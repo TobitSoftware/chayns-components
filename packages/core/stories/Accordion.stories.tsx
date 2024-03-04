@@ -1,11 +1,12 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { ChangeEvent, useState } from 'react';
 import { Icon } from '../src';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
 import AccordionGroup from '../src/components/accordion/accordion-group/AccordionGroup';
 import AccordionItem from '../src/components/accordion/accordion-item/AccordionItem';
 import Badge from '../src/components/badge/Badge';
-import { ChangeEvent, useState } from 'react';
+import Button from '../src/components/button/Button';
 
 export default {
     title: 'Core/Accordion',
@@ -66,7 +67,29 @@ const WithSearchTemplate: StoryFn<typeof Accordion> = ({ children, ...args }) =>
     );
 };
 
+const ControlledAccordionTemplate: StoryFn<typeof Accordion> = ({ children, ...args }) => {
+    const [isOpened, setIsOpened] = useState(false);
+
+    const handleToggle = () => {
+        setIsOpened((prev) => !prev);
+    };
+
+    return (
+        <>
+            <Button onClick={handleToggle}>Toggle</Button>
+            <AccordionGroup>
+                <Accordion {...args} isOpened={isOpened}>
+                    {children}
+                </Accordion>
+                <Accordion {...args}>{children}</Accordion>
+            </AccordionGroup>
+        </>
+    );
+};
+
 export const General = Template.bind({});
+
+export const ControlledAccordion = ControlledAccordionTemplate.bind({});
 
 export const MultipleAccordions = MultipleAccordionsTemplate.bind({});
 
@@ -87,6 +110,21 @@ export const ScrollableAccordion = Template.bind({});
 export const WithAccordionItems = Template.bind({});
 
 General.args = {
+    children: (
+        <AccordionContent>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+            accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+            sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+            aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+            rebum.
+        </AccordionContent>
+    ),
+    title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+};
+
+ControlledAccordion.args = {
     children: (
         <AccordionContent>
             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor

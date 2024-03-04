@@ -152,13 +152,15 @@ const Accordion: FC<AccordionProps> = ({
 
     const isOpen = isInGroup ? openAccordionUuid === uuid : isAccordionOpen;
 
+    const isOpenRef = useRef(isOpen);
     const onCloseRef = useRef(onClose);
     const onOpenRef = useRef(onOpen);
 
     useEffect(() => {
+        isOpenRef.current = isOpen;
         onCloseRef.current = onClose;
         onOpenRef.current = onOpen;
-    }, [onClose, onOpen]);
+    }, [isOpen, onClose, onOpen]);
 
     const handleHeadClick = useCallback(() => {
         if (isDisabled) {
@@ -206,7 +208,7 @@ const Accordion: FC<AccordionProps> = ({
 
     useEffect(() => {
         if (typeof isOpened === 'boolean') {
-            if (typeof updateOpenAccordionUuid === 'function' && isOpened) {
+            if (typeof updateOpenAccordionUuid === 'function' && isOpened !== isOpenRef.current) {
                 updateOpenAccordionUuid(uuid);
             } else {
                 setIsAccordionOpen(isOpened);
