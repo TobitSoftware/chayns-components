@@ -72,10 +72,7 @@ export const escapeHTML = (text: string) => {
         "'": '&apos;',
     };
 
-    return text
-        .replace(/&nbsp;/g, 'TMP_NON_BREAKING_SPACE')
-        .replace(/[&<>"']/g, (match) => escaped[match] ?? match)
-        .replace(/TMP_NON_BREAKING_SPACE/g, '&nbsp;');
+    return text.replace(/[&<>"']/g, (match) => escaped[match] ?? match);
 };
 
 export const convertEmojisToUnicode = (text: string): string => {
