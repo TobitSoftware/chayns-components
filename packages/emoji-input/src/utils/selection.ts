@@ -140,8 +140,17 @@ export const restoreSelection = (element: HTMLDivElement) => {
         endOffset = clamp(endOffset, 0, childNode.nodeValue.length);
     }
 
-    range.setStart(childNode, startOffset);
-    range.setEnd(childNode, startOffset); // ToDo: Check for better solution
+    try {
+        range.setStart(childNode, startOffset);
+        range.setEnd(childNode, endOffset);
+    } catch (error) {
+        try {
+            range.setStartAfter(childNode);
+            range.setEndAfter(childNode);
+        } catch (_) {
+            // Do nothing
+        }
+    }
 
     selection.removeAllRanges();
     selection.addRange(range);
