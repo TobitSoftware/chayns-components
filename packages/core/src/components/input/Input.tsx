@@ -157,15 +157,8 @@ const Input = forwardRef<InputRef, InputProps>(
             }
         }, [onChange]);
 
-        const shouldShowBorder = useMemo(() => {
-            if (rightElement) {
-                // Ignore because rightElement can be any type of element.
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                return rightElement.props.style.backgroundColor === undefined;
-            }
-
-            return true;
-        }, [rightElement]);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        const shouldShowBorder = rightElement?.props?.style?.backgroundColor === undefined;
 
         useEffect(() => {
             if (inputRef.current) {
