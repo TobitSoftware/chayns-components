@@ -83,11 +83,13 @@ const MentionFinder: FC<MentionFinderProps> = ({
 
                 shouldPreventDefault = true;
             } else if (event.key === 'Enter') {
+                console.debug('"Enter" detected in MentionFinder', { fullMatch, activeMember });
+
                 if (fullMatch && activeMember) {
                     onSelect({ fullMatch, member: activeMember });
-
-                    shouldPreventDefault = true;
                 }
+
+                shouldPreventDefault = true;
             }
 
             if (shouldPreventDefault) {
