@@ -112,18 +112,12 @@ export interface ReplaceTextOptions {
 export const replaceText = ({ editorElement, searchText, pasteText }: ReplaceTextOptions) => {
     const selection = window.getSelection();
 
-    saveSelection(editorElement);
-
     const rangeToReplace = findAndSelectText({ editorElement, searchText });
 
     if (rangeToReplace && selection) {
         selection.removeAllRanges();
         selection.addRange(rangeToReplace);
 
-        rangeToReplace.deleteContents();
-
-        rangeToReplace.insertNode(document.createTextNode(pasteText));
-
-        restoreSelection(editorElement);
+        insertTextAtCursorPosition({ editorElement, text: pasteText });
     }
 };
