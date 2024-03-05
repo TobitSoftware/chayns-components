@@ -432,12 +432,20 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const handleInsertTextAtCursorPosition = useCallback((text: string) => {
             if (editorRef.current) {
                 insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+
+                const newEvent = new Event('input', { bubbles: true });
+
+                editorRef.current.dispatchEvent(newEvent);
             }
         }, []);
 
         const handleReplaceText = useCallback((searchText: string, pasteText: string) => {
             if (editorRef.current) {
                 replaceText({ editorElement: editorRef.current, searchText, pasteText });
+
+                const newEvent = new Event('input', { bubbles: true });
+
+                editorRef.current.dispatchEvent(newEvent);
             }
         }, []);
 
