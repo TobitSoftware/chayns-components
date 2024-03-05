@@ -12,7 +12,7 @@ interface SaveSelectionOptions {
 
 export const saveSelection = (
     element: HTMLDivElement,
-    { shouldIgnoreEmptyTextNodes }: SaveSelectionOptions = {}
+    { shouldIgnoreEmptyTextNodes }: SaveSelectionOptions = {},
 ) => {
     const selection = window.getSelection();
 
@@ -33,7 +33,7 @@ export const saveSelection = (
     if (shouldIgnoreEmptyTextNodes) {
         childNodesArray = childNodesArray.filter(
             ({ nodeType, nodeValue }) =>
-                nodeType !== Node.TEXT_NODE || (nodeValue !== '' && nodeValue !== '\u200B')
+                nodeType !== Node.TEXT_NODE || (nodeValue !== '' && nodeValue !== '\u200B'),
         );
     }
 
@@ -198,4 +198,49 @@ export const getCharCodeThatWillBeDeleted = (event: KeyboardEvent<HTMLDivElement
     }
 
     return nextSibling?.nodeValue?.charCodeAt(0);
+};
+
+interface FindAndSelectTextOptions {
+    editorElement: HTMLDivElement;
+    searchText: string;
+}
+
+export const findAndSelectText = ({
+    editorElement,
+    searchText,
+}: FindAndSelectTextOptions): Range | null => {
+    if (!editorElement.textContent?.includes(searchText)) {
+        return null;
+    }
+
+    const range = document.createRange();
+
+    let startNode: Node | null = null;
+    let offset = -1;
+
+    const searchNodesForText = (node: Node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+            const index = node.textContent?.indexOf(searchText);
+
+            if (typeof index === 'number' && index !== -1) {
+                startNode = node;
+                offset = index;
+
+                range.setStart(node, index);
+                range.setEnd(node, index + searchText.length);
+
+                return true;
+            }
+        } else {
+            return Array.from(node.childNodes).some(searchNodesForText);
+        }
+
+        return false;
+    };
+
+    searchNodesForText(editorElement);
+
+    if (startNode && offset !== -1) return range;
+
+    return null;
 };

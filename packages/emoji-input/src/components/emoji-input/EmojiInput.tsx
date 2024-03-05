@@ -23,7 +23,7 @@ import React, {
 import type { PopupAlignment } from '../../constants/alignment';
 import { convertEmojisToUnicode } from '../../utils/emoji';
 import { getIsMobile } from '../../utils/environment';
-import { insertTextAtCursorPosition } from '../../utils/insert';
+import { insertTextAtCursorPosition, replaceText } from '../../utils/insert';
 import {
     getCharCodeThatWillBeDeleted,
     restoreSelection,
@@ -127,6 +127,7 @@ export type EmojiInputProps = {
 };
 
 export type EmojiInputRef = {
+    replaceText: (searchText: string, replaceText: string) => void;
     startProgress: (durationInSeconds: number) => void;
     stopProgress: () => void;
 };
@@ -424,6 +425,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             handleUpdateHTML(valueRef.current);
         }, [handleUpdateHTML]);
 
+        const handleReplaceText = useCallback((searchText: string, pasteText: string) => {
+            if (editorRef.current) {
+                replaceText({ editorElement: editorRef.current, searchText, pasteText });
+            }
+        }, []);
+
         const handleStartProgress = useCallback((duration: number) => {
             setProgressDuration(duration);
         }, []);
@@ -435,10 +442,11 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         useImperativeHandle(
             ref,
             () => ({
+                replaceText: handleReplaceText,
                 startProgress: handleStartProgress,
                 stopProgress: handleStopProgress,
             }),
-            [handleStartProgress, handleStopProgress],
+            [handleReplaceText, handleStartProgress, handleStopProgress],
         );
 
         useEffect(() => {

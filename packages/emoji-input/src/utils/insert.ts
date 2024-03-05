@@ -1,4 +1,10 @@
-import { moveSelectionOffset, restoreSelection, saveSelection, setChildIndex } from './selection';
+import {
+    findAndSelectText,
+    moveSelectionOffset,
+    restoreSelection,
+    saveSelection,
+    setChildIndex,
+} from './selection';
 
 interface InsertTextAtCursorPositionOptions {
     editorElement: HTMLDivElement;
@@ -94,5 +100,30 @@ export const insertTextAtCursorPosition = ({
     } else {
         // eslint-disable-next-line no-param-reassign
         editorElement.innerText += text;
+    }
+};
+
+export interface ReplaceTextOptions {
+    editorElement: HTMLDivElement;
+    searchText: string;
+    pasteText: string;
+}
+
+export const replaceText = ({ editorElement, searchText, pasteText }: ReplaceTextOptions) => {
+    const selection = window.getSelection();
+
+    saveSelection(editorElement);
+
+    const rangeToReplace = findAndSelectText({ editorElement, searchText });
+
+    if (rangeToReplace && selection) {
+        selection.removeAllRanges();
+        selection.addRange(rangeToReplace);
+
+        rangeToReplace.deleteContents();
+
+        rangeToReplace.insertNode(document.createTextNode(pasteText));
+
+        restoreSelection(editorElement);
     }
 };
