@@ -60,9 +60,10 @@ const MentionFinder: FC<MentionFinderProps> = ({
 
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
-            let shouldPreventDefault = false;
-
             if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                event.stopPropagation();
+
                 const currentIndex = filteredMembers.findIndex(({ id }) => id === activeMember?.id);
 
                 const prevIndex = Math.max(currentIndex - 1, 0);
@@ -70,9 +71,10 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 const member = filteredMembers[prevIndex];
 
                 setActiveMember(member);
-
-                shouldPreventDefault = true;
             } else if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                event.stopPropagation();
+
                 const currentIndex = filteredMembers.findIndex(({ id }) => id === activeMember?.id);
 
                 const nextIndex = Math.min(currentIndex + 1, filteredMembers.length - 1);
@@ -80,21 +82,13 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 const member = filteredMembers[nextIndex];
 
                 setActiveMember(member);
-
-                shouldPreventDefault = true;
             } else if (event.key === 'Enter') {
-                console.debug('"Enter" detected in MentionFinder', { fullMatch, activeMember });
+                event.preventDefault();
+                event.stopPropagation();
 
                 if (fullMatch && activeMember) {
                     onSelect({ fullMatch, member: activeMember });
                 }
-
-                shouldPreventDefault = true;
-            }
-
-            if (shouldPreventDefault) {
-                event.preventDefault();
-                event.stopPropagation();
             }
         },
         [activeMember, filteredMembers, fullMatch, onSelect],
