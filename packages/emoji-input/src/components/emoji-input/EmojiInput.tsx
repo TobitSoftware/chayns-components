@@ -104,7 +104,7 @@ export type EmojiInputProps = {
      */
     popupAlignment?: PopupAlignment;
     /**
-     * An Element that is pre wirten inside the input but the placeholder is still displaying.
+     * Element that is rendered before the input field but the placeholder is still visible.
      */
     prefixElement?: string;
     /**
@@ -127,6 +127,7 @@ export type EmojiInputProps = {
 };
 
 export type EmojiInputRef = {
+    insertTextAtCursorPosition: (text: string) => void;
     replaceText: (searchText: string, replaceText: string) => void;
     startProgress: (durationInSeconds: number) => void;
     stopProgress: () => void;
@@ -255,6 +256,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     event.preventDefault();
                     event.stopPropagation();
 
+                    // noinspection JSDeprecatedSymbols
                     document.execCommand('delete', false);
 
                     return;
@@ -267,6 +269,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     event.preventDefault();
                     event.stopPropagation();
 
+                    // noinspection JSDeprecatedSymbols
                     document.execCommand('forwardDelete', false);
 
                     return;
@@ -307,6 +310,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 if (event.key === 'Enter' && !event.isPropagationStopped() && editorRef.current) {
                     event.preventDefault();
 
+                    // noinspection JSDeprecatedSymbols
                     document.execCommand('insertLineBreak', false);
                 }
 
@@ -425,6 +429,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             handleUpdateHTML(valueRef.current);
         }, [handleUpdateHTML]);
 
+        const handleInsertTextAtCursorPosition = useCallback((text: string) => {
+            if (editorRef.current) {
+                insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+            }
+        }, []);
+
         const handleReplaceText = useCallback((searchText: string, pasteText: string) => {
             if (editorRef.current) {
                 replaceText({ editorElement: editorRef.current, searchText, pasteText });
@@ -442,11 +452,17 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         useImperativeHandle(
             ref,
             () => ({
+                insertTextAtCursorPosition: handleInsertTextAtCursorPosition,
                 replaceText: handleReplaceText,
                 startProgress: handleStartProgress,
                 stopProgress: handleStopProgress,
             }),
-            [handleReplaceText, handleStartProgress, handleStopProgress],
+            [
+                handleInsertTextAtCursorPosition,
+                handleReplaceText,
+                handleStartProgress,
+                handleStopProgress,
+            ],
         );
 
         useEffect(() => {
