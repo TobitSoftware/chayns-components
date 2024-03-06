@@ -135,18 +135,18 @@ export const restoreSelection = (element: HTMLDivElement) => {
 
     const range = document.createRange();
 
-    if (childNode.nodeValue) {
+    // noinspection SuspiciousTypeOfGuard
+    if (typeof childNode.nodeValue === 'string') {
         startOffset = clamp(startOffset, 0, childNode.nodeValue.length);
         endOffset = clamp(endOffset, 0, childNode.nodeValue.length);
     }
 
     console.debug('RESTORE SELECTION', {
+        childNode,
+        nextSibling: childNode.nextSibling,
+        previousSibling: childNode.previousSibling,
         startOffset,
         endOffset,
-        nodeValue: childNode.nodeValue,
-        nextSibling: childNode.nextSibling,
-        nodeValueLength: childNode.nodeValue?.length,
-        nextSiblingNextSibling: childNode.nextSibling?.nextSibling,
     });
 
     try {
