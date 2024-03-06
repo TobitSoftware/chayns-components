@@ -16,23 +16,11 @@ export const saveSelection = (
 ) => {
     const selection = window.getSelection();
 
-    console.debug('SAVE SELECTION - TEST 1', {
-        element,
-        selection,
-        shouldIgnoreEmptyTextNodes,
-    });
-
     if (!selection) {
         return;
     }
 
     const { anchorNode } = selection;
-
-    console.debug('SAVE SELECTION - TEST 2', {
-        anchorNode,
-        childNodes: element.childNodes,
-        range: selection.getRangeAt(0),
-    });
 
     if (!anchorNode) {
         return;
@@ -53,30 +41,12 @@ export const saveSelection = (
 
     endOffset = range.endOffset;
     startOffset = range.startOffset;
-
-    console.debug('SAVE SELECTION - TEST 3', {
-        childNodesArray,
-        anchorNode,
-        childIndex,
-        endOffset,
-        startOffset,
-        range,
-    });
 };
 
 export const restoreSelection = (element: HTMLDivElement) => {
     let childNode = element.childNodes[childIndex];
 
     const selection = window.getSelection();
-
-    console.debug('RESTORE SELECTION - TEST 1', {
-        childNodes: element.childNodes,
-        nodeValue: childNode?.nodeValue,
-        childNode,
-        childIndex,
-        element,
-        selection,
-    });
 
     if (!childNode || !element || !selection) {
         return;
@@ -85,13 +55,6 @@ export const restoreSelection = (element: HTMLDivElement) => {
     // noinspection SuspiciousTypeOfGuard
     if (typeof childNode.nodeValue !== 'string') {
         const elementTextLength = getElementTextLength(childNode as Element);
-
-        console.debug('RESTORE SELECTION - TEST 2.1', {
-            nodeValue: childNode.nodeValue,
-            nextSibling: childNode.nextSibling,
-            nodeType: childNode.nodeType,
-            elementTextLength,
-        });
 
         if (childNode.nextSibling) {
             childNode = childNode.nextSibling;
@@ -125,13 +88,6 @@ export const restoreSelection = (element: HTMLDivElement) => {
             startOffset = textNode.length;
         }
     } else if (childNode.nodeValue && endOffset > childNode.nodeValue.length) {
-        console.debug('RESTORE SELECTION - TEST 2.2', {
-            nextSibling: childNode.nextSibling,
-            nodeValue: childNode.nodeValue,
-            nodeValueLength: childNode.nodeValue.length,
-            nodeType: childNode.nodeType,
-        });
-
         if (childNode.nextSibling?.nodeValue) {
             let elementTextLength = childNode.nodeValue.length;
 

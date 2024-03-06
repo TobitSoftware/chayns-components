@@ -114,14 +114,6 @@ export const replaceText = ({ editorElement, searchText, pasteText }: ReplaceTex
 
     const rangeToReplace = findAndSelectText({ editorElement, searchText });
 
-    console.debug('REPLACE TEXT - TEST 1', {
-        selection,
-        rangeToReplace,
-        editorElement,
-        pasteText,
-        searchText,
-    });
-
     if (rangeToReplace && selection) {
         selection.removeAllRanges();
         selection.addRange(rangeToReplace);
