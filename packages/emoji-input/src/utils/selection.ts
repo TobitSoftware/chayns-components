@@ -1,4 +1,3 @@
-import { getUser } from 'chayns-api';
 import type { KeyboardEvent } from 'react';
 import { clamp } from './number';
 import { getElementTextLength } from './text';
@@ -142,9 +141,6 @@ export const restoreSelection = (element: HTMLDivElement) => {
     }
 
     try {
-        // eslint-disable-next-line no-debugger
-        if (getUser()?.personId === 'JAN-NIK96') debugger;
-
         range.setStart(childNode, startOffset);
         range.setEnd(childNode, endOffset);
     } catch (error) {
