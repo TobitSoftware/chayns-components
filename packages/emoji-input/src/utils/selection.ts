@@ -132,15 +132,16 @@ export const restoreSelection = (element: HTMLDivElement) => {
             nodeType: childNode.nodeType,
         });
 
-        if (childNode.nextSibling) {
+        if (childNode.nextSibling?.nodeValue) {
             let elementTextLength = childNode.nodeValue.length;
 
             childNode = childNode.nextSibling;
 
+            // noinspection SuspiciousTypeOfGuard
             if (typeof childNode.nodeValue !== 'string') {
                 elementTextLength += getElementTextLength(childNode as Element);
 
-                if (childNode.nextSibling) {
+                if (childNode.nextSibling?.nodeValue) {
                     childNode = childNode.nextSibling;
 
                     if (childNode.nodeType === Node.TEXT_NODE && childNode.nodeValue) {
