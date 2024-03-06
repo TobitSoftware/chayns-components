@@ -50,6 +50,7 @@ export const StyledSliderInput = styled.input<StyledSliderInputProps>`
         width: 20px;
         height: 20px;
         cursor: pointer;
+        opacity: 0;
         pointer-events: all;
         position: relative;
     }
@@ -59,6 +60,7 @@ export const StyledSliderInput = styled.input<StyledSliderInputProps>`
         width: 20px;
         height: 20px;
         cursor: pointer;
+        opacity: 0;
         pointer-events: all;
         position: relative;
     }
