@@ -140,16 +140,20 @@ export const restoreSelection = (element: HTMLDivElement) => {
         endOffset = clamp(endOffset, 0, childNode.nodeValue.length);
     }
 
+    console.debug('RESTORE SELECTION', {
+        startOffset,
+        endOffset,
+        nodeValue: childNode.nodeValue,
+        nextSibling: childNode.nextSibling,
+        nodeValueLength: childNode.nodeValue?.length,
+        nextSiblingNextSibling: childNode.nextSibling?.nextSibling,
+    });
+
     try {
         range.setStart(childNode, startOffset);
         range.setEnd(childNode, endOffset);
     } catch (error) {
-        try {
-            range.setStartAfter(childNode);
-            range.setEndAfter(childNode);
-        } catch (_) {
-            // Do nothing
-        }
+        // Do nothing
     }
 
     selection.removeAllRanges();
