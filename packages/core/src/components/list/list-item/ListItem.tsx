@@ -14,7 +14,7 @@ import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
 import { StyledMotionListItem } from './ListItem.styles';
 
-type ListItemProps = {
+export type ListItemProps = {
     /**
      * The content of the `ListItem` body. When the `ListItem` has children,
      * it can be opened and also gets an icon as an indicator automatically.
