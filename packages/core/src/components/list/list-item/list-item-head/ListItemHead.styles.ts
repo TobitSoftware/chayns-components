@@ -7,6 +7,7 @@ import type {
 
 type StyledListItemHeadProps = WithTheme<{
     $isClickable: boolean;
+    $isAnyItemExpandable: boolean;
 }>;
 
 export const StyledListItemHead = styled.div<StyledListItemHeadProps>`
@@ -15,6 +16,12 @@ export const StyledListItemHead = styled.div<StyledListItemHeadProps>`
     display: flex;
     height: 64px;
     padding: 12px 9px;
+
+    ${({ $isAnyItemExpandable }) =>
+        !$isAnyItemExpandable &&
+        css`
+            padding-left: 12px;
+        `}
 
     ${({ $isClickable }) =>
         $isClickable &&

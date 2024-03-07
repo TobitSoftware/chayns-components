@@ -136,6 +136,8 @@ const ListItem: FC<ListItemProps> = ({
         }
     }, [isDefaultOpen, updateOpenItemUuid, uuid]);
 
+    const isClickable = typeof onClick === 'function' || isExpandable;
+
     return (
         <StyledMotionListItem
             animate={{ height: 'auto', opacity: 1 }}
@@ -143,7 +145,7 @@ const ListItem: FC<ListItemProps> = ({
             exit={{ height: 0, opacity: 0 }}
             initial={{ height: 0, opacity: 0 }}
             key={`list-item-${uuid}`}
-            $isClickable={typeof onClick === 'function' || isExpandable}
+            $isClickable={isClickable}
             $isOpen={isItemOpen}
             $isWrapped={isWrapped}
         >
@@ -154,7 +156,7 @@ const ListItem: FC<ListItemProps> = ({
                 isAnyItemExpandable={isAnyItemExpandable}
                 isExpandable={isExpandable}
                 isOpen={isItemOpen}
-                onClick={handleHeadClick}
+                onClick={isClickable ? handleHeadClick : undefined}
                 onLongPress={onLongPress}
                 leftElements={leftElements}
                 rightElements={rightElements}

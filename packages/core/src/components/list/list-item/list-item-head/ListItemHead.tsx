@@ -95,6 +95,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         <StyledListItemHead
             className="beta-chayns-list-item-head"
             $isClickable={typeof onClick === 'function' || isExpandable}
+            $isAnyItemExpandable={isAnyItemExpandable}
             onClick={onClick}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
