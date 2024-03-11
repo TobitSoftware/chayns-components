@@ -45,14 +45,6 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
     const [scope, animate] = useAnimate();
 
-    useEffect(() => {
-        if (selectedButtonId) {
-            setSelectedButton(selectedButtonId);
-        } else {
-            setSelectedButton(items[0]?.id);
-        }
-    }, [items, selectedButtonId]);
-
     const itemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
 
     useEffect(() => {
@@ -74,6 +66,20 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         },
         [animate, scope],
     );
+
+    useEffect(() => {
+        if (selectedButtonId) {
+            setSelectedButton(selectedButtonId);
+
+            const index = items.findIndex(({ id }) => id === selectedButtonId);
+
+            if (index >= 0) {
+                void animation(itemWidth * index);
+            }
+        } else {
+            setSelectedButton(items[0]?.id);
+        }
+    }, [animation, itemWidth, items, selectedButtonId]);
 
     const handleClick = useCallback(
         (id: string, index: number) => {
