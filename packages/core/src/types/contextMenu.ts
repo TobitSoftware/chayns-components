@@ -1,3 +1,4 @@
+// Alignment of the popup
 export enum ContextMenuAlignment {
     TopLeft,
     BottomLeft,
