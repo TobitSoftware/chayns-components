@@ -157,7 +157,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          */
         const handleFocus = useCallback(() => {
             if (shouldShowContentOnEmptyInput) {
-                setMatchingItems(searchList({ items: list, searchString: value }));
+                const newMatchingItems = searchList({ items: list, searchString: value });
+
+                if (newMatchingItems.length === 1 && newMatchingItems[0]?.text === value) {
+                    return;
+                }
+
+                setMatchingItems(newMatchingItems);
                 setIsAnimating(true);
             }
         }, [list, shouldShowContentOnEmptyInput, value]);
@@ -165,6 +171,10 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         useEffect(() => {
             if (list) {
                 const newMatchingItems = searchList({ items: list, searchString: value });
+
+                if (newMatchingItems.length === 1 && newMatchingItems[0]?.text === value) {
+                    return;
+                }
 
                 if (shouldShowContentOnEmptyInput || value !== '') {
                     setMatchingItems(newMatchingItems);
@@ -180,7 +190,10 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             (event: ChangeEvent<HTMLInputElement>) => {
                 const searchedItems = searchList({ items: list, searchString: event.target.value });
 
-                if (!shouldShowContentOnEmptyInput && !event.target.value) {
+                if (
+                    (!shouldShowContentOnEmptyInput && !event.target.value) ||
+                    (searchedItems.length === 1 && searchedItems[0]?.text === event.target.value)
+                ) {
                     setMatchingItems([]);
                 } else {
                     setMatchingItems(searchedItems);
@@ -215,6 +228,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             (item: ISearchBoxItem) => {
                 setValue(item.text);
                 setIsAnimating(false);
+                setMatchingItems([]);
 
                 if (typeof onSelect === 'function') {
                     onSelect(item);
