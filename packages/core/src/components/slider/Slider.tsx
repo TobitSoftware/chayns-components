@@ -5,7 +5,7 @@ import {
     StyledSlider,
     StyledSliderInput,
     StyledSliderThumb,
-    StyledSliderThumbLable,
+    StyledSliderThumbLabel,
 } from './Slider.styles';
 
 export interface SliderInterval {
@@ -37,7 +37,7 @@ export type SliderProps = {
     /**
      * Whether the current value should be displayed inside the slider thumb.
      */
-    shouldShowThumbLable?: boolean;
+    shouldShowThumbLabel?: boolean;
     /**
      * The steps of the slider.
      */
@@ -60,7 +60,7 @@ const Slider: FC<SliderProps> = ({
     onChange,
     interval,
     thumbLabelFormatter,
-    shouldShowThumbLable = false,
+    shouldShowThumbLabel = false,
     steps = 1,
 }) => {
     const [fromValue, setFromValue] = useState(0);
@@ -248,22 +248,22 @@ const Slider: FC<SliderProps> = ({
                     $value={fromValue}
                 />
                 <StyledSliderThumb ref={fromSliderThumbRef} $position={fromSliderThumbPosition}>
-                    {shouldShowThumbLable && (
-                        <StyledSliderThumbLable>
+                    {shouldShowThumbLabel && (
+                        <StyledSliderThumbLabel>
                             {typeof thumbLabelFormatter === 'function'
                                 ? thumbLabelFormatter(fromValue)
                                 : fromValue}
-                        </StyledSliderThumbLable>
+                        </StyledSliderThumbLabel>
                     )}
                 </StyledSliderThumb>
                 {interval && (
                     <StyledSliderThumb ref={toSliderThumbRef} $position={toSliderThumbPosition}>
-                        {shouldShowThumbLable && (
-                            <StyledSliderThumbLable>
+                        {shouldShowThumbLabel && (
+                            <StyledSliderThumbLabel>
                                 {typeof thumbLabelFormatter === 'function'
                                     ? thumbLabelFormatter(toValue)
                                     : toValue}
-                            </StyledSliderThumbLable>
+                            </StyledSliderThumbLabel>
                         )}
                     </StyledSliderThumb>
                 )}
@@ -294,7 +294,7 @@ const Slider: FC<SliderProps> = ({
             handleInputChange,
             handleMouseUp,
             fromSliderThumbPosition,
-            shouldShowThumbLable,
+            shouldShowThumbLabel,
             thumbLabelFormatter,
             toSliderThumbPosition,
             toValue,

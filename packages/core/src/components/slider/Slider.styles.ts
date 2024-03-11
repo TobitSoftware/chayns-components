@@ -86,6 +86,6 @@ export const StyledSliderThumb = styled.div<StyledSliderThumbProps>`
     white-space: nowrap;
 `;
 
-export const StyledSliderThumbLable = styled.span`
+export const StyledSliderThumbLabel = styled.span`
     pointer-events: none;
 `;
