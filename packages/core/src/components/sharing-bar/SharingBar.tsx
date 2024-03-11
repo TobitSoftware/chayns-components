@@ -94,19 +94,19 @@ const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment }) => {
             text: 'Zwischenablage',
         },
         {
-            icons: ['fa-brands fa-whatsapp'],
+            icons: ['fa-solid fa-brands fa-whatsapp'],
             key: 'whatsapp',
             onClick: () => handleShare('whatsapp'),
             text: 'Whatsapp',
         },
         {
-            icons: ['fa-brands fa-facebook-f'],
+            icons: ['fa-solid fa-brands fa-facebook-f'],
             key: 'facebook',
             onClick: () => handleShare('facebook'),
             text: 'Facebook',
         },
         {
-            icons: ['fa-brands fa-twitter'],
+            icons: ['fa-solid fa-brands fa-twitter'],
             key: 'twitter',
             onClick: () => handleShare('twitter'),
             text: 'Twitter',
