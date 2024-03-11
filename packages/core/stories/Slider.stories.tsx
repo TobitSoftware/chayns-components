@@ -19,17 +19,17 @@ const WithFormatterTemplate: StoryFn<typeof Slider> = (args) => {
         return `${value} €`;
     };
 
-    return <Slider {...args} thumbLableFormatter={formatter} />;
+    return <Slider {...args} thumbLabelFormatter={formatter} />;
 };
 
 export const General = Template.bind({});
 
-export const WithThumbLableFormatter = WithFormatterTemplate.bind({});
+export const WithThumbLabelFormatter = WithFormatterTemplate.bind({});
 
 export const RangeSlider = Template.bind({});
 
-WithThumbLableFormatter.args = {
-    shouldShowThumbLable: true,
+WithThumbLabelFormatter.args = {
+    shouldShowThumbLabel: true,
 };
 
 RangeSlider.args = {
