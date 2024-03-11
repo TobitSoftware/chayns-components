@@ -82,6 +82,9 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     onTimeRemove,
 }) => {
     const [newOpeningTimes, setNewOpeningTimes] = useState<OpeningTime[]>();
+    const [invalidOpeningTimes, setInvalidOpeningTimes] = useState<
+        { openingTimeId: string; invalidTimeIds: string[] }[]
+    >([]);
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -159,6 +162,41 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
         [onTimeAdd],
     );
 
+    const handleUpdateInvalidIds = useCallback(
+        (openingTimeId: string, invalidTimeIds: string[]) => {
+            setInvalidOpeningTimes((prevState) => {
+                let updatedInvalidOpeningTimes = prevState.map((invalidOpeningTime) => {
+                    if (invalidOpeningTime.openingTimeId === openingTimeId) {
+                        return {
+                            openingTimeId,
+                            invalidTimeIds,
+                        };
+                    }
+
+                    return invalidOpeningTime;
+                });
+
+                if (
+                    !updatedInvalidOpeningTimes.some(
+                        ({ openingTimeId: updatedInvalidOpeningId }) =>
+                            updatedInvalidOpeningId === openingTimeId,
+                    ) &&
+                    invalidTimeIds.length > 0
+                ) {
+                    updatedInvalidOpeningTimes.push({ openingTimeId, invalidTimeIds });
+                }
+
+                updatedInvalidOpeningTimes = updatedInvalidOpeningTimes.filter(
+                    (updatedInvalidOpeningTime) =>
+                        updatedInvalidOpeningTime.invalidTimeIds.length !== 0,
+                );
+
+                return updatedInvalidOpeningTimes;
+            });
+        },
+        [],
+    );
+
     const handleRemove = useCallback(
         (id: string) => {
             setNewOpeningTimes((prevOpeningTimes) =>
@@ -204,6 +242,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                         id={id}
                         times={times}
                         isDisabled={isDisabled}
+                        onInvalid={handleUpdateInvalidIds}
                         onChange={(newTime) => handleChange(newTime, id)}
                         onRemove={handleRemove}
                         onAdd={handleAdd}
@@ -221,6 +260,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
         handleChange,
         handleCheckBoxChange,
         handleRemove,
+        handleUpdateInvalidIds,
         newOpeningTimes,
         weekdays,
     ]);
@@ -248,7 +288,13 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                 style={size && { width: size.width }}
             >
                 <StyledOpeningTimesWeekDay>{weekday}</StyledOpeningTimesWeekDay>
-                <OpeningInputs closedText={closedText} id={id} times={times} editMode={editMode} />
+                <OpeningInputs
+                    closedText={closedText}
+                    onInvalid={handleUpdateInvalidIds}
+                    id={id}
+                    times={times}
+                    editMode={editMode}
+                />
             </StyledOpeningTimesWrapper>
         );
 
@@ -263,25 +309,21 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                 {element}
             </Tooltip>
         );
-    }, [closedText, content, currentDayId, editMode, newOpeningTimes, weekdays, size]);
+    }, [
+        currentDayId,
+        editMode,
+        newOpeningTimes,
+        weekdays,
+        size,
+        closedText,
+        handleUpdateInvalidIds,
+        content,
+    ]);
 
-    const shouldShowHint = useMemo(() => {
-        let tmp = false;
-
-        openingTimes.forEach(({ times }) => {
-            if (times.length > 1) {
-                if (!times[0] || !times[1]) {
-                    return;
-                }
-
-                if (times[0].start >= times[1].end) {
-                    tmp = true;
-                }
-            }
-        });
-
-        return tmp;
-    }, [openingTimes]);
+    const shouldShowHint = useMemo(
+        () => invalidOpeningTimes.length > 0,
+        [invalidOpeningTimes.length],
+    );
 
     return useMemo(
         () => (

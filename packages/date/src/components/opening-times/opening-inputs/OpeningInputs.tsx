@@ -11,6 +11,7 @@ export type OpeningInputsProps = {
     onChange?: (time: Time) => void;
     onAdd?: (time: Time, id: string) => void;
     onRemove?: (id: Time['id']) => void;
+    onInvalid?: (openingTimeId: string, timeIds: string[]) => void;
     id: string;
     editMode: boolean;
     closedText: string;
@@ -21,12 +22,14 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
     isDisabled,
     onRemove,
     onAdd,
+    onInvalid,
     id,
     onChange,
     editMode,
     closedText,
 }) => {
     const [newTimes, setNewTimes] = useState<Time[]>();
+    const [invalidTimes, setInvalidTimes] = useState<string[]>([]);
 
     useEffect(() => {
         setNewTimes(times);
@@ -52,6 +55,40 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
         },
         [onRemove],
     );
+
+    useEffect(() => {
+        const result: Time[] = [];
+
+        for (let i = 0; i < times.length; i++) {
+            const currentTime = times[i];
+            const prevTime = times[i - 1];
+
+            if (currentTime) {
+                const currStart = new Date(`2000-01-01T${currentTime.start}`);
+                const currEnd = new Date(`2000-01-01T${currentTime.end}`);
+
+                if (currStart >= currEnd) {
+                    result.push(currentTime);
+                }
+
+                if (prevTime) {
+                    const prevEnd = new Date(`2000-01-01T${prevTime.end}`);
+
+                    if (prevEnd > currStart) {
+                        result.push(prevTime, currentTime);
+                    }
+                }
+            }
+        }
+
+        const invalidTimeIds = result.map(({ id: invalidId }) => invalidId);
+
+        setInvalidTimes(invalidTimeIds);
+
+        if (typeof onInvalid === 'function') {
+            onInvalid(id, invalidTimeIds);
+        }
+    }, [id, onInvalid, times]);
 
     const handleChange = useCallback(
         (newTime: Time) => {
@@ -112,6 +149,7 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
                     id={timeId}
                     end={end}
                     isDisabled={isDisabled}
+                    isInvalid={invalidTimes.includes(timeId)}
                     buttonType={buttonType}
                     onAdd={handleAdd}
                     onChange={(time) => handleChange(time)}
@@ -128,6 +166,7 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
         handleChange,
         handleRemove,
         id,
+        invalidTimes,
         isDisabled,
         newTimes,
         times.length,

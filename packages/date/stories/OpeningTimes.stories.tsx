@@ -15,22 +15,22 @@ const OPENINGTIMES = [
     {
         id: 'montag',
         weekdayId: 0,
-        times: [{ start: '12:00', end: '12:00', id: '1' }],
+        times: [{ start: '08:00', end: '18:00', id: '1' }],
         isDisabled: true,
     },
     {
         id: 'dienstag',
         weekdayId: 1,
         times: [
-            { start: '12:00', end: '12:00', id: '2' },
-            { start: '12:00', end: '12:00', id: '3' },
+            { start: '08:00', end: '12:00', id: '2' },
+            { start: '11:00', end: '18:00', id: '3' },
         ],
     },
-    { id: 'mittwoch', weekdayId: 2, times: [{ start: '12:00', end: '12:00', id: '4' }] },
-    { id: 'donnerstag', weekdayId: 3, times: [{ start: '12:00', end: '12:00', id: '5' }] },
-    { id: 'freitag', weekdayId: 4, times: [{ start: '12:00', end: '12:00', id: '6' }] },
-    { id: 'samstag', weekdayId: 5, times: [{ start: '12:00', end: '12:00', id: '7' }] },
-    { id: 'sonntag', weekdayId: 6, times: [{ start: '12:00', end: '12:00', id: '8' }] },
+    { id: 'mittwoch', weekdayId: 2, times: [{ start: '08:00', end: '18:00', id: '4' }] },
+    { id: 'donnerstag', weekdayId: 3, times: [{ start: '08:00', end: '18:00', id: '5' }] },
+    { id: 'freitag', weekdayId: 4, times: [{ start: '08:00', end: '18:00', id: '6' }] },
+    { id: 'samstag', weekdayId: 5, times: [{ start: '08:00', end: '18:00', id: '7' }] },
+    { id: 'sonntag', weekdayId: 6, times: [{ start: '18:00', end: '08:00', id: '8' }] },
 ];
 
 export default {

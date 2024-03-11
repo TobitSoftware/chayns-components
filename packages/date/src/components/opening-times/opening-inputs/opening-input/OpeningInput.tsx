@@ -13,6 +13,7 @@ export type OpeningInputProps = {
     start: Time['start'];
     end: Time['end'];
     isDisabled?: boolean;
+    isInvalid?: boolean;
     id: string;
     buttonType: OpeningTimesButtonType;
     onAdd: () => void;
@@ -24,6 +25,7 @@ const OpeningInput: FC<OpeningInputProps> = ({
     end,
     start,
     isDisabled,
+    isInvalid,
     buttonType,
     onRemove,
     onAdd,
@@ -53,8 +55,8 @@ const OpeningInput: FC<OpeningInputProps> = ({
     }, [buttonType, onAdd, onRemove]);
 
     const handleStartTimeBlur = useCallback(
-        (value: string | number | null, isInvalid: boolean) => {
-            if (isInvalid || typeof value === 'number' || !value) {
+        (value: string | number | null, isTimeInvalid: boolean) => {
+            if (isTimeInvalid || typeof value === 'number' || !value) {
                 return;
             }
 
@@ -66,8 +68,8 @@ const OpeningInput: FC<OpeningInputProps> = ({
     );
 
     const handleEndTimeBlur = useCallback(
-        (value: string | number | null, isInvalid: boolean) => {
-            if (isInvalid || typeof value === 'number' || !value) {
+        (value: string | number | null, isTimeInvalid: boolean) => {
+            if (isTimeInvalid || typeof value === 'number' || !value) {
                 return;
             }
 
@@ -90,6 +92,7 @@ const OpeningInput: FC<OpeningInputProps> = ({
                     <NumberInput
                         shouldShowOnlyBottomBorder
                         isTimeInput
+                        isInvalid={isInvalid}
                         value={startTime}
                         onBlur={handleStartTimeBlur}
                         isDisabled={isDisabled}
@@ -100,6 +103,7 @@ const OpeningInput: FC<OpeningInputProps> = ({
                     <NumberInput
                         shouldShowOnlyBottomBorder
                         isTimeInput
+                        isInvalid={isInvalid}
                         value={endTime}
                         onBlur={handleEndTimeBlur}
                         isDisabled={isDisabled}
@@ -108,7 +112,16 @@ const OpeningInput: FC<OpeningInputProps> = ({
                 {button}
             </StyledOpeningInput>
         ),
-        [button, endTime, handleEndTimeBlur, handleStartTimeBlur, id, isDisabled, startTime],
+        [
+            button,
+            endTime,
+            handleEndTimeBlur,
+            handleStartTimeBlur,
+            id,
+            isDisabled,
+            isInvalid,
+            startTime,
+        ],
     );
 };
 
