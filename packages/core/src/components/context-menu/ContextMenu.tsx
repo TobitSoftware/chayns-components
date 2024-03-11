@@ -14,9 +14,9 @@ import React, {
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
 import { ContextMenuAlignment } from '../../types/contextMenu';
+import Icon from '../icon/Icon';
 import ContextMenuContent from './context-menu-content/ContextMenuContent';
 import { StyledContextMenu } from './ContextMenu.styles';
-import Icon from '../icon/Icon';
 
 export type ContextMenuCoordinates = {
     x: number;
@@ -67,6 +67,10 @@ type ContextMenuProps = {
      * Function to be executed when the content of the Context menu has been shown.
      */
     onShow?: VoidFunction;
+    /**
+     * Whether the popup should be closed if its clicked.
+     */
+    shouldCloseOnPopupClick?: boolean;
 };
 
 const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
@@ -79,6 +83,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             items,
             onHide,
             onShow,
+            shouldCloseOnPopupClick = true,
         },
         ref,
     ) => {
@@ -162,14 +167,19 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
         const handleDocumentClick = useCallback<EventListener>(
             (event) => {
-                if (!contextMenuContentRef.current?.contains(event.target as Node)) {
+                if (
+                    !shouldCloseOnPopupClick &&
+                    contextMenuContentRef.current?.contains(event.target as Node)
+                ) {
                     event.preventDefault();
                     event.stopPropagation();
+
+                    return;
                 }
 
                 handleHide();
             },
-            [handleHide],
+            [handleHide, shouldCloseOnPopupClick],
         );
 
         useImperativeHandle(
