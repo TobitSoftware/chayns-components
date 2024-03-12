@@ -171,9 +171,6 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     !shouldCloseOnPopupClick &&
                     contextMenuContentRef.current?.contains(event.target as Node)
                 ) {
-                    event.preventDefault();
-                    event.stopPropagation();
-
                     return;
                 }
 
