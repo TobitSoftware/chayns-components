@@ -3,7 +3,7 @@ import {
     StyledMotionProgressBarProgress,
     StyledProgressBar,
     StyledProgressBarBackground,
-    StyledProgressBarLable,
+    StyledProgressBarLabel,
     StyledProgressBarProgressWrapper,
 } from './ProgressBar.styles';
 
@@ -76,7 +76,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ percentage, label, shouldHideProgre
         () => (
             <StyledProgressBar>
                 {progressBar}
-                {label && <StyledProgressBarLable>{label}</StyledProgressBarLable>}
+                {label && <StyledProgressBarLabel>{label}</StyledProgressBarLabel>}
             </StyledProgressBar>
         ),
         [progressBar, label],

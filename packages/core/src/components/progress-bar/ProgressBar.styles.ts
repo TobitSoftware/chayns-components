@@ -30,4 +30,9 @@ export const StyledMotionProgressBarProgress = styled(motion.div)<StyledProgress
     background-color: ${({ theme }: StyledProgressBarProgressProps) => theme.headline};
 `;
 
-export const StyledProgressBarLable = styled.div``;
+type StyledProgressBarLabelProps = WithTheme<unknown>;
+
+export const StyledProgressBarLabel = styled.div<StyledProgressBarLabelProps>`
+    font-size: 85%;
+    color: ${({ theme }: StyledProgressBarLabelProps) => theme.headline};
+`;
