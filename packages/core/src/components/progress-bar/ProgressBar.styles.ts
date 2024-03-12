@@ -13,6 +13,13 @@ export const StyledProgressBarBackground = styled.div<StyledProgressBarBackgroun
     background-color: ${({ theme }: StyledProgressBarBackgroundProps) => theme['100']};
 `;
 
+export const StyledProgressBarProgressWrapper = styled.div`
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 10px;
+`;
+
 type StyledProgressBarProgressProps = WithTheme<unknown>;
 export const StyledMotionProgressBarProgress = styled(motion.div)<StyledProgressBarProgressProps>`
     height: 10px;

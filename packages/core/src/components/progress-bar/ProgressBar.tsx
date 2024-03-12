@@ -4,6 +4,7 @@ import {
     StyledProgressBar,
     StyledProgressBarBackground,
     StyledProgressBarLable,
+    StyledProgressBarProgressWrapper,
 } from './ProgressBar.styles';
 
 export type ProgressBarProps = {
@@ -14,21 +15,52 @@ export type ProgressBarProps = {
     /**
      * The percentage of the progress. Number between 0 and 100.
      */
-    percentage: number;
+    percentage?: number;
+    /**
+     * Whether the progress should be hide and just display the label.
+     */
+    shouldHideProgress?: boolean;
 };
 
-const ProgressBar: FC<ProgressBarProps> = ({ percentage, label }) => {
+const ProgressBar: FC<ProgressBarProps> = ({ percentage, label, shouldHideProgress = false }) => {
     const [internalPercentage, setInternalPercentage] = useState(0);
 
     useEffect(() => {
+        if (!percentage) {
+            return;
+        }
+
         if (percentage >= 0 && percentage <= 100) {
             setInternalPercentage(percentage);
         }
     }, [percentage]);
 
-    return useMemo(
-        () => (
-            <StyledProgressBar>
+    const progressBar = useMemo(() => {
+        if (shouldHideProgress) {
+            return null;
+        }
+
+        if (!percentage) {
+            return (
+                <StyledProgressBarProgressWrapper>
+                    <StyledMotionProgressBarProgress
+                        initial={{ width: '200px', left: '-200px' }}
+                        animate={{ width: '200px', left: '100%' }}
+                        exit={{ width: '200px', left: '100%' }}
+                        transition={{
+                            type: 'tween',
+                            repeat: Infinity,
+                            repeatDelay: 0,
+                            duration: 1,
+                        }}
+                    />
+                    <StyledProgressBarBackground />
+                </StyledProgressBarProgressWrapper>
+            );
+        }
+
+        return (
+            <>
                 <StyledMotionProgressBarProgress
                     initial={{ width: '0%' }}
                     animate={{ width: `${internalPercentage}%` }}
@@ -36,10 +68,18 @@ const ProgressBar: FC<ProgressBarProps> = ({ percentage, label }) => {
                     transition={{ type: 'tween' }}
                 />
                 <StyledProgressBarBackground />
+            </>
+        );
+    }, [internalPercentage, percentage, shouldHideProgress]);
+
+    return useMemo(
+        () => (
+            <StyledProgressBar>
+                {progressBar}
                 {label && <StyledProgressBarLable>{label}</StyledProgressBarLable>}
             </StyledProgressBar>
         ),
-        [label, internalPercentage],
+        [progressBar, label],
     );
 };
 

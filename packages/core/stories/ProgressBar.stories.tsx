@@ -13,3 +13,8 @@ export default {
 const Template: StoryFn<typeof ProgressBar> = ({ ...args }) => <ProgressBar {...args} />;
 
 export const General = Template.bind({});
+export const InfinityProgressBar = Template.bind({});
+
+InfinityProgressBar.args = {
+    percentage: undefined,
+};
