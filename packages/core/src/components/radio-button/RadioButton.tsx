@@ -112,19 +112,20 @@ const RadioButton: FC<RadioButtonProps> = ({
         () => (
             <StyledRadioButton
                 $isDisabled={isDisabled}
-                onClick={handleClick}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >
-                <StyledRadioButtonWrapper>
-                    <StyledRadioButtonPseudoCheckBox $isChecked={isMarked}>
+                <StyledRadioButtonWrapper $isDisabled={isDisabled} onClick={handleClick}>
+                    <StyledRadioButtonPseudoCheckBox $isDisabled={isDisabled} $isChecked={isMarked}>
                         <StyledRadioButtonCheckBoxMark
                             $isHovered={isHovered}
                             $isSelected={isMarked}
+                            $isDisabled={isDisabled}
                         />
                     </StyledRadioButtonPseudoCheckBox>
                     <StyledRadioButtonCheckBox
                         disabled={isDisabled}
+                        $isDisabled={isDisabled}
                         type="radio"
                         checked={isMarked}
                         onChange={() => {}}

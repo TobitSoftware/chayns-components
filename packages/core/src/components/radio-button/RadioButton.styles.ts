@@ -8,30 +8,39 @@ export const StyledRadioButton = styled.span<StyledRadioButtonProps>`
     display: flex;
     flex-direction: column;
 
-    user-select: none;
     width: fit-content;
     position: relative;
-    cursor: ${({ $isDisabled }: StyledRadioButtonProps) =>
-        $isDisabled ? 'default !important' : 'pointer'};
+
     opacity: ${({ $isDisabled }: StyledRadioButtonProps) => ($isDisabled ? 0.5 : 1)};
 `;
 
-export const StyledRadioButtonWrapper = styled.div`
+type StyledRadioButtonWrapperProps = WithTheme<{ $isDisabled: boolean }>;
+
+export const StyledRadioButtonWrapper = styled.div<StyledRadioButtonWrapperProps>`
     display: flex;
     align-items: center;
     position: relative;
     gap: 5px;
+    user-select: none;
+
+    cursor: ${({ $isDisabled }: StyledRadioButtonWrapperProps) =>
+        $isDisabled ? 'default !important' : 'pointer !important'};
 `;
 
-type StyledRadioButtonCheckBoxProps = WithTheme<unknown>;
+type StyledRadioButtonCheckBoxProps = WithTheme<{ $isDisabled: boolean }>;
 
 export const StyledRadioButtonCheckBox = styled.input<StyledRadioButtonCheckBoxProps>`
     opacity: 0;
     height: 15px;
     width: 15px;
+    cursor: ${({ $isDisabled }: StyledRadioButtonCheckBoxProps) =>
+        $isDisabled ? 'default !important' : 'pointer !important'};
 `;
 
-type StyledRadioButtonPseudoCheckBoxProps = WithTheme<{ $isChecked: boolean }>;
+type StyledRadioButtonPseudoCheckBoxProps = WithTheme<{
+    $isChecked: boolean;
+    $isDisabled: boolean;
+}>;
 
 export const StyledRadioButtonPseudoCheckBox = styled.div<StyledRadioButtonPseudoCheckBoxProps>`
     background-color: ${({ theme, $isChecked }: StyledRadioButtonPseudoCheckBoxProps) =>
@@ -45,16 +54,17 @@ export const StyledRadioButtonPseudoCheckBox = styled.div<StyledRadioButtonPseud
     border-radius: 100%;
     top: 50%;
     transform: translateY(-50%);
-    cursor: pointer !important;
+    cursor: ${({ $isDisabled }: StyledRadioButtonPseudoCheckBoxProps) =>
+        $isDisabled ? 'default !important' : 'pointer !important'};
 `;
 
 type StyledRadioButtonCheckBoxMarkProps = WithTheme<{
     $isHovered: boolean;
     $isSelected: boolean;
+    $isDisabled: boolean;
 }>;
 
 export const StyledRadioButtonCheckBoxMark = styled.span<StyledRadioButtonCheckBoxMarkProps>`
-    cursor: pointer;
     background-color: transparent;
     position: absolute;
     top: 1px;
@@ -68,6 +78,8 @@ export const StyledRadioButtonCheckBoxMark = styled.span<StyledRadioButtonCheckB
     border-top: transparent;
     border-left: transparent;
     z-index: 2;
+    cursor: ${({ $isDisabled }: StyledRadioButtonCheckBoxMarkProps) =>
+        $isDisabled ? 'default !important' : 'pointer !important'};
 
     ${({ $isHovered, $isSelected }) => {
         if ($isSelected) {
@@ -96,4 +108,5 @@ export const StyledRadioButtonLabel = styled.p<StyledRadioButtonLabelProps>`
 
 export const StyledMotionRadioButtonChildren = styled(motion.div)`
     margin-left: 18px;
+    cursor: text;
 `;
