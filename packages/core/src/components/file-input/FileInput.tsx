@@ -59,13 +59,19 @@ const FileInput: FC<FileInputProps> = ({
                 }
             });
 
-            if (newFileItems.length > 0 && typeof onAdd === 'function') {
-                onAdd(newFileItems);
+            let tmp = newFileItems;
+
+            if (maxFiles) {
+                tmp = newFileItems.slice(0, maxFiles - internalFiles.length);
             }
 
-            setInternalFiles((prevState) => [...prevState, ...newFileItems]);
+            if (tmp.length > 0 && typeof onAdd === 'function') {
+                onAdd(tmp);
+            }
+
+            setInternalFiles((prevState) => [...prevState, ...tmp]);
         },
-        [internalFiles, onAdd],
+        [internalFiles, maxFiles, onAdd],
     );
 
     const handleDeleteFile = useCallback(
