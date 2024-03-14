@@ -20,7 +20,11 @@ import { calculateContentHeight } from '../../utils/calculate';
 import { searchList } from '../../utils/searchBox';
 import Input from '../input/Input';
 import SearchBoxItem from './search-box-item/SearchBoxItem';
-import { StyledMotionSearchBoxBody, StyledSearchBox } from './SearchBox.styles';
+import {
+    StyledMotionSearchBoxBody,
+    StyledSearchBox,
+    StyledSearchBoxContent,
+} from './SearchBox.styles';
 
 export type SearchBoxRef = {
     clear: VoidFunction;
@@ -83,7 +87,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
         const boxRef = useRef<HTMLDivElement>(null);
-        const contentRef = useRef<HTMLDivElement | null>(null);
+        const contentRef = useRef<HTMLAnchorElement | null>(null);
         const inputRef = useRef<HTMLInputElement | null>(null);
 
         const { browser } = getDevice();
@@ -358,7 +362,9 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                                 type: 'tween',
                             }}
                         >
-                            <div ref={contentRef}>{content}</div>
+                            <StyledSearchBoxContent ref={contentRef} tabIndex={0}>
+                                {content}
+                            </StyledSearchBoxContent>
                         </StyledMotionSearchBoxBody>
                     </AnimatePresence>
                 </StyledSearchBox>

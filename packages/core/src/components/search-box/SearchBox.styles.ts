@@ -55,3 +55,8 @@ export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBo
                   }
               `}
 `;
+
+export const StyledSearchBoxContent = styled.a`
+    text-decoration: none;
+    border: none;
+`;
