@@ -22,6 +22,10 @@ export const StyledComboBoxItem = styled.div<StyledComboBoxItemProps>`
             &:hover {
                 background-color: ${theme['secondary-102']};
             }
+
+            &:focus {
+                background-color: ${theme['secondary-102']};
+            }
         `}
 `;
 

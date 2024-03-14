@@ -78,8 +78,10 @@ const ComboBox: FC<ComboBoxProps> = ({
     const [isAnimating, setIsAnimating] = useState(false);
     const [minWidth, setMinWidth] = useState(0);
     const [height, setHeight] = useState(0);
+    const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
     const ref = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement | null>(null);
 
     const { browser } = getDevice();
 
@@ -119,6 +121,57 @@ const ComboBox: FC<ComboBoxProps> = ({
         },
         [onSelect],
     );
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                const children = contentRef.current?.children;
+                if (children && children.length > 0) {
+                    const newIndex =
+                        focusedIndex !== null
+                            ? (focusedIndex + (e.key === 'ArrowUp' ? -1 : 1) + children.length) %
+                              children.length
+                            : 0;
+
+                    if (focusedIndex !== null) {
+                        const prevElement = children[focusedIndex] as HTMLDivElement;
+                        prevElement.tabIndex = -1;
+                    }
+
+                    setFocusedIndex(newIndex);
+
+                    const newElement = children[newIndex] as HTMLDivElement;
+                    newElement.tabIndex = 0;
+                    newElement.focus();
+                }
+            } else if (e.key === 'Enter' && focusedIndex !== null) {
+                const element = contentRef.current?.children[focusedIndex];
+
+                if (!element) {
+                    return;
+                }
+
+                const { id } = element;
+
+                const newSelectedItem = list.find(
+                    ({ value }) => String(value) === id.replace('combobox-item__', ''),
+                );
+
+                if (!newSelectedItem) {
+                    return;
+                }
+
+                handleSetSelectedItem(newSelectedItem);
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [focusedIndex, handleSetSelectedItem, list]);
 
     /**
      * This function calculates the greatest width
@@ -187,6 +240,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                 imageUrl={imageUrl}
                 isSelected={selectedItem ? value === selectedItem.value : false}
                 key={value}
+                id={value}
                 onSelect={handleSetSelectedItem}
                 shouldShowRoundImage={shouldShowRoundImage}
                 suffixElement={suffixElement}
@@ -213,6 +267,8 @@ const ComboBox: FC<ComboBoxProps> = ({
                 style={style}
                 $direction={direction}
                 transition={{ duration: 0.2 }}
+                tabIndex={0}
+                ref={contentRef}
             >
                 {items}
             </StyledMotionComboBoxBody>

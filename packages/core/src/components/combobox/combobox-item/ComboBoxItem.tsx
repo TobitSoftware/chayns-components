@@ -10,6 +10,7 @@ export type ComboBoxItemProps = {
     suffixElement?: ReactNode;
     text: IComboBoxItem['text'];
     value: IComboBoxItem['value'];
+    id: IComboBoxItem['value'];
 };
 
 const ComboBoxItem: FC<ComboBoxItemProps> = ({
@@ -19,6 +20,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
     shouldShowRoundImage,
     suffixElement,
     text,
+    id,
     value,
 }) => {
     const handleItemClick = useCallback(() => {
@@ -30,6 +32,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
     return useMemo(
         () => (
             <StyledComboBoxItem
+                id={`combobox-item__${typeof id === 'number' ? String(id) : id}`}
                 onClick={handleItemClick}
                 $isMobile={isMobile}
                 $isSelected={isSelected}
@@ -46,6 +49,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
         ),
         [
             handleItemClick,
+            id,
             imageUrl,
             isMobile,
             isSelected,
