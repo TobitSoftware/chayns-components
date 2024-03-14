@@ -1,5 +1,5 @@
 import { AnimatePresence } from 'framer-motion';
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { MentionFinderPopupAlignment } from '../../constants/mentionFinder';
 import MentionFinderItem from './mention-finder-item/MentionFinderItem';
 import { StyledMentionFinder, StyledMotionMentionFinderPopup } from './MentionFinder.styles';
@@ -37,6 +37,9 @@ const MentionFinder: FC<MentionFinderProps> = ({
     popupAlignment,
 }) => {
     const [activeMember, setActiveMember] = useState(members[0]);
+    const [focusedIndex, setFocusedIndex] = useState(0);
+
+    const ref = useRef<HTMLDivElement>(null);
 
     const [fullMatch, searchString] = useMemo(() => {
         // eslint-disable-next-line no-irregular-whitespace
@@ -60,28 +63,35 @@ const MentionFinder: FC<MentionFinderProps> = ({
 
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
-            if (event.key === 'ArrowUp') {
+            if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
                 event.preventDefault();
-                event.stopPropagation();
 
-                const currentIndex = filteredMembers.findIndex(({ id }) => id === activeMember?.id);
+                const children = ref.current?.children;
 
-                const prevIndex = Math.max(currentIndex - 1, 0);
+                if (children && children.length > 0) {
+                    const newIndex =
+                        focusedIndex !== null
+                            ? (focusedIndex +
+                                  (event.key === 'ArrowUp' ? -1 : 1) +
+                                  children.length) %
+                              children.length
+                            : 0;
 
-                const member = filteredMembers[prevIndex];
+                    if (focusedIndex !== null) {
+                        const prevElement = children[focusedIndex] as HTMLDivElement;
+                        prevElement.tabIndex = -1;
+                    }
 
-                setActiveMember(member);
-            } else if (event.key === 'ArrowDown') {
-                event.preventDefault();
-                event.stopPropagation();
+                    setFocusedIndex(newIndex);
 
-                const currentIndex = filteredMembers.findIndex(({ id }) => id === activeMember?.id);
+                    const member = filteredMembers[newIndex];
 
-                const nextIndex = Math.min(currentIndex + 1, filteredMembers.length - 1);
+                    setActiveMember(member);
 
-                const member = filteredMembers[nextIndex];
-
-                setActiveMember(member);
+                    const newElement = children[newIndex] as HTMLDivElement;
+                    newElement.tabIndex = 0;
+                    newElement.focus();
+                }
             } else if (event.key === 'Enter') {
                 event.preventDefault();
                 event.stopPropagation();
@@ -90,8 +100,39 @@ const MentionFinder: FC<MentionFinderProps> = ({
                     onSelect({ fullMatch, member: activeMember });
                 }
             }
+
+            // if (event.key === 'ArrowUp') {
+            //     event.preventDefault();
+            //     event.stopPropagation();
+            //
+            //     const currentIndex = filteredMembers.findIndex(({ id }) => id === activeMember?.id);
+            //
+            //     const prevIndex = Math.max(currentIndex - 1, 0);
+            //
+            //     const member = filteredMembers[prevIndex];
+            //
+            //     setActiveMember(member);
+            // } else if (event.key === 'ArrowDown') {
+            //     event.preventDefault();
+            //     event.stopPropagation();
+            //
+            //     const currentIndex = filteredMembers.findIndex(({ id }) => id === activeMember?.id);
+            //
+            //     const nextIndex = Math.min(currentIndex + 1, filteredMembers.length - 1);
+            //
+            //     const member = filteredMembers[nextIndex];
+            //
+            //     setActiveMember(member);
+            // } else if (event.key === 'Enter') {
+            //     event.preventDefault();
+            //     event.stopPropagation();
+            //
+            //     if (fullMatch && activeMember) {
+            //         onSelect({ fullMatch, member: activeMember });
+            //     }
+            // }
         },
-        [activeMember, filteredMembers, fullMatch, onSelect],
+        [activeMember, filteredMembers, focusedIndex, fullMatch, onSelect],
     );
 
     const handleMemberClick = useCallback(
@@ -148,12 +189,14 @@ const MentionFinder: FC<MentionFinderProps> = ({
             <AnimatePresence initial={false}>
                 {shouldShowPopup && (
                     <StyledMotionMentionFinderPopup
+                        ref={ref}
                         animate={{ height: 'auto', opacity: 1 }}
                         className="prevent-lose-focus"
                         exit={{ height: 0, opacity: 0 }}
                         initial={{ height: 0, opacity: 0 }}
                         $popupAlignment={popupAlignment}
                         transition={{ duration: 0.15 }}
+                        tabIndex={0}
                     >
                         {items}
                     </StyledMotionMentionFinderPopup>
