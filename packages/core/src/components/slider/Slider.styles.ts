@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
-import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import styled from 'styled-components';
+import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledSlider = styled.div`
     width: 100%;
@@ -17,7 +17,24 @@ type StyledSliderInputProps = WithTheme<{
     $isInterval: boolean;
 }>;
 
-export const StyledSliderInput = styled.input<StyledSliderInputProps>`
+export const StyledSliderInput = styled.input.attrs<StyledSliderInputProps>(
+    ({ $isInterval, $value, $min, $max, theme }) => ({
+        style: {
+            pointerEvents: $isInterval ? 'none' : 'all',
+            background: !$isInterval
+                ? `linear-gradient(
+            to right,
+            ${(theme as Theme)['409'] ?? ''} 0%,
+            ${(theme as Theme)['409'] ?? ''}
+            ${(($value - $min) / ($max - $min)) * 100}%,
+            ${(theme as Theme)['403'] ?? ''}
+            ${(($value - $min) / ($max - $min)) * 100}%,
+            ${(theme as Theme)['403'] ?? ''}
+        )`
+                : undefined,
+        },
+    }),
+)`
     position: absolute;
     width: 100%;
     border-radius: 100px;
@@ -27,21 +44,6 @@ export const StyledSliderInput = styled.input<StyledSliderInputProps>`
     cursor: pointer !important;
     z-index: 2;
     appearance: none;
-    pointer-events: ${({ $isInterval }) => ($isInterval ? 'none' : 'all')};
-
-    ${({ $isInterval, theme, $min, $max, $value }: StyledSliderInputProps) =>
-        !$isInterval &&
-        css`
-            background: ${`linear-gradient(
-            to right,
-            ${theme['409'] ?? ''} 0%,
-            ${theme['409'] ?? ''}
-            ${(($value - $min) / ($max - $min)) * 100}%,
-            ${theme['403'] ?? ''}
-            ${(($value - $min) / ($max - $min)) * 100}%,
-            ${theme['403'] ?? ''}
-        )`};
-        `}
 
     // Slider thumb for chrome
     &::-webkit-slider-thumb {
@@ -56,6 +58,7 @@ export const StyledSliderInput = styled.input<StyledSliderInputProps>`
     }
 
     // slider thumb for firefox
+
     &::-moz-range-thumb {
         width: 20px;
         height: 20px;
@@ -68,16 +71,21 @@ export const StyledSliderInput = styled.input<StyledSliderInputProps>`
 
 type StyledSliderThumbProps = WithTheme<{ $position: number }>;
 
-export const StyledSliderThumb = styled.div<StyledSliderThumbProps>`
+export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(
+    ({ $position, theme }) => ({
+        style: {
+            left: `${$position}px`,
+            backgroundColor: (theme as Theme)['100'],
+        },
+    }),
+)`
     min-width: 20px;
     height: 20px;
-    background-color: ${({ theme }: StyledSliderThumbProps) => theme['100']};
     cursor: pointer;
     border-radius: 100px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     pointer-events: none;
     z-index: 3;
-    left: ${({ $position }) => $position}px;
     position: absolute;
     display: flex;
     align-items: center;
