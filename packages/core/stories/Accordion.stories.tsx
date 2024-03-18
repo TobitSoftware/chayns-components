@@ -150,29 +150,29 @@ WrappedAccordions.args = {
             aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
             rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor si amet.
         </AccordionContent>,
-        <AccordionGroup>
-            <Accordion isWrapped title="At vero eos et accusam">
+        <AccordionGroup isWrapped>
+            <Accordion title="At vero eos et accusam1">
                 <AccordionContent>
                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
                     tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
                 </AccordionContent>
             </Accordion>
-            <Accordion isWrapped title="Justo duo dolores et ea rebum">
+            <Accordion title="Justo duo dolores et ea rebum1">
                 <AccordionContent>
                     At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
                     gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
                     dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
                     invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
                 </AccordionContent>
-                <AccordionGroup>
-                    <Accordion isWrapped title="At vero eos et accusam">
+                <AccordionGroup isWrapped>
+                    <Accordion title="At vero eos et accusam2">
                         <AccordionContent>
                             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
                             eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
                             voluptua.
                         </AccordionContent>
                     </Accordion>
-                    <Accordion isWrapped title="Justo duo dolores et ea rebum">
+                    <Accordion title="Justo duo dolores et ea rebum2">
                         <AccordionContent>
                             At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
                             gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem
@@ -180,15 +180,15 @@ WrappedAccordions.args = {
                             eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
                             voluptua.
                         </AccordionContent>
-                        <AccordionGroup>
-                            <Accordion isWrapped title="At vero eos et accusam">
+                        <AccordionGroup isWrapped>
+                            <Accordion title="At vero eos et accusam3">
                                 <AccordionContent>
                                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                                     diam nonumy eirmod tempor invidunt ut labore et dolore magna
                                     aliquyam erat, sed diam voluptua.
                                 </AccordionContent>
                             </Accordion>
-                            <Accordion isWrapped title="Justo duo dolores et ea rebum">
+                            <Accordion title="Justo duo dolores et ea rebum3">
                                 <AccordionContent>
                                     At vero eos et accusam et justo duo dolores et ea rebum. Stet
                                     clita kasd gubergren, no sea takimata sanctus est Lorem ipsum

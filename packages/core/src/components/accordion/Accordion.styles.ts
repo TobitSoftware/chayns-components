@@ -47,7 +47,7 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
         if (theme.accordionLines) {
             if ($isWrapped) {
                 return css`
-                    :not(:last-child) {
+                    &&:not(:last-child) {
                         border-bottom-color: ${theme.headline};
                     }
                 `;
