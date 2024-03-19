@@ -1,0 +1,93 @@
+import React, { useCallback, useMemo, useState } from 'react';
+import type { IPresetColor } from '../../types';
+import { StyledColorPicker } from './ColorPicker.styles';
+import PresetColors from './preset-colors/PresetColors';
+
+interface IColorPickerContext {
+    selectedColor?: string;
+    updateSelectedColor?: (color: string | undefined) => void;
+}
+
+export const ColorPickerContext = React.createContext<IColorPickerContext>({
+    selectedColor: undefined,
+    updateSelectedColor: undefined,
+});
+
+ColorPickerContext.displayName = 'ColorPickerContext';
+
+interface ColorPickerProps {
+    /**
+     * Function to be executed when a color is selected.
+     */
+    onSelect?: (color: string) => void;
+    /**
+     * The color that should be preselected.
+     */
+    selectedColor?: string;
+    /**
+     * Colors the user can select from.
+     */
+    presetColors?: IPresetColor[];
+    /**
+     * Whether the preset colors should be displayed.
+     */
+    shouldShowPresetColors?: boolean;
+    /**
+     * Function to be executed when a preset color is added.
+     */
+    onPresetColorAdd?: (presetColor: IPresetColor) => void;
+    /**
+     * Function to be executed when a preset color is removed.
+     */
+    onPresetColorRemove?: (presetColorId: IPresetColor['id']) => void;
+    /**
+     * Whether the transparency slider should be displayed.
+     */
+    shouldShowTransparencySlider?: boolean;
+    /**
+     * Whether the more options accordion should be displayed.
+     */
+    shouldShowMoreOptions?: boolean;
+    /**
+     * Whether the ColorPicker should be displayed inside a popup.
+     */
+    shouldShowAsPopup?: boolean;
+}
+
+const ColorPicker = ({
+    selectedColor,
+    presetColors,
+    onPresetColorRemove,
+    onPresetColorAdd,
+    shouldShowPresetColors = false,
+    shouldShowAsPopup = true,
+    shouldShowTransparencySlider = false,
+    shouldShowMoreOptions = false,
+    onSelect,
+}: ColorPickerProps) => {
+    const [internalSelectedColor, setInternalSelectedColor] = useState<string>();
+
+    const updateSelectedColor = useCallback((color: string | undefined) => {
+        setInternalSelectedColor(color);
+    }, []);
+
+    const providerValue = useMemo<IColorPickerContext>(
+        () => ({
+            selectedColor: internalSelectedColor,
+            updateSelectedColor,
+        }),
+        [internalSelectedColor, updateSelectedColor],
+    );
+
+    return (
+        <StyledColorPicker>
+            <ColorPickerContext.Provider value={providerValue}>
+                <PresetColors presetColors={presetColors} />
+            </ColorPickerContext.Provider>
+        </StyledColorPicker>
+    );
+};
+
+ColorPicker.displayName = 'ColorPicker';
+
+export default ColorPicker;

@@ -14,3 +14,9 @@ export interface RGB {
     b: number;
     a?: number;
 }
+
+export interface IPresetColor {
+    isCustom?: boolean;
+    id: string;
+    color: string;
+}
