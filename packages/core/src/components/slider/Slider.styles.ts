@@ -71,18 +71,16 @@ export const StyledSliderInput = styled.input.attrs<StyledSliderInputProps>(
 
 type StyledSliderThumbProps = WithTheme<{ $position: number }>;
 
-export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(
-    ({ $position, theme }) => ({
-        style: {
-            left: `${$position}px`,
-            backgroundColor: (theme as Theme)['100'],
-        },
-    }),
-)`
+export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $position }) => ({
+    style: {
+        left: `${$position}px`,
+    },
+}))`
     min-width: 20px;
     height: 20px;
     cursor: pointer;
     border-radius: 100px;
+    background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     pointer-events: none;
     z-index: 3;
