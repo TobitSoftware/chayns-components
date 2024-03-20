@@ -71,7 +71,14 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
 
             return $isChecked ? theme['408'] : theme['403'];
         }};
-        border: 1px solid rgba(${({ theme }: StyledCheckboxLabelProps) => theme['409-rgb']}, 0.5);
+        
+        ${({ $shouldShowAsSwitch }) =>
+            !$shouldShowAsSwitch &&
+            css`
+                border: 1px solid
+                    rgba(${({ theme }: StyledCheckboxLabelProps) => theme['409-rgb']}, 0.5);
+            `}
+        
         border-radius: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '100px' : 0)};
         content: ' ';
         height: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '13px' : '15px')};
