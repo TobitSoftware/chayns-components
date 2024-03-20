@@ -21,12 +21,15 @@ export const StyledSmallWaitCursor = styled.div<StyledSmallWaitCursorProps>`
 type StyledSmallWaitCursorBackgroundProps = WithTheme<unknown>;
 
 export const StyledSmallWaitCursorBackground = styled.div<StyledSmallWaitCursorBackgroundProps>`
-    background-color: ${({ theme }: StyledSmallWaitCursorBackgroundProps) => theme['100']};
+    background-color: white;
     border-radius: 50%;
     height: 100%;
     width: 100%;
     position: relative;
     z-index: 1;
+    box-shadow:
+        0 4px 12px 0 rgba(0, 0, 0, 0.2),
+        0 1px 1px rgba(0, 0, 0, 0.2);
 `;
 
 type StyledSmallWaitCursorWaitCursorProps = WithTheme<{
