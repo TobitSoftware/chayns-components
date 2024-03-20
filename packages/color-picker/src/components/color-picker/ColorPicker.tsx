@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { IPresetColor } from '../../types';
 import { StyledColorPicker } from './ColorPicker.styles';
 import PresetColors from './preset-colors/PresetColors';
@@ -70,6 +70,12 @@ const ColorPicker = ({
     const updateSelectedColor = useCallback((color: string | undefined) => {
         setInternalSelectedColor(color);
     }, []);
+
+    useEffect(() => {
+        if (typeof selectedColor === 'string') {
+            updateSelectedColor(selectedColor);
+        }
+    }, [selectedColor, updateSelectedColor]);
 
     const providerValue = useMemo<IColorPickerContext>(
         () => ({
