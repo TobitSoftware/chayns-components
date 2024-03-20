@@ -8,7 +8,6 @@ export const StyledSliderButton = styled.div<StyledSliderButtonProps>`
     align-items: center;
     background-color: ${({ theme }: StyledSliderButtonProps) => theme['404']};
     border-radius: 3px;
-    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
     border: none;
     color: white;
     cursor: pointer;
@@ -38,6 +37,7 @@ export const StyledMotionSliderButtonThumb = styled(motion.div)<StyledMotionSlid
     width: ${({ $width }) => $width}px;
     position: absolute;
     border-radius: 3px;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
     z-index: 3;
     height: 100%;
     padding: 7px 12px;
