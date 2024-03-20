@@ -39,9 +39,20 @@ export type AmountControlProps = {
      * A Function that is executed when the amount is changed
      */
     onChange?: (amount: number) => void;
+    /**
+     * Whether the icon should be displayed if no amount is selected
+     */
+    shouldShowIcon?: boolean;
 };
 
-const AmountControl: FC<AmountControlProps> = ({ amount, icon, label, maxAmount, onChange }) => {
+const AmountControl: FC<AmountControlProps> = ({
+    amount,
+    icon,
+    shouldShowIcon = true,
+    label,
+    maxAmount,
+    onChange,
+}) => {
     const [amountValue, setAmountValue] = useState(0);
     const [inputValue, setInputValue] = useState('0');
     const [displayState, setDisplayState] = useState<DisplayState>('default');
@@ -159,18 +170,36 @@ const AmountControl: FC<AmountControlProps> = ({ amount, icon, label, maxAmount,
         return item;
     }, [displayState, icon]);
 
+    const shouldShowLeftIcon = useMemo(() => {
+        if (shouldShowIcon) {
+            return true;
+        }
+
+        return !(displayState === 'default' && !shouldShowIcon);
+    }, [displayState, shouldShowIcon]);
+
     return useMemo(
         () => (
             <StyledAmountControl onClick={handleFirstAmount}>
-                <StyledMotionAmountControlButton
-                    onClick={handleAmountRemove}
-                    disabled={amountValue !== 0 && amountValue <= minAmount}
-                    $isDisabled={amountValue !== 0 && amountValue <= minAmount}
-                >
-                    {leftIcon}
-                </StyledMotionAmountControlButton>
+                <AnimatePresence initial={false}>
+                    {shouldShowLeftIcon && (
+                        <StyledMotionAmountControlButton
+                            key="right_button"
+                            initial={{ width: 0, opacity: 0, padding: 0 }}
+                            animate={{ width: 40, opacity: 1, padding: 0 }}
+                            exit={{ width: 0, opacity: 0, padding: 0 }}
+                            transition={{ duration: 0.2, type: 'tween' }}
+                            onClick={handleAmountRemove}
+                            disabled={amountValue !== 0 && amountValue <= minAmount}
+                            $isDisabled={amountValue !== 0 && amountValue <= minAmount}
+                        >
+                            {leftIcon}
+                        </StyledMotionAmountControlButton>
+                    )}
+                </AnimatePresence>
                 <StyledAmountControlInput
                     $displayState={displayState}
+                    $shouldShowIcon={shouldShowIcon}
                     onBlur={handleInputBlur}
                     onChange={handleInputChange}
                     value={displayState === 'default' && label ? label : inputValue}
@@ -204,7 +233,8 @@ const AmountControl: FC<AmountControlProps> = ({ amount, icon, label, maxAmount,
             label,
             leftIcon,
             maxAmount,
-            minAmount,
+            shouldShowIcon,
+            shouldShowLeftIcon,
         ],
     );
 };
