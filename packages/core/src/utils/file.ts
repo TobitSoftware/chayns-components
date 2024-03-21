@@ -11,6 +11,17 @@ export const filterDuplicateFile = ({ newFile, files }: FilerDuplicateFileOption
     return duplicates.length > 0;
 };
 
+interface FilterDuplicateFileUrlsOptions {
+    files: string[];
+    newFile: string;
+}
+
+export const filterDuplicateFileUrls = ({ newFile, files }: FilterDuplicateFileUrlsOptions) => {
+    const duplicates = files.filter((fileItem) => fileItem === newFile);
+
+    return duplicates.length > 0;
+};
+
 const FILE_SIZE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
 
 export const getHumanSize = (bytes: number): string => {
