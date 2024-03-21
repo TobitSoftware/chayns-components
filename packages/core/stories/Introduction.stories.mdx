@@ -93,22 +93,35 @@ import { Meta } from '@storybook/addon-docs';
 
 ```tsx
 import React from 'react';
-import { ColorSchemeProvider } from '@chayns-components/core';
-import { ChaynsProvider, getSite } from 'chayns-api';
+import { ChaynsProvider } from 'chayns-api';
 
 const AppWrapper = () => {
-    const { color, colorMode } = getSite();
-
     return (
         <ChaynsProvider>
-            <ColorSchemeProvider color={color} colorMode={colorMode}>
-                <YourComponent/>
-            </ColorSchemeProvider>
+            <App/>
         </ChaynsProvider>
     )
 }
 
 export default AppWrapper;
+```
+
+```tsx
+import React from 'react';
+import { ColorSchemeProvider } from '@chayns-components/core';
+import { getSite } from 'chayns-api';
+
+const App = () => {
+    const { color, colorMode } = getSite();
+
+    return (
+            <ColorSchemeProvider color={color} colorMode={colorMode}>
+                <YourComponent/>
+            </ColorSchemeProvider>
+    )
+}
+
+export default App;
 ```
 
 <h2 style={{ marginTop: '32px' }}>Contribution</h2>
