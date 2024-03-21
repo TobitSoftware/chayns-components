@@ -15,6 +15,7 @@ export const StyledGridImage = styled.div<StyledGridImageProps>`
     position: relative;
     transition: border-radius 0.3s ease;
     width: ${({ $size }) => $size}px;
+    flex: 0 0 auto;
 `;
 
 type StyledGridLeftImageProps = {
