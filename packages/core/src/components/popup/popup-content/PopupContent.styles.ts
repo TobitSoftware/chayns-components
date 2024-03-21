@@ -63,6 +63,7 @@ export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupCont
 
     &::before {
         background-color: inherit;
+        border-radius: 3px;
         bottom: 0;
         content: '';
         left: 0;
@@ -75,4 +76,5 @@ export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupCont
 
 export const StyledPopupContentInner = styled.div`
     overflow: hidden;
+    padding: 6px 12px;
 `;

@@ -7,7 +7,7 @@ export default {
     component: Popup,
     args: {
         content: (
-            <span style={{ display: 'block', padding: '5px' }}>
+            <span style={{ display: 'block' }}>
                 <h1 style={{ margin: 0 }}>Popup</h1>
                 <p>Das ist ein Popup!</p>
             </span>
