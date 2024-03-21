@@ -151,13 +151,16 @@ WrappedAccordions.args = {
             rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor si amet.
         </AccordionContent>,
         <AccordionGroup isWrapped>
-            <Accordion title="At vero eos et accusam1">
+            <Accordion
+                title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua"
+            >
                 <AccordionContent>
                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
                     tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
                 </AccordionContent>
             </Accordion>
-            <Accordion title="Justo duo dolores et ea rebum1">
+            <Accordion title="Justo duo dolores et ea rebum">
                 <AccordionContent>
                     At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
                     gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
@@ -165,14 +168,14 @@ WrappedAccordions.args = {
                     invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
                 </AccordionContent>
                 <AccordionGroup isWrapped>
-                    <Accordion title="At vero eos et accusam2">
+                    <Accordion title="At vero eos et accusam">
                         <AccordionContent>
                             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
                             eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
                             voluptua.
                         </AccordionContent>
                     </Accordion>
-                    <Accordion title="Justo duo dolores et ea rebum2">
+                    <Accordion title="Justo duo dolores et ea rebum">
                         <AccordionContent>
                             At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
                             gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem
@@ -181,14 +184,14 @@ WrappedAccordions.args = {
                             voluptua.
                         </AccordionContent>
                         <AccordionGroup isWrapped>
-                            <Accordion title="At vero eos et accusam3">
+                            <Accordion title="At vero eos et accusam">
                                 <AccordionContent>
                                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                                     diam nonumy eirmod tempor invidunt ut labore et dolore magna
                                     aliquyam erat, sed diam voluptua.
                                 </AccordionContent>
                             </Accordion>
-                            <Accordion title="Justo duo dolores et ea rebum3">
+                            <Accordion title="Justo duo dolores et ea rebum">
                                 <AccordionContent>
                                     At vero eos et accusam et justo duo dolores et ea rebum. Stet
                                     clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
@@ -300,10 +303,12 @@ WithAccordionItems.args = {
             <AccordionItem>Consetetur sadipscing elitr</AccordionItem>
             <AccordionItem>Sed diam nonumy eirmod tempor invidunt ut labore</AccordionItem>
             <AccordionItem>Et dolore magna aliquyam erat</AccordionItem>
-            <Accordion isWrapped title="At vero eos et accusam">
-                <AccordionItem>Consetetur sadipscing elitr</AccordionItem>
-                <AccordionItem>Sed diam nonumy eirmod tempor invidunt ut labore</AccordionItem>
-            </Accordion>
+            <AccordionGroup isWrapped>
+                <Accordion title="At vero eos et accusam">
+                    <AccordionItem>Consetetur sadipscing elitr</AccordionItem>
+                    <AccordionItem>Sed diam nonumy eirmod tempor invidunt ut labore</AccordionItem>
+                </Accordion>
+            </AccordionGroup>
         </>
     ),
     title: 'Lorem ipsum dolor sit amet',
