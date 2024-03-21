@@ -7,8 +7,7 @@ export const StyledMentionFinderItem = styled.div<StyledMentionFinderItemProps>`
     align-items: center;
     cursor: pointer;
     display: flex;
-    height: 64px;
-    padding: 12px 9px;
+    padding: 10px 8px;
 
     &:not(:last-child) {
         border-bottom: 1px solid
@@ -16,7 +15,7 @@ export const StyledMentionFinderItem = styled.div<StyledMentionFinderItemProps>`
     }
 
     &:nth-child(even) {
-        background-color: ${({ theme }: StyledMentionFinderItemProps) => theme['002']};
+        background-color: ${({ theme }: StyledMentionFinderItemProps) => theme['101']};
     }
 
     ${({ $isActive, theme }) =>
