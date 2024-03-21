@@ -74,11 +74,7 @@ export const StyledInputField = styled.input<StyledInputFieldProps>`
     width: 100%;
 `;
 
-type StyledMotionInputLabelWrapperProps = WithTheme<{ $width: number }>;
-
-export const StyledMotionInputLabelWrapper = styled(
-    motion.label,
-)<StyledMotionInputLabelWrapperProps>`
+export const StyledMotionInputLabelWrapper = styled(motion.label)`
     align-items: baseline;
     display: flex;
     flex: 0 0 auto;
@@ -87,7 +83,7 @@ export const StyledMotionInputLabelWrapper = styled(
     pointer-events: none;
     position: absolute;
     user-select: none;
-    max-width: ${({ $width }) => $width}px;
+    max-width: 100%;
 `;
 
 type StyledInputLabelProps = WithTheme<{ $isInvalid?: boolean }>;

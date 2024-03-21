@@ -139,7 +139,6 @@ const Input = forwardRef<InputRef, InputProps>(
         ref,
     ) => {
         const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
-        const [width, setWidth] = useState(0);
 
         const theme = useTheme() as Theme;
 
@@ -159,25 +158,6 @@ const Input = forwardRef<InputRef, InputProps>(
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const shouldShowBorder = rightElement?.props?.style?.backgroundColor === undefined;
-
-        useEffect(() => {
-            if (inputRef.current) {
-                const resizeObserver = new ResizeObserver((entries) => {
-                    if (entries && entries[0]) {
-                        const observedWidth = entries[0].contentRect.width;
-                        setWidth(observedWidth);
-                    }
-                });
-
-                resizeObserver.observe(inputRef.current);
-
-                return () => {
-                    resizeObserver.disconnect();
-                };
-            }
-
-            return () => {};
-        }, []);
 
         const handleInputFieldChange = useCallback(
             (event: ChangeEvent<HTMLInputElement>) => {
@@ -243,7 +223,6 @@ const Input = forwardRef<InputRef, InputProps>(
                             layout
                             style={{ ...labelPosition }}
                             transition={{ type: 'tween', duration: 0.3 }}
-                            $width={width}
                         >
                             {placeholderElement}
                             <StyledInputLabel $isInvalid={isInvalid}>
