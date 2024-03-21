@@ -77,7 +77,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
     (
         {
             alignment,
-            children = <Icon icons={['ts-ellipsis_v']} />,
+            children = <Icon icons={['ts-ellipsis_v']} size={20} />,
             container = document.body,
             coordinates,
             items,
