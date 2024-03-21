@@ -33,7 +33,7 @@ export type FileInputProps = {
      */
     imageSelectIcons?: string[];
     /**
-     * If set, pictures can be select via pixabay.
+     * If set, pictures can be select via Pixabay.
      */
     imageSelectPlaceholder?: string;
     /**
