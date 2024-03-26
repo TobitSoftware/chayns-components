@@ -1,3 +1,4 @@
+import { ColorSchemeProvider } from '@chayns-components/core';
 import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import {
@@ -112,7 +113,11 @@ const Typewriter: FC<TypewriterProps> = ({
 
             if (currentChildren) {
                 return React.isValidElement(currentChildren)
-                    ? renderToString(currentChildren)
+                    ? renderToString(
+                          <ColorSchemeProvider color="#005EB8" colorMode={0}>
+                              {currentChildren}
+                          </ColorSchemeProvider>,
+                      )
                     : (currentChildren as string);
             }
 
@@ -120,7 +125,11 @@ const Typewriter: FC<TypewriterProps> = ({
         }
 
         return React.isValidElement(sortedChildren)
-            ? renderToString(sortedChildren)
+            ? renderToString(
+                  <ColorSchemeProvider color="#005EB8" colorMode={0}>
+                      {sortedChildren}
+                  </ColorSchemeProvider>,
+              )
             : (sortedChildren as string);
     }, [areMultipleChildrenGiven, currentChildrenIndex, sortedChildren]);
 
@@ -260,7 +269,11 @@ const Typewriter: FC<TypewriterProps> = ({
     const pseudoTextHTML = useMemo(() => {
         if (pseudoChildren) {
             const pseudoText = React.isValidElement(pseudoChildren)
-                ? renderToString(pseudoChildren)
+                ? renderToString(
+                      <ColorSchemeProvider color="#005EB8" colorMode={0}>
+                          {pseudoChildren}
+                      </ColorSchemeProvider>,
+                  )
                 : (pseudoChildren as string);
 
             if (shouldUseAnimationHeight) {
