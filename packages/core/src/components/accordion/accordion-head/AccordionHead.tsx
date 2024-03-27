@@ -94,7 +94,11 @@ const AccordionHead: FC<AccordionHeadProps> = ({
 
         let internalIcon = 'f105';
 
-        if (theme?.accordionIcon && theme.accordionIcon !== 110) {
+        if (
+            theme?.accordionIcon &&
+            theme.accordionIcon !== 110 &&
+            theme.accordionIcon !== 1110100
+        ) {
             internalIcon = (theme.accordionIcon as number).toString(16);
         }
 
