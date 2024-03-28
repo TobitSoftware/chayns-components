@@ -198,12 +198,13 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                         {isOpen && (
                             <PopupContentWrapper
                                 coordinates={coordinates}
-                                content={content}
                                 key={`tooltip_${uuid}`}
                                 alignment={alignment}
                                 ref={popupContentRef}
                                 onMouseLeave={handleMouseLeave}
-                            />
+                            >
+                                {content}
+                            </PopupContentWrapper>
                         )}
                     </AnimatePresence>,
                     container,

@@ -29,6 +29,7 @@ export { default as MentionFinder } from './components/mention-finder/MentionFin
 export type { MentionMember } from './components/mention-finder/MentionFinder';
 export { default as NumberInput } from './components/number-input/NumberInput';
 export { default as Popup } from './components/popup/Popup';
+export { default as PopupContent } from './components/popup/popup-content/PopupContent';
 export { default as ProgressBar } from './components/progress-bar/ProgressBar';
 export { default as RadioButtonGroup } from './components/radio-button/radio-button-group/RadioButtonGroup';
 export { default as RadioButton } from './components/radio-button/RadioButton';

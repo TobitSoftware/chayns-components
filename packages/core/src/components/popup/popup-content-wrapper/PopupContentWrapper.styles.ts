@@ -75,8 +75,3 @@ export const StyledMotionPopupContentWrapper = styled(
         z-index: -1;
     }
 `;
-
-export const StyledPopupContentInner = styled.div`
-    overflow: hidden;
-    padding: 6px 12px;
-`;

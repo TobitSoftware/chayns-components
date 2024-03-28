@@ -1,20 +1,17 @@
 import { useSite } from 'chayns-api';
 import React, { ReactNode, type MouseEventHandler } from 'react';
 import { PopupAlignment, PopupCoordinates } from '../../../types/popup';
-import {
-    StyledMotionPopupContentWrapper,
-    StyledPopupContentInner,
-} from './PopupContentWrapper.styles';
+import { StyledMotionPopupContentWrapper } from './PopupContentWrapper.styles';
 
 type PopupContentProps = {
     alignment: PopupAlignment;
+    children: ReactNode;
     coordinates: PopupCoordinates;
-    content: ReactNode;
     onMouseLeave: MouseEventHandler<HTMLSpanElement>;
 };
 
 const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
-    ({ alignment, coordinates, content, onMouseLeave }, ref) => {
+    ({ alignment, children, coordinates, onMouseLeave }, ref) => {
         const { colorMode } = useSite();
 
         const isBottomLeftAlignment = alignment === PopupAlignment.BottomLeft;
@@ -49,7 +46,7 @@ const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
                     translateY(${y})
                 `}
             >
-                <StyledPopupContentInner>{content}</StyledPopupContentInner>
+                {children}
             </StyledMotionPopupContentWrapper>
         );
     },
