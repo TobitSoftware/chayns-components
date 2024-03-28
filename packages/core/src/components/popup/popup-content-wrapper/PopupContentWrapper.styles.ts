@@ -4,17 +4,19 @@ import styled, { css } from 'styled-components';
 import { PopupAlignment } from '../../../types/popup';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
-type StyledMotionPopupContentProps = WithTheme<{
+type StyledMotionPopupContentWrapperProps = WithTheme<{
     $position: PopupAlignment;
     $colorMode: ColorMode;
 }>;
 
-export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupContentProps>`
-    background-color: ${({ theme, $colorMode }: StyledMotionPopupContentProps) =>
+export const StyledMotionPopupContentWrapper = styled(
+    motion.div,
+)<StyledMotionPopupContentWrapperProps>`
+    background-color: ${({ theme, $colorMode }: StyledMotionPopupContentWrapperProps) =>
         $colorMode === ColorMode.Dark ? theme['003'] : theme['001']};
     border-radius: 3px;
     box-shadow: 1px 3px 8px rgb(0 0 0 / 30%);
-    color: ${({ theme }: StyledMotionPopupContentProps) => theme.text};
+    color: ${({ theme }: StyledMotionPopupContentWrapperProps) => theme.text};
     z-index: 100;
     position: fixed;
 

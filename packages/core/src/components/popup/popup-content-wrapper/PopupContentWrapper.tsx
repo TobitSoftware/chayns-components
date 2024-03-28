@@ -1,7 +1,10 @@
 import { useSite } from 'chayns-api';
 import React, { ReactNode, type MouseEventHandler } from 'react';
 import { PopupAlignment, PopupCoordinates } from '../../../types/popup';
-import { StyledMotionPopupContent, StyledPopupContentInner } from './PopupContent.styles';
+import {
+    StyledMotionPopupContentWrapper,
+    StyledPopupContentInner,
+} from './PopupContentWrapper.styles';
 
 type PopupContentProps = {
     alignment: PopupAlignment;
@@ -10,7 +13,7 @@ type PopupContentProps = {
     onMouseLeave: MouseEventHandler<HTMLSpanElement>;
 };
 
-const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
+const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
     ({ alignment, coordinates, content, onMouseLeave }, ref) => {
         const { colorMode } = useSite();
 
@@ -27,7 +30,7 @@ const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
         const exitAndInitialY = isTopLeftAlignment || isTopRightAlignment ? -16 : 16;
 
         return (
-            <StyledMotionPopupContent
+            <StyledMotionPopupContentWrapper
                 animate={{ opacity: 1, y: 0 }}
                 $colorMode={colorMode}
                 exit={{ opacity: 0, y: exitAndInitialY }}
@@ -47,11 +50,11 @@ const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
                 `}
             >
                 <StyledPopupContentInner>{content}</StyledPopupContentInner>
-            </StyledMotionPopupContent>
+            </StyledMotionPopupContentWrapper>
         );
     },
 );
 
-PopupContent.displayName = 'PopupContent';
+PopupContentWrapper.displayName = 'PopupContent';
 
-export default PopupContent;
+export default PopupContentWrapper;

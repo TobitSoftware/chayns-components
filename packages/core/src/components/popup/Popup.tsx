@@ -14,7 +14,7 @@ import React, {
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
 import { PopupAlignment, PopupCoordinates, PopupRef } from '../../types/popup';
-import PopupContent from './popup-content/PopupContent';
+import PopupContentWrapper from './popup-content-wrapper/PopupContentWrapper';
 import { StyledPopup, StyledPopupPseudo } from './Popup.styles';
 
 export type PopupProps = {
@@ -196,7 +196,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 createPortal(
                     <AnimatePresence initial={false}>
                         {isOpen && (
-                            <PopupContent
+                            <PopupContentWrapper
                                 coordinates={coordinates}
                                 content={content}
                                 key={`tooltip_${uuid}`}
