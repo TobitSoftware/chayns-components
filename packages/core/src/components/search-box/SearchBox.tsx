@@ -7,6 +7,7 @@ import React, {
     FocusEvent,
     FocusEventHandler,
     forwardRef,
+    KeyboardEventHandler,
     ReactElement,
     useCallback,
     useEffect,
@@ -44,6 +45,10 @@ export type SearchBoxProps = {
      */
     onChange?: ChangeEventHandler<HTMLInputElement>;
     /**
+     * Function that is executed when a letter is pressed
+     */
+    onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
+    /**
      * Function to be executed when an item is selected.
      */
     onSelect?: (item: ISearchBoxItem) => void;
@@ -69,6 +74,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             onChange,
             onBlur,
             onSelect,
+            onKeyDown,
             selectedId,
             shouldShowRoundImage,
             shouldShowContentOnEmptyInput = true,
@@ -339,6 +345,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             onBlur={handleBlur}
                             onFocus={handleFocus}
                             placeholder={placeholder}
+                            onKeyDown={onKeyDown}
                             value={value}
                         />
                     </div>
