@@ -6,7 +6,7 @@ export type ContentCardProps = {
     /**
      * The content of the content card
      */
-    children: ReactNode;
+    children?: ReactNode;
     /**
      * The onClick event handler
      */
