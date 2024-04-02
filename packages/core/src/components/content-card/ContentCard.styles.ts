@@ -22,16 +22,19 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
                 return css`
                     background-color: ${theme['red-4']};
                     border: 1px solid ${theme['red-1']};
+                    color: #222;
                 `;
             case ContentCardType.Success:
                 return css`
                     background-color: ${theme['green-4']};
                     border: 1px solid ${theme['green-1']};
+                    color: #222;
                 `;
             case ContentCardType.Warning:
                 return css`
                     background-color: ${theme['yellow-4']};
                     border: 1px solid ${theme['yellow-1']};
+                    color: #222;
                 `;
             default:
                 return css`
