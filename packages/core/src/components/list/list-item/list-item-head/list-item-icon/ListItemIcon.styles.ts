@@ -12,6 +12,5 @@ export const StyledListItemIcon = styled.div`
     flex: 0 0 auto;
     height: 40px;
     justify-content: center;
-    margin-right: 10px;
     width: 40px;
 `;
