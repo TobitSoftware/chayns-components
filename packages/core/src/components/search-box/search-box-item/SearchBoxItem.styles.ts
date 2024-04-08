@@ -37,4 +37,8 @@ type StyledSearchBoxItemTextProps = WithTheme<unknown>;
 export const StyledSearchBoxItemText = styled.p<StyledSearchBoxItemTextProps>`
     color: ${({ theme }: StyledSearchBoxItemTextProps) => theme.text};
     margin: 5px 0 !important;
+
+    b {
+        color: ${({ theme }: StyledSearchBoxItemTextProps) => theme.headline};
+    }
 `;

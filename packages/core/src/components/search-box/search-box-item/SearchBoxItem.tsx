@@ -39,7 +39,7 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
                         $shouldShowRoundImage={shouldShowRoundImage}
                     />
                 )}
-                <StyledSearchBoxItemText>{text}</StyledSearchBoxItemText>
+                <StyledSearchBoxItemText dangerouslySetInnerHTML={{ __html: text }} />
             </StyledSearchBoxItem>
         ),
         [groupName, handleClick, id, imageUrl, shouldShowRoundImage, text],

@@ -20,9 +20,9 @@ import type { ISearchBoxItem, ISearchBoxItems } from '../../types/searchBox';
 import { calculateContentHeight } from '../../utils/calculate';
 import { searchList } from '../../utils/searchBox';
 import Input from '../input/Input';
+import GroupName from './group-name/GroupName';
 import SearchBoxItem from './search-box-item/SearchBoxItem';
 import { StyledMotionSearchBoxBody, StyledSearchBox } from './SearchBox.styles';
-import GroupName from './group-name/GroupName';
 
 export type SearchBoxRef = {
     clear: VoidFunction;
@@ -327,7 +327,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     <SearchBoxItem
                         id="input-value"
                         onSelect={handleSelect}
-                        text={inputToListValue}
+                        text={`<b>${inputToListValue}</b`}
                     />,
                 );
             }
