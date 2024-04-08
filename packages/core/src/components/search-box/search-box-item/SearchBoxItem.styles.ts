@@ -9,11 +9,11 @@ export const StyledSearchBoxItem = styled.div<StyledSearchBoxItemProps>`
     padding: 4px 10px;
 
     &:hover {
-        background: ${({ theme }: StyledSearchBoxItemProps) => theme['secondary-103']};
+        background: ${({ theme }: StyledSearchBoxItemProps) => theme['secondary-102']};
     }
 
     &:focus {
-        background: ${({ theme }: StyledSearchBoxItemProps) => theme['secondary-103']};
+        background: ${({ theme }: StyledSearchBoxItemProps) => theme['secondary-102']};
     }
 `;
 
