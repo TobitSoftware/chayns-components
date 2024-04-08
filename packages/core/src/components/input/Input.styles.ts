@@ -67,7 +67,7 @@ export const StyledInputContent = styled.div<StyledInputContentProps>`
     flex: 1 1 auto;
     min-width: 0;
     margin: ${({ $shouldShowOnlyBottomBorder }) =>
-        !$shouldShowOnlyBottomBorder ? '8px 10px' : '4px 10px 4px 0'};
+        !$shouldShowOnlyBottomBorder ? '8px 10px' : '4px 0'};
     position: relative;
 `;
 
