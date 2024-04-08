@@ -16,12 +16,13 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import type { ISearchBoxItem } from '../../types/searchBox';
+import type { ISearchBoxItem, ISearchBoxItems } from '../../types/searchBox';
 import { calculateContentHeight } from '../../utils/calculate';
 import { searchList } from '../../utils/searchBox';
 import Input from '../input/Input';
 import SearchBoxItem from './search-box-item/SearchBoxItem';
 import { StyledMotionSearchBoxBody, StyledSearchBox } from './SearchBox.styles';
+import GroupName from './group-name/GroupName';
 
 export type SearchBoxRef = {
     clear: VoidFunction;
@@ -29,9 +30,9 @@ export type SearchBoxRef = {
 
 export type SearchBoxProps = {
     /**
-     * A list of items that can be searched.
+     * List of groups with items that can be searched. It is possible to give only one list; if multiple lists are provided, the 'group name' parameter becomes mandatory.
      */
-    list: ISearchBoxItem[];
+    lists: ISearchBoxItems[];
     /**
      * The placeholder that should be displayed.
      */
@@ -64,13 +65,17 @@ export type SearchBoxProps = {
      * If true, the images of the items are displayed in a round shape.
      */
     shouldShowRoundImage?: boolean;
+    /**
+     * If true, the value in the Input is displayed in the list.
+     */
+    shouldAddInputToList: boolean;
 };
 
 const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
     (
         {
             placeholder,
-            list,
+            lists,
             onChange,
             onBlur,
             onSelect,
@@ -78,21 +83,33 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             selectedId,
             shouldShowRoundImage,
             shouldShowContentOnEmptyInput = true,
+            shouldAddInputToList = true,
         },
         ref,
     ) => {
-        const [matchingItems, setMatchingItems] = useState<ISearchBoxItem[]>([]);
+        const [matchingListsItems, setMatchingListsItems] = useState<ISearchBoxItems[]>(lists);
         const [value, setValue] = useState('');
         const [isAnimating, setIsAnimating] = useState(false);
         const [height, setHeight] = useState<number>(0);
         const [width, setWidth] = useState(0);
         const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+        const [hasMultipleGroups, setHasMultipleGroups] = useState<boolean>(lists.length > 1);
+        const [filteredChildrenArray, setFilteredChildrenArray] = useState<Element[]>();
+        const [inputToListValue, setInputToListValue] = useState<string>('');
 
         const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement | null>(null);
         const inputRef = useRef<HTMLInputElement | null>(null);
 
         const { browser } = getDevice();
+
+        /**
+         * Checks if Lists are smaller then 1
+         */
+
+        useEffect(() => {
+            setHasMultipleGroups(lists.length > 1);
+        }, [lists]);
 
         /**
          * This function closes the list of items
@@ -123,10 +140,22 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          * This hook calculates the height
          */
         useEffect(() => {
-            const textArray = list.map(({ text }) => text);
+            const textArray: string[] = [];
+
+            lists.forEach(({ list, groupName }) => {
+                list.forEach(({ text }) => textArray.push(text));
+                if (!groupName) {
+                    return;
+                }
+                textArray.push(groupName);
+            });
+
+            if (shouldAddInputToList && inputToListValue !== '') {
+                textArray.push(inputToListValue);
+            }
 
             setHeight(calculateContentHeight(textArray));
-        }, [list, placeholder]);
+        }, [inputToListValue, lists, placeholder, shouldAddInputToList]);
 
         /**
          * This hook calculates the width
@@ -141,13 +170,14 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         useEffect(() => {
             if (selectedId) {
-                const selectedItem = list.find(({ id }) => id === selectedId);
-
-                if (selectedItem) {
-                    setValue(selectedItem.text);
-                }
+                lists.forEach(({ list }) => {
+                    const selectedItem = list.find(({ id }) => id === selectedId);
+                    if (selectedItem) {
+                        setValue(selectedItem.text);
+                    }
+                });
             }
-        }, [list, selectedId]);
+        }, [lists, selectedId]);
 
         /**
          * This hook resets the value if the selectedId changes to undefined. This is an own useEffect because the value
@@ -162,58 +192,79 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         /**
          * This function sets the items on focus if shouldShowContentOnEmptyInput
          */
+
         const handleFocus = useCallback(() => {
             if (shouldShowContentOnEmptyInput) {
-                const newMatchingItems = searchList({ items: list, searchString: value });
+                const newMatchingItems = lists.map(({ list, groupName }) => ({
+                    groupName,
+                    list: searchList({ items: list, searchString: value }),
+                }));
 
-                if (newMatchingItems.length === 1 && newMatchingItems[0]?.text === value) {
-                    return;
-                }
+                const filteredMatchingListItems = newMatchingItems.map(({ list, groupName }) => ({
+                    groupName,
+                    list: list.filter(
+                        (item) => !(newMatchingItems.length === 1 && item.text === value),
+                    ),
+                }));
 
-                setMatchingItems(newMatchingItems);
-                setIsAnimating(true);
+                setMatchingListsItems(filteredMatchingListItems);
+                setIsAnimating(filteredMatchingListItems.length !== 0);
             }
-        }, [list, shouldShowContentOnEmptyInput, value]);
+        }, [lists, shouldShowContentOnEmptyInput, value]);
+
+        /**
+         * This function filters the lists by input
+         */
 
         useEffect(() => {
-            if (list) {
-                const newMatchingItems = searchList({ items: list, searchString: value });
+            const newMatchingItems = lists.map(({ list, groupName }) => ({
+                groupName,
+                list: searchList({ items: list, searchString: value }),
+            }));
 
-                if (newMatchingItems.length === 1 && newMatchingItems[0]?.text === value) {
-                    return;
-                }
-
-                if (shouldShowContentOnEmptyInput || value !== '') {
-                    setMatchingItems(newMatchingItems);
-                    setIsAnimating(newMatchingItems.length !== 0);
-                }
+            if (shouldAddInputToList && inputToListValue !== '') {
+                newMatchingItems.forEach(({ list }) => {
+                    list.forEach(({ text }) => {
+                        if (text.toLowerCase() === inputToListValue.toLowerCase()) {
+                            setInputToListValue('');
+                        }
+                    });
+                });
             }
-        }, [list, shouldShowContentOnEmptyInput, value]);
+
+            if (!shouldShowContentOnEmptyInput && !value) {
+                setMatchingListsItems([]);
+            } else {
+                setMatchingListsItems(newMatchingItems);
+                setIsAnimating(newMatchingItems.length !== 0);
+            }
+        }, [inputToListValue, lists, shouldAddInputToList, shouldShowContentOnEmptyInput, value]);
 
         /**
          * This function handles changes of the input
          */
         const handleChange = useCallback(
             (event: ChangeEvent<HTMLInputElement>) => {
-                const searchedItems = searchList({ items: list, searchString: event.target.value });
+                const filteredLists = lists.map(({ list, groupName }) => ({
+                    groupName,
+                    list: searchList({ items: list, searchString: event.target.value }),
+                }));
 
-                if (
-                    (!shouldShowContentOnEmptyInput && !event.target.value) ||
-                    (searchedItems.length === 1 && searchedItems[0]?.text === event.target.value)
-                ) {
-                    setMatchingItems([]);
+                if (!shouldShowContentOnEmptyInput && !event.target.value) {
+                    setMatchingListsItems([]);
                 } else {
-                    setMatchingItems(searchedItems);
-                    setIsAnimating(searchedItems.length !== 0);
+                    setMatchingListsItems(filteredLists);
+                    setIsAnimating(filteredLists.length !== 0);
                 }
 
                 setValue(event.target.value);
+                setInputToListValue(event.target.value);
 
                 if (typeof onChange === 'function') {
                     onChange(event);
                 }
             },
-            [list, onChange, shouldShowContentOnEmptyInput],
+            [lists, onChange, shouldShowContentOnEmptyInput],
         );
 
         /**
@@ -235,8 +286,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             (item: ISearchBoxItem) => {
                 setValue(item.text);
                 setIsAnimating(false);
-                setMatchingItems([]);
 
+                setMatchingListsItems([]);
                 if (typeof onSelect === 'function') {
                     onSelect(item);
                 }
@@ -247,62 +298,96 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const content = useMemo(() => {
             const items: ReactElement[] = [];
 
-            matchingItems.sort((a, b) => a.text.localeCompare(b.text));
+            matchingListsItems.forEach(({ groupName, list }) => {
+                if (hasMultipleGroups) {
+                    if (list.length <= 0) {
+                        return;
+                    }
 
-            matchingItems.forEach(({ id, text, imageUrl }) => {
-                items.push(
-                    <SearchBoxItem
-                        key={id}
-                        text={text}
-                        imageUrl={imageUrl}
-                        id={id}
-                        shouldShowRoundImage={shouldShowRoundImage}
-                        onSelect={handleSelect}
-                    />,
-                );
+                    items.push(<GroupName key={groupName} name={groupName ?? ''} />);
+                }
+
+                list.forEach(({ id, text, imageUrl }) => {
+                    items.push(
+                        <SearchBoxItem
+                            key={`${id}_${groupName ?? ''}`}
+                            id={id}
+                            text={text}
+                            imageUrl={imageUrl}
+                            shouldShowRoundImage={shouldShowRoundImage}
+                            onSelect={handleSelect}
+                            groupName={groupName}
+                        />,
+                    );
+                });
             });
 
+            if (shouldAddInputToList && inputToListValue !== '') {
+                items.push(
+                    <SearchBoxItem
+                        id="input-value"
+                        onSelect={handleSelect}
+                        text={inputToListValue}
+                    />,
+                );
+            }
+
             return items;
-        }, [shouldShowRoundImage, handleSelect, matchingItems]);
+        }, [
+            matchingListsItems,
+            shouldAddInputToList,
+            inputToListValue,
+            hasMultipleGroups,
+            shouldShowRoundImage,
+            handleSelect,
+        ]);
 
         useEffect(() => {
             const handleKeyDown = (e: KeyboardEvent) => {
                 if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                     e.preventDefault();
                     const children = contentRef.current?.children;
+
                     if (children && children.length > 0) {
+                        const filteredChildren = Array.from(children).filter(
+                            (child) => (child as HTMLElement).dataset.isgroupname !== 'true',
+                        );
+                        setFilteredChildrenArray(filteredChildren);
+
                         const newIndex =
                             focusedIndex !== null
                                 ? (focusedIndex +
                                       (e.key === 'ArrowUp' ? -1 : 1) +
-                                      children.length) %
-                                  children.length
+                                      filteredChildren.length) %
+                                  filteredChildren.length
                                 : 0;
 
                         if (focusedIndex !== null) {
-                            const prevElement = children[focusedIndex] as HTMLDivElement;
+                            const prevElement = filteredChildren[focusedIndex] as HTMLDivElement;
                             prevElement.tabIndex = -1;
                         }
 
                         setFocusedIndex(newIndex);
 
-                        const newElement = children[newIndex] as HTMLDivElement;
+                        const newElement = filteredChildren[newIndex] as HTMLDivElement;
                         newElement.tabIndex = 0;
                         newElement.focus();
                     }
                 } else if (e.key === 'Enter' && focusedIndex !== null) {
-                    const element = contentRef.current?.children[focusedIndex];
+                    if (filteredChildrenArray) {
+                        const element = filteredChildrenArray[focusedIndex];
 
-                    if (!element) {
-                        return;
+                        if (!element) {
+                            return;
+                        }
+
+                        const { id, textContent } = element;
+
+                        handleSelect({
+                            id: id.replace('search-box-item__', ''),
+                            text: textContent ?? '',
+                        });
                     }
-
-                    const { id, textContent } = element;
-
-                    handleSelect({
-                        id: id.replace('search-box-item__', ''),
-                        text: textContent ?? '',
-                    });
                 }
             };
 
@@ -311,11 +396,11 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             return () => {
                 document.removeEventListener('keydown', handleKeyDown);
             };
-        }, [focusedIndex, handleSelect]);
+        }, [filteredChildrenArray, focusedIndex, handleSelect]);
 
         const handleKeyPress = useCallback((event: KeyboardEvent) => {
             if (event.keyCode === 27) {
-                setMatchingItems([]);
+                setMatchingListsItems([]);
             }
         }, []);
 
@@ -381,6 +466,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 handleFocus,
                 height,
                 isAnimating,
+                onKeyDown,
                 placeholder,
                 value,
                 width,

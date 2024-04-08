@@ -5,33 +5,38 @@ export default {
     title: 'Core/SearchBox',
     component: SearchBox,
     args: {
-        list: [
+        placeholder: 'Essen holen',
+        lists: [
             {
-                id: '1',
-                text: 'Pizza',
-            },
-            {
-                id: '2',
-                text: 'Burger',
-            },
-            {
-                id: '3',
-                text: 'Nudeln',
-            },
-            {
-                id: '4',
-                text: 'Steak',
-            },
-            {
-                id: '5',
-                text: 'Pommes',
-            },
-            {
-                id: '6',
-                text: 'Reis',
+                groupName: undefined,
+                list: [
+                    {
+                        id: '1',
+                        text: 'Pizza',
+                    },
+                    {
+                        id: '2',
+                        text: 'Burger',
+                    },
+                    {
+                        id: '3',
+                        text: 'Nudeln',
+                    },
+                    {
+                        id: '4',
+                        text: 'Steak',
+                    },
+                    {
+                        id: '5',
+                        text: 'Pommes',
+                    },
+                    {
+                        id: '6',
+                        text: 'Reis',
+                    },
+                ],
             },
         ],
-        placeholder: 'Essen Suchen',
     },
 } as Meta<typeof SearchBox>;
 
@@ -62,17 +67,51 @@ export const General = Template.bind({});
 
 export const WithImages = Template.bind({});
 
+export const WithGroups = Template.bind({});
+
 WithImages.args = {
-    list: [
+    lists: [
         {
-            imageUrl: 'https://picsum.photos/200',
-            id: '1',
-            text: 'Pizza',
+            groupName: undefined,
+            list: [
+                {
+                    imageUrl: 'https://picsum.photos/200',
+                    id: '1',
+                    text: 'Pizza',
+                },
+                { imageUrl: 'https://picsum.photos/200', id: '2', text: 'Burger' },
+                { imageUrl: 'https://picsum.photos/200', id: '3', text: 'Nudeln' },
+                { imageUrl: 'https://picsum.photos/200', id: '4', text: 'Steak' },
+                { imageUrl: 'https://picsum.photos/200', id: '5', text: 'Pommes' },
+                { imageUrl: 'https://picsum.photos/200', id: '6', text: 'Reis' },
+            ],
         },
-        { imageUrl: 'https://picsum.photos/200', id: '2', text: 'Burger' },
-        { imageUrl: 'https://picsum.photos/200', id: '3', text: 'Nudeln' },
-        { imageUrl: 'https://picsum.photos/200', id: '4', text: 'Steak' },
-        { imageUrl: 'https://picsum.photos/200', id: '5', text: 'Pommes' },
-        { imageUrl: 'https://picsum.photos/200', id: '6', text: 'Reis' },
+    ],
+};
+
+WithGroups.args = {
+    lists: [
+        {
+            groupName: 'Essbar',
+            list: [
+                { id: '1', text: 'Pizza' },
+                { id: '2', text: 'Burger' },
+                { id: '3', text: 'Nudeln' },
+                { id: '4', text: 'Steak' },
+                { id: '5', text: 'Pommes' },
+                { id: '6', text: 'Reis' },
+            ],
+        },
+        {
+            groupName: 'Nicht essbar',
+            list: [
+                { id: '7', text: 'Baum' },
+                { id: '8', text: 'Stein' },
+                { id: '9', text: 'Ziegelstein' },
+                { id: '10', text: 'Tastatur' },
+                { id: '11', text: 'Hosen' },
+                { id: '12', text: 'Luft' },
+            ],
+        },
     ],
 };
