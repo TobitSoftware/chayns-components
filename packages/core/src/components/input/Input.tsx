@@ -192,7 +192,7 @@ const Input = forwardRef<InputRef, InputProps>(
             }
 
             return { left: 0, top: 0 };
-        }, [hasValue]);
+        }, [hasValue, shouldShowOnlyBottomBorder]);
 
         return (
             <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
