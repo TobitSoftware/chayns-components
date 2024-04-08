@@ -61,7 +61,14 @@ export const StyledListItemHeadTitle = styled.div`
     justify-content: space-between;
 `;
 
-export const StyledListItemHeadTitleText = styled.span`
+type StyledListItemHeadTitleTextProps = WithTheme<{ $isOpen: boolean }>;
+
+export const StyledListItemHeadTitleText = styled.span<StyledListItemHeadTitleTextProps>`
+    font-weight: ${({ $isOpen }) => ($isOpen ? 'bold' : 'normal')};
+    white-space: ${({ $isOpen }) => ($isOpen ? 'normal' : 'nowrap')};
+    overflow: hidden;
+    text-overflow: ellipsis;
+
     flex: 1 1 auto;
     min-width: 0;
 `;
@@ -74,7 +81,14 @@ export const StyledListItemHeadSubtitle = styled.div`
     opacity: 0.75;
 `;
 
-export const StyledListItemHeadSubtitleText = styled.span`
+type StyledListItemHeadSubtitleTextProps = WithTheme<{ $isOpen: boolean }>;
+
+export const StyledListItemHeadSubtitleText = styled.span<StyledListItemHeadSubtitleTextProps>`
+    font-weight: ${({ $isOpen }) => ($isOpen ? 'bold' : 'normal')};
+    white-space: ${({ $isOpen }) => ($isOpen ? 'normal' : 'nowrap')};
+    overflow: hidden;
+    text-overflow: ellipsis;
+
     flex: 1 1 auto;
     font-size: 85%;
     min-width: 0;

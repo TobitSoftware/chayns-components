@@ -118,7 +118,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 $isOpen={isOpen}
             >
                 <StyledListItemHeadTitle>
-                    <StyledListItemHeadTitleText className="ellipsis">
+                    <StyledListItemHeadTitleText $isOpen={isOpen}>
                         {title}
                     </StyledListItemHeadTitleText>
                     {rightElements && rightElements.length > 1 && rightElements[0] && (
@@ -129,7 +129,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 </StyledListItemHeadTitle>
                 {subtitle && (
                     <StyledListItemHeadSubtitle>
-                        <StyledListItemHeadSubtitleText className="ellipsis">
+                        <StyledListItemHeadSubtitleText $isOpen={isOpen}>
                             {subtitle}
                         </StyledListItemHeadSubtitleText>
                         {rightElements && rightElements.length > 1 && rightElements[1] && (
