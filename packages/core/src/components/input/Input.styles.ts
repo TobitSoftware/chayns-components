@@ -26,9 +26,14 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
     color: ${({ theme }: StyledInputContentWrapperProps) => theme['006']};
     display: flex;
     justify-content: space-between;
-    min-height: 42px;
     width: 100%;
     transition: opacity 0.3s ease;
+
+    ${({ $shouldShowOnlyBottomBorder }) =>
+        !$shouldShowOnlyBottomBorder &&
+        css`
+            min-height: 42px;
+        `}
 
     ${({ $shouldRoundRightCorners, $shouldShowOnlyBottomBorder, theme }) => {
         if ($shouldShowOnlyBottomBorder) {
@@ -55,11 +60,14 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
     }}
 `;
 
-export const StyledInputContent = styled.div`
+type StyledInputContentProps = WithTheme<{ $shouldShowOnlyBottomBorder?: boolean }>;
+
+export const StyledInputContent = styled.div<StyledInputContentProps>`
     display: flex;
     flex: 1 1 auto;
     min-width: 0;
-    margin: 8px 10px;
+    margin: ${({ $shouldShowOnlyBottomBorder }) =>
+        !$shouldShowOnlyBottomBorder ? '8px 10px' : '4px 10px 4px 0'};
     position: relative;
 `;
 

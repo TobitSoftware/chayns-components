@@ -186,7 +186,9 @@ const Input = forwardRef<InputRef, InputProps>(
 
         const labelPosition = useMemo(() => {
             if (hasValue) {
-                return { bottom: -8, right: -6 };
+                return shouldShowOnlyBottomBorder
+                    ? { bottom: -4, right: -6 }
+                    : { bottom: -8, right: -6 };
             }
 
             return { left: 0, top: 0 };
@@ -200,7 +202,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                 >
                     {iconElement && <StyledInputIconWrapper>{iconElement}</StyledInputIconWrapper>}
-                    <StyledInputContent>
+                    <StyledInputContent $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}>
                         <StyledInputField
                             id={id}
                             disabled={isDisabled}
