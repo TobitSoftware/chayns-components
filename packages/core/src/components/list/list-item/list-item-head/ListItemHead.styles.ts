@@ -114,4 +114,5 @@ export const StyledListItemHeadRightElement = styled.div`
 
 export const StyledMotionListItemHeadHoverItem = styled(motion.div)<FramerMotionBugFix>`
     overflow: hidden;
+    flex-shrink: 0;
 `;
