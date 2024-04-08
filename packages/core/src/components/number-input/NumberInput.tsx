@@ -204,6 +204,7 @@ const NumberInput: FC<NumberInputProps> = ({
             onFocus={onLocalFocus}
             isDisabled={isDisabled}
             isInvalid={typeof isInvalid === 'boolean' ? isInvalid : isValueInvalid}
+            shouldShowCenteredContent={shouldShowOnlyBottomBorder}
         />
     );
 };
