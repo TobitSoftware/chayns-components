@@ -77,6 +77,8 @@ const Truncation: FC<TruncationProps> = ({
     const pseudoChildrenRef = useRef<HTMLDivElement>(null);
     const childrenRef = useRef<HTMLDivElement>(null);
     const originalChildrenRef = useRef<HTMLDivElement>(null);
+    const hasCollapsed = useRef(false);
+    const isAnimating = useRef(false);
 
     useEffect(() => {
         if (typeof isOpen === 'boolean') {
@@ -101,7 +103,13 @@ const Truncation: FC<TruncationProps> = ({
 
     const handleAnimationEnd = useCallback(() => {
         setHasSizeChanged(false);
+        hasCollapsed.current = true;
+        isAnimating.current = false;
         setShouldShowCollapsedElement(!internalIsOpen);
+
+        window.setTimeout(() => {
+            hasCollapsed.current = false;
+        }, 30);
     }, [internalIsOpen]);
 
     useEffect(() => {
@@ -146,10 +154,14 @@ const Truncation: FC<TruncationProps> = ({
             const resizeObserver = new ResizeObserver((entries) => {
                 if (entries && entries[0]) {
                     const observedHeight = entries[0].contentRect.height;
+
                     setOriginalHeight(
                         observedHeight < originalBigHeight ? originalBigHeight : observedHeight,
                     );
-                    setHasSizeChanged(true);
+
+                    if (!hasCollapsed.current && !isAnimating.current) {
+                        setHasSizeChanged(true);
+                    }
                 }
             });
 
@@ -168,10 +180,14 @@ const Truncation: FC<TruncationProps> = ({
             const resizeObserver = new ResizeObserver((entries) => {
                 if (entries && entries[0]) {
                     const observedHeight = entries[0].contentRect.height;
+
                     setNewCollapsedHeight(
                         observedHeight < originalSmallHeight ? originalSmallHeight : observedHeight,
                     );
-                    setHasSizeChanged(true);
+
+                    if (!hasCollapsed.current && !isAnimating.current) {
+                        setHasSizeChanged(true);
+                    }
                 }
             });
 
@@ -199,6 +215,9 @@ const Truncation: FC<TruncationProps> = ({
                     initial={false}
                     transition={{ type: 'tween', duration: hasSizeChanged ? 0 : 0.2 }}
                     onAnimationComplete={handleAnimationEnd}
+                    onAnimationStart={() => {
+                        isAnimating.current = true;
+                    }}
                     ref={childrenRef}
                 />
                 {showClamp && (
