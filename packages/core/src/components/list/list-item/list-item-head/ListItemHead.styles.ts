@@ -14,7 +14,7 @@ export const StyledListItemHead = styled.div<StyledListItemHeadProps>`
     align-items: center;
     color: ${({ theme }: StyledListItemHeadProps) => theme.text};
     display: flex;
-    height: 64px;
+    min-height: 64px;
     padding: 12px 9px;
 
     ${({ $isAnyItemExpandable }) =>
