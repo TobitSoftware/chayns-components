@@ -38,7 +38,7 @@ export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
               `
             : css`
                   &::-webkit-scrollbar {
-                      width: 5px;
+                      width: 10px;
                   }
 
                   &::-webkit-scrollbar-track {
@@ -53,6 +53,8 @@ export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
                   &::-webkit-scrollbar-thumb {
                       background-color: rgba(${theme['text-rgb']}, 0.15);
                       border-radius: 20px;
+                      background-clip: padding-box;
+                      border: solid 3px transparent;
                   }
               `}
 `;
