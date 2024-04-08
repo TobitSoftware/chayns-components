@@ -4,7 +4,11 @@ import styled from 'styled-components';
 
 export const StyledHueSlider = styled.div`
     width: 100%;
+    height: 30px;
     cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
 `;
 
 type StyledHueSliderInputProps = WithTheme<{
@@ -43,19 +47,40 @@ export const StyledHueSliderInput = styled.input<StyledHueSliderInputProps>`
         appearance: none;
         width: 20px;
         height: 20px;
-        background-color: ${({ $color }) => $color};
         cursor: pointer;
         border-radius: 50%;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     }
 
     // slider thumb for firefox
     &::-moz-range-thumb {
         width: 20px;
         height: 20px;
-        background-color: ${({ $color }) => $color};
         cursor: pointer;
         border-radius: 50%;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     }
+`;
+
+type StyledHueSliderThumbProps = WithTheme<{ $position: number; $color: CSSProperties['color'] }>;
+
+export const StyledHueSliderThumb = styled.div.attrs<StyledHueSliderThumbProps>(
+    ({ $position, $color }) => ({
+        style: {
+            left: `${$position}px`,
+            backgroundColor: $color,
+        },
+    }),
+)`
+    min-width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border-radius: 100px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+    z-index: 3;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    white-space: nowrap;
 `;
