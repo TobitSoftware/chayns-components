@@ -1,7 +1,7 @@
 import type { Browser } from 'detect-browser';
 import type { CSSProperties } from 'react';
-import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import styled, { css } from 'styled-components';
 
 export const StyledTextArea = styled.div`
     display: flex;
