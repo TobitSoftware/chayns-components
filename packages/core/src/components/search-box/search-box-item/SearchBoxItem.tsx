@@ -24,8 +24,8 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
     groupName,
 }) => {
     const handleClick = useCallback(() => {
-        onSelect({ id, text }, groupName);
-    }, [id, onSelect, text, groupName]);
+        onSelect({ id, text, imageUrl }, groupName);
+    }, [onSelect, id, text, imageUrl, groupName]);
 
     return useMemo(
         () => (

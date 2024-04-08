@@ -22,6 +22,7 @@ import { searchList } from '../../utils/searchBox';
 import Input from '../input/Input';
 import GroupName from './group-name/GroupName';
 import SearchBoxItem from './search-box-item/SearchBoxItem';
+import { StyledSearchBoxItemImage } from './search-box-item/SearchBoxItem.styles';
 import { StyledMotionSearchBoxBody, StyledSearchBox } from './SearchBox.styles';
 
 export type SearchBoxRef = {
@@ -88,6 +89,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         ref,
     ) => {
         const [matchingListsItems, setMatchingListsItems] = useState<ISearchBoxItems[]>(lists);
+        const [selectedImage, setSelectedImage] = useState<ReactElement>();
         const [value, setValue] = useState('');
         const [isAnimating, setIsAnimating] = useState(false);
         const [height, setHeight] = useState<number>(0);
@@ -136,6 +138,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             };
         }, [handleOutsideClick, boxRef]);
 
+        useEffect(() => {}, []);
+
         /**
          * This hook calculates the height
          */
@@ -174,10 +178,19 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     const selectedItem = list.find(({ id }) => id === selectedId);
                     if (selectedItem) {
                         setValue(selectedItem.text);
+
+                        if (selectedItem.imageUrl) {
+                            setSelectedImage(
+                                <StyledSearchBoxItemImage
+                                    src={selectedItem.imageUrl}
+                                    $shouldShowRoundImage={shouldShowRoundImage}
+                                />,
+                            );
+                        }
                     }
                 });
             }
-        }, [lists, selectedId]);
+        }, [lists, selectedId, shouldShowRoundImage]);
 
         /**
          * This hook resets the value if the selectedId changes to undefined. This is an own useEffect because the value
@@ -192,7 +205,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         /**
          * This function sets the items on focus if shouldShowContentOnEmptyInput
          */
-
         const handleFocus = useCallback(() => {
             if (shouldShowContentOnEmptyInput) {
                 const newMatchingItems = lists.map(({ list, groupName }) => ({
@@ -250,6 +262,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     list: searchList({ items: list, searchString: event.target.value }),
                 }));
 
+                setSelectedImage(undefined);
+
                 if (!shouldShowContentOnEmptyInput && !event.target.value) {
                     setMatchingListsItems([]);
                 } else {
@@ -284,15 +298,30 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          */
         const handleSelect = useCallback(
             (item: ISearchBoxItem) => {
-                setValue(item.text);
+                const newItem = {
+                    ...item,
+                    text: item.text.replace('<b>', '').replace('</b>', '').replace('</b', ''),
+                };
+
+                setValue(newItem.text);
                 setIsAnimating(false);
 
+                setSelectedImage(
+                    newItem.imageUrl ? (
+                        <StyledSearchBoxItemImage
+                            src={newItem.imageUrl}
+                            $shouldShowRoundImage={shouldShowRoundImage}
+                        />
+                    ) : undefined,
+                );
+
                 setMatchingListsItems([]);
+
                 if (typeof onSelect === 'function') {
-                    onSelect(item);
+                    onSelect(newItem);
                 }
             },
-            [onSelect],
+            [onSelect, shouldShowRoundImage],
         );
 
         const content = useMemo(() => {
@@ -383,9 +412,22 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
                         const { id, textContent } = element;
 
+                        let imageUrl: string | undefined;
+
+                        // Just Ignore, it works
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        if (element.children[0]?.attributes.src) {
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                            imageUrl = element.children[0]?.attributes.src.nodeValue as string;
+                        }
+
                         handleSelect({
                             id: id.replace('search-box-item__', ''),
                             text: textContent ?? '',
+                            imageUrl,
                         });
                     }
                 }
@@ -431,6 +473,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             onFocus={handleFocus}
                             placeholder={placeholder}
                             onKeyDown={onKeyDown}
+                            iconElement={selectedImage}
                             value={value}
                         />
                     </div>
@@ -468,6 +511,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 isAnimating,
                 onKeyDown,
                 placeholder,
+                selectedImage,
                 value,
                 width,
             ],
