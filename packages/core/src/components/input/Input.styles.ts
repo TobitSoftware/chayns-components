@@ -71,7 +71,10 @@ export const StyledInputContent = styled.div<StyledInputContentProps>`
     position: relative;
 `;
 
-type StyledInputFieldProps = WithTheme<{ $isInvalid?: boolean }>;
+type StyledInputFieldProps = WithTheme<{
+    $isInvalid?: boolean;
+    $shouldShowCenteredContent: boolean;
+}>;
 
 export const StyledInputField = styled.input<StyledInputFieldProps>`
     background: none;
@@ -80,6 +83,12 @@ export const StyledInputField = styled.input<StyledInputFieldProps>`
         $isInvalid ? theme.wrong : theme.text};
     padding: 0;
     width: 100%;
+
+    ${({ $shouldShowCenteredContent }) =>
+        $shouldShowCenteredContent &&
+        css`
+            text-align: center;
+        `}
 `;
 
 export const StyledMotionInputLabelWrapper = styled(motion.label)`

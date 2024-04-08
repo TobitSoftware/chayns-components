@@ -62,6 +62,10 @@ export type InputProps = {
      */
     isDisabled?: boolean;
     /**
+     * If true, the input field is marked as invalid
+     */
+    isInvalid?: boolean;
+    /**
      * Function that is executed when the input field loses focus
      */
     onBlur?: FocusEventHandler<HTMLInputElement>;
@@ -90,17 +94,13 @@ export type InputProps = {
      */
     rightElement?: ReactElement;
     /**
+     * Whether the content should be displayed centered inside the input.
+     */
+    shouldShowCenteredContent?: boolean;
+    /**
      * If true, a clear icon is displayed at the end of the input field
      */
     shouldShowClearIcon?: boolean;
-    /**
-     * Input type set for input element (e.g. 'text', 'number' or 'password')
-     */
-    type?: HTMLInputTypeAttribute;
-    /**
-     * Value if the input field should be controlled
-     */
-    value?: string;
     /**
      * Whether only the bottom border should be displayed
      */
@@ -110,9 +110,13 @@ export type InputProps = {
      */
     shouldUseAutoFocus?: boolean;
     /**
-     * If true, the input field is marked as invalid
+     * Input type set for input element (e.g. 'text', 'number' or 'password')
      */
-    isInvalid?: boolean;
+    type?: HTMLInputTypeAttribute;
+    /**
+     * Value if the input field should be controlled
+     */
+    value?: string;
 };
 
 const Input = forwardRef<InputRef, InputProps>(
@@ -130,6 +134,7 @@ const Input = forwardRef<InputRef, InputProps>(
             rightElement,
             shouldShowOnlyBottomBorder,
             shouldShowClearIcon = false,
+            shouldShowCenteredContent = false,
             type = 'text',
             value,
             shouldUseAutoFocus = false,
@@ -216,6 +221,7 @@ const Input = forwardRef<InputRef, InputProps>(
                             autoFocus={shouldUseAutoFocus}
                             inputMode={inputMode}
                             $isInvalid={isInvalid}
+                            $shouldShowCenteredContent={shouldShowCenteredContent}
                         />
                         <StyledMotionInputLabelWrapper
                             animate={{
