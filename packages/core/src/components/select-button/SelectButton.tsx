@@ -1,8 +1,8 @@
-import React, { type FC, useMemo } from 'react';
-import { StyledSelectButton } from './SelectButton.styles';
-import Button from '../button/Button';
+import { createDialog, DialogType, type DialogSelectListItemType } from 'chayns-api';
+import React, { useMemo, type FC } from 'react';
 import type { SelectButtonItem } from '../../types/selectButton';
-import { createDialog, type DialogSelectListItemType, DialogType } from 'chayns-api';
+import Button from '../button/Button';
+import { StyledSelectButton } from './SelectButton.styles';
 
 export type SelectButtonProps = {
     /**
@@ -60,6 +60,18 @@ const SelectButton: FC<SelectButtonProps> = ({
         return items;
     }, [list, selectedItemIds]);
 
+    const selectedItemText = useMemo(() => {
+        if (selectedItemIds && !selectedItemIds[0]) {
+            return null;
+        }
+
+        if (selectedItemIds && selectedItemIds[0]) {
+            return list.find(({ id }) => id === selectedItemIds[0])?.text;
+        }
+
+        return null;
+    }, [list, selectedItemIds]);
+
     const handleClick = () => {
         void createDialog({
             type: DialogType.SELECT,
@@ -83,8 +95,8 @@ const SelectButton: FC<SelectButtonProps> = ({
 
     return (
         <StyledSelectButton>
-            <Button onClick={handleClick} isDisabled={isDisabled}>
-                {buttonText}
+            <Button onClick={handleClick} isDisabled={isDisabled} isSecondary>
+                {selectedItemText ?? buttonText}
             </Button>
         </StyledSelectButton>
     );

@@ -1,3 +1,4 @@
+import { getDevice } from 'chayns-api';
 import React, { FC, ReactNode, UIEvent, useMemo } from 'react';
 import type { AccordionProps } from '../Accordion';
 import { AccordionGroupContext } from '../accordion-group/AccordionGroup';
@@ -28,6 +29,8 @@ const AccordionBody: FC<AccordionBodyProps> = ({
     onScroll,
     shouldHideBody,
 }) => {
+    const { browser } = getDevice();
+
     const AccordionGroupContextProviderValue = useMemo(
         () => ({ openAccordionUuid: undefined }),
         [],
@@ -40,6 +43,7 @@ const AccordionBody: FC<AccordionBodyProps> = ({
             exit={{ height: 0, opacity: 0 }}
             initial={{ height: 0, opacity: 0 }}
             $maxHeight={maxHeight}
+            $browser={browser?.name}
             onScroll={onScroll}
         >
             <AccordionGroupContext.Provider value={AccordionGroupContextProviderValue}>

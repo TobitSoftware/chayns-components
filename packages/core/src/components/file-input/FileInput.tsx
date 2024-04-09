@@ -1,6 +1,8 @@
+import { createDialog, DialogType } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, { DragEvent, FC, ReactElement, useCallback, useMemo, useState } from 'react';
-import { filterDuplicateFile } from '../../utils/file';
+import type { ImageDialogResult } from '../../types/fileInput';
+import { filterDuplicateFile, filterDuplicateFileUrls } from '../../utils/file';
 import { selectFiles } from '../../utils/fileDialog';
 import Icon from '../icon/Icon';
 import List from '../list/List';
@@ -9,6 +11,7 @@ import {
     StyledFileInput,
     StyledFileInputContainer,
     StyledFileInputText,
+    StyledFileInputWrapper,
     StyledMotionFileInputList,
 } from './FileInput.styles';
 
@@ -16,7 +19,23 @@ export type FileInputProps = {
     /**
      * An array of icons that should be displayed inside the FileInput
      */
-    icons?: string[];
+    fileSelectionIcons?: string[];
+    /**
+     * The text that should be displayed inside the FileInput.
+     */
+    fileSelectionPlaceholder?: string;
+    /**
+     * The filetypes that could be selected. Example for multiple types: 'image/*, video/*'.
+     */
+    fileTypes?: string;
+    /**
+     * The icon of the image selection.
+     */
+    imageSelectIcons?: string[];
+    /**
+     * If set, pictures can be select via Pixabay.
+     */
+    imageSelectPlaceholder?: string;
     /**
      * The maximum amount of Files that can be uploaded.
      */
@@ -24,7 +43,7 @@ export type FileInputProps = {
     /**
      * A function to be executed when files are added.
      */
-    onAdd?: (files: File[]) => void;
+    onAdd?: (files: File[] | string[]) => void;
     /**
      * Function to be executed when the maximum amount of Files are reached.
      */
@@ -32,22 +51,47 @@ export type FileInputProps = {
     /**
      * A function to be executed when a file is removed.
      */
-    onRemove?: (file: File) => void;
-    /**
-     * The text that should be displayed inside the FileInput
-     */
-    placeholder?: string;
+    onRemove?: (file: File | string) => void;
 };
 
 const FileInput: FC<FileInputProps> = ({
-    icons = ['fa fa-upload'],
+    fileSelectionIcons = ['fa fa-upload'],
+    imageSelectIcons = ['ts-image'],
+    fileTypes,
     onMaxFilesReached,
     maxFiles,
     onRemove,
     onAdd,
-    placeholder = 'Dateien hinzufügen',
+    fileSelectionPlaceholder = 'Dateien hinzufügen',
+    imageSelectPlaceholder,
 }) => {
     const [internalFiles, setInternalFiles] = useState<File[]>([]);
+    const [internalImages, setInternalImages] = useState<string[]>([]);
+
+    const handleAddImages = useCallback(
+        (images: string[]) => {
+            const newImages: string[] = [];
+
+            images.forEach((image) => {
+                if (!filterDuplicateFileUrls({ files: internalImages, newFile: image })) {
+                    newImages.push(image);
+                }
+            });
+
+            let tmp = newImages;
+
+            if (maxFiles) {
+                tmp = newImages.slice(0, maxFiles - (internalFiles.length + internalImages.length));
+            }
+
+            if (tmp.length > 0 && typeof onAdd === 'function') {
+                onAdd(tmp);
+            }
+
+            setInternalImages((prevState) => [...prevState, ...tmp]);
+        },
+        [internalFiles.length, internalImages, maxFiles, onAdd],
+    );
 
     const handleAddFiles = useCallback(
         (files: File[]) => {
@@ -62,7 +106,10 @@ const FileInput: FC<FileInputProps> = ({
             let tmp = newFileItems;
 
             if (maxFiles) {
-                tmp = newFileItems.slice(0, maxFiles - internalFiles.length);
+                tmp = newFileItems.slice(
+                    0,
+                    maxFiles - (internalFiles.length + internalImages.length),
+                );
             }
 
             if (tmp.length > 0 && typeof onAdd === 'function') {
@@ -71,12 +118,12 @@ const FileInput: FC<FileInputProps> = ({
 
             setInternalFiles((prevState) => [...prevState, ...tmp]);
         },
-        [internalFiles, maxFiles, onAdd],
+        [internalFiles, internalImages.length, maxFiles, onAdd],
     );
 
     const handleDeleteFile = useCallback(
         (fileName?: string) => {
-            let fileToDelete: File | undefined;
+            let fileToDelete: File | string | undefined;
 
             const filteredFiles = internalFiles.filter((file) => {
                 const { name } = file;
@@ -90,18 +137,30 @@ const FileInput: FC<FileInputProps> = ({
 
             setInternalFiles(filteredFiles);
 
+            if (!fileToDelete) {
+                const filteredImages = internalImages.filter((image) => {
+                    if (image === fileName) {
+                        fileToDelete = image;
+                    }
+
+                    return image !== fileName;
+                });
+
+                setInternalImages(filteredImages);
+            }
+
             if (!fileToDelete || typeof onRemove !== 'function') {
                 return;
             }
 
             onRemove(fileToDelete);
         },
-        [internalFiles, onRemove],
+        [internalFiles, internalImages, onRemove],
     );
 
     const isDisabled = useMemo(() => {
         if (maxFiles) {
-            if (internalFiles.length >= maxFiles) {
+            if (internalFiles.length + internalImages.length >= maxFiles) {
                 if (typeof onMaxFilesReached === 'function') {
                     onMaxFilesReached();
                 }
@@ -111,19 +170,48 @@ const FileInput: FC<FileInputProps> = ({
         }
 
         return false;
-    }, [internalFiles.length, maxFiles, onMaxFilesReached]);
+    }, [internalFiles.length, internalImages.length, maxFiles, onMaxFilesReached]);
 
-    const handleClick = useCallback(async () => {
+    const handleImageSelectionClick = useCallback(async () => {
+        if (isDisabled) {
+            return;
+        }
+
+        const { buttonType, result } = (await createDialog({
+            dialogInput: {
+                upload: true,
+                buttons: [
+                    { text: 'hello', buttonType: 1 },
+                    { text: 'can', buttonType: -1 },
+                ],
+                initialView: 'pixabay',
+            },
+            type: DialogType.MODULE,
+            system: {
+                url: 'https://tapp.chayns-static.space/api/dialog-image-editor/v1/remoteEntry.js',
+                scope: 'dialog_image_editor',
+                module: './ImageEditorEntry',
+            },
+            buttons: [],
+        }).open()) as ImageDialogResult;
+
+        if (buttonType === 1 && result?.url) {
+            handleAddImages([result.url]);
+        }
+    }, [handleAddImages, isDisabled]);
+
+    const handleFileSelectionClick = useCallback(async () => {
         if (isDisabled) {
             return;
         }
 
         const files = await selectFiles({
             multiple: true,
+            type: fileTypes,
         });
 
         handleAddFiles(files);
-    }, [handleAddFiles, isDisabled]);
+    }, [fileTypes, handleAddFiles, isDisabled]);
 
     const handleDrop = useCallback(
         (e: DragEvent<HTMLDivElement>) => {
@@ -136,43 +224,67 @@ const FileInput: FC<FileInputProps> = ({
     );
 
     const content = useMemo(() => {
-        const items: ReactElement[] = internalFiles.map((file) => (
+        const combinedFiles = [...internalImages, ...internalFiles];
+
+        const items: ReactElement[] = combinedFiles.map((file) => (
             <StyledMotionFileInputList
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                key={file.name}
+                key={typeof file === 'string' ? file : file.name}
                 transition={{ duration: 0.25, type: 'tween' }}
             >
                 <FileListItem
-                    fileType={file.type}
-                    fileName={file.name}
-                    fileSize={file.size}
+                    fileType={typeof file !== 'string' ? file.type : undefined}
+                    fileName={typeof file !== 'string' ? file.name : undefined}
+                    fileSize={typeof file !== 'string' ? file.size : undefined}
+                    url={typeof file === 'string' ? file : undefined}
                     onRemove={handleDeleteFile}
                 />
             </StyledMotionFileInputList>
         ));
 
         return items;
-    }, [handleDeleteFile, internalFiles]);
+    }, [handleDeleteFile, internalFiles, internalImages]);
 
     return useMemo(
         () => (
             <StyledFileInput>
-                <StyledFileInputContainer
-                    $isDisabled={isDisabled}
-                    onClick={() => void handleClick()}
-                    onDragOver={(e: DragEvent<HTMLDivElement>) => e.preventDefault()}
-                    onDrop={(e: DragEvent<HTMLDivElement>) => void handleDrop(e)}
-                >
-                    <Icon icons={icons} />
-                    <StyledFileInputText>{placeholder}</StyledFileInputText>
-                </StyledFileInputContainer>
+                <StyledFileInputWrapper $isDisabled={isDisabled}>
+                    <StyledFileInputContainer
+                        onClick={() => void handleFileSelectionClick()}
+                        onDragOver={(e: DragEvent<HTMLDivElement>) => e.preventDefault()}
+                        onDrop={(e: DragEvent<HTMLDivElement>) => void handleDrop(e)}
+                    >
+                        <Icon icons={fileSelectionIcons} />
+                        <StyledFileInputText>{fileSelectionPlaceholder}</StyledFileInputText>
+                    </StyledFileInputContainer>
+                    {imageSelectPlaceholder && (
+                        <StyledFileInputContainer
+                            $isImageSelection
+                            onClick={() => void handleImageSelectionClick()}
+                        >
+                            <Icon icons={imageSelectIcons} />
+                            <StyledFileInputText>{imageSelectPlaceholder}</StyledFileInputText>
+                        </StyledFileInputContainer>
+                    )}
+                </StyledFileInputWrapper>
+
                 <List>
                     <AnimatePresence initial={false}>{content}</AnimatePresence>
                 </List>
             </StyledFileInput>
         ),
-        [content, handleClick, handleDrop, icons, isDisabled, placeholder],
+        [
+            isDisabled,
+            fileSelectionIcons,
+            fileSelectionPlaceholder,
+            imageSelectPlaceholder,
+            imageSelectIcons,
+            content,
+            handleFileSelectionClick,
+            handleDrop,
+            handleImageSelectionClick,
+        ],
     );
 };
 

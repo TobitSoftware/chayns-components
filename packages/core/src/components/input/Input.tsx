@@ -62,6 +62,10 @@ export type InputProps = {
      */
     isDisabled?: boolean;
     /**
+     * If true, the input field is marked as invalid
+     */
+    isInvalid?: boolean;
+    /**
      * Function that is executed when the input field loses focus
      */
     onBlur?: FocusEventHandler<HTMLInputElement>;
@@ -90,17 +94,13 @@ export type InputProps = {
      */
     rightElement?: ReactElement;
     /**
+     * Whether the content should be displayed centered inside the input.
+     */
+    shouldShowCenteredContent?: boolean;
+    /**
      * If true, a clear icon is displayed at the end of the input field
      */
     shouldShowClearIcon?: boolean;
-    /**
-     * Input type set for input element (e.g. 'text', 'number' or 'password')
-     */
-    type?: HTMLInputTypeAttribute;
-    /**
-     * Value if the input field should be controlled
-     */
-    value?: string;
     /**
      * Whether only the bottom border should be displayed
      */
@@ -110,9 +110,13 @@ export type InputProps = {
      */
     shouldUseAutoFocus?: boolean;
     /**
-     * If true, the input field is marked as invalid
+     * Input type set for input element (e.g. 'text', 'number' or 'password')
      */
-    isInvalid?: boolean;
+    type?: HTMLInputTypeAttribute;
+    /**
+     * Value if the input field should be controlled
+     */
+    value?: string;
 };
 
 const Input = forwardRef<InputRef, InputProps>(
@@ -130,6 +134,7 @@ const Input = forwardRef<InputRef, InputProps>(
             rightElement,
             shouldShowOnlyBottomBorder,
             shouldShowClearIcon = false,
+            shouldShowCenteredContent = false,
             type = 'text',
             value,
             shouldUseAutoFocus = false,
@@ -139,7 +144,6 @@ const Input = forwardRef<InputRef, InputProps>(
         ref,
     ) => {
         const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
-        const [width, setWidth] = useState(0);
 
         const theme = useTheme() as Theme;
 
@@ -159,25 +163,6 @@ const Input = forwardRef<InputRef, InputProps>(
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const shouldShowBorder = rightElement?.props?.style?.backgroundColor === undefined;
-
-        useEffect(() => {
-            if (inputRef.current) {
-                const resizeObserver = new ResizeObserver((entries) => {
-                    if (entries && entries[0]) {
-                        const observedWidth = entries[0].contentRect.width;
-                        setWidth(observedWidth);
-                    }
-                });
-
-                resizeObserver.observe(inputRef.current);
-
-                return () => {
-                    resizeObserver.disconnect();
-                };
-            }
-
-            return () => {};
-        }, []);
 
         const handleInputFieldChange = useCallback(
             (event: ChangeEvent<HTMLInputElement>) => {
@@ -206,11 +191,13 @@ const Input = forwardRef<InputRef, InputProps>(
 
         const labelPosition = useMemo(() => {
             if (hasValue) {
-                return { bottom: -8, right: -6 };
+                return shouldShowOnlyBottomBorder
+                    ? { bottom: -4, right: 3 }
+                    : { bottom: -8, right: -6 };
             }
 
             return { left: 0, top: 0 };
-        }, [hasValue]);
+        }, [hasValue, shouldShowOnlyBottomBorder]);
 
         return (
             <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
@@ -220,7 +207,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                 >
                     {iconElement && <StyledInputIconWrapper>{iconElement}</StyledInputIconWrapper>}
-                    <StyledInputContent>
+                    <StyledInputContent $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}>
                         <StyledInputField
                             id={id}
                             disabled={isDisabled}
@@ -234,6 +221,7 @@ const Input = forwardRef<InputRef, InputProps>(
                             autoFocus={shouldUseAutoFocus}
                             inputMode={inputMode}
                             $isInvalid={isInvalid}
+                            $shouldShowCenteredContent={shouldShowCenteredContent}
                         />
                         <StyledMotionInputLabelWrapper
                             animate={{
@@ -243,7 +231,6 @@ const Input = forwardRef<InputRef, InputProps>(
                             layout
                             style={{ ...labelPosition }}
                             transition={{ type: 'tween', duration: 0.3 }}
-                            $width={width}
                         >
                             {placeholderElement}
                             <StyledInputLabel $isInvalid={isInvalid}>

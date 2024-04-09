@@ -9,11 +9,11 @@ export const StyledSearchBoxItem = styled.div<StyledSearchBoxItemProps>`
     padding: 4px 10px;
 
     &:hover {
-        background: ${({ theme }: StyledSearchBoxItemProps) => theme['secondary-103']};
+        background: ${({ theme }: StyledSearchBoxItemProps) => theme['secondary-102']};
     }
 
     &:focus {
-        background: ${({ theme }: StyledSearchBoxItemProps) => theme['secondary-103']};
+        background: ${({ theme }: StyledSearchBoxItemProps) => theme['secondary-102']};
     }
 `;
 
@@ -36,5 +36,9 @@ type StyledSearchBoxItemTextProps = WithTheme<unknown>;
 
 export const StyledSearchBoxItemText = styled.p<StyledSearchBoxItemTextProps>`
     color: ${({ theme }: StyledSearchBoxItemTextProps) => theme.text};
-    margin: 5px;
+    margin: 5px 0 !important;
+
+    b {
+        color: ${({ theme }: StyledSearchBoxItemTextProps) => theme.headline};
+    }
 `;

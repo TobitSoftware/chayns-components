@@ -14,6 +14,7 @@ export const StyledAmountControl = styled.div<StyledAmountControlProps>`
 
 type StyledAmountControlInputProps = WithTheme<{
     $displayState: DisplayState;
+    $shouldShowIcon: boolean;
 }>;
 
 export const StyledAmountControlInput = styled.input<StyledAmountControlInputProps>`
@@ -27,6 +28,14 @@ export const StyledAmountControlInput = styled.input<StyledAmountControlInputPro
         css`
             border-bottom-right-radius: 3px;
             border-top-right-radius: 3px;
+        `}
+
+    ${({ $displayState, $shouldShowIcon }) =>
+        $displayState === 'default' &&
+        !$shouldShowIcon &&
+        css`
+            border-bottom-left-radius: 3px;
+            border-top-left-radius: 3px;
         `}
 `;
 

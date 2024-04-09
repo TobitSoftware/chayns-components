@@ -10,3 +10,8 @@ export default {
 const Template: StoryFn<typeof FileInput> = ({ ...args }) => <FileInput {...args}></FileInput>;
 
 export const General = Template.bind({});
+export const WithImageSelection = Template.bind({});
+
+WithImageSelection.args = {
+    imageSelectPlaceholder: 'Bild auswählen',
+};

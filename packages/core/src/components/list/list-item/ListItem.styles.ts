@@ -29,8 +29,8 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
     ${({ theme }: StyledListItemProps) =>
         theme.accordionLines &&
         css`
-            &:not(:last-child) {
-                border-bottom: 1px solid ${theme.headline};
+            &&:not(:last-child) {
+                border-bottom: 1px solid ${theme.headline}50;
             }
         `}}
 

@@ -5,14 +5,15 @@ import ListItem from '../../list/list-item/ListItem';
 import { StyledFileListItem } from './FileListItem.styles';
 
 export type FileListItemProps = {
-    fileName: string;
-    fileSize: number;
-    fileType: string;
+    fileName?: string;
+    fileSize?: number;
+    fileType?: string;
+    url?: string;
     onRemove: (name: string) => void;
 };
 
-const FileListItem: FC<FileListItemProps> = ({ fileName, fileSize, fileType, onRemove }) => {
-    const humanFileSize = useMemo(() => getHumanSize(fileSize), [fileSize]);
+const FileListItem: FC<FileListItemProps> = ({ fileName, fileSize, fileType, onRemove, url }) => {
+    const humanFileSize = useMemo(() => fileSize && getHumanSize(fileSize), [fileSize]);
 
     const icon = useMemo(() => getIconByMimeType(fileType), [fileType]);
 
@@ -20,11 +21,14 @@ const FileListItem: FC<FileListItemProps> = ({ fileName, fileSize, fileType, onR
         () => (
             <StyledFileListItem>
                 <ListItem
-                    title={fileName}
+                    title={fileName ?? url}
                     subtitle={humanFileSize}
-                    icons={[icon]}
+                    icons={url ? ['fa fa-file-image'] : [icon]}
                     rightElements={[
-                        <Icon icons={['ts-wrong']} onClick={() => onRemove(fileName)} />,
+                        <Icon
+                            icons={['ts-wrong']}
+                            onClick={() => onRemove(fileName ?? url ?? '')}
+                        />,
                     ]}
                 />
             </StyledFileListItem>

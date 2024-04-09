@@ -6,10 +6,11 @@ import React, {
     useCallback,
     useEffect,
     useMemo,
+    useRef,
     useState,
 } from 'react';
 import { convertColorToHsl, splitRgb } from '../../utils/color';
-import { StyledHueSlider, StyledHueSliderInput } from './HueSlider.styles';
+import { StyledHueSlider, StyledHueSliderInput, StyledHueSliderThumb } from './HueSlider.styles';
 
 export type HueSliderProps = {
     /**
@@ -25,6 +26,9 @@ export type HueSliderProps = {
 const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' }) => {
     const [editedValue, setEditedValue] = useState(0);
     const [hslColor, setHslColor] = useState<CSSProperties['color']>('hsl(0, 0, 100)');
+
+    const sliderThumbRef = useRef<HTMLDivElement>(null);
+    const sliderRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (color) {
@@ -75,10 +79,21 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
         [onChange],
     );
 
+    const sliderThumbPosition = useMemo(() => {
+        if (sliderRef.current && sliderThumbRef.current) {
+            return (
+                (editedValue / 360) *
+                (sliderRef.current.offsetWidth - sliderThumbRef.current.offsetWidth / 2)
+            );
+        }
+        return 0;
+    }, [editedValue]);
+
     return useMemo(
         () => (
             <StyledHueSlider>
                 <StyledHueSliderInput
+                    ref={sliderRef}
                     $color={hslColor}
                     type="range"
                     min={0}
@@ -86,9 +101,14 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
                     value={editedValue}
                     onChange={handleInputChange}
                 />
+                <StyledHueSliderThumb
+                    ref={sliderThumbRef}
+                    $position={sliderThumbPosition}
+                    $color={hslColor}
+                />
             </StyledHueSlider>
         ),
-        [editedValue, handleInputChange, hslColor],
+        [editedValue, handleInputChange, hslColor, sliderThumbPosition],
     );
 };
 

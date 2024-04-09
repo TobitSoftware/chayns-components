@@ -187,7 +187,11 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         // 45px = padding left + padding right + border left + border right + arrow icon width + arrow icon margin left
         // 32px = image width + flex gap
-        setMinWidth(calculateContentWidth(list) + 45 + (isAtLeastOneItemWithImageGiven ? 32 : 0));
+        setMinWidth(
+            calculateContentWidth([...list, { text: placeholder, value: 'placeholder' }]) +
+                45 +
+                (isAtLeastOneItemWithImageGiven ? 32 : 0),
+        );
     }, [list, placeholder]);
 
     /**

@@ -100,37 +100,6 @@ const MentionFinder: FC<MentionFinderProps> = ({
                     onSelect({ fullMatch, member: activeMember });
                 }
             }
-
-            // if (event.key === 'ArrowUp') {
-            //     event.preventDefault();
-            //     event.stopPropagation();
-            //
-            //     const currentIndex = filteredMembers.findIndex(({ id }) => id === activeMember?.id);
-            //
-            //     const prevIndex = Math.max(currentIndex - 1, 0);
-            //
-            //     const member = filteredMembers[prevIndex];
-            //
-            //     setActiveMember(member);
-            // } else if (event.key === 'ArrowDown') {
-            //     event.preventDefault();
-            //     event.stopPropagation();
-            //
-            //     const currentIndex = filteredMembers.findIndex(({ id }) => id === activeMember?.id);
-            //
-            //     const nextIndex = Math.min(currentIndex + 1, filteredMembers.length - 1);
-            //
-            //     const member = filteredMembers[nextIndex];
-            //
-            //     setActiveMember(member);
-            // } else if (event.key === 'Enter') {
-            //     event.preventDefault();
-            //     event.stopPropagation();
-            //
-            //     if (fullMatch && activeMember) {
-            //         onSelect({ fullMatch, member: activeMember });
-            //     }
-            // }
         },
         [activeMember, filteredMembers, focusedIndex, fullMatch, onSelect],
     );

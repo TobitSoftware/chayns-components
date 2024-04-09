@@ -26,9 +26,14 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
     color: ${({ theme }: StyledInputContentWrapperProps) => theme['006']};
     display: flex;
     justify-content: space-between;
-    min-height: 42px;
     width: 100%;
     transition: opacity 0.3s ease;
+
+    ${({ $shouldShowOnlyBottomBorder }) =>
+        !$shouldShowOnlyBottomBorder &&
+        css`
+            min-height: 42px;
+        `}
 
     ${({ $shouldRoundRightCorners, $shouldShowOnlyBottomBorder, theme }) => {
         if ($shouldShowOnlyBottomBorder) {
@@ -55,15 +60,21 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
     }}
 `;
 
-export const StyledInputContent = styled.div`
+type StyledInputContentProps = WithTheme<{ $shouldShowOnlyBottomBorder?: boolean }>;
+
+export const StyledInputContent = styled.div<StyledInputContentProps>`
     display: flex;
     flex: 1 1 auto;
     min-width: 0;
-    margin: 8px 10px;
+    margin: ${({ $shouldShowOnlyBottomBorder }) =>
+        !$shouldShowOnlyBottomBorder ? '8px 10px' : '4px 0'};
     position: relative;
 `;
 
-type StyledInputFieldProps = WithTheme<{ $isInvalid?: boolean }>;
+type StyledInputFieldProps = WithTheme<{
+    $isInvalid?: boolean;
+    $shouldShowCenteredContent: boolean;
+}>;
 
 export const StyledInputField = styled.input<StyledInputFieldProps>`
     background: none;
@@ -72,13 +83,15 @@ export const StyledInputField = styled.input<StyledInputFieldProps>`
         $isInvalid ? theme.wrong : theme.text};
     padding: 0;
     width: 100%;
+
+    ${({ $shouldShowCenteredContent }) =>
+        $shouldShowCenteredContent &&
+        css`
+            text-align: center;
+        `}
 `;
 
-type StyledMotionInputLabelWrapperProps = WithTheme<{ $width: number }>;
-
-export const StyledMotionInputLabelWrapper = styled(
-    motion.label,
-)<StyledMotionInputLabelWrapperProps>`
+export const StyledMotionInputLabelWrapper = styled(motion.label)`
     align-items: baseline;
     display: flex;
     flex: 0 0 auto;
@@ -87,7 +100,7 @@ export const StyledMotionInputLabelWrapper = styled(
     pointer-events: none;
     position: absolute;
     user-select: none;
-    max-width: ${({ $width }) => $width}px;
+    max-width: 100%;
 `;
 
 type StyledInputLabelProps = WithTheme<{ $isInvalid?: boolean }>;

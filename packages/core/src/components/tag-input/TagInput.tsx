@@ -8,6 +8,7 @@ import React, {
     type KeyboardEvent,
     type ReactElement,
 } from 'react';
+import { useTheme } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import type { Tag } from '../../types/tagInput';
 import Badge from '../badge/Badge';
@@ -41,6 +42,9 @@ export type TagInputProps = {
 const TagInput: FC<TagInputProps> = ({ placeholder, tags, onRemove, onAdd }) => {
     const [internalTags, setInternalTags] = useState<Tag[]>();
     const [currentValue, setCurrentValue] = useState('');
+    const [selectedId, setSelectedId] = useState<Tag['id']>();
+
+    const theme = useTheme();
 
     useEffect(() => {
         if (tags) {
@@ -69,12 +73,52 @@ const TagInput: FC<TagInputProps> = ({ placeholder, tags, onRemove, onAdd }) => 
                     return '';
                 });
             }
+
+            if (event.key === 'Backspace' && currentValue === '') {
+                if (!selectedId) {
+                    if (!internalTags) {
+                        return;
+                    }
+
+                    const newSelectedId = internalTags[internalTags.length - 1]?.id;
+
+                    setSelectedId(newSelectedId);
+
+                    return;
+                }
+
+                setInternalTags((prevState) => {
+                    if (!prevState) {
+                        return prevState;
+                    }
+
+                    const removedId = prevState[prevState.length - 1]?.id;
+
+                    if (!removedId) {
+                        return prevState;
+                    }
+
+                    const updatedTags = (prevState ?? []).filter((tag) => tag.id !== removedId);
+
+                    if (typeof onRemove === 'function') {
+                        onRemove(removedId);
+                    }
+
+                    setSelectedId(undefined);
+
+                    return updatedTags;
+                });
+            }
         },
-        [onAdd],
+        [currentValue, internalTags, onAdd, onRemove, selectedId],
     );
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setCurrentValue(event.target.value);
+
+        if (event.target.value !== '') {
+            setSelectedId(undefined);
+        }
     };
 
     const handleIconClick = useCallback(
@@ -101,7 +145,12 @@ const TagInput: FC<TagInputProps> = ({ placeholder, tags, onRemove, onAdd }) => 
 
         internalTags.forEach(({ text, id }) => {
             items.push(
-                <Badge key={`tag-input-${id}`}>
+                <Badge
+                    key={`tag-input-${id}`}
+                    backgroundColor={
+                        id === selectedId ? (theme['206'] as string) ?? undefined : undefined
+                    }
+                >
                     <StyledTagInputTagWrapper>
                         <StyledTagInputTagWrapperText>{text}</StyledTagInputTagWrapperText>
                         <Icon icons={['ts-wrong']} onClick={() => handleIconClick(id)} />
@@ -111,7 +160,7 @@ const TagInput: FC<TagInputProps> = ({ placeholder, tags, onRemove, onAdd }) => 
         });
 
         return items;
-    }, [handleIconClick, internalTags]);
+    }, [handleIconClick, internalTags, selectedId, theme]);
 
     return useMemo(
         () => (

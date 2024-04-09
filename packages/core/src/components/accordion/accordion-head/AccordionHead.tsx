@@ -86,19 +86,25 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     }, [isWrapped, title]);
 
     const iconElement = useMemo(() => {
-        if (icon || (icon && isFixed)) {
+        if (icon || isFixed) {
             return (
                 <Icon icons={[isFixed ? 'fa fa-horizontal-rule' : icon ?? 'fa fa-chevron-right']} />
             );
         }
 
-        const internalIcon = theme && theme.accordionIcon ? (theme.accordionIcon as number) : 61701;
-        const internalIconStyle =
-            theme && theme.iconStyle ? (theme.iconStyle as string) : 'fa-regular';
+        let internalIcon = 'f105';
 
-        return (
-            <StyledAccordionIcon className={internalIconStyle} $icon={internalIcon.toString(16)} />
-        );
+        if (
+            theme?.accordionIcon &&
+            theme.accordionIcon !== 110 &&
+            theme.accordionIcon !== 1110100
+        ) {
+            internalIcon = (theme.accordionIcon as number).toString(16);
+        }
+
+        const internalIconStyle = theme?.iconStyle ? (theme.iconStyle as string) : 'fa-regular';
+
+        return <StyledAccordionIcon className={internalIconStyle} $icon={internalIcon} />;
     }, [icon, theme, isFixed]);
 
     return (

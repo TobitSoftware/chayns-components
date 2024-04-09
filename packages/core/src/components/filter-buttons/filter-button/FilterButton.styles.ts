@@ -51,7 +51,8 @@ export const StyledFilterButtonItemBorder = styled.div<StyledFilterButtonItemBor
     width: 100%;
     opacity: 0.4;
     z-index: 0;
-    border-radius: ${({ $shape }) => ($shape === FilterButtonItemShape.Round ? 100 : 0)}px;
+    border-radius: ${({ $shape }) => ($shape === FilterButtonItemShape.Round ? 100 : 3)}px;
+
     ${({ $color, theme, $isSelected }: StyledFilterButtonItemBorderProps) =>
         !$isSelected &&
         css`
@@ -78,7 +79,7 @@ export const StyledMotionFilterButtonItemBackground = styled(
     z-index: 0;
     opacity: ${({ $isSelected }) => ($isSelected ? 0.4 : 0)};
     transition: opacity 0.5s ease;
-    border-radius: ${({ $shape }) => ($shape === FilterButtonItemShape.Round ? 100 : 0)}px;
+    border-radius: ${({ $shape }) => ($shape === FilterButtonItemShape.Round ? 100 : 3)}px;
     background-color: ${({ $color, theme }: StyledFilterButtonItemBackgroundProps) =>
         $color ?? theme.headline};
 `;

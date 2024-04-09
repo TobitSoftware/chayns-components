@@ -85,10 +85,6 @@ const NumberInput: FC<NumberInputProps> = ({
     const onLocalChange: ChangeEventHandler<HTMLInputElement> = (event) => {
         const newValue = event.target.value;
 
-        if (newValue.replaceAll(':', '').length > 4) {
-            return;
-        }
-
         const sanitizedValueString = newValue
             // Removes everything except numbers, commas and points
             .replace(NUMBER_CLEAR_REGEX, '');
@@ -208,6 +204,7 @@ const NumberInput: FC<NumberInputProps> = ({
             onFocus={onLocalFocus}
             isDisabled={isDisabled}
             isInvalid={typeof isInvalid === 'boolean' ? isInvalid : isValueInvalid}
+            shouldShowCenteredContent={shouldShowOnlyBottomBorder}
         />
     );
 };

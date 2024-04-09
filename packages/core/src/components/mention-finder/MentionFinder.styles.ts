@@ -15,7 +15,7 @@ export const StyledMotionMentionFinderPopup = styled(motion.div)<StyledMentionFi
     border-radius: 3px;
     box-shadow: 1px 3px 8px rgba(0, 0, 0, 0.1);
     left: 0;
-    max-height: 300px;
+    max-height: 275px;
     overflow-y: scroll;
     position: absolute;
     width: 100%;
