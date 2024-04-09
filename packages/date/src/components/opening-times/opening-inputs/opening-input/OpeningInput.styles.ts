@@ -6,6 +6,7 @@ export const StyledOpeningInput = styled(motion.div)`
     display: flex;
     align-items: center;
     gap: 6px;
+    overflow: hidden;
 `;
 
 export const StyledOpeningInputWrapper = styled.div`

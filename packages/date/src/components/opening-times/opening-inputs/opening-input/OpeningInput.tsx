@@ -87,6 +87,7 @@ const OpeningInput: FC<OpeningInputProps> = ({
                 animate={{ opacity: 1, height: 'auto' }}
                 initial={{ opacity: 0, height: 0 }}
                 exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2, type: 'tween' }}
             >
                 <StyledOpeningInputWrapper>
                     <NumberInput
