@@ -10,6 +10,7 @@ type StyledProgressBarBackgroundProps = WithTheme<unknown>;
 export const StyledProgressBarBackground = styled.div<StyledProgressBarBackgroundProps>`
     height: 10px;
     width: 100%;
+    border-radius: 2px;
     background-color: ${({ theme }: StyledProgressBarBackgroundProps) => theme['104']};
 `;
 

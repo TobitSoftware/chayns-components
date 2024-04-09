@@ -60,7 +60,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ percentage, label, shouldHideProgre
         }
 
         return (
-            <>
+            <StyledProgressBarProgressWrapper>
                 <StyledMotionProgressBarProgress
                     initial={{ width: '0%' }}
                     animate={{ width: `${internalPercentage}%` }}
@@ -68,7 +68,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ percentage, label, shouldHideProgre
                     transition={{ type: 'tween' }}
                 />
                 <StyledProgressBarBackground />
-            </>
+            </StyledProgressBarProgressWrapper>
         );
     }, [internalPercentage, percentage, shouldHideProgress]);
 
