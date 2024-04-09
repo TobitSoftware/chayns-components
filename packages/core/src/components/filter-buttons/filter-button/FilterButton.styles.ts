@@ -34,7 +34,15 @@ type StyledFilterButtonItemLabelTextProps = WithTheme<unknown>;
 
 export const StyledFilterButtonItemLabelText = styled.p<StyledFilterButtonItemLabelTextProps>`
     color: ${({ theme }: StyledFilterButtonItemLabelTextProps) => theme.text};
-    margin-top: 2px;
+    margin: 0;
+`;
+
+type StyledFilterButtonItemLabelCountProps = WithTheme<unknown>;
+
+export const StyledFilterButtonItemLabelCount = styled.p<StyledFilterButtonItemLabelCountProps>`
+    color: ${({ theme }: StyledFilterButtonItemLabelTextProps) => theme.text};
+    margin: 0;
+    font-weight: bold;
 `;
 
 type StyledFilterButtonItemBorderProps = WithTheme<{

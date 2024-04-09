@@ -60,11 +60,8 @@ export { ComboBoxDirection } from './types/comboBox';
 export { ContentCardType } from './types/contentCard';
 export { ContextMenuAlignment } from './types/contextMenu';
 export type { FileItem, Image, InternalFileItem, Meta, Video } from './types/file';
-export type {
-    FilterButtonItemShape,
-    FilterButtonSize,
-    IFilterButtonItem as FilterButtonItem,
-} from './types/filterButtons';
+export { FilterButtonItemShape, FilterButtonSize } from './types/filterButtons';
+export type { IFilterButtonItem as FilterButtonItem } from './types/filterButtons';
 export type { PopupRef } from './types/popup';
 export type { ISearchBoxItem as SearchBoxItem } from './types/searchBox';
 export type { SelectButtonItem } from './types/selectButton';

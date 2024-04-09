@@ -5,6 +5,7 @@ import {
     StyledFilterButtonItem,
     StyledFilterButtonItemBorder,
     StyledFilterButtonItemLabel,
+    StyledFilterButtonItemLabelCount,
     StyledFilterButtonItemLabelText,
     StyledMotionFilterButtonItemBackground,
 } from './FilterButton.styles';
@@ -15,6 +16,7 @@ export type FilterButtonProps = {
     isSelected: boolean;
     shape: FilterButtonItemShape;
     size: FilterButtonSize;
+    count?: number;
     text: string;
     id: string;
     onSelect: (key: string) => void;
@@ -26,6 +28,7 @@ const FilterButton: FC<FilterButtonProps> = ({
     shape,
     text,
     color,
+    count,
     isSelected,
     id,
     onSelect,
@@ -42,6 +45,7 @@ const FilterButton: FC<FilterButtonProps> = ({
                         <Icon icons={icons} size={size === FilterButtonSize.Normal ? 15 : 10} />
                     )}
                     <StyledFilterButtonItemLabelText>{text}</StyledFilterButtonItemLabelText>
+                    <StyledFilterButtonItemLabelCount>{count}</StyledFilterButtonItemLabelCount>
                 </StyledFilterButtonItemLabel>
                 <StyledFilterButtonItemBorder
                     $isSelected={isSelected}
@@ -55,7 +59,7 @@ const FilterButton: FC<FilterButtonProps> = ({
                 />
             </StyledFilterButtonItem>
         ),
-        [color, handleClick, icons, isSelected, shape, size, text],
+        [color, count, handleClick, icons, isSelected, shape, size, text],
     );
 };
 
