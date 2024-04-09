@@ -5,11 +5,13 @@ import React, {
     ReactElement,
     useCallback,
     useEffect,
+    useLayoutEffect,
     useMemo,
     useRef,
     useState,
 } from 'react';
 import { ClampPosition } from '../../types/truncation';
+import { debounce } from '../../utils/debounce';
 import { truncateElement } from '../../utils/truncation';
 import {
     StyledMotionTruncationContent,
@@ -79,6 +81,8 @@ const Truncation: FC<TruncationProps> = ({
     const originalChildrenRef = useRef<HTMLDivElement>(null);
     const hasCollapsed = useRef(false);
     const isAnimating = useRef(false);
+    const hasSizeRecentlyChanged = useRef(false);
+    const canResetSizeChanged = useRef(true);
 
     useEffect(() => {
         if (typeof isOpen === 'boolean') {
@@ -102,9 +106,18 @@ const Truncation: FC<TruncationProps> = ({
     );
 
     const handleAnimationEnd = useCallback(() => {
-        setHasSizeChanged(false);
         hasCollapsed.current = true;
         isAnimating.current = false;
+
+        if (canResetSizeChanged.current) {
+            setHasSizeChanged(false);
+            canResetSizeChanged.current = false;
+        }
+
+        window.setTimeout(() => {
+            hasSizeRecentlyChanged.current = false;
+        }, 10);
+
         setShouldShowCollapsedElement(!internalIsOpen);
 
         window.setTimeout(() => {
@@ -149,7 +162,7 @@ const Truncation: FC<TruncationProps> = ({
         }
     }, [children, internalIsOpen, shouldShowCollapsedElement]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (originalChildrenRef.current) {
             const resizeObserver = new ResizeObserver((entries) => {
                 if (entries && entries[0]) {
@@ -159,8 +172,17 @@ const Truncation: FC<TruncationProps> = ({
                         observedHeight < originalBigHeight ? originalBigHeight : observedHeight,
                     );
 
-                    if (!hasCollapsed.current && !isAnimating.current) {
+                    if (
+                        !hasCollapsed.current &&
+                        !isAnimating.current &&
+                        !hasSizeRecentlyChanged.current
+                    ) {
+                        void debounce(() => {
+                            canResetSizeChanged.current = true;
+                        }, 250)();
+
                         setHasSizeChanged(true);
+                        hasSizeRecentlyChanged.current = true;
                     }
                 }
             });
@@ -175,7 +197,7 @@ const Truncation: FC<TruncationProps> = ({
         return () => {};
     }, [originalBigHeight]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (pseudoChildrenRef.current) {
             const resizeObserver = new ResizeObserver((entries) => {
                 if (entries && entries[0]) {
@@ -185,8 +207,17 @@ const Truncation: FC<TruncationProps> = ({
                         observedHeight < originalSmallHeight ? originalSmallHeight : observedHeight,
                     );
 
-                    if (!hasCollapsed.current && !isAnimating.current) {
+                    if (
+                        !hasCollapsed.current &&
+                        !isAnimating.current &&
+                        !hasSizeRecentlyChanged.current
+                    ) {
+                        void debounce(() => {
+                            canResetSizeChanged.current = true;
+                        }, 250)();
+
                         setHasSizeChanged(true);
+                        hasSizeRecentlyChanged.current = true;
                     }
                 }
             });
