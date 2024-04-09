@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { IPresetColor } from '../../types';
 import { StyledColorPicker } from './ColorPicker.styles';
+import MoreOptions from './more-options/MoreOptions';
 import PresetColors from './preset-colors/PresetColors';
 
 interface IColorPickerContext {
@@ -79,8 +80,8 @@ const ColorPicker = ({
     );
 
     useEffect(() => {
-        updateSelectedColor(selectedColor);
-    }, [selectedColor, updateSelectedColor]);
+        setInternalSelectedColor(selectedColor);
+    }, [selectedColor]);
 
     const providerValue = useMemo<IColorPickerContext>(
         () => ({
@@ -98,6 +99,7 @@ const ColorPicker = ({
                     onPresetColorAdd={onPresetColorAdd}
                     onPresetColorRemove={onPresetColorRemove}
                 />
+                <MoreOptions />
             </ColorPickerContext.Provider>
         </StyledColorPicker>
     );
