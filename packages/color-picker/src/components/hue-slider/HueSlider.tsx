@@ -47,10 +47,6 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
 
             setHslColor(`hsl(${match[1]}, 100%, 50%)`);
             setEditedValue(parseInt(match[1], 10));
-
-            if (typeof onChange === 'function') {
-                onChange(hsl);
-            }
         }
     }, [color, onChange]);
 
