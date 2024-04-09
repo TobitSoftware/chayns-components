@@ -29,7 +29,13 @@ export default {
 } as Meta<typeof Truncation>;
 
 const Template: StoryFn<typeof Truncation> = ({ children, ...args }) => (
-    <Truncation {...args}>{children}</Truncation>
+    <>
+        {' '}
+        <Truncation {...args}>{children}</Truncation>Der legendärste Abend: Homecoming at next!
+        Studenten und Ausreißer, Urlauber und Daheimgebliebene, Partymäuse und Partymuffel – sie
+        alle zieht es am Tag vor Heiligabend in die Heimat an einen zuvor ausgemachten Ort, um all
+        die guten Freunde und alte Bekannte wiederzutreffen.
+    </>
 );
 
 export const General = Template.bind({});

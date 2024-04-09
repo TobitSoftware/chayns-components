@@ -5,6 +5,7 @@ import type { FramerMotionBugFix, WithTheme } from '../color-scheme-provider/Col
 
 export const StyledTruncation = styled.div`
     position: relative;
+    overflow: hidden;
 `;
 
 // Fix framer-motion bug
