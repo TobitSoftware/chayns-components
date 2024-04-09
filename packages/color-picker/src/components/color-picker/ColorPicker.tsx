@@ -67,14 +67,19 @@ const ColorPicker = ({
 }: ColorPickerProps) => {
     const [internalSelectedColor, setInternalSelectedColor] = useState<string>();
 
-    const updateSelectedColor = useCallback((color: string | undefined) => {
-        setInternalSelectedColor(color);
-    }, []);
+    const updateSelectedColor = useCallback(
+        (color: string | undefined) => {
+            setInternalSelectedColor(color);
+
+            if (typeof onSelect === 'function' && color) {
+                onSelect(color);
+            }
+        },
+        [onSelect],
+    );
 
     useEffect(() => {
-        if (typeof selectedColor === 'string') {
-            updateSelectedColor(selectedColor);
-        }
+        updateSelectedColor(selectedColor);
     }, [selectedColor, updateSelectedColor]);
 
     const providerValue = useMemo<IColorPickerContext>(
@@ -88,7 +93,11 @@ const ColorPicker = ({
     return (
         <StyledColorPicker>
             <ColorPickerContext.Provider value={providerValue}>
-                <PresetColors presetColors={presetColors} />
+                <PresetColors
+                    presetColors={presetColors}
+                    onPresetColorAdd={onPresetColorAdd}
+                    onPresetColorRemove={onPresetColorRemove}
+                />
             </ColorPickerContext.Provider>
         </StyledColorPicker>
     );
