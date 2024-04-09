@@ -25,7 +25,7 @@ export const StyledFilterButtonItem = styled.div<StyledFilterButtonItemProps>`
 export const StyledFilterButtonItemLabel = styled.div`
     display: flex;
     gap: 5px;
-    align-items: center;
+    align-items: baseline;
     position: relative;
     z-index: 1;
 `;
