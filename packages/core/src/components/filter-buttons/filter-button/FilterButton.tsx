@@ -45,7 +45,9 @@ const FilterButton: FC<FilterButtonProps> = ({
                         <Icon icons={icons} size={size === FilterButtonSize.Normal ? 15 : 10} />
                     )}
                     <StyledFilterButtonItemLabelText>{text}</StyledFilterButtonItemLabelText>
-                    <StyledFilterButtonItemLabelCount>{count}</StyledFilterButtonItemLabelCount>
+                    {count && (
+                        <StyledFilterButtonItemLabelCount>{count}</StyledFilterButtonItemLabelCount>
+                    )}
                 </StyledFilterButtonItemLabel>
                 <StyledFilterButtonItemBorder
                     $isSelected={isSelected}
