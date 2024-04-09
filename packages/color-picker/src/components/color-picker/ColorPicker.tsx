@@ -3,6 +3,7 @@ import type { IPresetColor } from '../../types';
 import { StyledColorPicker } from './ColorPicker.styles';
 import MoreOptions from './more-options/MoreOptions';
 import PresetColors from './preset-colors/PresetColors';
+import Sliders from './sliders/Sliders';
 
 interface IColorPickerContext {
     selectedColor?: string;
@@ -94,6 +95,7 @@ const ColorPicker = ({
     return (
         <StyledColorPicker>
             <ColorPickerContext.Provider value={providerValue}>
+                <Sliders />
                 <PresetColors
                     presetColors={presetColors}
                     onPresetColorAdd={onPresetColorAdd}
