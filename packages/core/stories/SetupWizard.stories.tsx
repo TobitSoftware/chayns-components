@@ -95,8 +95,8 @@ const InsideAccordionTemplate: StoryFn<typeof SetupWizard> = ({ ...args }) => {
 
     return (
         <Accordion title={'SetupWizard inside an Accordion'}>
-            <SetupWizard {...args} ref={setupRef}>
-                <SetupWizardItem id={0} step={1} title="Intro" isWrapped>
+            <SetupWizard {...args} ref={setupRef} isWrapped>
+                <SetupWizardItem id={0} step={1} title="Intro">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis et dui eget sapien
                     convallis tincidunt. Sed dictum vestibulum mi, quis euismod nunc suscipit vitae.
                     Aenean quis nisi eu purus efficitur ullamcorper sed vitae est. Duis quis diam
@@ -118,7 +118,7 @@ const InsideAccordionTemplate: StoryFn<typeof SetupWizard> = ({ ...args }) => {
                         </Button>
                     </div>
                 </SetupWizardItem>
-                <SetupWizardItem id={1} step={2} title="Dein Name" isWrapped>
+                <SetupWizardItem id={1} step={2} title="Dein Name">
                     <h3>Teile uns deinen Namen mit</h3>
                     <Input placeholder="Namen eingeben" />
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10 }}>
@@ -131,7 +131,7 @@ const InsideAccordionTemplate: StoryFn<typeof SetupWizard> = ({ ...args }) => {
                         </Button>
                     </div>
                 </SetupWizardItem>
-                <SetupWizardItem id={2} step={3} title="Dein Essen" isWrapped>
+                <SetupWizardItem id={2} step={3} title="Dein Essen">
                     <h3>Teile uns dein Lieblingsessen mit</h3>
                     <RadioButtonGroup>
                         <RadioButton id="0" label="Nudeln" />
@@ -151,7 +151,7 @@ const InsideAccordionTemplate: StoryFn<typeof SetupWizard> = ({ ...args }) => {
                         </Button>
                     </div>
                 </SetupWizardItem>
-                <SetupWizardItem id={3} step={4} title="Fertig" isWrapped>
+                <SetupWizardItem id={3} step={4} title="Fertig">
                     <h3>Danke für deine Zeit :)</h3>
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10 }}>
                         <Button
