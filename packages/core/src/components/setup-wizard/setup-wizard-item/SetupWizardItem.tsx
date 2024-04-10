@@ -13,7 +13,7 @@ import AccordionContent from '../../accordion/accordion-content/AccordionContent
 import Badge from '../../badge/Badge';
 import Icon from '../../icon/Icon';
 import { SetupWizardContext } from '../SetupWizard';
-import { StyledSetupWizardItem, StyledSetupWizardItemBadge } from './SetupWizardItem.styles';
+import { StyledSetupWizardItemBadge } from './SetupWizardItem.styles';
 
 export type SetupWizardItemProps = {
     /**
@@ -83,17 +83,15 @@ const SetupWizardItem: FC<SetupWizardItemProps> = ({ children, step, title, id }
 
     return useMemo(
         () => (
-            <StyledSetupWizardItem>
-                <Accordion
-                    onOpen={handleAccordionOpen}
-                    title={`${step}. ${title}`}
-                    isOpened={shouldOpen}
-                    isDisabled={shouldBeDisabled}
-                    rightElement={rightElement}
-                >
-                    <AccordionContent>{children}</AccordionContent>
-                </Accordion>
-            </StyledSetupWizardItem>
+            <Accordion
+                onOpen={handleAccordionOpen}
+                title={`${step}. ${title}`}
+                isOpened={shouldOpen}
+                isDisabled={shouldBeDisabled}
+                rightElement={rightElement}
+            >
+                <AccordionContent>{children}</AccordionContent>
+            </Accordion>
         ),
         [handleAccordionOpen, step, title, shouldOpen, shouldBeDisabled, rightElement, children],
     );
