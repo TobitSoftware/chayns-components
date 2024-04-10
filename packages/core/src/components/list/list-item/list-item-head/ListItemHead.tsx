@@ -15,6 +15,7 @@ import {
     StyledListItemHead,
     StyledListItemHeadBottomRightElement,
     StyledListItemHeadContent,
+    StyledListItemHeadRightElement,
     StyledListItemHeadSubtitle,
     StyledListItemHeadSubtitleText,
     StyledListItemHeadTitle,
@@ -129,7 +130,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                             {titleElement}
                         </StyledListItemHeadTitleElement>
                     </StyledListItemHeadTitleContent>
-                    {rightElements && rightElements[0] && (
+                    {rightElements && rightElements.length > 1 && rightElements[0] && (
                         <StyledListItemHeadTopRightElement>
                             {rightElements[0]}
                         </StyledListItemHeadTopRightElement>
@@ -148,6 +149,9 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     </StyledListItemHeadSubtitle>
                 )}
             </StyledListItemHeadContent>
+            {rightElements?.length === 1 && (
+                <StyledListItemHeadRightElement>{rightElements[0]}</StyledListItemHeadRightElement>
+            )}
             {hoverItem && (
                 <StyledMotionListItemHeadHoverItem
                     animate={{
