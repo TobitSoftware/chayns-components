@@ -70,6 +70,10 @@ export type ListItemProps = {
      */
     shouldShowRoundImage?: boolean;
     /**
+     * Whether a single rightElement should be shown beside the title.
+     */
+    shouldShowSingleRightElementInTitle?: boolean;
+    /**
      * Subtitle of the `ListItem` displayed in the head below the title
      */
     subtitle?: ReactNode;
@@ -94,6 +98,7 @@ const ListItem: FC<ListItemProps> = ({
     onLongPress,
     leftElements,
     rightElements,
+    shouldShowSingleRightElementInTitle = false,
     subtitle,
     shouldShowRoundImage,
     title,
@@ -167,6 +172,7 @@ const ListItem: FC<ListItemProps> = ({
                 rightElements={rightElements}
                 subtitle={subtitle}
                 shouldShowRoundImage={shouldShowRoundImage}
+                shouldShowSingleRightElementInTitle={shouldShowSingleRightElementInTitle}
                 title={title}
                 titleElement={titleElement}
             />

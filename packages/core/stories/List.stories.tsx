@@ -127,6 +127,13 @@ ListItemsWithRightElements.args = {
         />,
         <ListItem
             images={[locationImages[1]]}
+            rightElements={[<Badge>123</Badge>]}
+            shouldShowSingleRightElementInTitle
+            subtitle="Dolor sit ipsum amet"
+            title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
+        />,
+        <ListItem
+            images={[locationImages[1]]}
             rightElements={['07:51 Uhr', undefined]}
             subtitle="Dolor sit ipsum amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"

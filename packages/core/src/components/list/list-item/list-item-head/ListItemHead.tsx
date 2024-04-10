@@ -40,6 +40,7 @@ type ListItemHeadProps = {
     rightElements?: [ReactNode, ...ReactNode[]];
     subtitle?: ReactNode;
     shouldShowRoundImage?: boolean;
+    shouldShowSingleRightElementInTitle: boolean;
     title: ReactNode;
     titleElement?: ReactNode;
 };
@@ -57,6 +58,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     rightElements,
     subtitle,
     shouldShowRoundImage,
+    shouldShowSingleRightElementInTitle,
     title,
     titleElement,
 }) => {
@@ -130,6 +132,11 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                             {titleElement}
                         </StyledListItemHeadTitleElement>
                     </StyledListItemHeadTitleContent>
+                    {rightElements?.length === 1 && shouldShowSingleRightElementInTitle && (
+                        <StyledListItemHeadTopRightElement>
+                            {rightElements[0]}
+                        </StyledListItemHeadTopRightElement>
+                    )}
                     {rightElements && rightElements.length > 1 && rightElements[0] && (
                         <StyledListItemHeadTopRightElement>
                             {rightElements[0]}
@@ -149,7 +156,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     </StyledListItemHeadSubtitle>
                 )}
             </StyledListItemHeadContent>
-            {rightElements?.length === 1 && (
+            {rightElements?.length === 1 && !shouldShowSingleRightElementInTitle && (
                 <StyledListItemHeadRightElement>{rightElements[0]}</StyledListItemHeadRightElement>
             )}
             {hoverItem && (
