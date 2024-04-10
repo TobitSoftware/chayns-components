@@ -128,7 +128,7 @@ ListItemsWithRightElements.args = {
         <ListItem
             images={[locationImages[1]]}
             rightElements={[<Badge>123</Badge>]}
-            shouldShowSingleRightElementInTitle
+            shouldShowSingleRightElementCentered
             subtitle="Dolor sit ipsum amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
         />,

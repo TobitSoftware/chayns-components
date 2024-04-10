@@ -72,7 +72,7 @@ export type ListItemProps = {
     /**
      * Whether a single rightElement should be shown beside the title.
      */
-    shouldShowSingleRightElementInTitle?: boolean;
+    shouldShowSingleRightElementCentered?: boolean;
     /**
      * Subtitle of the `ListItem` displayed in the head below the title
      */
@@ -98,7 +98,7 @@ const ListItem: FC<ListItemProps> = ({
     onLongPress,
     leftElements,
     rightElements,
-    shouldShowSingleRightElementInTitle = false,
+    shouldShowSingleRightElementCentered = false,
     subtitle,
     shouldShowRoundImage,
     title,
@@ -172,7 +172,7 @@ const ListItem: FC<ListItemProps> = ({
                 rightElements={rightElements}
                 subtitle={subtitle}
                 shouldShowRoundImage={shouldShowRoundImage}
-                shouldShowSingleRightElementInTitle={shouldShowSingleRightElementInTitle}
+                shouldShowSingleRightElementCentered={shouldShowSingleRightElementCentered}
                 title={title}
                 titleElement={titleElement}
             />
