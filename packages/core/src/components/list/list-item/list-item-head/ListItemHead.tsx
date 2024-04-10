@@ -18,6 +18,8 @@ import {
     StyledListItemHeadSubtitle,
     StyledListItemHeadSubtitleText,
     StyledListItemHeadTitle,
+    StyledListItemHeadTitleContent,
+    StyledListItemHeadTitleElement,
     StyledListItemHeadTitleText,
     StyledListItemHeadTopRightElement,
     StyledMotionListItemHeadHoverItem,
@@ -31,13 +33,14 @@ type ListItemHeadProps = {
     isAnyItemExpandable: boolean;
     isExpandable: boolean;
     isOpen: boolean;
+    leftElements?: ReactNode;
     onClick?: MouseEventHandler<HTMLDivElement>;
     onLongPress?: TouchEventHandler<HTMLDivElement>;
     rightElements?: [ReactNode, ...ReactNode[]];
     subtitle?: ReactNode;
-    leftElements?: ReactNode;
     shouldShowRoundImage?: boolean;
     title: ReactNode;
+    titleElement?: ReactNode;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -47,13 +50,14 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     isAnyItemExpandable,
     isExpandable,
     isOpen,
+    leftElements,
     onClick,
     onLongPress,
     rightElements,
     subtitle,
     shouldShowRoundImage,
     title,
-    leftElements,
+    titleElement,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
 
@@ -117,9 +121,14 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 $isOpen={isOpen}
             >
                 <StyledListItemHeadTitle>
-                    <StyledListItemHeadTitleText $isOpen={isOpen}>
-                        {title}
-                    </StyledListItemHeadTitleText>
+                    <StyledListItemHeadTitleContent>
+                        <StyledListItemHeadTitleText $isOpen={isOpen}>
+                            {title}
+                        </StyledListItemHeadTitleText>
+                        <StyledListItemHeadTitleElement>
+                            {titleElement}
+                        </StyledListItemHeadTitleElement>
+                    </StyledListItemHeadTitleContent>
                     {rightElements && rightElements[0] && (
                         <StyledListItemHeadTopRightElement>
                             {rightElements[0]}

@@ -28,6 +28,8 @@ export const ExpandableListItems = Template.bind({});
 
 export const MixedListItems = Template.bind({});
 
+export const ListItemWithTitleElement = Template.bind({});
+
 const images = [
     'https://tsimg.cloud/77896-21884/8aee1a304297729a4542b97325940a656a3da8f2.png',
     'https://tsimg.cloud/77896-21884/54a117f35e5fb57520e64471461af5491c0eff06.png',
@@ -285,5 +287,34 @@ MixedListItems.args = {
                 takimata sanctus est Lorem ipsum dolor sit amet.
             </ListItemContent>
         </ListItem>,
+    ],
+};
+
+ListItemWithTitleElement.args = {
+    children: [
+        <ListItem
+            icons={['ts-chayns']}
+            subtitle="Stet clita kasd gubergren, no sea"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+            titleElement={<Icon icons={['fa fa-rocket']} />}
+        />,
+        <ListItem
+            icons={['fa fa-rocket']}
+            subtitle="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+            title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
+            titleElement={<Icon icons={['ts-chayns']} />}
+        />,
+        <ListItem
+            icons={['ts-chayns']}
+            subtitle="Consetetur sadipscing elitr, sed diam nonumy eirmod"
+            title="At vero eos et accusam et justo duo dolores et ea rebum sit amet dolor"
+            titleElement={<Icon icons={['fa fa-rocket']} />}
+        />,
+        <ListItem
+            icons={['fa fa-rocket']}
+            subtitle="Et justo duo dolores et ea rebum"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+            titleElement={<Icon icons={['ts-chayns']} />}
+        />,
     ],
 };

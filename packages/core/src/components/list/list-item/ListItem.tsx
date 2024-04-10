@@ -77,6 +77,10 @@ export type ListItemProps = {
      * Title of the `ListItem` displayed in the head
      */
     title: ReactNode;
+    /**
+     * Additional elements to be displayed in the header next to the title.
+     */
+    titleElement?: ReactNode;
 };
 
 const ListItem: FC<ListItemProps> = ({
@@ -93,6 +97,7 @@ const ListItem: FC<ListItemProps> = ({
     subtitle,
     shouldShowRoundImage,
     title,
+    titleElement,
 }) => {
     const {
         incrementExpandableItemCount,
@@ -156,13 +161,14 @@ const ListItem: FC<ListItemProps> = ({
                 isAnyItemExpandable={isAnyItemExpandable}
                 isExpandable={isExpandable}
                 isOpen={isItemOpen}
+                leftElements={leftElements}
                 onClick={isClickable ? handleHeadClick : undefined}
                 onLongPress={onLongPress}
-                leftElements={leftElements}
                 rightElements={rightElements}
                 subtitle={subtitle}
                 shouldShowRoundImage={shouldShowRoundImage}
                 title={title}
+                titleElement={titleElement}
             />
             <AnimatePresence initial={false}>
                 {isExpandable && isItemOpen && <ListItemBody id={uuid}>{children}</ListItemBody>}

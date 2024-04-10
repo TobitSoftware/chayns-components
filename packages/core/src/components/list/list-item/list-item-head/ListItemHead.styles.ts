@@ -61,6 +61,20 @@ export const StyledListItemHeadTitle = styled.div`
     justify-content: space-between;
 `;
 
+export const StyledListItemHeadTitleContent = styled.div`
+    display: flex;
+    flex: 1 1 auto;
+    max-width: 100%;
+    min-width: 0;
+`;
+
+export const StyledListItemHeadTitleElement = styled.div`
+    align-items: center;
+    display: flex;
+    flex: 0 0 auto;
+    margin-left: 8px;
+`;
+
 type StyledListItemHeadTitleTextProps = WithTheme<{ $isOpen: boolean }>;
 
 export const StyledListItemHeadTitleText = styled.span<StyledListItemHeadTitleTextProps>`
@@ -68,9 +82,6 @@ export const StyledListItemHeadTitleText = styled.span<StyledListItemHeadTitleTe
     white-space: ${({ $isOpen }) => ($isOpen ? 'normal' : 'nowrap')};
     overflow: hidden;
     text-overflow: ellipsis;
-
-    flex: 1 1 auto;
-    min-width: 0;
 `;
 
 export const StyledListItemHeadSubtitle = styled.div`

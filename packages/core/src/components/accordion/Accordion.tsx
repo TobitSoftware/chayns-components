@@ -97,6 +97,10 @@ export type AccordionProps = {
      */
     shouldHideBackground?: boolean;
     /**
+     * This will render the Accordion closed on the first render.
+     */
+    shouldRenderClosed?: boolean;
+    /**
      * Whether the icon should be rotating.
      */
     shouldRotateIcon?: boolean;
@@ -108,10 +112,6 @@ export type AccordionProps = {
      * Additional elements to be displayed in the header next to the title.
      */
     titleElement?: ReactNode;
-    /**
-     * This will render the Accordion closed on the first render.
-     */
-    shouldRenderClosed?: boolean;
 };
 
 const Accordion: FC<AccordionProps> = ({
@@ -133,10 +133,10 @@ const Accordion: FC<AccordionProps> = ({
     searchValue,
     shouldForceBackground = false,
     shouldHideBackground = false,
+    shouldRenderClosed = false,
     shouldRotateIcon = true,
     title,
     titleElement,
-    shouldRenderClosed = false,
 }) => {
     const { isWrapped, openAccordionUuid, updateOpenAccordionUuid } =
         useContext(AccordionGroupContext);
