@@ -70,7 +70,7 @@ export type ListItemProps = {
      */
     shouldShowRoundImage?: boolean;
     /**
-     * Whether a single rightElement should be shown beside the title.
+     * Whether a single rightElement should be centered. Only works if one rightElement is given.
      */
     shouldShowSingleRightElementCentered?: boolean;
     /**
