@@ -19,5 +19,5 @@ export const StyledMoreOptionsInput = styled.input<StyledMoreOptionsInputProps>`
         theme.colorMode === 'classic' ? theme['000'] : theme['100']};
     color: ${({ theme }: StyledMoreOptionsInputProps) => theme.text};
     padding: 6px;
-    font-size: small;
+    font-size: 12px;
 `;
