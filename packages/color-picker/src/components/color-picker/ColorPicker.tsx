@@ -57,7 +57,7 @@ interface ColorPickerProps {
 }
 
 const ColorPicker = ({
-    selectedColor,
+    selectedColor = 'rgba(255, 0, 0, 1)',
     presetColors,
     onPresetColorRemove,
     onPresetColorAdd,

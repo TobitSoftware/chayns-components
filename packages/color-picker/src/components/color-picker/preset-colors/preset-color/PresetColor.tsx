@@ -4,12 +4,10 @@ import { ColorPickerContext } from '../../ColorPicker';
 import { StyledPresetColor } from './PresetColor.styles';
 
 interface PresetColorProps {
-    id: IPresetColor['id'];
     color: IPresetColor['color'];
-    isCustom: IPresetColor['isCustom'];
 }
 
-const PresetColor = ({ id, color, isCustom }: PresetColorProps) => {
+const PresetColor = ({ color }: PresetColorProps) => {
     const { selectedColor, updateSelectedColor } = useContext(ColorPickerContext);
 
     const isSelected = useMemo(() => selectedColor === color, [color, selectedColor]);

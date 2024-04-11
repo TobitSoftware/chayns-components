@@ -1,9 +1,20 @@
-import { StyledColorPreview } from './ColorPreview.styles';
+import React, { useContext } from 'react';
+import { ColorPickerContext } from '../../ColorPicker';
+import {
+    StyledColorPreview,
+    StyledColorPreviewBackground,
+    StyledColorPreviewColor,
+} from './ColorPreview.styles';
 
 const ColorPreview = () => {
-    const test = '';
+    const { selectedColor } = useContext(ColorPickerContext);
 
-    return <StyledColorPreview>test</StyledColorPreview>;
+    return (
+        <StyledColorPreview>
+            <StyledColorPreviewBackground />
+            <StyledColorPreviewColor $color={selectedColor} />
+        </StyledColorPreview>
+    );
 };
 
 ColorPreview.displayName = 'ColorPreview';

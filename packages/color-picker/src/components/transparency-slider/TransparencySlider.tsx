@@ -10,11 +10,14 @@ import {
 } from './TransparencySlider.styles';
 
 interface TransparencySliderProps {
-    color: string;
+    color?: string;
     onChange?: (color: string) => void;
 }
 
-const TransparencySlider = ({ onChange, color }: TransparencySliderProps) => {
+const TransparencySlider = ({
+    onChange,
+    color = 'rgba(255, 0, 0, 1)',
+}: TransparencySliderProps) => {
     const [editedValue, setEditedValue] = useState(0);
     const [pureColor, setPureColor] = useState<string>();
     const [previewColor, setPreviewColor] = useState<string>();
@@ -32,7 +35,7 @@ const TransparencySlider = ({ onChange, color }: TransparencySliderProps) => {
 
             const { r, g, b, a } = rgb;
 
-            const newColor = `rgba(${r}, ${g}, ${b}, ${(100 - a) / 100})`;
+            const newColor = `rgba(${r}, ${g}, ${b}, ${a})`;
 
             setPreviewColor(newColor);
             setPureColor(`rgb(${r},${g},${b},1)`);

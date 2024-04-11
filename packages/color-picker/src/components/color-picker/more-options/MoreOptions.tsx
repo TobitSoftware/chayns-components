@@ -1,6 +1,7 @@
 import { Accordion, AccordionGroup } from '@chayns-components/core';
+import { isHex, isRgb1 } from '@chayns/colors';
 import React, { useContext, useMemo, type ChangeEvent } from 'react';
-import { hexToRgb } from '../../../utils/color';
+import { extractRgbValues, hexToRgb, rgbToHex } from '../../../utils/color';
 import { ColorPickerContext } from '../ColorPicker';
 import {
     StyledMoreOptions,
@@ -12,26 +13,31 @@ const MoreOptions = () => {
     const { selectedColor, updateSelectedColor } = useContext(ColorPickerContext);
 
     const handleHexChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (typeof updateSelectedColor === 'function') {
+        if (typeof updateSelectedColor === 'function' && isHex(event.target.value)) {
+            const { r, g, b, a } = hexToRgb(event.target.value);
+
+            updateSelectedColor(`rgba(${r},${g},${b},${a})`);
+        }
+    };
+
+    const handleRgbChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (typeof updateSelectedColor === 'function' && isRgb1(event.target.value)) {
             updateSelectedColor(event.target.value);
         }
     };
 
-    const handleRgbChange = (event: ChangeEvent<HTMLInputElement>) => {};
-
-    const rgbColor = useMemo(() => {
-        const { r, b, g, a } = hexToRgb(selectedColor ?? '');
-
-        return `rgba(${r},${g},${b},${a})`;
-    }, [selectedColor]);
+    const hexColor = useMemo(
+        () => rgbToHex(extractRgbValues(selectedColor ?? '')),
+        [selectedColor],
+    );
 
     return (
         <StyledMoreOptions>
             <AccordionGroup isWrapped>
-                <Accordion title="Erweitert" isDefaultOpen>
+                <Accordion title="Erweitert">
                     <StyledMoreOptionsInputWrapper>
-                        <StyledMoreOptionsInput value={selectedColor} onChange={handleHexChange} />
-                        <StyledMoreOptionsInput value={rgbColor} onChange={handleRgbChange} />
+                        <StyledMoreOptionsInput value={hexColor} onChange={handleHexChange} />
+                        <StyledMoreOptionsInput value={selectedColor} onChange={handleRgbChange} />
                     </StyledMoreOptionsInputWrapper>
                 </Accordion>
             </AccordionGroup>

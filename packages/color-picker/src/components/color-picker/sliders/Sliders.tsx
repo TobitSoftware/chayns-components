@@ -1,5 +1,4 @@
-import React, { useContext, useMemo, type CSSProperties } from 'react';
-import { extractRgbValues, hexToRgb, rgbToHex } from '../../../utils/color';
+import React, { useContext, type CSSProperties } from 'react';
 import HueSlider from '../../hue-slider/HueSlider';
 import TransparencySlider from '../../transparency-slider/TransparencySlider';
 import { ColorPickerContext } from '../ColorPicker';
@@ -9,31 +8,17 @@ import { StyledSliders, StyledSlidersWrapper } from './Sliders.styles';
 const Sliders = () => {
     const { selectedColor, updateSelectedColor } = useContext(ColorPickerContext);
 
-    const rgbColor = useMemo(() => {
-        const { r, b, g, a } = hexToRgb(selectedColor ?? '');
-
-        return `rgba(${r},${g},${b},${a})`;
-    }, [selectedColor]);
-
     const handleColorChange = (color: CSSProperties['color']) => {
         if (typeof updateSelectedColor === 'function' && color) {
-            const rgb = extractRgbValues(color);
-
-            const hex = rgbToHex(rgb);
-
-            if (!hex) {
-                return;
-            }
-
-            updateSelectedColor(hex);
+            updateSelectedColor(color);
         }
     };
 
     return (
         <StyledSliders>
             <StyledSlidersWrapper>
-                <HueSlider color={rgbColor} onChange={handleColorChange} />
-                <TransparencySlider color={rgbColor} onChange={handleColorChange} />
+                <HueSlider color={selectedColor} onChange={handleColorChange} />
+                <TransparencySlider color={selectedColor} onChange={handleColorChange} />
             </StyledSlidersWrapper>
             <ColorPreview />
         </StyledSliders>

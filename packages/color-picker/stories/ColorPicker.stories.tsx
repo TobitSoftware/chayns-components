@@ -6,9 +6,7 @@ import { IPresetColor } from '../src/types';
 export default {
     title: 'ColorPicker/ColorPicker',
     component: ColorPicker,
-    args: {
-        selectedColor: '#6a18a1',
-    },
+    args: {},
 } as Meta<typeof ColorPicker>;
 
 const Template: StoryFn<typeof ColorPicker> = ({ ...args }) => {

@@ -1,6 +1,8 @@
+import { isHex } from '@chayns/colors';
 import React, { useContext, useMemo, type ReactElement } from 'react';
 import { PRESETCOLORS } from '../../../constants/color';
 import type { IPresetColor } from '../../../types';
+import { hexToRgb } from '../../../utils/color';
 import { ColorPickerContext } from '../ColorPicker';
 import PresetButton from './preset-button/PresetButton';
 import PresetColor from './preset-color/PresetColor';
@@ -19,23 +21,31 @@ const PresetColors = ({
 }: PresetColorsProps) => {
     const { selectedColor } = useContext(ColorPickerContext);
 
-    const combinedColors = useMemo(
-        () => [...PRESETCOLORS, ...(presetColors ?? [])],
-        [presetColors],
-    );
+    const combinedColors = useMemo(() => {
+        const tmp = (presetColors ?? []).map(({ color, isCustom, id }) => {
+            let newColor = color;
+
+            if (isHex(color)) {
+                const { r, g, b, a } = hexToRgb(color);
+
+                newColor = `rgba(${r},${g},${b},${a})`;
+            }
+
+            return {
+                id,
+                isCustom,
+                color: newColor,
+            };
+        });
+
+        return [...PRESETCOLORS, ...tmp];
+    }, [presetColors]);
 
     const content = useMemo(() => {
         const items: ReactElement[] = [];
 
-        combinedColors.forEach(({ color, id, isCustom }) => {
-            items.push(
-                <PresetColor
-                    key={`preset-color__${id}`}
-                    id={id}
-                    color={color}
-                    isCustom={isCustom}
-                />,
-            );
+        combinedColors.forEach(({ color, id }) => {
+            items.push(<PresetColor key={`preset-color__${id}`} color={color} />);
         });
 
         return items;
