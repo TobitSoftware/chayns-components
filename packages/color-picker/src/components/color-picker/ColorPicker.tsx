@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { IPresetColor } from '../../types';
+import ColorArea from './color-area/ColorArea';
 import { StyledColorPicker } from './ColorPicker.styles';
 import MoreOptions from './more-options/MoreOptions';
 import PresetColors from './preset-colors/PresetColors';
@@ -8,11 +9,15 @@ import Sliders from './sliders/Sliders';
 interface IColorPickerContext {
     selectedColor?: string;
     updateSelectedColor?: (color: string | undefined) => void;
+    hueColor?: string;
+    updateHueColor?: (color: string | undefined) => void;
 }
 
 export const ColorPickerContext = React.createContext<IColorPickerContext>({
     selectedColor: undefined,
     updateSelectedColor: undefined,
+    hueColor: undefined,
+    updateHueColor: undefined,
 });
 
 ColorPickerContext.displayName = 'ColorPickerContext';
@@ -68,6 +73,7 @@ const ColorPicker = ({
     onSelect,
 }: ColorPickerProps) => {
     const [internalSelectedColor, setInternalSelectedColor] = useState<string>();
+    const [internalHueColor, setInternalHueColor] = useState<string>();
 
     const updateSelectedColor = useCallback(
         (color: string | undefined) => {
@@ -80,6 +86,10 @@ const ColorPicker = ({
         [onSelect],
     );
 
+    const updateHueColor = useCallback((color: string | undefined) => {
+        setInternalHueColor(color);
+    }, []);
+
     useEffect(() => {
         setInternalSelectedColor(selectedColor);
     }, [selectedColor]);
@@ -88,13 +98,16 @@ const ColorPicker = ({
         () => ({
             selectedColor: internalSelectedColor,
             updateSelectedColor,
+            hueColor: internalHueColor,
+            updateHueColor,
         }),
-        [internalSelectedColor, updateSelectedColor],
+        [internalHueColor, internalSelectedColor, updateHueColor, updateSelectedColor],
     );
 
     return (
         <StyledColorPicker>
             <ColorPickerContext.Provider value={providerValue}>
+                <ColorArea />
                 <Sliders />
                 <PresetColors
                     presetColors={presetColors}
