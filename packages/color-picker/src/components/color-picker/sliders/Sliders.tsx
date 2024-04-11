@@ -1,6 +1,7 @@
 import React, { useContext, useMemo, type CSSProperties } from 'react';
 import { extractRgbValues, hexToRgb, rgbToHex } from '../../../utils/color';
 import HueSlider from '../../hue-slider/HueSlider';
+import TransparencySlider from '../../transparency-slider/TransparencySlider';
 import { ColorPickerContext } from '../ColorPicker';
 import ColorPreview from './color-preview/ColorPreview';
 import { StyledSliders, StyledSlidersWrapper } from './Sliders.styles';
@@ -32,7 +33,7 @@ const Sliders = () => {
         <StyledSliders>
             <StyledSlidersWrapper>
                 <HueSlider color={rgbColor} onChange={handleColorChange} />
-                SLider
+                <TransparencySlider color={rgbColor} onChange={handleColorChange} />
             </StyledSlidersWrapper>
             <ColorPreview />
         </StyledSliders>

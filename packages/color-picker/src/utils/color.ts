@@ -148,6 +148,7 @@ export const extractRgbValues = (rgbString: string): RGBA => {
         const g = parseInt(match[2] ?? '');
         const b = parseInt(match[3] ?? '');
         const a = parseFloat(match[4] ?? '');
+
         return { r, g, b, a };
     }
 
@@ -171,7 +172,10 @@ export const hexToRgb = (hex: string): RGBA => {
         r = parseInt(result[1] ?? '0', 16);
         g = parseInt(result[2] ?? '0', 16);
         b = parseInt(result[3] ?? '0', 16);
-        a = result[4] ? parseInt(result[4], 16) / 255 : 1;
+        a = result[4] ? parseInt(result[4], 16) / 100 : 1;
+
+        console.log(result);
+
         return { r, g, b, a };
     }
 
@@ -179,7 +183,7 @@ export const hexToRgb = (hex: string): RGBA => {
         r: 255,
         g: 255,
         b: 255,
-        a: 255,
+        a: 1,
     };
 };
 
@@ -190,5 +194,5 @@ export const rgbToHex = ({ r, g, b, a = 1 }: RGBA): string => {
         const hexValue = clamp(x).toString(16);
         return hexValue.length === 1 ? `0${hexValue}` : hexValue;
     };
-    return `#${hex(r)}${hex(g)}${hex(b)}${alpha < 1 ? hex(alpha * 255) : ''}`;
+    return `#${hex(r)}${hex(g)}${hex(b)}${alpha <= 1 ? hex(alpha) : ''}`;
 };
