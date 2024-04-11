@@ -26,6 +26,7 @@ export type HueSliderProps = {
 const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' }) => {
     const [editedValue, setEditedValue] = useState(0);
     const [hslColor, setHslColor] = useState<CSSProperties['color']>('hsl(0, 0, 100)');
+    const [opacity, setOpacity] = useState(1);
 
     const sliderThumbRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLInputElement>(null);
@@ -38,7 +39,11 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
                 return;
             }
 
-            const hsl = convertColorToHsl(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1)`);
+            const { r, g, b, a } = rgb;
+
+            setOpacity(a);
+
+            const hsl = convertColorToHsl(`rgba(${r}, ${g}, ${b}, 1)`);
             const match = hsl?.toString().match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/);
 
             if (!match || !match[1]) {
@@ -48,7 +53,7 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
             setHslColor(`hsl(${match[1]}, 100%, 50%)`);
             setEditedValue(parseInt(match[1], 10));
         }
-    }, [color, onChange]);
+    }, [color]);
 
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -69,10 +74,10 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
                     return;
                 }
 
-                onChange(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${1})`);
+                onChange(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`);
             }
         },
-        [onChange],
+        [onChange, opacity],
     );
 
     const sliderThumbPosition = useMemo(() => {
