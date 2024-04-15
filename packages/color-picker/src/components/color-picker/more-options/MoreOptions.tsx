@@ -10,7 +10,7 @@ import {
 } from './MoreOptions.styles';
 
 const MoreOptions = () => {
-    const { selectedColor, updateSelectedColor, updateTmpColor } = useContext(ColorPickerContext);
+    const { selectedColor, updateSelectedColor } = useContext(ColorPickerContext);
 
     const [tmpHexValue, setTmpHexValue] = useState('');
     const [tmpRgbValue, setTmpRgbValue] = useState('');
@@ -24,15 +24,10 @@ const MoreOptions = () => {
 
         setIsHexInvalid(!isValid);
 
-        if (
-            typeof updateSelectedColor === 'function' &&
-            typeof updateTmpColor === 'function' &&
-            isValid
-        ) {
+        if (typeof updateSelectedColor === 'function' && isValid) {
             const { r, g, b, a } = hexToRgb(event.target.value);
 
             updateSelectedColor(`rgba(${r},${g},${b},${a})`);
-            updateTmpColor(`rgba(${r},${g},${b},${a})`);
         }
     };
 
@@ -43,13 +38,8 @@ const MoreOptions = () => {
 
         setIsRgbInvalid(!isValid);
 
-        if (
-            typeof updateSelectedColor === 'function' &&
-            typeof updateTmpColor === 'function' &&
-            isValid
-        ) {
+        if (typeof updateSelectedColor === 'function' && isValid) {
             updateSelectedColor(event.target.value);
-            updateTmpColor(event.target.value);
         }
     };
 
