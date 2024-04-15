@@ -21,6 +21,6 @@ export const StyledMoreOptionsInput = styled.input<StyledMoreOptionsInputProps>`
         theme.colorMode === 'classic' ? theme['000'] : theme['100']};
     color: ${({ theme, $isInvalid }: StyledMoreOptionsInputProps) =>
         $isInvalid ? theme.wrong : theme.text};
-    padding: 6px;
+    padding: 8px 10px;
     font-size: 12px;
 `;
