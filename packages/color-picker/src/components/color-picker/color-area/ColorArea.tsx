@@ -173,6 +173,14 @@ const ColorArea = () => {
 
     const handleClick = useCallback(
         (event: MouseEvent) => {
+            if (typeof updateShouldGetCoordinates === 'function') {
+                updateShouldGetCoordinates(false);
+
+                window.setTimeout(() => {
+                    updateShouldGetCoordinates(true);
+                }, 200);
+            }
+
             if (typeof updateSelectedColor === 'function') {
                 const color = getColorFromCoordinates({
                     coordinates: {
@@ -187,7 +195,7 @@ const ColorArea = () => {
                 updateSelectedColor(color);
             }
         },
-        [opacity, scale, updateSelectedColor],
+        [opacity, scale, updateSelectedColor, updateShouldGetCoordinates],
     );
 
     const handlePointerUp = useCallback(() => {
