@@ -18,18 +18,30 @@ import {
 import { hsvToHex } from '@chayns/colors';
 import { useDragControls, useMotionValue } from 'framer-motion';
 import type { Scale } from '../../../types';
-import { extractRgbValues, getColorFromCoordinates, rgbToHsv } from '../../../utils/color';
+import {
+    extractRgbValues,
+    getColorFromCoordinates,
+    getCoordinatesFromColor,
+    rgbToHsv,
+} from '../../../utils/color';
 import { ColorPickerContext } from '../ColorPicker';
 
 const ColorArea = () => {
-    const { selectedColor, updateSelectedColor, updateIsPresetColor, isPresetColor, hueColor } =
-        useContext(ColorPickerContext);
+    const {
+        selectedColor,
+        updateSelectedColor,
+        updateIsPresetColor,
+        isPresetColor,
+        shouldGetCoordinates,
+        updateShouldGetCoordinates,
+        hueColor,
+    } = useContext(ColorPickerContext);
 
     const [opacity, setOpacity] = useState<number>(1);
     const [scale, setScale] = useState<Scale>({ scaleX: 0, scaleY: 0 });
 
-    const hasAreaChangedColor = useRef(false);
     const isPresetColorRef = useRef(false);
+    const shouldGetCoordinatesRef = useRef(false);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const pseudoRef = useRef<HTMLDivElement>(null);
 
@@ -41,6 +53,10 @@ const ColorArea = () => {
     useEffect(() => {
         isPresetColorRef.current = isPresetColor ?? false;
     }, [isPresetColor]);
+
+    useEffect(() => {
+        shouldGetCoordinatesRef.current = shouldGetCoordinates ?? true;
+    }, [shouldGetCoordinates]);
 
     useEffect(() => {
         if (selectedColor) {
@@ -127,23 +143,29 @@ const ColorArea = () => {
 
     const handleStartDrag: PointerEventHandler = useCallback(
         (event) => {
-            hasAreaChangedColor.current = true;
+            if (typeof updateShouldGetCoordinates === 'function') {
+                updateShouldGetCoordinates(false);
+            }
 
             dragControls.start(event, { snapToCursor: true });
         },
-        [dragControls],
+        [dragControls, updateShouldGetCoordinates],
     );
 
-    // useEffect(() => {
-    //     if (selectedColor && !hasAreaChangedColor.current) {
-    //         const cords = getCoordinatesFromColor({ color: selectedColor, canvas: canvasRef });
-    //
-    //         if (cords) {
-    //             x.set(cords.x);
-    //             y.set(cords.y);
-    //         }
-    //     }
-    // }, [selectedColor, x, y]);
+    useEffect(() => {
+        if (selectedColor && shouldGetCoordinatesRef.current) {
+            const cords = getCoordinatesFromColor({
+                color: selectedColor,
+                canvas: canvasRef,
+                tolerance: 10,
+            });
+
+            if (cords) {
+                x.set(cords.x);
+                y.set(cords.y);
+            }
+        }
+    }, [selectedColor, x, y]);
 
     const handleDrag = useCallback(() => {
         setColor();
@@ -168,15 +190,19 @@ const ColorArea = () => {
         [opacity, scale, updateSelectedColor],
     );
 
+    const handlePointerUp = useCallback(() => {
+        if (typeof updateShouldGetCoordinates === 'function') {
+            updateShouldGetCoordinates(true);
+        }
+    }, [updateShouldGetCoordinates]);
+
     return useMemo(
         () => (
             <StyledColorArea>
                 <StyledColorAreaCanvas
                     ref={canvasRef}
                     onPointerDown={handleStartDrag}
-                    onPointerUp={() => {
-                        hasAreaChangedColor.current = false;
-                    }}
+                    onPointerUp={handlePointerUp}
                     onClick={handleClick}
                 />
                 <StyledColorAreaPseudo ref={pseudoRef}>
@@ -192,7 +218,7 @@ const ColorArea = () => {
                 </StyledColorAreaPseudo>
             </StyledColorArea>
         ),
-        [dragControls, handleClick, handleDrag, handleStartDrag, x, y],
+        [dragControls, handleClick, handleDrag, handlePointerUp, handleStartDrag, x, y],
     );
 };
 

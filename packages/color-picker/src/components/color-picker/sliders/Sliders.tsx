@@ -7,8 +7,13 @@ import ColorPreview from './color-preview/ColorPreview';
 import { StyledSliders, StyledSlidersWrapper } from './Sliders.styles';
 
 const Sliders = () => {
-    const { selectedColor, updateSelectedColor, updateHueColor, hueColor } =
-        useContext(ColorPickerContext);
+    const {
+        selectedColor,
+        updateSelectedColor,
+        updateHueColor,
+        updateShouldGetCoordinates,
+        hueColor,
+    } = useContext(ColorPickerContext);
 
     const handleColorChange = (color: CSSProperties['color']) => {
         if (typeof updateSelectedColor === 'function' && color) {
@@ -22,13 +27,36 @@ const Sliders = () => {
         }
     };
 
+    const handleStart = () => {
+        if (typeof updateShouldGetCoordinates === 'function') {
+            updateShouldGetCoordinates(false);
+        }
+    };
+
+    const handleEnd = () => {
+        if (typeof updateShouldGetCoordinates === 'function') {
+            updateShouldGetCoordinates(true);
+        }
+    };
+
     const opacity = useMemo(() => extractRgbValues(selectedColor ?? '').a, [selectedColor]);
 
     return (
         <StyledSliders>
             <StyledSlidersWrapper>
-                <HueSlider color={hueColor} opacity={opacity} onChange={handleHueColorChange} />
-                <TransparencySlider color={selectedColor} onChange={handleColorChange} />
+                <HueSlider
+                    color={hueColor}
+                    opacity={opacity}
+                    onEnd={handleEnd}
+                    onStart={handleStart}
+                    onChange={handleHueColorChange}
+                />
+                <TransparencySlider
+                    color={selectedColor}
+                    onEnd={handleEnd}
+                    onStart={handleStart}
+                    onChange={handleColorChange}
+                />
             </StyledSlidersWrapper>
             <ColorPreview />
         </StyledSliders>

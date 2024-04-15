@@ -13,6 +13,8 @@ interface IColorPickerContext {
     updateHueColor?: (color: string | undefined) => void;
     isPresetColor?: boolean;
     updateIsPresetColor?: (isPresetColor: boolean) => void;
+    shouldGetCoordinates?: boolean;
+    updateShouldGetCoordinates?: (shouldGetCoordinates: boolean) => void;
 }
 
 export const ColorPickerContext = React.createContext<IColorPickerContext>({
@@ -22,6 +24,8 @@ export const ColorPickerContext = React.createContext<IColorPickerContext>({
     updateHueColor: undefined,
     isPresetColor: undefined,
     updateIsPresetColor: undefined,
+    shouldGetCoordinates: undefined,
+    updateShouldGetCoordinates: undefined,
 });
 
 ColorPickerContext.displayName = 'ColorPickerContext';
@@ -79,6 +83,7 @@ const ColorPicker = ({
     const [internalSelectedColor, setInternalSelectedColor] = useState<string>();
     const [internalHueColor, setInternalHueColor] = useState<string>();
     const [internalIsPresetColor, setInternalIsPresetColor] = useState<boolean>(false);
+    const [internalShouldGetCoordinates, setInternalShouldGetCoordinates] = useState<boolean>(true);
 
     const updateSelectedColor = useCallback(
         (color: string | undefined) => {
@@ -99,6 +104,10 @@ const ColorPicker = ({
         setInternalIsPresetColor(isPresetColor);
     }, []);
 
+    const updateShouldGetCoordinates = useCallback((shouldGetCoordinates: boolean) => {
+        setInternalShouldGetCoordinates(shouldGetCoordinates);
+    }, []);
+
     useEffect(() => {
         setInternalSelectedColor(selectedColor);
     }, [selectedColor]);
@@ -111,14 +120,18 @@ const ColorPicker = ({
             updateHueColor,
             isPresetColor: internalIsPresetColor,
             updateIsPresetColor,
+            shouldGetCoordinates: internalShouldGetCoordinates,
+            updateShouldGetCoordinates,
         }),
         [
             internalHueColor,
             internalIsPresetColor,
             internalSelectedColor,
+            internalShouldGetCoordinates,
             updateHueColor,
             updateIsPresetColor,
             updateSelectedColor,
+            updateShouldGetCoordinates,
         ],
     );
 

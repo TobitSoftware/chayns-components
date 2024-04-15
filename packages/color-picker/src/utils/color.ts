@@ -211,6 +211,22 @@ export const convertColorToHsl = (color: string) => {
 export const rgbToHsv = (color: CSSProperties['color']) =>
     rgb255ToHsv(extractRgbValues(color ?? ''));
 
+export const extractHsl = (hsl: string) => {
+    const match = hsl.match(
+        /hsl\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)%\s*,\s*(\d+(?:\.\d+)?)%\s*\)/i,
+    );
+
+    if (!match) {
+        return null;
+    }
+
+    const h = parseFloat(match[1] ?? '');
+    const s = parseFloat(match[2] ?? '') / 100;
+    const l = parseFloat(match[3] ?? '') / 100;
+
+    return { h, s, l };
+};
+
 export const splitRgb = (color: CSSProperties['color']): null | RGBA => {
     const rgba = color?.match(/[\d.]+/g);
 

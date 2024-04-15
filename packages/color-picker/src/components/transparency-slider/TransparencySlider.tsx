@@ -10,12 +10,28 @@ import {
 } from './TransparencySlider.styles';
 
 interface TransparencySliderProps {
+    /**
+     * The color that should be selected.
+     */
     color?: string;
+    /**
+     * Function that will be executed when the opacity is changed.
+     */
     onChange?: (color: string) => void;
+    /**
+     * Function that will be executed when the opacity is ending to change.
+     */
+    onEnd?: (color: string) => void;
+    /**
+     * Function that will be executed when the opacity is starting to change.
+     */
+    onStart?: (color: string) => void;
 }
 
 const TransparencySlider = ({
     onChange,
+    onStart,
+    onEnd,
     color = 'rgba(255, 0, 0, 1)',
 }: TransparencySliderProps) => {
     const [editedValue, setEditedValue] = useState(0);
@@ -78,6 +94,38 @@ const TransparencySlider = ({
         return 0;
     }, [editedValue]);
 
+    const handleStart = useCallback(() => {
+        if (typeof onStart === 'function') {
+            const rgb = splitRgb(pureColor);
+
+            if (!rgb) {
+                return;
+            }
+
+            const { r, g, b } = rgb;
+
+            const newColor = `rgba(${r}, ${g}, ${b}, ${(100 - editedValue) / 100})`;
+
+            onStart(newColor);
+        }
+    }, [editedValue, onStart, pureColor]);
+
+    const handleEnd = useCallback(() => {
+        if (typeof onEnd === 'function') {
+            const rgb = splitRgb(pureColor);
+
+            if (!rgb) {
+                return;
+            }
+
+            const { r, g, b } = rgb;
+
+            const newColor = `rgba(${r}, ${g}, ${b}, ${(100 - editedValue) / 100})`;
+
+            onEnd(newColor);
+        }
+    }, [editedValue, onEnd, pureColor]);
+
     return (
         <StyledTransparencySlider>
             <StyledTransparencySliderInput
@@ -87,6 +135,8 @@ const TransparencySlider = ({
                 min={0}
                 max={100}
                 value={editedValue}
+                onPointerDown={handleStart}
+                onPointerUp={handleEnd}
                 onChange={handleInputChange}
             />
             <StyledTransparencySliderBackground />
