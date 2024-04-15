@@ -31,12 +31,17 @@ export const StyledTransparencySliderBackground = styled.div`
 
 type StyledTransparencySliderInputProps = WithTheme<{ $color?: string }>;
 
-export const StyledTransparencySliderInput = styled.input<StyledTransparencySliderInputProps>`
+export const StyledTransparencySliderInput = styled.input.attrs<StyledTransparencySliderInputProps>(
+    ({ $color }) => ({
+        style: {
+            background: `linear-gradient(90deg, ${$color ?? ''}, transparent)`,
+        },
+    }),
+)`
     width: 100%;
     border-radius: 100px;
     -webkit-appearance: none;
     height: 10px;
-    background: linear-gradient(90deg, ${({ $color }) => $color}, transparent);
     outline: none;
     opacity: 0.7;
     -webkit-transition: 0.2s;
