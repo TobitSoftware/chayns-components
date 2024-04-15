@@ -17,8 +17,6 @@ const Sliders = () => {
     };
 
     const handleHueColorChange = (color: CSSProperties['color']) => {
-        handleColorChange(color);
-
         if (typeof updateHueColor === 'function' && color) {
             updateHueColor(color);
         }
