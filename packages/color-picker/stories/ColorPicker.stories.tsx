@@ -57,4 +57,7 @@ WithMoreOptions.args = {
 };
 ShowPlain.args = {
     shouldShowAsPopup: false,
+    shouldShowMoreOptions: true,
+    shouldShowTransparencySlider: true,
+    shouldShowPresetColors: true,
 };

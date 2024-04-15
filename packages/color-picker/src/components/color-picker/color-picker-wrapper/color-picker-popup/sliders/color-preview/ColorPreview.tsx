@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ColorPickerContext } from '../../../ColorPickerProvider';
+import { ColorPickerContext } from '../../../../../ColorPickerProvider';
 import {
     StyledColorPreview,
     StyledColorPreviewBackground,

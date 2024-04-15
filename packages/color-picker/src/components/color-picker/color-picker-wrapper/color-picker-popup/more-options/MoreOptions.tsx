@@ -1,8 +1,8 @@
 import { Accordion, AccordionGroup } from '@chayns-components/core';
 import { isHex } from '@chayns/colors';
 import React, { useContext, useEffect, useState, type ChangeEvent } from 'react';
-import { extractRgbValues, hexToRgb, isValidRGBA, rgbToHex } from '../../../utils/color';
-import { ColorPickerContext } from '../../ColorPickerProvider';
+import { extractRgbValues, hexToRgb, isValidRGBA, rgbToHex } from '../../../../../utils/color';
+import { ColorPickerContext } from '../../../../ColorPickerProvider';
 import {
     StyledMoreOptions,
     StyledMoreOptionsInput,

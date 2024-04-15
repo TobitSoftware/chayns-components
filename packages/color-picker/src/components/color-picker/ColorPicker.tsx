@@ -1,11 +1,8 @@
 import React from 'react';
 import type { IPresetColor } from '../../types';
 import ColorPickerProvider from '../ColorPickerProvider';
-import ColorArea from './color-area/ColorArea';
+import ColorPickerWrapper from './color-picker-wrapper/ColorPickerWrapper';
 import { StyledColorPicker } from './ColorPicker.styles';
-import MoreOptions from './more-options/MoreOptions';
-import PresetColors from './preset-colors/PresetColors';
-import Sliders from './sliders/Sliders';
 
 interface ColorPickerProps {
     /**
@@ -59,14 +56,17 @@ const ColorPicker = ({
 }: ColorPickerProps) => (
     <ColorPickerProvider selectedColor={selectedColor} onSelect={onSelect}>
         <StyledColorPicker>
-            <ColorArea />
-            <Sliders />
-            <PresetColors
+            <ColorPickerWrapper
+                selectedColor={selectedColor}
+                shouldShowTransparencySlider={shouldShowTransparencySlider}
+                onSelect={onSelect}
                 presetColors={presetColors}
                 onPresetColorAdd={onPresetColorAdd}
                 onPresetColorRemove={onPresetColorRemove}
+                shouldShowAsPopup={shouldShowAsPopup}
+                shouldShowMoreOptions={shouldShowMoreOptions}
+                shouldShowPresetColors={shouldShowPresetColors}
             />
-            <MoreOptions />
         </StyledColorPicker>
     </ColorPickerProvider>
 );
