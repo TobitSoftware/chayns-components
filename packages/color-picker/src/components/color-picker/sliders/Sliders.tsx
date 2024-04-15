@@ -7,7 +7,8 @@ import ColorPreview from './color-preview/ColorPreview';
 import { StyledSliders, StyledSlidersWrapper } from './Sliders.styles';
 
 const Sliders = () => {
-    const { selectedColor, updateSelectedColor, updateHueColor } = useContext(ColorPickerContext);
+    const { selectedColor, updateSelectedColor, updateHueColor, hueColor } =
+        useContext(ColorPickerContext);
 
     const handleColorChange = (color: CSSProperties['color']) => {
         if (typeof updateSelectedColor === 'function' && color) {
@@ -28,7 +29,7 @@ const Sliders = () => {
     return (
         <StyledSliders>
             <StyledSlidersWrapper>
-                <HueSlider color={selectedColor} onChange={handleHueColorChange} />
+                <HueSlider color={hueColor} onChange={handleHueColorChange} />
                 <TransparencySlider color={selectedColor} onChange={handleColorChange} />
             </StyledSlidersWrapper>
             <ColorPreview />
