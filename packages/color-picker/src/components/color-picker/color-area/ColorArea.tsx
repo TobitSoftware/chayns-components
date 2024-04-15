@@ -27,9 +27,9 @@ const ColorArea = () => {
     const [opacity, setOpacity] = useState<number>(1);
     const [scale, setScale] = useState<Scale>({ scaleX: 0, scaleY: 0 });
 
+    const hasAreaChangedColor = useRef(false);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const pseudoRef = useRef<HTMLDivElement>(null);
-    const tumbRef = useRef<HTMLDivElement>(null);
 
     const dragControls = useDragControls();
 
@@ -99,10 +99,18 @@ const ColorArea = () => {
 
     const handleStartDrag: PointerEventHandler = useCallback(
         (event) => {
+            hasAreaChangedColor.current = true;
+
             dragControls.start(event, { snapToCursor: true });
         },
         [dragControls],
     );
+
+    useEffect(() => {
+        if (selectedColor && !hasAreaChangedColor.current) {
+            console.log('hallo');
+        }
+    }, [selectedColor]);
 
     const handleDrag = useCallback(() => {
         const xCord = x.get() + 25.5;
@@ -156,11 +164,13 @@ const ColorArea = () => {
                 <StyledColorAreaCanvas
                     ref={canvasRef}
                     onPointerDown={handleStartDrag}
+                    onPointerUp={() => {
+                        hasAreaChangedColor.current = false;
+                    }}
                     onClick={handleClick}
                 />
                 <StyledColorAreaPseudo ref={pseudoRef}>
                     <StyledMotionColorAreaPointer
-                        ref={tumbRef}
                         drag
                         dragConstraints={pseudoRef}
                         style={{ x, y }}
