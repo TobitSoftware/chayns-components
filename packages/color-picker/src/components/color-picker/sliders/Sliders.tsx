@@ -9,15 +9,16 @@ import { StyledSliders, StyledSlidersWrapper } from './Sliders.styles';
 const Sliders = () => {
     const {
         selectedColor,
-        updateSelectedColor,
         updateHueColor,
+        updateSelectedColor,
         updateShouldGetCoordinates,
+        updateTmpColor,
         hueColor,
     } = useContext(ColorPickerContext);
 
     const handleColorChange = (color: CSSProperties['color']) => {
-        if (typeof updateSelectedColor === 'function' && color) {
-            updateSelectedColor(color);
+        if (typeof updateTmpColor === 'function' && color) {
+            updateTmpColor(color);
         }
     };
 
@@ -33,9 +34,13 @@ const Sliders = () => {
         }
     };
 
-    const handleEnd = () => {
-        if (typeof updateShouldGetCoordinates === 'function') {
+    const handleEnd = (color: CSSProperties['color']) => {
+        if (
+            typeof updateShouldGetCoordinates === 'function' &&
+            typeof updateSelectedColor === 'function'
+        ) {
             updateShouldGetCoordinates(true);
+            // updateSelectedColor(color);
         }
     };
 

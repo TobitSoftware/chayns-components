@@ -34,6 +34,7 @@ const ColorArea = () => {
         isPresetColor,
         shouldGetCoordinates,
         updateShouldGetCoordinates,
+        updateTmpColor,
         hueColor,
     } = useContext(ColorPickerContext);
 
@@ -59,14 +60,6 @@ const ColorArea = () => {
     }, [shouldGetCoordinates]);
 
     useEffect(() => {
-        if (selectedColor) {
-            const { a } = extractRgbValues(selectedColor);
-
-            setOpacity(a);
-        }
-    }, [selectedColor]);
-
-    useEffect(() => {
         const canvas = canvasRef.current;
 
         if (!canvas) {
@@ -85,7 +78,7 @@ const ColorArea = () => {
         const xCord = x.get() + 25.5;
         const yCord = y.get() + 25.5;
 
-        if (typeof updateSelectedColor === 'function') {
+        if (typeof updateSelectedColor === 'function' && typeof updateTmpColor === 'function') {
             const color = getColorFromCoordinates({
                 coordinates: {
                     x: xCord,
@@ -101,8 +94,21 @@ const ColorArea = () => {
             }
 
             updateSelectedColor(color);
+            updateTmpColor(color);
         }
-    }, [opacity, scale, updateSelectedColor, x, y]);
+    }, [opacity, scale, updateSelectedColor, updateTmpColor, x, y]);
+
+    useEffect(() => {
+        if (selectedColor) {
+            const { a } = extractRgbValues(selectedColor);
+
+            setOpacity(a);
+
+            if (shouldGetCoordinatesRef.current) {
+                setColor();
+            }
+        }
+    }, [selectedColor, setColor]);
 
     useEffect(() => {
         const ctx = canvasRef.current?.getContext('2d');

@@ -7,12 +7,12 @@ import {
 } from './ColorPreview.styles';
 
 const ColorPreview = () => {
-    const { selectedColor } = useContext(ColorPickerContext);
+    const { tmpColor } = useContext(ColorPickerContext);
 
     return (
         <StyledColorPreview>
             <StyledColorPreviewBackground />
-            <StyledColorPreviewColor $color={selectedColor} />
+            <StyledColorPreviewColor $color={tmpColor} />
         </StyledColorPreview>
     );
 };

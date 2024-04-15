@@ -3,6 +3,8 @@ import React, { useCallback, useEffect, useMemo, useState, type ReactNode } from
 interface IColorPickerContext {
     selectedColor?: string;
     updateSelectedColor?: (color: string | undefined) => void;
+    tmpColor?: string;
+    updateTmpColor?: (color: string | undefined) => void;
     hueColor?: string;
     updateHueColor?: (color: string | undefined) => void;
     isPresetColor?: boolean;
@@ -14,6 +16,8 @@ interface IColorPickerContext {
 export const ColorPickerContext = React.createContext<IColorPickerContext>({
     selectedColor: undefined,
     updateSelectedColor: undefined,
+    tmpColor: undefined,
+    updateTmpColor: undefined,
     hueColor: undefined,
     updateHueColor: undefined,
     isPresetColor: undefined,
@@ -41,6 +45,7 @@ interface ColorPickerProviderProps {
 
 const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerProviderProps) => {
     const [internalSelectedColor, setInternalSelectedColor] = useState<string>();
+    const [internalTmpColor, setInternalTmpColor] = useState<string>();
     const [internalHueColor, setInternalHueColor] = useState<string>();
     const [internalIsPresetColor, setInternalIsPresetColor] = useState<boolean>(false);
     const [internalShouldGetCoordinates, setInternalShouldGetCoordinates] = useState<boolean>(true);
@@ -55,6 +60,10 @@ const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerP
         },
         [onSelect],
     );
+
+    const updateTmpColor = useCallback((color: string | undefined) => {
+        setInternalTmpColor(color);
+    }, []);
 
     const updateHueColor = useCallback((color: string | undefined) => {
         setInternalHueColor(color);
@@ -82,16 +91,20 @@ const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerP
             updateIsPresetColor,
             shouldGetCoordinates: internalShouldGetCoordinates,
             updateShouldGetCoordinates,
+            tmpColor: internalTmpColor,
+            updateTmpColor,
         }),
         [
             internalHueColor,
             internalIsPresetColor,
             internalSelectedColor,
             internalShouldGetCoordinates,
+            internalTmpColor,
             updateHueColor,
             updateIsPresetColor,
             updateSelectedColor,
             updateShouldGetCoordinates,
+            updateTmpColor,
         ],
     );
 
