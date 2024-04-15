@@ -11,6 +11,8 @@ interface IColorPickerContext {
     updateSelectedColor?: (color: string | undefined) => void;
     hueColor?: string;
     updateHueColor?: (color: string | undefined) => void;
+    isPresetColor?: boolean;
+    updateIsPresetColor?: (isPresetColor: boolean) => void;
 }
 
 export const ColorPickerContext = React.createContext<IColorPickerContext>({
@@ -18,6 +20,8 @@ export const ColorPickerContext = React.createContext<IColorPickerContext>({
     updateSelectedColor: undefined,
     hueColor: undefined,
     updateHueColor: undefined,
+    isPresetColor: undefined,
+    updateIsPresetColor: undefined,
 });
 
 ColorPickerContext.displayName = 'ColorPickerContext';
@@ -74,6 +78,7 @@ const ColorPicker = ({
 }: ColorPickerProps) => {
     const [internalSelectedColor, setInternalSelectedColor] = useState<string>();
     const [internalHueColor, setInternalHueColor] = useState<string>();
+    const [internalIsPresetColor, setInternalIsPresetColor] = useState<boolean>(false);
 
     const updateSelectedColor = useCallback(
         (color: string | undefined) => {
@@ -90,6 +95,10 @@ const ColorPicker = ({
         setInternalHueColor(color);
     }, []);
 
+    const updateIsPresetColor = useCallback((isPresetColor: boolean) => {
+        setInternalIsPresetColor(isPresetColor);
+    }, []);
+
     useEffect(() => {
         setInternalSelectedColor(selectedColor);
     }, [selectedColor]);
@@ -100,8 +109,17 @@ const ColorPicker = ({
             updateSelectedColor,
             hueColor: internalHueColor,
             updateHueColor,
+            isPresetColor: internalIsPresetColor,
+            updateIsPresetColor,
         }),
-        [internalHueColor, internalSelectedColor, updateHueColor, updateSelectedColor],
+        [
+            internalHueColor,
+            internalIsPresetColor,
+            internalSelectedColor,
+            updateHueColor,
+            updateIsPresetColor,
+            updateSelectedColor,
+        ],
     );
 
     return (

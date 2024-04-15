@@ -15,19 +15,21 @@ import {
     StyledMotionColorAreaPointer,
 } from './ColorArea.styles';
 
+import { hsvToHex } from '@chayns/colors';
 import { useDragControls, useMotionValue } from 'framer-motion';
-import type { Coordinates, Scale } from '../../../types';
-import { extractRgbValues, getColorFromCoordinates } from '../../../utils/color';
+import type { Scale } from '../../../types';
+import { extractRgbValues, getColorFromCoordinates, rgbToHsv } from '../../../utils/color';
 import { ColorPickerContext } from '../ColorPicker';
 
 const ColorArea = () => {
-    const { selectedColor, updateSelectedColor, hueColor } = useContext(ColorPickerContext);
+    const { selectedColor, updateSelectedColor, updateIsPresetColor, isPresetColor, hueColor } =
+        useContext(ColorPickerContext);
 
-    const [coordinates, setCoordinates] = useState<Coordinates>();
     const [opacity, setOpacity] = useState<number>(1);
     const [scale, setScale] = useState<Scale>({ scaleX: 0, scaleY: 0 });
 
     const hasAreaChangedColor = useRef(false);
+    const isPresetColorRef = useRef(false);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const pseudoRef = useRef<HTMLDivElement>(null);
 
@@ -35,6 +37,10 @@ const ColorArea = () => {
 
     const x = useMotionValue(0);
     const y = useMotionValue(0);
+
+    useEffect(() => {
+        isPresetColorRef.current = isPresetColor ?? false;
+    }, [isPresetColor]);
 
     useEffect(() => {
         if (selectedColor) {
@@ -89,9 +95,13 @@ const ColorArea = () => {
             return;
         }
 
+        const hsv = rgbToHsv(hueColor);
+
+        const hex = hsvToHex({ h: hsv?.h ?? 1, s: 1, v: 1 });
+
         const colorGradiant = ctx.createLinearGradient(0, 0, 300, 0);
-        colorGradiant.addColorStop(0, 'white');
-        colorGradiant.addColorStop(1, hueColor ?? 'red');
+        colorGradiant.addColorStop(0, '#fff');
+        colorGradiant.addColorStop(1, hex ?? 'red');
 
         ctx.fillStyle = colorGradiant;
         ctx.fillRect(0, 0, 300, 150);
@@ -104,8 +114,16 @@ const ColorArea = () => {
         ctx.fillStyle = transparentGradiant;
         ctx.fillRect(0, 0, 300, 150);
 
+        if (isPresetColorRef.current) {
+            if (typeof updateIsPresetColor === 'function') {
+                updateIsPresetColor(false);
+            }
+
+            return;
+        }
+
         setColor();
-    }, [hueColor, setColor]);
+    }, [hueColor, setColor, updateIsPresetColor]);
 
     const handleStartDrag: PointerEventHandler = useCallback(
         (event) => {
