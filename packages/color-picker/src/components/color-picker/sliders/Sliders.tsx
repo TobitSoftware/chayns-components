@@ -1,8 +1,8 @@
 import React, { useContext, useMemo, type CSSProperties } from 'react';
 import { extractRgbValues } from '../../../utils/color';
+import { ColorPickerContext } from '../../ColorPickerProvider';
 import HueSlider from '../../hue-slider/HueSlider';
 import TransparencySlider from '../../transparency-slider/TransparencySlider';
-import { ColorPickerContext } from '../ColorPicker';
 import ColorPreview from './color-preview/ColorPreview';
 import { StyledSliders, StyledSlidersWrapper } from './Sliders.styles';
 

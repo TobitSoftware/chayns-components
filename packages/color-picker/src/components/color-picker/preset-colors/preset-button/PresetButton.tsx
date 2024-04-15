@@ -2,7 +2,7 @@ import { Icon } from '@chayns-components/core';
 import React, { useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import type { IPresetColor } from '../../../../types';
-import { ColorPickerContext } from '../../ColorPicker';
+import { ColorPickerContext } from '../../../ColorPickerProvider';
 import { StyledPresetButton } from './PresetButton.styles';
 
 interface PresetButtonProps {

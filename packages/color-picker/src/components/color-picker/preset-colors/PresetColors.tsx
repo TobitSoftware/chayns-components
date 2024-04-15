@@ -3,7 +3,7 @@ import React, { useContext, useMemo, type ReactElement } from 'react';
 import { PRESETCOLORS } from '../../../constants/color';
 import type { IPresetColor } from '../../../types';
 import { hexToRgb } from '../../../utils/color';
-import { ColorPickerContext } from '../ColorPicker';
+import { ColorPickerContext } from '../../ColorPickerProvider';
 import PresetButton from './preset-button/PresetButton';
 import PresetColor from './preset-color/PresetColor';
 import { StyledPresetColors } from './PresetColors.styles';

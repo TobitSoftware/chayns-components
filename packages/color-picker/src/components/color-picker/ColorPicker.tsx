@@ -1,34 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import type { IPresetColor } from '../../types';
+import ColorPickerProvider from '../ColorPickerProvider';
 import ColorArea from './color-area/ColorArea';
 import { StyledColorPicker } from './ColorPicker.styles';
 import MoreOptions from './more-options/MoreOptions';
 import PresetColors from './preset-colors/PresetColors';
 import Sliders from './sliders/Sliders';
-
-interface IColorPickerContext {
-    selectedColor?: string;
-    updateSelectedColor?: (color: string | undefined) => void;
-    hueColor?: string;
-    updateHueColor?: (color: string | undefined) => void;
-    isPresetColor?: boolean;
-    updateIsPresetColor?: (isPresetColor: boolean) => void;
-    shouldGetCoordinates?: boolean;
-    updateShouldGetCoordinates?: (shouldGetCoordinates: boolean) => void;
-}
-
-export const ColorPickerContext = React.createContext<IColorPickerContext>({
-    selectedColor: undefined,
-    updateSelectedColor: undefined,
-    hueColor: undefined,
-    updateHueColor: undefined,
-    isPresetColor: undefined,
-    updateIsPresetColor: undefined,
-    shouldGetCoordinates: undefined,
-    updateShouldGetCoordinates: undefined,
-});
-
-ColorPickerContext.displayName = 'ColorPickerContext';
 
 interface ColorPickerProps {
     /**
@@ -79,77 +56,20 @@ const ColorPicker = ({
     shouldShowTransparencySlider = false,
     shouldShowMoreOptions = false,
     onSelect,
-}: ColorPickerProps) => {
-    const [internalSelectedColor, setInternalSelectedColor] = useState<string>();
-    const [internalHueColor, setInternalHueColor] = useState<string>();
-    const [internalIsPresetColor, setInternalIsPresetColor] = useState<boolean>(false);
-    const [internalShouldGetCoordinates, setInternalShouldGetCoordinates] = useState<boolean>(true);
-
-    const updateSelectedColor = useCallback(
-        (color: string | undefined) => {
-            setInternalSelectedColor(color);
-
-            if (typeof onSelect === 'function' && color) {
-                onSelect(color);
-            }
-        },
-        [onSelect],
-    );
-
-    const updateHueColor = useCallback((color: string | undefined) => {
-        setInternalHueColor(color);
-    }, []);
-
-    const updateIsPresetColor = useCallback((isPresetColor: boolean) => {
-        setInternalIsPresetColor(isPresetColor);
-    }, []);
-
-    const updateShouldGetCoordinates = useCallback((shouldGetCoordinates: boolean) => {
-        setInternalShouldGetCoordinates(shouldGetCoordinates);
-    }, []);
-
-    useEffect(() => {
-        setInternalSelectedColor(selectedColor);
-    }, [selectedColor]);
-
-    const providerValue = useMemo<IColorPickerContext>(
-        () => ({
-            selectedColor: internalSelectedColor,
-            updateSelectedColor,
-            hueColor: internalHueColor,
-            updateHueColor,
-            isPresetColor: internalIsPresetColor,
-            updateIsPresetColor,
-            shouldGetCoordinates: internalShouldGetCoordinates,
-            updateShouldGetCoordinates,
-        }),
-        [
-            internalHueColor,
-            internalIsPresetColor,
-            internalSelectedColor,
-            internalShouldGetCoordinates,
-            updateHueColor,
-            updateIsPresetColor,
-            updateSelectedColor,
-            updateShouldGetCoordinates,
-        ],
-    );
-
-    return (
+}: ColorPickerProps) => (
+    <ColorPickerProvider selectedColor={selectedColor} onSelect={onSelect}>
         <StyledColorPicker>
-            <ColorPickerContext.Provider value={providerValue}>
-                <ColorArea />
-                <Sliders />
-                <PresetColors
-                    presetColors={presetColors}
-                    onPresetColorAdd={onPresetColorAdd}
-                    onPresetColorRemove={onPresetColorRemove}
-                />
-                <MoreOptions />
-            </ColorPickerContext.Provider>
+            <ColorArea />
+            <Sliders />
+            <PresetColors
+                presetColors={presetColors}
+                onPresetColorAdd={onPresetColorAdd}
+                onPresetColorRemove={onPresetColorRemove}
+            />
+            <MoreOptions />
         </StyledColorPicker>
-    );
-};
+    </ColorPickerProvider>
+);
 
 ColorPicker.displayName = 'ColorPicker';
 

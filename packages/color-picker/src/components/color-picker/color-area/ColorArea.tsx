@@ -24,7 +24,7 @@ import {
     getCoordinatesFromColor,
     rgbToHsv,
 } from '../../../utils/color';
-import { ColorPickerContext } from '../ColorPicker';
+import { ColorPickerContext } from '../../ColorPickerProvider';
 
 const ColorArea = () => {
     const {
