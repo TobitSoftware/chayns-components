@@ -44,21 +44,6 @@ const ColorArea = () => {
         }
     }, [selectedColor]);
 
-    // useEffect(() => {
-    //     if (color) {
-    //         const cords = getCoordinatesFromColor({ color, canvas: canvasRef });
-    //
-    //         console.log("CORDS",cords)
-    //
-    //         if (!cords) {
-    //             return;
-    //
-    //         }
-    //
-    //         setCoordinates(cords);
-    //     }
-    // }, [color]);
-
     useEffect(() => {
         const canvas = canvasRef.current;
 
@@ -73,6 +58,29 @@ const ColorArea = () => {
 
         setScale({ scaleX, scaleY });
     }, []);
+
+    const setColor = useCallback(() => {
+        const xCord = x.get() + 25.5;
+        const yCord = y.get() + 25.5;
+
+        if (typeof updateSelectedColor === 'function') {
+            const color = getColorFromCoordinates({
+                coordinates: {
+                    x: xCord,
+                    y: yCord,
+                },
+                canvas: canvasRef,
+                opacity,
+                scale,
+            });
+
+            if (color === 'transparent') {
+                return;
+            }
+
+            updateSelectedColor(color);
+        }
+    }, [opacity, scale, updateSelectedColor, x, y]);
 
     useEffect(() => {
         const ctx = canvasRef.current?.getContext('2d');
@@ -95,7 +103,9 @@ const ColorArea = () => {
 
         ctx.fillStyle = transparentGradiant;
         ctx.fillRect(0, 0, 300, 150);
-    }, [hueColor]);
+
+        setColor();
+    }, [hueColor, setColor]);
 
     const handleStartDrag: PointerEventHandler = useCallback(
         (event) => {
@@ -106,41 +116,23 @@ const ColorArea = () => {
         [dragControls],
     );
 
-    useEffect(() => {
-        if (selectedColor && !hasAreaChangedColor.current) {
-            console.log('hallo');
-        }
-    }, [selectedColor]);
+    // useEffect(() => {
+    //     if (selectedColor && !hasAreaChangedColor.current) {
+    //         const cords = getCoordinatesFromColor({ color: selectedColor, canvas: canvasRef });
+    //
+    //         if (cords) {
+    //             x.set(cords.x);
+    //             y.set(cords.y);
+    //         }
+    //     }
+    // }, [selectedColor, x, y]);
 
     const handleDrag = useCallback(() => {
-        const xCord = x.get() + 25.5;
-        const yCord = y.get() + 25.5;
-
-        setCoordinates({ x: xCord, y: yCord });
-
-        if (typeof updateSelectedColor === 'function') {
-            const color = getColorFromCoordinates({
-                coordinates: {
-                    x: xCord,
-                    y: yCord,
-                },
-                canvas: canvasRef,
-                opacity,
-                scale,
-            });
-
-            if (color === 'transparent') {
-                return;
-            }
-
-            updateSelectedColor(color);
-        }
-    }, [opacity, scale, updateSelectedColor, x, y]);
+        setColor();
+    }, [setColor]);
 
     const handleClick = useCallback(
         (event: MouseEvent) => {
-            setCoordinates({ x: event.clientX, y: event.clientY });
-
             if (typeof updateSelectedColor === 'function') {
                 const color = getColorFromCoordinates({
                     coordinates: {
