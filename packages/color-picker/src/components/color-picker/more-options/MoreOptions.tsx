@@ -1,7 +1,7 @@
 import { Accordion, AccordionGroup } from '@chayns-components/core';
-import { isHex, isRgb1 } from '@chayns/colors';
+import { isHex } from '@chayns/colors';
 import React, { useContext, useEffect, useState, type ChangeEvent } from 'react';
-import { extractRgbValues, hexToRgb, rgbToHex } from '../../../utils/color';
+import { extractRgbValues, hexToRgb, isValidRGBA, rgbToHex } from '../../../utils/color';
 import { ColorPickerContext } from '../ColorPicker';
 import {
     StyledMoreOptions,
@@ -14,11 +14,17 @@ const MoreOptions = () => {
 
     const [tmpHexValue, setTmpHexValue] = useState('');
     const [tmpRgbValue, setTmpRgbValue] = useState('');
+    const [isHexInvalid, setIsHexInvalid] = useState(false);
+    const [isRgbInvalid, setIsRgbInvalid] = useState(false);
 
     const handleHexChange = (event: ChangeEvent<HTMLInputElement>) => {
         setTmpHexValue(event.target.value);
 
-        if (typeof updateSelectedColor === 'function' && isHex(event.target.value)) {
+        const isValid = isHex(event.target.value);
+
+        setIsHexInvalid(!isValid);
+
+        if (typeof updateSelectedColor === 'function' && isValid) {
             const { r, g, b, a } = hexToRgb(event.target.value);
 
             updateSelectedColor(`rgba(${r},${g},${b},${a})`);
@@ -28,7 +34,11 @@ const MoreOptions = () => {
     const handleRgbChange = (event: ChangeEvent<HTMLInputElement>) => {
         setTmpRgbValue(event.target.value);
 
-        if (typeof updateSelectedColor === 'function' && isRgb1(event.target.value)) {
+        const isValid = isValidRGBA(event.target.value);
+
+        setIsRgbInvalid(!isValid);
+
+        if (typeof updateSelectedColor === 'function' && isValid) {
             updateSelectedColor(event.target.value);
         }
     };
@@ -45,8 +55,16 @@ const MoreOptions = () => {
             <AccordionGroup isWrapped>
                 <Accordion title="Erweitert">
                     <StyledMoreOptionsInputWrapper>
-                        <StyledMoreOptionsInput value={tmpHexValue} onChange={handleHexChange} />
-                        <StyledMoreOptionsInput value={tmpRgbValue} onChange={handleRgbChange} />
+                        <StyledMoreOptionsInput
+                            value={tmpHexValue}
+                            onChange={handleHexChange}
+                            $isInvalid={isHexInvalid}
+                        />
+                        <StyledMoreOptionsInput
+                            value={tmpRgbValue}
+                            onChange={handleRgbChange}
+                            $isInvalid={isRgbInvalid}
+                        />
                     </StyledMoreOptionsInputWrapper>
                 </Accordion>
             </AccordionGroup>

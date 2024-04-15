@@ -83,6 +83,38 @@ export const getCoordinatesFromColor = ({ canvas, color }: GetCoordinatesFromCol
     return null;
 };
 
+export const isValidRGBA = (rgbaString: string): boolean => {
+    if (rgbaString === '') {
+        return false;
+    }
+
+    const rgbaRegex = /^rgba\(\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*((0?\.\d+)|(1|0))\s*\)$/;
+    if (!rgbaRegex.test(rgbaString)) {
+        return false;
+    }
+
+    const matches = rgbaString.match(rgbaRegex);
+    if (!matches) {
+        return false;
+    }
+
+    const red = parseInt(matches[1] ?? '', 10);
+    const green = parseInt(matches[2] ?? '', 10);
+    const blue = parseInt(matches[3] ?? '', 10);
+    const alpha = parseFloat(matches[4] ?? '');
+
+    return !(
+        red < 0 ||
+        red > 255 ||
+        green < 0 ||
+        green > 255 ||
+        blue < 0 ||
+        blue > 255 ||
+        alpha < 0 ||
+        alpha > 1
+    );
+};
+
 export const convertColorToHsl = (color: string) => {
     const hexRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
     const rgbRegex =
