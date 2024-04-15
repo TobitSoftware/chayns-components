@@ -44,43 +44,90 @@ export const getColorFromCoordinates = ({
 interface GetCoordinatesFromColorOptions {
     color: CSSProperties['color'];
     canvas: RefObject<HTMLCanvasElement>;
+    tolerance?: number;
 }
 
-export const getCoordinatesFromColor = ({ canvas, color }: GetCoordinatesFromColorOptions) => {
+export const getCoordinatesFromColor = ({
+    canvas,
+    color,
+    tolerance = 0,
+}: GetCoordinatesFromColorOptions) => {
     const ctx = canvas.current?.getContext('2d');
 
-    if (!ctx || !color) {
-        return undefined;
+    if (!ctx) {
+        return null;
     }
 
-    const { data } = ctx.getImageData(0, 0, 300, 150); /// get image data
-    let x = 0;
-    let y = 0;
+    const height = canvas.current?.height ?? 150;
+    const width = canvas.current?.width ?? 300;
+
+    const imageData = ctx.getImageData(0, 0, width, height);
+    const pixels = imageData.data;
 
     const rgb = splitRgb(color);
 
     if (!rgb) {
-        return undefined;
+        return null;
     }
 
-    // iterating x/y instead of forward to get position the easy way
-    for (; y < 150; y++) {
-        // common value for all x
-        const p = y * 4 * 300;
+    const { r: targetR, g: targetG, b: targetB } = rgb;
 
-        for (x = 0; x < 300; x++) {
-            // next pixel (skipping 4 bytes as each pixel is RGBA bytes)
-            const px = p + x * 4;
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const index = (y * width + x) * 4;
+            const r = pixels[index] ?? 0;
+            const g = pixels[index + 1] ?? 0;
+            const b = pixels[index + 2] ?? 0;
 
-            // if red component match check the others
-            if (data[px] === rgb.r) {
-                if (data[px + 1] === rgb.g && data[px + 2] === rgb.b) {
-                    return { x, y };
-                }
+            if (
+                Math.abs(targetR - r) <= tolerance &&
+                Math.abs(targetG - g) <= tolerance &&
+                Math.abs(targetB - b) <= tolerance
+            ) {
+                return { x, y };
             }
         }
     }
+
     return null;
+
+    // const ctx = canvas.current?.getContext('2d');
+    //
+    // if (!ctx || !color) {
+    //     return undefined;
+    // }
+    //
+    // const { data } = ctx.getImageData(0, 0, 300, 150); /// get image data
+    // let x = 0;
+    // let y = 0;
+    //
+    // const rgb = splitRgb(color);
+    //
+    // if (!rgb) {
+    //     return undefined;
+    // }
+    //
+    // console.log(rgb);
+    //
+    // // iterating x/y instead of forward to get position the easy way
+    // for (; y < 150; y++) {
+    //     // common value for all x
+    //     const p = y * 4 * 300;
+    //
+    //     for (x = 0; x < 300; x++) {
+    //         // next pixel (skipping 4 bytes as each pixel is RGBA bytes)
+    //         const px = p + x * 4;
+    //
+    //         // if red component match check the others
+    //         if (data[px] === rgb.r) {
+    //             if (data[px + 1] === rgb.g && data[px + 2] === rgb.b) {
+    //                 return { x, y };
+    //             }
+    //         }
+    //     }
+    // }
+    //
+    // return null;
 };
 
 export const isValidRGBA = (rgbaString: string): boolean => {
