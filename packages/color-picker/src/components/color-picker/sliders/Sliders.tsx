@@ -1,4 +1,4 @@
-import React, { useContext, type CSSProperties } from 'react';
+import React, { useContext, useMemo, type CSSProperties } from 'react';
 import { extractRgbValues } from '../../../utils/color';
 import HueSlider from '../../hue-slider/HueSlider';
 import TransparencySlider from '../../transparency-slider/TransparencySlider';
@@ -20,16 +20,16 @@ const Sliders = () => {
         handleColorChange(color);
 
         if (typeof updateHueColor === 'function' && color) {
-            const { r, g, b } = extractRgbValues(color);
-
-            updateHueColor(`rgba(${r},${g},${b}, 1)`);
+            updateHueColor(color);
         }
     };
+
+    const opacity = useMemo(() => extractRgbValues(selectedColor ?? '').a, [selectedColor]);
 
     return (
         <StyledSliders>
             <StyledSlidersWrapper>
-                <HueSlider color={hueColor} onChange={handleHueColorChange} />
+                <HueSlider color={hueColor} opacity={opacity} onChange={handleHueColorChange} />
                 <TransparencySlider color={selectedColor} onChange={handleColorChange} />
             </StyledSlidersWrapper>
             <ColorPreview />

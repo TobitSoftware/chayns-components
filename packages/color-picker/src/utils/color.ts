@@ -1,6 +1,6 @@
 import type { CSSProperties, RefObject } from 'react';
 
-import { hexToHsl, rgb255ToHsl } from '@chayns/colors';
+import { hexToHsl, rgb255ToHsl, rgb255ToHsv } from '@chayns/colors';
 import type { HSL, HSLA } from '@chayns/colors/lib/types/hsl';
 import type { Coordinates, RGBA, Scale } from '../types';
 
@@ -182,7 +182,7 @@ export const convertColorToHsl = (color: string) => {
                 return undefined;
             }
 
-            return `hsl(${Math.floor(hsl.h)},100%,50%)`;
+            return `hsl(${Math.floor(hsl.h)},100%,100%)`;
         case rgbRegex.test(newColor):
             rgba = color.match(/[\d.]+/g);
 
@@ -200,13 +200,16 @@ export const convertColorToHsl = (color: string) => {
                 return undefined;
             }
 
-            return `hsl(${Math.floor(hsl.h)},100%,50%)`;
+            return `hsl(${Math.floor(hsl.h)},100%,100%)`;
         case hslRegex.test(newColor):
             return color;
         default:
             return undefined;
     }
 };
+
+export const rgbToHsv = (color: CSSProperties['color']) =>
+    rgb255ToHsv(extractRgbValues(color ?? ''));
 
 export const splitRgb = (color: CSSProperties['color']): null | RGBA => {
     const rgba = color?.match(/[\d.]+/g);
