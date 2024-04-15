@@ -21,7 +21,7 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
     ${({ $isClickable, theme }) =>
         $isClickable &&
         css`
-            :hover {
+            &&:hover {
                 background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
             }
         `}
