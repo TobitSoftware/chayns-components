@@ -12,5 +12,14 @@ export interface RGB {
     r: number;
     g: number;
     b: number;
-    a?: number;
+}
+
+export interface RGBA extends RGB {
+    a: number;
+}
+
+export interface IPresetColor {
+    isCustom?: boolean;
+    id: string;
+    color: string;
 }

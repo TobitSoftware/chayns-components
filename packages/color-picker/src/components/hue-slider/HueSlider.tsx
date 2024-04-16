@@ -9,7 +9,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { convertColorToHsl, splitRgb } from '../../utils/color';
+import { convertColorToHsl, extractHsl, splitRgb } from '../../utils/color';
 import { StyledHueSlider, StyledHueSliderInput, StyledHueSliderThumb } from './HueSlider.styles';
 
 export type HueSliderProps = {
@@ -20,12 +20,31 @@ export type HueSliderProps = {
     /**
      * Function that will be executed when the color is changed.
      */
-    onChange?: (color: CSSProperties['color']) => void;
+    onChange?: (rgb: CSSProperties['color'], hsl: CSSProperties['color']) => void;
+    /**
+     * Function that will be executed when the color is ending to change.
+     */
+    onEnd?: (rgb: CSSProperties['color'], hsl: CSSProperties['color']) => void;
+    /**
+     * Function that will be executed when the color is starting to change.
+     */
+    onStart?: (rgb: CSSProperties['color'], hsl: CSSProperties['color']) => void;
+    /**
+     * The opacity of the Color. Is used if the color has no opacity value.
+     */
+    opacity?: number;
 };
 
-const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' }) => {
+const HueSlider: FC<HueSliderProps> = ({
+    onChange,
+    onStart,
+    onEnd,
+    opacity,
+    color = 'rgba(255, 0, 0, 1)',
+}) => {
     const [editedValue, setEditedValue] = useState(0);
     const [hslColor, setHslColor] = useState<CSSProperties['color']>('hsl(0, 0, 100)');
+    const [internalOpacity, setInternalOpacity] = useState(1);
 
     const sliderThumbRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLInputElement>(null);
@@ -38,7 +57,11 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
                 return;
             }
 
-            const hsl = convertColorToHsl(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1)`);
+            const { r, g, b, a } = rgb;
+
+            setInternalOpacity(a);
+
+            const hsl = convertColorToHsl(`rgba(${r}, ${g}, ${b}, 1)`);
             const match = hsl?.toString().match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/);
 
             if (!match || !match[1]) {
@@ -47,12 +70,8 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
 
             setHslColor(`hsl(${match[1]}, 100%, 50%)`);
             setEditedValue(parseInt(match[1], 10));
-
-            if (typeof onChange === 'function') {
-                onChange(hsl);
-            }
         }
-    }, [color, onChange]);
+    }, [color]);
 
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -73,10 +92,10 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
                     return;
                 }
 
-                onChange(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${1})`);
+                onChange(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity ?? internalOpacity})`, hsl);
             }
         },
-        [onChange],
+        [internalOpacity, onChange, opacity],
     );
 
     const sliderThumbPosition = useMemo(() => {
@@ -89,6 +108,46 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
         return 0;
     }, [editedValue]);
 
+    const handleStart = useCallback(() => {
+        if (typeof onStart === 'function' && hslColor) {
+            const hsl = extractHsl(hslColor);
+
+            if (!hsl) {
+                return;
+            }
+
+            const rgb = hslToRgb255(hsl);
+
+            if (!rgb) {
+                return;
+            }
+
+            const { r, g, b } = rgb;
+
+            onStart(`rgba(${r}, ${g}, ${b}, ${opacity ?? internalOpacity})`, hslColor);
+        }
+    }, [hslColor, internalOpacity, onStart, opacity]);
+
+    const handleEnd = useCallback(() => {
+        if (typeof onEnd === 'function' && hslColor) {
+            const hsl = extractHsl(hslColor);
+
+            if (!hsl) {
+                return;
+            }
+
+            const rgb = hslToRgb255(hsl);
+
+            if (!rgb) {
+                return;
+            }
+
+            const { r, g, b } = rgb;
+
+            onEnd(`rgba(${r}, ${g}, ${b}, ${opacity ?? internalOpacity})`, hslColor);
+        }
+    }, [hslColor, internalOpacity, onEnd, opacity]);
+
     return useMemo(
         () => (
             <StyledHueSlider>
@@ -100,6 +159,8 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
                     max={360}
                     value={editedValue}
                     onChange={handleInputChange}
+                    onPointerDown={handleStart}
+                    onPointerUp={handleEnd}
                 />
                 <StyledHueSliderThumb
                     ref={sliderThumbRef}
@@ -108,7 +169,7 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
                 />
             </StyledHueSlider>
         ),
-        [editedValue, handleInputChange, hslColor, sliderThumbPosition],
+        [editedValue, handleEnd, handleInputChange, handleStart, hslColor, sliderThumbPosition],
     );
 };
 
