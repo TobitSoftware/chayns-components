@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { Badge, Icon } from '../src';
+import Button from '../src/components/button/Button';
 import List from '../src/components/list/List';
 import ListItemContent from '../src/components/list/list-item/list-item-content/ListItemContent';
 import ListItem from '../src/components/list/list-item/ListItem';
@@ -19,6 +20,8 @@ export const ListItemsWithImage = Template.bind({});
 export const ListItemsWithGridImage = Template.bind({});
 
 export const ListItemsWithRightElements = Template.bind({});
+
+export const ListItemsWithButtonAsRightElements = Template.bind({});
 
 export const ListItemsWithHoverItem = Template.bind({});
 
@@ -144,6 +147,45 @@ ListItemsWithRightElements.args = {
             subtitle="Dolor sit ipsum amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
         />,
+    ],
+};
+
+ListItemsWithButtonAsRightElements.args = {
+    children: [
+        <ListItem images={[otherImages[0]]} subtitle="Max Mustermann" title="Ballermann Hits">
+            <List>
+                <ListItem
+                    images={[locationImages[0]]}
+                    subtitle="Julian Sommer"
+                    title="Oben Ohne"
+                    rightElements={[
+                        <Button icon="fa fa-plus" onClick={() => {}}>
+                            Hinzufügen
+                        </Button>,
+                    ]}
+                    shouldShowSingleRightElementCentered
+                />
+                <ListItem
+                    images={[locationImages[1]]}
+                    subtitle="Julian Sommer"
+                    title="Morgen kickt der Kater"
+                    rightElements={[
+                        <Button icon="fa fa-plus" onClick={() => {}}>
+                            Hinzufügen
+                        </Button>,
+                    ]}
+                    shouldShowSingleRightElementCentered
+                />
+                <ListItem
+                    images={[locationImages[2]]}
+                    subtitle="Bierkapitän x Eko Fresh"
+                    title="Ihr könnt mich alle"
+                    rightElements={[<Badge>Hinzugefügt</Badge>]}
+                    shouldShowSingleRightElementCentered
+                />
+            </List>
+        </ListItem>,
+        <ListItem images={[otherImages[1]]} subtitle="Doris Musterfrau" title="Vevo Top Hits" />,
     ],
 };
 
