@@ -21,8 +21,6 @@ export const getColorFromCoordinates = ({
         return undefined;
     }
 
-    const { top, left } = canvas.current.getBoundingClientRect();
-
     const xCords = coordinates.x;
     const yCords = coordinates.y;
 
