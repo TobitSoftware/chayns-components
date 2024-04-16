@@ -83,8 +83,8 @@ const ColorArea = () => {
     }, []);
 
     const setColor = useCallback(() => {
-        const xCord = x.get() + 25.5;
-        const yCord = y.get() + 25.5;
+        const xCord = x.get();
+        const yCord = y.get();
 
         if (typeof updateSelectedColor === 'function') {
             const color = getColorFromCoordinates({

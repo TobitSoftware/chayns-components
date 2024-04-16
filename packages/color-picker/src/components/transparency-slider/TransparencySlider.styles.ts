@@ -23,6 +23,7 @@ export const StyledTransparencySliderBackground = styled.div`
         4px -4px,
         -4px 0;
     background-repeat: repeat;
+    border-radius: 100px;
     background-size: 8px 8px;
     content: '';
     position: absolute;
