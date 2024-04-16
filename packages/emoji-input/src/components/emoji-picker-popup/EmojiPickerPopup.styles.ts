@@ -82,5 +82,6 @@ export const StyledMotionEmojiPickerPopupContent = styled(
 `;
 
 export const StyledEmojiPickerPopupIconWrapper = styled.div`
+    display: flex;
     cursor: pointer;
 `;

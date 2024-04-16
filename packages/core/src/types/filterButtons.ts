@@ -14,4 +14,5 @@ export interface IFilterButtonItem {
     text: string;
     color?: CSSProperties['color'];
     icons?: string[];
+    count?: number;
 }

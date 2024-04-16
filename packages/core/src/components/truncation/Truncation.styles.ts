@@ -11,6 +11,7 @@ export const StyledTruncation = styled.div`
 // Fix framer-motion bug
 export const StyledMotionTruncationContent = styled(motion.div)<FramerMotionBugFix>`
     overflow: hidden;
+    position: relative;
 `;
 
 export const StyledTruncationPseudoContent = styled.div`

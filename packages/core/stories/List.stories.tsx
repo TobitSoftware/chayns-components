@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { Badge, Icon } from '../src';
+import Button from '../src/components/button/Button';
 import List from '../src/components/list/List';
 import ListItemContent from '../src/components/list/list-item/list-item-content/ListItemContent';
 import ListItem from '../src/components/list/list-item/ListItem';
@@ -20,6 +21,8 @@ export const ListItemsWithGridImage = Template.bind({});
 
 export const ListItemsWithRightElements = Template.bind({});
 
+export const ListItemsWithButtonAsRightElements = Template.bind({});
+
 export const ListItemsWithHoverItem = Template.bind({});
 
 export const ListItemsWithIcon = Template.bind({});
@@ -27,6 +30,8 @@ export const ListItemsWithIcon = Template.bind({});
 export const ExpandableListItems = Template.bind({});
 
 export const MixedListItems = Template.bind({});
+
+export const ListItemWithTitleElement = Template.bind({});
 
 const images = [
     'https://tsimg.cloud/77896-21884/8aee1a304297729a4542b97325940a656a3da8f2.png',
@@ -125,6 +130,13 @@ ListItemsWithRightElements.args = {
         />,
         <ListItem
             images={[locationImages[1]]}
+            rightElements={[<Badge>123</Badge>]}
+            shouldShowSingleRightElementCentered
+            subtitle="Dolor sit ipsum amet"
+            title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
+        />,
+        <ListItem
+            images={[locationImages[1]]}
             rightElements={['07:51 Uhr', undefined]}
             subtitle="Dolor sit ipsum amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
@@ -135,6 +147,45 @@ ListItemsWithRightElements.args = {
             subtitle="Dolor sit ipsum amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
         />,
+    ],
+};
+
+ListItemsWithButtonAsRightElements.args = {
+    children: [
+        <ListItem images={[otherImages[0]]} subtitle="Max Mustermann" title="Ballermann Hits">
+            <List>
+                <ListItem
+                    images={[locationImages[0]]}
+                    subtitle="Julian Sommer"
+                    title="Oben Ohne"
+                    rightElements={[
+                        <Button icon="fa fa-plus" onClick={() => {}}>
+                            Hinzufügen
+                        </Button>,
+                    ]}
+                    shouldShowSingleRightElementCentered
+                />
+                <ListItem
+                    images={[locationImages[1]]}
+                    subtitle="Julian Sommer"
+                    title="Morgen kickt der Kater"
+                    rightElements={[
+                        <Button icon="fa fa-plus" onClick={() => {}}>
+                            Hinzufügen
+                        </Button>,
+                    ]}
+                    shouldShowSingleRightElementCentered
+                />
+                <ListItem
+                    images={[locationImages[2]]}
+                    subtitle="Bierkapitän x Eko Fresh"
+                    title="Ihr könnt mich alle"
+                    rightElements={[<Badge>Hinzugefügt</Badge>]}
+                    shouldShowSingleRightElementCentered
+                />
+            </List>
+        </ListItem>,
+        <ListItem images={[otherImages[1]]} subtitle="Doris Musterfrau" title="Vevo Top Hits" />,
     ],
 };
 
@@ -285,5 +336,34 @@ MixedListItems.args = {
                 takimata sanctus est Lorem ipsum dolor sit amet.
             </ListItemContent>
         </ListItem>,
+    ],
+};
+
+ListItemWithTitleElement.args = {
+    children: [
+        <ListItem
+            icons={['ts-chayns']}
+            subtitle="Stet clita kasd gubergren, no sea"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+            titleElement={<Icon icons={['fa fa-rocket']} />}
+        />,
+        <ListItem
+            icons={['fa fa-rocket']}
+            subtitle="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+            title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
+            titleElement={<Icon icons={['ts-chayns']} />}
+        />,
+        <ListItem
+            icons={['ts-chayns']}
+            subtitle="Consetetur sadipscing elitr, sed diam nonumy eirmod"
+            title="At vero eos et accusam et justo duo dolores et ea rebum sit amet dolor"
+            titleElement={<Icon icons={['fa fa-rocket']} />}
+        />,
+        <ListItem
+            icons={['fa fa-rocket']}
+            subtitle="Et justo duo dolores et ea rebum"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+            titleElement={<Icon icons={['ts-chayns']} />}
+        />,
     ],
 };

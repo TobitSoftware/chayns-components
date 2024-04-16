@@ -25,7 +25,7 @@ export const StyledFilterButtonItem = styled.div<StyledFilterButtonItemProps>`
 export const StyledFilterButtonItemLabel = styled.div`
     display: flex;
     gap: 5px;
-    align-items: center;
+    align-items: baseline;
     position: relative;
     z-index: 1;
 `;
@@ -34,7 +34,15 @@ type StyledFilterButtonItemLabelTextProps = WithTheme<unknown>;
 
 export const StyledFilterButtonItemLabelText = styled.p<StyledFilterButtonItemLabelTextProps>`
     color: ${({ theme }: StyledFilterButtonItemLabelTextProps) => theme.text};
-    margin-top: 2px;
+    margin: 0;
+`;
+
+type StyledFilterButtonItemLabelCountProps = WithTheme<unknown>;
+
+export const StyledFilterButtonItemLabelCount = styled.p<StyledFilterButtonItemLabelCountProps>`
+    color: ${({ theme }: StyledFilterButtonItemLabelTextProps) => theme.text};
+    margin: 0;
+    font-weight: bold;
 `;
 
 type StyledFilterButtonItemBorderProps = WithTheme<{

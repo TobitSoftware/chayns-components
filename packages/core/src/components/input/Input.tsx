@@ -192,11 +192,11 @@ const Input = forwardRef<InputRef, InputProps>(
         const labelPosition = useMemo(() => {
             if (hasValue) {
                 return shouldShowOnlyBottomBorder
-                    ? { bottom: -4, right: 3 }
-                    : { bottom: -8, right: -6 };
+                    ? { bottom: -3, right: 3 }
+                    : { bottom: -7, right: -6 };
             }
 
-            return { left: 0, top: 0 };
+            return { left: -1, top: -1.5 };
         }, [hasValue, shouldShowOnlyBottomBorder]);
 
         return (

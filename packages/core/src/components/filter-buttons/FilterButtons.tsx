@@ -1,11 +1,11 @@
 import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import FilterButton from './filter-button/FilterButton';
-import { StyledFilterButton } from './FilterButtons.styles';
 import {
     FilterButtonItemShape,
     FilterButtonSize,
     IFilterButtonItem,
 } from '../../types/filterButtons';
+import FilterButton from './filter-button/FilterButton';
+import { StyledFilterButton } from './FilterButtons.styles';
 
 export type FilterButtonsProps = {
     /**
@@ -88,13 +88,14 @@ const FilterButtons: FC<FilterButtonsProps> = ({
             />,
         ];
 
-        items.forEach(({ icons, text, color, id }) => {
+        items.forEach(({ icons, text, color, count, id }) => {
             array.push(
                 <FilterButton
                     color={color}
                     icons={icons}
                     id={id}
                     key={id}
+                    count={count}
                     onSelect={handleSelect}
                     isSelected={selectedIds.includes(id)}
                     shape={FilterButtonItemShape.Round}

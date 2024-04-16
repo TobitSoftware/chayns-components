@@ -174,11 +174,15 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
 
     return useMemo(
         () => (
-            <StyledOpeningInputs>
+            <StyledOpeningInputs
+                key={`opening-inputs__${id}`}
+                animate={{ gap: newTimes && newTimes.length > 1 ? '8px' : 0 }}
+                initial={{ gap: 0 }}
+            >
                 <AnimatePresence initial={false}>{content}</AnimatePresence>
             </StyledOpeningInputs>
         ),
-        [content],
+        [content, id, newTimes],
     );
 };
 
