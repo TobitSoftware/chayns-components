@@ -11,8 +11,6 @@ import {
 } from './ColorPickerWrapper.styles';
 
 interface ColorPickerWrapperProps {
-    onSelect?: (color: string) => void;
-    selectedColor?: string;
     presetColors?: IPresetColor[];
     shouldShowPresetColors: boolean;
     onPresetColorAdd?: (presetColor: IPresetColor) => void;
@@ -23,8 +21,6 @@ interface ColorPickerWrapperProps {
 }
 
 const ColorPickerWrapper = ({
-    selectedColor,
-    onSelect,
     presetColors,
     onPresetColorRemove,
     onPresetColorAdd,
@@ -33,7 +29,7 @@ const ColorPickerWrapper = ({
     shouldShowTransparencySlider,
     shouldShowMoreOptions,
 }: ColorPickerWrapperProps) => {
-    const { selectedColor: internalSelectedColor } = useContext(ColorPickerContext);
+    const { selectedColor } = useContext(ColorPickerContext);
 
     const content = useMemo(
         () => (
@@ -43,17 +39,13 @@ const ColorPickerWrapper = ({
                 onPresetColorAdd={onPresetColorAdd}
                 presetColors={presetColors}
                 shouldShowMoreOptions={shouldShowMoreOptions}
-                selectedColor={selectedColor}
                 shouldShowTransparencySlider={shouldShowTransparencySlider}
-                onSelect={onSelect}
             />
         ),
         [
             onPresetColorAdd,
             onPresetColorRemove,
-            onSelect,
             presetColors,
-            selectedColor,
             shouldShowMoreOptions,
             shouldShowPresetColors,
             shouldShowTransparencySlider,
@@ -65,9 +57,9 @@ const ColorPickerWrapper = ({
             {shouldShowAsPopup ? (
                 <Popup content={content}>
                     <StyledColorPickerWrapperInfo>
-                        <StyledColorPickerWrapperInfoColor $color={internalSelectedColor} />
+                        <StyledColorPickerWrapperInfoColor $color={selectedColor} />
                         <StyledColorPickerWrapperInfoText>
-                            {internalSelectedColor}
+                            {selectedColor}
                         </StyledColorPickerWrapperInfoText>
                     </StyledColorPickerWrapperInfo>
                 </Popup>

@@ -57,9 +57,7 @@ const ColorPicker = ({
     <ColorPickerProvider selectedColor={selectedColor} onSelect={onSelect}>
         <StyledColorPicker>
             <ColorPickerWrapper
-                selectedColor={selectedColor}
                 shouldShowTransparencySlider={shouldShowTransparencySlider}
-                onSelect={onSelect}
                 presetColors={presetColors}
                 onPresetColorAdd={onPresetColorAdd}
                 onPresetColorRemove={onPresetColorRemove}
