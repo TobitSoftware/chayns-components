@@ -34,6 +34,7 @@ const ColorArea = () => {
         isPresetColor,
         shouldGetCoordinates,
         updateShouldGetCoordinates,
+        updateShouldCallOnSelect,
         hueColor,
     } = useContext(ColorPickerContext);
 
@@ -202,7 +203,11 @@ const ColorArea = () => {
         if (typeof updateShouldGetCoordinates === 'function') {
             updateShouldGetCoordinates(true);
         }
-    }, [updateShouldGetCoordinates]);
+
+        if (typeof updateShouldCallOnSelect === 'function') {
+            updateShouldCallOnSelect(true);
+        }
+    }, [updateShouldCallOnSelect, updateShouldGetCoordinates]);
 
     return useMemo(
         () => (

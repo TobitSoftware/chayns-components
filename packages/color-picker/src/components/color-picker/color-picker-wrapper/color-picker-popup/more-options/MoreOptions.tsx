@@ -10,7 +10,8 @@ import {
 } from './MoreOptions.styles';
 
 const MoreOptions = () => {
-    const { selectedColor, updateSelectedColor } = useContext(ColorPickerContext);
+    const { selectedColor, updateSelectedColor, updateShouldCallOnSelect } =
+        useContext(ColorPickerContext);
 
     const [tmpHexValue, setTmpHexValue] = useState('');
     const [tmpRgbValue, setTmpRgbValue] = useState('');
@@ -29,6 +30,10 @@ const MoreOptions = () => {
 
             updateSelectedColor(`rgba(${r},${g},${b},${a})`);
         }
+
+        if (typeof updateShouldCallOnSelect === 'function' && isValid) {
+            updateShouldCallOnSelect(true);
+        }
     };
 
     const handleRgbChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -40,6 +45,10 @@ const MoreOptions = () => {
 
         if (typeof updateSelectedColor === 'function' && isValid) {
             updateSelectedColor(event.target.value);
+        }
+
+        if (typeof updateShouldCallOnSelect === 'function' && isValid) {
+            updateShouldCallOnSelect(true);
         }
     };
 

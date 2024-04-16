@@ -8,8 +8,13 @@ interface PresetColorProps {
 }
 
 const PresetColor = ({ color }: PresetColorProps) => {
-    const { selectedColor, updateSelectedColor, updateHueColor, updateIsPresetColor } =
-        useContext(ColorPickerContext);
+    const {
+        selectedColor,
+        updateSelectedColor,
+        updateHueColor,
+        updateShouldCallOnSelect,
+        updateIsPresetColor,
+    } = useContext(ColorPickerContext);
 
     const isSelected = useMemo(() => selectedColor === color, [color, selectedColor]);
 
@@ -24,6 +29,10 @@ const PresetColor = ({ color }: PresetColorProps) => {
 
         if (typeof updateIsPresetColor === 'function') {
             updateIsPresetColor(true);
+        }
+
+        if (typeof updateShouldCallOnSelect === 'function') {
+            updateShouldCallOnSelect(true);
         }
     };
 

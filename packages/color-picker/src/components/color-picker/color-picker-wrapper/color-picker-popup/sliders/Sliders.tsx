@@ -16,6 +16,7 @@ const Sliders = ({ shouldShowTransparencySlider }: SlidersProps) => {
         updateSelectedColor,
         updateHueColor,
         updateShouldGetCoordinates,
+        updateShouldCallOnSelect,
         hueColor,
     } = useContext(ColorPickerContext);
 
@@ -38,8 +39,12 @@ const Sliders = ({ shouldShowTransparencySlider }: SlidersProps) => {
     };
 
     const handleEnd = () => {
-        if (typeof updateShouldGetCoordinates === 'function') {
+        if (
+            typeof updateShouldGetCoordinates === 'function' &&
+            typeof updateShouldCallOnSelect === 'function'
+        ) {
             updateShouldGetCoordinates(true);
+            updateShouldCallOnSelect(true);
         }
     };
 

@@ -9,6 +9,8 @@ interface IColorPickerContext {
     updateIsPresetColor?: (isPresetColor: boolean) => void;
     shouldGetCoordinates?: boolean;
     updateShouldGetCoordinates?: (shouldGetCoordinates: boolean) => void;
+    shouldCallOnSelect?: boolean;
+    updateShouldCallOnSelect?: (shouldCallOnSelect: boolean) => void;
 }
 
 export const ColorPickerContext = React.createContext<IColorPickerContext>({
@@ -20,6 +22,8 @@ export const ColorPickerContext = React.createContext<IColorPickerContext>({
     updateIsPresetColor: undefined,
     shouldGetCoordinates: undefined,
     updateShouldGetCoordinates: undefined,
+    shouldCallOnSelect: undefined,
+    updateShouldCallOnSelect: undefined,
 });
 
 ColorPickerContext.displayName = 'ColorPickerContext';
@@ -44,17 +48,11 @@ const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerP
     const [internalHueColor, setInternalHueColor] = useState<string>();
     const [internalIsPresetColor, setInternalIsPresetColor] = useState<boolean>(false);
     const [internalShouldGetCoordinates, setInternalShouldGetCoordinates] = useState<boolean>(true);
+    const [internalShouldCallOnSelect, setInternalShouldCallOnSelect] = useState<boolean>(false);
 
-    const updateSelectedColor = useCallback(
-        (color: string | undefined) => {
-            setInternalSelectedColor(color);
-
-            if (typeof onSelect === 'function' && color) {
-                onSelect(color);
-            }
-        },
-        [onSelect],
-    );
+    const updateSelectedColor = useCallback((color: string | undefined) => {
+        setInternalSelectedColor(color);
+    }, []);
 
     const updateHueColor = useCallback((color: string | undefined) => {
         setInternalHueColor(color);
@@ -68,9 +66,21 @@ const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerP
         setInternalShouldGetCoordinates(shouldGetCoordinates);
     }, []);
 
+    const updateShouldCallOnSelect = useCallback((shouldCallOnSelect: boolean) => {
+        setInternalShouldCallOnSelect(shouldCallOnSelect);
+    }, []);
+
     useEffect(() => {
         setInternalSelectedColor(selectedColor);
     }, [selectedColor]);
+
+    useEffect(() => {
+        if (typeof onSelect === 'function' && internalShouldCallOnSelect && internalSelectedColor) {
+            onSelect(internalSelectedColor);
+
+            setInternalShouldCallOnSelect(false);
+        }
+    }, [internalSelectedColor, internalShouldCallOnSelect, onSelect]);
 
     const providerValue = useMemo<IColorPickerContext>(
         () => ({
@@ -82,15 +92,19 @@ const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerP
             updateIsPresetColor,
             shouldGetCoordinates: internalShouldGetCoordinates,
             updateShouldGetCoordinates,
+            shouldCallOnSelect: internalShouldCallOnSelect,
+            updateShouldCallOnSelect,
         }),
         [
             internalHueColor,
             internalIsPresetColor,
             internalSelectedColor,
+            internalShouldCallOnSelect,
             internalShouldGetCoordinates,
             updateHueColor,
             updateIsPresetColor,
             updateSelectedColor,
+            updateShouldCallOnSelect,
             updateShouldGetCoordinates,
         ],
     );
