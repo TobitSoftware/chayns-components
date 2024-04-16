@@ -111,7 +111,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         };
 
         const handleHide = useCallback(() => {
-            // setIsOpen(false);
+            setIsOpen(false);
         }, []);
 
         const handleMouseEnter = () => {

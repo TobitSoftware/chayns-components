@@ -72,6 +72,8 @@ const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerP
 
     useEffect(() => {
         setInternalSelectedColor(selectedColor);
+        setInternalHueColor(selectedColor);
+        setInternalIsPresetColor(true);
     }, [selectedColor]);
 
     useEffect(() => {

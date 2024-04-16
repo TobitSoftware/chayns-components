@@ -20,7 +20,6 @@ export const StyledColorAreaPseudo = styled.div`
     left: -10px;
 
     user-select: none;
-    pointer-events: none;
 
     height: 170px;
     width: 320px;

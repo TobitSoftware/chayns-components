@@ -13,6 +13,7 @@ const PresetColor = ({ color }: PresetColorProps) => {
         updateSelectedColor,
         updateHueColor,
         updateShouldCallOnSelect,
+        updateShouldGetCoordinates,
         updateIsPresetColor,
     } = useContext(ColorPickerContext);
 
@@ -33,6 +34,10 @@ const PresetColor = ({ color }: PresetColorProps) => {
 
         if (typeof updateShouldCallOnSelect === 'function') {
             updateShouldCallOnSelect(true);
+        }
+
+        if (typeof updateShouldGetCoordinates === 'function') {
+            updateShouldGetCoordinates(true);
         }
     };
 

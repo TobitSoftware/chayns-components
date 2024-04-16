@@ -23,10 +23,11 @@ export const getColorFromCoordinates = ({
 
     const { top, left } = canvas.current.getBoundingClientRect();
 
-    console.log(top, left, coordinates, scale);
+    const xCords = coordinates.x;
+    const yCords = coordinates.y;
 
-    const x = (coordinates.x - 0.5) * scale.scaleX;
-    const y = (coordinates.y - 0.5) * scale.scaleY;
+    const x = (xCords - 0.5) * scale.scaleX;
+    const y = (yCords - 0.5) * scale.scaleY;
 
     const ctx = canvas.current?.getContext('2d', { willReadFrequently: true });
     const pixels = ctx?.getImageData(x, y, 1, 1).data;

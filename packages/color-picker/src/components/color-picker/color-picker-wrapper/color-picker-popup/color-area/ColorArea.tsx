@@ -1,6 +1,5 @@
 import React, {
     MouseEvent,
-    PointerEventHandler,
     useCallback,
     useContext,
     useEffect,
@@ -43,6 +42,7 @@ const ColorArea = () => {
 
     const isPresetColorRef = useRef(false);
     const shouldGetCoordinatesRef = useRef(false);
+    const canDrag = useRef(false);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const pseudoRef = useRef<HTMLDivElement>(null);
 
@@ -142,16 +142,13 @@ const ColorArea = () => {
         setColor();
     }, [hueColor, setColor, updateIsPresetColor]);
 
-    const handleStartDrag: PointerEventHandler = useCallback(
-        (event) => {
-            if (typeof updateShouldGetCoordinates === 'function') {
-                updateShouldGetCoordinates(false);
-            }
+    const handleStartDrag = useCallback(() => {
+        if (typeof updateShouldGetCoordinates === 'function') {
+            updateShouldGetCoordinates(false);
+        }
 
-            dragControls.start(event, { snapToCursor: true });
-        },
-        [dragControls, updateShouldGetCoordinates],
-    );
+        canDrag.current = true;
+    }, [updateShouldGetCoordinates]);
 
     useEffect(() => {
         if (selectedColor && shouldGetCoordinatesRef.current) {
@@ -173,33 +170,24 @@ const ColorArea = () => {
     }, [setColor]);
 
     const handleClick = useCallback(
-        (event: MouseEvent) => {
+        (event: MouseEvent<HTMLDivElement>) => {
             if (typeof updateShouldGetCoordinates === 'function') {
                 updateShouldGetCoordinates(false);
-
-                window.setTimeout(() => {
-                    updateShouldGetCoordinates(true);
-                }, 200);
             }
 
-            if (typeof updateSelectedColor === 'function') {
-                const color = getColorFromCoordinates({
-                    coordinates: {
-                        x: event.clientX,
-                        y: event.clientY,
-                    },
-                    canvas: canvasRef,
-                    opacity,
-                    scale,
-                });
+            const { left, top } = (event.target as HTMLDivElement).getBoundingClientRect();
 
-                updateSelectedColor(color);
-            }
+            x.set(event.clientX - left - 10);
+            y.set(event.clientY - top - 10);
+
+            setColor();
         },
-        [opacity, scale, updateSelectedColor, updateShouldGetCoordinates],
+        [setColor, updateShouldGetCoordinates, x, y],
     );
 
     const handlePointerUp = useCallback(() => {
+        canDrag.current = false;
+
         if (typeof updateShouldGetCoordinates === 'function') {
             updateShouldGetCoordinates(true);
         }
@@ -209,16 +197,68 @@ const ColorArea = () => {
         }
     }, [updateShouldCallOnSelect, updateShouldGetCoordinates]);
 
+    const handleMouseMove = useCallback(
+        (event: MouseEvent) => {
+            if (canDrag.current && pseudoRef.current) {
+                const { left, top } = pseudoRef.current.getBoundingClientRect();
+
+                let xCords = event.clientX - left - 10;
+                let yCords = event.clientY - top - 10;
+
+                switch (true) {
+                    case xCords > 300:
+                        xCords = 300;
+                        break;
+                    case xCords < 0:
+                        xCords = 0;
+                        break;
+                    default:
+                        break;
+                }
+
+                switch (true) {
+                    case yCords > 150:
+                        yCords = 150;
+                        break;
+                    case yCords < 0:
+                        yCords = 0;
+                        break;
+                    default:
+                        break;
+                }
+
+                x.set(xCords);
+                y.set(yCords);
+
+                setColor();
+            }
+        },
+        [setColor, x, y],
+    );
+
+    useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('pointerup', handlePointerUp);
+
+        return () => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('pointerup', handlePointerUp);
+        };
+    }, [handleMouseMove, handlePointerUp]);
+
     return useMemo(
         () => (
             <StyledColorArea>
-                <StyledColorAreaCanvas
-                    ref={canvasRef}
+                <StyledColorAreaCanvas ref={canvasRef} />
+                <StyledColorAreaPseudo
+                    ref={pseudoRef}
                     onPointerDown={handleStartDrag}
-                    onPointerUp={handlePointerUp}
                     onClick={handleClick}
-                />
-                <StyledColorAreaPseudo ref={pseudoRef}>
+                >
                     <StyledMotionColorAreaPointer
                         drag
                         dragConstraints={pseudoRef}
@@ -231,7 +271,7 @@ const ColorArea = () => {
                 </StyledColorAreaPseudo>
             </StyledColorArea>
         ),
-        [dragControls, handleClick, handleDrag, handlePointerUp, handleStartDrag, x, y],
+        [dragControls, handleClick, handleDrag, handleStartDrag, x, y],
     );
 };
 
