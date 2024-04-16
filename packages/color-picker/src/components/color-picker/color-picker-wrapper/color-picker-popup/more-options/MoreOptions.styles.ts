@@ -22,5 +22,5 @@ export const StyledMoreOptionsInput = styled.input<StyledMoreOptionsInputProps>`
     color: ${({ theme, $isInvalid }: StyledMoreOptionsInputProps) =>
         $isInvalid ? theme.wrong : theme.text};
     padding: 8px 10px;
-    font-size: 12px;
+    font-size: 11px;
 `;
