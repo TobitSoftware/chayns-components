@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/date",
-    "version": "5.0.0-beta.567",
+    "version": "5.0.0-beta.569",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -57,7 +57,7 @@
         "typescript": "^5.4.5"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.567",
+        "@chayns-components/core": "^5.0.0-beta.569",
         "date-fns": "^2.30.0",
         "uuid": "^9.0.1"
     },
