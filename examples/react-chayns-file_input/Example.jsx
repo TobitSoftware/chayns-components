@@ -46,9 +46,7 @@ const FileInputExample = () => {
                 siteId: chayns.env.site.id,
             });
             console.log('Uploaded image', result);
-            setDisplayPath(
-                `${displayPath}${result.baseDomain}${result.image.path}\n`
-            );
+            setDisplayPath(`${displayPath}${result.base}/${result.key}\n`);
         });
     }, [images, setDisplayPath]);
 

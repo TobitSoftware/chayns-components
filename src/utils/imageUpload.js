@@ -61,7 +61,20 @@ export default async function imageUpload(file, options, _personId, _siteId) {
     const response = await fetch(url, { method: 'POST', body, headers });
 
     if (response.ok) {
-        return response.json();
+        const { image, baseDomain } = await response.json();
+        // Maps image-service-api-v3 result to v2 result.
+        return {
+            key: image.path,
+            // Removes trailing slash from baseDomain, since image-service-api-v2 doesn't have a trailing slash on base.
+            base: baseDomain.endsWith('/')
+                ? baseDomain.slice(0, -1)
+                : baseDomain,
+            meta: {
+                preview: image.preview,
+                width: image.width,
+                height: image.height,
+            },
+        };
     }
 
     throw new Error(
