@@ -14,7 +14,12 @@ const ListItemBody: FC<ListItemBodyProps> = ({ children, id }) => {
         if (containerRef.current) {
             const resizeObserver = new ResizeObserver((entries) => {
                 if (entries && entries[0]) {
-                    const observedHeight = entries[0].contentRect.height;
+                    const observedHeight = entries[0].contentBoxSize[0]?.blockSize;
+
+                    if (!observedHeight) {
+                        return;
+                    }
+
                     setHeight(observedHeight);
                 }
             });
