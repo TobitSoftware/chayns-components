@@ -15,7 +15,7 @@ interface PresetButtonProps {
 const PresetButton = ({ id, isCustom, onRemove, onAdd }: PresetButtonProps) => {
     const { selectedColor } = useContext(ColorPickerContext);
 
-    const icon = isCustom ? ['ts-trash'] : ['ts-plus'];
+    const icon = isCustom ? ['fa-solid fa-trash'] : ['fa-solid fa-plus'];
 
     const handleClick = () => {
         if (id) {
@@ -29,7 +29,7 @@ const PresetButton = ({ id, isCustom, onRemove, onAdd }: PresetButtonProps) => {
 
     return (
         <StyledPresetButton onClick={handleClick} $isDisabled={!!id && !isCustom}>
-            <Icon icons={icon} />
+            <Icon icons={icon} size={isCustom ? 10 : 15} />
         </StyledPresetButton>
     );
 };
