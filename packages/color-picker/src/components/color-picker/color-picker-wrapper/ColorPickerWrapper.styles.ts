@@ -9,7 +9,10 @@ export const StyledColorPickerWrapperInfo = styled.div`
     gap: 8px;
 `;
 
-type StyledColorPickerWrapperInfoColorProps = WithTheme<{ $color?: string }>;
+type StyledColorPickerWrapperInfoColorProps = WithTheme<{
+    $color?: string;
+    $shouldShowRoundPreviewColor: boolean;
+}>;
 
 export const StyledColorPickerWrapperInfoColor = styled.div.attrs<StyledColorPickerWrapperInfoColorProps>(
     ({ $color }) => ({
@@ -20,7 +23,8 @@ export const StyledColorPickerWrapperInfoColor = styled.div.attrs<StyledColorPic
 )`
     width: 15px;
     aspect-ratio: 1;
-    border-radius: 50px;
+    border-radius: ${({ $shouldShowRoundPreviewColor }) =>
+        $shouldShowRoundPreviewColor ? '50px' : '0px'};
 `;
 
 type StyledColorPickerWrapperInfoTextProps = WithTheme<unknown>;

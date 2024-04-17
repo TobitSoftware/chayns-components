@@ -6,21 +6,9 @@ import { StyledColorPicker } from './ColorPicker.styles';
 
 interface ColorPickerProps {
     /**
-     * Function to be executed when a color is selected.
-     */
-    onSelect?: (color: string) => void;
-    /**
-     * The color that should be preselected.
-     */
-    selectedColor?: string;
-    /**
      * Colors the user can select from.
      */
     presetColors?: IPresetColor[];
-    /**
-     * Whether the preset colors should be displayed.
-     */
-    shouldShowPresetColors?: boolean;
     /**
      * Function to be executed when a preset color is added.
      */
@@ -30,17 +18,37 @@ interface ColorPickerProps {
      */
     onPresetColorRemove?: (presetColorId: IPresetColor['id']) => void;
     /**
-     * Whether the transparency slider should be displayed.
+     * Function to be executed when a color is selected.
      */
-    shouldShowTransparencySlider?: boolean;
+    onSelect?: (color: string) => void;
+    /**
+     * The color that should be preselected.
+     */
+    selectedColor?: string;
+    /**
+     * Whether the ColorPicker should be displayed inside a popup.
+     */
+    shouldShowAsPopup?: boolean;
     /**
      * Whether the more options accordion should be displayed.
      */
     shouldShowMoreOptions?: boolean;
     /**
-     * Whether the ColorPicker should be displayed inside a popup.
+     * Whether the preset colors should be displayed.
      */
-    shouldShowAsPopup?: boolean;
+    shouldShowPresetColors?: boolean;
+    /**
+     * Whether the preview color should be displayed as text.
+     */
+    shouldShowPreviewColorString?: boolean;
+    /**
+     * Whether the preview color should be displayed round.
+     */
+    shouldShowRoundPreviewColor?: boolean;
+    /**
+     * Whether the transparency slider should be displayed.
+     */
+    shouldShowTransparencySlider?: boolean;
 }
 
 const ColorPicker = ({
@@ -52,11 +60,15 @@ const ColorPicker = ({
     shouldShowAsPopup = true,
     shouldShowTransparencySlider = false,
     shouldShowMoreOptions = false,
+    shouldShowRoundPreviewColor = true,
+    shouldShowPreviewColorString = true,
     onSelect,
 }: ColorPickerProps) => (
     <ColorPickerProvider selectedColor={selectedColor} onSelect={onSelect}>
         <StyledColorPicker>
             <ColorPickerWrapper
+                shouldShowPreviewColorString={shouldShowPreviewColorString}
+                shouldShowRoundPreviewColor={shouldShowRoundPreviewColor}
                 shouldShowTransparencySlider={shouldShowTransparencySlider}
                 presetColors={presetColors}
                 onPresetColorAdd={onPresetColorAdd}

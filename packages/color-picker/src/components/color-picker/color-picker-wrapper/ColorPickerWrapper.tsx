@@ -18,6 +18,8 @@ interface ColorPickerWrapperProps {
     shouldShowTransparencySlider: boolean;
     shouldShowMoreOptions: boolean;
     shouldShowAsPopup: boolean;
+    shouldShowPreviewColorString: boolean;
+    shouldShowRoundPreviewColor: boolean;
 }
 
 const ColorPickerWrapper = ({
@@ -28,6 +30,8 @@ const ColorPickerWrapper = ({
     shouldShowAsPopup,
     shouldShowTransparencySlider,
     shouldShowMoreOptions,
+    shouldShowRoundPreviewColor,
+    shouldShowPreviewColorString,
 }: ColorPickerWrapperProps) => {
     const { selectedColor } = useContext(ColorPickerContext);
 
@@ -57,10 +61,15 @@ const ColorPickerWrapper = ({
             {shouldShowAsPopup ? (
                 <Popup content={content}>
                     <StyledColorPickerWrapperInfo>
-                        <StyledColorPickerWrapperInfoColor $color={selectedColor} />
-                        <StyledColorPickerWrapperInfoText>
-                            {selectedColor}
-                        </StyledColorPickerWrapperInfoText>
+                        <StyledColorPickerWrapperInfoColor
+                            $color={selectedColor}
+                            $shouldShowRoundPreviewColor={shouldShowRoundPreviewColor}
+                        />
+                        {shouldShowPreviewColorString && (
+                            <StyledColorPickerWrapperInfoText>
+                                {selectedColor}
+                            </StyledColorPickerWrapperInfoText>
+                        )}
                     </StyledColorPickerWrapperInfo>
                 </Popup>
             ) : (
