@@ -113,7 +113,7 @@ const Button: FC<ButtonProps> = ({
                         exit={{ opacity: 0, width: 0 }}
                         initial={{ opacity: 0, width: 0 }}
                         key="children"
-                        style={{ overflow: 'hidden' }}
+                        // style={{ overflow: 'hidden' }}
                         transition={{ duration: 0.2 }}
                     >
                         {children}
