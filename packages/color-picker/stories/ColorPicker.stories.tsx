@@ -16,13 +16,7 @@ const Template: StoryFn<typeof ColorPicker> = ({ ...args }) => {
         { id: 'dhrsmjdhd', color: '#ff0099', isCustom: true },
     ]);
     const handlePresetAdd = (presetColor: IPresetColor) => {
-        setPresetColors((prevState) => {
-            const newPresetColors = prevState;
-
-            newPresetColors.push(presetColor);
-
-            return newPresetColors;
-        });
+        setPresetColors((prevState) => [...prevState, presetColor]);
     };
     const handlePresetRemove = (idToFilter: IPresetColor['id']) => {
         setPresetColors((prevState) => {

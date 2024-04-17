@@ -1,7 +1,11 @@
 import React, { useContext, useMemo } from 'react';
 import type { IPresetColor } from '../../../../../../types';
 import { ColorPickerContext } from '../../../../../ColorPickerProvider';
-import { StyledPresetColor } from './PresetColor.styles';
+import {
+    StyledPresetColor,
+    StyledPresetColorBackground,
+    StyledPresetColorColor,
+} from './PresetColor.styles';
 
 interface PresetColorProps {
     color: IPresetColor['color'];
@@ -41,7 +45,12 @@ const PresetColor = ({ color }: PresetColorProps) => {
         }
     };
 
-    return <StyledPresetColor onClick={handleClick} $color={color} $isSelected={isSelected} />;
+    return (
+        <StyledPresetColor onClick={handleClick} $isSelected={isSelected}>
+            <StyledPresetColorBackground />
+            <StyledPresetColorColor $color={color} />
+        </StyledPresetColor>
+    );
 };
 
 PresetColor.displayName = 'PresetColor';
