@@ -30,11 +30,9 @@ const ContentCard: FC<ContentCardProps> = ({
         [areaProvider.shouldChangeColor],
     );
 
-    console.log(areaProvider);
-
     return (
         <StyledContentCard onClick={onClick} $type={type} $shouldChangeColor={shouldChangeColor}>
-            {shouldChangeColor ? children : <AreaProvider>{children}</AreaProvider>}
+            <AreaProvider shouldChangeColor={!shouldChangeColor}>{children}</AreaProvider>
         </StyledContentCard>
     );
 };

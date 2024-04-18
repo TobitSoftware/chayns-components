@@ -9,8 +9,13 @@ type StyledContentCardProps = WithTheme<{
 
 export const StyledContentCard = styled.div<StyledContentCardProps>`
     border-radius: ${({ theme }: StyledContentCardProps) => theme.cardBorderRadius}px;
-    box-shadow: 0 2px 6px 0
-        rgba(0, 0, 0, ${({ theme }: StyledContentCardProps) => theme.cardShadow});
+
+    ${({ theme, $shouldChangeColor }: StyledContentCardProps) =>
+        !$shouldChangeColor &&
+        css`
+            box-shadow: 0 2px 6px 0 rgba(0, 0, 0, ${theme.cardShadow});
+        `};
+
     padding: 8px 12px;
 
     color: ${({ theme }: StyledContentCardProps) => theme.text};
@@ -22,10 +27,7 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
     ${({ $type, theme, $shouldChangeColor }: StyledContentCardProps) => {
         if ($type === ContentCardType.Default && $shouldChangeColor) {
             return css`
-                background-color: rgba(
-                    ${theme['secondary-000-rgb']},
-                    ${theme.cardBackgroundOpacity}
-                );
+                background-color: rgba(${theme['000-rgb']}, ${theme.cardBackgroundOpacity});
             `;
         }
 
