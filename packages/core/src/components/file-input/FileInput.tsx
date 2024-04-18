@@ -1,7 +1,7 @@
 import { createDialog, DialogType } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, { DragEvent, FC, ReactElement, useCallback, useMemo, useState } from 'react';
-import type { ImageDialogResult } from '../../types/fileInput';
+import type { FileInputFileItem, ImageDialogResult } from '../../types/fileInput';
 import { filterDuplicateFile, filterDuplicateFileUrls } from '../../utils/file';
 import { selectFiles } from '../../utils/fileDialog';
 import Icon from '../icon/Icon';
@@ -13,9 +13,14 @@ import {
     StyledFileInputText,
     StyledFileInputWrapper,
     StyledMotionFileInputList,
+    StyledUploadedFilesList,
 } from './FileInput.styles';
 
 export type FileInputProps = {
+    /**
+     * Already uploaded files to display.
+     */
+    files?: FileInputFileItem[];
     /**
      * An array of icons that should be displayed inside the FileInput
      */
@@ -51,7 +56,7 @@ export type FileInputProps = {
     /**
      * A function to be executed when a file is removed.
      */
-    onRemove?: (file: File | string) => void;
+    onRemove?: (file: File | FileInputFileItem | string) => void;
 };
 
 const FileInput: FC<FileInputProps> = ({
@@ -61,6 +66,7 @@ const FileInput: FC<FileInputProps> = ({
     onMaxFilesReached,
     maxFiles,
     onRemove,
+    files,
     onAdd,
     fileSelectionPlaceholder = 'Dateien hinzufügen',
     imageSelectPlaceholder,
@@ -81,7 +87,11 @@ const FileInput: FC<FileInputProps> = ({
             let tmp = newImages;
 
             if (maxFiles) {
-                tmp = newImages.slice(0, maxFiles - (internalFiles.length + internalImages.length));
+                tmp = newImages.slice(
+                    0,
+                    maxFiles -
+                        (internalFiles.length + internalImages.length + (files?.length ?? 0)),
+                );
             }
 
             if (tmp.length > 0 && typeof onAdd === 'function') {
@@ -90,14 +100,14 @@ const FileInput: FC<FileInputProps> = ({
 
             setInternalImages((prevState) => [...prevState, ...tmp]);
         },
-        [internalFiles.length, internalImages, maxFiles, onAdd],
+        [files?.length, internalFiles.length, internalImages, maxFiles, onAdd],
     );
 
     const handleAddFiles = useCallback(
-        (files: File[]) => {
+        (newFiles: File[]) => {
             const newFileItems: File[] = [];
 
-            files.forEach((file) => {
+            newFiles.forEach((file) => {
                 if (file && !filterDuplicateFile({ files: internalFiles, newFile: file })) {
                     newFileItems.push(file);
                 }
@@ -108,7 +118,8 @@ const FileInput: FC<FileInputProps> = ({
             if (maxFiles) {
                 tmp = newFileItems.slice(
                     0,
-                    maxFiles - (internalFiles.length + internalImages.length),
+                    maxFiles -
+                        (internalFiles.length + internalImages.length + (files?.length ?? 0)),
                 );
             }
 
@@ -118,12 +129,12 @@ const FileInput: FC<FileInputProps> = ({
 
             setInternalFiles((prevState) => [...prevState, ...tmp]);
         },
-        [internalFiles, internalImages.length, maxFiles, onAdd],
+        [files?.length, internalFiles, internalImages.length, maxFiles, onAdd],
     );
 
     const handleDeleteFile = useCallback(
         (fileName?: string) => {
-            let fileToDelete: File | string | undefined;
+            let fileToDelete: File | FileInputFileItem | string | undefined;
 
             const filteredFiles = internalFiles.filter((file) => {
                 const { name } = file;
@@ -149,13 +160,21 @@ const FileInput: FC<FileInputProps> = ({
                 setInternalImages(filteredImages);
             }
 
+            if (!fileToDelete) {
+                files?.forEach((file) => {
+                    if (file.url === fileName || file.name === fileName) {
+                        fileToDelete = file;
+                    }
+                });
+            }
+
             if (!fileToDelete || typeof onRemove !== 'function') {
                 return;
             }
 
             onRemove(fileToDelete);
         },
-        [internalFiles, internalImages, onRemove],
+        [files, internalFiles, internalImages, onRemove],
     );
 
     const isDisabled = useMemo(() => {
@@ -205,12 +224,12 @@ const FileInput: FC<FileInputProps> = ({
             return;
         }
 
-        const files = await selectFiles({
+        const newFiles = await selectFiles({
             multiple: true,
             type: fileTypes,
         });
 
-        handleAddFiles(files);
+        handleAddFiles(newFiles);
     }, [fileTypes, handleAddFiles, isDisabled]);
 
     const handleDrop = useCallback(
@@ -246,6 +265,27 @@ const FileInput: FC<FileInputProps> = ({
         return items;
     }, [handleDeleteFile, internalFiles, internalImages]);
 
+    const uploadedFiles = useMemo(() => {
+        const items: ReactElement[] = [];
+
+        const cutFiles = maxFiles ? files?.splice(0, maxFiles) : files;
+
+        cutFiles?.forEach(({ url, id, name }) => {
+            items.push(
+                <StyledMotionFileInputList
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    key={id}
+                    transition={{ duration: 0.25, type: 'tween' }}
+                >
+                    <FileListItem url={url} onRemove={handleDeleteFile} fileName={name} />
+                </StyledMotionFileInputList>,
+            );
+        });
+
+        return items;
+    }, [files, handleDeleteFile, maxFiles]);
+
     return useMemo(
         () => (
             <StyledFileInput>
@@ -268,10 +308,16 @@ const FileInput: FC<FileInputProps> = ({
                         </StyledFileInputContainer>
                     )}
                 </StyledFileInputWrapper>
-
                 <List>
                     <AnimatePresence initial={false}>{content}</AnimatePresence>
                 </List>
+                {uploadedFiles.length > 0 && (
+                    <StyledUploadedFilesList $shouldShowBorder={content.length > 0}>
+                        <List>
+                            <AnimatePresence initial={false}>{uploadedFiles}</AnimatePresence>
+                        </List>
+                    </StyledUploadedFilesList>
+                )}
             </StyledFileInput>
         ),
         [
@@ -281,6 +327,7 @@ const FileInput: FC<FileInputProps> = ({
             imageSelectPlaceholder,
             imageSelectIcons,
             content,
+            uploadedFiles,
             handleFileSelectionClick,
             handleDrop,
             handleImageSelectionClick,

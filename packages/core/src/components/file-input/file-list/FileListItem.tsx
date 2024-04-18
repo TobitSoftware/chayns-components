@@ -24,6 +24,7 @@ const FileListItem: FC<FileListItemProps> = ({ fileName, fileSize, fileType, onR
                     title={fileName ?? url}
                     subtitle={humanFileSize}
                     icons={url ? ['fa fa-file-image'] : [icon]}
+                    shouldShowSingleRightElementCentered
                     rightElements={[
                         <Icon
                             icons={['ts-wrong']}
@@ -33,7 +34,7 @@ const FileListItem: FC<FileListItemProps> = ({ fileName, fileSize, fileType, onR
                 />
             </StyledFileListItem>
         ),
-        [fileName, humanFileSize, icon, onRemove],
+        [fileName, humanFileSize, icon, onRemove, url],
     );
 };
 

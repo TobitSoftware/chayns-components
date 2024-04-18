@@ -19,6 +19,16 @@ type StyledFileInputContainerProps = WithTheme<{
     $isImageSelection?: boolean;
 }>;
 
+type StyledUploadedFilesListProps = WithTheme<{ $shouldShowBorder: boolean }>;
+
+export const StyledUploadedFilesList = styled.div<StyledUploadedFilesListProps>`
+    ${({ $shouldShowBorder, theme }: StyledUploadedFilesListProps) =>
+        $shouldShowBorder &&
+        css`
+            border-top: 1px solid ${theme.headline};
+        `}
+`;
+
 export const StyledFileInputContainer = styled.div<StyledFileInputContainerProps>`
     border: ${({ theme }: StyledFileInputContainerProps) => theme.text} 1px dotted;
     display: flex;
