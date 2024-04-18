@@ -78,6 +78,8 @@ const AmountControl: FC<AmountControlProps> = ({
         }
     }, [amountValue, maxAmount]);
 
+    const hasFocus = useMemo(() => displayState !== 'default', [displayState]);
+
     /**
      * Function that sets the amountValue to the amount
      */
@@ -200,6 +202,7 @@ const AmountControl: FC<AmountControlProps> = ({
                 <StyledAmountControlInput
                     $displayState={displayState}
                     $shouldShowIcon={shouldShowIcon}
+                    $hasFocus={hasFocus}
                     onBlur={handleInputBlur}
                     onChange={handleInputChange}
                     value={displayState === 'default' && label ? label : inputValue}

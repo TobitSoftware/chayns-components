@@ -15,6 +15,7 @@ export const StyledAmountControl = styled.div<StyledAmountControlProps>`
 type StyledAmountControlInputProps = WithTheme<{
     $displayState: DisplayState;
     $shouldShowIcon: boolean;
+    $hasFocus: boolean;
 }>;
 
 export const StyledAmountControlInput = styled.input<StyledAmountControlInputProps>`
@@ -23,20 +24,21 @@ export const StyledAmountControlInput = styled.input<StyledAmountControlInputPro
     height: 28px;
     width: 95px;
     text-align: center;
+    cursor: ${({ $hasFocus }) => ($hasFocus ? 'text' : 'pointer')};
+
     ${({ $displayState }) =>
         $displayState !== 'normal' &&
         css`
             border-bottom-right-radius: 3px;
             border-top-right-radius: 3px;
         `}
-
     ${({ $displayState, $shouldShowIcon }) =>
         $displayState === 'default' &&
         !$shouldShowIcon &&
         css`
             border-bottom-left-radius: 3px;
             border-top-left-radius: 3px;
-        `}
+        `};
 `;
 
 type StyledAmountControlButtonProps = WithTheme<{
