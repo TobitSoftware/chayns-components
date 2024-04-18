@@ -5,6 +5,7 @@ export { default as AccordionGroup } from './components/accordion/accordion-grou
 export { default as AccordionIntro } from './components/accordion/accordion-intro/AccordionIntro';
 export { default as AccordionItem } from './components/accordion/accordion-item/AccordionItem';
 export { default as AmountControl } from './components/amount-control/AmountControl';
+export { AreaProviderContext } from './components/area-provider/AreaProvider';
 export { default as Badge } from './components/badge/Badge';
 export { default as Button } from './components/button/Button';
 export { default as Checkbox } from './components/checkbox/Checkbox';
