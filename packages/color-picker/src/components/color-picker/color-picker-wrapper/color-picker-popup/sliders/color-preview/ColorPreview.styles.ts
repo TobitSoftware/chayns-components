@@ -5,6 +5,9 @@ export const StyledColorPreview = styled.div`
     width: 40px;
     aspect-ratio: 1;
     position: relative;
+
+    border-radius: 2px;
+    overflow: hidden;
 `;
 
 export const StyledColorPreviewBackground = styled.div`
