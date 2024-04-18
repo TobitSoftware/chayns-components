@@ -7,6 +7,7 @@ import React, {
     KeyboardEventHandler,
     ReactNode,
     useCallback,
+    useContext,
     useEffect,
     useImperativeHandle,
     useMemo,
@@ -15,6 +16,7 @@ import React, {
     type ReactElement,
 } from 'react';
 import { useTheme } from 'styled-components';
+import { AreaProviderContext } from '../area-provider/AreaProvider';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import {
@@ -145,9 +147,16 @@ const Input = forwardRef<InputRef, InputProps>(
     ) => {
         const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
 
+        const areaProvider = useContext(AreaProviderContext);
+
         const theme = useTheme() as Theme;
 
         const inputRef = useRef<HTMLInputElement>(null);
+
+        const shouldChangeColor = useMemo(
+            () => areaProvider.shouldChangeColor ?? false,
+            [areaProvider.shouldChangeColor],
+        );
 
         const handleClearIconClick = useCallback(() => {
             if (inputRef.current) {
@@ -202,6 +211,7 @@ const Input = forwardRef<InputRef, InputProps>(
         return (
             <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
                 <StyledInputContentWrapper
+                    $shouldChangeColor={shouldChangeColor}
                     $isInvalid={isInvalid}
                     $shouldRoundRightCorners={shouldShowBorder}
                     $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}

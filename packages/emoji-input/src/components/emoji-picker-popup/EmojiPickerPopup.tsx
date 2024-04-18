@@ -1,4 +1,4 @@
-import { Icon } from '@chayns-components/core';
+import { AreaProvider, Icon } from '@chayns-components/core';
 import { AnimatePresence } from 'framer-motion';
 import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { PopupAlignment } from '../../constants/alignment';
@@ -179,11 +179,13 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
                         style={position}
                         transition={{ type: 'tween' }}
                     >
-                        <EmojiPicker
-                            accessToken={accessToken}
-                            onSelect={onSelect}
-                            personId={personId}
-                        />
+                        <AreaProvider shouldChangeColor={false}>
+                            <EmojiPicker
+                                accessToken={accessToken}
+                                onSelect={onSelect}
+                                personId={personId}
+                            />
+                        </AreaProvider>
                     </StyledMotionEmojiPickerPopupContent>
                 )}
             </AnimatePresence>

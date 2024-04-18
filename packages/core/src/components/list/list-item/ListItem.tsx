@@ -9,6 +9,7 @@ import React, {
     useEffect,
 } from 'react';
 import { useUuid } from '../../../hooks/uuid';
+import AreaProvider from '../../area-provider/AreaProvider';
 import { ListContext } from '../List';
 import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
@@ -177,7 +178,11 @@ const ListItem: FC<ListItemProps> = ({
                 titleElement={titleElement}
             />
             <AnimatePresence initial={false}>
-                {isExpandable && isItemOpen && <ListItemBody id={uuid}>{children}</ListItemBody>}
+                {isExpandable && isItemOpen && (
+                    <ListItemBody id={uuid}>
+                        <AreaProvider>{children}</AreaProvider>
+                    </ListItemBody>
+                )}
             </AnimatePresence>
         </StyledMotionListItem>
     );

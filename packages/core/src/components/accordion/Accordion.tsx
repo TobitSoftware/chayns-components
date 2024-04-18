@@ -12,6 +12,7 @@ import React, {
     useState,
 } from 'react';
 import { useUuid } from '../../hooks/uuid';
+import AreaProvider from '../area-provider/AreaProvider';
 import AccordionBody from './accordion-body/AccordionBody';
 import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';
@@ -255,7 +256,7 @@ const Accordion: FC<AccordionProps> = ({
                                 onScroll={onBodyScroll}
                                 shouldHideBody={shouldRenderClosed && !isOpen}
                             >
-                                {children}
+                                <AreaProvider>{children}</AreaProvider>
                             </AccordionBody>
                         )}
                     </AnimatePresence>

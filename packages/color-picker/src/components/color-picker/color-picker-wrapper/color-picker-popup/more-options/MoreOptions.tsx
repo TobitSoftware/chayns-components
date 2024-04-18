@@ -1,6 +1,6 @@
-import { Accordion, AccordionGroup } from '@chayns-components/core';
+import { Accordion, AccordionGroup, AreaProviderContext } from '@chayns-components/core';
 import { isHex } from '@chayns/colors';
-import React, { useContext, useEffect, useState, type ChangeEvent } from 'react';
+import React, { useContext, useEffect, useMemo, useState, type ChangeEvent } from 'react';
 import { extractRgbValues, hexToRgb, isValidRGBA, rgbToHex } from '../../../../../utils/color';
 import { ColorPickerContext } from '../../../../ColorPickerProvider';
 import {
@@ -12,11 +12,17 @@ import {
 const MoreOptions = () => {
     const { selectedColor, updateSelectedColor, updateShouldCallOnSelect } =
         useContext(ColorPickerContext);
+    const areaProvider = useContext(AreaProviderContext);
 
     const [tmpHexValue, setTmpHexValue] = useState('');
     const [tmpRgbValue, setTmpRgbValue] = useState('');
     const [isHexInvalid, setIsHexInvalid] = useState(false);
     const [isRgbInvalid, setIsRgbInvalid] = useState(false);
+
+    const shouldChangeColor = useMemo(
+        () => areaProvider.shouldChangeColor ?? false,
+        [areaProvider.shouldChangeColor],
+    );
 
     const handleHexChange = (event: ChangeEvent<HTMLInputElement>) => {
         setTmpHexValue(event.target.value);
@@ -65,11 +71,13 @@ const MoreOptions = () => {
                 <Accordion title="Erweitert">
                     <StyledMoreOptionsInputWrapper>
                         <StyledMoreOptionsInput
+                            $shouldChangeColor={shouldChangeColor}
                             value={tmpHexValue}
                             onChange={handleHexChange}
                             $isInvalid={isHexInvalid}
                         />
                         <StyledMoreOptionsInput
+                            $shouldChangeColor={shouldChangeColor}
                             value={tmpRgbValue}
                             onChange={handleRgbChange}
                             $isInvalid={isRgbInvalid}

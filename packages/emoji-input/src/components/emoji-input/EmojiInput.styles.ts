@@ -4,11 +4,12 @@ import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import { getFontFamily } from '../../utils/font';
 
-type StyledEmojiInputProps = WithTheme<{ $isDisabled?: boolean }>;
+type StyledEmojiInputProps = WithTheme<{ $isDisabled?: boolean; $shouldChangeColor: boolean }>;
 
 export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     align-items: center;
-    background-color: ${({ theme }: StyledEmojiInputProps) => theme['100']};
+    background-color: ${({ theme, $shouldChangeColor }: StyledEmojiInputProps) =>
+        theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
     border-radius: 3px;
     display: flex;
     min-height: 42px;

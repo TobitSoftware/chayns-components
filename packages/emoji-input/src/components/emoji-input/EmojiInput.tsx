@@ -1,3 +1,4 @@
+import { AreaProviderContext } from '@chayns-components/core';
 import { getDevice } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
@@ -12,6 +13,7 @@ import React, {
     ReactElement,
     ReactNode,
     useCallback,
+    useContext,
     useEffect,
     useImperativeHandle,
     useLayoutEffect,
@@ -167,6 +169,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const [isPrefixAnimationFinished, setIsPrefixAnimationFinished] = useState(!prefixElement);
         const [prefixElementWidth, setPrefixElementWidth] = useState<number | undefined>();
 
+        const areaProvider = useContext(AreaProviderContext);
+
         const editorRef = useRef<HTMLDivElement>(null);
         const prefixElementRef = useRef<HTMLDivElement>(null);
         const hasPrefixRendered = useRef(false);
@@ -176,6 +180,11 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const valueRef = useRef(value);
 
         const { browser } = getDevice();
+
+        const shouldChangeColor = useMemo(
+            () => areaProvider.shouldChangeColor ?? false,
+            [areaProvider.shouldChangeColor],
+        );
 
         /**
          * This function updates the content of the 'contentEditable' element if the new text is
@@ -619,7 +628,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         }, [isDisabled]);
 
         return (
-            <StyledEmojiInput $isDisabled={isDisabled}>
+            <StyledEmojiInput $isDisabled={isDisabled} $shouldChangeColor={shouldChangeColor}>
                 <AnimatePresence initial>
                     {progressDuration > 0 && (
                         <StyledMotionEmojiInputProgress

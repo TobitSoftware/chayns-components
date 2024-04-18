@@ -14,6 +14,7 @@ import React, {
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
 import { PopupAlignment, PopupCoordinates, PopupRef } from '../../types/popup';
+import AreaProvider from '../area-provider/AreaProvider';
 import PopupContentWrapper from './popup-content-wrapper/PopupContentWrapper';
 import { StyledPopup, StyledPopupPseudo } from './Popup.styles';
 
@@ -203,7 +204,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                                 ref={popupContentRef}
                                 onMouseLeave={handleMouseLeave}
                             >
-                                {content}
+                                <AreaProvider shouldChangeColor={false}>{content}</AreaProvider>
                             </PopupContentWrapper>
                         )}
                     </AnimatePresence>,

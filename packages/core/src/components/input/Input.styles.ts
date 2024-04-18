@@ -14,12 +14,13 @@ type StyledInputContentWrapperProps = WithTheme<{
     $shouldRoundRightCorners: boolean;
     $shouldShowOnlyBottomBorder?: boolean;
     $isInvalid?: boolean;
+    $shouldChangeColor: boolean;
 }>;
 
 export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
     align-items: center;
-    background-color: ${({ theme }: StyledInputContentWrapperProps) =>
-        theme.colorMode === 'classic' ? theme['000'] : theme['100']};
+    background-color: ${({ theme, $shouldChangeColor }: StyledInputContentWrapperProps) =>
+        theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
     border: 1px solid
         ${({ theme, $isInvalid }: StyledInputContentWrapperProps) =>
             $isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)'};

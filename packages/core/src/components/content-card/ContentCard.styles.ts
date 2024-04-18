@@ -4,6 +4,7 @@ import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledContentCardProps = WithTheme<{
     $type: ContentCardType;
+    $shouldChangeColor: boolean;
 }>;
 
 export const StyledContentCard = styled.div<StyledContentCardProps>`
@@ -12,11 +13,22 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
         rgba(0, 0, 0, ${({ theme }: StyledContentCardProps) => theme.cardShadow});
     padding: 8px 12px;
 
+    color: ${({ theme }: StyledContentCardProps) => theme.text};
+
     &:not(:last-child) {
         margin-bottom: 8px;
     }
 
-    ${({ $type, theme }: StyledContentCardProps) => {
+    ${({ $type, theme, $shouldChangeColor }: StyledContentCardProps) => {
+        if ($type === ContentCardType.Default && $shouldChangeColor) {
+            return css`
+                background-color: rgba(
+                    ${theme['secondary-000-rgb']},
+                    ${theme.cardBackgroundOpacity}
+                );
+            `;
+        }
+
         switch ($type) {
             case ContentCardType.Error:
                 return css`

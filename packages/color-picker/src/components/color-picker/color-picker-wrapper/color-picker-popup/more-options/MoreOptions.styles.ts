@@ -9,7 +9,7 @@ export const StyledMoreOptionsInputWrapper = styled.div`
     align-items: center;
 `;
 
-type StyledMoreOptionsInputProps = WithTheme<{ $isInvalid: boolean }>;
+type StyledMoreOptionsInputProps = WithTheme<{ $isInvalid: boolean; $shouldChangeColor: boolean }>;
 
 export const StyledMoreOptionsInput = styled.input<StyledMoreOptionsInputProps>`
     width: 100%;
@@ -17,8 +17,8 @@ export const StyledMoreOptionsInput = styled.input<StyledMoreOptionsInputProps>`
     border: 1px solid
         ${({ theme, $isInvalid }: StyledMoreOptionsInputProps) =>
             $isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)'};
-    background-color: ${({ theme }: StyledMoreOptionsInputProps) =>
-        theme.colorMode === 'classic' ? theme['000'] : theme['100']};
+    background-color: ${({ theme, $shouldChangeColor }: StyledMoreOptionsInputProps) =>
+        theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
     color: ${({ theme, $isInvalid }: StyledMoreOptionsInputProps) =>
         $isInvalid ? theme.wrong : theme.text};
     padding: 8px 10px;
