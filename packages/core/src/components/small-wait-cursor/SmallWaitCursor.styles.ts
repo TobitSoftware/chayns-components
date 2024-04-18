@@ -8,7 +8,7 @@ import type {
 
 type StyledSmallWaitCursorProps = WithTheme<{
     $shouldShowWaitCursor: boolean;
-    $size: SmallWaitCursorSize;
+    $size: SmallWaitCursorSize | number;
 }>;
 
 export const StyledSmallWaitCursor = styled.div<StyledSmallWaitCursorProps>`
@@ -34,7 +34,7 @@ export const StyledSmallWaitCursorBackground = styled.div<StyledSmallWaitCursorB
 
 type StyledSmallWaitCursorWaitCursorProps = WithTheme<{
     $color: SmallWaitCursorProps['color'];
-    $size: SmallWaitCursorSize;
+    $size: SmallWaitCursorSize | number;
     $speed: SmallWaitCursorSpeed;
 }>;
 

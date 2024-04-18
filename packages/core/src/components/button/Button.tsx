@@ -4,7 +4,7 @@ import React, { FC, MouseEventHandler, ReactNode } from 'react';
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
-import SmallWaitCursor, { SmallWaitCursorSize } from '../small-wait-cursor/SmallWaitCursor';
+import SmallWaitCursor from '../small-wait-cursor/SmallWaitCursor';
 import {
     StyledIconWrapper,
     StyledMotionButton,
@@ -100,11 +100,7 @@ const Button: FC<ButtonProps> = ({
                         style={{ overflow: 'hidden' }}
                         transition={{ duration: 0.2 }}
                     >
-                        <SmallWaitCursor
-                            color="white"
-                            shouldHideBackground
-                            size={SmallWaitCursorSize.Small}
-                        />
+                        <SmallWaitCursor color="white" shouldHideBackground size={26} />
                     </StyledMotionWaitCursorWrapper>
                 )}
                 {!shouldShowWaitCursor && children && (

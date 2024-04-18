@@ -31,7 +31,7 @@ export type SmallWaitCursorProps = {
     /**
      * The size of the wait cursor in pixels. Use the SmallWaitCursorSize enum for this prop.
      */
-    size?: SmallWaitCursorSize;
+    size?: SmallWaitCursorSize | number;
     /**
      * The speed of the animation in seconds. Use the SmallWaitCursorSpeed enum for this prop.
      */
