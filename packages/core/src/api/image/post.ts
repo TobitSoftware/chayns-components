@@ -1,4 +1,4 @@
-import { getAccessToken, getUser } from 'chayns-api';
+import { getAccessToken, getSite, getUser } from 'chayns-api';
 import type { Meta } from '../../types/file';
 import { getFileAsArrayBuffer } from '../../utils/fileDialog';
 
@@ -10,6 +10,7 @@ export interface PostImageResult {
 
 interface PostImageOptions {
     file: File;
+    shouldUploadImageToSite?: boolean;
 }
 
 /**
@@ -17,12 +18,20 @@ interface PostImageOptions {
  */
 export const postImage = async ({
     file,
+    shouldUploadImageToSite,
 }: PostImageOptions): Promise<PostImageResult | undefined> => {
     const { accessToken } = await getAccessToken();
     const user = getUser();
+    const site = getSite();
 
     if (!accessToken || !user?.personId) {
         return undefined;
+    }
+
+    let head: { [key: string]: string } = { 'X-Person-Id': user.personId };
+
+    if (shouldUploadImageToSite && site.id) {
+        head = { 'X-Site-Id': site.id };
     }
 
     const body = await getFileAsArrayBuffer(file);
@@ -33,7 +42,7 @@ export const postImage = async ({
             Accept: 'application/json',
             Authorization: `bearer ${accessToken}`,
             'Content-Type': 'image/*',
-            'X-Person-Id': user.personId,
+            ...head,
         },
         method: 'POST',
     });

@@ -5,9 +5,14 @@ import type { Image, InternalFileItem, Video } from '../types/file';
 interface UploadFilesOptions {
     fileToUpload: InternalFileItem;
     callback: (UploadedFile: Video | Image) => void;
+    shouldUploadImageToSite?: boolean;
 }
 
-export const uploadFile = async ({ fileToUpload, callback }: UploadFilesOptions): Promise<void> => {
+export const uploadFile = async ({
+    fileToUpload,
+    callback,
+    shouldUploadImageToSite,
+}: UploadFilesOptions): Promise<void> => {
     if (!fileToUpload || fileToUpload.state !== 'none') {
         return;
     }
@@ -24,7 +29,7 @@ export const uploadFile = async ({ fileToUpload, callback }: UploadFilesOptions)
     }
 
     if (fileToUpload.file?.type.includes('image/')) {
-        const uploadedImage = await postImage({ file: fileToUpload.file });
+        const uploadedImage = await postImage({ file: fileToUpload.file, shouldUploadImageToSite });
 
         if (uploadedImage) {
             callback({
