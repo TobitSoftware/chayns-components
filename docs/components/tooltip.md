@@ -39,24 +39,23 @@ import { Tooltip } from 'chayns-components';
 
 The `Tooltip`-component takes the following props:
 
-| Name                                        | Type                                                                                                                       | Default                                                    | Required |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | :------: |
-| [content](#content)                         | `{ text: string, headline: string, imageUrl: string, buttonText: string, buttonOnClick: function } \| { html: ReactNode }` |                                                            |    ✓     |
-| [children](#children)                       | `ReactNode`                                                                                                                |                                                            |          |
-| [bindListeners](#bindlisteners)             | `boolean`                                                                                                                  | `false`                                                    |          |
-| [position](#position)                       | `number`                                                                                                                   |                                                            |          |
-| [minWidth](#minwidth)                       | `number`                                                                                                                   | `100`                                                      |          |
-| [maxWidth](#maxwidth)                       | `number`                                                                                                                   | `250`                                                      |          |
-| [removeIcon](#removeicon)                   | `boolean`                                                                                                                  | `typeof chayns !== 'undefined' ? chayns.env.isIOS : false` |          |
-| [parent](#parent)                           | `custom`                                                                                                                   |                                                            |          |
-| [coordinates](#coordinates)                 | `{ x: number, y: number }`                                                                                                 |                                                            |          |
-| [childrenStyle](#childrenstyle)             | `{ [key: string]: string \| number }`                                                                                      |                                                            |          |
-| [childrenClassNames](#childrenclassnames)   | `string`                                                                                                                   |                                                            |          |
-| [preventTriggerStyle](#preventtriggerstyle) | `boolean`                                                                                                                  | `false`                                                    |          |
-| [hideOnChildrenLeave](#hideonchildrenleave) | `boolean`                                                                                                                  | `false`                                                    |          |
-| [removeParentSpace](#removeparentspace)     | `boolean`                                                                                                                  | `false`                                                    |          |
-| [isIOS](#isios)                             | `boolean`                                                                                                                  | `typeof chayns !== 'undefined' ? chayns.env.isIOS : false` |          |
-| [stopPropagation](#stoppropagation)         | `boolean`                                                                                                                  | `false`                                                    |          |
+| Name                                        | Type                                                                                                                       | Default | Required |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------- | :------: |
+| [content](#content)                         | `{ text: string, headline: string, imageUrl: string, buttonText: string, buttonOnClick: function } \| { html: ReactNode }` |         |    ✓     |
+| [children](#children)                       | `ReactNode`                                                                                                                |         |          |
+| [bindListeners](#bindlisteners)             | `boolean`                                                                                                                  | `false` |          |
+| [position](#position)                       | `number`                                                                                                                   |         |          |
+| [minWidth](#minwidth)                       | `number`                                                                                                                   | `100`   |          |
+| [maxWidth](#maxwidth)                       | `number`                                                                                                                   | `250`   |          |
+| [removeIcon](#removeicon)                   | `boolean`                                                                                                                  |         |          |
+| [parent](#parent)                           | `custom`                                                                                                                   |         |          |
+| [coordinates](#coordinates)                 | `{ x: number, y: number }`                                                                                                 |         |          |
+| [childrenStyle](#childrenstyle)             | `{ [key: string]: string \| number }`                                                                                      |         |          |
+| [childrenClassNames](#childrenclassnames)   | `string`                                                                                                                   |         |          |
+| [preventTriggerStyle](#preventtriggerstyle) | `boolean`                                                                                                                  | `false` |          |
+| [hideOnChildrenLeave](#hideonchildrenleave) | `boolean`                                                                                                                  | `false` |          |
+| [removeParentSpace](#removeparentspace)     | `boolean`                                                                                                                  | `false` |          |
+| [stopPropagation](#stoppropagation)         | `boolean`                                                                                                                  | `false` |          |
 
 ### `content`
 
@@ -202,16 +201,6 @@ removeParentSpace?: boolean
 
 Removes any padding of the page from the tooltip position. This is only needed
 when the parent is padded to the page and is relatively positioned.
-
----
-
-### `isIOS`
-
-```ts
-isIOS?: boolean
-```
-
-Wether the target device is iOS (only relevant during serverside rendering).
 
 ---
 

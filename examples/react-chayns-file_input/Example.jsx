@@ -41,12 +41,10 @@ const FileInputExample = () => {
 
     const upload = useCallback(() => {
         images.forEach(async (image) => {
-            const result = await imageUpload(
-                image.file || image.url,
-                'componentsTestUpload',
-                chayns.env.user.personId,
-                chayns.env.site.id
-            );
+            const result = await imageUpload(image.file || image.url, {
+                personId: chayns.env.user.personId,
+                siteId: chayns.env.site.id,
+            });
             console.log('Uploaded image', result);
             setDisplayPath(`${displayPath}${result.base}/${result.key}\n`);
         });
