@@ -1,5 +1,5 @@
 import React, { CSSProperties, FC, useCallback, useMemo } from 'react';
-import { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';
+import type { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';
 import Icon from '../../icon/Icon';
 import {
     StyledFilterButtonItem,
@@ -41,9 +41,7 @@ const FilterButton: FC<FilterButtonProps> = ({
         () => (
             <StyledFilterButtonItem $isSelected={isSelected} $size={size} onClick={handleClick}>
                 <StyledFilterButtonItemLabel>
-                    {icons && (
-                        <Icon icons={icons} size={size === FilterButtonSize.Normal ? 15 : 10} />
-                    )}
+                    {icons && <Icon icons={icons} size={15} />}
                     <StyledFilterButtonItemLabelText>{text}</StyledFilterButtonItemLabelText>
                     {count && (
                         <StyledFilterButtonItemLabelCount>{count}</StyledFilterButtonItemLabelCount>

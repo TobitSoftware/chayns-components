@@ -8,10 +8,14 @@ type StyledFilterButtonItemProps = WithTheme<{ $size: FilterButtonSize; $isSelec
 
 export const StyledFilterButtonItem = styled.div<StyledFilterButtonItemProps>`
     position: relative;
-    font-size: ${({ $size }) => ($size === FilterButtonSize.Normal ? 15 : 12)}px;
+    font-size: 15px;
+    line-height: 1em;
     cursor: pointer;
     user-select: none;
-    padding: 3px 14px;
+    padding: ${({ $size }) => ($size === FilterButtonSize.Normal ? '8px 14px' : '4px 8px')};
+
+    display: flex;
+    align-items: center;
 
     &:hover > div:last-child {
         ${({ $isSelected }) =>
