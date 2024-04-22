@@ -6,9 +6,9 @@ export { default as AccordionIntro } from './components/accordion/accordion-intr
 export { default as AccordionItem } from './components/accordion/accordion-item/AccordionItem';
 export { default as AmountControl } from './components/amount-control/AmountControl';
 export {
-    AreaProviderContext,
+    AreaContext,
     default as AreaProvider,
-} from './components/area-provider/AreaProvider';
+} from './components/area-provider/AreaContextProvider';
 export { default as Badge } from './components/badge/Badge';
 export { default as Button } from './components/button/Button';
 export { default as Checkbox } from './components/checkbox/Checkbox';

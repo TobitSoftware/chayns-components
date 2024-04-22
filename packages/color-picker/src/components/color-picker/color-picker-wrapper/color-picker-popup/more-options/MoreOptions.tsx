@@ -1,4 +1,4 @@
-import { Accordion, AccordionGroup, AreaProviderContext } from '@chayns-components/core';
+import { Accordion, AccordionGroup, AreaContext } from '@chayns-components/core';
 import { isHex } from '@chayns/colors';
 import React, { useContext, useEffect, useMemo, useState, type ChangeEvent } from 'react';
 import { extractRgbValues, hexToRgb, isValidRGBA, rgbToHex } from '../../../../../utils/color';
@@ -12,7 +12,7 @@ import {
 const MoreOptions = () => {
     const { selectedColor, updateSelectedColor, updateShouldCallOnSelect } =
         useContext(ColorPickerContext);
-    const areaProvider = useContext(AreaProviderContext);
+    const areaProvider = useContext(AreaContext);
 
     const [tmpHexValue, setTmpHexValue] = useState('');
     const [tmpRgbValue, setTmpRgbValue] = useState('');

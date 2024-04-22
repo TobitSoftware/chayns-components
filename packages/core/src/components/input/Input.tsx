@@ -16,7 +16,7 @@ import React, {
     type ReactElement,
 } from 'react';
 import { useTheme } from 'styled-components';
-import { AreaProviderContext } from '../area-provider/AreaProvider';
+import { AreaContext } from '../area-provider/AreaContextProvider';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import {
@@ -147,7 +147,7 @@ const Input = forwardRef<InputRef, InputProps>(
     ) => {
         const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
 
-        const areaProvider = useContext(AreaProviderContext);
+        const areaProvider = useContext(AreaContext);
 
         const theme = useTheme() as Theme;
 

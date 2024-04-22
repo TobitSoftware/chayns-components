@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useContext, useMemo } from 'react';
 import { ContentCardType } from '../../types/contentCard';
-import AreaProvider, { AreaProviderContext } from '../area-provider/AreaProvider';
+import AreaContextProvider, { AreaContext } from '../area-provider/AreaContextProvider';
 import { StyledContentCard } from './ContentCard.styles';
 
 export type ContentCardProps = {
@@ -23,7 +23,7 @@ const ContentCard: FC<ContentCardProps> = ({
     onClick,
     type = ContentCardType.Default,
 }) => {
-    const areaProvider = useContext(AreaProviderContext);
+    const areaProvider = useContext(AreaContext);
 
     const shouldChangeColor = useMemo(
         () => areaProvider.shouldChangeColor ?? false,
@@ -32,7 +32,9 @@ const ContentCard: FC<ContentCardProps> = ({
 
     return (
         <StyledContentCard onClick={onClick} $type={type} $shouldChangeColor={shouldChangeColor}>
-            <AreaProvider shouldChangeColor={!shouldChangeColor}>{children}</AreaProvider>
+            <AreaContextProvider shouldChangeColor={!shouldChangeColor}>
+                {children}
+            </AreaContextProvider>
         </StyledContentCard>
     );
 };

@@ -1,4 +1,4 @@
-import { AreaProviderContext } from '@chayns-components/core';
+import { AreaContext } from '@chayns-components/core';
 import { getDevice } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
@@ -169,7 +169,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const [isPrefixAnimationFinished, setIsPrefixAnimationFinished] = useState(!prefixElement);
         const [prefixElementWidth, setPrefixElementWidth] = useState<number | undefined>();
 
-        const areaProvider = useContext(AreaProviderContext);
+        const areaProvider = useContext(AreaContext);
 
         const editorRef = useRef<HTMLDivElement>(null);
         const prefixElementRef = useRef<HTMLDivElement>(null);
