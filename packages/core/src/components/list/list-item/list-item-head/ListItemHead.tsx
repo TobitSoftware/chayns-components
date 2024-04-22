@@ -4,10 +4,12 @@ import React, {
     ReactNode,
     TouchEventHandler,
     useCallback,
+    useEffect,
     useMemo,
     useRef,
     useState,
 } from 'react';
+import { useElementSize } from '../../../../hooks/useElementSize';
 import Icon from '../../../icon/Icon';
 import ListItemIcon from './list-item-icon/ListItemIcon';
 import ListItemImage from './list-item-image/ListItemImage';
@@ -15,17 +17,25 @@ import {
     StyledListItemHead,
     StyledListItemHeadBottomRightElement,
     StyledListItemHeadContent,
+    StyledListItemHeadLeftWrapper,
     StyledListItemHeadRightElement,
     StyledListItemHeadSubtitle,
     StyledListItemHeadSubtitleText,
+    StyledListItemHeadSubtitleTextPseudo,
     StyledListItemHeadTitle,
     StyledListItemHeadTitleContent,
     StyledListItemHeadTitleElement,
     StyledListItemHeadTitleText,
+    StyledListItemHeadTitleTextPseudo,
     StyledListItemHeadTopRightElement,
     StyledMotionListItemHeadHoverItem,
     StyledMotionListItemHeadIndicator,
 } from './ListItemHead.styles';
+
+interface HeadHeight {
+    closed: number;
+    open: number;
+}
 
 type ListItemHeadProps = {
     hoverItem?: ReactNode;
@@ -63,12 +73,48 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     titleElement,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
+    const [headHeight, setHeadHeight] = useState<HeadHeight>({
+        closed: 40,
+        open: 40,
+    });
 
     const longPressTimeoutRef = useRef<number>();
+    const pseudoTitleOpenRef = useRef<HTMLDivElement>(null);
+    const pseudoTitleClosedRef = useRef<HTMLDivElement>(null);
+    const pseudoSubtitleOpenRef = useRef<HTMLDivElement>(null);
+    const pseudoSubtitleClosedRef = useRef<HTMLDivElement>(null);
+
+    const closedTitle = useElementSize(pseudoTitleClosedRef);
+    const openedTitle = useElementSize(pseudoTitleOpenRef);
+    const closedSubtitle = useElementSize(pseudoSubtitleClosedRef);
+    const openedSubtitle = useElementSize(pseudoSubtitleOpenRef);
+
+    useEffect(() => {
+        if (closedTitle && openedTitle) {
+            setHeadHeight({
+                closed:
+                    subtitle && closedSubtitle
+                        ? closedSubtitle.height + 4 + closedTitle.height + 24
+                        : closedTitle.height + 24,
+                open:
+                    subtitle && openedSubtitle
+                        ? openedSubtitle.height + 4 + openedTitle.height + 24
+                        : openedTitle.height + 24,
+            });
+        }
+    }, [closedSubtitle, closedTitle, openedSubtitle, openedTitle, subtitle]);
 
     const handleMouseEnter = useCallback(() => setShouldShowHoverItem(true), []);
 
     const handleMouseLeave = useCallback(() => setShouldShowHoverItem(false), []);
+
+    const marginTop = useMemo(() => {
+        if (headHeight.closed < 64) {
+            return (64 - headHeight.closed) / 2;
+        }
+
+        return 0;
+    }, [headHeight.closed]);
 
     const handleTouchStart = useCallback<TouchEventHandler<HTMLDivElement>>(
         (event) => {
@@ -99,6 +145,9 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     return (
         <StyledListItemHead
+            animate={{ height: isOpen ? headHeight.open : headHeight.closed }}
+            initial={false}
+            transition={{ duration: 0.2, type: 'tween' }}
             className="beta-chayns-list-item-head"
             $isClickable={typeof onClick === 'function' || isExpandable}
             $isAnyItemExpandable={isAnyItemExpandable}
@@ -108,23 +157,35 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             onTouchStart={typeof onLongPress === 'function' ? handleTouchStart : undefined}
             onTouchEnd={typeof onLongPress === 'function' ? handleTouchEnd : undefined}
         >
-            {isAnyItemExpandable && (
-                <StyledMotionListItemHeadIndicator
-                    animate={{ rotate: isOpen ? 90 : 0 }}
-                    initial={false}
-                    transition={{ type: 'tween' }}
-                >
-                    {isExpandable && <Icon icons={['fa fa-chevron-right']} />}
-                </StyledMotionListItemHeadIndicator>
-            )}
-            {leftElements}
-            {iconOrImageElement}
+            <StyledListItemHeadLeftWrapper>
+                {isAnyItemExpandable && (
+                    <StyledMotionListItemHeadIndicator
+                        animate={{ rotate: isOpen ? 90 : 0 }}
+                        initial={false}
+                        transition={{ type: 'tween' }}
+                    >
+                        {isExpandable && <Icon icons={['fa fa-chevron-right']} />}
+                    </StyledMotionListItemHeadIndicator>
+                )}
+                {leftElements}
+                {iconOrImageElement}
+            </StyledListItemHeadLeftWrapper>
             <StyledListItemHeadContent
                 $isIconOrImageGiven={iconOrImageElement !== undefined}
+                $marginTop={marginTop}
                 $isOpen={isOpen}
             >
                 <StyledListItemHeadTitle>
                     <StyledListItemHeadTitleContent>
+                        <StyledListItemHeadTitleTextPseudo ref={pseudoTitleOpenRef} $isOpen>
+                            {title}
+                        </StyledListItemHeadTitleTextPseudo>
+                        <StyledListItemHeadTitleTextPseudo
+                            ref={pseudoTitleClosedRef}
+                            $isOpen={false}
+                        >
+                            {title}
+                        </StyledListItemHeadTitleTextPseudo>
                         <StyledListItemHeadTitleText $isOpen={isOpen}>
                             {title}
                         </StyledListItemHeadTitleText>
@@ -145,6 +206,15 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 </StyledListItemHeadTitle>
                 {subtitle && (
                     <StyledListItemHeadSubtitle>
+                        <StyledListItemHeadSubtitleTextPseudo ref={pseudoSubtitleOpenRef} $isOpen>
+                            {subtitle}
+                        </StyledListItemHeadSubtitleTextPseudo>
+                        <StyledListItemHeadSubtitleTextPseudo
+                            ref={pseudoSubtitleClosedRef}
+                            $isOpen={false}
+                        >
+                            {subtitle}
+                        </StyledListItemHeadSubtitleTextPseudo>
                         <StyledListItemHeadSubtitleText $isOpen={isOpen}>
                             {subtitle}
                         </StyledListItemHeadSubtitleText>

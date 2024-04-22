@@ -10,8 +10,9 @@ type StyledListItemHeadProps = WithTheme<{
     $isAnyItemExpandable: boolean;
 }>;
 
-export const StyledListItemHead = styled.div<StyledListItemHeadProps>`
-    align-items: center;
+export const StyledListItemHead = styled(motion.div)<StyledListItemHeadProps>`
+    //align-items: center;
+    overflow: hidden;
     color: ${({ theme }: StyledListItemHeadProps) => theme.text};
     display: flex;
     min-height: 64px;
@@ -30,6 +31,12 @@ export const StyledListItemHead = styled.div<StyledListItemHeadProps>`
         `}
 `;
 
+export const StyledListItemHeadLeftWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    margin: auto 0;
+`;
+
 export const StyledMotionListItemHeadIndicator = styled(motion.div)<FramerMotionBugFix>`
     align-items: center;
     display: flex;
@@ -42,6 +49,7 @@ export const StyledMotionListItemHeadIndicator = styled(motion.div)<FramerMotion
 type StyledListItemHeadContentProps = {
     $isIconOrImageGiven: boolean;
     $isOpen: boolean;
+    $marginTop: number;
 };
 
 export const StyledListItemHeadContent = styled.div<StyledListItemHeadContentProps>`
@@ -49,8 +57,11 @@ export const StyledListItemHeadContent = styled.div<StyledListItemHeadContentPro
     flex: 1 1 auto;
     flex-direction: column;
     font-weight: ${({ $isOpen }) => ($isOpen ? 'bold' : 'normal')};
-    justify-content: center;
+    justify-content: start;
     line-height: normal;
+
+    margin-top: ${({ $marginTop, $isOpen }) => ($isOpen ? 0 : $marginTop)}px;
+
     margin-left: ${({ $isIconOrImageGiven }) => ($isIconOrImageGiven ? '10px' : undefined)};
     min-width: 0;
 `;
@@ -66,6 +77,7 @@ export const StyledListItemHeadTitleContent = styled.div`
     flex: 1 1 auto;
     max-width: 100%;
     min-width: 0;
+    position: relative;
 `;
 
 export const StyledListItemHeadTitleElement = styled.div`
@@ -77,11 +89,25 @@ export const StyledListItemHeadTitleElement = styled.div`
 
 type StyledListItemHeadTitleTextProps = WithTheme<{ $isOpen: boolean }>;
 
-export const StyledListItemHeadTitleText = styled.span<StyledListItemHeadTitleTextProps>`
+export const StyledListItemHeadTitleText = styled(motion.span)<StyledListItemHeadTitleTextProps>`
     font-weight: ${({ $isOpen }) => ($isOpen ? 'bold' : 'normal')};
     white-space: ${({ $isOpen }) => ($isOpen ? 'normal' : 'nowrap')};
     overflow: hidden;
     text-overflow: ellipsis;
+`;
+
+type StyledListItemHeadTitleTextPseudoProps = WithTheme<{ $isOpen: boolean }>;
+
+export const StyledListItemHeadTitleTextPseudo = styled.span<StyledListItemHeadTitleTextPseudoProps>`
+    font-weight: ${({ $isOpen }) => ($isOpen ? 'bold' : 'normal')};
+    white-space: ${({ $isOpen }) => ($isOpen ? 'normal' : 'nowrap')};
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+    position: absolute;
 `;
 
 export const StyledListItemHeadSubtitle = styled.div`
@@ -105,6 +131,25 @@ export const StyledListItemHeadSubtitleText = styled.span<StyledListItemHeadSubt
     min-width: 0;
 `;
 
+type StyledListItemHeadSubtitleTextPseudoProps = WithTheme<{ $isOpen: boolean }>;
+
+export const StyledListItemHeadSubtitleTextPseudo = styled.span<StyledListItemHeadSubtitleTextPseudoProps>`
+    font-weight: ${({ $isOpen }) => ($isOpen ? 'bold' : 'normal')};
+    white-space: ${({ $isOpen }) => ($isOpen ? 'normal' : 'nowrap')};
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    flex: 1 1 auto;
+    font-size: 85%;
+    min-width: 0;
+
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+
+    position: absolute;
+`;
+
 export const StyledListItemHeadTopRightElement = styled.div`
     flex: 0 0 auto;
     font-size: 85%;
@@ -126,4 +171,5 @@ export const StyledListItemHeadRightElement = styled.div`
 export const StyledMotionListItemHeadHoverItem = styled(motion.div)<FramerMotionBugFix>`
     overflow: hidden;
     flex-shrink: 0;
+    margin: auto 0;
 `;
