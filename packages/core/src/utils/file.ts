@@ -38,6 +38,24 @@ export const getHumanSize = (bytes: number): string => {
     return `${size.toString().replace('.', ',')} ${FILE_SIZE_UNITS[unitIndex] ?? ''}`;
 };
 
+interface IsValidFileTypeOptions {
+    file: File;
+    types: string;
+}
+
+export const isValidFileType = ({ types, file }: IsValidFileTypeOptions) => {
+    const allowedTypesArray = types.split(',').map((type) => type.trim());
+    const fileType = file.type;
+
+    return allowedTypesArray.some((type) => {
+        if (type.endsWith('/*')) {
+            const baseType = type.slice(0, -2); // remove '/*'
+            return fileType.startsWith(baseType);
+        }
+        return fileType === type;
+    });
+};
+
 export const MIME_TYPE_MAPPING = {
     // Excel
     'application/vnd.ms-excel': 'fa fa-file-excel',

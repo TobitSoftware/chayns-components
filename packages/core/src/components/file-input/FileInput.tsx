@@ -2,7 +2,7 @@ import { createDialog, DialogType } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, { DragEvent, FC, ReactElement, useCallback, useMemo, useState } from 'react';
 import type { FileInputFileItem, ImageDialogResult } from '../../types/fileInput';
-import { filterDuplicateFile, filterDuplicateFileUrls } from '../../utils/file';
+import { filterDuplicateFile, filterDuplicateFileUrls, isValidFileType } from '../../utils/file';
 import { selectFiles } from '../../utils/fileDialog';
 import Icon from '../icon/Icon';
 import List from '../list/List';
@@ -108,6 +108,10 @@ const FileInput: FC<FileInputProps> = ({
             const newFileItems: File[] = [];
 
             newFiles.forEach((file) => {
+                if (fileTypes && !isValidFileType({ file, types: fileTypes })) {
+                    return;
+                }
+
                 if (file && !filterDuplicateFile({ files: internalFiles, newFile: file })) {
                     newFileItems.push(file);
                 }
