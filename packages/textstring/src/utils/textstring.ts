@@ -1,4 +1,5 @@
-import type { TextstringValue } from '../components/textstring-provider/TextstringProvider';
+import type { ITextstring, TextstringReplacement } from '../components/textstring/types';
+import type { TextstringValue } from '../types/textstring';
 
 interface LoadLibraryOptions {
     libraryName: string;
@@ -27,4 +28,33 @@ export const selectLanguageToChange = ({ textstringName }: SelectLanguageToChang
         buttons: [],
         input: { textstring: textstringName },
     });
+};
+
+interface GetTextstringValueOptions {
+    textstring: ITextstring;
+    libraryName: string;
+    replacements?: TextstringReplacement;
+}
+
+export const getTextstringValue = ({
+    libraryName,
+    textstring,
+    replacements,
+}: GetTextstringValueOptions) => {
+    const textstrings = window.Textstrings[libraryName];
+
+    if (!textstrings) {
+        return undefined;
+    }
+
+    const value = textstrings[textstring.name] ?? textstring.fallback;
+
+    if (!replacements) {
+        return value;
+    }
+
+    return Object.keys(replacements).reduce(
+        (current, key) => current.replace(new RegExp(key, 'g'), <string>replacements[key] || ''),
+        value,
+    );
 };

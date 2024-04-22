@@ -1,9 +1,6 @@
 import React, { createContext, FC, ReactNode, useEffect, useState } from 'react';
+import type { TextstringValue } from '../../types/textstring';
 import { loadLibrary } from '../../utils/textstring';
-
-export type TextstringValue = {
-    [key: string]: string;
-};
 
 export const TextstringContext = createContext<TextstringValue>({});
 
@@ -30,6 +27,13 @@ const TextstringProvider: FC<TextstringProviderProps> = ({ children, libraryName
             const textstringResult = await loadLibrary({ libraryName, language });
 
             if (textstringResult) {
+                const prevTextstrings = window.Textstrings;
+
+                window.Textstrings = {
+                    ...prevTextstrings,
+                    [libraryName]: textstringResult,
+                };
+
                 setTextstrings(textstringResult);
             }
         };
