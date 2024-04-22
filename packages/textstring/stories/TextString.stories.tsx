@@ -2,7 +2,7 @@ import RadioButtonGroup from '@chayns-components/core/lib/components/radio-butto
 import RadioButton from '@chayns-components/core/lib/components/radio-button/RadioButton';
 import { RadioButtonItem } from '@chayns-components/core/lib/components/radio-button/types';
 import { Meta, StoryFn } from '@storybook/react';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Textstring, TextstringProvider } from '../src';
 
 export default {
@@ -19,7 +19,12 @@ const Template: StoryFn<typeof Textstring> = ({ ...args }) => (
 
 const TextstringWithReplacementTemplate: StoryFn<typeof Textstring> = ({ ...args }) => {
     const [food, setFood] = useState('##food##');
-    const handleFoodChange = (item: RadioButtonItem) => {
+
+    const handleFoodChange = useCallback((item: RadioButtonItem) => {
+        if (!item.isChecked) {
+            return;
+        }
+
         switch (item.id) {
             case '0':
                 setFood('Eis');
@@ -34,7 +39,7 @@ const TextstringWithReplacementTemplate: StoryFn<typeof Textstring> = ({ ...args
                 setFood('Schokolade');
                 break;
         }
-    };
+    }, []);
 
     return useMemo(() => {
         return (
@@ -57,7 +62,7 @@ const TextstringWithReplacementTemplate: StoryFn<typeof Textstring> = ({ ...args
                 </RadioButtonGroup>
             </TextstringProvider>
         );
-    }, [food]);
+    }, [food, handleFoodChange]);
 };
 
 export const General = Template.bind({});
