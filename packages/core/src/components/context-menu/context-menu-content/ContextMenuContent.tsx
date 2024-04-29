@@ -50,6 +50,9 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                     <StyledContextMenuContentItem
                         key={key}
                         onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+
                             void onClick(event);
                         }}
                     >
