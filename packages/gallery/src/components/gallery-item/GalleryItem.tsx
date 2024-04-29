@@ -1,5 +1,4 @@
-import { Icon } from '@chayns-components/core';
-import type { InternalFileItem } from '@chayns-components/core/lib/types/file';
+import { Icon, type InternalFileItem } from '@chayns-components/core';
 import { AnimatePresence } from 'framer-motion';
 import React, { FC, useMemo } from 'react';
 import {

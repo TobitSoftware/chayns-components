@@ -1,5 +1,4 @@
-import { SmallWaitCursor } from '@chayns-components/core';
-import type { InternalFileItem } from '@chayns-components/core/lib/types/file';
+import { InternalFileItem, SmallWaitCursor } from '@chayns-components/core';
 import React, { FC } from 'react';
 import {
     StyledMotionPreviewItem,

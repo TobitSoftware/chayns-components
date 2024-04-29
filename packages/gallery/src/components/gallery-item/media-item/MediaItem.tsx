@@ -1,5 +1,4 @@
-import { Icon } from '@chayns-components/core';
-import type { InternalFileItem } from '@chayns-components/core/lib/types/file';
+import { Icon, type InternalFileItem } from '@chayns-components/core';
 import React, { FC } from 'react';
 import {
     StyledMediaItemImage,
