@@ -44,8 +44,8 @@
     "scripts": {
         "build": "npm run build:cjs && npm run build:esm && npm run build:types",
         "build:types": "tsc",
-        "build:cjs": "cross-env NODE_ENV=cjs babel src --out-dir lib/cjs --extensions=.ts,.tsx --source-maps --ignore=src/stories",
-        "build:esm": "cross-env NODE_ENV=esm babel src --out-dir lib/esm --extensions=.ts,.tsx --source-maps --ignore=src/stories",
+        "build:cjs": "cross-env NODE_ENV=cjs babel src --out-dir lib/cjs --extensions=.ts,.tsx --source-maps --ignore=src/stories --copy-files",
+        "build:esm": "cross-env NODE_ENV=esm babel src --out-dir lib/esm --extensions=.ts,.tsx --source-maps --ignore=src/stories --copy-files",
         "prepublishOnly": "npm run build"
     },
     "bugs": {

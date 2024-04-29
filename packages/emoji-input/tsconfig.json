@@ -22,5 +22,5 @@
         "ignoreDeprecations": "5.0"
     },
     "exclude": ["node_modules"],
-    "include": ["./src/**/*.ts", "./src/**/*.tsx"]
+    "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.json"]
 }
