@@ -1,6 +1,4 @@
-import RadioButtonGroup from '@chayns-components/core/lib/components/radio-button/radio-button-group/RadioButtonGroup';
-import RadioButton from '@chayns-components/core/lib/components/radio-button/RadioButton';
-import { RadioButtonItem } from '@chayns-components/core/lib/components/radio-button/types';
+import { RadioButton, RadioButtonGroup, type RadioButtonItem } from '@chayns-components/core';
 import { Meta, StoryFn } from '@storybook/react';
 import { useCallback, useMemo, useState } from 'react';
 import { Textstring, TextstringProvider } from '../src';

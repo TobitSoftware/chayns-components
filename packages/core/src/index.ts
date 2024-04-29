@@ -68,6 +68,7 @@ export type { FileInputFileItem } from './types/fileInput';
 export { FilterButtonItemShape, FilterButtonSize } from './types/filterButtons';
 export type { IFilterButtonItem as FilterButtonItem } from './types/filterButtons';
 export type { PopupRef } from './types/popup';
+export type { RadioButtonItem } from './types/radioButton';
 export type { ISearchBoxItem as SearchBoxItem } from './types/searchBox';
 export type { SelectButtonItem } from './types/selectButton';
 export type { SliderButtonItem } from './types/slider-button';

@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { useRef } from 'react';
-import { AccordionContent } from '../lib';
 import Accordion from '../src/components/accordion/Accordion';
+import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
 import Button from '../src/components/button/Button';
 import Input from '../src/components/input/Input';
 import RadioButtonGroup from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
