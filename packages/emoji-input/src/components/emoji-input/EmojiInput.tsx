@@ -338,13 +338,20 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             [isDisabled, isPopupVisible, onKeyDown],
         );
 
-        const handlePopupVisibility = (isVisible: boolean) => {
-            setIsPopupVisible(isVisible);
+        const handlePopupVisibility = useCallback(
+            (isVisible: boolean) => {
+                setIsPopupVisible(isVisible);
 
-            if (typeof onPopupVisibilityChange === 'function') {
-                onPopupVisibilityChange(isVisible);
-            }
-        };
+                if (editorRef.current && isVisible) {
+                    saveSelection(editorRef.current);
+                }
+
+                if (typeof onPopupVisibilityChange === 'function') {
+                    onPopupVisibilityChange(isVisible);
+                }
+            },
+            [onPopupVisibilityChange],
+        );
 
         /**
          * This function prevents formatting from being adopted when texts are inserted. To do this, the
@@ -387,7 +394,11 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
          */
         const handlePopupSelect = useCallback((emoji: string) => {
             if (editorRef.current) {
-                insertTextAtCursorPosition({ editorElement: editorRef.current, text: emoji });
+                insertTextAtCursorPosition({
+                    editorElement: editorRef.current,
+                    text: emoji,
+                    shouldUseSavedSelection: true,
+                });
 
                 const event = new Event('input', { bubbles: true });
 

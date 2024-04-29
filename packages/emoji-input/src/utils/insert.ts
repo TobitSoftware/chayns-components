@@ -9,6 +9,7 @@ import {
 interface InsertTextAtCursorPositionOptions {
     editorElement: HTMLDivElement;
     text: string;
+    shouldUseSavedSelection?: boolean;
 }
 
 /**
@@ -27,7 +28,12 @@ interface InsertTextAtCursorPositionOptions {
 export const insertTextAtCursorPosition = ({
     editorElement,
     text,
+    shouldUseSavedSelection = false,
 }: InsertTextAtCursorPositionOptions) => {
+    if (shouldUseSavedSelection) {
+        restoreSelection(editorElement);
+    }
+
     const selection = window.getSelection();
 
     saveSelection(editorElement);
