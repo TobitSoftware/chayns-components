@@ -182,9 +182,13 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
             const searchResults: JSX.Element[] = [];
 
             Object.entries(emojiList).forEach(([emoji, { name, skin_tone_support }], index) => {
-                const keywords = emojiLib[emoji] as string[] | undefined;
-                // @ts-expect-error: Type is correct here
-                const germanKeywords = germanEmojiLib[emoji] as string[] | undefined;
+                const keywords = (emojiLib as { [key: string]: string[] })[emoji] as
+                    | string[]
+                    | undefined;
+
+                const germanKeywords = (germanEmojiLib as { [key: string]: string[] })[emoji] as
+                    | string[]
+                    | undefined;
 
                 if (
                     name.includes(lowerSearchString) ||
