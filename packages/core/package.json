@@ -17,8 +17,16 @@
     "author": "Tobit.Software",
     "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/core#readme",
     "license": "MIT",
-    "main": "lib/index.js",
-    "types": "lib/index.d.ts",
+    "main": "lib/cjs/index.js",
+    "module": "lib/esm/index.js",
+    "types": "lib/types/index.d.ts",
+    "exports": {
+        ".": {
+            "require": "./lib/cjs/index.js",
+            "import": "./lib/esm/index.js",
+            "types": "./lib/types/index.d.ts"
+        }
+    },
     "directories": {
         "lib": "lib",
         "test": "__tests__"
@@ -31,9 +39,10 @@
         "url": "git+https://github.com/TobitSoftware/chayns-components.git"
     },
     "scripts": {
-        "build": "npm run build:js && npm run build:types",
-        "build:js": "babel src --out-dir lib --extensions=.ts,.tsx --source-maps --ignore=src/stories",
+        "build": "npm run build:cjs && npm run build:esm && npm run build:types",
         "build:types": "tsc",
+        "build:cjs": "cross-env NODE_ENV=cjs babel src --out-dir lib/cjs --extensions=.ts,.tsx --source-maps --ignore=src/stories",
+        "build:esm": "cross-env NODE_ENV=esm babel src --out-dir lib/esm --extensions=.ts,.tsx --source-maps --ignore=src/stories",
         "prepublishOnly": "npm run build"
     },
     "bugs": {
@@ -50,6 +59,7 @@
         "@types/styled-components": "^5.1.34",
         "@types/uuid": "^9.0.8",
         "babel-loader": "^9.1.3",
+        "cross-env": "^7.0.3",
         "lerna": "^8.1.2",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
