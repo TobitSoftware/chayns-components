@@ -2,7 +2,7 @@ import type { CSSProperties, RefObject } from 'react';
 
 import { hexToHsl, rgb255ToHsl, rgb255ToHsv } from '@chayns/colors';
 import type { HSL, HSLA } from '@chayns/colors/lib/types/hsl';
-import type { Coordinates, RGBA, Scale } from '../types';
+import type { Coordinates, RGBA, Scale } from '../types/colorPicker';
 
 interface GetColorFromCoordinatesOptions {
     coordinates: Coordinates;

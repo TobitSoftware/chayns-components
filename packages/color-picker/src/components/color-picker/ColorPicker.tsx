@@ -1,5 +1,5 @@
 import React from 'react';
-import type { IPresetColor } from '../../types';
+import type { IPresetColor } from '../../types/colorPicker';
 import ColorPickerProvider from '../ColorPickerProvider';
 import ColorPickerWrapper from './color-picker-wrapper/ColorPickerWrapper';
 import { StyledColorPicker } from './ColorPicker.styles';

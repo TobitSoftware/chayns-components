@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react';
-import type { IPresetColor } from '../../../../../../types';
+import type { IPresetColor } from '../../../../../../types/colorPicker';
 import { ColorPickerContext } from '../../../../../ColorPickerProvider';
 import {
     StyledPresetColor,

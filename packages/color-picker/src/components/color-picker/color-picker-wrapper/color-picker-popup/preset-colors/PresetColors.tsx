@@ -1,7 +1,7 @@
 import { isHex } from '@chayns/colors';
 import React, { useContext, useMemo, type ReactElement } from 'react';
 import { PRESETCOLORS } from '../../../../../constants/color';
-import type { IPresetColor } from '../../../../../types';
+import type { IPresetColor } from '../../../../../types/colorPicker';
 import { hexToRgb } from '../../../../../utils/color';
 import { ColorPickerContext } from '../../../../ColorPickerProvider';
 import PresetButton from './preset-button/PresetButton';

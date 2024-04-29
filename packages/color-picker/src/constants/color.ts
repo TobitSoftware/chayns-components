@@ -1,4 +1,4 @@
-import type { IPresetColor } from '../types';
+import type { IPresetColor } from '../types/colorPicker';
 
 export const PRESETCOLORS: IPresetColor[] = [
     { id: '0', color: 'rgba(0,0,0,1)' },

@@ -16,7 +16,7 @@ import {
 
 import { hsvToHex } from '@chayns/colors';
 import { useDragControls, useMotionValue } from 'framer-motion';
-import type { Scale } from '../../../../../types';
+import type { Scale } from '../../../../../types/colorPicker';
 import {
     extractRgbValues,
     getColorFromCoordinates,

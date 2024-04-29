@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { useState } from 'react';
 import ColorPicker from '../src/components/color-picker/ColorPicker';
-import { IPresetColor } from '../src/types';
+import { IPresetColor } from '../src/types/colorPicker';
 
 export default {
     title: 'ColorPicker/ColorPicker',

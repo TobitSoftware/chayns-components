@@ -1,5 +1,5 @@
 import React from 'react';
-import type { IPresetColor } from '../../../../types';
+import type { IPresetColor } from '../../../../types/colorPicker';
 import ColorArea from './color-area/ColorArea';
 import { StyledColorPickerPopup } from './ColorPickerPopup.styles';
 import MoreOptions from './more-options/MoreOptions';
