@@ -1,5 +1,5 @@
-import type { CSSProperties } from 'react';
 import type { Browser } from 'detect-browser';
+import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
@@ -13,6 +13,7 @@ export const StyledTextArea = styled.div`
 type StyledTextAreaInputProps = WithTheme<{
     $maxHeight: CSSProperties['maxHeight'];
     $minHeight: CSSProperties['minHeight'];
+    $shouldChangeColor: boolean;
     $isOverflowing: boolean;
     $browser: Browser | 'bot' | null | undefined;
 }>;
@@ -20,7 +21,8 @@ type StyledTextAreaInputProps = WithTheme<{
 export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
     border-radius: 3px;
     border: 1px solid rgba(160, 160, 160, 0.3);
-    background-color: ${({ theme }: StyledTextAreaInputProps) => theme['100']};
+    background-color: ${({ theme, $shouldChangeColor }: StyledTextAreaInputProps) =>
+        theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
     color: ${({ theme }: StyledTextAreaInputProps) => theme.text};
     resize: none;
     overflow-y: ${({ $isOverflowing }) => ($isOverflowing ? 'scroll' : 'hidden')};

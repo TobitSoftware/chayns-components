@@ -6,11 +6,13 @@ import React, {
     FocusEventHandler,
     ReactElement,
     useCallback,
+    useContext,
     useEffect,
     useMemo,
     useRef,
     useState,
 } from 'react';
+import { AreaContext } from '../area-provider/AreaContextProvider';
 import {
     StyledTextArea,
     StyledTextAreaInput,
@@ -55,9 +57,16 @@ const TextArea: FC<TextAreaProps> = ({
 }) => {
     const [isOverflowing, setIsOverflowing] = useState(false);
 
+    const areaProvider = useContext(AreaContext);
+
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const { browser } = getDevice();
+
+    const shouldChangeColor = useMemo(
+        () => areaProvider.shouldChangeColor ?? false,
+        [areaProvider.shouldChangeColor],
+    );
 
     const adjustTextareaHeight = useCallback(() => {
         if (textareaRef.current) {
@@ -82,6 +91,7 @@ const TextArea: FC<TextAreaProps> = ({
         () => (
             <StyledTextArea>
                 <StyledTextAreaInput
+                    $shouldChangeColor={shouldChangeColor}
                     $browser={browser?.name}
                     ref={textareaRef}
                     value={value}
@@ -100,7 +110,17 @@ const TextArea: FC<TextAreaProps> = ({
                 )}
             </StyledTextArea>
         ),
-        [browser?.name, isOverflowing, maxHeight, minHeight, onBlur, onChange, placeholder, value],
+        [
+            browser?.name,
+            isOverflowing,
+            maxHeight,
+            minHeight,
+            onBlur,
+            onChange,
+            placeholder,
+            shouldChangeColor,
+            value,
+        ],
     );
 };
 
