@@ -28,10 +28,6 @@ export type GalleryProps = {
      */
     doubleFileDialogMessage?: string;
     /**
-     *  Whether images and videos can be edited
-     */
-    isEditMode?: boolean;
-    /**
      * The minimum width of a file in the edit mode
      */
     fileMinWidth?: number;
@@ -39,6 +35,14 @@ export type GalleryProps = {
      *  Images and videos which should be displayed
      */
     files?: FileItem[];
+    /**
+     *  Whether images and videos can be edited
+     */
+    isEditMode?: boolean;
+    /**
+     * The maximum amount of images and videos that can be uploaded.
+     */
+    maxFiles?: number;
     /**
      *  Function to be executed when files are added and uploaded
      */
@@ -63,6 +67,7 @@ const Gallery: FC<GalleryProps> = ({
     isEditMode = false,
     fileMinWidth = 100,
     files,
+    maxFiles,
     onAdd,
     onFileCountChange,
     onRemove,
@@ -215,9 +220,15 @@ const Gallery: FC<GalleryProps> = ({
                 }
             });
 
-            setFileItems((prevState) => [...prevState, ...newFileItems]);
+            let tmp = newFileItems;
+
+            if (maxFiles) {
+                tmp = newFileItems.slice(0, maxFiles - (fileItems.length + filesToAdd.length - 1));
+            }
+
+            setFileItems((prevState) => [...prevState, ...tmp]);
         },
-        [fileItems],
+        [fileItems, maxFiles],
     );
 
     /**
@@ -362,6 +373,10 @@ const Gallery: FC<GalleryProps> = ({
                 />
             ));
 
+            if (maxFiles && maxFiles <= combinedFilesLength) {
+                return items;
+            }
+
             items.push(<AddFile key="add_file" onAdd={handleAddFiles} />);
 
             return items;
@@ -397,7 +412,7 @@ const Gallery: FC<GalleryProps> = ({
                 />
             );
         });
-    }, [fileItems, isEditMode, handleAddFiles, openFiles, handleDeleteFile, viewMode]);
+    }, [fileItems, isEditMode, maxFiles, handleAddFiles, openFiles, handleDeleteFile, viewMode]);
 
     return useMemo(
         () => (
