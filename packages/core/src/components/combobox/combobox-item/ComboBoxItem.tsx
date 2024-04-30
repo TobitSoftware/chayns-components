@@ -1,3 +1,4 @@
+import { getIsMobile } from '@chayns-components/emoji-input/lib/types/utils/environment';
 import React, { FC, ReactNode, useCallback, useMemo } from 'react';
 import type { ComboBoxProps, IComboBoxItem } from '../ComboBox';
 import { StyledComboBoxItem, StyledComboBoxItemImage } from './ComboBoxItem.styles';
@@ -27,7 +28,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
         onSelect({ text, value });
     }, [onSelect, text, value]);
 
-    const { isMobile } = chayns.env;
+    const isMobile = getIsMobile();
 
     return useMemo(
         () => (

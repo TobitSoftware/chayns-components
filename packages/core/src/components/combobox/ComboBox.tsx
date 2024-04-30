@@ -1,3 +1,4 @@
+import { getIsMobile } from '@chayns-components/emoji-input/lib/types/utils/environment';
 import { getDevice } from 'chayns-api';
 import React, {
     FC,
@@ -85,7 +86,7 @@ const ComboBox: FC<ComboBoxProps> = ({
 
     const { browser } = getDevice();
 
-    const { isMobile } = chayns.env;
+    const isMobile = getIsMobile();
 
     const handleClick = useCallback(
         (event: MouseEvent) => {
