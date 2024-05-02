@@ -8,6 +8,7 @@ import React, {
     useState,
     type ReactElement,
 } from 'react';
+import { useElementSize } from '../../hooks/useElementSize';
 import type { SliderButtonItem } from '../../types/slider-button';
 import { calculateBiggestWidth } from '../../utils/calculate';
 import { getNearestPoint, getThumbPosition } from '../../utils/sliderButton';
@@ -47,11 +48,13 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
     const itemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
 
+    const sliderSize = useElementSize(sliderButtonRef);
+
     useEffect(() => {
-        if (sliderButtonRef.current) {
-            setDragRange({ left: 0, right: sliderButtonRef.current.offsetWidth - itemWidth });
+        if (sliderSize) {
+            setDragRange({ left: 0, right: sliderSize.width - itemWidth });
         }
-    }, [itemWidth]);
+    }, [itemWidth, sliderSize]);
 
     const animation = useCallback(
         async (x: number) => {
