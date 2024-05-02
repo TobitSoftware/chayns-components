@@ -8,6 +8,7 @@ export const StyledSlider = styled.div`
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
 `;
 
 type StyledSliderInputProps = WithTheme<{
@@ -15,12 +16,14 @@ type StyledSliderInputProps = WithTheme<{
     $max: number;
     $value: number;
     $isInterval: boolean;
+    $thumbWidth: number;
 }>;
 
 export const StyledSliderInput = styled.input.attrs<StyledSliderInputProps>(
-    ({ $isInterval, $value, $min, $max, theme }) => ({
+    ({ $isInterval, $value, $thumbWidth, $min, $max, theme }) => ({
         style: {
             pointerEvents: $isInterval ? 'none' : 'all',
+            width: `calc(100% - ${$thumbWidth / 2}px)`,
             background: !$isInterval
                 ? `linear-gradient(
             to right,
@@ -36,7 +39,6 @@ export const StyledSliderInput = styled.input.attrs<StyledSliderInputProps>(
     }),
 )`
     position: absolute;
-    width: 100%;
     border-radius: 100px;
     -webkit-appearance: none;
     height: 10px;
@@ -92,6 +94,9 @@ export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $po
     white-space: nowrap;
 `;
 
-export const StyledSliderThumbLabel = styled.span`
+type StyledSliderThumbLabelProps = WithTheme<unknown>;
+
+export const StyledSliderThumbLabel = styled.span<StyledSliderThumbLabelProps>`
     pointer-events: none;
+    color: #222;
 `;

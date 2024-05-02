@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from 'styled-components';
-import { fillSlider } from '../../utils/slider';
+import { fillSlider, getThumbMaxWidth } from '../../utils/slider';
 import {
     StyledSlider,
     StyledSliderInput,
@@ -65,6 +65,7 @@ const Slider: FC<SliderProps> = ({
 }) => {
     const [fromValue, setFromValue] = useState(0);
     const [toValue, setToValue] = useState(maxValue);
+    const [thumbWidth, setThumbWidth] = useState(20);
 
     const fromSliderRef = useRef<HTMLInputElement>(null);
     const toSliderRef = useRef<HTMLInputElement>(null);
@@ -72,6 +73,12 @@ const Slider: FC<SliderProps> = ({
     const toSliderThumbRef = useRef<HTMLDivElement>(null);
 
     const theme = useTheme();
+
+    useEffect(() => {
+        if (shouldShowThumbLabel) {
+            setThumbWidth(getThumbMaxWidth({ maxNumber: maxValue, thumbLabelFormatter }));
+        }
+    }, [maxValue, shouldShowThumbLabel, thumbLabelFormatter]);
 
     /**
      * This function sets the value
@@ -214,26 +221,30 @@ const Slider: FC<SliderProps> = ({
         if (fromSliderRef.current && fromSliderThumbRef.current) {
             return (
                 ((fromValue - minValue) / (maxValue - minValue)) *
-                (fromSliderRef.current.offsetWidth - fromSliderThumbRef.current.offsetWidth / 2)
+                    (fromSliderRef.current.offsetWidth -
+                        fromSliderThumbRef.current.offsetWidth / 2) -
+                (shouldShowThumbLabel && fromValue === maxValue ? 4 : 0)
             );
         }
         return 0;
-    }, [fromValue, maxValue, minValue]);
+    }, [fromValue, maxValue, minValue, shouldShowThumbLabel]);
 
     const toSliderThumbPosition = useMemo(() => {
         if (toSliderRef.current && toSliderThumbRef.current) {
             return (
                 ((toValue - minValue) / (maxValue - minValue)) *
-                (toSliderRef.current.offsetWidth - toSliderThumbRef.current.offsetWidth / 2)
+                    (toSliderRef.current.offsetWidth - toSliderThumbRef.current.offsetWidth / 2) -
+                (shouldShowThumbLabel && toValue === maxValue ? 4 : 0)
             );
         }
         return 0;
-    }, [toValue, maxValue, minValue]);
+    }, [toValue, minValue, maxValue, shouldShowThumbLabel]);
 
     return useMemo(
         () => (
             <StyledSlider>
                 <StyledSliderInput
+                    $thumbWidth={thumbWidth}
                     ref={fromSliderRef}
                     $isInterval={!!interval}
                     type="range"
@@ -269,6 +280,7 @@ const Slider: FC<SliderProps> = ({
                 )}
                 {interval && (
                     <StyledSliderInput
+                        $thumbWidth={thumbWidth}
                         $max={maxValue}
                         $min={minValue}
                         $value={toValue}
@@ -286,6 +298,7 @@ const Slider: FC<SliderProps> = ({
             </StyledSlider>
         ),
         [
+            thumbWidth,
             interval,
             fromValue,
             steps,
