@@ -55,7 +55,7 @@ export const StyledSmallWaitCursorWaitCursor = styled.div<StyledSmallWaitCursorW
     border-style: solid;
     border-width: 3px;
     border-color: ${({ $color, theme }: StyledSmallWaitCursorWaitCursorProps) =>
-        $color ?? theme.headline};
+        $color ?? theme.primary};
     height: ${({ $size }) => `${$size - 10}px`};
     width: ${({ $size }) => `${$size - 10}px`};
     border-radius: 50%;
