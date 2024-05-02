@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from 'styled-components';
+import { useElementSize } from '../../hooks/useElementSize';
 import { fillSlider, getThumbMaxWidth } from '../../utils/slider';
 import {
     StyledSlider,
@@ -71,6 +72,9 @@ const Slider: FC<SliderProps> = ({
     const toSliderRef = useRef<HTMLInputElement>(null);
     const fromSliderThumbRef = useRef<HTMLDivElement>(null);
     const toSliderThumbRef = useRef<HTMLDivElement>(null);
+    const sliderWrapperRef = useRef<HTMLDivElement>(null);
+
+    const sliderWrapperSize = useElementSize(sliderWrapperRef);
 
     const theme = useTheme();
 
@@ -218,7 +222,7 @@ const Slider: FC<SliderProps> = ({
     );
 
     const fromSliderThumbPosition = useMemo(() => {
-        if (fromSliderRef.current && fromSliderThumbRef.current) {
+        if (fromSliderRef.current && fromSliderThumbRef.current && sliderWrapperSize) {
             return (
                 ((fromValue - minValue) / (maxValue - minValue)) *
                     (fromSliderRef.current.offsetWidth -
@@ -227,10 +231,10 @@ const Slider: FC<SliderProps> = ({
             );
         }
         return 0;
-    }, [fromValue, maxValue, minValue, shouldShowThumbLabel]);
+    }, [fromValue, maxValue, minValue, shouldShowThumbLabel, sliderWrapperSize]);
 
     const toSliderThumbPosition = useMemo(() => {
-        if (toSliderRef.current && toSliderThumbRef.current) {
+        if (toSliderRef.current && toSliderThumbRef.current && sliderWrapperSize) {
             return (
                 ((toValue - minValue) / (maxValue - minValue)) *
                     (toSliderRef.current.offsetWidth - toSliderThumbRef.current.offsetWidth / 2) -
@@ -238,11 +242,11 @@ const Slider: FC<SliderProps> = ({
             );
         }
         return 0;
-    }, [toValue, minValue, maxValue, shouldShowThumbLabel]);
+    }, [toValue, minValue, maxValue, shouldShowThumbLabel, sliderWrapperSize]);
 
     return useMemo(
         () => (
-            <StyledSlider>
+            <StyledSlider ref={sliderWrapperRef}>
                 <StyledSliderInput
                     $thumbWidth={thumbWidth}
                     ref={fromSliderRef}
