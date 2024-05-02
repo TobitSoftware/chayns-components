@@ -167,8 +167,14 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         useEffect(() => {
             const input = document.getElementById('search_box_input');
 
+            const getInputWidth = () => {
+                if (input) {
+                    setWidth(input.offsetWidth);
+                }
+            };
+
             if (input) {
-                setWidth(input.offsetWidth);
+                new ResizeObserver(getInputWidth).observe(input);
             }
         }, []);
 
