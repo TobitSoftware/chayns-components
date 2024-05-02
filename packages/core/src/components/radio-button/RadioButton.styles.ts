@@ -106,7 +106,12 @@ export const StyledRadioButtonLabel = styled.p<StyledRadioButtonLabelProps>`
     color: ${({ theme }: StyledRadioButtonLabelProps) => theme.text};
 `;
 
-export const StyledMotionRadioButtonChildren = styled(motion.div)`
+type StyledMotionRadioButtonChildrenProps = WithTheme<unknown>;
+
+export const StyledMotionRadioButtonChildren = styled(
+    motion.div,
+)<StyledMotionRadioButtonChildrenProps>`
     margin-left: 18px;
     cursor: text;
+    color: ${({ theme }: StyledMotionRadioButtonChildrenProps) => theme.text};
 `;
