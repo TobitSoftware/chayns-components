@@ -25,7 +25,15 @@ export const formateNumber = ({ number, isMoneyInput, isTimeInput }: FormateNumb
         let hours = 0;
         let minutes = 0;
 
-        const firstTwoNumbers = Number(number.substring(0, 2));
+        let firstTwoDigits = number.substring(0, 2);
+
+        if (firstTwoDigits.includes(':')) {
+            firstTwoDigits = firstTwoDigits.replace(':', '');
+
+            firstTwoDigits = `0${firstTwoDigits}`;
+        }
+
+        const firstTwoNumbers = Number(firstTwoDigits);
         let lastTwoNumbers = 0;
         let lastTwoNumbersLength = 0;
 
