@@ -26,7 +26,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ percentage, label, shouldHideProgre
     const [internalPercentage, setInternalPercentage] = useState(0);
 
     useEffect(() => {
-        if (!percentage) {
+        if (typeof percentage !== 'number') {
             return;
         }
 
@@ -40,7 +40,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ percentage, label, shouldHideProgre
             return null;
         }
 
-        if (!percentage) {
+        if (typeof percentage !== 'number') {
             return (
                 <StyledProgressBarProgressWrapper>
                     <StyledMotionProgressBarProgress
