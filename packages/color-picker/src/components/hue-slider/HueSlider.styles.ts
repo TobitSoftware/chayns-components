@@ -9,6 +9,7 @@ export const StyledHueSlider = styled.div`
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
 `;
 
 type StyledHueSliderInputProps = WithTheme<{
@@ -16,7 +17,7 @@ type StyledHueSliderInputProps = WithTheme<{
 }>;
 
 export const StyledHueSliderInput = styled.input<StyledHueSliderInputProps>`
-    width: 100%;
+    width: calc(100% - 10px);
     border-radius: 100px;
     -webkit-appearance: none;
     height: 10px;
