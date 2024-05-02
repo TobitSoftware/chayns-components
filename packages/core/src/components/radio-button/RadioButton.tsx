@@ -56,7 +56,7 @@ const RadioButton: FC<RadioButtonProps> = ({
     id,
     isDisabled = false,
 }) => {
-    const { selectedRadioButtonId, updateSelectedRadioButtonId, setSelectedRadioButtonId } =
+    const { selectedRadioButtonId, updateSelectedRadioButtonId } =
         useContext(RadioButtonGroupContext);
 
     const [internalIsChecked, setInternalIsChecked] = useState(false);
@@ -69,14 +69,14 @@ const RadioButton: FC<RadioButtonProps> = ({
     const isInitialRenderRef = useRef(true);
 
     useEffect(() => {
-        if (typeof isChecked === 'boolean') {
-            if (typeof setSelectedRadioButtonId === 'function') {
-                setSelectedRadioButtonId(isChecked ? id : undefined);
+        if (typeof isChecked === 'boolean' && isChecked) {
+            if (typeof updateSelectedRadioButtonId === 'function') {
+                updateSelectedRadioButtonId(id);
             } else {
                 setInternalIsChecked(isChecked);
             }
         }
-    }, [id, isChecked, setSelectedRadioButtonId]);
+    }, [id, isChecked, updateSelectedRadioButtonId]);
 
     useEffect(() => {
         if (isInitialRenderRef.current) {
@@ -95,7 +95,7 @@ const RadioButton: FC<RadioButtonProps> = ({
             updateSelectedRadioButtonId(id);
         }
 
-        setInternalIsChecked((prevState) => !prevState);
+        setInternalIsChecked(true);
     }, [id, isDisabled, updateSelectedRadioButtonId]);
 
     const handleMouseEnter = useCallback(() => {

@@ -1,26 +1,14 @@
-import React, {
-    Dispatch,
-    FC,
-    ReactNode,
-    SetStateAction,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 type IUpdateSelectedRadioButtonId = (id: string) => void;
 
 interface IRadioButtonGroupContext {
     selectedRadioButtonId: string | undefined;
-    setSelectedRadioButtonId?: Dispatch<SetStateAction<string | undefined>>;
     updateSelectedRadioButtonId?: IUpdateSelectedRadioButtonId;
 }
 
 export const RadioButtonGroupContext = React.createContext<IRadioButtonGroupContext>({
     selectedRadioButtonId: undefined,
-    setSelectedRadioButtonId: undefined,
     updateSelectedRadioButtonId: undefined,
 });
 
@@ -41,13 +29,7 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = ({ children }) => {
     const isInitialRenderRef = useRef(true);
 
     const updateSelectedRadioButtonId = useCallback<IUpdateSelectedRadioButtonId>((id) => {
-        setSelectedRadioButtonId((currentSelectedRadioButtonId) => {
-            if (currentSelectedRadioButtonId === id) {
-                return undefined;
-            }
-
-            return id;
-        });
+        setSelectedRadioButtonId(id);
     }, []);
 
     useEffect(() => {
@@ -59,10 +41,9 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = ({ children }) => {
     const providerValue = useMemo<IRadioButtonGroupContext>(
         () => ({
             selectedRadioButtonId,
-            setSelectedRadioButtonId,
             updateSelectedRadioButtonId,
         }),
-        [selectedRadioButtonId, updateSelectedRadioButtonId]
+        [selectedRadioButtonId, updateSelectedRadioButtonId],
     );
 
     return (
