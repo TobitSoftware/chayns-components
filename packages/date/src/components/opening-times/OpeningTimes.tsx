@@ -1,4 +1,4 @@
-import { Checkbox, Tooltip, useElementSize } from '@chayns-components/core';
+import { Checkbox, Popup, useElementSize, type PopupRef } from '@chayns-components/core';
 import React, {
     FC,
     useCallback,
@@ -87,6 +87,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     >([]);
 
     const ref = useRef<HTMLDivElement>(null);
+    const popupRef = useRef<PopupRef>(null);
 
     useEffect(() => {
         setNewOpeningTimes(openingTimes);
@@ -282,12 +283,23 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
 
         const weekday = weekdays.find((weekDay) => weekDay.id === weekdayId)?.name;
 
-        const element = (
+        return (
             <StyledOpeningTimesWrapper
                 key={`currentDay__${currentDayId}`}
                 style={size && { width: size.width }}
+                onMouseEnter={() => popupRef.current?.show()}
+                onMouseLeave={() => popupRef.current?.hide()}
             >
-                <StyledOpeningTimesWeekDay>{weekday}</StyledOpeningTimesWeekDay>
+                <Popup
+                    ref={popupRef}
+                    content={
+                        <StyledOpeningTimesTooltipContent key="opening-time-tooltip">
+                            {content}
+                        </StyledOpeningTimesTooltipContent>
+                    }
+                >
+                    <StyledOpeningTimesWeekDay>{weekday}</StyledOpeningTimesWeekDay>
+                </Popup>
                 <OpeningInputs
                     closedText={closedText}
                     onInvalid={handleUpdateInvalidIds}
@@ -296,18 +308,6 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                     editMode={editMode}
                 />
             </StyledOpeningTimesWrapper>
-        );
-
-        return (
-            <Tooltip
-                item={
-                    <StyledOpeningTimesTooltipContent key="opening-time-tooltip">
-                        {content}
-                    </StyledOpeningTimesTooltipContent>
-                }
-            >
-                {element}
-            </Tooltip>
         );
     }, [
         currentDayId,
