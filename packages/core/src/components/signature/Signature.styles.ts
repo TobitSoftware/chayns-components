@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledSignature = styled.div``;
 export const StyledSignatureImageWrapper = styled.div`
@@ -6,7 +7,16 @@ export const StyledSignatureImageWrapper = styled.div`
     aspect-ratio: 3.8;
     width: 100%;
 `;
-export const StyledSignatureImage = styled.img``;
+
+type StyledSignatureImageProps = WithTheme<unknown>;
+
+export const StyledSignatureImage = styled.img<StyledSignatureImageProps>`
+    ${({ theme }: StyledSignatureImageProps) =>
+        theme.colorMode === 'dark' &&
+        css`
+            filter: invert(1);
+        `}
+`;
 export const StyledSignatureDeleteIconWrapper = styled.div`
     position: absolute;
     top: 0;
