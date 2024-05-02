@@ -20,6 +20,7 @@ type StyledAmountControlInputProps = WithTheme<{
 
 export const StyledAmountControlInput = styled.input<StyledAmountControlInputProps>`
     background-color: ${({ theme }: StyledAmountControlInputProps) => theme['202']};
+    color: ${({ theme }: StyledAmountControlInputProps) => theme.text};
     border: none;
     height: 28px;
     width: 95px;
