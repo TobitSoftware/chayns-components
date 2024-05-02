@@ -8,7 +8,7 @@ export const StyledHintText = styled.div<StyledHintTextProp>`
     border-style: solid;
     border-color: #9f5f00;
     background-color: #fff3e0;
-    color: ${({ theme }: StyledHintTextProp) => theme.text};
+    color: #222;
     padding: 8px 12px;
 
     border-radius: ${({ theme }: StyledHintTextProp) => theme.cardBorderRadius}px;
