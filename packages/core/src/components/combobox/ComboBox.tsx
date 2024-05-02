@@ -204,8 +204,6 @@ const ComboBox: FC<ComboBoxProps> = ({
     }, [selectedItem]);
 
     const placeholderImageUrl = useMemo(() => {
-        console.log(selectedItem, item);
-
         if (selectedItem) {
             return selectedItem.imageUrl;
         }
