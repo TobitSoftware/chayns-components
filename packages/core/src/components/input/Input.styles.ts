@@ -75,6 +75,7 @@ export const StyledInputContent = styled.div<StyledInputContentProps>`
 type StyledInputFieldProps = WithTheme<{
     $isInvalid?: boolean;
     $shouldShowCenteredContent: boolean;
+    $placeholderWidth: number;
 }>;
 
 export const StyledInputField = styled.input<StyledInputFieldProps>`
@@ -83,7 +84,8 @@ export const StyledInputField = styled.input<StyledInputFieldProps>`
     color: ${({ theme, $isInvalid }: StyledInputFieldProps) =>
         $isInvalid ? theme.wrong : theme.text};
     padding: 0;
-    width: 100%;
+    width: ${({ $placeholderWidth }) => `calc(100% - ${$placeholderWidth}px)`};
+    line-height: 1em;
 
     ${({ $shouldShowCenteredContent }) =>
         $shouldShowCenteredContent &&

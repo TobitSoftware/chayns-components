@@ -16,6 +16,7 @@ import React, {
     type ReactElement,
 } from 'react';
 import { useTheme } from 'styled-components';
+import { useElementSize } from '../../hooks/useElementSize';
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
@@ -146,12 +147,22 @@ const Input = forwardRef<InputRef, InputProps>(
         ref,
     ) => {
         const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
+        const [placeholderWidth, setPlaceholderWidth] = useState(0);
 
         const areaProvider = useContext(AreaContext);
 
         const theme = useTheme() as Theme;
 
         const inputRef = useRef<HTMLInputElement>(null);
+        const placeholderRef = useRef<HTMLLabelElement>(null);
+
+        const placeholderSize = useElementSize(placeholderRef);
+
+        useEffect(() => {
+            if (placeholderSize && shouldShowOnlyBottomBorder) {
+                setPlaceholderWidth(placeholderSize.width + 5);
+            }
+        }, [placeholderSize, shouldShowOnlyBottomBorder]);
 
         const shouldChangeColor = useMemo(
             () => areaProvider.shouldChangeColor ?? false,
@@ -201,8 +212,8 @@ const Input = forwardRef<InputRef, InputProps>(
         const labelPosition = useMemo(() => {
             if (hasValue) {
                 return shouldShowOnlyBottomBorder
-                    ? { bottom: -3, right: 3 }
-                    : { bottom: -7, right: -6 };
+                    ? { right: 3, top: -1.5 }
+                    : { bottom: -10, right: -6 };
             }
 
             return { left: -1, top: -1.5 };
@@ -219,6 +230,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     {iconElement && <StyledInputIconWrapper>{iconElement}</StyledInputIconWrapper>}
                     <StyledInputContent $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}>
                         <StyledInputField
+                            $placeholderWidth={placeholderWidth}
                             id={id}
                             disabled={isDisabled}
                             onBlur={onBlur}
@@ -235,10 +247,11 @@ const Input = forwardRef<InputRef, InputProps>(
                         />
                         <StyledMotionInputLabelWrapper
                             animate={{
-                                fontSize: hasValue ? '10px' : '16px',
+                                fontSize: hasValue && !shouldShowOnlyBottomBorder ? '9px' : '16px',
                             }}
                             initial={false}
                             layout
+                            ref={placeholderRef}
                             style={{ ...labelPosition }}
                             transition={{ type: 'tween', duration: 0.3 }}
                         >
