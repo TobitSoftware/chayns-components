@@ -132,7 +132,7 @@ const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment }) => {
     return (
         <StyledSharingBar onClick={handleSharingBarClick}>
             <StyledSharingBarIconWrapper>
-                <Icon icons={['fa fa-share-nodes']} />
+                <Icon icons={['fa-solid fa-share-nodes']} />
             </StyledSharingBarIconWrapper>
             <ContextMenu items={contextMenuItems} ref={contextMenuRef} alignment={popupAlignment}>
                 {null}
