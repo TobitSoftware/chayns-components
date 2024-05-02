@@ -89,6 +89,14 @@ const NumberInput: FC<NumberInputProps> = ({
             // Removes everything except numbers, commas and points
             .replace(NUMBER_CLEAR_REGEX, '');
 
+        if (
+            isTimeInput &&
+            ((sanitizedValueString.includes(':') && sanitizedValueString.length > 5) ||
+                (!sanitizedValueString.includes(':') && sanitizedValueString.length > 4))
+        ) {
+            return;
+        }
+
         const valueToCheck = sanitizedValueString.replaceAll(',', '.');
 
         if (!isValidString({ string: valueToCheck, isMoneyInput, isDecimalInput, isTimeInput })) {
