@@ -17,6 +17,9 @@ export const getNearestPoint = ({ snapPoints, position }: GetNearestPointProps) 
         }
     }
 
+    nearestIndex = nearestIndex === -1 ? 0 : nearestIndex;
+    nearestPoint = nearestPoint === -Infinity ? 0 : nearestPoint;
+
     return { nearestIndex, nearestPoint };
 };
 
