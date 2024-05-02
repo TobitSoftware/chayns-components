@@ -78,6 +78,7 @@ const NumberInput: FC<NumberInputProps> = ({
     // the formattedValue will be shown in the input, when it is not in focus
     const [formattedValue, setFormattedValue] = useState<string>('');
     const [hasFocus, setHasFocus] = useState<boolean>(false);
+    const [shouldRemainPlaceholder, setShouldRemainPlaceholder] = useState<boolean>(false);
 
     const [isValueInvalid, setIsValueInvalid] = useState(false);
     const localPlaceholder = placeholder ?? (isMoneyInput ? '€' : undefined);
@@ -101,6 +102,12 @@ const NumberInput: FC<NumberInputProps> = ({
 
         if (!isValidString({ string: valueToCheck, isMoneyInput, isDecimalInput, isTimeInput })) {
             return;
+        }
+
+        if (newValue.length === 1 && newValue.match(/^[0-9]+$/) === null) {
+            setShouldRemainPlaceholder(true);
+        } else {
+            setShouldRemainPlaceholder(false);
         }
 
         setPlainText(sanitizedValueString.replaceAll('.', ','));
@@ -203,6 +210,7 @@ const NumberInput: FC<NumberInputProps> = ({
 
     return (
         <Input
+            shouldRemainPlaceholder={shouldRemainPlaceholder}
             shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
             inputMode="decimal"
             onChange={onLocalChange}

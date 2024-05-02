@@ -97,6 +97,10 @@ export type InputProps = {
      */
     rightElement?: ReactElement;
     /**
+     * Whether the placeholder should remain at its position if a value is typed.
+     */
+    shouldRemainPlaceholder?: boolean;
+    /**
      * Whether the content should be displayed centered inside the input.
      */
     shouldShowCenteredContent?: boolean;
@@ -136,6 +140,7 @@ const Input = forwardRef<InputRef, InputProps>(
             placeholderElement,
             rightElement,
             shouldShowOnlyBottomBorder,
+            shouldRemainPlaceholder = false,
             shouldShowClearIcon = false,
             shouldShowCenteredContent = false,
             type = 'text',
@@ -210,14 +215,14 @@ const Input = forwardRef<InputRef, InputProps>(
         }, [value]);
 
         const labelPosition = useMemo(() => {
-            if (hasValue) {
+            if (hasValue && !shouldRemainPlaceholder) {
                 return shouldShowOnlyBottomBorder
                     ? { right: 3, top: -1.5 }
                     : { bottom: -10, right: -6 };
             }
 
             return { left: -1, top: -1.5 };
-        }, [hasValue, shouldShowOnlyBottomBorder]);
+        }, [hasValue, shouldRemainPlaceholder, shouldShowOnlyBottomBorder]);
 
         return (
             <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
@@ -247,7 +252,12 @@ const Input = forwardRef<InputRef, InputProps>(
                         />
                         <StyledMotionInputLabelWrapper
                             animate={{
-                                fontSize: hasValue && !shouldShowOnlyBottomBorder ? '9px' : '16px',
+                                fontSize:
+                                    hasValue &&
+                                    !shouldShowOnlyBottomBorder &&
+                                    !shouldRemainPlaceholder
+                                        ? '9px'
+                                        : '16px',
                             }}
                             initial={false}
                             layout
