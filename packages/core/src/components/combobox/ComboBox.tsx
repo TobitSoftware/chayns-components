@@ -1,4 +1,3 @@
-import { getIsMobile } from '@chayns-components/emoji-input/lib/types/utils/environment';
 import { getDevice } from 'chayns-api';
 import React, {
     FC,
@@ -12,6 +11,7 @@ import React, {
 } from 'react';
 import { ComboBoxDirection } from '../../types/comboBox';
 import { calculateContentHeight, calculateContentWidth } from '../../utils/calculate';
+import { getIsMobile } from '../../utils/environment';
 import Icon from '../icon/Icon';
 import ComboBoxItem from './combobox-item/ComboBoxItem';
 import {

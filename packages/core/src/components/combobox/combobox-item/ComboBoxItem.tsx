@@ -1,5 +1,5 @@
-import { getIsMobile } from '@chayns-components/emoji-input/lib/types/utils/environment';
 import React, { FC, ReactNode, useCallback, useMemo } from 'react';
+import { getIsMobile } from '../../../utils/environment';
 import type { ComboBoxProps, IComboBoxItem } from '../ComboBox';
 import { StyledComboBoxItem, StyledComboBoxItemImage } from './ComboBoxItem.styles';
 
