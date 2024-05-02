@@ -9,6 +9,7 @@ export const StyledTransparencySlider = styled.div`
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
 `;
 
 export const StyledTransparencySliderBackground = styled.div`
@@ -27,7 +28,7 @@ export const StyledTransparencySliderBackground = styled.div`
     background-size: 8px 8px;
     content: '';
     position: absolute;
-    width: 100%;
+    width: calc(100% - 10px);
 `;
 
 type StyledTransparencySliderInputProps = WithTheme<{ $color?: string }>;
@@ -39,7 +40,7 @@ export const StyledTransparencySliderInput = styled.input.attrs<StyledTransparen
         },
     }),
 )`
-    width: 100%;
+    width: calc(100% - 10px);
     border-radius: 100px;
     -webkit-appearance: none;
     height: 10px;
