@@ -204,6 +204,8 @@ const ComboBox: FC<ComboBoxProps> = ({
     }, [selectedItem]);
 
     const placeholderImageUrl = useMemo(() => {
+        console.log(selectedItem, item);
+
         if (selectedItem) {
             return selectedItem.imageUrl;
         }
@@ -311,6 +313,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                             />
                         )}
                         {placeholderText}
+                        {item && item.suffixElement && item.suffixElement}
                     </StyledComboBoxPlaceholder>
                     <StyledComboBoxIconWrapper>
                         <Icon icons={['fa fa-chevron-down']} />

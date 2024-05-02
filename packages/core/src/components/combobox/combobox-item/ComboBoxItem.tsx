@@ -25,7 +25,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
     value,
 }) => {
     const handleItemClick = useCallback(() => {
-        onSelect({ text, value });
+        onSelect({ text, value, suffixElement, imageUrl });
     }, [onSelect, text, value]);
 
     const isMobile = getIsMobile();
