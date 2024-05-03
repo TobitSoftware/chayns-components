@@ -28,7 +28,7 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
     user-select: none;
 
     &:after {
-        ${({ $isChecked, $shouldShowAsSwitch, $lineHeight }) =>
+        ${({ $isChecked, $shouldShowAsSwitch, $lineHeight, theme }: StyledCheckboxLabelProps) =>
             $shouldShowAsSwitch
                 ? css`
                       background-color: white;
@@ -36,7 +36,7 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
                       box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
                       height: 16px;
                       left: 7px;
-                      top: ${$lineHeight ? `${$lineHeight / 1.5}px` : '50%'};
+                      top: ${$lineHeight ? `${theme.fontSize - 2}px` : '50%'};
                       transform: translateX(${$isChecked ? '18px' : 0}) translateY(-50%);
                       transition: transform 0.2s ease;
                       width: 16px;
@@ -47,9 +47,7 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
                       height: 10px;
                       left: 2px;
                       opacity: ${$isChecked ? 1 : 0};
-                      top: ${$lineHeight
-                          ? `calc(${$lineHeight / 1.5}px - 2px)`
-                          : 'calc(50% - 2px)'};
+                      top: ${$lineHeight ? `${theme.fontSize - 4}px` : 'calc(50% - 2px)'};
                       transform: rotateZ(37deg) translateY(-50%);
                       transition: opacity 0.2s ease;
                       width: 5.5px;
@@ -86,10 +84,10 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
         position: absolute;
         transition: background-color 0.2s ease;
         width: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '28px' : '15px')};
-        ${({ $lineHeight }) =>
+        ${({ $lineHeight, theme }: StyledCheckboxLabelProps) =>
             $lineHeight
                 ? css`
-                      top: ${$lineHeight / 1.5}px;
+                      top: ${theme.fontSize - 2}px;
                       transform: translateY(-50%);
                   `
                 : css`
