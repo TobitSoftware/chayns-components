@@ -44,7 +44,7 @@ type ColorSchemeProviderProps = {
 };
 
 export interface Theme {
-    [key: string]: string | number;
+    [key: string]: string;
 }
 
 export type WithTheme<T> = T & {

@@ -93,13 +93,11 @@ export const getFontSize = () => {
 
     document.body.appendChild(element);
 
-    // const { fontSize } = element.style;
-
     const { fontSize } = window.getComputedStyle(element);
 
     document.body.removeChild(element);
 
-    return Number(fontSize.replace('px', ''));
+    return fontSize.replace('px', '');
 };
 
 export const generateFontFaces = () =>
