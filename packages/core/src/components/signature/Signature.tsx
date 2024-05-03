@@ -94,6 +94,7 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
         const handleDelete = useCallback(async () => {
             await deleteUserSignature().then((success) => {
                 if (success) {
+                    setHasSubscribed(false);
                     setSignatureUrl(undefined);
 
                     if (typeof onRemove === 'function') {
