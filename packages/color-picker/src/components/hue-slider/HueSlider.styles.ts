@@ -48,6 +48,7 @@ export const StyledHueSliderInput = styled.input<StyledHueSliderInputProps>`
         appearance: none;
         width: 20px;
         height: 20px;
+        opacity: 0;
         cursor: pointer;
         border-radius: 50%;
     }
@@ -55,6 +56,7 @@ export const StyledHueSliderInput = styled.input<StyledHueSliderInputProps>`
     // slider thumb for firefox
     &::-moz-range-thumb {
         width: 20px;
+        opacity: 0;
         height: 20px;
         cursor: pointer;
         border-radius: 50%;
