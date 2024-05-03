@@ -54,6 +54,7 @@ export const StyledTransparencySliderInput = styled.input.attrs<StyledTransparen
     &::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
+        opacity: 0;
         width: 20px;
         height: 20px;
         cursor: pointer;
@@ -64,6 +65,7 @@ export const StyledTransparencySliderInput = styled.input.attrs<StyledTransparen
     &::-moz-range-thumb {
         width: 20px;
         height: 20px;
+        opacity: 0;
         cursor: pointer;
         border-radius: 50%;
     }
