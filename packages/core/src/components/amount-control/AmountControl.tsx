@@ -28,6 +28,10 @@ export type AmountControlProps = {
      */
     icon?: string;
     /**
+     * The color of the icon.
+     */
+    iconColor?: string;
+    /**
      * A Text that should be displayed, if no amount is selected;
      */
     label?: string;
@@ -50,6 +54,7 @@ const AmountControl: FC<AmountControlProps> = ({
     icon,
     shouldShowIcon = true,
     label,
+    iconColor,
     maxAmount,
     onChange,
 }) => {
@@ -156,7 +161,7 @@ const AmountControl: FC<AmountControlProps> = ({
 
         switch (displayState) {
             case 'default':
-                item = <Icon icons={[icon ?? 'fa fa-cart-shopping']} size={15} />;
+                item = <Icon icons={[icon ?? 'fa fa-cart-shopping']} size={15} color={iconColor} />;
                 break;
             case 'delete':
                 item = <Icon icons={['fa ts-trash']} size={25} />;
@@ -172,7 +177,7 @@ const AmountControl: FC<AmountControlProps> = ({
         }
 
         return item;
-    }, [displayState, icon]);
+    }, [displayState, icon, iconColor]);
 
     const shouldShowLeftIcon = useMemo(() => {
         if (shouldShowIcon) {
