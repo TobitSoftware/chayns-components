@@ -111,5 +111,9 @@ export const isValidString: IsValidString = ({
         isValid = true;
     }
 
+    if (string.startsWith('0')) {
+        isValid = true;
+    }
+
     return isValid;
 };

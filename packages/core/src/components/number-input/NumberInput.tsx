@@ -84,6 +84,10 @@ const NumberInput: FC<NumberInputProps> = ({
     const localPlaceholder = placeholder ?? (isMoneyInput ? '€' : undefined);
 
     const onLocalChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+        if (isValueInvalid || isInvalid) {
+            return;
+        }
+
         const newValue = event.target.value;
 
         const sanitizedValueString = newValue
@@ -99,8 +103,18 @@ const NumberInput: FC<NumberInputProps> = ({
         }
 
         const valueToCheck = sanitizedValueString.replaceAll(',', '.');
+        console.log(valueToCheck);
 
         if (!isValidString({ string: valueToCheck, isMoneyInput, isDecimalInput, isTimeInput })) {
+            return;
+        }
+
+        console.log(minNumber && Number(valueToCheck) < minNumber);
+
+        if (
+            (maxNumber && Number(valueToCheck) > maxNumber) ||
+            (minNumber && Number(valueToCheck) < minNumber)
+        ) {
             return;
         }
 
