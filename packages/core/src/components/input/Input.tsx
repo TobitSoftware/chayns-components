@@ -221,7 +221,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     : { bottom: -10, right: -6 };
             }
 
-            return { left: -1, top: -1.5 };
+            return { left: -1 };
         }, [hasValue, shouldRemainPlaceholder, shouldShowOnlyBottomBorder]);
 
         return (
