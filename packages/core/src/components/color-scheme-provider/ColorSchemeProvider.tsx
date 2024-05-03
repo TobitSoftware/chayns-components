@@ -4,7 +4,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { getDesignSettings } from '../../api/theme/get';
 import type { DesignSettings } from '../../types/colorSchemeProvider';
-import { convertIconStyle, generateFontFaces } from '../../utils/font';
+import { convertIconStyle, generateFontFaces, getFontSize } from '../../utils/font';
 
 enum ColorMode {
     Classic,
@@ -44,7 +44,7 @@ type ColorSchemeProviderProps = {
 };
 
 export interface Theme {
-    [key: string]: string;
+    [key: string]: string | number;
 }
 
 export type WithTheme<T> = T & {
@@ -145,6 +145,8 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                 newTheme[key] = internalDesignSettings[key];
             });
         }
+
+        newTheme.fontSize = getFontSize();
 
         setTheme(newTheme);
         setColors(newColors);

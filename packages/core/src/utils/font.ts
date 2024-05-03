@@ -83,6 +83,25 @@ export const convertIconStyle = (iconStyle: IconStyle) => {
     }
 };
 
+export const getFontSize = () => {
+    const element = document.createElement('p');
+
+    element.style.position = 'absolute';
+    element.style.opacity = '0';
+
+    element.textContent = 'Ich war hier';
+
+    document.body.appendChild(element);
+
+    // const { fontSize } = element.style;
+
+    const { fontSize } = window.getComputedStyle(element);
+
+    document.body.removeChild(element);
+
+    return Number(fontSize.replace('px', ''));
+};
+
 export const generateFontFaces = () =>
     fonts
         .map(
