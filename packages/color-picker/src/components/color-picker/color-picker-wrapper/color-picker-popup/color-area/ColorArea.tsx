@@ -197,43 +197,73 @@ const ColorArea = () => {
         }
     }, [updateShouldCallOnSelect, updateShouldGetCoordinates]);
 
+    const move = useCallback(
+        (xCords: number, yCords: number) => {
+            let newXCords = xCords;
+            let newYCords = yCords;
+
+            switch (true) {
+                case xCords > 300:
+                    newXCords = 300;
+                    break;
+                case xCords < 0:
+                    newXCords = 0;
+                    break;
+                default:
+                    break;
+            }
+
+            switch (true) {
+                case yCords > 150:
+                    newYCords = 150;
+                    break;
+                case yCords < 0:
+                    newYCords = 0;
+                    break;
+                default:
+                    break;
+            }
+
+            x.set(newXCords);
+            y.set(newYCords);
+
+            setColor();
+        },
+        [setColor, x, y],
+    );
+
     const handleMouseMove = useCallback(
         (event: MouseEvent) => {
             if (canDrag.current && pseudoRef.current) {
                 const { left, top } = pseudoRef.current.getBoundingClientRect();
 
-                let xCords = event.clientX - left - 10;
-                let yCords = event.clientY - top - 10;
+                const xCords = event.clientX - left - 10;
+                const yCords = event.clientY - top - 10;
 
-                switch (true) {
-                    case xCords > 300:
-                        xCords = 300;
-                        break;
-                    case xCords < 0:
-                        xCords = 0;
-                        break;
-                    default:
-                        break;
-                }
-
-                switch (true) {
-                    case yCords > 150:
-                        yCords = 150;
-                        break;
-                    case yCords < 0:
-                        yCords = 0;
-                        break;
-                    default:
-                        break;
-                }
-
-                x.set(xCords);
-                y.set(yCords);
-
-                setColor();
+                move(xCords, yCords);
             }
         },
-        [setColor, x, y],
+        [move],
+    );
+
+    const handleTouchMove = useCallback(
+        (event: TouchEvent) => {
+            if (canDrag.current && pseudoRef.current) {
+                event.preventDefault();
+
+                const { left, top } = pseudoRef.current.getBoundingClientRect();
+
+                const xCords = event.changedTouches[0]
+                    ? event.changedTouches[0].clientX - left - 10
+                    : (event as unknown as { pageX: number }).pageX;
+                const yCords = event.changedTouches[0]
+                    ? event.changedTouches[0].clientY - top - 10
+                    : (event as unknown as { pageY: number }).pageY;
+
+                move(xCords, yCords);
+            }
+        },
+        [move],
     );
 
     useEffect(() => {
@@ -241,14 +271,18 @@ const ColorArea = () => {
         // @ts-ignore
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('pointerup', handlePointerUp);
+        window.addEventListener('touchmove', handleTouchMove);
+        window.addEventListener('touchend', handlePointerUp);
 
         return () => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('pointerup', handlePointerUp);
+            window.removeEventListener('touchmove', handleTouchMove);
+            window.removeEventListener('touchend', handlePointerUp);
         };
-    }, [handleMouseMove, handlePointerUp]);
+    }, [handleMouseMove, handlePointerUp, handleTouchMove]);
 
     return useMemo(
         () => (
