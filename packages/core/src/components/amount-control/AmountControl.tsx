@@ -130,12 +130,14 @@ const AmountControl: FC<AmountControlProps> = ({
 
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
-            const valueBeforeCheck = Number(event.target.value);
+            const { value } = event.target;
+
+            const valueBeforeCheck = Number(value.replace(/\D/g, ''));
 
             const checkedValue = checkForValidAmount({
                 minAmount,
                 maxAmount,
-                amount: Number(event.target.value),
+                amount: valueBeforeCheck,
             });
 
             if (valueBeforeCheck < minAmount && minAmount === 0) {
@@ -206,7 +208,6 @@ const AmountControl: FC<AmountControlProps> = ({
                     onBlur={handleInputBlur}
                     onChange={handleInputChange}
                     value={displayState === 'default' && label ? label : inputValue}
-                    type={amountValue === 0 ? 'text' : 'number'}
                 />
                 <AnimatePresence initial={false}>
                     {displayState === 'normal' && (
@@ -232,6 +233,7 @@ const AmountControl: FC<AmountControlProps> = ({
             handleFirstAmount,
             handleInputBlur,
             handleInputChange,
+            hasFocus,
             inputValue,
             label,
             leftIcon,
