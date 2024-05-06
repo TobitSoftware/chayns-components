@@ -85,6 +85,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     const [invalidOpeningTimes, setInvalidOpeningTimes] = useState<
         { openingTimeId: string; invalidTimeIds: string[] }[]
     >([]);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     const ref = useRef<HTMLDivElement>(null);
     const popupRef = useRef<PopupRef>(null);
@@ -268,6 +269,16 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
 
     const size = useElementSize(ref);
 
+    const hidePopup = useCallback(() => {
+        setIsPopupOpen(false);
+        popupRef.current?.hide();
+    }, []);
+
+    const showPopup = useCallback(() => {
+        setIsPopupOpen(true);
+        popupRef.current?.show();
+    }, []);
+
     const displayedContent = useMemo(() => {
         if (!currentDayId || editMode) {
             return content;
@@ -287,10 +298,13 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
             <StyledOpeningTimesWrapper
                 key={`currentDay__${currentDayId}`}
                 style={size && { width: size.width }}
-                onMouseEnter={() => popupRef.current?.show()}
-                onMouseLeave={() => popupRef.current?.hide()}
+                onMouseEnter={showPopup}
+                onMouseLeave={hidePopup}
+                onClick={() => (isPopupOpen ? hidePopup() : showPopup())}
             >
                 <Popup
+                    onShow={() => setIsPopupOpen(true)}
+                    onHide={() => setIsPopupOpen(false)}
                     ref={popupRef}
                     content={
                         <StyledOpeningTimesTooltipContent key="opening-time-tooltip">
@@ -315,9 +329,11 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
         newOpeningTimes,
         weekdays,
         size,
+        showPopup,
+        hidePopup,
         closedText,
         handleUpdateInvalidIds,
-        content,
+        isPopupOpen,
     ]);
 
     const shouldShowHint = useMemo(
