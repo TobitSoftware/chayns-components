@@ -20,6 +20,10 @@ export const StyledMotionPopupContentWrapper = styled(
     z-index: 100;
     position: fixed;
 
+    & img {
+        width: 100%;
+    }
+
     &::after {
         background-color: inherit;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
