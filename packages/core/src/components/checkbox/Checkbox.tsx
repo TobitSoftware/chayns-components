@@ -72,7 +72,7 @@ const Checkbox: FC<CheckboxProps> = ({
     );
 
     return (
-        <StyledCheckbox>
+        <StyledCheckbox $hasLabel={!!children}>
             <StyledCheckboxInput
                 checked={isChecked}
                 disabled={isDisabled}
@@ -83,6 +83,7 @@ const Checkbox: FC<CheckboxProps> = ({
             <StyledCheckboxLabel
                 className={labelClassName}
                 htmlFor={uuid}
+                $hasLabel={!!children}
                 $isChecked={isChecked ?? isActive}
                 $isDisabled={isDisabled}
                 $shouldShowAsSwitch={shouldShowAsSwitch}
