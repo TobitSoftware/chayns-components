@@ -18,7 +18,7 @@ export const StyledCodeHighlighter = styled.div<StyledCodeHighlighterProps>`
     pre {
         margin: 0 !important;
         overflow: auto;
-        padding: 1em;
+        padding: 15px;
         line-height: 1.5;
 
         // Styles for custom scrollbar

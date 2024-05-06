@@ -1,6 +1,6 @@
 import { getDevice } from 'chayns-api';
 import { format } from 'prettier/standalone';
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import {
@@ -58,7 +58,25 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     shouldFormatCode = false,
     shouldShowLineNumbers = false,
 }) => {
+    const [width, setWidth] = useState(0);
+
+    const ref = useRef<HTMLDivElement>(null);
+
     const { browser } = getDevice();
+
+    useEffect(() => {
+        if (ref.current) {
+            const { children } = ref.current;
+
+            const preElement = Array.from(children).find(
+                ({ tagName }) => tagName.toLowerCase() === 'pre',
+            );
+
+            if (preElement) {
+                setWidth(preElement.scrollWidth);
+            }
+        }
+    }, []);
 
     // function to style highlighted code
     const lineWrapper = useCallback(
@@ -67,6 +85,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                 backgroundColor: 'none',
                 display: 'block',
                 borderRadius: '2px',
+                width: width - 15,
             };
 
             if (highlightedLines?.added && highlightedLines.added.includes(lineNumber)) {
@@ -79,7 +98,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
             return { style };
         },
-        [highlightedLines],
+        [highlightedLines, width],
     );
 
     const formattedCode = useMemo(() => {
@@ -98,7 +117,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
     return useMemo(
         () => (
-            <StyledCodeHighlighter $browser={browser?.name} $codeTheme={theme}>
+            <StyledCodeHighlighter $browser={browser?.name} $codeTheme={theme} ref={ref}>
                 <StyledCodeHighlighterHeader $codeTheme={theme}>
                     <StyledCodeHighlighterFileName $codeTheme={theme}>
                         {formatLanguage(language)}
