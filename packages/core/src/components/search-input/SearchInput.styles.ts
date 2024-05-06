@@ -16,7 +16,6 @@ export const StyledMotionSearchInputContentWrapper = styled(motion.div)<FramerMo
 `;
 
 export const StyledMotionSearchInputIconWrapper = styled.div`
-    height: 18px;
     width: 18px;
 `;
 
