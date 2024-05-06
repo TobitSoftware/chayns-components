@@ -1,11 +1,16 @@
 import type { WithTheme } from '@chayns-components/core';
 import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const StyledOpeningInputs = styled(motion.div)`
+type StyledOpeningInputsProps = WithTheme<{ $editMode: boolean }>;
+
+export const StyledOpeningInputs = styled(motion.div)<StyledOpeningInputsProps>`
     display: flex;
-    flex-direction: column;
-    //gap: 8px;
+    ${({ $editMode }) =>
+        $editMode &&
+        css`
+            flex-direction: column;
+        `}
 `;
 
 type StyledOpeningInputPreviewProps = WithTheme<unknown>;

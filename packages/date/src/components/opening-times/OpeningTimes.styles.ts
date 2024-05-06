@@ -13,7 +13,7 @@ export const StyledOpeningTimesWrapper = styled.div`
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 16px;
+    min-width: 300px;
 `;
 
 export const StyledOpeningTimesTooltipContent = styled.div`

@@ -241,6 +241,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                     )}
                     <OpeningInputs
                         closedText={closedText}
+                        currentDayId={currentDayId}
                         id={id}
                         times={times}
                         isDisabled={isDisabled}
@@ -257,6 +258,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
         return items;
     }, [
         closedText,
+        currentDayId,
         editMode,
         handleAdd,
         handleChange,
@@ -316,6 +318,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                 </Popup>
                 <OpeningInputs
                     closedText={closedText}
+                    currentDayId={currentDayId}
                     onInvalid={handleUpdateInvalidIds}
                     id={id}
                     times={times}
@@ -331,6 +334,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
         size,
         showPopup,
         hidePopup,
+        content,
         closedText,
         handleUpdateInvalidIds,
         isPopupOpen,

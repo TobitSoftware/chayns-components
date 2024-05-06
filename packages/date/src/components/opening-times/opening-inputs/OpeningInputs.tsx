@@ -1,7 +1,7 @@
 import { AnimatePresence } from 'framer-motion';
 import React, { FC, useCallback, useEffect, useMemo, useState, type ReactElement } from 'react';
 import { v4 as uuidV4 } from 'uuid';
-import { OpeningTimesButtonType, type Time } from '../../../types/openingTimes';
+import { OpeningTimesButtonType, type OpeningTime, type Time } from '../../../types/openingTimes';
 import OpeningInput from './opening-input/OpeningInput';
 import { StyledOpeningInputPreview, StyledOpeningInputs } from './OpeningInputs.styles';
 
@@ -13,6 +13,7 @@ export type OpeningInputsProps = {
     onRemove?: (id: Time['id']) => void;
     onInvalid?: (openingTimeId: string, timeIds: string[]) => void;
     id: string;
+    currentDayId?: OpeningTime['id'];
     editMode: boolean;
     closedText: string;
 };
@@ -25,6 +26,7 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
     onInvalid,
     id,
     onChange,
+    currentDayId,
     editMode,
     closedText,
 }) => {
@@ -123,7 +125,7 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
 
                 items.push(
                     <StyledOpeningInputPreview key={`opening-times-preview__${id}.${timeId}`}>
-                        {text}
+                        {`${text}${currentDayId && newTimes.length > 1 && index === 0 ? ', ' : ''}`}
                     </StyledOpeningInputPreview>,
                 );
 
@@ -161,6 +163,7 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
         return items;
     }, [
         closedText,
+        currentDayId,
         editMode,
         handleAdd,
         handleChange,
@@ -172,17 +175,26 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
         times.length,
     ]);
 
+    const gap = useMemo(() => {
+        if ((newTimes && newTimes.length > 1 && editMode) || (!editMode && currentDayId)) {
+            return '8px';
+        }
+
+        return 0;
+    }, [currentDayId, editMode, newTimes]);
+
     return useMemo(
         () => (
             <StyledOpeningInputs
+                $editMode={!currentDayId}
                 key={`opening-inputs__${id}`}
-                animate={{ gap: newTimes && newTimes.length > 1 ? '8px' : 0 }}
+                animate={{ gap }}
                 initial={{ gap: 0 }}
             >
                 <AnimatePresence initial={false}>{content}</AnimatePresence>
             </StyledOpeningInputs>
         ),
-        [content, id, newTimes],
+        [content, currentDayId, gap, id],
     );
 };
 
