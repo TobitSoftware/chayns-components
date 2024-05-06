@@ -2,7 +2,6 @@ import { getWindowMetrics } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
     forwardRef,
-    MouseEvent,
     ReactNode,
     ReactPortal,
     useCallback,
@@ -57,6 +56,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const [isOpen, setIsOpen] = useState(false);
         const [portal, setPortal] = useState<ReactPortal>();
         const [menuHeight, setMenuHeight] = useState(0);
+
+        const timeout = useRef<number>();
 
         const uuid = useUuid();
 
@@ -115,32 +116,22 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             setIsOpen(false);
         }, []);
 
-        const handleMouseEnter = () => {
+        const handleMouseEnter = useCallback(() => {
             if (shouldShowOnHover) {
+                window.clearTimeout(timeout.current);
                 handleShow();
             }
-        };
+        }, [handleShow, shouldShowOnHover]);
 
-        const handleMouseLeave = useCallback(
-            (event: MouseEvent) => {
-                if (shouldShowOnHover) {
-                    if ((event.currentTarget as HTMLElement).dataset.ispopup === 'true') {
-                        handleHide();
-                    }
+        const handleMouseLeave = useCallback(() => {
+            if (!shouldShowOnHover) {
+                return;
+            }
 
-                    if (
-                        event.relatedTarget &&
-                        (event.relatedTarget === popupContentRef.current ||
-                            popupContentRef.current?.contains(event.relatedTarget as Node))
-                    ) {
-                        return;
-                    }
-
-                    handleHide();
-                }
-            },
-            [handleHide, shouldShowOnHover],
-        );
+            timeout.current = window.setTimeout(() => {
+                handleHide();
+            }, 500);
+        }, [handleHide, shouldShowOnHover]);
 
         const handleDocumentClick = useCallback<EventListener>(
             (event) => {
@@ -203,6 +194,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                                 alignment={alignment}
                                 ref={popupContentRef}
                                 onMouseLeave={handleMouseLeave}
+                                onMouseEnter={handleMouseEnter}
                             >
                                 <AreaContextProvider shouldChangeColor={false}>
                                     {content}
@@ -213,7 +205,16 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     container,
                 ),
             );
-        }, [alignment, container, content, coordinates, handleMouseLeave, isOpen, uuid]);
+        }, [
+            alignment,
+            container,
+            content,
+            coordinates,
+            handleMouseEnter,
+            handleMouseLeave,
+            isOpen,
+            uuid,
+        ]);
 
         return (
             <>

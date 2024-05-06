@@ -8,10 +8,11 @@ type PopupContentProps = {
     children: ReactNode;
     coordinates: PopupCoordinates;
     onMouseLeave: MouseEventHandler<HTMLSpanElement>;
+    onMouseEnter: MouseEventHandler<HTMLSpanElement>;
 };
 
 const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
-    ({ alignment, children, coordinates, onMouseLeave }, ref) => {
+    ({ alignment, children, coordinates, onMouseLeave, onMouseEnter }, ref) => {
         const { colorMode } = useSite();
 
         const isBottomLeftAlignment = alignment === PopupAlignment.BottomLeft;
@@ -35,6 +36,7 @@ const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
                 $position={alignment}
                 ref={ref}
                 data-ispopup="true"
+                onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
                 style={{ left: coordinates.x, top: coordinates.y }}
                 transition={{ type: 'tween' }}
