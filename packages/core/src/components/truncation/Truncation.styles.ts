@@ -17,7 +17,7 @@ export const StyledMotionTruncationContent = styled(motion.div)<FramerMotionBugF
 export const StyledTruncationPseudoContent = styled.div`
     visibility: hidden;
     position: absolute;
-    width: fit-content;
+    width: 100%;
 `;
 
 type StyledTruncationClampWrapperProps = WithTheme<{ $position: ClampPosition }>;

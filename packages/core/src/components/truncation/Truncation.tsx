@@ -76,6 +76,7 @@ const Truncation: FC<TruncationProps> = ({
         setInitialRender(false);
     }, []);
 
+    const parentRef = useRef<HTMLDivElement>(null);
     const pseudoChildrenRef = useRef<HTMLDivElement>(null);
     const childrenRef = useRef<HTMLDivElement>(null);
     const originalChildrenRef = useRef<HTMLDivElement>(null);
@@ -158,6 +159,12 @@ const Truncation: FC<TruncationProps> = ({
                     : originalChildrenRef.current,
             );
 
+            parentRef.current?.appendChild(
+                shouldShowCollapsedElement && !internalIsOpen
+                    ? originalChildrenRef.current
+                    : pseudoChildrenRef.current,
+            );
+
             (childrenRef.current.children[0] as HTMLDivElement).style.visibility = 'visible';
         }
     }, [children, internalIsOpen, shouldShowCollapsedElement]);
@@ -234,7 +241,7 @@ const Truncation: FC<TruncationProps> = ({
 
     return useMemo(
         () => (
-            <StyledTruncation className="beta-chayns-truncation">
+            <StyledTruncation className="beta-chayns-truncation" ref={parentRef}>
                 <StyledTruncationPseudoContent ref={pseudoChildrenRef}>
                     {children}
                 </StyledTruncationPseudoContent>
