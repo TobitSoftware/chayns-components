@@ -53,6 +53,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const container = document.querySelector('.tapp') || document.body;
 
         const [alignment, setAlignment] = useState<PopupAlignment>(PopupAlignment.TopLeft);
+        const [offset, setOffset] = useState<number>(0);
         const [isOpen, setIsOpen] = useState(false);
         const [portal, setPortal] = useState<ReactPortal>();
         const [menuHeight, setMenuHeight] = useState(0);
@@ -62,6 +63,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const uuid = useUuid();
 
         // ToDo: Replace with hook if new chayns api is ready
+
         const popupContentRef = useRef<HTMLDivElement>(null);
         const popupPseudoContentRef = useRef<HTMLDivElement>(null);
         const popupRef = useRef<HTMLDivElement>(null);
@@ -79,26 +81,84 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 } = popupRef.current.getBoundingClientRect();
 
                 if (pseudoHeight > childrenTop - 25) {
+                    let isRight = false;
+
                     if (pseudoWidth > childrenLeft + childrenWidth / 2 - 25) {
                         setAlignment(PopupAlignment.BottomRight);
+
+                        isRight = true;
                     } else {
                         setAlignment(PopupAlignment.BottomLeft);
                     }
 
+                    const x = childrenLeft + childrenWidth / 2;
+                    const y = childrenTop + childrenHeight + yOffset;
+
+                    let newOffset;
+
+                    if (isRight) {
+                        newOffset =
+                            x + pseudoWidth >= window.innerWidth
+                                ? x + pseudoWidth - window.innerWidth
+                                : 0;
+                    } else {
+                        newOffset = 0;
+
+                        const right = window.innerWidth - (childrenLeft + childrenWidth / 2);
+
+                        newOffset =
+                            right + pseudoWidth >= window.innerWidth
+                                ? right + pseudoWidth - window.innerWidth
+                                : 0;
+                    }
+
+                    setOffset(newOffset);
+
+                    const newX = x - newOffset;
+
                     setCoordinates({
-                        x: childrenLeft + childrenWidth / 2,
-                        y: childrenTop + childrenHeight + yOffset,
+                        x: newX < 23 ? 23 : newX,
+                        y: y - yOffset,
                     });
                 } else {
+                    let isRight = false;
+
                     if (pseudoWidth > childrenLeft + childrenWidth / 2 - 25) {
                         setAlignment(PopupAlignment.TopRight);
+
+                        isRight = true;
                     } else {
                         setAlignment(PopupAlignment.TopLeft);
                     }
 
+                    const x = childrenLeft + childrenWidth / 2;
+                    const y = childrenTop - yOffset;
+
+                    let newOffset;
+
+                    if (isRight) {
+                        newOffset =
+                            x + pseudoWidth >= window.innerWidth
+                                ? x + pseudoWidth - window.innerWidth
+                                : 0;
+                    } else {
+                        newOffset = 0;
+
+                        const right = window.innerWidth - (childrenLeft + childrenWidth / 2);
+
+                        newOffset =
+                            right + pseudoWidth >= window.innerWidth
+                                ? right + pseudoWidth - window.innerWidth
+                                : 0;
+                    }
+
+                    setOffset(newOffset);
+
+                    const newX = x - newOffset;
+
                     setCoordinates({
-                        x: childrenLeft + childrenWidth / 2,
-                        y: childrenTop - yOffset,
+                        x: newX < 23 ? 23 : newX,
+                        y: y - yOffset,
                     });
                 }
 
@@ -189,6 +249,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     <AnimatePresence initial={false}>
                         {isOpen && (
                             <PopupContentWrapper
+                                offset={offset}
                                 coordinates={coordinates}
                                 key={`tooltip_${uuid}`}
                                 alignment={alignment}
@@ -213,6 +274,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             handleMouseEnter,
             handleMouseLeave,
             isOpen,
+            offset,
             uuid,
         ]);
 

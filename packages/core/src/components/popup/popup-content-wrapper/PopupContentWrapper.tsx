@@ -6,13 +6,14 @@ import { StyledMotionPopupContentWrapper } from './PopupContentWrapper.styles';
 type PopupContentProps = {
     alignment: PopupAlignment;
     children: ReactNode;
+    offset: number;
     coordinates: PopupCoordinates;
     onMouseLeave: MouseEventHandler<HTMLSpanElement>;
     onMouseEnter: MouseEventHandler<HTMLSpanElement>;
 };
 
 const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
-    ({ alignment, children, coordinates, onMouseLeave, onMouseEnter }, ref) => {
+    ({ alignment, children, coordinates, offset, onMouseLeave, onMouseEnter }, ref) => {
         const { colorMode } = useSite();
 
         const isBottomLeftAlignment = alignment === PopupAlignment.BottomLeft;
@@ -31,6 +32,7 @@ const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
             <StyledMotionPopupContentWrapper
                 animate={{ opacity: 1, y: 0 }}
                 $colorMode={colorMode}
+                $offset={offset}
                 exit={{ opacity: 0, y: exitAndInitialY }}
                 initial={{ opacity: 0, y: exitAndInitialY }}
                 $position={alignment}

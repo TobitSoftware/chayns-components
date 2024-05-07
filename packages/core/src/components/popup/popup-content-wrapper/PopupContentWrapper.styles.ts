@@ -7,6 +7,7 @@ import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider'
 type StyledMotionPopupContentWrapperProps = WithTheme<{
     $position: PopupAlignment;
     $colorMode: ColorMode;
+    $offset: number;
 }>;
 
 export const StyledMotionPopupContentWrapper = styled(
@@ -35,31 +36,31 @@ export const StyledMotionPopupContentWrapper = styled(
         width: 14px;
         z-index: -2;
 
-        ${({ $position }) => {
+        ${({ $position, $offset }) => {
             switch ($position) {
                 case PopupAlignment.TopLeft:
                     return css`
                         bottom: -7px;
-                        right: 13px;
+                        right: ${13 + $offset}px;
                         transform: rotate(45deg);
                     `;
                 case PopupAlignment.BottomLeft:
                     return css`
                         top: -7px;
-                        right: 13px;
+                        right: ${13 + $offset}px;
                         transform: rotate(225deg);
                     `;
                 case PopupAlignment.TopRight:
                     return css`
                         transform: rotate(45deg);
                         bottom: -7px;
-                        left: 13px;
+                        left: ${13 + $offset}px;
                     `;
                 case PopupAlignment.BottomRight:
                     return css`
                         transform: rotate(225deg);
                         top: -7px;
-                        left: 13px;
+                        left: ${13 + $offset}px;
                     `;
                 default:
                     return undefined;
