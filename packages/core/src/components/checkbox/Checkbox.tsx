@@ -67,12 +67,12 @@ const Checkbox: FC<CheckboxProps> = ({
     const uuid = useUuid();
 
     const lineHeight = useMemo(
-        () => (shouldShowCentered ? undefined : getHeightOfSingleTextLine()),
-        [shouldShowCentered],
+        () => (!children || shouldShowCentered ? undefined : getHeightOfSingleTextLine()),
+        [children, shouldShowCentered],
     );
 
     return (
-        <StyledCheckbox $hasLabel={!!children}>
+        <StyledCheckbox>
             <StyledCheckboxInput
                 checked={isChecked}
                 disabled={isDisabled}
@@ -83,7 +83,6 @@ const Checkbox: FC<CheckboxProps> = ({
             <StyledCheckboxLabel
                 className={labelClassName}
                 htmlFor={uuid}
-                $hasLabel={!!children}
                 $isChecked={isChecked ?? isActive}
                 $isDisabled={isDisabled}
                 $shouldShowAsSwitch={shouldShowAsSwitch}

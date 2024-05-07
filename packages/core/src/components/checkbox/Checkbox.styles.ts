@@ -2,20 +2,10 @@ import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { CheckboxProps } from './Checkbox';
 
-type StyledCheckboxProps = WithTheme<{
-    $hasLabel: boolean;
-}>;
-
-export const StyledCheckbox = styled.div<StyledCheckboxProps>`
+export const StyledCheckbox = styled.div`
     align-items: center;
     display: flex;
     position: relative;
-
-    ${({ $hasLabel }) =>
-        !$hasLabel &&
-        css`
-            height: 15px;
-        `}
 `;
 
 export const StyledCheckboxInput = styled.input`
@@ -27,7 +17,6 @@ type StyledCheckboxLabelProps = WithTheme<{
     $isDisabled?: CheckboxProps['isDisabled'];
     $isChecked?: CheckboxProps['isChecked'];
     $lineHeight?: number;
-    $hasLabel: boolean;
 }>;
 
 export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
@@ -39,13 +28,7 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
     user-select: none;
 
     &:after {
-        ${({
-            $isChecked,
-            $shouldShowAsSwitch,
-            $lineHeight,
-            theme,
-            $hasLabel,
-        }: StyledCheckboxLabelProps) =>
+        ${({ $isChecked, $shouldShowAsSwitch, $lineHeight, theme }: StyledCheckboxLabelProps) =>
             $shouldShowAsSwitch
                 ? css`
                       background-color: white;
@@ -53,9 +36,7 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
                       box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
                       height: 16px;
                       left: 7px;
-                      top: ${$lineHeight
-                          ? `${Number(theme.fontSize) - ($hasLabel ? 2 : 6)}px`
-                          : '50%'};
+                      top: ${$lineHeight ? `${Number(theme.fontSize) - 2}px` : '50%'};
                       transform: translateX(${$isChecked ? '18px' : 0}) translateY(-50%);
                       transition: transform 0.2s ease;
                       width: 16px;
@@ -66,9 +47,7 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
                       height: 10px;
                       left: 2px;
                       opacity: ${$isChecked ? 1 : 0};
-                      top: ${$lineHeight
-                          ? `${Number(theme.fontSize) - ($hasLabel ? 4 : 8)}px`
-                          : 'calc(50% - 2px)'};
+                      top: ${$lineHeight ? `${Number(theme.fontSize) - 4}px` : 'calc(50% - 2px)'};
                       transform: rotateZ(37deg) translateY(-50%);
                       transition: opacity 0.2s ease;
                       width: 5.5px;
@@ -104,10 +83,10 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
         position: absolute;
         transition: background-color 0.2s ease;
         width: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '28px' : '15px')};
-        ${({ $lineHeight, theme, $hasLabel }: StyledCheckboxLabelProps) =>
+        ${({ $lineHeight, theme }: StyledCheckboxLabelProps) =>
             $lineHeight
                 ? css`
-                      top: ${Number(theme.fontSize) - ($hasLabel ? 2 : 6)}px;
+                      top: ${Number(theme.fontSize) - 2}px;
                       transform: translateY(-50%);
                   `
                 : css`
