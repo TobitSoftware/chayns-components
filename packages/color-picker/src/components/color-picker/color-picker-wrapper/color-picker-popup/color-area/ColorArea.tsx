@@ -15,6 +15,7 @@ import {
 } from './ColorArea.styles';
 
 import { hsvToHex } from '@chayns/colors';
+import { setRefreshScrollEnabled } from 'chayns-api';
 import { useDragControls, useMotionValue } from 'framer-motion';
 import type { Scale } from '../../../../../types/colorPicker';
 import {
@@ -188,6 +189,8 @@ const ColorArea = () => {
     const handlePointerUp = useCallback(() => {
         canDrag.current = false;
 
+        void setRefreshScrollEnabled(true);
+
         if (typeof updateShouldGetCoordinates === 'function') {
             updateShouldGetCoordinates(true);
         }
@@ -250,6 +253,8 @@ const ColorArea = () => {
         (event: TouchEvent) => {
             if (canDrag.current && pseudoRef.current) {
                 event.preventDefault();
+
+                void setRefreshScrollEnabled(false);
 
                 const { left, top } = pseudoRef.current.getBoundingClientRect();
 
