@@ -18,7 +18,7 @@ export const StyledColorAreaPseudo = styled.div`
     position: absolute;
     top: -10px;
     left: -10px;
-
+    touch-action: none;
     user-select: none;
 
     height: 170px;
