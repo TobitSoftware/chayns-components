@@ -1,5 +1,9 @@
+import { getSite } from 'chayns-api';
 import React, { FC, useRef } from 'react';
+import { SHAREPROVIDER } from '../../constants/sharingBar';
 import type { ContextMenuAlignment } from '../../types/contextMenu';
+import { getIsMobile } from '../../utils/environment';
+import { copyToClipboard, shareWithApp, shareWithUrl } from '../../utils/sharingBar';
 import ContextMenu from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
 import {
@@ -26,64 +30,61 @@ export type SharingBarProps = {
 const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment }) => {
     const contextMenuRef = useRef<{ hide: VoidFunction; show: VoidFunction }>(null);
 
-    const handleImageDownload = async () => {
-        const image = await fetch(
-            `https://cube.tobit.cloud/qr-code-generator/v1.0/png?value=${link}&color=005EB8&text=Teilen`,
+    const handleImageDownload = () => {
+        shareWithUrl(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            SHAREPROVIDER[5].url
+                .replace('{url}', encodeURIComponent(link))
+                .replace('{linkText}', 'Teilen')
+                .replace('{color}', getSite().color.replace('#', '')),
         );
-        const imageBlog = await image.blob();
-        const imageURL = URL.createObjectURL(imageBlog);
-
-        const url = document.createElement('a');
-
-        // Removes illegal characters from the name and shortens it to a maximum of 50 characters
-        const fileName = `CallingCode_Share`
-            .replace(/[^\w-]+/g, '_')
-            .trim()
-            .slice(0, 75);
-
-        url.href = imageURL;
-        url.download = fileName;
-
-        document.body.appendChild(url);
-
-        url.click();
-
-        document.body.removeChild(url);
-
-        contextMenuRef.current?.hide();
     };
 
     const handleShare = (key: string) => {
         contextMenuRef.current?.hide();
 
-        const encodedUrl = encodeURIComponent(link);
-        let preparedLink;
+        const isMobile = getIsMobile();
 
         switch (key) {
             case 'whatsapp':
-                preparedLink = `https://wa.me/?text=${encodedUrl}`;
+                shareWithUrl(
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    SHAREPROVIDER[0].url.replace('{url}', encodeURIComponent(`${link}`.trim())),
+                );
                 break;
             case 'facebook':
-                preparedLink = `https://www.facebook.com/sharer.php?u=${encodedUrl}`;
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                shareWithUrl(SHAREPROVIDER[3].url.replace('{url}', encodeURIComponent(link)));
                 break;
             case 'twitter':
-                preparedLink = `https://twitter.com/intent/tweet?url=${encodedUrl}`;
+                shareWithUrl(
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    SHAREPROVIDER[4].url
+                        .replace('{url}', encodeURIComponent(link))
+                        .replace('{linkText}', ''),
+                );
                 break;
             case 'mail':
-                preparedLink = `mailto:?subject=&body= ${encodedUrl}`;
+                if (isMobile) {
+                    shareWithApp(`${link}`.trim());
+                } else {
+                    shareWithUrl(
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        SHAREPROVIDER[2].url.replace('{url}', encodeURIComponent(`${link}`.trim())),
+                    );
+                }
                 break;
             case 'copy':
-                void navigator.clipboard.writeText(link);
+                copyToClipboard(link);
                 break;
             default:
                 break;
         }
-
-        if (!preparedLink) {
-            return;
-        }
-
-        window.open(preparedLink);
     };
 
     const contextMenuItems = [
@@ -106,10 +107,10 @@ const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment }) => {
             text: 'Facebook',
         },
         {
-            icons: ['fa-solid fa-brands fa-twitter'],
+            icons: ['fa-solid fa-brands fa-x-twitter'],
             key: 'twitter',
             onClick: () => handleShare('twitter'),
-            text: 'Twitter',
+            text: 'X',
         },
         {
             icons: ['fa fa-envelope'],
@@ -130,7 +131,7 @@ const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment }) => {
     };
 
     return (
-        <StyledSharingBar onClick={handleSharingBarClick}>
+        <StyledSharingBar onClick={handleSharingBarClick} onTouchStart={handleSharingBarClick}>
             <StyledSharingBarIconWrapper>
                 <Icon icons={['fa-solid fa-share-nodes']} />
             </StyledSharingBarIconWrapper>
