@@ -82,7 +82,7 @@ const TextArea: FC<TextAreaProps> = ({
      * To maintain the functionality while clearing the input, the length need to be greater than -1.
      */
     useEffect(() => {
-        if (value && value.length > -1) {
+        if (typeof value === 'string' && value.length > -1) {
             adjustTextareaHeight();
         }
     }, [adjustTextareaHeight, value]);
@@ -104,7 +104,6 @@ const TextArea: FC<TextAreaProps> = ({
                 />
                 {!value && (
                     <StyledTextAreaLabelWrapper>
-                        {' '}
                         <StyledTextAreaLabel>{placeholder}</StyledTextAreaLabel>
                     </StyledTextAreaLabelWrapper>
                 )}
