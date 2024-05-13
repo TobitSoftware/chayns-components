@@ -1,14 +1,5 @@
 import { AnimatePresence, useAnimate } from 'framer-motion';
-import React, {
-    FC,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-    type ReactElement,
-} from 'react';
-import { useElementSize } from '../../hooks/useElementSize';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { SliderButtonItem } from '../../types/slider-button';
 import { calculateBiggestWidth } from '../../utils/calculate';
 import { getNearestPoint, getThumbPosition } from '../../utils/sliderButton';
@@ -48,13 +39,9 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
     const itemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
 
-    const sliderSize = useElementSize(sliderButtonRef);
-
     useEffect(() => {
-        if (sliderSize) {
-            setDragRange({ left: 0, right: sliderSize.width - itemWidth });
-        }
-    }, [itemWidth, sliderSize]);
+        setDragRange({ left: 0, right: itemWidth * (items.length - 1) });
+    }, [itemWidth, items.length]);
 
     const animation = useCallback(
         async (x: number) => {
@@ -101,11 +88,9 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         [animation, isDisabled, itemWidth, onChange],
     );
 
-    const buttons = useMemo(() => {
-        const list: ReactElement[] = [];
-
-        items.forEach(({ id, text }, index) => {
-            list.push(
+    const buttons = useMemo(
+        () =>
+            items.map(({ id, text }, index) => (
                 <StyledSliderButtonItem
                     $width={itemWidth}
                     key={`slider-button-${id}`}
@@ -113,12 +98,10 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                     $isSelected={id === selectedButton}
                 >
                     {text}
-                </StyledSliderButtonItem>,
-            );
-        });
-
-        return list;
-    }, [handleClick, itemWidth, items, selectedButton]);
+                </StyledSliderButtonItem>
+            )),
+        [handleClick, itemWidth, items, selectedButton],
+    );
 
     const thumbText = useMemo(() => {
         const selectedItem = items.find(({ id }) => id === selectedButton);
@@ -164,6 +147,10 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
         if (!position) {
             return;
+        }
+
+        if (sliderButtonRef.current) {
+            sliderButtonRef.current.scrollLeft = (position - itemWidth / 2) / 1.1;
         }
 
         const { nearestIndex } = getNearestPoint({ snapPoints, position });

@@ -19,13 +19,28 @@ export const StyledSliderButton = styled.div<StyledSliderButtonProps>`
     user-select: none;
     transition: opacity 0.3s ease;
     z-index: 1;
+
+    max-width: 100%;
+    overflow-x: scroll;
+
+    // Chrome
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    // IE and Edge
+    -ms-overflow-style: none;
+
+    // Firefox
+    scrollbar-width: none;
 `;
 
 type StyledSliderButtonItemProps = WithTheme<{ $isSelected: boolean; $width: number }>;
 
 export const StyledSliderButtonItem = styled.div<StyledSliderButtonItemProps>`
     padding: 7px 12px;
-    width: ${({ $width }) => $width}px;
+    min-width: ${({ $width }) => $width}px;
+    max-width: ${({ $width }) => $width}px;
     display: flex;
     justify-content: center;
 `;
