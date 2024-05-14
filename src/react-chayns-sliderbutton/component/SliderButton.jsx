@@ -29,13 +29,13 @@ const SliderButton = (props) => {
     const [lastSelectedIndex, setLastSelectedIndex] = useState(selectedItemId);
 
     const sliderButtonRef = useRef();
-    const sliderButton = sliderButtonRef && sliderButtonRef.current;
+    const sliderButton = sliderButtonRef?.current;
 
     const firstItemRef = useRef();
-    let firstItem = firstItemRef && firstItemRef.current;
+    let firstItem = firstItemRef?.current;
 
     const markerRef = useRef();
-    let marker = markerRef && markerRef.current;
+    let marker = markerRef?.current;
 
     const handleChange = (newIndex) => {
         if (newIndex !== lastSelectedIndex) {
