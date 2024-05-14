@@ -20,6 +20,7 @@ const SliderButton = (props) => {
         onDragStart,
         selectedItemId,
         disabled,
+        initialAnimation,
     } = props;
 
     const [markerPosX, setMarkerPosX] = useState(0);
@@ -272,6 +273,11 @@ SliderButton.propTypes = {
      * in a disabled style.
      */
     disabled: PropTypes.bool,
+
+    /**
+     * Whether there should be an animation when the component is mounted.
+     */
+    initialAnimation: PropTypes.bool,
 };
 
 SliderButton.defaultProps = {
@@ -296,6 +302,7 @@ SliderButton.defaultProps = {
     onDragStart: null,
     selectedItemId: 0,
     disabled: false,
+    initialAnimation: true,
 };
 
 SliderButton.displayName = 'SliderButton';
