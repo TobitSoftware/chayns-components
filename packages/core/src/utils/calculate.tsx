@@ -68,24 +68,27 @@ export const calculateBiggestWidth = (elements: SliderButtonItem[]) => {
 };
 
 export const calculateContentHeight = (elements: string[]) => {
-    const length: number[] = [];
+    const heights: number[] = [];
 
     elements.forEach((element: string) => {
-        const div = document.createElement('p');
+        const div = document.createElement('div');
+
         div.style.visibility = 'hidden';
         div.style.position = 'absolute';
         div.style.width = 'auto';
-        div.style.margin = '5px';
+        div.style.padding = '4px 10px';
         div.style.whiteSpace = 'nowrap';
+
         document.body.appendChild(div);
+
         div.innerText = element;
 
-        length.push(div.offsetHeight);
+        heights.push(div.offsetHeight);
 
         document.body.removeChild(div);
     });
 
-    return length.reduce((partialSum, a) => partialSum + a, 0);
+    return heights.reduce((partialSum, a) => partialSum + a, 0);
 };
 
 export const getHeightOfSingleTextLine = () => {
