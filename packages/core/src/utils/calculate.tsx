@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type CSSProperties } from 'react';
 import { renderToString } from 'react-dom/server';
 import ColorSchemeProvider from '../components/color-scheme-provider/ColorSchemeProvider';
 import type { IComboBoxItem } from '../components/combobox/ComboBox';
@@ -101,6 +101,26 @@ export const getHeightOfSingleTextLine = () => {
     const height = span.offsetHeight;
 
     document.body.removeChild(span);
+
+    return height;
+};
+
+export const getMaxHeightInPixels = (
+    maxHeight: CSSProperties['maxHeight'],
+    rootElement: HTMLElement,
+): number => {
+    const tempElement = document.createElement('div');
+
+    tempElement.style.position = 'absolute';
+    tempElement.style.visibility = 'hidden';
+    tempElement.style.height = '100vh';
+    tempElement.style.maxHeight = maxHeight as string;
+
+    rootElement.appendChild(tempElement);
+
+    const { height } = tempElement.getBoundingClientRect();
+
+    rootElement.removeChild(tempElement);
 
     return height;
 };
