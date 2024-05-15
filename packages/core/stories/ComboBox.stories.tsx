@@ -52,22 +52,6 @@ export default {
                 text: 'Spinat',
                 value: 11,
             },
-            {
-                text: 'Feta',
-                value: 12,
-            },
-            {
-                text: 'Mais',
-                value: 13,
-            },
-            {
-                text: 'Rucola',
-                value: 14,
-            },
-            {
-                text: 'Parmesan',
-                value: 15,
-            },
         ],
         placeholder: 'Select Pizza',
     },
