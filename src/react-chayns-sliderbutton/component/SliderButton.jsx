@@ -285,7 +285,7 @@ SliderButton.propTypes = {
     disabled: PropTypes.bool,
 
     /**
-     * Whether there should be an animation when the component is mounted.
+     * Whether there should be an animation when the component is mounted. If set to `false`, the marker will be positioned at the selected item without any animation on mount.
      */
     initialAnimation: PropTypes.bool,
 };
