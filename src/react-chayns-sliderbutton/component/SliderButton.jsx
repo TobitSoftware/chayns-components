@@ -26,10 +26,13 @@ const SliderButton = (props) => {
     // We assume the buttons each have a width of 64px because it is specified
     // in the scss ($itemWidth). 0.25 is added to prevent a bug where text of
     // the marker does not match the text of the hovered item.
+    const itemWidth = 64; // $itemWidth in scss
     const [markerPosX, setMarkerPosX] = useState(
         initialAnimation
             ? 0
-            : items.findIndex((item) => item.id === selectedItemId) * 64 + 0.25
+            : items.findIndex((item) => item.id === selectedItemId) *
+                  itemWidth +
+                  0.25
     );
     const [dragStartPosX, setDragStartPosX] = useState(null);
     const [dragStartMarkerPosX, setDragStartMarkerPosX] = useState(null);
