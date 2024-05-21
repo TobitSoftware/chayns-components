@@ -61,6 +61,7 @@ const SliderButton = (props) => {
 
             // Element.animate() does not work on iOS, so we need transition
             setLastSelectedIndex(index);
+            markerRef.current.style.left = `${newMarkerPosX}px`;
             setMarkerPosX(newMarkerPosX);
             if (!marker.style.transition) {
                 requestAnimationFrame(() => {
@@ -121,6 +122,7 @@ const SliderButton = (props) => {
             const newSelectedIndex = getHoveredItemIndex(newMarkerPosX);
 
             handleChange(newSelectedIndex);
+            markerRef.current.style.left = `${newMarkerPosX}px`;
             setMarkerPosX(newMarkerPosX);
         }
     };
@@ -209,9 +211,6 @@ const SliderButton = (props) => {
             ))}
             <div
                 className={classNames('sliderButton__item__marker', 'button')}
-                style={{
-                    left: `${markerPosX}px`,
-                }}
                 onMouseDown={(ev) => {
                     if (!chayns.env.isMobile) {
                         startDrag(ev.clientX);
