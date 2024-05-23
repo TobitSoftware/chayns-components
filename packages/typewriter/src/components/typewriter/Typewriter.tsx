@@ -114,7 +114,11 @@ const Typewriter: FC<TypewriterProps> = ({
             if (currentChildren) {
                 return React.isValidElement(currentChildren)
                     ? renderToString(
-                          <ColorSchemeProvider color="#005EB8" colorMode={0}>
+                          <ColorSchemeProvider
+                              color="#005EB8"
+                              colorMode={0}
+                              style={{ display: 'inline' }}
+                          >
                               {currentChildren}
                           </ColorSchemeProvider>,
                       )
@@ -126,7 +130,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
         return React.isValidElement(sortedChildren)
             ? renderToString(
-                  <ColorSchemeProvider color="#005EB8" colorMode={0}>
+                  <ColorSchemeProvider color="#005EB8" colorMode={0} style={{ display: 'inline' }}>
                       {sortedChildren}
                   </ColorSchemeProvider>,
               )
