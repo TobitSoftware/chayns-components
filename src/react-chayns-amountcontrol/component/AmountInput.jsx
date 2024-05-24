@@ -88,7 +88,7 @@ export default class AmountInput extends PureComponent {
     };
 
     getButtonValue() {
-        const { amount, buttonText, buttonFormatHandler } = this.props;
+        const { amount, buttonText, buttonFormatHandler, max } = this.props;
 
         if (buttonFormatHandler) {
             return buttonFormatHandler({
@@ -97,7 +97,7 @@ export default class AmountInput extends PureComponent {
             });
         }
 
-        if (amount > 0) {
+        if (amount > 0 && max !== 1) {
             return `${amount}`;
         }
 

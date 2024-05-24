@@ -8,6 +8,7 @@ export default class ControlButton extends PureComponent {
     render() {
         const {
             icon,
+            backgroundColor,
             onClick,
             className,
             disabled,
@@ -22,6 +23,7 @@ export default class ControlButton extends PureComponent {
                     if (stopPropagation) e.stopPropagation();
                 }}
                 className={classNames(className, { disabled })}
+                style={{ backgroundColor }}
             >
                 <Icon icon={icon} style={color ? { color } : null} />
             </div>

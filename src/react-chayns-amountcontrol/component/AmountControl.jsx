@@ -19,7 +19,7 @@ const DEFAULT_MINUS_ICON = 'fa fa-minus';
 const DEFAULT_REMOVE_ICON = 'fa fa-minus';
 
 // default remove icon when there is only one item available (max = 1)
-const DEFAULT_SINGLE_REMOVE_ICON = 'fa fa-trash-can';
+const DEFAULT_SINGLE_REMOVE_ICON = 'fa fa-check';
 // endregion
 
 /**
@@ -66,14 +66,8 @@ export default class AmountControl extends PureComponent {
     };
 
     getRemoveIcon() {
-        const {
-            amount,
-            icon,
-            removeIcon,
-            minusIcon,
-            hasAlwaysControls,
-            max,
-        } = this.props;
+        const { amount, icon, removeIcon, minusIcon, hasAlwaysControls, max } =
+            this.props;
         const { tempAmount } = this.state;
 
         if (icon && !tempAmount && !hasAlwaysControls) {
@@ -85,7 +79,10 @@ export default class AmountControl extends PureComponent {
         }
 
         // the default removeIcon will become a trash-can when the max-value is 1
-        return removeIcon ?? (max === 1 ? DEFAULT_SINGLE_REMOVE_ICON : DEFAULT_REMOVE_ICON);
+        return (
+            removeIcon ??
+            (max === 1 ? DEFAULT_SINGLE_REMOVE_ICON : DEFAULT_REMOVE_ICON)
+        );
     }
 
     addItem = () => {
@@ -219,6 +216,11 @@ export default class AmountControl extends PureComponent {
         } = this.props;
         const { tempAmount, tempValue } = this.state;
 
+        const removeIconColor =
+            icon && !tempAmount && !hasAlwaysControls ? iconColor : removeColor;
+        const removeIconBackgroundColor =
+            icon && !tempAmount && !hasAlwaysControls ? iconColor : addColor;
+
         return (
             <div
                 className={classNames(
@@ -245,9 +247,14 @@ export default class AmountControl extends PureComponent {
                             amount > 0 || icon || hasAlwaysControls,
                     })}
                     color={
-                        icon && !tempAmount && !hasAlwaysControls
-                            ? iconColor
-                            : removeColor
+                        amount === 1 && max === 1
+                            ? 'var(--chayns-color--text)'
+                            : removeIconColor
+                    }
+                    backgroundColor={
+                        amount === 1 && max === 1
+                            ? removeIconBackgroundColor
+                            : null
                     }
                 />
                 <AmountInput
@@ -272,13 +279,16 @@ export default class AmountControl extends PureComponent {
                     tempAmount={tempAmount}
                     tempValue={tempValue}
                     focusOnClick={focusOnClick}
+                    max={max}
                 />
                 {this.isAddButtonShown() && (
                     <ControlButton
                         stopPropagation={stopPropagation}
                         icon={plusIcon}
                         onClick={this.addItem}
-                        disabled={disabled || disableAdd || (max && amount >= max)}
+                        disabled={
+                            disabled || disableAdd || (max && amount >= max)
+                        }
                         className={classNames('cc__amount-control__add', {
                             'cc__amount-control--icon':
                                 amount > 0 || hasAlwaysControls,
