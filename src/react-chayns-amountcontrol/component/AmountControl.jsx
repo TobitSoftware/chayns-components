@@ -246,11 +246,7 @@ export default class AmountControl extends PureComponent {
                         'cc__amount-control--icon':
                             amount > 0 || icon || hasAlwaysControls,
                     })}
-                    color={
-                        amount === 1 && max === 1
-                            ? 'var(--chayns-color--text)'
-                            : removeIconColor
-                    }
+                    color={amount === 1 && max === 1 ? '#fff' : removeIconColor}
                     backgroundColor={
                         amount === 1 && max === 1
                             ? removeIconBackgroundColor
