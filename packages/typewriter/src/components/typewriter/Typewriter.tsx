@@ -274,7 +274,11 @@ const Typewriter: FC<TypewriterProps> = ({
         if (pseudoChildren) {
             const pseudoText = React.isValidElement(pseudoChildren)
                 ? renderToString(
-                      <ColorSchemeProvider color="#005EB8" colorMode={0}>
+                      <ColorSchemeProvider
+                          color="#005EB8"
+                          colorMode={0}
+                          style={{ display: 'inline' }}
+                      >
                           {pseudoChildren}
                       </ColorSchemeProvider>,
                   )
@@ -315,6 +319,8 @@ const Typewriter: FC<TypewriterProps> = ({
                 {isAnimatingText && (
                     <StyledTypewriterPseudoText
                         dangerouslySetInnerHTML={{ __html: pseudoTextHTML }}
+                        $isAnimatingText
+                        $shouldHideCursor={shouldHideCursor}
                     />
                 )}
             </StyledTypewriter>
