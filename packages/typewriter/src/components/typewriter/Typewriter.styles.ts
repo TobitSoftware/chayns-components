@@ -14,10 +14,33 @@ const blinkAnimation = keyframes`
   }
 `;
 
-export const StyledTypewriterPseudoText = styled.span`
+const typewriterCursorElement = ({
+    $isAnimatingText,
+    $shouldHideCursor,
+}: {
+    $isAnimatingText?: boolean;
+    $shouldHideCursor?: boolean;
+}) =>
+    $isAnimatingText &&
+    !$shouldHideCursor &&
+    css`
+        &:after {
+            animation: ${blinkAnimation} 1s steps(5, start) infinite;
+            color: ${({ theme }: StyledTypewriterTextProps) => theme.text};
+            content: '▋';
+            margin-left: 0.25rem;
+            opacity: 0.85;
+            position: relative;
+            vertical-align: baseline;
+        }
+    `;
+
+export const StyledTypewriterPseudoText = styled.span<StyledTypewriterTextProps>`
     opacity: 0;
     pointer-events: none;
     user-select: none;
+
+    ${typewriterCursorElement}
 `;
 
 type StyledTypewriterTextProps = WithTheme<{
@@ -30,18 +53,5 @@ export const StyledTypewriterText = styled.span<StyledTypewriterTextProps>`
     position: ${({ $isAnimatingText }) => ($isAnimatingText ? 'absolute' : 'relative')};
     width: 100%;
 
-    ${({ $isAnimatingText, $shouldHideCursor }) =>
-        $isAnimatingText &&
-        !$shouldHideCursor &&
-        css`
-            &:after {
-                animation: ${blinkAnimation} 1s steps(5, start) infinite;
-                color: ${({ theme }: StyledTypewriterTextProps) => theme.text};
-                content: '▋';
-                margin-left: 0.25rem;
-                opacity: 0.85;
-                position: absolute;
-                vertical-align: baseline;
-            }
-        `}
+    ${typewriterCursorElement}
 `;
