@@ -173,7 +173,12 @@ export default class AmountControl extends PureComponent {
      * @returns {boolean}
      */
     isInputEnabled() {
-        const { disableInput, max } = this.props;
+        const { disableInput, max, amount } = this.props;
+
+        // When max and amount are both 1 even the disableInput-prop will be ignored
+        if (max === 1 && amount === 1) {
+            return false;
+        }
 
         // When the disableInput-prop is manually set (not defaultValue: undefined)
         // this value has precedence over all default behaviour
@@ -228,15 +233,16 @@ export default class AmountControl extends PureComponent {
                     className,
                     {
                         'cc__amount-control--active':
-                            amount > 0 || hasAlwaysControls,
+                            (amount > 0 && max !== 1) || hasAlwaysControls,
                         'cc__amount-control--disabled': disabled,
                     }
                 )}
+                onClick={amount === 1 && max === 1 ? this.removeItem : null}
             >
                 <ControlButton
                     stopPropagation={stopPropagation}
                     icon={this.getRemoveIcon()}
-                    onClick={this.removeItem}
+                    onClick={amount === 1 && max === 1 ? null : this.removeItem}
                     disabled={
                         disabled ||
                         disableRemove ||
@@ -254,7 +260,9 @@ export default class AmountControl extends PureComponent {
                     }
                 />
                 <AmountInput
-                    stopPropagation={stopPropagation}
+                    stopPropagation={
+                        stopPropagation && !(amount === 1 && max === 1)
+                    }
                     contentWidth={contentWidth}
                     equalize={equalize}
                     autoInput={autoInput}
