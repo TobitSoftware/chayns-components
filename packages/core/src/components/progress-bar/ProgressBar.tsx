@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
+import { useUuid } from '../../hooks/uuid';
 import {
     StyledMotionProgressBarProgress,
     StyledProgressBar,
@@ -24,6 +25,7 @@ export type ProgressBarProps = {
 
 const ProgressBar: FC<ProgressBarProps> = ({ percentage, label, shouldHideProgress = false }) => {
     const [internalPercentage, setInternalPercentage] = useState(0);
+    const uuid = useUuid();
 
     useEffect(() => {
         if (typeof percentage !== 'number') {
@@ -44,7 +46,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ percentage, label, shouldHideProgre
             return (
                 <StyledProgressBarProgressWrapper>
                     <StyledMotionProgressBarProgress
-                        key="progress-bar-loop"
+                        key={`progress-bar-loop__${uuid}`}
                         initial={{ width: '200px', left: '-200px' }}
                         animate={{ width: '200px', left: '100%' }}
                         exit={{ width: '200px', left: '100%' }}
@@ -63,7 +65,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ percentage, label, shouldHideProgre
         return (
             <StyledProgressBarProgressWrapper>
                 <StyledMotionProgressBarProgress
-                    key="progress-bar"
+                    key={`progress-bar__${uuid}`}
                     initial={{ width: '0%' }}
                     animate={{ width: `${internalPercentage}%` }}
                     exit={{ width: '0%' }}
@@ -72,7 +74,7 @@ const ProgressBar: FC<ProgressBarProps> = ({ percentage, label, shouldHideProgre
                 <StyledProgressBarBackground />
             </StyledProgressBarProgressWrapper>
         );
-    }, [internalPercentage, percentage, shouldHideProgress]);
+    }, [internalPercentage, percentage, shouldHideProgress, uuid]);
 
     return useMemo(
         () => (
