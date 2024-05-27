@@ -3,15 +3,16 @@ import type { AnimationScope } from 'framer-motion';
 interface GetNearestPointProps {
     position: number;
     snapPoints: number[];
+    scrollLeft: number;
 }
-export const getNearestPoint = ({ snapPoints, position }: GetNearestPointProps) => {
+export const getNearestPoint = ({ snapPoints, position, scrollLeft }: GetNearestPointProps) => {
     let nearestIndex = -1;
     let nearestPoint = -Infinity;
 
     for (let i = 0; i < snapPoints.length; i++) {
         const index = snapPoints[i];
 
-        if (index && index < position && index > nearestPoint) {
+        if (index && index < position + scrollLeft && index > nearestPoint) {
             nearestPoint = index;
             nearestIndex = i;
         }
@@ -46,9 +47,9 @@ export const getThumbPosition = ({ itemWidth, scope }: GetThumbPositionProps) =>
         }
     }
 
-    if (!position) {
+    if (typeof position !== 'number' && !position) {
         return undefined;
     }
 
-    return position + itemWidth / 2;
+    return { left: position, right: position + itemWidth, middle: position + itemWidth / 2 };
 };

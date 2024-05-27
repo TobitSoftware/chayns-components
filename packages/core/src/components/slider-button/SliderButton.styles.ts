@@ -5,6 +5,13 @@ import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 type StyledSliderButtonProps = WithTheme<{ $isDisabled?: boolean }>;
 
 export const StyledSliderButton = styled.div<StyledSliderButtonProps>`
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
+    width: 100%;
+`;
+
+type StyledSliderButtonWrapperProps = WithTheme<{ $width: number }>;
+
+export const StyledSliderButtonWrapper = styled.div<StyledSliderButtonWrapperProps>`
     align-items: center;
     background-color: ${({ theme }: StyledSliderButtonProps) => theme['404']};
     border-radius: 3px;
@@ -13,12 +20,13 @@ export const StyledSliderButton = styled.div<StyledSliderButtonProps>`
     cursor: pointer;
     display: inline-flex;
     line-height: 1.15;
-    min-height: 32px;
-    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
+    height: 32px;
     position: relative;
     user-select: none;
     transition: opacity 0.3s ease;
     z-index: 1;
+
+    width: ${({ $width }) => $width}px;
 
     max-width: 100%;
     overflow-x: scroll;
@@ -47,6 +55,12 @@ export const StyledSliderButtonItem = styled.div<StyledSliderButtonItemProps>`
     justify-content: center;
 `;
 
+export const StyledSliderButtonButtonsWrapper = styled.div`
+    position: absolute;
+    display: flex;
+    align-items: center;
+`;
+
 type StyledMotionSliderButtonThumbProps = WithTheme<{ $width: number }>;
 
 export const StyledMotionSliderButtonThumb = styled(motion.div)<StyledMotionSliderButtonThumbProps>`
@@ -58,8 +72,10 @@ export const StyledMotionSliderButtonThumb = styled(motion.div)<StyledMotionSlid
     border-radius: 3px;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
     z-index: 3;
-    height: 100%;
+    height: 32px;
     padding: 7px 12px;
     display: flex;
     justify-content: center;
+    align-items: center;
+    cursor: pointer;
 `;
