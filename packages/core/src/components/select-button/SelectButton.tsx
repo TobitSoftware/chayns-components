@@ -61,7 +61,7 @@ const SelectButton: FC<SelectButtonProps> = ({
     }, [list, selectedItemIds]);
 
     const selectedItemText = useMemo(() => {
-        if (!selectedItemIds) {
+        if (!selectedItemIds || selectedItemIds.length === 0) {
             return null;
         }
 
