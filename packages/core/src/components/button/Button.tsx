@@ -38,6 +38,10 @@ export type ButtonProps = {
      */
     onClick: MouseEventHandler<HTMLButtonElement>;
     /**
+     * Whether the text should be 'Roboto Medium'
+     */
+    ShouldShowTextAsRobotoMedium?: boolean;
+    /**
      * Shows a wait cursor instead of button text
      */
     shouldShowWaitCursor?: boolean;
@@ -56,6 +60,7 @@ const Button: FC<ButtonProps> = ({
     onClick,
     shouldShowWaitCursor,
     shouldStopPropagation,
+    ShouldShowTextAsRobotoMedium = true,
 }) => {
     const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
         if (shouldStopPropagation) {
@@ -71,6 +76,7 @@ const Button: FC<ButtonProps> = ({
 
     return (
         <StyledMotionButton
+            $ShouldShowTextAsRobotoMedium={ShouldShowTextAsRobotoMedium}
             className={buttonClasses}
             disabled={isDisabled}
             $isDisabled={isDisabled}

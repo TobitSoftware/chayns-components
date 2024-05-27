@@ -38,6 +38,8 @@ export const StyledSliderButton = styled.div<StyledSliderButtonProps>`
 type StyledSliderButtonItemProps = WithTheme<{ $isSelected: boolean; $width: number }>;
 
 export const StyledSliderButtonItem = styled.div<StyledSliderButtonItemProps>`
+    font-size: 110%;
+    font-family: 'Roboto Medium', serif;
     padding: 7px 12px;
     min-width: ${({ $width }) => $width}px;
     max-width: ${({ $width }) => $width}px;
@@ -48,6 +50,8 @@ export const StyledSliderButtonItem = styled.div<StyledSliderButtonItemProps>`
 type StyledMotionSliderButtonThumbProps = WithTheme<{ $width: number }>;
 
 export const StyledMotionSliderButtonThumb = styled(motion.div)<StyledMotionSliderButtonThumbProps>`
+    font-size: 110%;
+    font-family: 'Roboto Medium', serif;
     background-color: ${({ theme }: StyledMotionSliderButtonThumbProps) => theme['408']};
     width: ${({ $width }) => $width}px;
     position: absolute;

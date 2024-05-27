@@ -7,9 +7,17 @@ type StyledButtonProps = WithTheme<{
     $hasChildren: boolean;
     $isDisabled?: boolean;
     $isSecondary?: boolean;
+    $ShouldShowTextAsRobotoMedium: boolean;
 }>;
 
 export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
+    ${({ $ShouldShowTextAsRobotoMedium }) =>
+        $ShouldShowTextAsRobotoMedium &&
+        css`
+            font-size: 110%;
+            font-family: 'Roboto Medium', serif;
+        `}
+
     align-items: center;
     background-color: ${({ $isSecondary, theme }: StyledButtonProps) =>
         $isSecondary ? theme['202'] : theme['408']};

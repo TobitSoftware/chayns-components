@@ -99,7 +99,12 @@ const SelectButton: FC<SelectButtonProps> = ({
 
     return (
         <StyledSelectButton>
-            <Button onClick={handleClick} isDisabled={isDisabled} isSecondary>
+            <Button
+                onClick={handleClick}
+                isDisabled={isDisabled}
+                isSecondary
+                ShouldShowTextAsRobotoMedium={false}
+            >
                 {selectedItemText ?? buttonText}
             </Button>
         </StyledSelectButton>
