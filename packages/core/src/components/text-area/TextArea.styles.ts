@@ -26,8 +26,10 @@ export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
     color: ${({ theme }: StyledTextAreaInputProps) => theme.text};
     resize: none;
     overflow-y: ${({ $isOverflowing }) => ($isOverflowing ? 'scroll' : 'hidden')};
-    max-height: ${({ $maxHeight }: StyledTextAreaInputProps) => $maxHeight};
-    min-height: ${({ $minHeight }: StyledTextAreaInputProps) => $minHeight};
+    max-height: ${({ $maxHeight }: StyledTextAreaInputProps) =>
+        typeof $maxHeight === 'number' ? `${$maxHeight}px` : $maxHeight};
+    min-height: ${({ $minHeight }: StyledTextAreaInputProps) =>
+        typeof $minHeight === 'number' ? `${$minHeight}px` : $minHeight};
     width: 100%;
     padding: 8px 10px;
 
