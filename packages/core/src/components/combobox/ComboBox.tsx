@@ -10,7 +10,11 @@ import React, {
     type ReactNode,
 } from 'react';
 import { ComboBoxDirection } from '../../types/comboBox';
-import { calculateContentHeight, calculateContentWidth } from '../../utils/calculate';
+import {
+    calculateContentHeight,
+    calculateContentWidth,
+    getMaxHeightInPixels,
+} from '../../utils/calculate';
 import { getIsMobile } from '../../utils/environment';
 import Icon from '../icon/Icon';
 import ComboBoxItem from './combobox-item/ComboBoxItem';
@@ -69,7 +73,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     direction = ComboBoxDirection.BOTTOM,
     isDisabled = false,
     list,
-    maxHeight = '300px',
+    maxHeight = '280px',
     onSelect,
     placeholder,
     selectedItem,
@@ -78,10 +82,10 @@ const ComboBox: FC<ComboBoxProps> = ({
     const [item, setItem] = useState<IComboBoxItem>();
     const [isAnimating, setIsAnimating] = useState(false);
     const [minWidth, setMinWidth] = useState(0);
-    const [height, setHeight] = useState(0);
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+    const [overflowY, setOverflowY] = useState<CSSProperties['overflowY']>('hidden');
 
-    const ref = useRef<HTMLDivElement>(null);
+    const styledComboBoxElementRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
 
     const { browser } = getDevice();
@@ -90,11 +94,14 @@ const ComboBox: FC<ComboBoxProps> = ({
 
     const handleClick = useCallback(
         (event: MouseEvent) => {
-            if (ref.current && !ref.current.contains(event.target as Node)) {
+            if (
+                styledComboBoxElementRef.current &&
+                !styledComboBoxElementRef.current.contains(event.target as Node)
+            ) {
                 setIsAnimating(false);
             }
         },
-        [ref],
+        [styledComboBoxElementRef],
     );
 
     /**
@@ -106,7 +113,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         return () => {
             document.removeEventListener('click', handleClick);
         };
-    }, [handleClick, ref]);
+    }, [handleClick, styledComboBoxElementRef]);
 
     /**
      * This function sets the selected item
@@ -182,7 +189,14 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         const textArray = list.map(({ text }) => text);
 
-        setHeight(calculateContentHeight(textArray));
+        const contentHeight = calculateContentHeight(textArray);
+
+        const maxHeightInPixels = getMaxHeightInPixels(
+            maxHeight,
+            styledComboBoxElementRef.current ?? document.body,
+        );
+
+        setOverflowY(contentHeight > maxHeightInPixels ? 'scroll' : 'hidden');
 
         textArray.push(placeholder);
 
@@ -193,7 +207,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                 45 +
                 (isAtLeastOneItemWithImageGiven ? 32 : 0),
         );
-    }, [list, placeholder]);
+    }, [list, maxHeight, placeholder]);
 
     /**
      * This function sets the external selected item
@@ -265,7 +279,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             <StyledMotionComboBoxBody
                 $browser={browser?.name}
                 animate={animate}
-                $height={height}
+                $overflowY={overflowY}
                 initial={{ height: 0, opacity: 0 }}
                 $maxHeight={maxHeight}
                 $minWidth={minWidth}
@@ -282,18 +296,18 @@ const ComboBox: FC<ComboBoxProps> = ({
         browser?.name,
         direction,
         handleSetSelectedItem,
-        height,
         isAnimating,
         list,
         maxHeight,
         minWidth,
+        overflowY,
         selectedItem,
         shouldShowRoundImage,
     ]);
 
     return useMemo(
         () => (
-            <StyledComboBox ref={ref}>
+            <StyledComboBox ref={styledComboBoxElementRef}>
                 {direction === ComboBoxDirection.TOP && comboBoxBody}
                 <StyledComboBoxHeader
                     $direction={direction}
@@ -327,6 +341,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             isAnimating,
             isDisabled,
             isMobile,
+            item,
             minWidth,
             placeholderImageUrl,
             placeholderText,

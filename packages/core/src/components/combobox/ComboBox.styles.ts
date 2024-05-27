@@ -90,7 +90,7 @@ export const StyledComboBoxIconWrapper = styled.div`
 `;
 
 type StyledComboBoxBodyProps = WithTheme<{
-    $height: number;
+    $overflowY: CSSProperties['overflowY'];
     $minWidth: number;
     $maxHeight: CSSProperties['maxHeight'];
     $direction: ComboBoxDirection;
@@ -108,7 +108,7 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     min-width: ${({ $minWidth }) => $minWidth}px;
     max-width: ${({ $minWidth }) => $minWidth}px;
     max-height: ${({ $maxHeight }) => $maxHeight};
-    overflow-y: ${({ $height }) => ($height <= 300 ? 'hidden' : 'auto')};
+    overflow-y: ${({ $overflowY }) => $overflowY};
 
     ${({ $direction, theme }) => {
         if ($direction === ComboBoxDirection.BOTTOM) {

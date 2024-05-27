@@ -17,9 +17,9 @@ export enum TypewriterResetDelay {
 
 // noinspection JSUnusedGlobalSymbols
 export enum TypewriterSpeed {
-    Slow = 35,
-    Medium = 25,
-    Fast = 15,
+    Slow = 30,
+    Medium = 20,
+    Fast = 10,
 }
 
 export type TypewriterProps = {
@@ -114,7 +114,11 @@ const Typewriter: FC<TypewriterProps> = ({
             if (currentChildren) {
                 return React.isValidElement(currentChildren)
                     ? renderToString(
-                          <ColorSchemeProvider color="#005EB8" colorMode={0}>
+                          <ColorSchemeProvider
+                              color="#005EB8"
+                              colorMode={0}
+                              style={{ display: 'inline' }}
+                          >
                               {currentChildren}
                           </ColorSchemeProvider>,
                       )
@@ -126,7 +130,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
         return React.isValidElement(sortedChildren)
             ? renderToString(
-                  <ColorSchemeProvider color="#005EB8" colorMode={0}>
+                  <ColorSchemeProvider color="#005EB8" colorMode={0} style={{ display: 'inline' }}>
                       {sortedChildren}
                   </ColorSchemeProvider>,
               )
@@ -270,7 +274,11 @@ const Typewriter: FC<TypewriterProps> = ({
         if (pseudoChildren) {
             const pseudoText = React.isValidElement(pseudoChildren)
                 ? renderToString(
-                      <ColorSchemeProvider color="#005EB8" colorMode={0}>
+                      <ColorSchemeProvider
+                          color="#005EB8"
+                          colorMode={0}
+                          style={{ display: 'inline' }}
+                      >
                           {pseudoChildren}
                       </ColorSchemeProvider>,
                   )
@@ -311,6 +319,8 @@ const Typewriter: FC<TypewriterProps> = ({
                 {isAnimatingText && (
                     <StyledTypewriterPseudoText
                         dangerouslySetInnerHTML={{ __html: pseudoTextHTML }}
+                        $isAnimatingText
+                        $shouldHideCursor={shouldHideCursor}
                     />
                 )}
             </StyledTypewriter>

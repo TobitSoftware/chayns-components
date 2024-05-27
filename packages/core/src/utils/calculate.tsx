@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type CSSProperties } from 'react';
 import { renderToString } from 'react-dom/server';
 import ColorSchemeProvider from '../components/color-scheme-provider/ColorSchemeProvider';
 import type { IComboBoxItem } from '../components/combobox/ComboBox';
@@ -68,24 +68,27 @@ export const calculateBiggestWidth = (elements: SliderButtonItem[]) => {
 };
 
 export const calculateContentHeight = (elements: string[]) => {
-    const length: number[] = [];
+    const heights: number[] = [];
 
     elements.forEach((element: string) => {
-        const div = document.createElement('p');
+        const div = document.createElement('div');
+
         div.style.visibility = 'hidden';
         div.style.position = 'absolute';
         div.style.width = 'auto';
-        div.style.margin = '5px';
+        div.style.padding = '4px 10px';
         div.style.whiteSpace = 'nowrap';
+
         document.body.appendChild(div);
+
         div.innerText = element;
 
-        length.push(div.offsetHeight);
+        heights.push(div.offsetHeight);
 
         document.body.removeChild(div);
     });
 
-    return length.reduce((partialSum, a) => partialSum + a, 0);
+    return heights.reduce((partialSum, a) => partialSum + a, 0);
 };
 
 export const getHeightOfSingleTextLine = () => {
@@ -98,6 +101,26 @@ export const getHeightOfSingleTextLine = () => {
     const height = span.offsetHeight;
 
     document.body.removeChild(span);
+
+    return height;
+};
+
+export const getMaxHeightInPixels = (
+    maxHeight: CSSProperties['maxHeight'],
+    rootElement: HTMLElement,
+): number => {
+    const tempElement = document.createElement('div');
+
+    tempElement.style.position = 'absolute';
+    tempElement.style.visibility = 'hidden';
+    tempElement.style.height = '100vh';
+    tempElement.style.maxHeight = maxHeight as string;
+
+    rootElement.appendChild(tempElement);
+
+    const { height } = tempElement.getBoundingClientRect();
+
+    rootElement.removeChild(tempElement);
 
     return height;
 };
