@@ -18,6 +18,12 @@ export const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
     position: relative;
     transition: opacity 0.3s ease;
     min-width: ${({ $size }) => `${$size}px`};
+
+    // To insure that stacked icons have the same size as normal icons.
+    .fa-stack {
+        height: 0;
+        line-height: ${({ $size }) => $size}px;
+    }
 `;
 
 type StyledIconProps = WithTheme<{
