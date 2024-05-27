@@ -67,9 +67,9 @@ const SelectButton: FC<SelectButtonProps> = ({
 
         let newText = '';
 
-        list.forEach(({ text, id }, index) => {
+        list.forEach(({ text, id }) => {
             if (selectedItemIds?.includes(id)) {
-                newText += index === 0 ? `${text}` : `, ${text}`;
+                newText += newText.length === 0 ? `${text}` : `, ${text}`;
             }
         });
 
