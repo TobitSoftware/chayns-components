@@ -61,15 +61,20 @@ const SelectButton: FC<SelectButtonProps> = ({
     }, [list, selectedItemIds]);
 
     const selectedItemText = useMemo(() => {
-        if (selectedItemIds && !selectedItemIds[0]) {
+        if (!selectedItemIds) {
             return null;
         }
 
-        if (selectedItemIds && selectedItemIds[0]) {
-            return list.find(({ id }) => id === selectedItemIds[0])?.text;
-        }
+        let newText = '';
 
-        return null;
+        list.forEach(({ text, id }, index) => {
+            console.log(selectedItemIds);
+            if (selectedItemIds?.includes(id)) {
+                newText += index === 0 ? `${text}` : `, ${text}`;
+            }
+        });
+
+        return newText;
     }, [list, selectedItemIds]);
 
     const handleClick = () => {
