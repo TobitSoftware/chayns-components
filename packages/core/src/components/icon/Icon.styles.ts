@@ -20,8 +20,9 @@ export const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
     min-width: ${({ $size }) => `${$size}px`};
 
     // To insure that stacked icons have the same size as normal icons.
-    .fa-stack {
-        height: 0;
+    &&.fa-stack {
+        height: fit-content;
+        width: fit-content;
         line-height: ${({ $size }) => $size}px;
     }
 `;
