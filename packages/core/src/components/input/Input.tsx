@@ -263,7 +263,7 @@ const Input = forwardRef<InputRef, InputProps>(
                             layout
                             ref={placeholderRef}
                             style={{ ...labelPosition }}
-                            transition={{ type: 'tween', duration: 0.3 }}
+                            transition={{ type: 'tween', duration: 0.1 }}
                         >
                             {placeholderElement}
                             <StyledInputLabel $isInvalid={isInvalid}>
