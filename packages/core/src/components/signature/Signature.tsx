@@ -118,7 +118,6 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
 
         const handleUnSubscribe = () => {
             setHasSubscribed(false);
-            setSignatureUrl(undefined);
 
             if (typeof onUnsubscribe === 'function') {
                 onUnsubscribe();
