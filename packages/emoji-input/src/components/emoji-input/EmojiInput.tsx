@@ -174,6 +174,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const editorRef = useRef<HTMLDivElement>(null);
         const prefixElementRef = useRef<HTMLDivElement>(null);
         const hasPrefixRendered = useRef(false);
+        const hasPrefixChanged = useRef(false);
         const shouldDeleteOneMoreBackwards = useRef(false);
         const shouldDeleteOneMoreForwards = useRef(false);
 
@@ -430,9 +431,21 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 return;
             }
 
+            if (hasPrefixChanged.current) {
+                hasPrefixChanged.current = false;
+
+                return;
+            }
+
             onPrefixElementRemove();
             hasPrefixRendered.current = false;
         }, [onPrefixElementRemove, plainTextValue.length, prefixElement]);
+
+        useEffect(() => {
+            if (typeof prefixElement === 'string') {
+                hasPrefixChanged.current = true;
+            }
+        }, [prefixElement]);
 
         useEffect(() => {
             if (value !== plainTextValue) {
@@ -662,6 +675,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 <StyledEmojiInputContent $isRightElementGiven={!!rightElement}>
                     {prefixElement && (
                         <PrefixElement
+                            key={prefixElement}
                             element={prefixElement}
                             prefixElementRef={prefixElementRef}
                             setIsPrefixAnimationFinished={setIsPrefixAnimationFinished}
