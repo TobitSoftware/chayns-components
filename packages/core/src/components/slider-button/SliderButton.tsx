@@ -49,7 +49,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
     const sliderSize = useElementSize(sliderButtonRef);
 
     const isSliderBigger = useMemo(
-        () => sliderSize && sliderSize.width < itemWidth * (items.length - 1),
+        () => sliderSize && Math.floor(sliderSize.width / itemWidth) < items.length,
         [itemWidth, items.length, sliderSize],
     );
 
@@ -157,7 +157,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
     const thumbText = useMemo(() => {
         const selectedItem = items.find(({ id }) => id === selectedButton);
 
-        return selectedItem ? selectedItem.text : '';
+        return selectedItem ? selectedItem.text : items[0]?.text;
     }, [items, selectedButton]);
 
     /**
