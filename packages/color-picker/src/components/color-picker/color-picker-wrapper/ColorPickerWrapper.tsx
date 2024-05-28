@@ -7,6 +7,8 @@ import {
     StyledColorPickerWrapper,
     StyledColorPickerWrapperInfo,
     StyledColorPickerWrapperInfoColor,
+    StyledColorPickerWrapperInfoColorBackground,
+    StyledColorPickerWrapperInfoColorWrapper,
     StyledColorPickerWrapperInfoText,
 } from './ColorPickerWrapper.styles';
 
@@ -61,10 +63,13 @@ const ColorPickerWrapper = ({
             {shouldShowAsPopup ? (
                 <Popup content={content}>
                     <StyledColorPickerWrapperInfo>
-                        <StyledColorPickerWrapperInfoColor
-                            $color={selectedColor}
+                        <StyledColorPickerWrapperInfoColorWrapper
                             $shouldShowRoundPreviewColor={shouldShowRoundPreviewColor}
-                        />
+                        >
+                            <StyledColorPickerWrapperInfoColorBackground />
+                            <StyledColorPickerWrapperInfoColor $color={selectedColor} />
+                        </StyledColorPickerWrapperInfoColorWrapper>
+
                         {shouldShowPreviewColorString && (
                             <StyledColorPickerWrapperInfoText>
                                 {selectedColor}
