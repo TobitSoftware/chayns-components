@@ -1,10 +1,12 @@
 import { setRefreshScrollEnabled } from 'chayns-api';
 import { AnimatePresence, useAnimate } from 'framer-motion';
 import React, { FC, UIEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTheme } from 'styled-components';
 import { useElementSize } from '../../hooks/useElementSize';
 import type { SliderButtonItem } from '../../types/slider-button';
 import { calculateBiggestWidth } from '../../utils/calculate';
 import { getNearestPoint, getThumbPosition } from '../../utils/sliderButton';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import {
     StyledMotionSliderButtonThumb,
     StyledSliderButton,
@@ -47,6 +49,8 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
     const itemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
 
     const sliderSize = useElementSize(sliderButtonRef);
+
+    const theme: Theme = useTheme();
 
     const isSliderBigger = useMemo(
         () => sliderSize && Math.floor(sliderSize.width / itemWidth) < items.length,
@@ -314,6 +318,8 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                     $width={itemWidth}
                     onDrag={handleWhileDrag}
                     onDragEnd={handleDragEnd}
+                    whileTap={isDisabled ? {} : { backgroundColor: theme['407'] }}
+                    whileHover={isDisabled ? {} : { backgroundColor: theme['409'] }}
                 >
                     {thumbText}
                 </StyledMotionSliderButtonThumb>
