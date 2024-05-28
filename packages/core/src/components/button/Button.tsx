@@ -4,13 +4,13 @@ import React, { FC, MouseEventHandler, ReactNode } from 'react';
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
-import SmallWaitCursor from '../small-wait-cursor/SmallWaitCursor';
 import {
     StyledIconWrapper,
     StyledMotionButton,
     StyledMotionChildrenWrapper,
     StyledMotionWaitCursorWrapper,
 } from './Button.styles';
+import WaitCursor from './wait-cursor/WaitCursor';
 
 export type ButtonProps = {
     /**
@@ -106,7 +106,7 @@ const Button: FC<ButtonProps> = ({
                         style={{ overflow: 'hidden' }}
                         transition={{ duration: 0.2 }}
                     >
-                        <SmallWaitCursor color="white" shouldHideBackground size={26} />
+                        <WaitCursor shouldHideBackground />
                     </StyledMotionWaitCursorWrapper>
                 )}
                 {!shouldShowWaitCursor && children && (
