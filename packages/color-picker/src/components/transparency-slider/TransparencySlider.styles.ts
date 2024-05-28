@@ -10,6 +10,7 @@ export const StyledTransparencySlider = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    touch-action: none;
 `;
 
 export const StyledTransparencySliderBackground = styled.div`

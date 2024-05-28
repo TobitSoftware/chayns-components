@@ -1,4 +1,5 @@
 import { hslToRgb255 } from '@chayns/colors';
+import { setRefreshScrollEnabled } from 'chayns-api';
 import React, {
     ChangeEvent,
     CSSProperties,
@@ -109,6 +110,8 @@ const HueSlider: FC<HueSliderProps> = ({
     }, [editedValue]);
 
     const handleStart = useCallback(() => {
+        void setRefreshScrollEnabled(false);
+
         if (typeof onStart === 'function' && hslColor) {
             const hsl = extractHsl(hslColor);
 
@@ -129,6 +132,8 @@ const HueSlider: FC<HueSliderProps> = ({
     }, [hslColor, internalOpacity, onStart, opacity]);
 
     const handleEnd = useCallback(() => {
+        void setRefreshScrollEnabled(true);
+
         if (typeof onEnd === 'function' && hslColor) {
             const hsl = extractHsl(hslColor);
 

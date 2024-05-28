@@ -1,3 +1,4 @@
+import { setRefreshScrollEnabled } from 'chayns-api';
 import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { splitRgb } from '../../utils/color';
 import {
@@ -95,6 +96,8 @@ const TransparencySlider = ({
     }, [editedValue]);
 
     const handleStart = useCallback(() => {
+        void setRefreshScrollEnabled(false);
+
         if (typeof onStart === 'function') {
             const rgb = splitRgb(pureColor);
 
@@ -111,6 +114,8 @@ const TransparencySlider = ({
     }, [editedValue, onStart, pureColor]);
 
     const handleEnd = useCallback(() => {
+        void setRefreshScrollEnabled(true);
+
         if (typeof onEnd === 'function') {
             const rgb = splitRgb(pureColor);
 

@@ -7,6 +7,7 @@ type StyledSliderButtonProps = WithTheme<{ $isDisabled?: boolean }>;
 export const StyledSliderButton = styled.div<StyledSliderButtonProps>`
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     width: 100%;
+    touch-action: none;
 `;
 
 type StyledSliderButtonWrapperProps = WithTheme<{ $width: number }>;

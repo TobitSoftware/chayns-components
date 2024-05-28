@@ -10,6 +10,7 @@ export const StyledHueSlider = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    touch-action: none;
 `;
 
 type StyledHueSliderInputProps = WithTheme<{

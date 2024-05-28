@@ -1,3 +1,4 @@
+import { setRefreshScrollEnabled } from 'chayns-api';
 import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from 'styled-components';
 import { useElementSize } from '../../hooks/useElementSize';
@@ -108,6 +109,8 @@ const Slider: FC<SliderProps> = ({
     }, [fromValue, toValue]);
 
     const handleMouseUp = useCallback(() => {
+        void setRefreshScrollEnabled(true);
+
         const from = Number(fromSliderRef.current?.value);
         const to = Number(toSliderRef.current?.value);
 
@@ -151,6 +154,8 @@ const Slider: FC<SliderProps> = ({
 
     const handleControlToSlider = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
+            void setRefreshScrollEnabled(false);
+
             if (!fromSliderRef.current || !toSliderRef.current) {
                 return;
             }
@@ -204,6 +209,8 @@ const Slider: FC<SliderProps> = ({
      */
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
+            void setRefreshScrollEnabled(false);
+
             const newValue = Number(event.target.value);
 
             if (interval) {
