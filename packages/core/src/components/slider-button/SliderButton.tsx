@@ -77,32 +77,8 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         [animate, scope],
     );
 
-    useEffect(() => {
-        if (selectedButtonId) {
-            setSelectedButton(selectedButtonId);
-
-            const index = items.findIndex(({ id }) => id === selectedButtonId);
-
-            if (index >= 0) {
-                void animation(itemWidth * index);
-            }
-        } else {
-            setSelectedButton(items[0]?.id);
-        }
-    }, [animation, itemWidth, items, selectedButtonId]);
-
-    const handleClick = useCallback(
-        (id: string, index: number) => {
-            if (isDisabled) {
-                return;
-            }
-
-            setSelectedButton(id);
-
-            if (typeof onChange === 'function') {
-                onChange(id);
-            }
-
+    const setItemPosition = useCallback(
+        (index: number) => {
             if (!isSliderBigger) {
                 void animation(itemWidth * index);
 
@@ -121,7 +97,46 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                 sliderButtonWrapperRef.current.scrollLeft = itemWidth * index;
             }
         },
-        [animation, dragRange.right, isDisabled, isSliderBigger, itemWidth, items.length, onChange],
+        [animation, dragRange.right, isSliderBigger, itemWidth, items.length],
+    );
+
+    useEffect(() => {
+        if (selectedButtonId) {
+            setSelectedButton(selectedButtonId);
+
+            const index = items.findIndex(({ id }) => id === selectedButtonId);
+
+            if (index >= 0) {
+                setItemPosition(index);
+            }
+        } else {
+            setSelectedButton(items[0]?.id);
+        }
+    }, [
+        animation,
+        dragRange.right,
+        isSliderBigger,
+        itemWidth,
+        items,
+        selectedButtonId,
+        setItemPosition,
+    ]);
+
+    const handleClick = useCallback(
+        (id: string, index: number) => {
+            if (isDisabled) {
+                return;
+            }
+
+            setSelectedButton(id);
+
+            if (typeof onChange === 'function') {
+                onChange(id);
+            }
+
+            setItemPosition(index);
+        },
+        [isDisabled, onChange, setItemPosition],
     );
 
     const buttons = useMemo(
