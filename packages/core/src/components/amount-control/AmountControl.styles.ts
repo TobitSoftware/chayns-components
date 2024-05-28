@@ -10,6 +10,7 @@ export const StyledAmountControl = styled.div<StyledAmountControlProps>`
     display: flex;
     width: fit-content;
     border-radius: 3px;
+    overflow: hidden;
 `;
 
 type StyledAmountControlInputProps = WithTheme<{
@@ -23,7 +24,7 @@ export const StyledAmountControlInput = styled.input<StyledAmountControlInputPro
     color: ${({ theme }: StyledAmountControlInputProps) => theme.text};
     border: none;
     height: 28px;
-    width: 95px;
+    width: 90px;
     text-align: center;
     cursor: ${({ $hasFocus }) => ($hasFocus ? 'text' : 'pointer')};
 
@@ -44,15 +45,17 @@ export const StyledAmountControlInput = styled.input<StyledAmountControlInputPro
 
 type StyledAmountControlButtonProps = WithTheme<{
     $isDisabled: boolean;
+    $color?: string;
 }>;
 
 export const StyledMotionAmountControlButton = styled(
     motion.button,
 )<StyledAmountControlButtonProps>`
     overflow: hidden;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: ${({ $color }) => $color ?? 'rgba(255, 255, 255, 0.2)'};
+    transition: background-color 0.2s ease-in-out;
     height: 28px;
-    width: 40px;
+    width: 28px;
 
     ${({ $isDisabled }) =>
         $isDisabled &&

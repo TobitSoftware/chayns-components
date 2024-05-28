@@ -164,7 +164,7 @@ const AmountControl: FC<AmountControlProps> = ({
                 item = <Icon icons={[icon ?? 'fa fa-cart-shopping']} size={15} color={iconColor} />;
                 break;
             case 'delete':
-                item = <Icon icons={['fa ts-trash']} size={25} />;
+                item = <Icon icons={['fa ts-check']} size={20} color="white" />;
                 break;
             case 'normal':
                 item = <Icon icons={['fa fa-minus']} size={15} color="red" />;
@@ -195,10 +195,11 @@ const AmountControl: FC<AmountControlProps> = ({
                         <StyledMotionAmountControlButton
                             key="right_button"
                             initial={{ width: 0, opacity: 0, padding: 0 }}
-                            animate={{ width: 40, opacity: 1, padding: 0 }}
+                            animate={{ width: 28, opacity: 1, padding: 0 }}
                             exit={{ width: 0, opacity: 0, padding: 0 }}
                             transition={{ duration: 0.2, type: 'tween' }}
                             onClick={handleAmountRemove}
+                            $color={displayState === 'delete' ? 'rgb(32, 198, 90)' : undefined}
                             disabled={amountValue !== 0 && amountValue <= minAmount}
                             $isDisabled={amountValue !== 0 && amountValue <= minAmount}
                         >
@@ -219,7 +220,7 @@ const AmountControl: FC<AmountControlProps> = ({
                         <StyledMotionAmountControlButton
                             key="right_button"
                             initial={{ width: 0, opacity: 0, padding: 0 }}
-                            animate={{ width: 40, opacity: 1, padding: 0 }}
+                            animate={{ width: 28, opacity: 1, padding: 0 }}
                             exit={{ width: 0, opacity: 0, padding: 0 }}
                             transition={{ duration: 0.2, type: 'tween' }}
                             onClick={handleAmountAdd}
