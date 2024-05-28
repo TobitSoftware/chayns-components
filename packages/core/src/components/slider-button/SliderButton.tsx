@@ -1,3 +1,4 @@
+import { setRefreshScrollEnabled } from 'chayns-api';
 import { AnimatePresence, useAnimate } from 'framer-motion';
 import React, { FC, UIEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useElementSize } from '../../hooks/useElementSize';
@@ -158,6 +159,8 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
     }, [itemWidth, items.length]);
 
     const handleDragEnd = useCallback(() => {
+        void setRefreshScrollEnabled(true);
+
         const position = getThumbPosition({ scope, itemWidth });
 
         if (!position) {
@@ -207,6 +210,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
     const handleWhileDrag = useCallback(() => {
         preventHandleScroll.current = true;
+        void setRefreshScrollEnabled(false);
 
         const position = getThumbPosition({ scope, itemWidth });
 
@@ -250,6 +254,8 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
             if (preventHandleScroll.current) {
                 return;
             }
+
+            void setRefreshScrollEnabled(false);
 
             const position = getThumbPosition({ scope, itemWidth });
 
