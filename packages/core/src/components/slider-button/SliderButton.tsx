@@ -1,5 +1,5 @@
 import { AnimatePresence, useAnimate } from 'framer-motion';
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, UIEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useElementSize } from '../../hooks/useElementSize';
 import type { SliderButtonItem } from '../../types/slider-button';
 import { calculateBiggestWidth } from '../../utils/calculate';
@@ -38,6 +38,8 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
     const sliderButtonRef = useRef<HTMLDivElement>(null);
     const sliderButtonWrapperRef = useRef<HTMLDivElement>(null);
+    const timeout = useRef<number>();
+    const preventHandleScroll = useRef(false);
 
     const [scope, animate] = useAnimate();
 
@@ -111,10 +113,8 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
             if (items.length - count >= index) {
                 void animation(0);
             } else {
-                void animation(itemWidth * items.length - index);
+                void animation(itemWidth * (count - (items.length - index)));
             }
-
-            // void animation()
 
             if (sliderButtonWrapperRef.current) {
                 sliderButtonWrapperRef.current.scrollLeft = itemWidth * index;
@@ -166,14 +166,10 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
         const { middle, left } = position;
 
-        const { nearestPoint, nearestIndex } = getNearestPoint({
-            snapPoints,
-            position: middle,
-            scrollLeft: 0,
-        });
+        let scrollLeft = 0;
 
         if (sliderButtonWrapperRef.current) {
-            const { scrollLeft } = sliderButtonWrapperRef.current;
+            scrollLeft = sliderButtonWrapperRef.current.scrollLeft;
 
             sliderButtonWrapperRef.current.scrollLeft = getNearestPoint({
                 snapPoints,
@@ -182,18 +178,36 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
             }).nearestPoint;
         }
 
+        const { nearestIndex } = getNearestPoint({
+            snapPoints,
+            position: middle,
+            scrollLeft,
+        });
+
+        const { nearestPoint } = getNearestPoint({
+            snapPoints,
+            position: middle,
+            scrollLeft: 0,
+        });
+
         if (nearestPoint >= 0 && nearestIndex >= 0) {
             void animation(nearestPoint);
 
             const id = items[nearestIndex]?.id;
 
+            setSelectedButton(id);
+
             if (typeof onChange === 'function' && id) {
                 onChange(id);
             }
         }
+
+        preventHandleScroll.current = false;
     }, [animation, itemWidth, items, onChange, scope, snapPoints]);
 
     const handleWhileDrag = useCallback(() => {
+        preventHandleScroll.current = true;
+
         const position = getThumbPosition({ scope, itemWidth });
 
         if (!position) {
@@ -225,6 +239,45 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         }
     }, [dragRange, itemWidth, items, scope, snapPoints]);
 
+    // With this, the handleScroll works before the thumb is moved the first time.
+    useEffect(() => {
+        void animation(1);
+        void animation(0);
+    }, [animation]);
+
+    const handleScroll = useCallback(
+        (event: UIEvent<HTMLElement>) => {
+            if (preventHandleScroll.current) {
+                return;
+            }
+
+            const position = getThumbPosition({ scope, itemWidth });
+
+            if (!position) {
+                return;
+            }
+
+            const { middle } = position;
+
+            const { scrollLeft } = event.target as HTMLDivElement;
+
+            const { nearestIndex } = getNearestPoint({ snapPoints, position: middle, scrollLeft });
+
+            if (nearestIndex >= 0) {
+                setSelectedButton(items[nearestIndex]?.id);
+            }
+
+            if (timeout.current) {
+                clearTimeout(timeout.current);
+            }
+
+            timeout.current = window.setTimeout(() => {
+                handleDragEnd();
+            }, 200);
+        },
+        [handleDragEnd, itemWidth, items, scope, snapPoints],
+    );
+
     return useMemo(
         () => (
             <StyledSliderButton $isDisabled={isDisabled} ref={sliderButtonRef}>
@@ -246,6 +299,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                 <StyledSliderButtonWrapper
                     $width={!isSliderBigger ? dragRange.right + itemWidth : dragRange.right}
                     ref={sliderButtonWrapperRef}
+                    onScroll={handleScroll}
                 >
                     <AnimatePresence>
                         <StyledSliderButtonButtonsWrapper>
@@ -259,6 +313,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
             buttons,
             dragRange,
             handleDragEnd,
+            handleScroll,
             handleWhileDrag,
             isDisabled,
             isSliderBigger,
