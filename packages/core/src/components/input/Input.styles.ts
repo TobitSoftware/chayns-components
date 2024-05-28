@@ -106,6 +106,8 @@ export const StyledMotionInputLabelWrapper = styled(motion.label)`
     max-width: 100%;
 `;
 
+export const StyledMotionInputElement = styled(motion.div)``;
+
 type StyledInputLabelProps = WithTheme<{ $isInvalid?: boolean }>;
 
 export const StyledInputLabel = styled.label<StyledInputLabelProps>`

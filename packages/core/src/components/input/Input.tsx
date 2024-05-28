@@ -29,6 +29,7 @@ import {
     StyledInputLabel,
     StyledInputRightElement,
     StyledMotionInputClearIcon,
+    StyledMotionInputElement,
     StyledMotionInputLabelWrapper,
 } from './Input.styles';
 
@@ -221,7 +222,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     : { bottom: -10, right: -6 };
             }
 
-            return { left: -1 };
+            return { left: 2 };
         }, [hasValue, shouldRemainPlaceholder, shouldShowOnlyBottomBorder]);
 
         return (
@@ -265,7 +266,20 @@ const Input = forwardRef<InputRef, InputProps>(
                             style={{ ...labelPosition }}
                             transition={{ type: 'tween', duration: 0.1 }}
                         >
-                            {placeholderElement}
+                            <StyledMotionInputElement
+                                animate={
+                                    hasValue &&
+                                    !shouldShowOnlyBottomBorder &&
+                                    !shouldRemainPlaceholder
+                                        ? { scale: 0.4, x: '6px', y: '2px' }
+                                        : { scale: 1 }
+                                }
+                                initial={false}
+                                layout
+                                transition={{ type: 'tween', duration: 0.1 }}
+                            >
+                                {placeholderElement}
+                            </StyledMotionInputElement>
                             <StyledInputLabel $isInvalid={isInvalid}>
                                 {placeholder}
                             </StyledInputLabel>
