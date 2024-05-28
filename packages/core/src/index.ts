@@ -49,11 +49,7 @@ export { default as Signature } from './components/signature/Signature';
 export type { SignatureRef } from './components/signature/Signature';
 export { default as SliderButton } from './components/slider-button/SliderButton';
 export { default as Slider } from './components/slider/Slider';
-export {
-    default as SmallWaitCursor,
-    SmallWaitCursorSize,
-    SmallWaitCursorSpeed,
-} from './components/small-wait-cursor/SmallWaitCursor';
+export { default as SmallWaitCursor } from './components/small-wait-cursor/SmallWaitCursor';
 export { default as TagInput } from './components/tag-input/TagInput';
 export { default as TextArea } from './components/text-area/TextArea';
 export { default as Tooltip } from './components/tooltip/Tooltip';
