@@ -1,9 +1,10 @@
 import React, { FC, isValidElement, ReactNode, useMemo, useRef, type CSSProperties } from 'react';
 import type { PopupRef } from '../../types/popup';
 import type { ITooltipItem } from '../../types/tooltip';
+import { isTextOnlyElement } from '../../utils/tooltip';
 import Popup from '../popup/Popup';
 import TooltipItem from './tooltip-item/TooltipItem';
-import { StyledTooltip } from './Tooltip.styles';
+import { StyledTooltip, StyledTooltipChildren } from './Tooltip.styles';
 
 export type TooltipProps = {
     /**
@@ -47,10 +48,14 @@ const Tooltip: FC<TooltipProps> = ({ item, children, isDisabled, itemWidth }) =>
         () => (
             <StyledTooltip>
                 {isDisabled ? (
-                    children
+                    <StyledTooltipChildren $isOnlyText={isTextOnlyElement(children)}>
+                        {children}
+                    </StyledTooltipChildren>
                 ) : (
                     <Popup shouldShowOnHover content={content} ref={tooltipRef}>
-                        {children}
+                        <StyledTooltipChildren $isOnlyText={isTextOnlyElement(children)}>
+                            {children}
+                        </StyledTooltipChildren>
                     </Popup>
                 )}
             </StyledTooltip>

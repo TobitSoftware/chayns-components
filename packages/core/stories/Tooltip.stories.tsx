@@ -13,7 +13,7 @@ export default {
             imageUrl:
                 'https://tsimg.cloud/77896-21884/25399416f38c1d960f521a3530c8a2bc70a88bb9.png',
         },
-        itemWidth: '200px',
+        itemWidth: '300px',
     },
 } as Meta<typeof Tooltip>;
 
