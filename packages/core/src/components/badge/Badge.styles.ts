@@ -11,7 +11,7 @@ export const StyledBadge = styled.div<StyledBadgeProps>`
     background-color: ${({ $backgroundColor, theme }: StyledBadgeProps) =>
         $backgroundColor ?? theme['secondary-202']};
     border-radius: 15px;
-    color: ${({ $fontColor, theme }: StyledBadgeProps) => $fontColor ?? theme['007']};
+    color: ${({ $fontColor, theme }: StyledBadgeProps) => $fontColor ?? theme.text};
     display: inline-block;
     font-size: 0.8rem;
     min-width: 1.65rem;
