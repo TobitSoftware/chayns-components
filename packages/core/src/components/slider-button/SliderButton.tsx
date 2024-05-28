@@ -318,6 +318,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                     {thumbText}
                 </StyledMotionSliderButtonThumb>
                 <StyledSliderButtonWrapper
+                    $isDisabled={isDisabled}
                     $width={!isSliderBigger ? dragRange.right + itemWidth : dragRange.right}
                     ref={sliderButtonWrapperRef}
                     onScroll={handleScroll}

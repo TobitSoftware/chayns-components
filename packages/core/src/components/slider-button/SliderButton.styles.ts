@@ -10,7 +10,7 @@ export const StyledSliderButton = styled.div<StyledSliderButtonProps>`
     touch-action: none;
 `;
 
-type StyledSliderButtonWrapperProps = WithTheme<{ $width: number }>;
+type StyledSliderButtonWrapperProps = WithTheme<{ $width: number; $isDisabled?: boolean }>;
 
 export const StyledSliderButtonWrapper = styled.div<StyledSliderButtonWrapperProps>`
     align-items: center;
@@ -30,7 +30,7 @@ export const StyledSliderButtonWrapper = styled.div<StyledSliderButtonWrapperPro
     width: ${({ $width }) => $width}px;
 
     max-width: 100%;
-    overflow-x: scroll;
+    overflow-x: ${({ $isDisabled }) => ($isDisabled ? 'hidden' : 'scroll')};
 
     // Chrome
     &::-webkit-scrollbar {
