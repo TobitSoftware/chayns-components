@@ -222,8 +222,8 @@ const Input = forwardRef<InputRef, InputProps>(
                     : { bottom: -10, right: -6 };
             }
 
-            return { left: 2 };
-        }, [hasValue, shouldRemainPlaceholder, shouldShowOnlyBottomBorder]);
+            return { left: placeholderElement ? 2 : -1 };
+        }, [hasValue, placeholderElement, shouldRemainPlaceholder, shouldShowOnlyBottomBorder]);
 
         return (
             <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
