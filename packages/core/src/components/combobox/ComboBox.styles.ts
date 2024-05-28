@@ -110,19 +110,19 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     max-height: ${({ $maxHeight }) => $maxHeight};
     overflow-y: ${({ $overflowY }) => $overflowY};
 
-    ${({ $direction, theme }) => {
+    ${({ $direction }) => {
         if ($direction === ComboBoxDirection.BOTTOM) {
             return css`
                 border-bottom-left-radius: 3px;
                 border-bottom-right-radius: 3px;
-                box-shadow: 0 2px 8px 2px rgba(${theme['009-rgb']}, 0.15);
+                box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2);
             `;
         }
 
         return css`
             border-top-left-radius: 3px;
             border-top-right-radius: 3px;
-            box-shadow: 0 -2px 8px 2px rgba(${theme['009-rgb']}, 0.15);
+            box-shadow: 0 -3px 10px 0 rgba(0, 0, 0, 0.2);
         `;
     }}
 
