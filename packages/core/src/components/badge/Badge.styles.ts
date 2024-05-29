@@ -1,21 +1,24 @@
+import type { CSSProperties } from 'react';
 import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledBadgeProps = WithTheme<{
-    $backgroundColor?: string;
-    $fontColor?: string;
-    $isOnClick: boolean;
+    $cursor: CSSProperties['cursor'];
+    $backgroundColor?: CSSProperties['backgroundColor'];
+    $borderRadius: CSSProperties['borderRadius'];
+    $fontColor?: CSSProperties['color'];
+    $minWidth: CSSProperties['minWidth'];
 }>;
 
 export const StyledBadge = styled.div<StyledBadgeProps>`
     background-color: ${({ $backgroundColor, theme }: StyledBadgeProps) =>
         $backgroundColor ?? theme['secondary-202']};
-    border-radius: 15px;
+    border-radius: ${({ $borderRadius }) => $borderRadius};
     color: ${({ $fontColor, theme }: StyledBadgeProps) => $fontColor ?? theme.text};
     display: inline-block;
     font-size: 0.8rem;
-    min-width: 1.65rem;
-    padding: 2px 7px;
+    min-width: ${({ $minWidth }) => $minWidth};
+    padding: 2px 6px;
     text-align: center;
-    cursor: ${({ $isOnClick }) => ($isOnClick ? 'pointer' : 'default')};
+    cursor: ${({ $cursor }) => $cursor};
 `;

@@ -1,16 +1,17 @@
 import clsx from 'clsx';
-import React, { FC, ReactNode, type MouseEventHandler } from 'react';
+import React, { FC, ReactNode, useRef, type CSSProperties, type MouseEventHandler } from 'react';
+import { useElementSize } from '../../hooks/useElementSize';
 import { StyledBadge } from './Badge.styles';
 
 export type BadgeProps = {
     /**
      * The background color of the badge
      */
-    backgroundColor?: string;
+    backgroundColor?: CSSProperties['backgroundColor'];
     /**
      * The content of the badge
      */
-    children: ReactNode;
+    children?: ReactNode;
     /**
      * Additional class names for the badge element
      */
@@ -18,7 +19,7 @@ export type BadgeProps = {
     /**
      * The font color of the badge
      */
-    fontColor?: string;
+    fontColor?: CSSProperties['color'];
     /**
      * Function to be executed when the badge is clicked
      */
@@ -28,15 +29,26 @@ export type BadgeProps = {
 const Badge: FC<BadgeProps> = ({ backgroundColor, children, className, fontColor, onClick }) => {
     const badgeClasses = clsx('beta-chayns-badge ellipsis', className);
 
+    const badgeRef = useRef<HTMLDivElement>(null);
+
+    const size = useElementSize(badgeRef);
+
+    // Add 4px to the height to account for the padding
+    const borderRadius = size ? `${(size.height + 4) / 2}px` : '15px';
+    const minWidth = size ? `${size.height + 4}px` : '1.65rem';
+
     return (
         <StyledBadge
-            onClick={onClick}
-            $isOnClick={typeof onClick === 'function'}
-            $backgroundColor={backgroundColor}
             className={badgeClasses}
+            onClick={onClick}
+            ref={badgeRef}
+            $backgroundColor={backgroundColor}
+            $borderRadius={borderRadius}
+            $cursor={typeof onClick === 'function' ? 'pointer' : 'default'}
             $fontColor={fontColor}
+            $minWidth={minWidth}
         >
-            {children}
+            {children || '​'}
         </StyledBadge>
     );
 };

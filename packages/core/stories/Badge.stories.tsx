@@ -14,3 +14,17 @@ const Template: StoryFn<typeof Badge> = ({ children, ...args }) => (
 );
 
 export const General = Template.bind({});
+
+export const SingleNumber = Template.bind({});
+
+export const Empty = Template.bind({});
+
+SingleNumber.args = {
+    backgroundColor: '#ff0000',
+    children: '4',
+    fontColor: '#ffffff',
+};
+
+Empty.args = {
+    children: undefined,
+};
