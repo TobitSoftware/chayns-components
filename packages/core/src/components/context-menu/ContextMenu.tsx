@@ -10,7 +10,6 @@ import React, {
     useImperativeHandle,
     useRef,
     useState,
-    type CSSProperties,
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
@@ -58,10 +57,6 @@ type ContextMenuProps = {
      */
     coordinates?: ContextMenuCoordinates;
     /**
-     * The color of the default ellipsis icon. This is only used if the children prop is not set.
-     */
-    iconColor?: CSSProperties['color'];
-    /**
      * The items that will be displayed in the content of the `ContextMenu`.
      */
     items: ContextMenuItem[];
@@ -83,10 +78,9 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
     (
         {
             alignment,
-            children,
+            children = <Icon icons={['ts-ellipsis_v']} size={18} />,
             container = document.body,
             coordinates,
-            iconColor,
             items,
             onHide,
             onShow,
@@ -248,7 +242,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     onClick={handleClick}
                     ref={contextMenuRef}
                 >
-                    {children ?? <Icon icons={['ts-ellipsis_v']} color={iconColor} size={18} />}
+                    {children}
                 </StyledContextMenu>
                 {portal}
             </>
