@@ -124,13 +124,22 @@ ListItemsWithRightElements.args = {
     children: [
         <ListItem
             images={[locationImages[0]]}
-            rightElements={['09:01 Uhr', <Badge>3</Badge>]}
+            rightElements={[
+                '09:01 Uhr',
+                <Badge backgroundColor="red" fontColor="white">
+                    1
+                </Badge>,
+            ]}
             subtitle="Sadipscing elitr dolor sit"
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,
         <ListItem
             images={[locationImages[1]]}
-            rightElements={[<Badge>123</Badge>]}
+            rightElements={[
+                <Badge backgroundColor="red" fontColor="white">
+                    2
+                </Badge>,
+            ]}
             shouldShowSingleRightElementCentered
             subtitle="Dolor sit ipsum amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
@@ -143,7 +152,11 @@ ListItemsWithRightElements.args = {
         />,
         <ListItem
             images={[locationImages[2]]}
-            rightElements={[<Badge>123</Badge>]}
+            rightElements={[
+                <Badge backgroundColor="red" fontColor="white">
+                    4
+                </Badge>,
+            ]}
             subtitle="Dolor sit ipsum amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
         />,

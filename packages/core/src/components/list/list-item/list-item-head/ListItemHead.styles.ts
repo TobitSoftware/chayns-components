@@ -151,19 +151,22 @@ export const StyledListItemHeadSubtitleTextPseudo = styled.span<StyledListItemHe
 `;
 
 export const StyledListItemHeadTopRightElement = styled.div`
+    display: flex;
     flex: 0 0 auto;
     font-size: 85%;
     margin-left: 8px;
-    opacity: 0.75;
 `;
 
 export const StyledListItemHeadBottomRightElement = styled.div`
+    display: flex;
     flex: 0 0 auto;
     margin-left: 8px;
     font-size: 85%;
 `;
 
 export const StyledListItemHeadRightElement = styled.div`
+    align-items: center;
+    display: flex;
     flex: 0 0 auto;
     margin-left: 8px;
 `;
