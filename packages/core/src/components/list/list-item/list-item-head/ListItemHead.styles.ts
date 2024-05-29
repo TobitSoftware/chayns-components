@@ -115,7 +115,6 @@ export const StyledListItemHeadSubtitle = styled.div`
     display: flex;
     justify-content: space-between;
     margin-top: 2px;
-    opacity: 0.75;
 `;
 
 type StyledListItemHeadSubtitleTextProps = WithTheme<{ $isOpen: boolean }>;
@@ -129,6 +128,7 @@ export const StyledListItemHeadSubtitleText = styled.span<StyledListItemHeadSubt
     flex: 1 1 auto;
     font-size: 85%;
     min-width: 0;
+    opacity: 0.75;
 `;
 
 type StyledListItemHeadSubtitleTextPseudoProps = WithTheme<{ $isOpen: boolean }>;
