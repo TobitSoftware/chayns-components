@@ -1,10 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import type {
-    SmallWaitCursorProps,
-    SmallWaitCursorSize,
-    SmallWaitCursorSpeed,
-} from './SmallWaitCursor';
+import type { SmallWaitCursorSize, SmallWaitCursorSpeed } from './SmallWaitCursor';
 
 type StyledSmallWaitCursorProps = WithTheme<{
     $shouldShowWaitCursor: boolean;
@@ -33,9 +29,9 @@ export const StyledSmallWaitCursorBackground = styled.div<StyledSmallWaitCursorB
 `;
 
 type StyledSmallWaitCursorWaitCursorProps = WithTheme<{
-    $color: SmallWaitCursorProps['color'];
     $size: SmallWaitCursorSize | number;
     $speed: SmallWaitCursorSpeed;
+    $shouldHideBackground: boolean;
 }>;
 
 const spin = keyframes`
@@ -54,8 +50,8 @@ export const StyledSmallWaitCursorWaitCursor = styled.div<StyledSmallWaitCursorW
     z-index: 2;
     border-style: solid;
     border-width: 3px;
-    border-color: ${({ $color, theme }: StyledSmallWaitCursorWaitCursorProps) =>
-        $color ?? theme.primary};
+    border-color: ${({ theme, $shouldHideBackground }: StyledSmallWaitCursorWaitCursorProps) =>
+        theme.colorMode === 'dark' && $shouldHideBackground ? theme.headline : theme.primary};
     height: ${({ $size }) => `${$size - 10}px`};
     width: ${({ $size }) => `${$size - 10}px`};
     border-radius: 50%;

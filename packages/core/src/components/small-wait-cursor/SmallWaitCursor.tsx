@@ -1,6 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
-import React, { CSSProperties, FC } from 'react';
+import React, { FC } from 'react';
 import {
     StyledSmallWaitCursor,
     StyledSmallWaitCursorBackground,
@@ -19,7 +19,6 @@ export enum SmallWaitCursorSpeed {
 }
 
 export type SmallWaitCursorProps = {
-    color?: CSSProperties['color'];
     /**
      * Specifies whether the wait cursor should be displayed with a background.
      */
@@ -39,14 +38,17 @@ export type SmallWaitCursorProps = {
 };
 
 const SmallWaitCursor: FC<SmallWaitCursorProps> = ({
-    color,
     shouldHideBackground = false,
     shouldHideWaitCursor = false,
     size = SmallWaitCursorSize.Medium,
     speed = SmallWaitCursorSpeed.Medium,
 }) => (
     <StyledSmallWaitCursor $shouldShowWaitCursor={!shouldHideWaitCursor} $size={size}>
-        <StyledSmallWaitCursorWaitCursor $color={color} $size={size} $speed={speed} />
+        <StyledSmallWaitCursorWaitCursor
+            $shouldHideBackground={shouldHideBackground}
+            $size={size}
+            $speed={speed}
+        />
         {!shouldHideBackground && <StyledSmallWaitCursorBackground />}
     </StyledSmallWaitCursor>
 );
