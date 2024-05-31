@@ -1,4 +1,4 @@
-import { MotionValue, useSpring, useTransform } from 'framer-motion';
+import { MotionValue, useMotionValueEvent, useSpring, useTransform } from 'framer-motion';
 import React, { FC, useEffect } from 'react';
 import type { SwipeableActionItem } from '../SwipeableWrapper';
 import { StyledMotionSwipeableAction, StyledSwipeableActionButton } from './SwipeableAction.styles';
@@ -26,6 +26,8 @@ const SwipeableAction: FC<SwipeableActionProps> = ({
     shouldUseOpacityAnimation,
     totalActionCount,
 }) => {
+    const [pointerEvents, setPointerEvents] = React.useState<'auto' | 'none'>('none');
+
     const handleButtonClick = () => {
         item.action();
         close();
@@ -73,6 +75,10 @@ const SwipeableAction: FC<SwipeableActionProps> = ({
         Math.max(0, Math.min(1, Math.abs(x) / 72)),
     );
 
+    useMotionValueEvent(opacity, 'change', (value) => {
+        setPointerEvents(value < 0.5 ? 'none' : 'auto');
+    });
+
     // Animate to the middle after passing threshold if outermost item
     useEffect(() => {
         const isOuterMost = index === totalActionCount - 1;
@@ -115,8 +121,9 @@ const SwipeableAction: FC<SwipeableActionProps> = ({
             style={{ x: actionX, opacity: shouldUseOpacityAnimation ? opacity : 1 }}
         >
             <StyledSwipeableActionButton
-                $color={item.color}
                 onClick={handleButtonClick}
+                style={{ pointerEvents }}
+                $color={item.color}
                 $width={`${SWIPEABLE_ACTION_WIDTH}px`}
             >
                 {item.icon}
