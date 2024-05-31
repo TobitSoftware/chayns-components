@@ -12,6 +12,7 @@ export type SwipeableActionProps = {
     item: SwipeableActionItem;
     listItemXOffset: MotionValue<number>;
     position: 'left' | 'right';
+    shouldUseOpacityAnimation?: boolean;
     totalActionCount: number;
 };
 
@@ -22,6 +23,7 @@ const SwipeableAction: FC<SwipeableActionProps> = ({
     item,
     listItemXOffset,
     position,
+    shouldUseOpacityAnimation,
     totalActionCount,
 }) => {
     const handleButtonClick = () => {
@@ -67,6 +69,10 @@ const SwipeableAction: FC<SwipeableActionProps> = ({
         return Math.max((x ?? 0) + (y ?? 0), 0);
     });
 
+    const opacity = useTransform(listItemXOffset, (x) =>
+        Math.max(0, Math.min(1, Math.abs(x) / 72)),
+    );
+
     // Animate to the middle after passing threshold if outermost item
     useEffect(() => {
         const isOuterMost = index === totalActionCount - 1;
@@ -106,7 +112,7 @@ const SwipeableAction: FC<SwipeableActionProps> = ({
         <StyledMotionSwipeableAction
             $backgroundColor={item.backgroundColor}
             $position={position}
-            style={{ x: actionX }}
+            style={{ x: actionX, opacity: shouldUseOpacityAnimation ? opacity : 1 }}
         >
             <StyledSwipeableActionButton
                 $color={item.color}

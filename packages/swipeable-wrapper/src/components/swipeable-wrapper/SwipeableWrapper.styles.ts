@@ -9,6 +9,5 @@ export const StyledMotionSwipeableWrapper = styled(motion.div)<FramerMotionBugFi
 `;
 
 export const StyledSwipeableWrapperContent = styled.div`
-    overflow: hidden;
     width: 100%;
 `;

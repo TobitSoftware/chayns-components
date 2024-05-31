@@ -39,12 +39,17 @@ export type SwipeableWrapperProps = {
      * The right-side actions, ordered from left to the right.
      */
     rightActions?: SwipeableActionItem[];
+    /**
+     * Whether the opacity should be animated when swiping in the actions.
+     */
+    shouldUseOpacityAnimation?: boolean;
 };
 
 const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
     children,
     leftActions = [],
     rightActions = [],
+    shouldUseOpacityAnimation,
 }) => {
     const [leftThreshold, setLeftThreshold] = useState(
         calcThreshold({
@@ -230,10 +235,11 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
                         key={item.key}
                         listItemXOffset={listItemXOffset}
                         position="left"
+                        shouldUseOpacityAnimation={shouldUseOpacityAnimation}
                         totalActionCount={leftActions.length}
                     />
                 )),
-        [close, leftActions, leftThreshold, listItemXOffset],
+        [close, leftActions, leftThreshold, listItemXOffset, shouldUseOpacityAnimation],
     );
 
     const rightActionElements = useMemo(
@@ -247,10 +253,11 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
                     key={item.key}
                     listItemXOffset={listItemXOffset}
                     position="right"
+                    shouldUseOpacityAnimation={shouldUseOpacityAnimation}
                     totalActionCount={rightActions.length}
                 />
             )),
-        [close, rightActions, rightThreshold, listItemXOffset],
+        [rightActions, rightThreshold, close, listItemXOffset, shouldUseOpacityAnimation],
     );
 
     return (
