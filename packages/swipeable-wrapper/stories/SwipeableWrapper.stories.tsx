@@ -43,3 +43,35 @@ const Template: StoryFn<typeof SwipeableWrapper> = ({ children, ...args }) => (
 );
 
 export const General = Template.bind({});
+
+export const LeftActionWithoutBackground = Template.bind({});
+
+export const SingleRightAction = Template.bind({});
+
+LeftActionWithoutBackground.args = {
+    leftActions: [
+        {
+            action: () => console.log('Reply'),
+            backgroundColor: undefined,
+            color: 'var(--chayns-color--headline)',
+            icon: <Icon color="var(--chayns-color--headline)" icons={['fa fa-reply']} />,
+            key: 'reply',
+            text: 'Reply',
+        },
+    ],
+    rightActions: undefined,
+};
+
+SingleRightAction.args = {
+    leftActions: undefined,
+    rightActions: [
+        {
+            action: () => console.log('Delete'),
+            backgroundColor: 'red',
+            color: 'white',
+            icon: <Icon color="white" icons={['fa fa-trash']} />,
+            key: 'trash',
+            text: 'Delete',
+        },
+    ],
+};
