@@ -82,6 +82,30 @@ const Button: FC<ButtonProps> = ({
         return theme.buttonColor ?? 'white';
     }, [isSecondary, theme.buttonColor, theme.text]);
 
+    const tapStyles = useMemo(() => {
+        if (theme.buttonDesign === '2') {
+            return {
+                backgroundColor: `rgba(${theme['202-rgb'] ?? ''}, 0.7)`,
+            };
+        }
+
+        return {
+            opacity: 0.6,
+        };
+    }, [theme]);
+
+    const hoverStyles = useMemo(() => {
+        if (theme.buttonDesign === '2') {
+            return {
+                backgroundColor: `rgba(${theme['102-rgb'] ?? ''}, 0.5)`,
+            };
+        }
+
+        return {
+            opacity: 1,
+        };
+    }, [theme]);
+
     return (
         <StyledMotionButton
             $ShouldShowTextAsRobotoMedium={ShouldShowTextAsRobotoMedium}
@@ -92,12 +116,9 @@ const Button: FC<ButtonProps> = ({
             $hasIcon={typeof icon === 'string' && icon !== ''}
             $isSecondary={isSecondary}
             onClick={handleClick}
-            whileTap={
-                isDisabled ? {} : { backgroundColor: isSecondary ? theme['201'] : theme['407'] }
-            }
-            whileHover={
-                isDisabled ? {} : { backgroundColor: isSecondary ? theme['203'] : theme['409'] }
-            }
+            whileTap={isDisabled ? {} : { ...tapStyles, transition: { duration: 0.0 } }}
+            whileHover={isDisabled ? {} : { ...hoverStyles, transition: { duration: 0.3 } }}
+            transition={{ duration: 0.5 }}
         >
             <AnimatePresence initial={false}>
                 {icon && (
@@ -114,7 +135,7 @@ const Button: FC<ButtonProps> = ({
                         style={{ overflow: 'hidden' }}
                         transition={{ duration: 0.2 }}
                     >
-                        <WaitCursor shouldHideBackground />
+                        <WaitCursor color={iconColor ?? 'white'} shouldHideBackground />
                     </StyledMotionWaitCursorWrapper>
                 )}
                 {!shouldShowWaitCursor && children && (
