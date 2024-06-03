@@ -79,8 +79,16 @@ const Button: FC<ButtonProps> = ({
             return theme.text;
         }
 
-        return theme.buttonColor ?? 'white';
-    }, [isSecondary, theme.buttonColor, theme.text]);
+        return theme.buttonDesign === '2'
+            ? theme.buttonColor ?? theme.buttonBackgroundColor ?? 'white'
+            : theme.buttonColor ?? 'white';
+    }, [
+        isSecondary,
+        theme.buttonBackgroundColor,
+        theme.buttonColor,
+        theme.buttonDesign,
+        theme.text,
+    ]);
 
     const backgroundColor = useMemo(() => {
         let color;
