@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { AnimatePresence } from 'framer-motion';
-import React, { FC, MouseEventHandler, ReactNode } from 'react';
+import React, { FC, MouseEventHandler, ReactNode, useMemo } from 'react';
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
@@ -74,6 +74,14 @@ const Button: FC<ButtonProps> = ({
 
     const theme: Theme = useTheme();
 
+    const iconColor = useMemo(() => {
+        if (isSecondary) {
+            return theme.buttonColorBackground ?? theme.text;
+        }
+
+        return theme.buttonColor ?? 'white';
+    }, [isSecondary, theme.buttonColor, theme.buttonColorBackground, theme.text]);
+
     return (
         <StyledMotionButton
             $ShouldShowTextAsRobotoMedium={ShouldShowTextAsRobotoMedium}
@@ -94,7 +102,7 @@ const Button: FC<ButtonProps> = ({
             <AnimatePresence initial={false}>
                 {icon && (
                     <StyledIconWrapper>
-                        <Icon color="white" icons={[icon]} />
+                        <Icon color={iconColor} icons={[icon]} />
                     </StyledIconWrapper>
                 )}
                 {shouldShowWaitCursor && (

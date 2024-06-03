@@ -24,13 +24,13 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
         if ($isSecondary) {
             return css`
                 background-color: ${theme['202']};
-                color: white;
+                color: ${theme.buttonColorBackground ?? theme.text};
             `;
         }
 
         return css`
-            background-color: ${theme.buttonColorBackground};
-            color: ${theme.buttonColor ?? theme.text};
+            background-color: ${theme.buttonColorBackground ?? theme['408']};
+            color: ${theme.buttonColor ?? 'white'};
         `;
     }}
 
