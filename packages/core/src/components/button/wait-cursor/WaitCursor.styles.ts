@@ -26,7 +26,7 @@ export const StyledWaitCursorBackground = styled.div<StyledWaitCursorBackgroundP
         0 1px 1px rgba(0, 0, 0, 0.2);
 `;
 
-type StyledWaitCursorWaitCursorProps = WithTheme<unknown>;
+type StyledWaitCursorWaitCursorProps = WithTheme<{ $color: string }>;
 
 const spin = keyframes`
   from {
@@ -44,7 +44,7 @@ export const StyledWaitCursorWaitCursor = styled.div<StyledWaitCursorWaitCursorP
     z-index: 2;
     border-style: solid;
     border-width: 3px;
-    border-color: white;
+    border-color: ${({ $color }) => $color};
     height: ${26 - 10}px;
     width: ${26 - 10}px;
     border-radius: 50%;

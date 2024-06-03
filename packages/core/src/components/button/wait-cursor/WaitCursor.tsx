@@ -6,19 +6,18 @@ import {
 } from './WaitCursor.styles';
 
 export type WaitCursorProps = {
+    color: string;
     shouldHideBackground?: boolean;
-    /**
-     * Specifies whether the wait cursor should be displayed.
-     */
     shouldHideWaitCursor?: boolean;
 };
 
 const WaitCursor: FC<WaitCursorProps> = ({
+    color,
     shouldHideBackground = false,
     shouldHideWaitCursor = false,
 }) => (
     <StyledWaitCursor $shouldShowWaitCursor={!shouldHideWaitCursor}>
-        <StyledWaitCursorWaitCursor />
+        <StyledWaitCursorWaitCursor $color={color} />
         {!shouldHideBackground && <StyledWaitCursorBackground />}
     </StyledWaitCursor>
 );
