@@ -2,9 +2,14 @@ import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns
 import { useSite } from 'chayns-api';
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { getDesignSettings } from '../../api/theme/get';
-import type { DesignSettings } from '../../types/colorSchemeProvider';
-import { convertIconStyle, generateFontFaces, getFontSize } from '../../utils/font';
+import { getDesignSettings, getParagraphFormat } from '../../api/theme/get';
+import type { DesignSettings, ParagraphFormat } from '../../types/colorSchemeProvider';
+import {
+    convertIconStyle,
+    generateFontFaces,
+    getFontSize,
+    getHeadlineColorSelector,
+} from '../../utils/font';
 
 enum ColorMode {
     Classic,
@@ -75,6 +80,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     const [colors, setColors] = useState<Theme>({});
     const [theme, setTheme] = useState<Theme>({});
     const [internalDesignSettings, setInternalDesignSettings] = useState<DesignSettings>();
+    const [internalParagraphFormat, setInternalParagraphFormat] = useState<ParagraphFormat[]>();
 
     // Empty object is used to prevent error if ColorSchemeProvider is rendered on server
     const { color: internalColor, colorMode: internalColorMode } = useSite() ?? {};
@@ -88,6 +94,10 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
         void getDesignSettings().then((result) => {
             setInternalDesignSettings(result);
+        });
+
+        void getParagraphFormat().then((result) => {
+            setInternalParagraphFormat(result);
         });
     }, [designSettings]);
 
@@ -146,6 +156,28 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
             });
         }
 
+        if (internalParagraphFormat) {
+            const { colorResult, themeResult } = getHeadlineColorSelector(internalParagraphFormat);
+
+            // Update chayns-colors
+            Object.keys(colorResult).forEach((key) => {
+                // ToDo: Find better solution
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                newColors[key] = colorResult[key];
+            });
+
+            // Update Theme
+            Object.keys(themeResult).forEach((key) => {
+                // ToDo: Find better solution
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                newTheme[key] = themeResult[key];
+            });
+        }
+
         newTheme.fontSize = getFontSize();
 
         setTheme(newTheme);
@@ -156,6 +188,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         internalColor,
         internalColorMode,
         internalDesignSettings,
+        internalParagraphFormat,
         secondaryColor,
     ]);
 
