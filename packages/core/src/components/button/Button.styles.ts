@@ -28,7 +28,7 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
         }
 
         return css`
-            color: ${theme.buttonColor ?? 'white'};
+            color: ${theme.buttonColor ?? theme.buttonBackgroundColor ?? 'white'};
         `;
     }}
 

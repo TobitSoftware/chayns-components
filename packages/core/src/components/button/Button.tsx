@@ -101,14 +101,16 @@ const Button: FC<ButtonProps> = ({
     const tapStyles = useMemo(() => {
         if (theme.buttonDesign === '2') {
             return {
-                backgroundColor: `rgba(${theme['202-rgb'] ?? ''}, 0.7)`,
+                backgroundColor: isSecondary
+                    ? `rgba(${theme['202-rgb'] ?? ''}, 0.7)`
+                    : `${theme.buttonBackgroundColor ?? ''}40`,
             };
         }
 
         return {
             opacity: 0.6,
         };
-    }, [theme]);
+    }, [isSecondary, theme]);
 
     const hoverStyles = useMemo(() => {
         if (theme.buttonDesign === '2') {
