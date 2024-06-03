@@ -19,12 +19,24 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
         `}
 
     align-items: center;
-    background-color: ${({ $isSecondary, theme }: StyledButtonProps) =>
-        $isSecondary ? theme['202'] : theme['408']};
+
+    ${({ $isSecondary, theme }: StyledButtonProps) => {
+        if ($isSecondary) {
+            return css`
+                background-color: ${theme['202']};
+                color: white;
+            `;
+        }
+
+        return css`
+            background-color: ${theme.buttonColorBackground};
+            color: ${theme.buttonColor ?? theme.text};
+        `;
+    }}
+
     border-radius: 3px;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
     border: none;
-    color: ${({ $isSecondary, theme }: StyledButtonProps) => ($isSecondary ? theme.text : 'white')};
     cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
     display: inline-flex;
     line-height: 1.15;

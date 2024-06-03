@@ -146,7 +146,11 @@ export const getHeadlineColorSelector = (data: ParagraphFormat[]) => {
         }
 
         if (path === 'buttonColor' && backgroundColor) {
-            themeResult[path] = backgroundColor;
+            themeResult[`${path}Background`] = backgroundColor;
+
+            if (color) {
+                themeResult[path] = color;
+            }
 
             return;
         }
