@@ -131,6 +131,7 @@ export const getHeadlineColorSelector = (data: ParagraphFormat[]) => {
         h5: 'headline-5',
         h6: 'headline-6',
         p: 'text',
+        footer: 'footer',
         '.button': 'button',
     };
 
