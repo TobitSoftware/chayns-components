@@ -76,11 +76,11 @@ const Button: FC<ButtonProps> = ({
 
     const iconColor = useMemo(() => {
         if (isSecondary) {
-            return theme.buttonColorBackground ?? theme.text;
+            return theme.text;
         }
 
         return theme.buttonColor ?? 'white';
-    }, [isSecondary, theme.buttonColor, theme.buttonColorBackground, theme.text]);
+    }, [isSecondary, theme.buttonColor, theme.text]);
 
     return (
         <StyledMotionButton

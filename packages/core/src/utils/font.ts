@@ -131,10 +131,10 @@ export const getHeadlineColorSelector = (data: ParagraphFormat[]) => {
         h5: 'headline-5',
         h6: 'headline-6',
         p: 'text',
-        '.button': 'buttonColor',
+        '.button': 'button',
     };
 
-    data.forEach(({ selector, color, backgroundColor }) => {
+    data.forEach(({ selector, color, backgroundColor, design }) => {
         const selectors = selector.split(',');
 
         const tag = selectors[selectors.length - 1]?.trim();
@@ -145,11 +145,15 @@ export const getHeadlineColorSelector = (data: ParagraphFormat[]) => {
             return;
         }
 
-        if (path === 'buttonColor' && backgroundColor) {
-            themeResult[`${path}Background`] = backgroundColor;
+        if (path === 'button' && backgroundColor) {
+            themeResult[`${path}BackgroundColor`] = backgroundColor;
 
             if (color) {
-                themeResult[path] = color;
+                themeResult[`${path}Color`] = color;
+            }
+
+            if (design) {
+                themeResult[`${path}Design`] = String(design);
             }
 
             return;
