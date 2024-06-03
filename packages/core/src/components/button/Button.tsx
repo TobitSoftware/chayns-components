@@ -82,6 +82,22 @@ const Button: FC<ButtonProps> = ({
         return theme.buttonColor ?? 'white';
     }, [isSecondary, theme.buttonColor, theme.text]);
 
+    const backgroundColor = useMemo(() => {
+        let color;
+
+        if (isSecondary) {
+            color = theme['202'];
+        } else {
+            color = theme.buttonBackgroundColor ?? theme['408'];
+        }
+
+        if (theme.buttonDesign === '2') {
+            color = `rgba(${theme['102-rgb'] ?? ''}, 0)`;
+        }
+
+        return color;
+    }, [isSecondary, theme]);
+
     const tapStyles = useMemo(() => {
         if (theme.buttonDesign === '2') {
             return {
@@ -116,9 +132,9 @@ const Button: FC<ButtonProps> = ({
             $hasIcon={typeof icon === 'string' && icon !== ''}
             $isSecondary={isSecondary}
             onClick={handleClick}
-            whileTap={isDisabled ? {} : { ...tapStyles, transition: { duration: 0.0 } }}
-            whileHover={isDisabled ? {} : { ...hoverStyles, transition: { duration: 0.3 } }}
-            transition={{ duration: 0.5 }}
+            animate={{ backgroundColor }}
+            whileTap={isDisabled ? {} : { ...tapStyles }}
+            whileHover={isDisabled ? {} : { ...hoverStyles }}
         >
             <AnimatePresence initial={false}>
                 {icon && (
