@@ -1,15 +1,11 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
 import { useSite } from 'chayns-api';
 import React, { FC, ReactNode, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { getDesignSettings, getParagraphFormat } from '../../api/theme/get';
 import type { DesignSettings, ParagraphFormat } from '../../types/colorSchemeProvider';
-import {
-    convertIconStyle,
-    generateFontFaces,
-    getFontSize,
-    getHeadlineColorSelector,
-} from '../../utils/font';
+import { convertIconStyle, getFontSize, getHeadlineColorSelector } from '../../utils/font';
 
 enum ColorMode {
     Classic,
@@ -60,7 +56,6 @@ export type WithTheme<T> = T & {
 export type FramerMotionBugFix = WithTheme<unknown>;
 
 const GlobalStyle = createGlobalStyle`
-    ${generateFontFaces}
     .ellipsis {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -194,6 +189,12 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
     return (
         <ThemeProvider theme={theme}>
+            <Helmet>
+                <link
+                    rel="stylesheet"
+                    href="https://api.chayns-static.space/font/NotoColorEmoji/v1/font.css"
+                />
+            </Helmet>
             <div style={{ ...colors, ...cssVariables, ...style }}>{children}</div>
             <GlobalStyle />
         </ThemeProvider>
