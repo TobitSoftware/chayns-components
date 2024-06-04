@@ -132,8 +132,14 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                             <StyledMotionTitle
                                 animate={{ scale: 1 }}
                                 initial={{ scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }}
+                                exit={{ opacity: 0 }}
                                 $isOpen={isOpen}
                                 $isWrapped={isWrapped}
+                                transition={{
+                                    opacity: {
+                                        duration: 0,
+                                    },
+                                }}
                                 key={
                                     isOpen && !isWrapped
                                         ? 'accordionHeadTitleBig'
