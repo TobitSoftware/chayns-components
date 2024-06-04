@@ -30,11 +30,11 @@ export const getAccordionHeadHeight = ({
 
     if (isWrapped) {
         element.style.fontWeight = 'bold';
+        element.style.whiteSpace = 'nowrap';
     } else {
         element.style.fontSize = '1.3rem';
+        element.style.whiteSpace = 'normal';
     }
-
-    element.style.whiteSpace = 'normal';
 
     const openHeight = Math.max(element.clientHeight + 8, isWrapped ? 40 : 33);
 

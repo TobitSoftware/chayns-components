@@ -74,8 +74,7 @@ export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
     ${({ $isWrapped }) =>
         $isWrapped &&
         css`
-            align-items: center;
-            display: flex;
+            align-content: center;
         `}
 `;
 
