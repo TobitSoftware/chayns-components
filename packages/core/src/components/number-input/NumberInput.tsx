@@ -103,13 +103,10 @@ const NumberInput: FC<NumberInputProps> = ({
         }
 
         const valueToCheck = sanitizedValueString.replaceAll(',', '.');
-        console.log(valueToCheck);
 
         if (!isValidString({ string: valueToCheck, isMoneyInput, isDecimalInput, isTimeInput })) {
             return;
         }
-
-        console.log(minNumber && Number(valueToCheck) < minNumber);
 
         if (
             (maxNumber && Number(valueToCheck) > maxNumber) ||
