@@ -50,9 +50,9 @@ type InputMode =
 
 export type InputProps = {
     /**
-     * Icon element to be displayed on the left side of the input field
+     * An element to be displayed on the left side of the input field
      */
-    iconElement?: ReactNode;
+    leftElement?: ReactNode;
     /**
      * The id of the input
      */
@@ -130,7 +130,7 @@ export type InputProps = {
 const Input = forwardRef<InputRef, InputProps>(
     (
         {
-            iconElement,
+            leftElement,
             inputMode,
             isDisabled,
             onBlur,
@@ -233,7 +233,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     $shouldRoundRightCorners={shouldShowBorder}
                     $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                 >
-                    {iconElement && <StyledInputIconWrapper>{iconElement}</StyledInputIconWrapper>}
+                    {leftElement && <StyledInputIconWrapper>{leftElement}</StyledInputIconWrapper>}
                     <StyledInputContent $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}>
                         <StyledInputField
                             $placeholderWidth={placeholderWidth}

@@ -119,7 +119,7 @@ const SearchInput: FC<SearchInputProps> = ({
                         transition={{ duration: 0.3 }}
                     >
                         <Input
-                            iconElement={<Icon color={theme.text} icons={['far fa-search']} />}
+                            leftElement={<Icon color={theme.text} icons={['far fa-search']} />}
                             onChange={onChange}
                             onKeyDown={onKeyDown}
                             placeholder={placeholder}

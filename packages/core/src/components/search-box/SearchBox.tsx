@@ -496,7 +496,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             onFocus={handleFocus}
                             placeholder={placeholder}
                             onKeyDown={onKeyDown}
-                            iconElement={selectedImage}
+                            leftElement={selectedImage}
                             rightElement={rightElement}
                             value={value}
                         />
