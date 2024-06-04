@@ -17,6 +17,7 @@ type StyledAmountControlInputProps = WithTheme<{
     $displayState: DisplayState;
     $shouldShowIcon: boolean;
     $hasFocus: boolean;
+    $shouldShowWideInput: boolean;
 }>;
 
 export const StyledAmountControlInput = styled.input<StyledAmountControlInputProps>`
@@ -24,7 +25,7 @@ export const StyledAmountControlInput = styled.input<StyledAmountControlInputPro
     color: ${({ theme }: StyledAmountControlInputProps) => theme.text};
     border: none;
     height: 28px;
-    width: 90px;
+    width: ${({ $shouldShowWideInput }) => ($shouldShowWideInput ? 90 : 55)}px;
     text-align: center;
     cursor: ${({ $hasFocus }) => ($hasFocus ? 'text' : 'pointer')};
 
@@ -46,6 +47,7 @@ export const StyledAmountControlInput = styled.input<StyledAmountControlInputPro
 type StyledAmountControlButtonProps = WithTheme<{
     $isDisabled: boolean;
     $color?: string;
+    $isWide?: boolean;
 }>;
 
 export const StyledMotionAmountControlButton = styled(
@@ -55,7 +57,7 @@ export const StyledMotionAmountControlButton = styled(
     background-color: ${({ $color }) => $color ?? 'rgba(255, 255, 255, 0.2)'};
     transition: background-color 0.2s ease-in-out;
     height: 28px;
-    width: 28px;
+    width: ${({ $isWide }) => ($isWide ? 40 : 28)}px;
 
     ${({ $isDisabled }) =>
         $isDisabled &&

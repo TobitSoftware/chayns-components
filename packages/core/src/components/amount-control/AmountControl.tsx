@@ -47,6 +47,10 @@ export type AmountControlProps = {
      * Whether the icon should be displayed if no amount is selected
      */
     shouldShowIcon?: boolean;
+    /**
+     * Whether the input should be wider
+     */
+    shouldShowWideInput?: boolean;
 };
 
 const AmountControl: FC<AmountControlProps> = ({
@@ -57,6 +61,7 @@ const AmountControl: FC<AmountControlProps> = ({
     iconColor,
     maxAmount,
     onChange,
+    shouldShowWideInput = false,
 }) => {
     const [amountValue, setAmountValue] = useState(0);
     const [inputValue, setInputValue] = useState('0');
@@ -195,8 +200,16 @@ const AmountControl: FC<AmountControlProps> = ({
                         <StyledMotionAmountControlButton
                             key="right_button"
                             initial={{ width: 0, opacity: 0, padding: 0 }}
-                            animate={{ width: 28, opacity: 1, padding: 0 }}
+                            animate={{
+                                width:
+                                    displayState === 'normal' || displayState === 'maxAmount'
+                                        ? 40
+                                        : 28,
+                                opacity: 1,
+                                padding: 0,
+                            }}
                             exit={{ width: 0, opacity: 0, padding: 0 }}
+                            $isWide={displayState === 'normal' || displayState === 'maxAmount'}
                             transition={{ duration: 0.2, type: 'tween' }}
                             onClick={handleAmountRemove}
                             $color={displayState === 'delete' ? 'rgb(32, 198, 90)' : undefined}
@@ -210,6 +223,7 @@ const AmountControl: FC<AmountControlProps> = ({
                 <StyledAmountControlInput
                     $displayState={displayState}
                     $shouldShowIcon={shouldShowIcon}
+                    $shouldShowWideInput={shouldShowWideInput}
                     $hasFocus={hasFocus}
                     onBlur={handleInputBlur}
                     onChange={handleInputChange}
@@ -220,10 +234,15 @@ const AmountControl: FC<AmountControlProps> = ({
                         <StyledMotionAmountControlButton
                             key="right_button"
                             initial={{ width: 0, opacity: 0, padding: 0 }}
-                            animate={{ width: 28, opacity: 1, padding: 0 }}
+                            animate={{
+                                width: 40,
+                                opacity: 1,
+                                padding: 0,
+                            }}
                             exit={{ width: 0, opacity: 0, padding: 0 }}
                             transition={{ duration: 0.2, type: 'tween' }}
                             onClick={handleAmountAdd}
+                            $isWide={displayState === 'normal' || displayState === 'maxAmount'}
                             disabled={maxAmount ? amountValue >= maxAmount : false}
                             $isDisabled={maxAmount ? amountValue >= maxAmount : false}
                         >
@@ -246,6 +265,7 @@ const AmountControl: FC<AmountControlProps> = ({
             maxAmount,
             shouldShowIcon,
             shouldShowLeftIcon,
+            shouldShowWideInput,
         ],
     );
 };
