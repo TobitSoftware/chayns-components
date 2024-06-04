@@ -27,11 +27,6 @@ TappPortal.propTypes = {
             : () => {},
 };
 
-TappPortal.defaultProps = {
-    children: null,
-    parent: null,
-};
-
 TappPortal.displayName = 'TappPortal';
 
 export default TappPortal;

@@ -21,7 +21,7 @@ const ListItem = ({
     onClick,
     right,
     style,
-    circle,
+    circle = false,
     headerProps,
     hoverItem,
     onLongPress,
@@ -30,15 +30,15 @@ const ListItem = ({
     onTouchStart,
     onTouchEnd,
     onTouchCancel,
-    longPressTimeout,
+    longPressTimeout = 450,
     noContentClass,
     onOpen,
-    imageBorderColor,
+    imageBorderColor = 'rgba(var(--chayns-color-rgb--009), .08)',
     left,
-    headMultiline,
+    headMultiline = false,
     // eslint-disable-next-line react/prop-types
     notExpandable,
-    openImageOnClick,
+    openImageOnClick = false,
     ...props
 }) => (
     <div
@@ -236,35 +236,6 @@ ListItem.propTypes = {
      * Whether the head of the list item should be multiline or ellipsis in expanded state
      */
     headMultiline: PropTypes.bool,
-};
-
-ListItem.defaultProps = {
-    subtitle: null,
-    image: null,
-    images: null,
-    openImageOnClick: false,
-    icon: null,
-    className: null,
-    onClick: null,
-    right: null,
-    style: null,
-    headerProps: null,
-    circle: false,
-    hoverItem: null,
-    onLongPress: null,
-    onMouseDown: null,
-    onMouseMove: null,
-    onMouseUp: null,
-    onTouchStart: null,
-    onTouchMove: null,
-    onTouchEnd: null,
-    onTouchCancel: null,
-    longPressTimeout: 450,
-    noContentClass: null,
-    onOpen: null,
-    imageBorderColor: 'rgba(var(--chayns-color-rgb--009), .08)',
-    left: null,
-    headMultiline: false,
 };
 
 ListItem.displayName = 'ListItem';

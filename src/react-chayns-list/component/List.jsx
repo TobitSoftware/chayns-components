@@ -11,7 +11,7 @@ import './List.scss';
 /**
  * The wrapper for the `ListItem`-component to create lists.
  */
-const List = ({ className, children, notExpandable }) => {
+const List = ({ className, children, notExpandable = false }) => {
     if (notExpandable) {
         return <AbstractList className={className}>{children}</AbstractList>;
     }
@@ -37,12 +37,6 @@ List.propTypes = {
      * Wether the components inside of the list should not be expandable.
      */
     notExpandable: PropTypes.bool,
-};
-
-List.defaultProps = {
-    className: null,
-    children: null,
-    notExpandable: false,
 };
 
 List.displayName = 'List';

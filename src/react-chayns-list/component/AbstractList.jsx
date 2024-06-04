@@ -14,11 +14,6 @@ AbstractList.propTypes = {
     ]),
 };
 
-AbstractList.defaultProps = {
-    className: null,
-    children: null,
-};
-
 AbstractList.displayName = 'AbstractList';
 
 export default AbstractList;
