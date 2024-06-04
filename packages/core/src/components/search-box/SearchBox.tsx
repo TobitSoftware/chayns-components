@@ -98,6 +98,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const [hasMultipleGroups, setHasMultipleGroups] = useState<boolean>(lists.length > 1);
         const [filteredChildrenArray, setFilteredChildrenArray] = useState<Element[]>();
         const [inputToListValue, setInputToListValue] = useState<string>('');
+        const [hasFocus, setHasFocus] = useState(false);
 
         const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement | null>(null);
@@ -108,7 +109,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         /**
          * Checks if Lists are smaller then 1
          */
-
         useEffect(() => {
             setHasMultipleGroups(lists.length > 1);
         }, [lists]);
@@ -248,13 +248,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                         }
                     });
                 });
-            }
-
-            if (!shouldShowContentOnEmptyInput && !value) {
-                setMatchingListsItems([]);
-            } else {
-                setMatchingListsItems(newMatchingItems);
-                setIsAnimating(newMatchingItems.length !== 0);
             }
         }, [inputToListValue, lists, shouldAddInputToList, shouldShowContentOnEmptyInput, value]);
 
