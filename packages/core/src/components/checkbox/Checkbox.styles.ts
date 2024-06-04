@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { getCheckBoxPosition } from '../../utils/checkBox';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { CheckboxProps } from './Checkbox';
 
@@ -36,7 +37,9 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
                       box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
                       height: 16px;
                       left: 7px;
-                      top: ${$lineHeight ? `${Number(theme.fontSize) - 3}px` : '50%'};
+                      top: ${$lineHeight
+                          ? `${(getCheckBoxPosition(Number(theme.fontSize)) ?? 5) + 6}px`
+                          : '50%'};
                       transform: translateX(${$isChecked ? '18px' : 0}) translateY(-50%);
                       transition: transform 0.2s ease;
                       width: 16px;
@@ -47,7 +50,9 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
                       height: 10px;
                       left: 2px;
                       opacity: ${$isChecked ? 1 : 0};
-                      top: ${$lineHeight ? `${Number(theme.fontSize) - 5}px` : 'calc(50% - 2px)'};
+                      top: ${$lineHeight
+                          ? `${(getCheckBoxPosition(Number(theme.fontSize)) ?? 5) + 5}px`
+                          : 'calc(50% - 2px)'};
                       transform: rotateZ(37deg) translateY(-50%);
                       transition: opacity 0.2s ease;
                       width: 5.5px;
@@ -86,8 +91,8 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
         ${({ $lineHeight, theme, $shouldShowAsSwitch }: StyledCheckboxLabelProps) =>
             $lineHeight
                 ? css`
-                      top: ${Number(theme.fontSize) - ($shouldShowAsSwitch ? 3 : 3)}px;
-                      transform: translateY(-50%);
+                      top: ${getCheckBoxPosition(Number(theme.fontSize)) ??
+                      5 + ($shouldShowAsSwitch ? 1 : 0)}px;
                   `
                 : css`
                       top: 50%;
