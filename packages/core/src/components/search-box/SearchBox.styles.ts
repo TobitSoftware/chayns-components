@@ -55,3 +55,8 @@ export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBo
                   }
               `}
 `;
+
+export const StyledSearchBoxIcon = styled.div`
+    cursor: pointer;
+    padding: 0 10px;
+`;

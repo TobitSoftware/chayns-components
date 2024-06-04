@@ -16,14 +16,20 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { useTheme } from 'styled-components';
 import type { ISearchBoxItem, ISearchBoxItems } from '../../types/searchBox';
 import { calculateContentHeight } from '../../utils/calculate';
 import { searchList } from '../../utils/searchBox';
+import Icon from '../icon/Icon';
 import Input from '../input/Input';
 import GroupName from './group-name/GroupName';
 import SearchBoxItem from './search-box-item/SearchBoxItem';
 import { StyledSearchBoxItemImage } from './search-box-item/SearchBoxItem.styles';
-import { StyledMotionSearchBoxBody, StyledSearchBox } from './SearchBox.styles';
+import {
+    StyledMotionSearchBoxBody,
+    StyledSearchBox,
+    StyledSearchBoxIcon,
+} from './SearchBox.styles';
 
 export type SearchBoxRef = {
     clear: VoidFunction;
@@ -59,6 +65,10 @@ export type SearchBoxProps = {
      */
     selectedId?: string;
     /**
+     * If true, the value in the Input is displayed in the list.
+     */
+    shouldAddInputToList: boolean;
+    /**
      * Whether the full list of items should be displayed if the input is empty.
      */
     shouldShowContentOnEmptyInput?: boolean;
@@ -67,9 +77,9 @@ export type SearchBoxProps = {
      */
     shouldShowRoundImage?: boolean;
     /**
-     * If true, the value in the Input is displayed in the list.
+     * Whether the icon to open and close the list should be displayed.
      */
-    shouldAddInputToList: boolean;
+    shouldShowToggleIcon?: boolean;
 };
 
 const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
@@ -85,6 +95,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             shouldShowRoundImage,
             shouldShowContentOnEmptyInput = true,
             shouldAddInputToList = true,
+            shouldShowToggleIcon = false,
         },
         ref,
     ) => {
@@ -98,11 +109,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const [hasMultipleGroups, setHasMultipleGroups] = useState<boolean>(lists.length > 1);
         const [filteredChildrenArray, setFilteredChildrenArray] = useState<Element[]>();
         const [inputToListValue, setInputToListValue] = useState<string>('');
-        const [hasFocus, setHasFocus] = useState(false);
 
         const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement | null>(null);
         const inputRef = useRef<HTMLInputElement | null>(null);
+
+        const theme = useTheme();
 
         const { browser } = getDevice();
 
@@ -250,6 +262,18 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 });
             }
         }, [inputToListValue, lists, shouldAddInputToList, shouldShowContentOnEmptyInput, value]);
+
+        const rightElement = useMemo(() => {
+            if (!shouldShowToggleIcon) {
+                return undefined;
+            }
+
+            return (
+                <StyledSearchBoxIcon onClick={() => setIsAnimating((prevState) => !prevState)}>
+                    <Icon icons={['fa fa-chevron-down']} color={theme['006'] as string} />
+                </StyledSearchBoxIcon>
+            );
+        }, [shouldShowToggleIcon, theme]);
 
         /**
          * This function handles changes of the input
@@ -473,6 +497,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             placeholder={placeholder}
                             onKeyDown={onKeyDown}
                             iconElement={selectedImage}
+                            rightElement={rightElement}
                             value={value}
                         />
                     </div>
@@ -510,6 +535,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 isAnimating,
                 onKeyDown,
                 placeholder,
+                rightElement,
                 selectedImage,
                 value,
                 width,
