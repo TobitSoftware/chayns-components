@@ -83,7 +83,9 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 width: (titleWrapperRef.current?.clientWidth ?? 0) - 10,
             }),
         );
-    }, [isWrapped, title]);
+        // The fontSize need to be included to trigger a new calculation.
+        // After the size is increased, the Title is cut at the bottom.
+    }, [isWrapped, title, theme.fontSize]);
 
     const iconElement = useMemo(() => {
         if (icon || isFixed) {
