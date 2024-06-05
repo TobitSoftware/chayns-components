@@ -1,5 +1,14 @@
 import { ColorSchemeProvider } from '@chayns-components/core';
-import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+    FC,
+    ReactElement,
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useState,
+} from 'react';
+import { createPortal } from 'react-dom';
 import { renderToString } from 'react-dom/server';
 import {
     StyledTypewriter,
@@ -95,6 +104,19 @@ const Typewriter: FC<TypewriterProps> = ({
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
     const [shouldCount, setShouldCount] = useState(true);
+    const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
+
+    useLayoutEffect(() => {
+        if (children) {
+            setHasRenderedChildrenOnce(false);
+        }
+    }, [children]);
+
+    useEffect(() => {
+        if (!hasRenderedChildrenOnce) {
+            setHasRenderedChildrenOnce(true);
+        }
+    }, [hasRenderedChildrenOnce]);
 
     const sortedChildren = useMemo(
         () =>
@@ -318,10 +340,23 @@ const Typewriter: FC<TypewriterProps> = ({
                         $shouldHideCursor={shouldHideCursor}
                     />
                 )}
+                {/*
+                    The following is needed because some components like the CodeHighlighter will not render correct
+                    if the element is not rendered on client before...
+                */}
+                {!hasRenderedChildrenOnce &&
+                    createPortal(
+                        <div style={{ position: 'absolute', visibility: 'hidden' }}>
+                            {children}
+                        </div>,
+                        document.body,
+                    )}
             </StyledTypewriter>
         ),
         [
+            children,
             handleClick,
+            hasRenderedChildrenOnce,
             isAnimatingText,
             pseudoTextHTML,
             shouldHideCursor,
