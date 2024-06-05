@@ -13,7 +13,8 @@
         "build:storybook": "storybook build",
         "lerna:version": "lerna version --no-push",
         "lerna:build": "lerna run build",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "upgrade:minor": "lerna exec -- ncu -u -t minor"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
