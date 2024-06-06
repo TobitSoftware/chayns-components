@@ -32,7 +32,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
     items,
     size = FilterButtonSize.Normal,
 }) => {
-    const [selectedIds, setSelectedIds] = useState<string[]>([]);
+    const [selectedIds, setSelectedIds] = useState<string[]>(['all']);
 
     /**
      * This function set the selectedItemKey
