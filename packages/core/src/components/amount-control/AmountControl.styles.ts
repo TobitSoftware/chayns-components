@@ -44,6 +44,27 @@ export const StyledAmountControlInput = styled.input<StyledAmountControlInputPro
         `};
 `;
 
+type StyledAmountControlPseudoInputProps = WithTheme<{
+    $shouldShowWideInput: boolean;
+}>;
+
+export const StyledAmountControlPseudoInput = styled.div<StyledAmountControlPseudoInputProps>`
+    background-color: ${({ theme }: StyledAmountControlPseudoInputProps) => theme['202']};
+    color: ${({ theme }: StyledAmountControlPseudoInputProps) => theme.text};
+    border: none;
+    height: 28px;
+    width: ${({ $shouldShowWideInput }) => ($shouldShowWideInput ? 90 : 55)}px;
+    text-align: center;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+`;
+
 type StyledAmountControlButtonProps = WithTheme<{
     $isDisabled: boolean;
     $color?: string;

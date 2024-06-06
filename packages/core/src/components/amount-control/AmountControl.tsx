@@ -13,6 +13,7 @@ import Icon from '../icon/Icon';
 import {
     StyledAmountControl,
     StyledAmountControlInput,
+    StyledAmountControlPseudoInput,
     StyledMotionAmountControlButton,
 } from './AmountControl.styles';
 
@@ -220,15 +221,24 @@ const AmountControl: FC<AmountControlProps> = ({
                         </StyledMotionAmountControlButton>
                     )}
                 </AnimatePresence>
-                <StyledAmountControlInput
-                    $displayState={displayState}
-                    $shouldShowIcon={shouldShowIcon}
-                    $shouldShowWideInput={shouldShowWideInput}
-                    $hasFocus={hasFocus}
-                    onBlur={handleInputBlur}
-                    onChange={handleInputChange}
-                    value={displayState === 'default' && label ? label : inputValue}
-                />
+                {displayState === 'delete' ? (
+                    <StyledAmountControlPseudoInput
+                        onClick={handleAmountRemove}
+                        $shouldShowWideInput={shouldShowWideInput}
+                    >
+                        {inputValue}
+                    </StyledAmountControlPseudoInput>
+                ) : (
+                    <StyledAmountControlInput
+                        $displayState={displayState}
+                        $shouldShowIcon={shouldShowIcon}
+                        $shouldShowWideInput={shouldShowWideInput}
+                        $hasFocus={hasFocus}
+                        onBlur={handleInputBlur}
+                        onChange={handleInputChange}
+                        value={displayState === 'default' && label ? label : inputValue}
+                    />
+                )}
                 <AnimatePresence initial={false}>
                     {displayState === 'normal' && (
                         <StyledMotionAmountControlButton
