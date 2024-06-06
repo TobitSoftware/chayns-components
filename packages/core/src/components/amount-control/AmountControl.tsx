@@ -6,6 +6,7 @@ import React, {
     useCallback,
     useEffect,
     useMemo,
+    useRef,
     useState,
 } from 'react';
 import { checkForValidAmount } from '../../utils/amountControl';
@@ -70,6 +71,8 @@ const AmountControl: FC<AmountControlProps> = ({
 
     const minAmount = 0;
 
+    const inputRef = useRef<HTMLInputElement>(null);
+
     /**
      * This function controls the displayState
      */
@@ -130,6 +133,16 @@ const AmountControl: FC<AmountControlProps> = ({
         setAmountValue(1);
         setInputValue('1');
     }, [amountValue]);
+
+    const handleDeleteIconClick = useCallback(() => {
+        if (inputValue === '0') {
+            window.setTimeout(() => {
+                inputRef.current?.focus();
+            }, 500);
+        } else {
+            handleAmountRemove();
+        }
+    }, [inputValue]);
 
     const handleInputBlur = useCallback(() => {
         setAmountValue(inputValue === '' ? 0 : Number(inputValue));
@@ -221,15 +234,16 @@ const AmountControl: FC<AmountControlProps> = ({
                         </StyledMotionAmountControlButton>
                     )}
                 </AnimatePresence>
-                {displayState === 'delete' ? (
+                {displayState === 'delete' || inputValue === '0' ? (
                     <StyledAmountControlPseudoInput
-                        onClick={handleAmountRemove}
+                        onClick={handleDeleteIconClick}
                         $shouldShowWideInput={shouldShowWideInput}
                     >
-                        {inputValue}
+                        {displayState === 'default' && label ? label : inputValue}
                     </StyledAmountControlPseudoInput>
                 ) : (
                     <StyledAmountControlInput
+                        ref={inputRef}
                         $displayState={displayState}
                         $shouldShowIcon={shouldShowIcon}
                         $shouldShowWideInput={shouldShowWideInput}
@@ -265,6 +279,7 @@ const AmountControl: FC<AmountControlProps> = ({
         [
             amountValue,
             displayState,
+            handleDeleteIconClick,
             handleFirstAmount,
             handleInputBlur,
             handleInputChange,
