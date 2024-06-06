@@ -55,6 +55,19 @@ export const StyledMotionContextMenuContent = styled(
                         top: -7px;
                         left: 13px;
                     `;
+                case ContextMenuAlignment.TopCenter:
+                    return css`
+                        bottom: -7px;
+                        right: 45%;
+                        transform: rotate(45deg);
+                    `;
+                case ContextMenuAlignment.BottomCenter:
+                    return css`
+                        transform: rotate(225deg);
+                        top: -7px;
+                        left: 45%;
+                    `;
+
                 default:
                     return undefined;
             }

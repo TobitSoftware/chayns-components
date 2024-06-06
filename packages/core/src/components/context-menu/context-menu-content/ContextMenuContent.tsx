@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ContextMenuAlignment } from '../../../types/contextMenu';
 import Icon from '../../icon/Icon';
 import type { ContextMenuCoordinates, ContextMenuItem } from '../ContextMenu';
@@ -20,12 +20,48 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
         const isBottomLeftAlignment = alignment === ContextMenuAlignment.BottomLeft;
         const isTopLeftAlignment = alignment === ContextMenuAlignment.TopLeft;
         const isTopRightAlignment = alignment === ContextMenuAlignment.TopRight;
+        const isTopCenterAlignment = alignment === ContextMenuAlignment.TopCenter;
+        const isBottomCenterAlignment = alignment === ContextMenuAlignment.BottomCenter;
 
-        const percentageOffsetX = isBottomLeftAlignment || isTopLeftAlignment ? -100 : 0;
-        const percentageOffsetY = isTopRightAlignment || isTopLeftAlignment ? -100 : 0;
+        const percentageOffsetX = useMemo(() => {
+            if (isBottomLeftAlignment || isTopLeftAlignment) {
+                return -100;
+            }
 
-        const anchorOffsetX = isBottomLeftAlignment || isTopLeftAlignment ? 21 : -21;
-        const anchorOffsetY = isTopRightAlignment || isTopLeftAlignment ? -21 : 21;
+            if (isBottomCenterAlignment || isTopCenterAlignment) {
+                return -50;
+            }
+
+            return 0;
+        }, [
+            isBottomCenterAlignment,
+            isBottomLeftAlignment,
+            isTopCenterAlignment,
+            isTopLeftAlignment,
+        ]);
+
+        const anchorOffsetX = useMemo(() => {
+            if (isBottomLeftAlignment || isTopLeftAlignment) {
+                return 21;
+            }
+
+            if (isBottomCenterAlignment || isTopCenterAlignment) {
+                return 0;
+            }
+
+            return -21;
+        }, [
+            isBottomCenterAlignment,
+            isBottomLeftAlignment,
+            isTopCenterAlignment,
+            isTopLeftAlignment,
+        ]);
+
+        const percentageOffsetY =
+            isTopRightAlignment || isTopLeftAlignment || isTopCenterAlignment ? -100 : 0;
+
+        const anchorOffsetY =
+            isTopRightAlignment || isTopLeftAlignment || isTopCenterAlignment ? -21 : 21;
 
         const exitAndInitialY = isTopLeftAlignment || isTopRightAlignment ? -16 : 16;
 
