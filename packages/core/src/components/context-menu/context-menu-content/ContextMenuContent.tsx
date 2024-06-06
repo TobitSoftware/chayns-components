@@ -42,14 +42,14 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
 
         const anchorOffsetX = useMemo(() => {
             if (isBottomLeftAlignment || isTopLeftAlignment) {
-                return 21;
+                return 15;
             }
 
             if (isBottomCenterAlignment || isTopCenterAlignment) {
                 return 0;
             }
 
-            return -21;
+            return -15;
         }, [
             isBottomCenterAlignment,
             isBottomLeftAlignment,
