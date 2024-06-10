@@ -21,6 +21,7 @@ export { default as ComboBox } from './components/combobox/ComboBox';
 export type { IComboBoxItem as ComboBoxItem } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as ContextMenu } from './components/context-menu/ContextMenu';
+export { default as ExpandableContent } from './components/expandable-content/ExpandableContent';
 export { default as FileInput } from './components/file-input/FileInput';
 export { default as FilterButtons } from './components/filter-buttons/FilterButtons';
 export { default as GridImage } from './components/grid-image/GridImage';
