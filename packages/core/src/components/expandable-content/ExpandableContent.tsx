@@ -8,13 +8,37 @@ import React, { CSSProperties, FC, ReactNode, useMemo } from 'react';
 import { StyledMotionExpandableContent } from './ExpandableContent.styles';
 
 export type ExpandableContentProps = {
-    children: ReactNode;
-    style?: CSSProperties;
-    duration?: number;
+    /**
+     * The styles that should be animated.
+     */
     animate?: boolean | AnimationControls | TargetAndTransition | VariantLabels;
+    /**
+     * The children that should be animated.
+     */
+    children: ReactNode;
+    /**
+     * How long the animation last.
+     */
+    duration?: number;
+    /**
+     * the exit animation.
+     */
     exit?: TargetAndTransition | VariantLabels;
-    initial?: boolean | VariantLabels;
+    /**
+     * the id of the element.
+     */
     id: string;
+    /**
+     * the initial animation.
+     */
+    initial?: boolean | VariantLabels;
+    /**
+     * The style of the wrapper.
+     */
+    style?: CSSProperties;
+    /**
+     * The type of the animation.
+     */
     type?: 'just' | 'inertia' | 'tween' | 'spring' | 'keyframes';
 };
 
