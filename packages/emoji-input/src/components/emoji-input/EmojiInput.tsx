@@ -8,7 +8,7 @@ import React, {
     FocusEvent,
     FocusEventHandler,
     forwardRef,
-    KeyboardEvent,
+    KeyboardEvent as TmpKeyboardEvent,
     KeyboardEventHandler,
     ReactElement,
     ReactNode,
@@ -168,6 +168,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const [isPopupVisible, setIsPopupVisible] = useState(false);
         const [isPrefixAnimationFinished, setIsPrefixAnimationFinished] = useState(!prefixElement);
         const [prefixElementWidth, setPrefixElementWidth] = useState<number | undefined>();
+        const [textLength, setTextLength] = useState(0);
 
         const areaProvider = useContext(AreaContext);
 
@@ -259,6 +260,31 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     event.preventDefault();
                 }
 
+                const { target } = event;
+
+                const newLength = target.innerHTML.length;
+
+                setTextLength((prevState) => {
+                    if (newLength < prevState) {
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        const keyboardEvent = new KeyboardEvent('keydown', {
+                            key: 'Backspace',
+                            code: 'Backspace',
+                            keyCode: 8,
+                            which: 8,
+                            location: 0,
+                            bubbles: true, // Ensures the event bubbles up through the DOM
+                            cancelable: true, // Allows the event to be canceled
+                        });
+
+                        target.dispatchEvent(keyboardEvent);
+                    }
+
+                    return newLength;
+                });
+
                 if (shouldDeleteOneMoreBackwards.current) {
                     shouldDeleteOneMoreBackwards.current = false;
                     shouldDeleteOneMoreForwards.current = false;
@@ -299,7 +325,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         );
 
         const handleKeyDown = useCallback(
-            (event: KeyboardEvent<HTMLDivElement>) => {
+            (event: TmpKeyboardEvent<HTMLDivElement>) => {
                 if (isDisabled) {
                     event.preventDefault();
                     event.stopPropagation();
