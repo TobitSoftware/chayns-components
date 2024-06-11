@@ -8,8 +8,7 @@ type StyledFilterButtonItemProps = WithTheme<{ $size: FilterButtonSize; $isSelec
 
 export const StyledFilterButtonItem = styled.div<StyledFilterButtonItemProps>`
     position: relative;
-    font-size: 15px;
-    line-height: 1em;
+    line-height: 1;
     cursor: pointer;
     user-select: none;
     padding: ${({ $size }) => ($size === FilterButtonSize.Normal ? '8px 14px' : '4px 8px')};
@@ -39,6 +38,7 @@ type StyledFilterButtonItemLabelTextProps = WithTheme<unknown>;
 export const StyledFilterButtonItemLabelText = styled.p<StyledFilterButtonItemLabelTextProps>`
     color: ${({ theme }: StyledFilterButtonItemLabelTextProps) => theme.text};
     margin: 0;
+    line-height: 1;
 `;
 
 type StyledFilterButtonItemLabelCountProps = WithTheme<unknown>;
@@ -46,6 +46,7 @@ type StyledFilterButtonItemLabelCountProps = WithTheme<unknown>;
 export const StyledFilterButtonItemLabelCount = styled.p<StyledFilterButtonItemLabelCountProps>`
     color: ${({ theme }: StyledFilterButtonItemLabelTextProps) => theme.text};
     margin: 0;
+    line-height: 1;
     font-weight: bold;
 `;
 
