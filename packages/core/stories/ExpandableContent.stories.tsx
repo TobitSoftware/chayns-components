@@ -7,7 +7,6 @@ export default {
     title: 'Core/ExpandableContent',
     component: ExpandableContent,
     args: {
-        id: 'test',
         children:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec nisi vel nulla tincidunt facilisis. Nullam fringilla eu felis at sollicitudin. Aliquam et urna augue. Praesent rhoncus hendrerit molestie. Vestibulum non faucibus mauris. In bibendum ultricies pulvinar. Duis in nisi lacinia, maximus dolor sit amet, pharetra neque. Quisque vulputate semper eleifend. Quisque imperdiet dolor faucibus, lobortis quam et, consectetur dui. Nunc at aliquam odio, vel luctus magna. Cras at ante at nunc volutpat aliquam. Integer ex nunc, pellentesque ac pharetra eu, porttitor eu mi.\n' +
             '\n' +
@@ -21,12 +20,7 @@ const Template: StoryFn<typeof ExpandableContent> = ({ children, ...args }) => {
     return (
         <>
             <Button onClick={() => setIsOpen((prevState) => !prevState)}>öffnen/schließen</Button>
-            <ExpandableContent
-                {...args}
-                animate={isOpen ? { opacity: 1, height: '100%' } : { opacity: 0, height: 0 }}
-            >
-                {children}
-            </ExpandableContent>
+            <ExpandableContent isOpen={isOpen}>{children}</ExpandableContent>
         </>
     );
 };
