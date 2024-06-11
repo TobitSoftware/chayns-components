@@ -391,31 +391,34 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
          * text is then inserted at the correct position in the input field using the
          * 'insertTextAtCursorPosition' function.
          */
-        const handleDrop = useCallback((event: DragEvent) => {
-            if (editorRef.current) {
-                event.preventDefault();
+        const handleDrop = useCallback(
+            (event: DragEvent) => {
+                if (editorRef.current) {
+                    event.preventDefault();
 
-                if (isDisabled) {
-                    event.stopPropagation();
+                    if (isDisabled) {
+                        event.stopPropagation();
 
-                    return;
+                        return;
+                    }
+
+                    let text = event.dataTransfer?.getData('text');
+
+                    if (!text) {
+                        return;
+                    }
+
+                    text = convertEmojisToUnicode(text);
+
+                    insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+
+                    const newEvent = new Event('input', { bubbles: true });
+
+                    editorRef.current.dispatchEvent(newEvent);
                 }
-
-                let text = event.dataTransfer?.getData('text');
-
-                if (!text) {
-                    return;
-                }
-
-                text = convertEmojisToUnicode(text);
-
-                insertTextAtCursorPosition({ editorElement: editorRef.current, text });
-
-                const newEvent = new Event('input', { bubbles: true });
-
-                editorRef.current.dispatchEvent(newEvent);
-            }
-        }, []);
+            },
+            [isDisabled],
+        );
 
         /**
          * This function uses the 'insertTextAtCursorPosition' function to insert the emoji at the
