@@ -41,6 +41,7 @@ type AccordionHeadProps = {
     shouldRotateIcon?: boolean;
     title: string;
     titleElement?: ReactNode;
+    uuid: string;
 };
 
 interface HeadHeight {
@@ -63,6 +64,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     shouldRotateIcon,
     title,
     titleElement,
+    uuid,
 }) => {
     const [headHeight, setHeadHeight] = useState<HeadHeight>({
         closed: isWrapped ? 40 : 33,
@@ -114,11 +116,13 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             animate={{ height: isOpen ? headHeight.open : headHeight.closed }}
             className="beta-chayns-accordion-head"
             initial={false}
+            key={`accordionHead--${uuid}`}
         >
             <StyledMotionIconWrapper
                 animate={{ rotate: (isOpen || isFixed) && shouldRotateIcon ? 90 : 0 }}
                 initial={false}
                 onClick={!isFixed ? onClick : undefined}
+                key={`accordionHeadIcon--${uuid}`}
             >
                 {iconElement}
             </StyledMotionIconWrapper>
@@ -127,10 +131,11 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 initial={false}
                 onClick={!isFixed ? onClick : undefined}
                 ref={titleWrapperRef}
+                key={`accordionHeadContentWrapper--${uuid}`}
             >
-                <LayoutGroup>
-                    <StyledMotionTitleWrapper>
-                        <AnimatePresence initial={false}>
+                <LayoutGroup key={`accordionHeadLayoutGroup--${uuid}`}>
+                    <StyledMotionTitleWrapper key={`accordionHeadTitleWrapperWrapper--${uuid}`}>
+                        <AnimatePresence initial={false} key={`accordionHeadTitleWrapper--${uuid}`}>
                             <StyledMotionTitle
                                 animate={{ scale: 1 }}
                                 initial={{ scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }}
@@ -144,8 +149,8 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                 }}
                                 key={
                                     isOpen && !isWrapped
-                                        ? 'accordionHeadTitleBig'
-                                        : 'accordionHeadTitle'
+                                        ? `accordionHeadTitleBig--${uuid}`
+                                        : `accordionHeadTitle--${uuid}`
                                 }
                             >
                                 {title}
@@ -153,7 +158,10 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                         </AnimatePresence>
                     </StyledMotionTitleWrapper>
                     {titleElement && (
-                        <StyledMotionTitleElementWrapper layout>
+                        <StyledMotionTitleElementWrapper
+                            layout
+                            key={`accordionTitleElement--${uuid}`}
+                        >
                             {titleElement}
                         </StyledMotionTitleElementWrapper>
                     )}
@@ -161,7 +169,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             </StyledMotionContentWrapper>
             {(typeof onSearchChange === 'function' || rightElement) && (
                 <StyledRightWrapper>
-                    <AnimatePresence initial={false}>
+                    <AnimatePresence initial={false} key={`accordionRightWrapper--${uuid}`}>
                         {typeof onSearchChange === 'function' && isOpen ? (
                             <>
                                 <StyledMotionRightInput
@@ -170,7 +178,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                     exit={{ opacity: 0, width: 0 }}
                                     $hasIcon={hasSearchIcon}
                                     initial={{ opacity: 0, width: 0 }}
-                                    key="rightInput"
+                                    key={`rightInput--${uuid}`}
                                     onChange={onSearchChange}
                                     placeholder={searchPlaceholder}
                                     type="text"
@@ -181,7 +189,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
                                         initial={{ opacity: 0 }}
-                                        key="rightInputIcon"
+                                        key={`rightInputIcon-${uuid}`}
                                     >
                                         <Icon icons={searchIcon} />
                                     </StyledMotionRightInputIconWrapper>
@@ -192,7 +200,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 initial={{ opacity: 0 }}
-                                key="rightElementWrapper"
+                                key={`rightElementWrapper--${uuid}`}
                             >
                                 {rightElement}
                             </StyledMotionRightElementWrapper>

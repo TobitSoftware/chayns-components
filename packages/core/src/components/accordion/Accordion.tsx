@@ -234,6 +234,7 @@ const Accordion: FC<AccordionProps> = ({
             <AccordionContext.Provider value={accordionContextProviderValue}>
                 <MotionConfig transition={{ type: 'tween' }}>
                     <AccordionHead
+                        uuid={uuid}
                         icon={icon}
                         isOpen={isOpen}
                         isFixed={isFixed}
