@@ -60,7 +60,7 @@ export const StyledListItemHeadContent = styled.div<StyledListItemHeadContentPro
     justify-content: start;
     line-height: normal;
 
-    margin-top: ${({ $marginTop }) => $marginTop}px;
+    margin-top: ${({ $marginTop, $isOpen }) => ($isOpen ? 0 : $marginTop)}px;
 
     margin-left: ${({ $isIconOrImageGiven }) => ($isIconOrImageGiven ? '10px' : undefined)};
     min-width: 0;

@@ -145,7 +145,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     return (
         <StyledListItemHead
-            animate={{ height: isOpen ? headHeight.open : Math.min(headHeight.closed, 64) }}
+            animate={{ height: isOpen ? headHeight.open : headHeight.closed }}
             initial={false}
             transition={{ duration: 0.2, type: 'tween' }}
             className="beta-chayns-list-item-head"
