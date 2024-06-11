@@ -385,6 +385,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             [isDisabled],
         );
 
+        /**
+         * This function prevents formatting from being adopted when texts are dropped. To do this, the
+         * plain text is read from the event after the default behavior has been prevented. The plain
+         * text is then inserted at the correct position in the input field using the
+         * 'insertTextAtCursorPosition' function.
+         */
         const handleDrop = useCallback((event: DragEvent) => {
             if (editorRef.current) {
                 event.preventDefault();
