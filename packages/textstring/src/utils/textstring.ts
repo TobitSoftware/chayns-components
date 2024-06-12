@@ -1,3 +1,4 @@
+import { dialog } from 'chayns-api';
 import type { ITextstring, TextstringReplacement } from '../components/textstring/types';
 import type { TextstringValue } from '../types/textstring';
 
@@ -23,9 +24,14 @@ interface SelectLanguageToChangeOptions {
 }
 
 export const selectLanguageToChange = ({ textstringName }: SelectLanguageToChangeOptions) => {
-    void chayns.dialog.iFrame({
+    // Note: the page is in v4
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    void dialog.iFrame({
         url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
         buttons: [],
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         input: { textstring: textstringName },
     });
 };
