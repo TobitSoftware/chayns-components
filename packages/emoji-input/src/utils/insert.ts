@@ -64,7 +64,14 @@ export const insertTextAtCursorPosition = ({
             } else if (selection.anchorNode === editorElement) {
                 const textNode = document.createTextNode(firstPart);
 
-                editorElement.appendChild(textNode);
+                // Inserts the text node before the node at the anchor offset.
+                // If that node doesn't exist, the text node is appended to the editor, as a fallback. I'm not sure if there is any case where this would happen.
+                const insertBefore = editorElement.childNodes[selection.anchorOffset];
+                if (insertBefore) {
+                    insertBefore.before(textNode);
+                } else {
+                    editorElement.appendChild(textNode);
+                }
 
                 const textNodeIndex = Array.from(editorElement.childNodes).indexOf(textNode);
 
