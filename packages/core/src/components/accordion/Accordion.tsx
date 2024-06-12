@@ -10,6 +10,7 @@ import React, {
     useMemo,
     useRef,
     useState,
+    type MouseEventHandler,
 } from 'react';
 import { useUuid } from '../../hooks/uuid';
 import { AreaContext } from '../area-provider/AreaContextProvider';
@@ -63,6 +64,14 @@ export type AccordionProps = {
      * Function that is executed when the accordion will be closed.
      */
     onClose?: VoidFunction;
+    /**
+     * Function to be executed when the accordion is no longer hovered.
+     */
+    onHoverEnd?: MouseEventHandler<HTMLDivElement>;
+    /**
+     * Function to be executed when the accordion is hovered.
+     */
+    onHoverStart?: MouseEventHandler<HTMLDivElement>;
     /**
      * Function that is executed when the accordion will be opened.
      */
@@ -126,6 +135,8 @@ const Accordion: FC<AccordionProps> = ({
     isTitleGreyed = false,
     onBodyScroll,
     onClose,
+    onHoverEnd,
+    onHoverStart,
     onOpen,
     onSearchChange,
     rightElement,
@@ -230,6 +241,8 @@ const Accordion: FC<AccordionProps> = ({
             $isWrapped={isWrapped}
             $shouldForceBackground={shouldForceBackground}
             $shouldHideBackground={shouldHideBackground}
+            onMouseEnter={onHoverStart}
+            onMouseLeave={onHoverEnd}
         >
             <AccordionContext.Provider value={accordionContextProviderValue}>
                 <MotionConfig transition={{ type: 'tween' }}>
