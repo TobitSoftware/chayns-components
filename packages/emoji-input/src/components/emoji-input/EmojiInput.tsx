@@ -418,7 +418,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
          * 'insertTextAtCursorPosition' function.
          */
         const handleDrop = useCallback(
-            (event: DragEvent) => {
+            (event: React.DragEvent<HTMLDivElement>) => {
                 if (editorRef.current) {
                     event.preventDefault();
 
