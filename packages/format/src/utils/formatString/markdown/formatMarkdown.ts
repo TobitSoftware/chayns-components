@@ -1,12 +1,12 @@
 import { Parser } from 'commonmark';
-// @ts-expect-error: Not typed
-import { escapeHtmlInText } from '../../escape';
-import InternalHTMLRenderer from './InternalHTMLRenderer';
-
-export const MESSAGE_CONVERSION_LINE_BREAK = '<br is-replaced-linebreak>';
-export const MESSAGE_CONVERSION_LINE_BREAK_ESCAPED = escapeHtmlInText(
+import {
+    escapeHtmlInText,
     MESSAGE_CONVERSION_LINE_BREAK,
-);
+    MESSAGE_CONVERSION_LINE_BREAK_ESCAPED,
+} from '../../escape';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import InternalHTMLRenderer from './InternalHTMLRenderer.js';
 
 export const parseMarkdown = (text: string) => {
     let newText = text;

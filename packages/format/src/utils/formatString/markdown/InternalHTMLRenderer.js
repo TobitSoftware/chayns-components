@@ -2,8 +2,7 @@
 // noinspection JSUnusedGlobalSymbols,JSUnresolvedReference
 
 import { HtmlRenderer } from 'commonmark';
-import { MESSAGE_CONVERSION_LINE_BREAK } from '../../../../constants/convertMessage';
-import { escapeHtmlInText } from '../../escape';
+import { escapeHtmlInText, MESSAGE_CONVERSION_LINE_BREAK } from '../../escape';
 
 const reUnsafeProtocol = /^javascript:|vbscript:|file:|data:/i;
 const reSafeDataProtocol = /^data:image\/(?:png|gif|jpeg|webp)/i;
