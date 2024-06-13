@@ -195,17 +195,15 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         /**
          * This hook listens for clicks
          */
-        useEffect(() => {
-            document.addEventListener('click', handleOutsideClick);
-            window.addEventListener('blur', () => setIsAnimating(false));
-
-            return () => {
-                document.removeEventListener('click', handleOutsideClick);
-                window.addEventListener('blur', () => setIsAnimating(false));
-            };
-        }, [handleOutsideClick, boxRef]);
-
-        useEffect(() => {}, []);
+        // useEffect(() => {
+        //     document.addEventListener('click', handleOutsideClick);
+        //     window.addEventListener('blur', () => setIsAnimating(false));
+        //
+        //     return () => {
+        //         document.removeEventListener('click', handleOutsideClick);
+        //         window.addEventListener('blur', () => setIsAnimating(false));
+        //     };
+        // }, [handleOutsideClick, boxRef]);
 
         /**
          * This hook calculates the height
@@ -408,18 +406,18 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             [onSelect, shouldShowRoundImage],
         );
 
-        console.log(matchingListsItems);
-
         const content = useMemo(() => {
             const items: ReactElement[] = [];
 
-            matchingListsItems.forEach(({ groupName, list }) => {
+            matchingListsItems.forEach(({ groupName, list }, index) => {
                 if (hasMultipleGroups) {
                     if (list.length <= 0) {
                         return;
                     }
 
-                    items.push(<GroupName key={groupName} name={groupName ?? ''} />);
+                    if (index !== 0) {
+                        items.push(<GroupName key={groupName} name={groupName ?? ''} />);
+                    }
                 }
 
                 list.forEach(({ id, text, imageUrl }) => {
@@ -571,33 +569,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                                 width={width}
                                 browser={browser?.name}
                                 height={height}
-                                currentGroupName="Essbar"
                                 ref={contentRef}
                                 onGroupSelect={handleFilterButtonsGroupSelect}
                             >
                                 {content}
                             </SearchBoxBody>
                         )}
-                        {/* <StyledMotionSearchBoxBody */}
-                        {/*   $browser={browser?.name} */}
-                        {/*   key="content" */}
-                        {/*   $height={height} */}
-                        {/*   $width={width} */}
-                        {/*   initial={{ height: 0, opacity: 0 }} */}
-                        {/*   animate={ */}
-                        {/*       isAnimating */}
-                        {/*           ? { height: 'fit-content', opacity: 1 } */}
-                        {/*           : { height: 0, opacity: 0 } */}
-                        {/*   } */}
-                        {/*   transition={{ */}
-                        {/*       duration: 0.2, */}
-                        {/*       type: 'tween', */}
-                        {/*   }} */}
-                        {/*   ref={contentRef} */}
-                        {/*   tabIndex={0} */}
-                        {/* > */}
-                        {/*   {content} */}
-                        {/* </StyledMotionSearchBoxBody> */}
                     </AnimatePresence>
                 </StyledSearchBox>
             ),

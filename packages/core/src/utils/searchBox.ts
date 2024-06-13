@@ -8,6 +8,39 @@ const surroundWithBTag = (text: string, startIndex: number, length: number) => {
     return `${before}<b>${highlighted}</b>${after}`;
 };
 
+export const getCurrentGroupName = (element: HTMLElement) => {
+    let hasChildrenFound = false;
+    let currentGroupName = '';
+
+    const { top: parentTop } = element.getBoundingClientRect();
+    const { children } = element;
+
+    Array.from(children).forEach((child) => {
+        if (hasChildrenFound) {
+            return;
+        }
+
+        const { y: childrenY, height: childrenHeight } = child.getBoundingClientRect();
+        const { id } = child;
+
+        const sum = childrenY + childrenHeight - parentTop;
+
+        if (sum >= 0) {
+            hasChildrenFound = true;
+            let currentGroup = id;
+
+            if (id.startsWith('search-box-item__')) {
+                const nummer = id.split('__')[1];
+                currentGroup = nummer?.split('_').pop() ?? '';
+            }
+
+            currentGroupName = currentGroup;
+        }
+    });
+
+    return currentGroupName;
+};
+
 interface SearchListOptions {
     items: ISearchBoxItem[];
     searchString: string;
