@@ -146,7 +146,6 @@ function code(node) {
 }
 
 function code_block(node) {
-    console.log('node', node, node.isFenced);
     if (node._isFenced) {
         this.tag('pre', [['language', node.info]]);
         this.tag('code');
