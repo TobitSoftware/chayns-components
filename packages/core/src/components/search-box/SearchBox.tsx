@@ -174,7 +174,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             setMatchingListsItems(filteredMatchingListItems);
 
             return newLists;
-        }, [groups, lists]);
+        }, [groups, lists, value]);
 
         const handleFilterButtonsGroupSelect = (keys: string[]) => {
             setGroups(keys);
