@@ -43,8 +43,6 @@ export const formatStringToHtml = (
         formattedString = escapeHtmlInText(formattedString);
     }
 
-    // TODO Possibly include parseMarkdownTablesOption in the condition.
-
     // Escape BB-Code square brackets, to prevent conflicts between markdown and BB Code.
     /* Conflict example:
         When Sidekick detects a function call as an entity through NER, then the following text is returned.
@@ -78,7 +76,6 @@ export const formatStringToHtml = (
 
     const tables: TableObject[] = [];
 
-    // TODO Check what happens when parse tables is true, but parse markdown is false. Specifically see what happens when table cells include markdown.
     // Parses markdown tables to HTML. Also returns the tables content as an array, to allow further processing.
     if (parseMarkdownTablesOption) {
         try {
