@@ -339,10 +339,18 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          */
         const handleChange = useCallback(
             (event: ChangeEvent<HTMLInputElement>) => {
-                const filteredLists = activeList.map(({ list, groupName }) => ({
-                    groupName,
-                    list: searchList({ items: list, searchString: event.target.value }),
-                }));
+                const filteredLists: ISearchBoxItems[] = [];
+
+                activeList.forEach(({ list, groupName }) => {
+                    const newList = searchList({ items: list, searchString: event.target.value });
+
+                    if (newList.length > 0) {
+                        filteredLists.push({
+                            groupName,
+                            list: newList,
+                        });
+                    }
+                });
 
                 setSelectedImage(undefined);
 
@@ -408,6 +416,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         const content = useMemo(() => {
             const items: ReactElement[] = [];
+
+            console.log(matchingListsItems);
 
             matchingListsItems.forEach(({ groupName, list }, index) => {
                 if (hasMultipleGroups) {
