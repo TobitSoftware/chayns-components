@@ -1,11 +1,19 @@
 import type { Browser } from 'detect-browser';
-import React, { FC, useMemo, useRef, type ReactNode, type RefObject } from 'react';
+import React, {
+    FC,
+    UIEvent,
+    useMemo,
+    useRef,
+    useState,
+    type ReactNode,
+    type RefObject,
+} from 'react';
 import { useElementSize } from '../../../hooks/useElementSize';
 import type { IFilterButtonItem } from '../../../types/filterButtons';
 import FilterButtons from '../../filter-buttons/FilterButtons';
 import {
     StyledMotionSearchBoxBody,
-    StyledMotionSearchBoxBodyContent,
+    StyledSearchBoxBodyContent,
     StyledSearchBoxBodyHead,
     StyledSearchBoxBodyHeadGroupName,
 } from './SearchBoxBody.styles';
@@ -31,6 +39,8 @@ const SearchBoxBody: FC<SearchBoxBodyProps> = ({
     onGroupSelect,
     ref,
 }) => {
+    const [hasScrolled, setHasScrolled] = useState(false);
+
     const headRef = useRef<HTMLDivElement>(null);
 
     const headSize = useElementSize(headRef);
@@ -39,6 +49,11 @@ const SearchBoxBody: FC<SearchBoxBodyProps> = ({
         () => (headSize?.height ? headSize.height + 15 : 0),
         [headSize?.height],
     );
+
+    const handleScroll = (event: UIEvent) => {
+        setHasScrolled((event.target as HTMLDivElement).scrollTop > 1);
+    };
+
     return useMemo(
         () => (
             <StyledMotionSearchBoxBody
@@ -52,7 +67,7 @@ const SearchBoxBody: FC<SearchBoxBodyProps> = ({
                 }}
             >
                 {groups && groups?.length > 1 && (
-                    <StyledSearchBoxBodyHead ref={headRef}>
+                    <StyledSearchBoxBodyHead ref={headRef} $hasScrolled={hasScrolled}>
                         <FilterButtons
                             items={groups}
                             size={0}
@@ -64,16 +79,17 @@ const SearchBoxBody: FC<SearchBoxBodyProps> = ({
                         </StyledSearchBoxBodyHeadGroupName>
                     </StyledSearchBoxBodyHead>
                 )}
-                <StyledMotionSearchBoxBodyContent
+                <StyledSearchBoxBodyContent
                     $height={height}
                     $headHeight={headHeight}
                     key="content"
                     $browser={browser}
                     ref={ref}
                     tabIndex={0}
+                    onScroll={handleScroll}
                 >
                     {children}
-                </StyledMotionSearchBoxBodyContent>
+                </StyledSearchBoxBodyContent>
             </StyledMotionSearchBoxBody>
         ),
         [
@@ -81,6 +97,7 @@ const SearchBoxBody: FC<SearchBoxBodyProps> = ({
             children,
             currentGroupName,
             groups,
+            hasScrolled,
             headHeight,
             height,
             onGroupSelect,
