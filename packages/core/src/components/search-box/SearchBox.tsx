@@ -159,10 +159,25 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 });
             }
 
-            const newMatchingItems = newLists.map(({ list, groupName }) => ({
-                groupName,
-                list: searchList({ items: list, searchString: value }),
-            }));
+            const newMatchingItems: ISearchBoxItems[] = [];
+
+            newLists.forEach(({ list, groupName }) => {
+                const newList = searchList({ items: list, searchString: value });
+
+                if (newList.length > 0) {
+                    newMatchingItems.push({
+                        groupName,
+                        list: newList,
+                    });
+                }
+            });
+
+            if (newMatchingItems.length === 0 && shouldAddInputToList) {
+                newMatchingItems.push({
+                    groupName: undefined,
+                    list: [],
+                });
+            }
 
             const filteredMatchingListItems = newMatchingItems.map(({ list, groupName }) => ({
                 groupName,
@@ -278,10 +293,25 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          */
         const handleFocus = useCallback(() => {
             if (shouldShowContentOnEmptyInput) {
-                const newMatchingItems = activeList.map(({ list, groupName }) => ({
-                    groupName,
-                    list: searchList({ items: list, searchString: value }),
-                }));
+                const newMatchingItems: ISearchBoxItems[] = [];
+
+                activeList.forEach(({ list, groupName }) => {
+                    const newList = searchList({ items: list, searchString: value });
+
+                    if (newList.length > 0) {
+                        newMatchingItems.push({
+                            groupName,
+                            list: newList,
+                        });
+                    }
+                });
+
+                if (newMatchingItems.length === 0 && shouldAddInputToList) {
+                    newMatchingItems.push({
+                        groupName: undefined,
+                        list: [],
+                    });
+                }
 
                 const filteredMatchingListItems = newMatchingItems.map(({ list, groupName }) => ({
                     groupName,
@@ -300,10 +330,25 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          */
 
         useEffect(() => {
-            const newMatchingItems = activeList.map(({ list, groupName }) => ({
-                groupName,
-                list: searchList({ items: list, searchString: value }),
-            }));
+            const newMatchingItems: ISearchBoxItems[] = [];
+
+            activeList.forEach(({ list, groupName }) => {
+                const newList = searchList({ items: list, searchString: value });
+
+                if (newList.length > 0) {
+                    newMatchingItems.push({
+                        groupName,
+                        list: newList,
+                    });
+                }
+            });
+
+            if (newMatchingItems.length === 0 && shouldAddInputToList) {
+                newMatchingItems.push({
+                    groupName: undefined,
+                    list: [],
+                });
+            }
 
             if (shouldAddInputToList && inputToListValue !== '') {
                 newMatchingItems.forEach(({ list }) => {
