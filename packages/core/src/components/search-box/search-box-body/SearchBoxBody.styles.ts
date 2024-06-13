@@ -44,7 +44,7 @@ export const StyledMotionSearchBoxBodyContent = styled.div<StyledMotionSearchBox
     cursor: pointer;
     width: 100%;
     max-height: ${({ $headHeight }) => 300 - $headHeight}px;
-    overflow-y: ${({ $height, $headHeight }) => ($height <= 300 - $headHeight ? 'hidden' : 'auto')};
+    overflow-y: ${({ $height, $headHeight }) => ($height + $headHeight <= 300 ? 'hidden' : 'auto')};
 
     // Styles for custom scrollbar
     ${({ $browser, theme }: StyledMotionSearchBoxBodyContentProps) =>

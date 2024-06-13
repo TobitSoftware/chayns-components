@@ -35,6 +35,10 @@ const SearchBoxBody: FC<SearchBoxBodyProps> = ({
 
     const headSize = useElementSize(headRef);
 
+    const headHeight = useMemo(
+        () => (headSize?.height ? headSize.height + 15 : 0),
+        [headSize?.height],
+    );
     return useMemo(
         () => (
             <StyledMotionSearchBoxBody
@@ -62,7 +66,7 @@ const SearchBoxBody: FC<SearchBoxBodyProps> = ({
                 )}
                 <StyledMotionSearchBoxBodyContent
                     $height={height}
-                    $headHeight={headSize?.height ?? 0}
+                    $headHeight={headHeight}
                     key="content"
                     $browser={browser}
                     ref={ref}
@@ -77,7 +81,7 @@ const SearchBoxBody: FC<SearchBoxBodyProps> = ({
             children,
             currentGroupName,
             groups,
-            headSize?.height,
+            headHeight,
             height,
             onGroupSelect,
             ref,
