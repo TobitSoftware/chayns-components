@@ -23,13 +23,16 @@ export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBo
         rgba(${({ theme }: StyledMotionSearchBoxBodyProps) => theme['009-rgb']}, 0.08) inset;
 `;
 
-type StyledSearchBoxHeadProps = WithTheme<{ $hasScrolled: boolean }>;
-
 export const StyledSearchBoxBodyHead = styled.div<StyledSearchBoxHeadProps>`
     padding: 10px 10px 5px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+
+    ${({ $hasGroupName }) =>
+        $hasGroupName &&
+        css`
+            gap: 15px;
+        `}
 
     ${({ $hasScrolled }) =>
         $hasScrolled &&
@@ -37,6 +40,8 @@ export const StyledSearchBoxBodyHead = styled.div<StyledSearchBoxHeadProps>`
             box-shadow: 0 1px 4px #0000001a;
         `}
 `;
+
+type StyledSearchBoxHeadProps = WithTheme<{ $hasScrolled: boolean; $hasGroupName: boolean }>;
 
 export const StyledSearchBoxBodyHeadGroupName = styled.div`
     font-weight: bold;

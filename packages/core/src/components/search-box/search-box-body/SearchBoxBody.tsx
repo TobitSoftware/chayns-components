@@ -74,7 +74,11 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                     }}
                 >
                     {filterbuttons && filterbuttons?.length > 1 && (
-                        <StyledSearchBoxBodyHead ref={headRef} $hasScrolled={hasScrolled}>
+                        <StyledSearchBoxBodyHead
+                            ref={headRef}
+                            $hasScrolled={hasScrolled}
+                            $hasGroupName={!!currentGroupName}
+                        >
                             <FilterButtons
                                 items={filterbuttons}
                                 size={0}
@@ -110,6 +114,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                 height,
                 onGroupSelect,
                 ref,
+                selectedGroups,
                 uuid,
                 width,
             ],

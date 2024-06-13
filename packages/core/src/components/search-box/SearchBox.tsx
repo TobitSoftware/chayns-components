@@ -352,6 +352,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     }
                 });
 
+                if (filteredLists.length === 0 && shouldAddInputToList) {
+                    filteredLists.push({
+                        groupName: undefined,
+                        list: [],
+                    });
+                }
+
                 setSelectedImage(undefined);
 
                 if (!shouldShowContentOnEmptyInput && !event.target.value) {
