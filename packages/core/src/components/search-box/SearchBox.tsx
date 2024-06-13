@@ -189,7 +189,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             setMatchingListsItems(filteredMatchingListItems);
 
             return newLists;
-        }, [groups, lists, value]);
+        }, [groups, lists, shouldAddInputToList, value]);
 
         const handleFilterButtonsGroupSelect = (keys: string[]) => {
             setGroups(keys.length === 0 ? ['all'] : keys);
@@ -323,7 +323,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 setMatchingListsItems(filteredMatchingListItems);
                 setIsAnimating(filteredMatchingListItems.length !== 0);
             }
-        }, [activeList, shouldShowContentOnEmptyInput, value]);
+        }, [activeList, shouldAddInputToList, shouldShowContentOnEmptyInput, value]);
 
         /**
          * This function filters the lists by input
@@ -420,7 +420,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     onChange(event);
                 }
             },
-            [activeList, onChange, shouldShowContentOnEmptyInput],
+            [activeList, onChange, shouldAddInputToList, shouldShowContentOnEmptyInput],
         );
 
         /**
