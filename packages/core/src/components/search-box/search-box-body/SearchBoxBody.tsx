@@ -22,7 +22,8 @@ import {
 
 export type SearchBoxBodyProps = {
     children: ReactNode;
-    groups?: IFilterButtonItem[];
+    filterbuttons?: IFilterButtonItem[];
+    selectedGroups?: string[];
     height: number;
     width: number;
     browser: Browser | 'bot' | null | undefined;
@@ -30,7 +31,7 @@ export type SearchBoxBodyProps = {
 };
 
 const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
-    ({ groups, width, browser, height, children, onGroupSelect }, ref) => {
+    ({ filterbuttons, selectedGroups, width, browser, height, children, onGroupSelect }, ref) => {
         const [hasScrolled, setHasScrolled] = useState(false);
         const [currentGroupName, setCurrentGroupName] = useState('');
 
@@ -72,13 +73,13 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                         type: 'tween',
                     }}
                 >
-                    {groups && groups?.length > 1 && (
+                    {filterbuttons && filterbuttons?.length > 1 && (
                         <StyledSearchBoxBodyHead ref={headRef} $hasScrolled={hasScrolled}>
                             <FilterButtons
-                                items={groups}
+                                items={filterbuttons}
                                 size={0}
                                 onSelect={onGroupSelect}
-                                // selectedItemIds={groups.map(({ id }) => id)}
+                                selectedItemIds={selectedGroups}
                             />
                             <StyledSearchBoxBodyHeadGroupName>
                                 {currentGroupName}
@@ -103,7 +104,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                 browser,
                 children,
                 currentGroupName,
-                groups,
+                filterbuttons,
                 hasScrolled,
                 headHeight,
                 height,

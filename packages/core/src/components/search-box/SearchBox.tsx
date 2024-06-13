@@ -107,7 +107,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const [hasMultipleGroups, setHasMultipleGroups] = useState<boolean>(lists.length > 1);
         const [filteredChildrenArray, setFilteredChildrenArray] = useState<Element[]>();
         const [inputToListValue, setInputToListValue] = useState<string>('');
-        const [groups, setGroups] = useState<string[]>([]);
+        const [groups, setGroups] = useState<string[]>(['all']);
 
         const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement | null>(null);
@@ -149,7 +149,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const activeList = useMemo(() => {
             let newLists: ISearchBoxItems[] = [];
 
-            if (groups.length === 0) {
+            if (groups[0] === 'all') {
                 newLists = lists;
             } else {
                 lists.forEach((list) => {
@@ -177,7 +177,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         }, [groups, lists, value]);
 
         const handleFilterButtonsGroupSelect = (keys: string[]) => {
-            setGroups(keys);
+            setGroups(keys.length === 0 ? ['all'] : keys);
         };
 
         /**
@@ -195,15 +195,15 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         /**
          * This hook listens for clicks
          */
-        // useEffect(() => {
-        //     document.addEventListener('click', handleOutsideClick);
-        //     window.addEventListener('blur', () => setIsAnimating(false));
-        //
-        //     return () => {
-        //         document.removeEventListener('click', handleOutsideClick);
-        //         window.addEventListener('blur', () => setIsAnimating(false));
-        //     };
-        // }, [handleOutsideClick, boxRef]);
+        useEffect(() => {
+            document.addEventListener('click', handleOutsideClick);
+            window.addEventListener('blur', () => setIsAnimating(false));
+
+            return () => {
+                document.removeEventListener('click', handleOutsideClick);
+                window.addEventListener('blur', () => setIsAnimating(false));
+            };
+        }, [handleOutsideClick, boxRef]);
 
         /**
          * This hook calculates the height
@@ -417,8 +417,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const content = useMemo(() => {
             const items: ReactElement[] = [];
 
-            console.log(matchingListsItems);
-
             matchingListsItems.forEach(({ groupName, list }, index) => {
                 if (hasMultipleGroups) {
                     if (list.length <= 0) {
@@ -575,7 +573,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     <AnimatePresence initial={false}>
                         {isAnimating && (
                             <SearchBoxBody
-                                groups={filterbuttons}
+                                filterbuttons={filterbuttons}
+                                selectedGroups={groups}
                                 width={width}
                                 browser={browser?.name}
                                 height={height}
@@ -592,6 +591,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 browser?.name,
                 content,
                 filterbuttons,
+                groups,
                 handleBlur,
                 handleChange,
                 handleFocus,
