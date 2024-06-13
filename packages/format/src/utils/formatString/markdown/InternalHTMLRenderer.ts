@@ -1,4 +1,5 @@
-/* eslint-disable camelcase */
+// @ts-nocheck
+// /* eslint-disable camelcase */
 // noinspection JSUnusedGlobalSymbols,JSUnresolvedReference
 
 import { HtmlRenderer } from 'commonmark';

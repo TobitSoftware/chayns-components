@@ -6,7 +6,7 @@ import {
 } from '../../escape';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import InternalHTMLRenderer from './InternalHTMLRenderer.js';
+import InternalHTMLRenderer from './InternalHTMLRenderer';
 
 export const parseMarkdown = (text: string) => {
     let newText = text;
@@ -21,6 +21,7 @@ export const parseMarkdown = (text: string) => {
     const commonmarkParser = new Parser();
     // TODO Check if esc needs to be passed to InternalHTMLRenderer.
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
+    // @ts-ignore
     const internalHTMLRenderer = new InternalHTMLRenderer({ esc: escapeHtmlInText });
 
     // Converts markdown to HTML.
