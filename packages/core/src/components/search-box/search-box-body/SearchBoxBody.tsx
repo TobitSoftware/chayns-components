@@ -2,6 +2,7 @@ import type { Browser } from 'detect-browser';
 import React, {
     forwardRef,
     UIEvent,
+    useCallback,
     useEffect,
     useMemo,
     useRef,
@@ -49,17 +50,32 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
         useEffect(() => {
             const element = document.getElementById(`searchbox-content__${uuid}`);
 
-            if (element) {
+            if (
+                element &&
+                ((selectedGroups?.length === 1 && selectedGroups[0] === 'all') ||
+                    selectedGroups?.length !== 1)
+            ) {
                 setCurrentGroupName(getCurrentGroupName(element));
+            } else {
+                setCurrentGroupName('');
             }
-        }, [uuid, children]);
+        }, [uuid, children, selectedGroups]);
 
-        const handleScroll = (event: UIEvent) => {
-            const { scrollTop } = event.target as HTMLDivElement;
+        const handleScroll = useCallback(
+            (event: UIEvent) => {
+                const { scrollTop } = event.target as HTMLDivElement;
 
-            setHasScrolled(scrollTop > 1);
-            setCurrentGroupName(getCurrentGroupName(event.target as HTMLDivElement));
-        };
+                setHasScrolled(scrollTop > 1);
+
+                if (
+                    (selectedGroups?.length === 1 && selectedGroups[0] === 'all') ||
+                    selectedGroups?.length !== 1
+                ) {
+                    setCurrentGroupName(getCurrentGroupName(event.target as HTMLDivElement));
+                }
+            },
+            [selectedGroups],
+        );
 
         return useMemo(
             () => (
@@ -109,6 +125,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                 children,
                 currentGroupName,
                 filterbuttons,
+                handleScroll,
                 hasScrolled,
                 headHeight,
                 height,
