@@ -23,22 +23,32 @@ export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBo
         rgba(${({ theme }: StyledMotionSearchBoxBodyProps) => theme['009-rgb']}, 0.08) inset;
 `;
 
-export const StyledSearchBoxBodyHead = styled.div`
+type StyledSearchBoxHeadProps = WithTheme<{ $hasScrolled: boolean }>;
+
+export const StyledSearchBoxBodyHead = styled.div<StyledSearchBoxHeadProps>`
     padding: 10px 10px 5px;
     display: flex;
     flex-direction: column;
     gap: 15px;
+
+    ${({ $hasScrolled }) =>
+        $hasScrolled &&
+        css`
+            box-shadow: 0 1px 4px #0000001a;
+        `}
 `;
 
-export const StyledSearchBoxBodyHeadGroupName = styled.div``;
+export const StyledSearchBoxBodyHeadGroupName = styled.div`
+    font-weight: bold;
+`;
 
-type StyledMotionSearchBoxBodyContentProps = WithTheme<{
+type StyledSearchBoxBodyContentProps = WithTheme<{
     $height: number;
     $headHeight: number;
     $browser: Browser | 'bot' | null | undefined;
 }>;
 
-export const StyledMotionSearchBoxBodyContent = styled.div<StyledMotionSearchBoxBodyContentProps>`
+export const StyledSearchBoxBodyContent = styled.div<StyledSearchBoxBodyContentProps>`
     display: flex;
     flex-direction: column;
     cursor: pointer;
@@ -47,7 +57,7 @@ export const StyledMotionSearchBoxBodyContent = styled.div<StyledMotionSearchBox
     overflow-y: ${({ $height, $headHeight }) => ($height + $headHeight <= 300 ? 'hidden' : 'auto')};
 
     // Styles for custom scrollbar
-    ${({ $browser, theme }: StyledMotionSearchBoxBodyContentProps) =>
+    ${({ $browser, theme }: StyledSearchBoxBodyContentProps) =>
         $browser === 'firefox'
             ? css`
                   scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
