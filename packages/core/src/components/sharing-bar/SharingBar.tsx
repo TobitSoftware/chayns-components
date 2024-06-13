@@ -2,7 +2,7 @@ import { getSite } from 'chayns-api';
 import React, { FC, useRef } from 'react';
 import { SHAREPROVIDER } from '../../constants/sharingBar';
 import type { ContextMenuAlignment } from '../../types/contextMenu';
-import { getIsMobile } from '../../utils/environment';
+import { getIsTouch } from '../../utils/environment';
 import { copyToClipboard, shareWithApp, shareWithUrl } from '../../utils/sharingBar';
 import ContextMenu from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
@@ -44,7 +44,7 @@ const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment }) => {
     const handleShare = (key: string) => {
         contextMenuRef.current?.hide();
 
-        const isMobile = getIsMobile();
+        const isTouch = getIsTouch();
 
         switch (key) {
             case 'whatsapp':
@@ -69,7 +69,7 @@ const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment }) => {
                 );
                 break;
             case 'mail':
-                if (isMobile) {
+                if (isTouch) {
                     shareWithApp(`${link}`.trim());
                 } else {
                     shareWithUrl(

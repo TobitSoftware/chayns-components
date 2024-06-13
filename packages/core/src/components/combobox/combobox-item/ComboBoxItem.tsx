@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useCallback, useMemo } from 'react';
-import { getIsMobile } from '../../../utils/environment';
+import { getIsTouch } from '../../../utils/environment';
 import type { ComboBoxProps, IComboBoxItem } from '../ComboBox';
 import { StyledComboBoxItem, StyledComboBoxItemImage } from './ComboBoxItem.styles';
 
@@ -26,16 +26,16 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
 }) => {
     const handleItemClick = useCallback(() => {
         onSelect({ text, value, suffixElement, imageUrl });
-    }, [onSelect, text, value]);
+    }, [imageUrl, onSelect, suffixElement, text, value]);
 
-    const isMobile = getIsMobile();
+    const isTouch = getIsTouch();
 
     return useMemo(
         () => (
             <StyledComboBoxItem
                 id={`combobox-item__${typeof id === 'number' ? String(id) : id}`}
                 onClick={handleItemClick}
-                $isMobile={isMobile}
+                $isTouch={isTouch}
                 $isSelected={isSelected}
             >
                 {imageUrl && (
@@ -52,8 +52,8 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
             handleItemClick,
             id,
             imageUrl,
-            isMobile,
             isSelected,
+            isTouch,
             shouldShowRoundImage,
             suffixElement,
             text,

@@ -1,4 +1,4 @@
-import { AreaContext } from '@chayns-components/core';
+import { AreaContext, getIsTouch } from '@chayns-components/core';
 import { getDevice } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
@@ -24,7 +24,6 @@ import React, {
 } from 'react';
 import type { PopupAlignment } from '../../constants/alignment';
 import { convertEmojisToUnicode } from '../../utils/emoji';
-import { getIsMobile } from '../../utils/environment';
 import { insertTextAtCursorPosition, replaceText } from '../../utils/insert';
 import {
     getCharCodeThatWillBeDeleted,
@@ -160,7 +159,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         },
         ref,
     ) => {
-        const [isMobile] = useState(getIsMobile());
+        const [isTouch] = useState(getIsTouch());
         const [plainTextValue, setPlainTextValue] = useState(value);
         const [hasFocus, setHasFocus] = useState(false);
         const [progressDuration, setProgressDuration] = useState(0);
@@ -767,7 +766,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                             {placeholder}
                         </StyledEmojiInputLabel>
                     )}
-                    {!isMobile && !shouldPreventEmojiPicker && (
+                    {!isTouch && !shouldPreventEmojiPicker && (
                         <EmojiPickerPopup
                             accessToken={accessToken}
                             alignment={popupAlignment}

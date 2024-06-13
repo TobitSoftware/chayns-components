@@ -15,7 +15,7 @@ import {
     calculateContentWidth,
     getMaxHeightInPixels,
 } from '../../utils/calculate';
-import { getIsMobile } from '../../utils/environment';
+import { getIsTouch } from '../../utils/environment';
 import Icon from '../icon/Icon';
 import ComboBoxItem from './combobox-item/ComboBoxItem';
 import {
@@ -90,7 +90,7 @@ const ComboBox: FC<ComboBoxProps> = ({
 
     const { browser } = getDevice();
 
-    const isMobile = getIsMobile();
+    const isTouch = getIsTouch();
 
     const handleClick = useCallback(
         (event: MouseEvent) => {
@@ -314,7 +314,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                     $minWidth={minWidth}
                     onClick={handleHeaderClick}
                     $isOpen={isAnimating}
-                    $isMobile={isMobile}
+                    $isTouch={isTouch}
                     $isDisabled={isDisabled}
                 >
                     <StyledComboBoxPlaceholder>
@@ -340,7 +340,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             handleHeaderClick,
             isAnimating,
             isDisabled,
-            isMobile,
+            isTouch,
             item,
             minWidth,
             placeholderImageUrl,

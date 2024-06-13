@@ -12,7 +12,7 @@ export const StyledComboBox = styled.div`
 `;
 
 type StyledComboBoxHeaderProps = WithTheme<{
-    $isMobile: boolean;
+    $isTouch: boolean;
     $isOpen: boolean;
     $minWidth: number;
     $direction: ComboBoxDirection;
@@ -49,8 +49,8 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
         `;
     }}
 
-    ${({ $isMobile, $isDisabled, theme }: StyledComboBoxHeaderProps) =>
-        !$isMobile &&
+    ${({ $isTouch, $isDisabled, theme }: StyledComboBoxHeaderProps) =>
+        !$isTouch &&
         !$isDisabled &&
         css`
             &:hover {

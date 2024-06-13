@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledComboBoxItemProps = WithTheme<{
-    $isMobile: boolean;
+    $isTouch: boolean;
     $isSelected: boolean;
 }>;
 
@@ -16,8 +16,8 @@ export const StyledComboBoxItem = styled.div<StyledComboBoxItemProps>`
     padding: 4px 10px;
     transition: background-color 0.2s ease-in-out;
 
-    ${({ $isMobile, theme }: StyledComboBoxItemProps) =>
-        !$isMobile &&
+    ${({ $isTouch, theme }: StyledComboBoxItemProps) =>
+        !$isTouch &&
         css`
             &:hover {
                 background-color: ${theme['secondary-102']};

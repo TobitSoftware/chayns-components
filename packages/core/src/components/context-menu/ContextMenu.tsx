@@ -14,7 +14,7 @@ import React, {
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
 import { ContextMenuAlignment } from '../../types/contextMenu';
-import { getIsMobile } from '../../utils/environment';
+import { getIsTouch } from '../../utils/environment';
 import Icon from '../icon/Icon';
 import ContextMenuContent from './context-menu-content/ContextMenuContent';
 import { StyledContextMenu } from './ContextMenu.styles';
@@ -109,9 +109,9 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         }, []);
 
         const handleShow = useCallback(async () => {
-            const isMobile = getIsMobile();
+            const isTouch = getIsTouch();
 
-            if (isMobile) {
+            if (isTouch) {
                 // ToDo: Replace with new api function if new api is ready
                 const { buttonType, selection } = await chayns.dialog.select({
                     buttons: [],
