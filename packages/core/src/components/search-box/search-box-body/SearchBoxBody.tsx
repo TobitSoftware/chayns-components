@@ -51,7 +51,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
             if (element) {
                 setCurrentGroupName(getCurrentGroupName(element));
             }
-        }, [uuid]);
+        }, [uuid, children]);
 
         const handleScroll = (event: UIEvent) => {
             const { scrollTop } = event.target as HTMLDivElement;

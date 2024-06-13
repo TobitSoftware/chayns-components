@@ -147,17 +147,17 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          * Filters the lists by the FilterButtons
          */
         const activeList = useMemo(() => {
+            let newLists: ISearchBoxItems[] = [];
+
             if (groups.length === 0) {
-                return lists;
+                newLists = lists;
+            } else {
+                lists.forEach((list) => {
+                    if (list.groupName && groups.includes(list.groupName)) {
+                        newLists.push(list);
+                    }
+                });
             }
-
-            const newLists: ISearchBoxItems[] = [];
-
-            lists.forEach((list) => {
-                if (list.groupName && groups.includes(list.groupName)) {
-                    newLists.push(list);
-                }
-            });
 
             const newMatchingItems = newLists.map(({ list, groupName }) => ({
                 groupName,
