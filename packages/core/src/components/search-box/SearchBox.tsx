@@ -17,19 +17,17 @@ import React, {
     useState,
 } from 'react';
 import { useTheme } from 'styled-components';
+import type { IFilterButtonItem } from '../../types/filterButtons';
 import type { ISearchBoxItem, ISearchBoxItems } from '../../types/searchBox';
 import { calculateContentHeight } from '../../utils/calculate';
 import { searchList } from '../../utils/searchBox';
 import Icon from '../icon/Icon';
 import Input from '../input/Input';
 import GroupName from './group-name/GroupName';
+import SearchBoxBody from './search-box-body/SearchBoxBody';
 import SearchBoxItem from './search-box-item/SearchBoxItem';
 import { StyledSearchBoxItemImage } from './search-box-item/SearchBoxItem.styles';
-import {
-    StyledMotionSearchBoxBody,
-    StyledSearchBox,
-    StyledSearchBoxIcon,
-} from './SearchBox.styles';
+import { StyledSearchBox, StyledSearchBoxIcon } from './SearchBox.styles';
 
 export type SearchBoxRef = {
     clear: VoidFunction;
@@ -102,13 +100,14 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const [matchingListsItems, setMatchingListsItems] = useState<ISearchBoxItems[]>(lists);
         const [selectedImage, setSelectedImage] = useState<ReactElement>();
         const [value, setValue] = useState('');
-        const [isAnimating, setIsAnimating] = useState(false);
+        const [isAnimating, setIsAnimating] = useState(true);
         const [height, setHeight] = useState<number>(0);
         const [width, setWidth] = useState(0);
         const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
         const [hasMultipleGroups, setHasMultipleGroups] = useState<boolean>(lists.length > 1);
         const [filteredChildrenArray, setFilteredChildrenArray] = useState<Element[]>();
         const [inputToListValue, setInputToListValue] = useState<string>('');
+        const [groups, setGroups] = useState<string[]>(['all']);
 
         const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement | null>(null);
@@ -124,6 +123,77 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         useEffect(() => {
             setHasMultipleGroups(lists.length > 1);
         }, [lists]);
+
+        const filterbuttons = useMemo(() => {
+            const items: IFilterButtonItem[] = [];
+
+            if (lists.length <= 1) {
+                return items;
+            }
+
+            lists.forEach(({ groupName }) => {
+                if (groupName) {
+                    items.push({
+                        id: groupName,
+                        text: groupName,
+                    });
+                }
+            });
+
+            return items;
+        }, [lists]);
+
+        /**
+         * Filters the lists by the FilterButtons
+         */
+        const activeList = useMemo(() => {
+            let newLists: ISearchBoxItems[] = [];
+
+            if (groups[0] === 'all') {
+                newLists = lists;
+            } else {
+                lists.forEach((list) => {
+                    if (list.groupName && groups.includes(list.groupName)) {
+                        newLists.push(list);
+                    }
+                });
+            }
+
+            const newMatchingItems: ISearchBoxItems[] = [];
+
+            newLists.forEach(({ list, groupName }) => {
+                const newList = searchList({ items: list, searchString: value });
+
+                if (newList.length > 0) {
+                    newMatchingItems.push({
+                        groupName,
+                        list: newList,
+                    });
+                }
+            });
+
+            if (newMatchingItems.length === 0 && shouldAddInputToList) {
+                newMatchingItems.push({
+                    groupName: undefined,
+                    list: [],
+                });
+            }
+
+            const filteredMatchingListItems = newMatchingItems.map(({ list, groupName }) => ({
+                groupName,
+                list: list.filter(
+                    (item) => !(newMatchingItems.length === 1 && item.text === value),
+                ),
+            }));
+
+            setMatchingListsItems(filteredMatchingListItems);
+
+            return newLists;
+        }, [groups, lists, value]);
+
+        const handleFilterButtonsGroupSelect = (keys: string[]) => {
+            setGroups(keys.length === 0 ? ['all'] : keys);
+        };
 
         /**
          * This function closes the list of items
@@ -150,15 +220,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             };
         }, [handleOutsideClick, boxRef]);
 
-        useEffect(() => {}, []);
-
         /**
          * This hook calculates the height
          */
         useEffect(() => {
             const textArray: string[] = [];
 
-            lists.forEach(({ list, groupName }) => {
+            activeList.forEach(({ list, groupName }) => {
                 list.forEach(({ text }) => textArray.push(text));
                 if (!groupName) {
                     return;
@@ -171,7 +239,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             }
 
             setHeight(calculateContentHeight(textArray));
-        }, [inputToListValue, lists, placeholder, shouldAddInputToList]);
+        }, [inputToListValue, activeList, placeholder, shouldAddInputToList]);
 
         /**
          * This hook calculates the width
@@ -192,7 +260,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         useEffect(() => {
             if (selectedId) {
-                lists.forEach(({ list }) => {
+                activeList.forEach(({ list }) => {
                     const selectedItem = list.find(({ id }) => id === selectedId);
                     if (selectedItem) {
                         setValue(selectedItem.text);
@@ -208,7 +276,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     }
                 });
             }
-        }, [lists, selectedId, shouldShowRoundImage]);
+        }, [activeList, selectedId, shouldShowRoundImage]);
 
         /**
          * This hook resets the value if the selectedId changes to undefined. This is an own useEffect because the value
@@ -225,10 +293,25 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          */
         const handleFocus = useCallback(() => {
             if (shouldShowContentOnEmptyInput) {
-                const newMatchingItems = lists.map(({ list, groupName }) => ({
-                    groupName,
-                    list: searchList({ items: list, searchString: value }),
-                }));
+                const newMatchingItems: ISearchBoxItems[] = [];
+
+                activeList.forEach(({ list, groupName }) => {
+                    const newList = searchList({ items: list, searchString: value });
+
+                    if (newList.length > 0) {
+                        newMatchingItems.push({
+                            groupName,
+                            list: newList,
+                        });
+                    }
+                });
+
+                if (newMatchingItems.length === 0 && shouldAddInputToList) {
+                    newMatchingItems.push({
+                        groupName: undefined,
+                        list: [],
+                    });
+                }
 
                 const filteredMatchingListItems = newMatchingItems.map(({ list, groupName }) => ({
                     groupName,
@@ -240,17 +323,32 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 setMatchingListsItems(filteredMatchingListItems);
                 setIsAnimating(filteredMatchingListItems.length !== 0);
             }
-        }, [lists, shouldShowContentOnEmptyInput, value]);
+        }, [activeList, shouldShowContentOnEmptyInput, value]);
 
         /**
          * This function filters the lists by input
          */
 
         useEffect(() => {
-            const newMatchingItems = lists.map(({ list, groupName }) => ({
-                groupName,
-                list: searchList({ items: list, searchString: value }),
-            }));
+            const newMatchingItems: ISearchBoxItems[] = [];
+
+            activeList.forEach(({ list, groupName }) => {
+                const newList = searchList({ items: list, searchString: value });
+
+                if (newList.length > 0) {
+                    newMatchingItems.push({
+                        groupName,
+                        list: newList,
+                    });
+                }
+            });
+
+            if (newMatchingItems.length === 0 && shouldAddInputToList) {
+                newMatchingItems.push({
+                    groupName: undefined,
+                    list: [],
+                });
+            }
 
             if (shouldAddInputToList && inputToListValue !== '') {
                 newMatchingItems.forEach(({ list }) => {
@@ -261,7 +359,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     });
                 });
             }
-        }, [inputToListValue, lists, shouldAddInputToList, shouldShowContentOnEmptyInput, value]);
+        }, [
+            inputToListValue,
+            activeList,
+            shouldAddInputToList,
+            shouldShowContentOnEmptyInput,
+            value,
+        ]);
 
         const rightElement = useMemo(() => {
             if (!shouldShowToggleIcon) {
@@ -280,10 +384,25 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          */
         const handleChange = useCallback(
             (event: ChangeEvent<HTMLInputElement>) => {
-                const filteredLists = lists.map(({ list, groupName }) => ({
-                    groupName,
-                    list: searchList({ items: list, searchString: event.target.value }),
-                }));
+                const filteredLists: ISearchBoxItems[] = [];
+
+                activeList.forEach(({ list, groupName }) => {
+                    const newList = searchList({ items: list, searchString: event.target.value });
+
+                    if (newList.length > 0) {
+                        filteredLists.push({
+                            groupName,
+                            list: newList,
+                        });
+                    }
+                });
+
+                if (filteredLists.length === 0 && shouldAddInputToList) {
+                    filteredLists.push({
+                        groupName: undefined,
+                        list: [],
+                    });
+                }
 
                 setSelectedImage(undefined);
 
@@ -301,7 +420,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     onChange(event);
                 }
             },
-            [lists, onChange, shouldShowContentOnEmptyInput],
+            [activeList, onChange, shouldShowContentOnEmptyInput],
         );
 
         /**
@@ -350,13 +469,15 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const content = useMemo(() => {
             const items: ReactElement[] = [];
 
-            matchingListsItems.forEach(({ groupName, list }) => {
+            matchingListsItems.forEach(({ groupName, list }, index) => {
                 if (hasMultipleGroups) {
                     if (list.length <= 0) {
                         return;
                     }
 
-                    items.push(<GroupName key={groupName} name={groupName ?? ''} />);
+                    if (index !== 0) {
+                        items.push(<GroupName key={groupName} name={groupName ?? ''} />);
+                    }
                 }
 
                 list.forEach(({ id, text, imageUrl }) => {
@@ -502,32 +623,27 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                         />
                     </div>
                     <AnimatePresence initial={false}>
-                        <StyledMotionSearchBoxBody
-                            $browser={browser?.name}
-                            key="content"
-                            $height={height}
-                            $width={width}
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={
-                                isAnimating
-                                    ? { height: 'fit-content', opacity: 1 }
-                                    : { height: 0, opacity: 0 }
-                            }
-                            transition={{
-                                duration: 0.2,
-                                type: 'tween',
-                            }}
-                            ref={contentRef}
-                            tabIndex={0}
-                        >
-                            {content}
-                        </StyledMotionSearchBoxBody>
+                        {isAnimating && (
+                            <SearchBoxBody
+                                filterbuttons={filterbuttons}
+                                selectedGroups={groups}
+                                width={width}
+                                browser={browser?.name}
+                                height={height}
+                                ref={contentRef}
+                                onGroupSelect={handleFilterButtonsGroupSelect}
+                            >
+                                {content}
+                            </SearchBoxBody>
+                        )}
                     </AnimatePresence>
                 </StyledSearchBox>
             ),
             [
                 browser?.name,
                 content,
+                filterbuttons,
+                groups,
                 handleBlur,
                 handleChange,
                 handleFocus,

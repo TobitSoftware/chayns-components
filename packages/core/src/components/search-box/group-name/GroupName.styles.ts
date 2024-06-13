@@ -4,8 +4,8 @@ import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider'
 type StyledGroupNameProps = WithTheme<{ $groupName?: string }>;
 
 export const StyledGroupName = styled.span<StyledGroupNameProps>`
-    background: ${({ theme }: StyledGroupNameProps) => theme['103']};
     color: ${({ theme }: StyledGroupNameProps) => theme.text};
+    font-weight: bold;
 
     padding: 4px 10px;
     ${({ $groupName }) =>
