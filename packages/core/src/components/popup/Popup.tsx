@@ -53,7 +53,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         {
             content,
             onShow,
-            container = document.body,
+            container = document.querySelector('.tapp') || document.body,
             onHide,
             children,
             shouldShowOnHover = false,
