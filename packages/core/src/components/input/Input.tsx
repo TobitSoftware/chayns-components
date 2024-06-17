@@ -271,7 +271,7 @@ const Input = forwardRef<InputRef, InputProps>(
                                     hasValue &&
                                     !shouldShowOnlyBottomBorder &&
                                     !shouldRemainPlaceholder
-                                        ? { scale: 0.4, x: '6px', y: '2px' }
+                                        ? { scale: 0.4, x: '6px', y: '1px' }
                                         : { scale: 1 }
                                 }
                                 initial={false}

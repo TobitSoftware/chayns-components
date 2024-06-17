@@ -95,7 +95,7 @@ export const StyledInputField = styled.input<StyledInputFieldProps>`
 `;
 
 export const StyledMotionInputLabelWrapper = styled(motion.label)`
-    align-items: baseline;
+    align-items: center;
     display: flex;
     flex: 0 0 auto;
     gap: 4px;
@@ -106,7 +106,9 @@ export const StyledMotionInputLabelWrapper = styled(motion.label)`
     max-width: 100%;
 `;
 
-export const StyledMotionInputElement = styled(motion.div)``;
+export const StyledMotionInputElement = styled(motion.div)`
+    display: flex;
+`;
 
 type StyledInputLabelProps = WithTheme<{ $isInvalid?: boolean }>;
 
