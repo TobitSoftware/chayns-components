@@ -84,10 +84,6 @@ const NumberInput: FC<NumberInputProps> = ({
     const localPlaceholder = placeholder ?? (isMoneyInput ? '€' : undefined);
 
     const onLocalChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-        if (isValueInvalid || isInvalid) {
-            return;
-        }
-
         const newValue = event.target.value;
 
         const sanitizedValueString = newValue
