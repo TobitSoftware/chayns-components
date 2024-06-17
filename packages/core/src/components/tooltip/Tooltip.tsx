@@ -12,6 +12,10 @@ export type TooltipProps = {
      */
     children: ReactNode;
     /**
+     * The element where the content of the `Tooltip` should be rendered via React Portal.
+     */
+    container?: Element;
+    /**
      * The content that should be displayed.
      */
     item: ITooltipItem | ReactNode;
@@ -25,7 +29,7 @@ export type TooltipProps = {
     isDisabled?: boolean;
 };
 
-const Tooltip: FC<TooltipProps> = ({ item, children, isDisabled, itemWidth }) => {
+const Tooltip: FC<TooltipProps> = ({ item, children, container, isDisabled, itemWidth }) => {
     const tooltipRef = useRef<PopupRef>(null);
 
     const content = useMemo(() => {
@@ -52,7 +56,12 @@ const Tooltip: FC<TooltipProps> = ({ item, children, isDisabled, itemWidth }) =>
                         {children}
                     </StyledTooltipChildren>
                 ) : (
-                    <Popup shouldShowOnHover content={content} ref={tooltipRef}>
+                    <Popup
+                        shouldShowOnHover
+                        content={content}
+                        ref={tooltipRef}
+                        container={container}
+                    >
                         <StyledTooltipChildren $isOnlyText={isTextOnlyElement(children)}>
                             {children}
                         </StyledTooltipChildren>
@@ -60,7 +69,7 @@ const Tooltip: FC<TooltipProps> = ({ item, children, isDisabled, itemWidth }) =>
                 )}
             </StyledTooltip>
         ),
-        [isDisabled, children, content],
+        [isDisabled, children, content, container],
     );
 };
 

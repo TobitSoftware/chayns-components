@@ -23,6 +23,10 @@ export type PopupProps = {
      */
     children?: ReactNode;
     /**
+     * The element where the content of the `Popup` should be rendered via React Portal.
+     */
+    container?: Element;
+    /**
      * The content that should be displayed inside the popup.
      */
     content: ReactNode;
@@ -45,12 +49,22 @@ export type PopupProps = {
 };
 
 const Popup = forwardRef<PopupRef, PopupProps>(
-    ({ content, onShow, onHide, children, shouldShowOnHover = false, yOffset = 0 }, ref) => {
+    (
+        {
+            content,
+            onShow,
+            container = document.body,
+            onHide,
+            children,
+            shouldShowOnHover = false,
+            yOffset = 0,
+        },
+        ref,
+    ) => {
         const [coordinates, setCoordinates] = useState<PopupCoordinates>({
             x: 0,
             y: 0,
         });
-        const container = document.querySelector('.tapp') || document.body;
 
         const [alignment, setAlignment] = useState<PopupAlignment>(PopupAlignment.TopLeft);
         const [offset, setOffset] = useState<number>(0);
