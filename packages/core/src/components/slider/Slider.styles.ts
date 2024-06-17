@@ -10,6 +10,7 @@ export const StyledSlider = styled.div`
     align-items: center;
     justify-content: center;
     touch-action: none;
+    user-select: none;
 `;
 
 type StyledSliderInputProps = WithTheme<{
