@@ -13,15 +13,15 @@ import Icon from '../../react-chayns-icon/component/Icon';
  */
 const Button = forwardRef((props, ref) => {
     const {
-        chooseButton,
-        disabled,
+        chooseButton = false,
+        disabled = false,
         children,
         className,
         icon,
-        secondary,
-        stopPropagation,
+        secondary = false,
+        stopPropagation = false,
         onClick,
-        type,
+        type = 'button',
         ...other
     } = props;
 
@@ -109,17 +109,6 @@ Button.propTypes = {
      * Set the type for the native button HTML element.
      */
     type: PropTypes.oneOf(['button', 'submit', 'reset']),
-};
-
-Button.defaultProps = {
-    className: null,
-    onClick: null,
-    disabled: false,
-    chooseButton: false,
-    icon: null,
-    secondary: false,
-    stopPropagation: false,
-    type: 'button',
 };
 
 Button.displayName = 'Button';

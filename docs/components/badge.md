@@ -41,7 +41,7 @@ The `Badge`-component takes the following props:
 | Name                    | Type                                  | Default | Required |
 | ----------------------- | ------------------------------------- | ------- | :------: |
 | [children](#children)   | `ReactNode`                           |         |    ✓     |
-| [className](#classname) | `string`                              | `''`    |          |
+| [className](#classname) | `string`                              |         |          |
 | [style](#style)         | `{ [key: string]: string \| number }` |         |          |
 | [badgeRef](#badgeref)   | `function`                            |         |          |
 

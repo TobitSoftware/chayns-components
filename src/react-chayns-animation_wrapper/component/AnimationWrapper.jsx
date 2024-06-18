@@ -10,7 +10,11 @@ import './animation-wrapper.scss';
  * The AnimationWrapper provides an eye-catching initial animation to its
  * children.
  */
-const AnimationWrapper = ({ children, animationTime, setAutoTime }) => {
+const AnimationWrapper = ({
+    children = <div />,
+    animationTime = 0.2,
+    setAutoTime = 400,
+}) => {
     const [height, setHeight] = useState(0);
     const childrenRef = useRef(0);
 
@@ -81,12 +85,6 @@ AnimationWrapper.propTypes = {
      * changes in children size.
      */
     setAutoTime: PropTypes.number,
-};
-
-AnimationWrapper.defaultProps = {
-    children: <div />,
-    animationTime: 0.2,
-    setAutoTime: 400,
 };
 
 export default AnimationWrapper;

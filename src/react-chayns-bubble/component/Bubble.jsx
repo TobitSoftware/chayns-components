@@ -15,7 +15,7 @@ let currentId = 0;
  */
 const Bubble = React.forwardRef((props, ref) => {
     const {
-        position,
+        position = Bubble.position.TOP_LEFT,
         parent,
         topDivStyle,
         onMouseEnter,
@@ -157,18 +157,6 @@ Bubble.propTypes = {
     topDivStyle: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
-};
-
-Bubble.defaultProps = {
-    className: null,
-    style: null,
-    children: null,
-    position: 0,
-    parent: null,
-    coordinates: null,
-    onMouseEnter: null,
-    onMouseLeave: null,
-    topDivStyle: null,
 };
 
 Bubble.displayName = 'Bubble';

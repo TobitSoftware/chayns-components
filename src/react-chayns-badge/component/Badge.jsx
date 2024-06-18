@@ -67,10 +67,4 @@ Badge.propTypes = {
     badgeRef: PropTypes.func,
 };
 
-Badge.defaultProps = {
-    className: '',
-    style: undefined,
-    badgeRef: undefined,
-};
-
 Badge.displayName = 'Badge';

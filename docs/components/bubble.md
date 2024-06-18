@@ -43,7 +43,7 @@ The `Bubble`-component takes the following props:
 | [children](#children)         | `ReactNode`                           |         |          |
 | [className](#classname)       | `string`                              |         |          |
 | [style](#style)               | `{ [key: string]: string \| number }` |         |          |
-| [position](#position)         | `enum`                                | `0`     |          |
+| [position](#position)         | `enum`                                |         |          |
 | [parent](#parent)             | `custom`                              |         |          |
 | [coordinates](#coordinates)   | `{ x: number, y: number }`            |         |          |
 | [onMouseEnter](#onmouseenter) | `function`                            |         |          |

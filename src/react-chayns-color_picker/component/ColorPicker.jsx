@@ -59,25 +59,25 @@ const ColorPicker = forwardRef(
     (
         {
             defaultColorModel,
-            transparency,
+            transparency = false,
             onChangeEnd,
-            input,
+            input = false,
             color,
             onBlur,
-            inline,
+            inline = false,
             children,
-            removeParentSpace,
+            removeParentSpace = false,
             parent,
             onChange,
             style,
             className,
-            bubblePosition,
+            bubblePosition = Bubble.position.BOTTOM_CENTER,
             bubbleClassName,
             bubbleStyle,
-            showAllColorModels,
+            showAllColorModels = false,
             customColorsArray,
-            showCustomColors,
-            showGlobalColors,
+            showCustomColors = false,
+            showGlobalColors = false,
             onCreateCustomColor,
             onRemoveCustomColor,
         },
@@ -97,9 +97,9 @@ const ColorPicker = forwardRef(
         });
         const [colorModel, setColorModel] = useState(
             defaultColorModel ??
-            (transparency
-                ? ColorPicker.colorModels.RGB
-                : ColorPicker.colorModels.HEX)
+                (transparency
+                    ? ColorPicker.colorModels.RGB
+                    : ColorPicker.colorModels.HEX)
         );
 
         const [customColorsState, setCustomColorsState] = useState(
@@ -128,7 +128,10 @@ const ColorPicker = forwardRef(
                 // Hide bubble and remove event listeners if click was outside of the bubble
                 if (
                     event.type === 'blur' ||
-                    !(event.target === bubbleContentRef.current || isDescendant(bubbleContentRef.current, event.target))
+                    !(
+                        event.target === bubbleContentRef.current ||
+                        isDescendant(bubbleContentRef.current, event.target)
+                    )
                 ) {
                     document.removeEventListener('click', closeBubble);
                     window.removeEventListener('blur', closeBubble);
@@ -255,7 +258,7 @@ const ColorPicker = forwardRef(
                                     style={{}}
                                     className={classNames({
                                         'cc__color-picker__slider-container__with-transparency':
-                                        transparency,
+                                            transparency,
                                         'cc__color-picker__slider-container__without-transparency':
                                             !transparency,
                                     })}
@@ -284,7 +287,6 @@ const ColorPicker = forwardRef(
                                     />
                                 )}
                             </div>
-
                         </div>
 
                         <div>
@@ -377,7 +379,7 @@ const ColorPicker = forwardRef(
                                 style={{}}
                                 className={classNames({
                                     'cc__color-picker__slider-container__with-transparency':
-                                    transparency,
+                                        transparency,
                                     'cc__color-picker__slider-container__without-transparency':
                                         !transparency,
                                 })}
@@ -421,12 +423,8 @@ const ColorPicker = forwardRef(
                                 onChangeCallback(c);
                                 onChangeEnd?.(c);
                             }}
-                            onCreateCustomColor={
-                                onCreateCustomColorCallback
-                            }
-                            onRemoveCustomColor={
-                                onRemoveCustomColorCallback
-                            }
+                            onCreateCustomColor={onCreateCustomColorCallback}
+                            onRemoveCustomColor={onRemoveCustomColorCallback}
                         />
                         {input && (
                             <ColorInput
@@ -504,8 +502,7 @@ ColorPicker.propTypes = {
     parent:
         typeof Element !== 'undefined'
             ? PropTypes.instanceOf(Element)
-            : () => {
-            },
+            : () => {},
 
     /**
      * The classname that will be set on the children wrapper.
@@ -582,30 +579,6 @@ ColorPicker.propTypes = {
      * Will be called when a custom color is removed
      */
     onRemoveCustomColor: PropTypes.func,
-};
-
-ColorPicker.defaultProps = {
-    bubblePosition: Bubble.position.BOTTOM_CENTER,
-    onChange: null,
-    inline: false,
-    onChangeEnd: null,
-    onBlur: null,
-    transparency: false,
-    parent: null,
-    className: null,
-    style: null,
-    bubbleClassName: null,
-    bubbleStyle: null,
-    input: false,
-    defaultColorModel: null,
-    children: null,
-    removeParentSpace: false,
-    showAllColorModels: false,
-    customColorsArray: null,
-    showCustomColors: false,
-    showGlobalColors: false,
-    onCreateCustomColor: null,
-    onRemoveCustomColor: null,
 };
 
 ColorPicker.colorModels = {

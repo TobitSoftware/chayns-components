@@ -14,7 +14,7 @@ const AccordionSearch = ({
         onEnter={onSearchEnter}
         onIconClick={onSearchEnter}
         icon="fa fa-search"
-        value={searchValue === null ? undefined : searchValue}
+        value={searchValue}
         stopPropagation
         dynamic
     />
@@ -25,13 +25,6 @@ AccordionSearch.propTypes = {
     searchPlaceholder: PropTypes.string,
     onSearchEnter: PropTypes.func,
     searchValue: PropTypes.string,
-};
-
-AccordionSearch.defaultProps = {
-    onSearch: null,
-    searchPlaceholder: null,
-    onSearchEnter: null,
-    searchValue: null,
 };
 
 AccordionSearch.displayName = 'AccordionSearch';

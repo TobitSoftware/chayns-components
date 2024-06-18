@@ -51,15 +51,6 @@ ChooseButton.propTypes = {
     type: PropTypes.oneOf(['button', 'submit', 'reset']),
 };
 
-ChooseButton.defaultProps = {
-    className: null,
-    onClick: null,
-    disabled: false,
-    icon: null,
-    stopPropagation: false,
-    type: 'button',
-};
-
 ChooseButton.displayName = 'ChooseButton';
 
 export default ChooseButton;
