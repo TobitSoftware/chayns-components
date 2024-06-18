@@ -2,7 +2,7 @@ import { setRefreshScrollEnabled } from 'chayns-api';
 import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from 'styled-components';
 import { useElementSize } from '../../hooks/useElementSize';
-import { fillSlider, getThumbMaxWidth } from '../../utils/slider';
+import { calculateGradientOffset, fillSlider, getThumbMaxWidth } from '../../utils/slider';
 import {
     StyledSlider,
     StyledSliderInput,
@@ -68,6 +68,7 @@ const Slider: FC<SliderProps> = ({
     const [fromValue, setFromValue] = useState(0);
     const [toValue, setToValue] = useState(maxValue);
     const [thumbWidth, setThumbWidth] = useState(20);
+    const [isBigSlider, setIsBigSlider] = useState(false);
 
     const fromSliderRef = useRef<HTMLInputElement>(null);
     const toSliderRef = useRef<HTMLInputElement>(null);
@@ -230,31 +231,50 @@ const Slider: FC<SliderProps> = ({
 
     const fromSliderThumbPosition = useMemo(() => {
         if (fromSliderRef.current && fromSliderThumbRef.current && sliderWrapperSize) {
-            return (
-                ((fromValue - minValue) / (maxValue - minValue)) *
-                    (fromSliderRef.current.offsetWidth -
-                        fromSliderThumbRef.current.offsetWidth / 2) -
-                (shouldShowThumbLabel && fromValue === maxValue ? 4 : 0)
-            );
+            return calculateGradientOffset({
+                max: maxValue,
+                min: minValue,
+                value: fromValue,
+                thumbWidth: fromSliderThumbRef.current.offsetWidth,
+                containerWidth: fromSliderRef.current.offsetWidth,
+            });
         }
+
         return 0;
-    }, [fromValue, maxValue, minValue, shouldShowThumbLabel, sliderWrapperSize]);
+    }, [fromValue, maxValue, minValue, sliderWrapperSize]);
 
     const toSliderThumbPosition = useMemo(() => {
         if (toSliderRef.current && toSliderThumbRef.current && sliderWrapperSize) {
-            return (
-                ((toValue - minValue) / (maxValue - minValue)) *
-                    (toSliderRef.current.offsetWidth - toSliderThumbRef.current.offsetWidth / 2) -
-                (shouldShowThumbLabel && toValue === maxValue ? 4 : 0)
-            );
+            return calculateGradientOffset({
+                max: maxValue,
+                min: minValue,
+                value: toValue,
+                thumbWidth: toSliderThumbRef.current.offsetWidth,
+                containerWidth: toSliderRef.current.offsetWidth,
+            });
         }
         return 0;
-    }, [toValue, minValue, maxValue, shouldShowThumbLabel, sliderWrapperSize]);
+    }, [toValue, minValue, maxValue, sliderWrapperSize]);
+
+    const handleTouchStart = useCallback(() => {
+        if (shouldShowThumbLabel) {
+            setIsBigSlider(true);
+        }
+    }, [shouldShowThumbLabel]);
+
+    const handleTouchEnd = useCallback(() => {
+        if (shouldShowThumbLabel) {
+            setIsBigSlider(false);
+        }
+    }, [shouldShowThumbLabel]);
 
     return useMemo(
         () => (
             <StyledSlider ref={sliderWrapperRef}>
                 <StyledSliderInput
+                    animate={{ height: isBigSlider ? 30 : 10 }}
+                    initial={{ height: 10 }}
+                    exit={{ height: 10 }}
                     $thumbWidth={thumbWidth}
                     ref={fromSliderRef}
                     $isInterval={!!interval}
@@ -263,13 +283,19 @@ const Slider: FC<SliderProps> = ({
                     step={steps}
                     max={maxValue}
                     min={minValue}
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
                     onChange={handleInputChange}
                     onMouseUp={handleMouseUp}
                     $max={maxValue}
                     $min={minValue}
                     $value={fromValue}
                 />
-                <StyledSliderThumb ref={fromSliderThumbRef} $position={fromSliderThumbPosition}>
+                <StyledSliderThumb
+                    ref={fromSliderThumbRef}
+                    $position={fromSliderThumbPosition}
+                    $isBigSlider={isBigSlider}
+                >
                     {shouldShowThumbLabel && (
                         <StyledSliderThumbLabel>
                             {typeof thumbLabelFormatter === 'function'
@@ -279,7 +305,11 @@ const Slider: FC<SliderProps> = ({
                     )}
                 </StyledSliderThumb>
                 {interval && (
-                    <StyledSliderThumb ref={toSliderThumbRef} $position={toSliderThumbPosition}>
+                    <StyledSliderThumb
+                        ref={toSliderThumbRef}
+                        $position={toSliderThumbPosition}
+                        $isBigSlider={isBigSlider}
+                    >
                         {shouldShowThumbLabel && (
                             <StyledSliderThumbLabel>
                                 {typeof thumbLabelFormatter === 'function'
@@ -302,6 +332,8 @@ const Slider: FC<SliderProps> = ({
                         step={steps}
                         max={maxValue}
                         min={minValue}
+                        onTouchStart={handleTouchStart}
+                        onTouchEnd={handleTouchEnd}
                         onChange={handleControlToSlider}
                         onMouseUp={handleMouseUp}
                     />
@@ -309,12 +341,15 @@ const Slider: FC<SliderProps> = ({
             </StyledSlider>
         ),
         [
+            isBigSlider,
             thumbWidth,
             interval,
             fromValue,
             steps,
             maxValue,
             minValue,
+            handleTouchStart,
+            handleTouchEnd,
             handleInputChange,
             handleMouseUp,
             fromSliderThumbPosition,

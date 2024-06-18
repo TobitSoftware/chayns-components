@@ -34,6 +34,28 @@ export const fillSlider = ({ fromSlider, toSlider, theme }: FillSlider) => {
     fromSlider.style.background = gradient;
 };
 
+interface CalculateGradientOffset {
+    value: number;
+    min: number;
+    max: number;
+    thumbWidth: number;
+    containerWidth: number;
+}
+
+export const calculateGradientOffset = ({
+    value,
+    min,
+    max,
+    thumbWidth,
+    containerWidth,
+}: CalculateGradientOffset): number => {
+    const percentage = (value - min) / (max - min);
+
+    const adjustedWidth = containerWidth - thumbWidth * 0.25;
+
+    return percentage * adjustedWidth;
+};
+
 interface GetThumbMaxWidthOptions {
     maxNumber: number;
     thumbLabelFormatter?: (value: number) => string;

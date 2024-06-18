@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import styled, { css } from 'styled-components';
 import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledSlider = styled.div`
@@ -21,7 +22,7 @@ type StyledSliderInputProps = WithTheme<{
     $thumbWidth: number;
 }>;
 
-export const StyledSliderInput = styled.input.attrs<StyledSliderInputProps>(
+export const StyledSliderInput = styled(motion.input).attrs<StyledSliderInputProps>(
     ({ $isInterval, $value, $thumbWidth, $min, $max, theme }) => ({
         style: {
             pointerEvents: $isInterval ? 'none' : 'all',
@@ -43,7 +44,7 @@ export const StyledSliderInput = styled.input.attrs<StyledSliderInputProps>(
     position: absolute;
     border-radius: 100px;
     -webkit-appearance: none;
-    height: 10px;
+
     outline: none;
     cursor: pointer !important;
     z-index: 2;
@@ -73,7 +74,7 @@ export const StyledSliderInput = styled.input.attrs<StyledSliderInputProps>(
     }
 `;
 
-type StyledSliderThumbProps = WithTheme<{ $position: number }>;
+type StyledSliderThumbProps = WithTheme<{ $position: number; $isBigSlider: boolean }>;
 
 export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $position }) => ({
     style: {
@@ -94,6 +95,41 @@ export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $po
     justify-content: center;
     padding: 0 8px;
     white-space: nowrap;
+    top: 5px;
+
+    transition: top 0.2s ease 0s;
+
+    ${({ $isBigSlider }) =>
+        $isBigSlider &&
+        css`
+            top: -30px;
+
+            &::after {
+                background-color: inherit;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                border-right: 1px solid rgba(0, 0, 0, 0.1);
+                box-shadow: 2px 2px 8px rgb(4 3 4 / 10%);
+                content: '';
+                height: 14px;
+                position: absolute;
+                width: 14px;
+                z-index: -2;
+
+                transform: rotate(225deg);
+                bottom: -7px;
+            }
+
+            &::before {
+                background-color: inherit;
+                bottom: 0;
+                content: '';
+                left: 0;
+                position: absolute;
+                right: 0;
+                top: 0;
+                z-index: -1;
+            }
+        `}
 `;
 
 type StyledSliderThumbLabelProps = WithTheme<unknown>;
