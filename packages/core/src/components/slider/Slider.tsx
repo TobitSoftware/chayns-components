@@ -321,6 +321,9 @@ const Slider: FC<SliderProps> = ({
                 )}
                 {interval && (
                     <StyledSliderInput
+                        animate={{ height: isBigSlider ? 30 : 10 }}
+                        initial={{ height: 10 }}
+                        exit={{ height: 10 }}
                         $thumbWidth={thumbWidth}
                         $max={maxValue}
                         $min={minValue}
