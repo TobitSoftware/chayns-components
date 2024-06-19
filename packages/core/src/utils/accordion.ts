@@ -1,8 +1,8 @@
-interface GetAccordionHeadHeightOptions {
-    isWrapped?: boolean;
-    title: string;
+import type { AccordionHeadProps } from '../components/accordion/accordion-head/AccordionHead';
+
+type GetAccordionHeadHeightOptions = Pick<AccordionHeadProps, 'isWrapped' | 'title'> & {
     width: number;
-}
+};
 
 interface GetAccordionHeadHeightResult {
     closed: number;

@@ -10,6 +10,7 @@ import React, {
     useState,
 } from 'react';
 import { useTheme } from 'styled-components';
+import { useElementSize } from '../../../hooks/useElementSize';
 import { getAccordionHeadHeight } from '../../../utils/accordion';
 import Icon from '../../icon/Icon';
 import {
@@ -26,7 +27,7 @@ import {
     StyledRightWrapper,
 } from './AccordionHead.styles';
 
-type AccordionHeadProps = {
+export type AccordionHeadProps = {
     icon?: string;
     isOpen: boolean;
     isFixed: boolean;
@@ -73,7 +74,12 @@ const AccordionHead: FC<AccordionHeadProps> = ({
 
     const theme = useTheme();
 
+    const titleElementWrapperRef = useRef<HTMLDivElement>(null);
     const titleWrapperRef = useRef<HTMLDivElement>(null);
+
+    const titleElementChildrenSize = useElementSize(titleElementWrapperRef, {
+        shouldUseChildElement: true,
+    });
 
     const hasSearchIcon = Array.isArray(searchIcon);
 
@@ -87,7 +93,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         );
         // The fontSize need to be included to trigger a new calculation.
         // After the size is increased, the Title is cut at the bottom.
-    }, [isWrapped, title, theme.fontSize]);
+    }, [isWrapped, theme.fontSize, title]);
 
     const iconElement = useMemo(() => {
         if (icon || isFixed) {
@@ -111,9 +117,17 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         return <StyledAccordionIcon className={internalIconStyle} $icon={internalIcon} />;
     }, [icon, theme, isFixed]);
 
+    let accordionHeadHeight = isOpen ? headHeight.open : headHeight.closed;
+
+    if (titleElementChildrenSize && titleElementChildrenSize.height > accordionHeadHeight) {
+        // If the titleElement is bigger than the title, the height of the accordion head should be increased.
+        // The height of the titleElement is increased by 8px because of the padding of the accordion head element.
+        accordionHeadHeight = titleElementChildrenSize.height + 8;
+    }
+
     return (
         <StyledMotionAccordionHead
-            animate={{ height: isOpen ? headHeight.open : headHeight.closed }}
+            animate={{ height: accordionHeadHeight }}
             className="beta-chayns-accordion-head"
             initial={false}
             key={`accordionHead--${uuid}`}
@@ -161,6 +175,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                         <StyledMotionTitleElementWrapper
                             layout
                             key={`accordionTitleElement--${uuid}`}
+                            ref={titleElementWrapperRef}
                         >
                             {titleElement}
                         </StyledMotionTitleElementWrapper>
