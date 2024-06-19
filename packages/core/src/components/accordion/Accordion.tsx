@@ -163,8 +163,13 @@ const Accordion: FC<AccordionProps> = ({
     onTitleInputChange,
     titleInputProps,
 }) => {
-    const { isWrapped, openAccordionUuid, updateOpenAccordionUuid } =
-        useContext(AccordionGroupContext);
+    const {
+        isWrapped,
+        openAccordionUuid,
+        accordionGroupUuid,
+        accordionUuids,
+        updateOpenAccordionUuid,
+    } = useContext(AccordionGroupContext);
     const { isWrapped: isParentWrapped } = useContext(AccordionContext);
 
     const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(isDefaultOpen ?? isOpened);
@@ -180,6 +185,11 @@ const Accordion: FC<AccordionProps> = ({
     const isOpenRef = useRef(isOpen);
     const onCloseRef = useRef(onClose);
     const onOpenRef = useRef(onOpen);
+
+    const isLastAccordion = useMemo(
+        () => (accordionUuids ? accordionUuids[accordionUuids.length - 1] === uuid : false),
+        [accordionUuids, uuid],
+    );
 
     useEffect(() => {
         isOpenRef.current = isOpen;
@@ -250,6 +260,7 @@ const Accordion: FC<AccordionProps> = ({
 
     return (
         <StyledAccordion
+            data-uuid={`${accordionGroupUuid ?? ''}---${uuid}`}
             className="beta-chayns-accordion"
             $isOpen={isOpen}
             $isParentWrapped={isParentWrapped}

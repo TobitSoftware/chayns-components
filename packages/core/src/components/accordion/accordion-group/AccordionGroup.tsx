@@ -9,14 +9,19 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { useUuid } from '../../../hooks/uuid';
 
 type IUpdateOpenAccordionUuid = (uuid: string, options?: { shouldOnlyOpen?: boolean }) => void;
+type IUpdateAccordionUuids = (uuids: string[]) => void;
 
 interface IAccordionGroupContext {
     isWrapped?: boolean;
     openAccordionUuid?: string;
     setOpenAccordionUuid?: Dispatch<SetStateAction<string | undefined>>;
     updateOpenAccordionUuid?: IUpdateOpenAccordionUuid;
+    accordionUuids?: string[];
+    updateAccordionUuids?: IUpdateAccordionUuids;
+    accordionGroupUuid?: string;
 }
 
 export const AccordionGroupContext = React.createContext<IAccordionGroupContext>({
@@ -24,6 +29,9 @@ export const AccordionGroupContext = React.createContext<IAccordionGroupContext>
     openAccordionUuid: undefined,
     setOpenAccordionUuid: undefined,
     updateOpenAccordionUuid: undefined,
+    accordionUuids: undefined,
+    updateAccordionUuids: undefined,
+    accordionGroupUuid: undefined,
 });
 
 AccordionGroupContext.displayName = 'AccordionGroupContext';
@@ -57,8 +65,15 @@ const AccordionGroup: FC<AccordionGroupProps> = ({
 }) => {
     const [openAccordionUuid, setOpenAccordionUuid] =
         useState<IAccordionGroupContext['openAccordionUuid']>(undefined);
+    const [accordionUuids, setAccordionUuids] = useState<string[]>();
+
+    const accordionGroupId = useUuid();
 
     const isInitialRenderRef = useRef(true);
+
+    const updateAccordionUuids = useCallback((uuids: string[]) => {
+        setAccordionUuids(uuids);
+    }, []);
 
     const updateOpenAccordionUuid = useCallback<IUpdateOpenAccordionUuid>(
         (uuid, { shouldOnlyOpen } = {}) => {
@@ -72,6 +87,21 @@ const AccordionGroup: FC<AccordionGroupProps> = ({
         },
         [setOpenAccordionUuid],
     );
+
+    useEffect(() => {
+        const elements = document.querySelectorAll('[data-uuid]');
+        const newOrder = Array.from(elements).map((el) => el.getAttribute('data-uuid'));
+
+        const result: string[] = [];
+
+        newOrder.forEach((uuid) => {
+            if (uuid?.includes(accordionGroupId)) {
+                result.push(uuid.replace(`${accordionGroupId}---`, ''));
+            }
+        });
+
+        updateAccordionUuids(result);
+    }, [accordionGroupId, updateAccordionUuids]);
 
     useEffect(() => {
         if (isInitialRenderRef.current) {
@@ -91,8 +121,18 @@ const AccordionGroup: FC<AccordionGroupProps> = ({
             openAccordionUuid,
             setOpenAccordionUuid,
             updateOpenAccordionUuid,
+            updateAccordionUuids,
+            accordionUuids,
+            accordionGroupUuid: accordionGroupId,
         }),
-        [isWrapped, openAccordionUuid, updateOpenAccordionUuid],
+        [
+            accordionGroupId,
+            accordionUuids,
+            isWrapped,
+            openAccordionUuid,
+            updateAccordionUuids,
+            updateOpenAccordionUuid,
+        ],
     );
 
     return (
