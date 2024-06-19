@@ -233,6 +233,8 @@ const Accordion: FC<AccordionProps> = ({
         [isWrapped],
     );
 
+    const areaContextProviderValue = useMemo(() => ({ shouldChangeColor: true }), []);
+
     return (
         <StyledAccordion
             className="beta-chayns-accordion"
@@ -270,7 +272,7 @@ const Accordion: FC<AccordionProps> = ({
                                 onScroll={onBodyScroll}
                                 shouldHideBody={shouldRenderClosed && !isOpen}
                             >
-                                <AreaContext.Provider value={{ shouldChangeColor: true }}>
+                                <AreaContext.Provider value={areaContextProviderValue}>
                                     {children}
                                 </AreaContext.Provider>
                             </AccordionBody>
