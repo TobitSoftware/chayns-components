@@ -45,7 +45,7 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
         if ($shouldForceBackground) return undefined;
 
         if (theme.accordionLines) {
-            if ($isWrapped && !$isOpen) {
+            if ($isWrapped) {
                 return css`
                     &&:not(:last-child) {
                         border-bottom-color: ${theme.headline}80;
