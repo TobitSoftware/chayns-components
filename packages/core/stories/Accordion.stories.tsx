@@ -109,6 +109,8 @@ export const ScrollableAccordion = Template.bind({});
 
 export const WithAccordionItems = Template.bind({});
 
+export const InputAsTitle = Template.bind({});
+
 General.args = {
     children: (
         <AccordionContent>
@@ -122,6 +124,38 @@ General.args = {
         </AccordionContent>
     ),
     title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+};
+
+InputAsTitle.args = {
+    children: (
+        <AccordionContent>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+            accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+            sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+            aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+            rebum.
+        </AccordionContent>
+    ),
+    title: 'Lorem ipsum',
+    onTitleInputChange: {},
+    titleInputProps: {
+        rightElement: (
+            <div
+                style={{
+                    backgroundColor: '#3377b6',
+                    height: '42px',
+                    width: '42px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <Icon icons={['ts-calling-code']} size={25} color={'white'} />
+            </div>
+        ),
+    },
 };
 
 ControlledAccordion.args = {

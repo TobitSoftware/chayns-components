@@ -14,6 +14,7 @@ import React, {
 } from 'react';
 import { useUuid } from '../../hooks/uuid';
 import { AreaContext } from '../area-provider/AreaContextProvider';
+import type { InputProps } from '../input/Input';
 import AccordionBody from './accordion-body/AccordionBody';
 import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';
@@ -83,6 +84,12 @@ export type AccordionProps = {
      */
     onSearchChange?: ChangeEventHandler<HTMLInputElement>;
     /**
+     * Function that is executed when the text of the search in the accordion
+     * title changes. When this function is given, the search field is displayed
+     * as the Accordion title.
+     */
+    onTitleInputChange?: ChangeEventHandler<HTMLInputElement>;
+    /**
      * Content to be displayed on the right side in the head of the Accordion
      */
     rightElement?: ReactNode;
@@ -122,6 +129,10 @@ export type AccordionProps = {
      * Additional elements to be displayed in the header next to the title.
      */
     titleElement?: ReactNode;
+    /**
+     * The props of the title Input.
+     */
+    titleInputProps?: InputProps;
 };
 
 const Accordion: FC<AccordionProps> = ({
@@ -149,6 +160,8 @@ const Accordion: FC<AccordionProps> = ({
     shouldRotateIcon = true,
     title,
     titleElement,
+    onTitleInputChange,
+    titleInputProps,
 }) => {
     const { isWrapped, openAccordionUuid, updateOpenAccordionUuid } =
         useContext(AccordionGroupContext);
@@ -264,6 +277,8 @@ const Accordion: FC<AccordionProps> = ({
                         shouldRotateIcon={shouldRotateIcon}
                         title={title}
                         titleElement={titleElement}
+                        onTitleInputChange={onTitleInputChange}
+                        titleInputProps={titleInputProps}
                     />
                     <AnimatePresence initial={false}>
                         {(isOpen || shouldRenderClosed) && (

@@ -12,7 +12,9 @@ import React, {
 import { useTheme } from 'styled-components';
 import { useElementSize } from '../../../hooks/useElementSize';
 import { getAccordionHeadHeight } from '../../../utils/accordion';
+import { AreaContext } from '../../area-provider/AreaContextProvider';
 import Icon from '../../icon/Icon';
+import Input, { type InputProps } from '../../input/Input';
 import {
     StyledAccordionIcon,
     StyledMotionAccordionHead,
@@ -43,6 +45,8 @@ export type AccordionHeadProps = {
     title: string;
     titleElement?: ReactNode;
     uuid: string;
+    onTitleInputChange?: ChangeEventHandler<HTMLInputElement>;
+    titleInputProps?: InputProps;
 };
 
 interface HeadHeight {
@@ -66,6 +70,8 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     title,
     titleElement,
     uuid,
+    titleInputProps,
+    onTitleInputChange,
 }) => {
     const [headHeight, setHeadHeight] = useState<HeadHeight>({
         closed: isWrapped ? 40 : 33,
@@ -84,16 +90,20 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     const hasSearchIcon = Array.isArray(searchIcon);
 
     useEffect(() => {
-        setHeadHeight(
-            getAccordionHeadHeight({
-                isWrapped,
-                title,
-                width: (titleWrapperRef.current?.clientWidth ?? 0) - 10,
-            }),
-        );
+        if (typeof onTitleInputChange === 'function') {
+            setHeadHeight({ closed: 50, open: 50 });
+        } else {
+            setHeadHeight(
+                getAccordionHeadHeight({
+                    isWrapped,
+                    title,
+                    width: (titleWrapperRef.current?.clientWidth ?? 0) - 10,
+                }),
+            );
+        }
         // The fontSize need to be included to trigger a new calculation.
         // After the size is increased, the Title is cut at the bottom.
-    }, [isWrapped, theme.fontSize, title]);
+    }, [isWrapped, onTitleInputChange, theme.fontSize, title]);
 
     const iconElement = useMemo(() => {
         if (icon || isFixed) {
@@ -147,40 +157,51 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 ref={titleWrapperRef}
                 key={`accordionHeadContentWrapper--${uuid}`}
             >
-                <LayoutGroup key={`accordionHeadLayoutGroup--${uuid}`}>
-                    <StyledMotionTitleWrapper key={`accordionHeadTitleWrapperWrapper--${uuid}`}>
-                        <AnimatePresence initial={false} key={`accordionHeadTitleWrapper--${uuid}`}>
-                            <StyledMotionTitle
-                                animate={{ scale: 1 }}
-                                initial={{ scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }}
-                                exit={{ opacity: 0 }}
-                                $isOpen={isOpen}
-                                $isWrapped={isWrapped}
-                                transition={{
-                                    opacity: {
-                                        duration: 0,
-                                    },
-                                }}
-                                key={
-                                    isOpen && !isWrapped
-                                        ? `accordionHeadTitleBig--${uuid}`
-                                        : `accordionHeadTitle--${uuid}`
-                                }
+                {typeof onTitleInputChange === 'function' ? (
+                    // eslint-disable-next-line react/jsx-no-constructed-context-values
+                    <AreaContext.Provider value={{ shouldChangeColor: true }}>
+                        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                        <Input {...titleInputProps} value={title} onChange={onSearchChange} />
+                    </AreaContext.Provider>
+                ) : (
+                    <LayoutGroup key={`accordionHeadLayoutGroup--${uuid}`}>
+                        <StyledMotionTitleWrapper key={`accordionHeadTitleWrapperWrapper--${uuid}`}>
+                            <AnimatePresence
+                                initial={false}
+                                key={`accordionHeadTitleWrapper--${uuid}`}
                             >
-                                {title}
-                            </StyledMotionTitle>
-                        </AnimatePresence>
-                    </StyledMotionTitleWrapper>
-                    {titleElement && (
-                        <StyledMotionTitleElementWrapper
-                            layout
-                            key={`accordionTitleElement--${uuid}`}
-                            ref={titleElementWrapperRef}
-                        >
-                            {titleElement}
-                        </StyledMotionTitleElementWrapper>
-                    )}
-                </LayoutGroup>
+                                <StyledMotionTitle
+                                    animate={{ scale: 1 }}
+                                    initial={{ scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }}
+                                    exit={{ opacity: 0 }}
+                                    $isOpen={isOpen}
+                                    $isWrapped={isWrapped}
+                                    transition={{
+                                        opacity: {
+                                            duration: 0,
+                                        },
+                                    }}
+                                    key={
+                                        isOpen && !isWrapped
+                                            ? `accordionHeadTitleBig--${uuid}`
+                                            : `accordionHeadTitle--${uuid}`
+                                    }
+                                >
+                                    {title}
+                                </StyledMotionTitle>
+                            </AnimatePresence>
+                        </StyledMotionTitleWrapper>
+                        {titleElement && (
+                            <StyledMotionTitleElementWrapper
+                                layout
+                                key={`accordionTitleElement--${uuid}`}
+                                ref={titleElementWrapperRef}
+                            >
+                                {titleElement}
+                            </StyledMotionTitleElementWrapper>
+                        )}
+                    </LayoutGroup>
+                )}
             </StyledMotionContentWrapper>
             {(typeof onSearchChange === 'function' || rightElement) && (
                 <StyledRightWrapper>
