@@ -54,7 +54,7 @@ export const StyledSliderInput = styled(motion.input).attrs<StyledSliderInputPro
     &::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
-        width: 20px;
+        width: 50px;
         height: 20px;
         cursor: pointer;
         opacity: 0;
@@ -65,7 +65,7 @@ export const StyledSliderInput = styled(motion.input).attrs<StyledSliderInputPro
     // slider thumb for firefox
 
     &::-moz-range-thumb {
-        width: 20px;
+        width: 50px;
         height: 20px;
         cursor: pointer;
         opacity: 0;
