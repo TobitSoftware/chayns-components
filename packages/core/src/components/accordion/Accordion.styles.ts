@@ -7,6 +7,7 @@ type StyledMotionAccordionProps = WithTheme<{
     $isWrapped?: boolean;
     $shouldForceBackground?: boolean;
     $shouldHideBackground?: boolean;
+    $shouldShowLines?: boolean;
 }>;
 
 export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
@@ -41,19 +42,23 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
         box-shadow 0.3s ease,
         margin-bottom 0.3s ease;
 
-    ${({ $isOpen, $isWrapped, $shouldForceBackground, theme }: StyledMotionAccordionProps) => {
+    ${({
+        $isOpen,
+        $isWrapped,
+        $shouldForceBackground,
+        $shouldShowLines,
+        theme,
+    }: StyledMotionAccordionProps) => {
         if ($shouldForceBackground) return undefined;
 
         if (theme.accordionLines) {
-            if ($isWrapped) {
+            if ($isWrapped && $shouldShowLines) {
                 return css`
-                    &&:not(:last-child) {
-                        border-bottom-color: ${theme.headline}80;
-                    }
+                    border-bottom-color: ${theme.headline}80;
                 `;
             }
 
-            if (!$isOpen) {
+            if (!$isOpen && $shouldShowLines) {
                 return css`
                     border-bottom-color: ${theme.headline};
                 `;

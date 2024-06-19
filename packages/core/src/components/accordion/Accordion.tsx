@@ -256,6 +256,8 @@ const Accordion: FC<AccordionProps> = ({
         [isWrapped],
     );
 
+    console.log(title, isLastAccordion);
+
     const areaContextProviderValue = useMemo(() => ({ shouldChangeColor: true }), []);
 
     return (
@@ -263,6 +265,7 @@ const Accordion: FC<AccordionProps> = ({
             data-uuid={`${accordionGroupUuid ?? ''}---${uuid}`}
             className="beta-chayns-accordion"
             $isOpen={isOpen}
+            $shouldShowLines={!isLastAccordion}
             $isParentWrapped={isParentWrapped}
             $isWrapped={isWrapped}
             $shouldForceBackground={shouldForceBackground}
