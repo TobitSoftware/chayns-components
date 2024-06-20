@@ -263,6 +263,16 @@ const Slider: FC<SliderProps> = ({
     }, [shouldShowThumbLabel]);
 
     const handleTouchEnd = useCallback(() => {
+        const from = Number(fromSliderRef.current?.value);
+        const to = Number(toSliderRef.current?.value);
+
+        if (typeof onSelect === 'function') {
+            onSelect(
+                interval ? undefined : from,
+                interval ? { maxValue: to, minValue: from } : undefined,
+            );
+        }
+
         if (shouldShowThumbLabel) {
             setIsBigSlider(false);
         }
