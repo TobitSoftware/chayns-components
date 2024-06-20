@@ -29,7 +29,7 @@ export type SliderProps = {
      */
     minValue: number;
     /**
-     *
+     * Function that will be executed when the value is selected.
      */
     onSelect?: (value?: number, interval?: SliderInterval) => void;
     /**
@@ -276,7 +276,7 @@ const Slider: FC<SliderProps> = ({
         if (shouldShowThumbLabel) {
             setIsBigSlider(false);
         }
-    }, [shouldShowThumbLabel]);
+    }, [interval, onSelect, shouldShowThumbLabel]);
 
     return useMemo(
         () => (
