@@ -256,8 +256,6 @@ const Accordion: FC<AccordionProps> = ({
         [isWrapped],
     );
 
-    console.log(title, isLastAccordion);
-
     const areaContextProviderValue = useMemo(() => ({ shouldChangeColor: true }), []);
 
     return (
