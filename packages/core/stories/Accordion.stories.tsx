@@ -15,7 +15,14 @@ export default {
 } as Meta<typeof Accordion>;
 
 const Template: StoryFn<typeof Accordion> = ({ children, ...args }) => (
-    <Accordion {...args}>{children}</Accordion>
+    <Accordion {...args} onTitleInputChange={undefined} onSearchChange={undefined}>
+        {children}
+    </Accordion>
+);
+const InputAsTitleTemplate: StoryFn<typeof Accordion> = ({ children, ...args }) => (
+    <Accordion {...args} onSearchChange={undefined}>
+        {children}
+    </Accordion>
 );
 
 const MultipleAccordionsTemplate: StoryFn<typeof Accordion> = () => (
@@ -61,7 +68,12 @@ const WithSearchTemplate: StoryFn<typeof Accordion> = ({ children, ...args }) =>
     };
 
     return (
-        <Accordion {...args} searchValue={value} onSearchChange={handleSearch}>
+        <Accordion
+            {...args}
+            searchValue={value}
+            onTitleInputChange={undefined}
+            onSearchChange={handleSearch}
+        >
             {children}
         </Accordion>
     );
@@ -101,7 +113,7 @@ export const AccordionWithTitleElement = Template.bind({});
 
 export const AccordionWithSearch = WithSearchTemplate.bind({});
 
-export const AccordionWithBadgeAndSearch = Template.bind({});
+export const AccordionWithBadgeAndSearch = WithSearchTemplate.bind({});
 
 export const DisabledAccordion = Template.bind({});
 
@@ -109,7 +121,7 @@ export const ScrollableAccordion = Template.bind({});
 
 export const WithAccordionItems = Template.bind({});
 
-export const InputAsTitle = Template.bind({});
+export const InputAsTitle = InputAsTitleTemplate.bind({});
 
 General.args = {
     children: (
