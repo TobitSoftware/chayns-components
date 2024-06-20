@@ -42,7 +42,7 @@ The `SelectItem`-component takes the following props:
 | ----------------------------- | --------------------- | ------- | :------: |
 | [id](#id)                     | `number`              |         |          |
 | [htmlId](#htmlid)             | `string`              |         |          |
-| [className](#classname)       | `string`              | `''`    |          |
+| [className](#classname)       | `string`              |         |          |
 | [disabled](#disabled)         | `boolean`             | `false` |          |
 | [children](#children)         | `ReactNode`           |         |          |
 | [name](#name)                 | `string \| ReactNode` | `''`    |          |

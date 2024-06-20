@@ -65,7 +65,14 @@ function generateTimePart(digits, type) {
 }
 
 const TimeSpan = React.memo(
-    ({ startTime, endTime, onChange, childrenRef, isInvalid, disabled }) => {
+    ({
+        startTime,
+        endTime,
+        onChange,
+        childrenRef,
+        isInvalid = false,
+        disabled = false,
+    }) => {
         const [time, setTime] = useState({
             startTime,
             endTime,
@@ -97,12 +104,14 @@ const TimeSpan = React.memo(
             [onChange, setTime]
         );
 
-        const handleStartChange = useMemo(() => handleChange('start'), [
-            handleChange,
-        ]);
-        const handleEndChange = useMemo(() => handleChange('end'), [
-            handleChange,
-        ]);
+        const handleStartChange = useMemo(
+            () => handleChange('start'),
+            [handleChange]
+        );
+        const handleEndChange = useMemo(
+            () => handleChange('end'),
+            [handleChange]
+        );
 
         useEffect(() => {
             if (validateTimeSpan(startTime, endTime)) {
@@ -160,12 +169,14 @@ const TimeSpan = React.memo(
             [setTime, onChange]
         );
 
-        const handleStartAutoFormat = useMemo(() => handleAutoFormat('start'), [
-            handleAutoFormat,
-        ]);
-        const handleEndAutoFormat = useMemo(() => handleAutoFormat('end'), [
-            handleAutoFormat,
-        ]);
+        const handleStartAutoFormat = useMemo(
+            () => handleAutoFormat('start'),
+            [handleAutoFormat]
+        );
+        const handleEndAutoFormat = useMemo(
+            () => handleAutoFormat('end'),
+            [handleAutoFormat]
+        );
 
         const timeSpanValid = checkTimeSpan(time.startTime, time.endTime);
 
@@ -217,12 +228,6 @@ TimeSpan.propTypes = {
     onChange: PropTypes.func.isRequired,
     isInvalid: PropTypes.bool,
     childrenRef: PropTypes.func,
-};
-
-TimeSpan.defaultProps = {
-    disabled: false,
-    isInvalid: false,
-    childrenRef: null,
 };
 
 TimeSpan.displayName = 'TimeSpan';

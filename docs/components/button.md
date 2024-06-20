@@ -38,17 +38,17 @@ import { Button } from 'chayns-components';
 
 The `Button`-component takes the following props:
 
-| Name                                | Type               | Default | Required |
-| ----------------------------------- | ------------------ | ------- | :------: |
-| [children](#children)               | `ReactNode`        |         |    ✓     |
-| [chooseButton](#choosebutton)       | `boolean`          |         |          |
-| [disabled](#disabled)               | `boolean`          |         |          |
-| [onClick](#onclick)                 | `function`         |         |          |
-| [className](#classname)             | `string`           |         |          |
-| [icon](#icon)                       | `string \| object` |         |          |
-| [secondary](#secondary)             | `boolean`          |         |          |
-| [stopPropagation](#stoppropagation) | `boolean`          |         |          |
-| [type](#type)                       | `enum`             |         |          |
+| Name                                | Type               | Default    | Required |
+| ----------------------------------- | ------------------ | ---------- | :------: |
+| [children](#children)               | `ReactNode`        |            |    ✓     |
+| [chooseButton](#choosebutton)       | `boolean`          | `false`    |          |
+| [disabled](#disabled)               | `boolean`          | `false`    |          |
+| [onClick](#onclick)                 | `function`         |            |          |
+| [className](#classname)             | `string`           |            |          |
+| [icon](#icon)                       | `string \| object` |            |          |
+| [secondary](#secondary)             | `boolean`          | `false`    |          |
+| [stopPropagation](#stoppropagation) | `boolean`          | `false`    |          |
+| [type](#type)                       | `enum`             | `'button'` |          |
 
 ### `children`
 

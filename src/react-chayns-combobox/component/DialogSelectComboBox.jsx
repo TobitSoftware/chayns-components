@@ -20,10 +20,10 @@ const DialogSelectComboBox = ({
     className,
     label,
     list,
-    disabled,
+    disabled = false,
     listValue,
     listKey,
-    stopPropagation,
+    stopPropagation = false,
     defaultValue,
     parent,
     onSelect,
@@ -272,16 +272,4 @@ DialogSelectComboBox.propTypes = {
     parent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
     style: PropTypes.object,
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
-
-DialogSelectComboBox.defaultProps = {
-    label: null,
-    className: null,
-    onSelect: null,
-    disabled: false,
-    stopPropagation: false,
-    defaultValue: null,
-    parent: null,
-    style: null,
-    value: null,
 };

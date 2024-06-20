@@ -20,8 +20,8 @@ const SelectListItem = ({
     value,
     className,
     tooltipProps,
-    disabled,
-    name,
+    disabled = false,
+    name = '',
 }) => {
     const { selectListSelectedId, changeListItem, selectListId } =
         useContext(SelectListContext);
@@ -125,17 +125,6 @@ SelectListItem.propTypes = {
      * props will be forwarded.
      */
     tooltipProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-};
-
-SelectListItem.defaultProps = {
-    id: null,
-    htmlId: null,
-    className: '',
-    disabled: false,
-    children: null,
-    name: '',
-    value: null,
-    tooltipProps: null,
 };
 
 SelectListItem.displayName = 'SelectItem';

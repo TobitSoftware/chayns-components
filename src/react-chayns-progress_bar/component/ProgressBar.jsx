@@ -7,19 +7,18 @@ import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import AutoProgressBar from './AutoProgressBar';
+import { isNumber } from '../../utils/is';
 
 /**
  * An animated progress bar that can show an actions progress or an
  * indeterminate state like a loading spinner.
  */
-const ProgressBar = ({ children, value, ready }) => {
+const ProgressBar = ({ children = null, value, ready = false }) => {
     const className = useMemo(
         () =>
             classnames('cc__progress-bar', {
-                'cc__progress-bar--determinate': chayns.utils.isNumber(value),
-                'cc__progress-bar--indeterminate': !chayns.utils.isNumber(
-                    value
-                ),
+                'cc__progress-bar--determinate': isNumber(value),
+                'cc__progress-bar--indeterminate': isNumber(value),
             }),
         [value]
     );
@@ -61,12 +60,6 @@ ProgressBar.propTypes = {
      * and only show its children.
      */
     ready: PropTypes.bool,
-};
-
-ProgressBar.defaultProps = {
-    value: null,
-    children: null,
-    ready: false,
 };
 
 ProgressBar.displayName = 'ProgressBar';

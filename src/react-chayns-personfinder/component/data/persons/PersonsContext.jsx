@@ -145,17 +145,17 @@ const PersonFinderContext = createContext({
 
 const PersonFinderStateProvider = ({
     children,
-    take,
-    enablePersons,
-    enableSites,
-    enableFriends,
-    enableUacGroups,
+    take = 20,
+    enablePersons = true,
+    enableSites = false,
+    enableFriends = true,
+    enableUacGroups = false,
     enableKnownPersons,
-    includeOwn,
+    includeOwn = false,
     uacId,
     reducerFunction,
-    inputValue,
-    addInputToList,
+    inputValue = '',
+    addInputToList = false,
 }) => {
     const [state, dispatch] = useReducer(PersonsReducer, initialState);
     const skipPersons =
@@ -507,21 +507,6 @@ PersonFinderStateProvider.propTypes = {
     reducerFunction: PropTypes.func,
     addInputToList: PropTypes.bool,
     inputValue: PropTypes.string,
-};
-
-PersonFinderStateProvider.defaultProps = {
-    children: null,
-    take: 20,
-    enablePersons: true,
-    enableSites: false,
-    enableFriends: true,
-    enableUacGroups: false,
-    enableKnownPersons: false,
-    includeOwn: false,
-    uacId: null,
-    reducerFunction: null,
-    addInputToList: false,
-    inputValue: '',
 };
 
 export default {

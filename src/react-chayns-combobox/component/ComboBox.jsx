@@ -17,10 +17,10 @@ const ComboBox = ({
     className,
     label,
     list,
-    disabled,
+    disabled = false,
     listValue,
     listKey,
-    stopPropagation,
+    stopPropagation = false,
     defaultValue,
     parent,
     onSelect,
@@ -129,18 +129,6 @@ ComboBox.propTypes = {
      * label`-prop.
      */
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
-
-ComboBox.defaultProps = {
-    label: null,
-    className: null,
-    onSelect: null,
-    disabled: false,
-    stopPropagation: false,
-    defaultValue: null,
-    parent: null,
-    style: null,
-    value: null,
 };
 
 ComboBox.displayName = 'ComboBox';

@@ -20,10 +20,6 @@ WaitCursor.propTypes = {
     style: PropTypes.object,
 };
 
-WaitCursor.defaultProps = {
-    style: null,
-};
-
 WaitCursor.displayName = 'WaitCursor';
 
 export default WaitCursor;

@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ProgressBarDeterminate from './ProgressBarDeterminate';
 import ProgressBarIndeterminate from './ProgressBarIndeterminate';
+import { isNumber } from '../../utils/is';
 
 const AutoProgressBar = ({ value }) => {
-    if (chayns.utils.isNumber(value)) {
+    if (isNumber(value)) {
         return <ProgressBarDeterminate value={value} />;
     }
 
@@ -13,10 +14,6 @@ const AutoProgressBar = ({ value }) => {
 
 AutoProgressBar.propTypes = {
     value: PropTypes.number,
-};
-
-AutoProgressBar.defaultProps = {
-    value: null,
 };
 
 AutoProgressBar.displayName = 'AutoProgressBar';

@@ -10,7 +10,7 @@ const ToggleButton = React.forwardRef((props, ref) => {
     const {
         id,
         style,
-        disabled,
+        disabled = false,
         children,
         label,
         onChange,
@@ -20,7 +20,7 @@ const ToggleButton = React.forwardRef((props, ref) => {
         dangerouslySetLabel,
         labelStyle,
         labelClassName,
-        stopPropagation,
+        stopPropagation = false,
     } = props;
 
     let modifiedLabelStyle = labelStyle;
@@ -80,21 +80,6 @@ ToggleButton.propTypes = {
     disabled: PropTypes.bool,
     dangerouslySetLabel: PropTypes.object,
     stopPropagation: PropTypes.bool,
-};
-
-ToggleButton.defaultProps = {
-    style: null,
-    className: null,
-    label: null,
-    labelClassName: null,
-    labelStyle: null,
-    children: null,
-    onChange: null,
-    checked: undefined,
-    defaultChecked: undefined,
-    disabled: false,
-    dangerouslySetLabel: null,
-    stopPropagation: false,
 };
 
 ToggleButton.displayName = 'ToggleButton';

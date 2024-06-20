@@ -11,7 +11,7 @@ export const HINT_POSITIONS = {
     BOTTOM: 2,
 };
 
-const OpeningTimesHint = ({ content, position }) => (
+const OpeningTimesHint = ({ content = '', position }) => (
     <div
         className={classnames(
             'content__card content__card--warning cc__opening-times__hint',
@@ -33,10 +33,6 @@ OpeningTimesHint.propTypes = {
         HINT_POSITIONS.TOP,
         HINT_POSITIONS.BOTTOM,
     ]).isRequired,
-};
-
-OpeningTimesHint.defaultProps = {
-    content: '',
 };
 
 OpeningTimesHint.displayName = 'OpeningTimesHint';

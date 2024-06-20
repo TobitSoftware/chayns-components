@@ -4,7 +4,7 @@ import './ResultSelection.scss';
 
 const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-const ResultSelection = ({ text, search }) => {
+const ResultSelection = ({ text = '', search = '' }) => {
     const regexp = new RegExp(escapeRegExp(search), 'gi');
     const mismatches = text.split(regexp);
     const matches = text.match(regexp);
@@ -35,11 +35,6 @@ const ResultSelection = ({ text, search }) => {
 ResultSelection.propTypes = {
     text: PropTypes.string,
     search: PropTypes.string,
-};
-
-ResultSelection.defaultProps = {
-    text: '',
-    search: '',
 };
 
 ResultSelection.displayName = 'ResultSelection';

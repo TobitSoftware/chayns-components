@@ -8,8 +8,8 @@ const SimpleWrapperContext = createContext({
 
 const SimpleWrapperStateProvider = ({
     children,
-    data,
-    hasMore,
+    data = [],
+    hasMore = false,
     onLoadMore,
     onInput,
 }) => {
@@ -62,14 +62,6 @@ SimpleWrapperStateProvider.propTypes = {
     hasMore: PropTypes.bool,
     onLoadMore: PropTypes.func,
     onInput: PropTypes.func,
-};
-
-SimpleWrapperStateProvider.defaultProps = {
-    children: null,
-    data: [],
-    hasMore: false,
-    onLoadMore: null,
-    onInput: null,
 };
 
 export default (objectMapping) => ({

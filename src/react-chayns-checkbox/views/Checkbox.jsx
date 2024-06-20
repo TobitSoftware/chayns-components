@@ -9,7 +9,7 @@ const Checkbox = React.forwardRef((props, ref) => {
     const {
         id,
         style,
-        disabled,
+        disabled = false,
         children,
         label,
         onChange,
@@ -19,7 +19,7 @@ const Checkbox = React.forwardRef((props, ref) => {
         dangerouslySetLabel,
         labelStyle,
         labelClassName,
-        stopPropagation,
+        stopPropagation = false,
     } = props;
 
     let modifiedLabelStyle = labelStyle;
@@ -85,21 +85,6 @@ Checkbox.propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     dangerouslySetLabel: PropTypes.object,
     stopPropagation: PropTypes.bool,
-};
-
-Checkbox.defaultProps = {
-    style: null,
-    className: null,
-    label: null,
-    labelClassName: null,
-    labelStyle: null,
-    children: null,
-    onChange: null,
-    checked: undefined,
-    defaultChecked: undefined,
-    disabled: false,
-    dangerouslySetLabel: null,
-    stopPropagation: false,
 };
 
 Checkbox.displayName = 'Checkbox';

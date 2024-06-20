@@ -9,8 +9,8 @@ import './colorSelection.scss';
 const ColorSelection = ({
     color,
     customColorsArray,
-    showCustomColors,
-    showGlobalColors,
+    showCustomColors = false,
+    showGlobalColors = false,
     onChange,
     onCreateCustomColor,
     onRemoveCustomColor,
@@ -68,8 +68,7 @@ const ColorSelection = ({
         }
         if (showCustomColors) {
             colorsArr.push(
-                ...customColorsArray
-                    .map((c) => hsvToHexString(c).toLowerCase())
+                ...customColorsArray.map((c) => hsvToHexString(c).toLowerCase())
             );
         }
         return colorsArr.filter((c, i, arr) => arr.indexOf(c) === i);
@@ -92,10 +91,7 @@ const ColorSelection = ({
         <div className="cc_color-selection">
             <div className="cc_color-selection--inner scrollbar">
                 {colors.map((c) => (
-                    <div
-                        key={c}
-                        className="cc_color-selection--wrapper"
-                    >
+                    <div key={c} className="cc_color-selection--wrapper">
                         {activeColorHex === c && (
                             <div className="cc_color-selection--active" />
                         )}
@@ -193,12 +189,6 @@ ColorSelection.propTypes = {
     onChange: PropTypes.func.isRequired,
     onCreateCustomColor: PropTypes.func.isRequired,
     onRemoveCustomColor: PropTypes.func.isRequired,
-};
-
-ColorSelection.defaultProps = {
-    customColorsArray: null,
-    showCustomColors: false,
-    showGlobalColors: false,
 };
 
 export default ColorSelection;

@@ -1,14 +1,23 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-const ComboBoxItem = ({ id, value, onSelect, setShowOverlay, shouldStopPropagation }) => {
-    const handleClick = useCallback((ev) => {
-        onSelect(id);
-        setShowOverlay(false);
-        if (shouldStopPropagation) {
-            ev.stopPropagation();
-        }
-    }, [id, onSelect, setShowOverlay, shouldStopPropagation]);
+const ComboBoxItem = ({
+    id,
+    value,
+    onSelect,
+    setShowOverlay,
+    shouldStopPropagation = false,
+}) => {
+    const handleClick = useCallback(
+        (ev) => {
+            onSelect(id);
+            setShowOverlay(false);
+            if (shouldStopPropagation) {
+                ev.stopPropagation();
+            }
+        },
+        [id, onSelect, setShowOverlay, shouldStopPropagation]
+    );
 
     return (
         <div
@@ -20,7 +29,7 @@ const ComboBoxItem = ({ id, value, onSelect, setShowOverlay, shouldStopPropagati
             {value}
         </div>
     );
-}
+};
 
 ComboBoxItem.propTypes = {
     id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
@@ -28,10 +37,6 @@ ComboBoxItem.propTypes = {
     onSelect: PropTypes.func.isRequired,
     setShowOverlay: PropTypes.func.isRequired,
     shouldStopPropagation: PropTypes.bool,
-};
-
-ComboBoxItem.defaultProps = {
-    shouldStopPropagation: false,
 };
 
 export default ComboBoxItem;
