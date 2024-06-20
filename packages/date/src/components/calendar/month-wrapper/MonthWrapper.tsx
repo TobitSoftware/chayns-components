@@ -1,7 +1,6 @@
-import { useElementSize } from '@chayns-components/core';
 import type { Locale } from 'date-fns';
 import type { MotionProps } from 'framer-motion';
-import React, { FC, useEffect, useMemo, useRef, useState, type ReactElement } from 'react';
+import React, { FC, useEffect, useMemo, useState, type ReactElement } from 'react';
 import type { Categories, HighlightedDates } from '../../../types/calendar';
 import { getMonthAndYear, getNewDate } from '../../../utils/calendar';
 import Month from './month/Month';
@@ -35,14 +34,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     const [content, setContent] = useState<ReactElement[]>();
     const [prevSelectedDate, setPrevSelectedDate] = useState<Date>();
 
-    const monthWrapperRef = useRef<HTMLDivElement>(null);
-
-    const monthWrapperSize = useElementSize(monthWrapperRef);
-
-    const monthHeight = useMemo(
-        () => (monthWrapperSize ? monthWrapperSize.width / (shouldRenderTwo ? 2 : 1) : 0),
-        [monthWrapperSize, shouldRenderTwo],
-    );
+    const monthHeight = useMemo(() => width / (shouldRenderTwo ? 2 : 1), [width, shouldRenderTwo]);
 
     useEffect(() => {
         setContent(undefined);
@@ -173,7 +165,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     }, [direction, shouldRenderTwo]);
 
     return (
-        <StyledMonthWrapper $height={shouldRenderTwo ? width / 2 : width} ref={monthWrapperRef}>
+        <StyledMonthWrapper $height={monthHeight} $width={width}>
             <StyledMotionWrapper
                 animate={animate}
                 transition={{
