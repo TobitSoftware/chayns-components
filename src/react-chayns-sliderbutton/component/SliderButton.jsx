@@ -7,21 +7,34 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useRef, useState } from 'react';
 import './SliderButton.scss';
 
+const defaultItems = [
+    {
+        id: 0,
+        text: 'Auf',
+    },
+    {
+        id: 1,
+        text: 'Stopp',
+    },
+    {
+        id: 2,
+        text: 'Zu',
+    },
+];
+
 /**
  * A linear set of buttons which are mutually exclusive.
  */
-const SliderButton = (props) => {
-    const {
-        className,
-        style,
-        items,
-        onChange,
-        onDragStop,
-        onDragStart,
-        selectedItemId,
-        disabled,
-    } = props;
-
+const SliderButton = ({
+    className,
+    style,
+    items = defaultItems,
+    onChange,
+    onDragStop,
+    onDragStart,
+    selectedItemId = 0,
+    disabled = false,
+}) => {
     const [markerPosX, setMarkerPosX] = useState(0);
     const [dragStartPosX, setDragStartPosX] = useState(null);
     const [dragStartMarkerPosX, setDragStartMarkerPosX] = useState(null);
@@ -275,30 +288,6 @@ SliderButton.propTypes = {
      * in a disabled style.
      */
     disabled: PropTypes.bool,
-};
-
-SliderButton.defaultProps = {
-    className: null,
-    style: null,
-    items: [
-        {
-            id: 0,
-            text: 'Auf',
-        },
-        {
-            id: 1,
-            text: 'Stopp',
-        },
-        {
-            id: 2,
-            text: 'Zu',
-        },
-    ],
-    onChange: null,
-    onDragStop: null,
-    onDragStart: null,
-    selectedItemId: 0,
-    disabled: false,
 };
 
 SliderButton.displayName = 'SliderButton';

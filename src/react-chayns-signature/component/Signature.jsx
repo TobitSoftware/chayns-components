@@ -29,11 +29,11 @@ const Signature = forwardRef(
             buttonText,
             buttonWrapperClassName,
             onSubscribe,
-            skipLoadAndSave,
-            disabled,
+            skipLoadAndSave = false,
+            disabled = false,
             onEdit,
-            forceInitialShow,
-            showDeleteIcon,
+            forceInitialShow = false,
+            showDeleteIcon = false,
         },
         ref
     ) => {
@@ -214,17 +214,6 @@ Signature.propTypes = {
      * whether the icon to delete the signature should be shown
      */
     showDeleteIcon: PropTypes.bool,
-};
-
-Signature.defaultProps = {
-    buttonText: null,
-    buttonWrapperClassName: null,
-    disabled: false,
-    skipLoadAndSave: false,
-    onSubscribe: null,
-    onEdit: null,
-    forceInitialShow: false,
-    showDeleteIcon: false,
 };
 
 Signature.displayName = 'Signature';

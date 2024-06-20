@@ -2,7 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import Badge from '../../react-chayns-badge/component/Badge';
 
-const SetupItemRight = ({ right, ready }) => {
+const SetupItemRight = ({ right, ready = false }) => {
     const getReady = () => {
         if (right) {
             if (right.complete) {
@@ -50,11 +50,6 @@ SetupItemRight.propTypes = {
             notComplete: PropTypes.node.isRequired,
         }).isRequired,
     ]),
-};
-
-SetupItemRight.defaultProps = {
-    ready: false,
-    right: null,
 };
 
 export default SetupItemRight;

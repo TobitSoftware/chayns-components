@@ -22,7 +22,7 @@ const UacGroupContext = createContext({
     value: null,
 });
 
-const UacGroupStateProvider = ({ children }) => {
+const UacGroupStateProvider = ({ children = null }) => {
     const [data, dispatch] = useReducer(DefaultReducer, initialState);
 
     useEffect(() => {
@@ -62,10 +62,6 @@ UacGroupStateProvider.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node,
     ]),
-};
-
-UacGroupStateProvider.defaultProps = {
-    children: null,
 };
 
 export default {

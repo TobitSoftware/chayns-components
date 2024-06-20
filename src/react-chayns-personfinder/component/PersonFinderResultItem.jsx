@@ -14,13 +14,13 @@ const PersonFinderResultItem = ({
     data,
     orm,
     isFocused,
-    roundIcons,
-    hideFriendsIcon,
-    showCheckbox,
-    tags,
+    roundIcons = false,
+    hideFriendsIcon = false,
+    showCheckbox = false,
+    tags = [],
     onRemoveTag,
-    inputValue,
-    hideVerifiedIcon,
+    inputValue = '',
+    hideVerifiedIcon = false,
 }) => {
     const selectedValue = tags?.find(
         ({ value }) => value[orm.identifier] === data[orm.identifier]
@@ -140,15 +140,6 @@ PersonFinderResultItem.propTypes = {
     onRemoveTag: PropTypes.func.isRequired,
     inputValue: PropTypes.string,
     hideVerifiedIcon: PropTypes.bool,
-};
-
-PersonFinderResultItem.defaultProps = {
-    roundIcons: false,
-    hideFriendsIcon: false,
-    tags: [],
-    showCheckbox: false,
-    inputValue: '',
-    hideVerifiedIcon: false,
 };
 
 PersonFinderResultItem.displayName = 'PersonFinderResultItem';

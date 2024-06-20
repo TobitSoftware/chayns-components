@@ -5,21 +5,21 @@ import PersonFinderResultItem from './PersonFinderResultItem';
 import WaitCursor from './WaitCursor';
 
 const ResultItemList = ({
-    data,
-    hasMore,
+    data = [],
+    hasMore = false,
     orm,
-    group,
-    showWaitCursor,
+    group = 'default',
+    showWaitCursor = false,
     onLoadMore,
     onClick,
     focusIndex,
-    roundIcons,
-    hideFriendsIcon,
+    roundIcons = false,
+    hideFriendsIcon = false,
     onRemoveTag,
-    showCheckbox,
-    tags,
-    inputValue,
-    hideVerifiedIcon,
+    showCheckbox = false,
+    tags = [],
+    inputValue = '',
+    hideVerifiedIcon = false,
 }) => {
     if (!data || data.length === 0) {
         return null;
@@ -85,22 +85,6 @@ ResultItemList.propTypes = {
     showCheckbox: PropTypes.bool,
     inputValue: PropTypes.string,
     hideVerifiedIcon: PropTypes.bool,
-};
-
-ResultItemList.defaultProps = {
-    data: [],
-    showWaitCursor: false,
-    hasMore: false,
-    onClick: null,
-    group: 'default',
-    onLoadMore: null,
-    focusIndex: null,
-    roundIcons: false,
-    hideFriendsIcon: false,
-    tags: [],
-    showCheckbox: false,
-    inputValue: '',
-    hideVerifiedIcon: false,
 };
 
 ResultItemList.displayName = 'ResultItemList';

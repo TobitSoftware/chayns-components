@@ -20,9 +20,9 @@ import TextString from '../../react-chayns-textstring/component/TextString';
  */
 const SharingBar = ({
     link: linkProp,
-    linkText,
+    linkText = '',
     className,
-    stopPropagation,
+    stopPropagation = false,
     style,
     children,
 }) => {
@@ -146,15 +146,6 @@ SharingBar.propTypes = {
      * The children nodes of the `SharingBar`.
      */
     children: PropTypes.node,
-};
-
-SharingBar.defaultProps = {
-    link: null,
-    linkText: '',
-    className: null,
-    stopPropagation: false,
-    style: null,
-    children: null,
 };
 
 SharingBar.displayName = 'SharingBar';

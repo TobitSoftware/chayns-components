@@ -5,21 +5,21 @@ import ResultItemList from './ResultItemList';
 import PersonsContext from './data/persons/PersonsContext';
 
 const PersonFinderResults = ({
-    data,
-    tags,
+    data = [],
+    tags = [],
     orm,
-    value: inputValue,
-    hasMore,
+    value: inputValue = '',
+    hasMore = false,
     onLoadMore,
-    showWaitCursor,
+    showWaitCursor = false,
     onSelect,
     onRemoveTag,
     focusIndex,
-    noBackground,
-    filterSelected,
-    hideFriendsIcon,
-    showCheckbox,
-    hideVerifiedIcon,
+    noBackground = false,
+    filterSelected = false,
+    hideFriendsIcon = false,
+    showCheckbox = false,
+    hideVerifiedIcon = false,
 }) => {
     const handleClick = useCallback(
         (value) => {
@@ -201,21 +201,6 @@ PersonFinderResults.propTypes = {
     showCheckbox: PropTypes.bool,
     onRemoveTag: PropTypes.func.isRequired,
     hideVerifiedIcon: PropTypes.bool,
-};
-
-PersonFinderResults.defaultProps = {
-    data: [],
-    tags: [],
-    value: '',
-    onSelect: null,
-    hasMore: false,
-    showWaitCursor: false,
-    focusIndex: null,
-    noBackground: false,
-    filterSelected: false,
-    hideFriendsIcon: false,
-    showCheckbox: false,
-    hideVerifiedIcon: false,
 };
 
 PersonFinderResults.displayName = 'PersonFinderResults';

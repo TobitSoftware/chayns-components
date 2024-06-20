@@ -23,16 +23,16 @@ const TextArea = ({
     className,
     placeholder,
     defaultValue,
-    design,
+    design = TextArea.DEFAULT_DESIGN,
     onChange,
     autogrow,
     onBlur,
     onKeyUp,
     onKeyDown,
     value,
-    disabled,
+    disabled = false,
     required,
-    stopPropagation,
+    stopPropagation = false,
     reference,
     ...props
 }) => {
@@ -236,24 +236,6 @@ TextArea.propTypes = {
      * elements.
      */
     stopPropagation: PropTypes.bool,
-};
-
-TextArea.defaultProps = {
-    style: null,
-    className: null,
-    placeholder: null,
-    design: TextArea.DEFAULT_DESIGN,
-    required: null,
-    onChange: null,
-    onBlur: null,
-    defaultValue: undefined,
-    value: undefined,
-    onKeyUp: null,
-    onKeyDown: null,
-    autogrow: null,
-    reference: null,
-    disabled: false,
-    stopPropagation: false,
 };
 
 TextArea.displayName = 'TextArea';

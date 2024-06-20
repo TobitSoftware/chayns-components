@@ -6,7 +6,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
-const VerificationIcon = ({ name, design, verified }) => {
+const VerificationIcon = ({
+    name,
+    design = VerificationIcon.BLUE_DESIGN,
+    verified = false,
+}) => {
     if (!verified) {
         return name || null;
     }
@@ -49,11 +53,6 @@ VerificationIcon.propTypes = {
      * Whether the user is verified
      */
     verified: PropTypes.bool,
-};
-
-VerificationIcon.defaultProps = {
-    design: VerificationIcon.BLUE_DESIGN,
-    verified: false,
 };
 
 export default VerificationIcon;

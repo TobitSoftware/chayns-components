@@ -15,22 +15,23 @@ import { isNumber, isString } from '../../utils/is';
  */
 const SearchBox = ({
     list,
-    disabled,
-    listValue,
-    listKey,
+    disabled = false,
+    listValue = 'value',
+    listKey = 'key',
     sortKey,
     defaultValue,
     onSelect,
     value: valueProp,
-    stopPropagation,
-    showListWithoutInput,
+    stopPropagation = false,
+    showListWithoutInput = false,
     inputValue: inputValueProp,
     inputDefaultValue,
     onChange,
     className,
-    autoSelectFirst,
-    highlightInputInResult,
-    addInputToList,
+    autoSelectFirst = false,
+    highlightInputInResult = true,
+    addInputToList = false,
+    hasOpenCloseIcon = false,
     emptyKey,
     onBlur,
     ...otherProps
@@ -349,7 +350,7 @@ const SearchBox = ({
             onBlur={() => {
                 // return filtered list on onBlur event
                 if (typeof onBlur === 'function') {
-                    onBlur(filteredList)
+                    onBlur(filteredList);
                 }
 
                 if (addInputToList) {
@@ -372,6 +373,7 @@ const SearchBox = ({
                 }
             }}
             {...otherProps}
+            hasOpenCloseIcon={hasOpenCloseIcon}
             ref={inputBoxRef}
             disabled={disabled}
             className={classNames(className, {
@@ -383,7 +385,8 @@ const SearchBox = ({
             }}
             emptyValue={getValue(getItemByKey(emptyKey))}
         >
-            {filteredList && filteredList.length > 0 &&
+            {filteredList &&
+                filteredList.length > 0 &&
                 filteredList.map((item, index) => (
                     <div
                         key={getKey(item)}
@@ -531,31 +534,6 @@ SearchBox.propTypes = {
      * A callback that will be invoked when the user leaves the input.
      */
     onBlur: PropTypes.func,
-};
-
-SearchBox.defaultProps = {
-    className: null,
-    onSelect: null,
-    disabled: false,
-    stopPropagation: false,
-    defaultValue: null,
-    parent: null,
-    style: null,
-    value: null,
-    inputValue: null,
-    showListWithoutInput: false,
-    inputDefaultValue: null,
-    onChange: null,
-    list: null,
-    autoSelectFirst: false,
-    highlightInputInResult: true,
-    addInputToList: false,
-    listKey: 'key',
-    listValue: 'value',
-    sortKey: null,
-    emptyKey: null,
-    hasOpenCloseIcon: false,
-    onBlur: null,
 };
 
 SearchBox.displayName = 'SearchBox';

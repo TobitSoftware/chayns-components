@@ -12,10 +12,10 @@ const ListItemHeader = ({
     className,
     left,
     right,
-    circle,
+    circle = false,
     hoverItem,
     onLongPress,
-    longPressTimeout,
+    longPressTimeout = 450,
     onMouseDown,
     onMouseMove,
     onMouseUp,
@@ -31,7 +31,7 @@ const ListItemHeader = ({
     defaultOpen,
     images,
     imageBorderColor,
-    openImageOnClick,
+    openImageOnClick = 'rgba(var(--chayns-color-rgb--009), .08)',
     // eslint-disable-next-line react/prop-types
     headMultiline,
     // eslint-disable-next-line react/prop-types
@@ -250,35 +250,6 @@ ListItemHeader.propTypes = {
     headerProps: PropTypes.object,
     defaultOpen: PropTypes.bool,
     imageBorderColor: PropTypes.string,
-};
-
-ListItemHeader.defaultProps = {
-    subtitle: null,
-    image: null,
-    images: null,
-    openImageOnClick: false,
-    icon: null,
-    className: null,
-    left: null,
-    right: null,
-    circle: false,
-    hoverItem: null,
-    onLongPress: null,
-    onMouseDown: null,
-    onMouseMove: null,
-    onMouseUp: null,
-    onTouchStart: null,
-    onTouchMove: null,
-    onTouchEnd: null,
-    onTouchCancel: null,
-    onClick: null,
-    longPressTimeout: 450,
-    notExpandable: null,
-    noContentClass: null,
-    onOpen: null,
-    headerProps: null,
-    defaultOpen: null,
-    imageBorderColor: 'rgba(var(--chayns-color-rgb--009), .08)',
 };
 
 ListItemHeader.displayName = 'ListItemHeader';

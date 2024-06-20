@@ -16,7 +16,7 @@ import Icon from '../../react-chayns-icon/component/Icon';
 
 const InputBox = React.forwardRef((props, ref) => {
     const {
-        inputComponent: InputComponent,
+        inputComponent: InputComponent = Input,
         children,
         parent,
         inputRef,
@@ -26,9 +26,9 @@ const InputBox = React.forwardRef((props, ref) => {
         boxClassName,
         style,
         onBlur,
-        hasOpenCloseIcon,
-        renderInline,
-        hideInput,
+        hasOpenCloseIcon = false,
+        renderInline = false,
+        hideInput = false,
         ...restProps
     } = props;
 
@@ -54,10 +54,14 @@ const InputBox = React.forwardRef((props, ref) => {
             setRect({
                 top:
                     wrapperRect.top -
-                    (isParentRelative ? (parentRect?.top ?? 0) - parentElement.scrollTop : 0),
+                    (isParentRelative
+                        ? (parentRect?.top ?? 0) - parentElement.scrollTop
+                        : 0),
                 bottom:
                     wrapperRect.bottom -
-                    (isParentRelative ? (parentRect?.top ?? 0) - parentElement.scrollTop : 0),
+                    (isParentRelative
+                        ? (parentRect?.top ?? 0) - parentElement.scrollTop
+                        : 0),
                 left:
                     wrapperRect.left -
                     (isParentRelative ? parentRect?.left ?? 0 : 0),
@@ -123,7 +127,7 @@ const InputBox = React.forwardRef((props, ref) => {
 
         document.addEventListener('click', handleBlur);
         document.addEventListener('mousedown', handleBlur);
-        document.addEventListener('touchstart', handleTouchStart)
+        document.addEventListener('touchstart', handleTouchStart);
         document.addEventListener('touchend', handleTouchEnd);
         document.addEventListener('mousemove', handleTouchEnd);
 
@@ -291,22 +295,6 @@ InputBox.propTypes = {
     hasOpenCloseIcon: PropTypes.bool,
     renderInline: PropTypes.bool,
     hideInput: PropTypes.bool,
-};
-
-InputBox.defaultProps = {
-    onBlur: null,
-    inputComponent: Input,
-    parent: null,
-    onFocus: null,
-    children: null,
-    className: null,
-    boxClassName: null,
-    inputRef: null,
-    overlayProps: null,
-    style: null,
-    hasOpenCloseIcon: false,
-    renderInline: false,
-    hideInput: false,
 };
 
 InputBox.displayName = 'InputBox';

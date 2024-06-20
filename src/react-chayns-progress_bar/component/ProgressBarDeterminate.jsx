@@ -14,8 +14,6 @@ ProgressBarDeterminate.propTypes = {
     value: PropTypes.number.isRequired,
 };
 
-ProgressBarDeterminate.defaultProps = {};
-
 ProgressBarDeterminate.displayName = 'ProgressBarDeterminate';
 
 export default ProgressBarDeterminate;

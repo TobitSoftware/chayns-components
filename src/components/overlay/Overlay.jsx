@@ -45,8 +45,4 @@ Overlay.propTypes = {
     children: node.isRequired,
 };
 
-Overlay.defaultProps = {
-    parent: null,
-};
-
 export default Overlay;

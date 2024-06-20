@@ -14,7 +14,14 @@ let checkboxId = 1;
  * selecting options. Can be styled as a switch, a visual toggle between two
  * mutually exclusive states — on and off.
  */
-const Checkbox = ({ id, toggleButton, onChange, disabled, ...props }) => {
+const Checkbox = ({
+    id,
+    toggleButton = false,
+    disabled = false,
+    stopPropagation = false,
+    onChange,
+    ...props
+}) => {
     const idRef = useRef(`cc_checkbox_${checkboxId++}`);
 
     const handleChange = (e) => {
@@ -32,6 +39,7 @@ const Checkbox = ({ id, toggleButton, onChange, disabled, ...props }) => {
                 id={currentId}
                 disabled={disabled}
                 onChange={handleChange}
+                stopPropagation={stopPropagation}
             />
         );
     }
@@ -42,6 +50,7 @@ const Checkbox = ({ id, toggleButton, onChange, disabled, ...props }) => {
             id={currentId}
             disabled={disabled}
             onChange={handleChange}
+            stopPropagation={stopPropagation}
         />
     );
 };
@@ -132,23 +141,6 @@ Checkbox.propTypes = {
      * The HTML id of the input element.
      */
     id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-};
-
-Checkbox.defaultProps = {
-    style: null,
-    className: null,
-    label: null,
-    labelClassName: null,
-    labelStyle: null,
-    children: null,
-    onChange: null,
-    toggleButton: false,
-    checked: undefined,
-    defaultChecked: undefined,
-    disabled: false,
-    dangerouslySetLabel: null,
-    stopPropagation: false,
-    id: null,
 };
 
 Checkbox.displayName = 'Checkbox';

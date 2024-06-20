@@ -11,10 +11,10 @@ const Month = ({
     endDate,
     selected,
     activated,
-    highlighted,
+    highlighted = false,
     categories,
     circleColor,
-    activateAll,
+    activateAll = true,
 }) => (
     <div className={`month__item ${className || ''}`}>
         <div className="month__title">{title || ''}</div>
@@ -69,20 +69,6 @@ Month.propTypes = {
         })
     ),
     circleColor: PropTypes.string,
-};
-
-Month.defaultProps = {
-    title: '',
-    className: '',
-    selected: null,
-    activated: null,
-    startDate: null,
-    endDate: null,
-    highlighted: false,
-    categories: null,
-    circleColor: null,
-    activateAll: true,
-    onDateSelect: null,
 };
 
 Month.displayName = 'Month';

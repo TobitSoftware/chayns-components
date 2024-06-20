@@ -21,17 +21,17 @@ const FilterButton = ({
     icon,
     label,
     count,
-    checked,
+    checked = false,
     onChange,
     name,
     value,
     className,
     style,
     id,
-    disabled,
-    stopPropagation,
-    small,
-    rectangular,
+    disabled = false,
+    stopPropagation = false,
+    small = false,
+    rectangular = false,
 }) => {
     const htmlId = useRef(id || `${PREFIX}${(currentId += 1)}`);
 
@@ -179,23 +179,6 @@ FilterButton.propTypes = {
      * Changes the filter button shape to that of a button.
      */
     rectangular: PropTypes.bool,
-};
-
-FilterButton.defaultProps = {
-    label: undefined,
-    count: undefined,
-    icon: undefined,
-    onChange: undefined,
-    checked: false,
-    name: undefined,
-    value: undefined,
-    className: undefined,
-    style: undefined,
-    id: undefined,
-    disabled: false,
-    stopPropagation: false,
-    small: false,
-    rectangular: false,
 };
 
 FilterButton.displayName = 'FilterButton';

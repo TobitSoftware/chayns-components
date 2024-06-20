@@ -11,12 +11,12 @@ const ExpandableListHeader = ({
     image,
     icon,
     onClick,
-    hideIndicator,
+    hideIndicator = false,
     right,
     style,
     headerProps,
     open,
-    headMultiline,
+    headMultiline = false,
     className,
     ...props
 }) => {
@@ -76,20 +76,6 @@ ExpandableListHeader.propTypes = {
     open: PropTypes.bool,
     headMultiline: PropTypes.bool,
     className: PropTypes.string,
-};
-
-ExpandableListHeader.defaultProps = {
-    image: null,
-    icon: null,
-    subtitle: null,
-    onClick: null,
-    hideIndicator: false,
-    right: null,
-    style: null,
-    headerProps: null,
-    open: null,
-    headMultiline: false,
-    className: null,
 };
 
 ExpandableListHeader.displayName = 'ExpandableListHeader';

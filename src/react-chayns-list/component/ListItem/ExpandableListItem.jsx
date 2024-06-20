@@ -9,14 +9,14 @@ import { isFunction } from '../../../utils/is';
 
 const ExpandableListItem = ({ children, onClick, ...props }) => {
     const {
-        noContentClass,
+        noContentClass = false,
         className,
         headerClassName,
         open,
         style,
         onOpen,
         onClose,
-        defaultOpen,
+        defaultOpen = false,
     } = props;
 
     return (
@@ -69,19 +69,6 @@ ExpandableListItem.propTypes = {
     onClick: PropTypes.func,
     defaultOpen: PropTypes.bool,
     headMultiline: PropTypes.bool,
-};
-
-ExpandableListItem.defaultProps = {
-    noContentClass: false,
-    className: null,
-    headerClassName: null,
-    open: null,
-    style: null,
-    onOpen: null,
-    onClose: null,
-    onClick: null,
-    defaultOpen: false,
-    headMultiline: false,
 };
 
 ExpandableListItem.displayName = 'ExpandableListItem';

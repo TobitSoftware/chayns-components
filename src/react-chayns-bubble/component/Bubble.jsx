@@ -13,74 +13,80 @@ let currentId = 0;
  * A floating bubble that is primarily used to power the `ContextMenu` and
  * `Tooltip` components.
  */
-const Bubble = React.forwardRef((props, ref) => {
-    const {
-        position,
-        parent,
-        topDivStyle,
-        onMouseEnter,
-        onMouseLeave,
-        className,
-        children,
-        style,
-        coordinates,
-    } = props;
+const Bubble = React.forwardRef(
+    (
+        {
+            position = Bubble.position.TOP_LEFT,
+            parent,
+            topDivStyle,
+            onMouseEnter,
+            onMouseLeave,
+            className,
+            children,
+            style,
+            coordinates,
+        },
+        ref
+    ) => {
+        const bubbleRef = useRef();
+        const [key] = useState(() => `cc__bubble${++currentId}`);
 
-    const bubbleRef = useRef();
-    const [key] = useState(() => `cc__bubble${++currentId}`);
+        const timeoutRef = useRef();
 
-    const timeoutRef = useRef();
+        useEffect(() => () => clearTimeout(timeoutRef.current), []);
 
-    useEffect(() => () => clearTimeout(timeoutRef.current), []);
+        const [isActive, setIsActive] = useState(false);
+        const [isHidden, setIsHidden] = useState(true);
 
-    const [isActive, setIsActive] = useState(false);
-    const [isHidden, setIsHidden] = useState(true);
+        useImperativeHandle(
+            ref,
+            () => ({
+                show() {
+                    setIsHidden(false);
+                    clearTimeout(timeoutRef.current);
+                    timeoutRef.current = setTimeout(() => setIsActive(true));
+                },
+                hide() {
+                    setIsActive(false);
+                    clearTimeout(timeoutRef.current);
+                    timeoutRef.current = setTimeout(
+                        () => setIsHidden(true),
+                        500
+                    );
+                },
+            }),
+            []
+        );
 
-    useImperativeHandle(
-        ref,
-        () => ({
-            show() {
-                setIsHidden(false);
-                clearTimeout(timeoutRef.current);
-                timeoutRef.current = setTimeout(() => setIsActive(true));
-            },
-            hide() {
-                setIsActive(false);
-                clearTimeout(timeoutRef.current);
-                timeoutRef.current = setTimeout(() => setIsHidden(true), 500);
-            },
-        }),
-        []
-    );
+        const bubbleClasses = classNames(
+            `cc__bubble cc__bubble--position${position}`,
+            isActive && 'cc__bubble--active',
+            isHidden && 'cc__bubble--hide'
+        );
 
-    const bubbleClasses = classNames(
-        `cc__bubble cc__bubble--position${position}`,
-        isActive && 'cc__bubble--active',
-        isHidden && 'cc__bubble--hide'
-    );
+        const { x, y } = coordinates;
 
-    const { x, y } = coordinates;
-
-    return (
-        <TappPortal parent={parent}>
-            <div
-                className={bubbleClasses}
-                style={{ top: `${y}px`, left: `${x}px`, ...topDivStyle }}
-                ref={bubbleRef}
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-                key={key}
-            >
+        return (
+            <TappPortal parent={parent}>
                 <div
-                    className={classNames('cc__bubble__overlay', className)}
-                    style={style}
+                    className={bubbleClasses}
+                    style={{ top: `${y}px`, left: `${x}px`, ...topDivStyle }}
+                    ref={bubbleRef}
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                    key={key}
                 >
-                    {children}
+                    <div
+                        className={classNames('cc__bubble__overlay', className)}
+                        style={style}
+                    >
+                        {children}
+                    </div>
                 </div>
-            </div>
-        </TappPortal>
-    );
-});
+            </TappPortal>
+        );
+    }
+);
 
 Bubble.position = {
     TOP_LEFT: 0,
@@ -157,18 +163,6 @@ Bubble.propTypes = {
     topDivStyle: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
-};
-
-Bubble.defaultProps = {
-    className: null,
-    style: null,
-    children: null,
-    position: 0,
-    parent: null,
-    coordinates: null,
-    onMouseEnter: null,
-    onMouseLeave: null,
-    topDivStyle: null,
 };
 
 Bubble.displayName = 'Bubble';
