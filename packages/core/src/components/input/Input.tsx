@@ -29,7 +29,6 @@ import {
     StyledInputLabel,
     StyledInputRightElement,
     StyledMotionInputClearIcon,
-    StyledMotionInputElement,
     StyledMotionInputLabelWrapper,
 } from './Input.styles';
 
@@ -90,10 +89,6 @@ export type InputProps = {
      */
     placeholder?: string;
     /**
-     * Element to be displayed next to or instead of the "placeholder"
-     */
-    placeholderElement?: ReactNode;
-    /**
      * An element that should be displayed on the right side of the Input.
      */
     rightElement?: ReactElement;
@@ -138,7 +133,6 @@ const Input = forwardRef<InputRef, InputProps>(
             onFocus,
             onKeyDown,
             placeholder,
-            placeholderElement,
             rightElement,
             shouldShowOnlyBottomBorder,
             shouldRemainPlaceholder = false,
@@ -222,8 +216,8 @@ const Input = forwardRef<InputRef, InputProps>(
                     : { bottom: -10, right: -6 };
             }
 
-            return { left: placeholderElement ? 2 : -1 };
-        }, [hasValue, placeholderElement, shouldRemainPlaceholder, shouldShowOnlyBottomBorder]);
+            return { left: -1 };
+        }, [hasValue, shouldRemainPlaceholder, shouldShowOnlyBottomBorder]);
 
         return (
             <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
@@ -266,20 +260,6 @@ const Input = forwardRef<InputRef, InputProps>(
                             style={{ ...labelPosition }}
                             transition={{ type: 'tween', duration: 0.1 }}
                         >
-                            <StyledMotionInputElement
-                                animate={
-                                    hasValue &&
-                                    !shouldShowOnlyBottomBorder &&
-                                    !shouldRemainPlaceholder
-                                        ? { scale: 0.4, x: '6px', y: '1px' }
-                                        : { scale: 1 }
-                                }
-                                initial={false}
-                                layout
-                                transition={{ type: 'tween', duration: 0.1 }}
-                            >
-                                {placeholderElement}
-                            </StyledMotionInputElement>
                             <StyledInputLabel $isInvalid={isInvalid}>
                                 {placeholder}
                             </StyledInputLabel>

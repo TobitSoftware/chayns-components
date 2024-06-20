@@ -14,13 +14,7 @@ const Template: StoryFn<typeof Input> = (args) => <Input {...args} />;
 
 export const General = Template.bind({});
 
-export const WithPlaceholderElement = Template.bind({});
-
 export const WithRightElement = Template.bind({});
-
-WithPlaceholderElement.args = {
-    placeholderElement: <Icon icons={['fa fa-search']} />,
-};
 
 WithRightElement.args = {
     rightElement: (
