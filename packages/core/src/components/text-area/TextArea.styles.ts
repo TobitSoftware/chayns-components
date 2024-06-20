@@ -86,4 +86,5 @@ export const StyledTextAreaLabel = styled.label<StyledTextAreaLabelProps>`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: ${({ theme }: StyledTextAreaLabelProps) => theme['006']};
 `;
