@@ -1,5 +1,7 @@
 import useResizeObserver from '@react-hook/resize-observer';
-import { MutableRefObject, useLayoutEffect, useState } from 'react';
+import { MutableRefObject, useEffect, useLayoutEffect, useState } from 'react';
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 interface UseElementSizeOptions {
     shouldUseChildElement?: boolean;
@@ -14,7 +16,7 @@ export const useElementSize = (
     const element = ((shouldUseChildElement ? ref.current?.firstElementChild : ref.current) ??
         null) as HTMLDivElement | HTMLLabelElement | null;
 
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         if (element) {
             setSize(element.getBoundingClientRect());
         } else {
