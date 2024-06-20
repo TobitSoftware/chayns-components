@@ -1,7 +1,10 @@
+import type { WithTheme } from '@chayns-components/core';
 import styled from 'styled-components';
 
-export const StyledMonth = styled.div`
-    height: 100%;
+type StyledMonthProps = WithTheme<{ $height: number }>;
+
+export const StyledMonth = styled.div<StyledMonthProps>`
+    height: ${({ $height }) => $height}px;
     aspect-ratio: 1;
 `;
 
