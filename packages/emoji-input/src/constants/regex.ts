@@ -9,3 +9,4 @@ export const HTML_NER_IGNORE_REGEX = /<nerIgnore>(.+?)<\/nerIgnore>/g;
 export const HTML_NER_REPLACE_REGEX =
     /<nerReplace\s*(?:prefix="(.*?)")?\s*type="(.*?)"\s*value="(.*?)">(.*?)<\/nerReplace>/gi;
 export const HTML_BOLD_REGEX = /<b>(.+?)<\/b>/g;
+export const HTML_A_TAG_REGEX = /(?:<|&lt;)a\b[^>]*?(?:>|&gt;)(.*?)(?:<|&lt;)\/a(?:>|&gt;)/g;

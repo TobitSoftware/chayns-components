@@ -2,6 +2,7 @@ import {
     BB_LC_MENTION_REGEX,
     BB_NER_IGNORE_REGEX,
     BB_NER_REPLACE_REGEX,
+    HTML_A_TAG_REGEX,
     HTML_BOLD_REGEX,
     HTML_LC_MENTION_REGEX,
     HTML_NER_IGNORE_REGEX,
@@ -27,6 +28,7 @@ export const convertTextToHTML = (text: string) => {
     result = unescapeHTML(result);
 
     result = result
+        .replace(HTML_A_TAG_REGEX, '$1')
         .replace(
             BB_LC_MENTION_REGEX,
             '<lc_mention contenteditable="false" id="$1"><span>@</span>$2</lc_mention>',
@@ -48,6 +50,7 @@ export const convertHTMLToText = (text: string) => {
     let result = text;
 
     result = result
+        .replace(HTML_A_TAG_REGEX, '$1')
         .replace(HTML_BOLD_REGEX, '[b]$1[/b]')
         .replace(HTML_LC_MENTION_REGEX, '[lc_mention id="$1"]$2[/lc_mention]')
         .replace(HTML_NER_IGNORE_REGEX, '[nerIgnore]$1[/nerIgnore]')
