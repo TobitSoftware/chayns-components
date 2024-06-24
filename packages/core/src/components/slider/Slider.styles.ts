@@ -126,6 +126,7 @@ export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $po
                 left: 0;
                 position: absolute;
                 right: 0;
+                border-radius: 3px;
                 top: 0;
                 z-index: -1;
             }
