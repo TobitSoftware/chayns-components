@@ -1,4 +1,5 @@
 import React, { FC, ReactNode, useCallback, useMemo } from 'react';
+import { Icon } from '../../../index';
 import { getIsTouch } from '../../../utils/environment';
 import type { ComboBoxProps, IComboBoxItem } from '../ComboBox';
 import { StyledComboBoxItem, StyledComboBoxItemImage } from './ComboBoxItem.styles';
@@ -8,6 +9,7 @@ export type ComboBoxItemProps = {
     isSelected: boolean;
     onSelect: (itemToSelect: IComboBoxItem) => void;
     shouldShowRoundImage: ComboBoxProps['shouldShowRoundImage'];
+    icons?: IComboBoxItem['icons'];
     suffixElement?: ReactNode;
     text: IComboBoxItem['text'];
     value: IComboBoxItem['value'];
@@ -17,6 +19,7 @@ export type ComboBoxItemProps = {
 const ComboBoxItem: FC<ComboBoxItemProps> = ({
     imageUrl,
     isSelected,
+    icons,
     onSelect,
     shouldShowRoundImage,
     suffixElement,
@@ -44,12 +47,14 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
                         $shouldShowRoundImage={shouldShowRoundImage}
                     />
                 )}
+                {icons && <Icon icons={icons} />}
                 {text}
                 {suffixElement}
             </StyledComboBoxItem>
         ),
         [
             handleItemClick,
+            icons,
             id,
             imageUrl,
             isSelected,

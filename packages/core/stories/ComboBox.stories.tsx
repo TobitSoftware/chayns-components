@@ -82,6 +82,8 @@ export const WithImages = Template.bind({});
 
 export const WithSuffixElements = Template.bind({});
 
+export const WithIcons = Template.bind({});
+
 WithImages.args = {
     direction: ComboBoxDirection.TOP,
     list: [
@@ -113,6 +115,42 @@ WithImages.args = {
     ],
     selectedItem: {
         imageUrl: 'https://picsum.photos/200',
+        text: 'Flexibles Design',
+        value: 1,
+    },
+};
+
+WithIcons.args = {
+    direction: ComboBoxDirection.TOP,
+    list: [
+        {
+            icons: ['ts-calling-code'],
+            text: 'Schnellstart',
+            value: 0,
+        },
+        {
+            icons: ['ts-calling-code'],
+            text: 'Flexibles Design',
+            value: 1,
+        },
+        {
+            icons: ['ts-calling-code'],
+            text: 'Intuitive Bedienung',
+            value: 2,
+        },
+        {
+            icons: ['ts-calling-code'],
+            text: 'Integration',
+            value: 3,
+        },
+        {
+            icons: ['ts-calling-code'],
+            text: 'Navigation',
+            value: 4,
+        },
+    ],
+    selectedItem: {
+        icons: ['ts-calling-code'],
         text: 'Flexibles Design',
         value: 1,
     },

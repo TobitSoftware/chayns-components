@@ -28,6 +28,7 @@ import {
 } from './ComboBox.styles';
 
 export interface IComboBoxItem {
+    icons?: string[];
     imageUrl?: string;
     suffixElement?: ReactNode;
     text: string;
@@ -186,6 +187,7 @@ const ComboBox: FC<ComboBoxProps> = ({
      */
     useEffect(() => {
         const isAtLeastOneItemWithImageGiven = list.some(({ imageUrl }) => imageUrl);
+        const isAtLeastOneItemWithIconGiven = list.some(({ icons }) => icons);
 
         const textArray = list.map(({ text }) => text);
 
@@ -202,10 +204,12 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         // 45px = padding left + padding right + border left + border right + arrow icon width + arrow icon margin left
         // 32px = image width + flex gap
+        // 40px = icon width + flex gap
         setMinWidth(
             calculateContentWidth([...list, { text: placeholder, value: 'placeholder' }]) +
                 45 +
-                (isAtLeastOneItemWithImageGiven ? 32 : 0),
+                (isAtLeastOneItemWithImageGiven ? 32 : 0) +
+                (isAtLeastOneItemWithIconGiven ? 40 : 0),
         );
     }, [list, maxHeight, placeholder]);
 
@@ -224,6 +228,18 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         if (item) {
             return item.imageUrl;
+        }
+
+        return undefined;
+    }, [item, selectedItem]);
+
+    const placeholderIcon = useMemo(() => {
+        if (selectedItem) {
+            return selectedItem.icons;
+        }
+
+        if (item) {
+            return item.icons;
         }
 
         return undefined;
@@ -254,9 +270,10 @@ const ComboBox: FC<ComboBoxProps> = ({
     }, [isDisabled]);
 
     const comboBoxBody = useMemo(() => {
-        const items = list.map(({ imageUrl, suffixElement, text, value }) => (
+        const items = list.map(({ imageUrl, icons, suffixElement, text, value }) => (
             <ComboBoxItem
                 imageUrl={imageUrl}
+                icons={icons}
                 isSelected={selectedItem ? value === selectedItem.value : false}
                 key={value}
                 id={value}
@@ -324,6 +341,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                                 shouldShowRoundImage={shouldShowRoundImage}
                             />
                         )}
+                        {placeholderIcon && <Icon icons={placeholderIcon} />}
                         {placeholderText}
                         {item && item.suffixElement && item.suffixElement}
                     </StyledComboBoxPlaceholder>
@@ -343,6 +361,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             isTouch,
             item,
             minWidth,
+            placeholderIcon,
             placeholderImageUrl,
             placeholderText,
             shouldShowRoundImage,
