@@ -38,9 +38,13 @@ export type ButtonProps = {
      */
     onClick: MouseEventHandler<HTMLButtonElement>;
     /**
+     * Whether the button should be displayed as a selectButton.
+     */
+    shouldShowAsSelectButton?: boolean;
+    /**
      * Whether the text should be 'Roboto Medium'
      */
-    ShouldShowTextAsRobotoMedium?: boolean;
+    shouldShowTextAsRobotoMedium?: boolean;
     /**
      * Shows a wait cursor instead of button text
      */
@@ -60,7 +64,8 @@ const Button: FC<ButtonProps> = ({
     onClick,
     shouldShowWaitCursor,
     shouldStopPropagation,
-    ShouldShowTextAsRobotoMedium = true,
+    shouldShowAsSelectButton = false,
+    shouldShowTextAsRobotoMedium = true,
 }) => {
     const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
         if (shouldStopPropagation) {
@@ -93,7 +98,7 @@ const Button: FC<ButtonProps> = ({
     const backgroundColor = useMemo(() => {
         let color;
 
-        if (isSecondary) {
+        if (isSecondary || shouldShowAsSelectButton) {
             color = theme['202'];
         } else {
             color = theme.buttonBackgroundColor ?? theme['408'];
@@ -104,21 +109,22 @@ const Button: FC<ButtonProps> = ({
         }
 
         return color;
-    }, [isSecondary, theme]);
+    }, [isSecondary, shouldShowAsSelectButton, theme]);
 
     const tapStyles = useMemo(() => {
         if (theme.buttonDesign === '2') {
             return {
-                backgroundColor: isSecondary
-                    ? `rgba(${theme['202-rgb'] ?? ''}, 0.7)`
-                    : `${theme.buttonBackgroundColor ?? ''}40`,
+                backgroundColor:
+                    isSecondary || shouldShowAsSelectButton
+                        ? `rgba(${theme['202-rgb'] ?? ''}, 0.7)`
+                        : `${theme.buttonBackgroundColor ?? ''}40`,
             };
         }
 
         return {
             opacity: 0.6,
         };
-    }, [isSecondary, theme]);
+    }, [isSecondary, shouldShowAsSelectButton, theme]);
 
     const hoverStyles = useMemo(() => {
         if (theme.buttonDesign === '2') {
@@ -134,7 +140,8 @@ const Button: FC<ButtonProps> = ({
 
     return (
         <StyledMotionButton
-            $ShouldShowTextAsRobotoMedium={ShouldShowTextAsRobotoMedium}
+            $shouldShowTextAsRobotoMedium={shouldShowTextAsRobotoMedium}
+            $shouldShowAsSelectButton={shouldShowAsSelectButton}
             className={buttonClasses}
             disabled={isDisabled}
             $isDisabled={isDisabled}

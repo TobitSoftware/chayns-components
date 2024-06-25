@@ -103,7 +103,7 @@ const SelectButton: FC<SelectButtonProps> = ({
                 onClick={handleClick}
                 isDisabled={isDisabled}
                 isSecondary
-                ShouldShowTextAsRobotoMedium={false}
+                shouldShowTextAsRobotoMedium={false}
             >
                 {selectedItemText ?? buttonText}
             </Button>
