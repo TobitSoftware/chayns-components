@@ -732,7 +732,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         />
                     )}
                 </AnimatePresence>
-                <StyledEmojiInputContent $isRightElementGiven={!!rightElement}>
+                <StyledEmojiInputContent>
                     {prefixElement && (
                         <PrefixElement
                             key={prefixElement}

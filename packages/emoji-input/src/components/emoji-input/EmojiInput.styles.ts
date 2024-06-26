@@ -12,6 +12,7 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
         theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
     border-radius: 3px;
     display: flex;
+    border: 1px solid rgba(160, 160, 160, 0.3);
     min-height: 42px;
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     pointer-events: ${({ $isDisabled }) => ($isDisabled ? 'none' : 'initial')};
@@ -31,28 +32,14 @@ export const StyledMotionEmojiInputProgress = styled(
     border-radius: 3px;
 `;
 
-type StyledEmojiInputContentProps = {
-    $isRightElementGiven: boolean;
-};
-
-export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
+export const StyledEmojiInputContent = styled.div`
     align-items: end;
-    border: 1px solid rgba(160, 160, 160, 0.3);
     border-radius: 3px;
     display: flex;
     flex: 1 1 auto;
     gap: 10px;
     padding: 8px 10px;
     z-index: 3;
-
-    ${({ $isRightElementGiven }) =>
-        $isRightElementGiven &&
-        css`
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-            border-right-width: 0;
-            padding-right: 0;
-        `}
 `;
 
 type StyledEmojiInputEditorProps = WithTheme<{
