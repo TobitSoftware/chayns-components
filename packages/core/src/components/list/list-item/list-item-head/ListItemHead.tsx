@@ -77,6 +77,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         closed: 40,
         open: 40,
     });
+    const [isFirstRender, setIsFirstRender] = useState(false);
 
     const longPressTimeoutRef = useRef<number>();
     const pseudoTitleOpenRef = useRef<HTMLDivElement>(null);
@@ -103,6 +104,11 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             });
         }
     }, [closedSubtitle, closedTitle, openedSubtitle, openedTitle, subtitle]);
+
+    // This is used to trigger a rerender, so the head height can be calculate
+    useEffect(() => {
+        setIsFirstRender(true);
+    }, []);
 
     const handleMouseEnter = useCallback(() => setShouldShowHoverItem(true), []);
 
