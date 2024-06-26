@@ -769,7 +769,6 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     {!isTouch && !shouldPreventEmojiPicker && (
                         <EmojiPickerPopup
                             accessToken={accessToken}
-                            alignment={popupAlignment}
                             onSelect={handlePopupSelect}
                             onPopupVisibilityChange={handlePopupVisibility}
                             personId={personId}

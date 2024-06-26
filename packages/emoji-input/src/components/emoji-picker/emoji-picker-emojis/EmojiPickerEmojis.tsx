@@ -28,11 +28,11 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
     selectedCategory,
 }) => {
     const [shouldPreventScroll, setShouldPreventScroll] = useState(false);
+    const [shouldShowSkinTonePopup, setShouldShowSkinTonePopup] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState<number>(0);
 
     const emojiRef = useRef<HTMLDivElement>(null);
     const shouldPreventEmojiControlsRef = useRef(false);
-    const [shouldShowSkinTonePopup, setShouldShowSkinTonePopup] = useState(false);
 
     const { browser } = getDevice();
 

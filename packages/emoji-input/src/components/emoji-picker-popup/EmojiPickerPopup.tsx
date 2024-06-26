@@ -1,26 +1,13 @@
-import { AreaProvider, Icon } from '@chayns-components/core';
-import { AnimatePresence } from 'framer-motion';
-import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { PopupAlignment } from '../../constants/alignment';
+import { AreaProvider, Icon, Popup, type PopupRef } from '@chayns-components/core';
+import React, { FC, useCallback, useEffect, useRef } from 'react';
 import EmojiPicker from '../emoji-picker/EmojiPicker';
-import { emojiPickerSize } from '../emoji-picker/EmojiPicker.styles';
-import {
-    StyledEmojiPickerPopup,
-    StyledEmojiPickerPopupIconWrapper,
-    StyledMotionEmojiPickerPopupContent,
-} from './EmojiPickerPopup.styles';
+import { StyledEmojiPickerPopup } from './EmojiPickerPopup.styles';
 
 export type EmojiPickerPopupProps = {
     /**
      * Access token of the logged-in user. Is needed to load and save the history of the emojis.
      */
     accessToken?: string;
-    /**
-     * Sets the alignment of the popup to a fixed value. If this value is not set, the component
-     * calculates the best position on its own. Use the imported 'PopupAlignment' enum to set this
-     * value.
-     */
-    alignment?: PopupAlignment;
     /**
      * Function that is executed when the visibility of the popup changes.
      * @param {boolean} isVisible - Whether the popup is visible or not
@@ -37,166 +24,54 @@ export type EmojiPickerPopupProps = {
     onSelect: (emoji: string) => void;
 };
 
-export type PopupPosition = {
-    bottom?: number;
-    left?: number;
-    right?: number;
-    top?: number;
-};
-
 const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
     accessToken,
-    alignment,
     onPopupVisibilityChange,
     onSelect,
     personId,
 }) => {
-    const [internalAlignment, setInternalAlignment] = useState<PopupAlignment>(
-        PopupAlignment.TopLeft,
-    );
-    const [shouldShowPopup, setShouldShowPopup] = useState(false);
-    const [position, setPosition] = useState({} as PopupPosition);
+    const popupRef = useRef<PopupRef>(null);
 
-    const contentRef = useRef<HTMLDivElement>(null);
-
-    const handleHide = useCallback(() => {
-        setShouldShowPopup(false);
+    const handleKeyPress = useCallback((event: KeyboardEvent) => {
+        if (event.key === 'Escape' && !event.shiftKey) {
+            popupRef.current?.hide();
+        }
     }, []);
 
-    const handleDocumentClick = useCallback<EventListener>(
-        (event) => {
-            if (!contentRef.current?.contains(event.target as Node)) {
-                event.preventDefault();
-                event.stopPropagation();
-
-                handleHide();
-            }
-        },
-        [handleHide],
-    );
-
-    const handlePopupIconClick = useCallback(
-        (event: MouseEvent<HTMLSpanElement>) => {
-            if (shouldShowPopup) {
-                setShouldShowPopup(false);
-
-                return;
-            }
-
-            const { height, left, top, width } = event.currentTarget.getBoundingClientRect();
-
-            let newInternalAlignment: PopupAlignment | undefined = alignment;
-
-            if (typeof newInternalAlignment !== 'number') {
-                if (top < emojiPickerSize.height + 16) {
-                    if (left < emojiPickerSize.width + 16) {
-                        newInternalAlignment = PopupAlignment.BottomRight;
-                    } else {
-                        newInternalAlignment = PopupAlignment.BottomLeft;
-                    }
-                } else if (left < emojiPickerSize.width + 16) {
-                    newInternalAlignment = PopupAlignment.TopRight;
-                } else {
-                    newInternalAlignment = PopupAlignment.TopLeft;
-                }
-            }
-
-            let newPosition: PopupPosition = {};
-
-            switch (newInternalAlignment) {
-                case PopupAlignment.BottomLeft:
-                    newPosition = { left: 8 + width - emojiPickerSize.width, top: 12 + height };
-                    break;
-                case PopupAlignment.BottomRight:
-                    newPosition = { left: -10, top: 12 + height };
-                    break;
-                case PopupAlignment.TopLeft:
-                    newPosition = {
-                        left: 8 + width - emojiPickerSize.width,
-                        top: -12 - emojiPickerSize.height,
-                    };
-                    break;
-                case PopupAlignment.TopRight:
-                    newPosition = { left: -10, top: -12 - emojiPickerSize.height };
-                    break;
-                default:
-                    break;
-            }
-
-            setInternalAlignment(newInternalAlignment);
-            setPosition(newPosition);
-            setShouldShowPopup(true);
-        },
-        [alignment, shouldShowPopup],
-    );
-
-    const handleKeyPress = useCallback(
-        (event: KeyboardEvent) => {
-            if (event.key === 'Escape' && !event.shiftKey) {
-                handleHide();
-            }
-        },
-        [handleHide],
-    );
-
     useEffect(() => {
-        if (shouldShowPopup) {
-            document.addEventListener('click', handleDocumentClick, true);
-            window.addEventListener('blur', handleHide);
-            document.addEventListener('keydown', handleKeyPress);
-        }
+        document.addEventListener('keydown', handleKeyPress);
 
         return () => {
-            document.removeEventListener('click', handleDocumentClick, true);
-            window.removeEventListener('blur', handleHide);
             document.addEventListener('keydown', handleKeyPress);
         };
-    }, [handleDocumentClick, handleHide, handleKeyPress, shouldShowPopup]);
-
-    useEffect(() => {
-        if (typeof onPopupVisibilityChange === 'function') {
-            onPopupVisibilityChange(shouldShowPopup);
-        }
-    }, [onPopupVisibilityChange, shouldShowPopup]);
-
-    const exitAndInitialY =
-        internalAlignment === PopupAlignment.TopLeft ||
-        internalAlignment === PopupAlignment.TopRight
-            ? -16
-            : 16;
+    }, [handleKeyPress]);
 
     return (
         <StyledEmojiPickerPopup>
-            <AnimatePresence initial={false}>
-                {shouldShowPopup && (
-                    <StyledMotionEmojiPickerPopupContent
-                        $alignment={internalAlignment}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: exitAndInitialY }}
-                        initial={{ opacity: 0, y: exitAndInitialY }}
-                        key="emojiPickerPopupContent"
-                        ref={contentRef}
-                        style={position}
-                        transition={{ type: 'tween' }}
-                    >
-                        <AreaProvider shouldChangeColor={false}>
-                            <EmojiPicker
-                                accessToken={accessToken}
-                                onSelect={onSelect}
-                                personId={personId}
-                            />
-                        </AreaProvider>
-                    </StyledMotionEmojiPickerPopupContent>
-                )}
-            </AnimatePresence>
-            <StyledEmojiPickerPopupIconWrapper>
-                <Icon
-                    className="prevent-lose-focus"
-                    icons={['far fa-smile']}
-                    onClick={handlePopupIconClick}
-                    size={18}
-                />
-            </StyledEmojiPickerPopupIconWrapper>
+            <Popup
+                ref={popupRef}
+                onHide={() =>
+                    typeof onPopupVisibilityChange === 'function'
+                        ? onPopupVisibilityChange(false)
+                        : undefined
+                }
+                onShow={() =>
+                    typeof onPopupVisibilityChange === 'function'
+                        ? onPopupVisibilityChange(true)
+                        : undefined
+                }
+                content={
+                    <AreaProvider shouldChangeColor={false}>
+                        <EmojiPicker
+                            accessToken={accessToken}
+                            onSelect={onSelect}
+                            personId={personId}
+                        />
+                    </AreaProvider>
+                }
+            >
+                <Icon className="prevent-lose-focus" icons={['far fa-smile']} size={18} />
+            </Popup>
         </StyledEmojiPickerPopup>
     );
 };
