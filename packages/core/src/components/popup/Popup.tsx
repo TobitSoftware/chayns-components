@@ -72,6 +72,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const [portal, setPortal] = useState<ReactPortal>();
         const [menuHeight, setMenuHeight] = useState(0);
 
+        const [pseudoSize, setPseudoSize] = useState<{ height: number; width: number }>();
+
         const timeout = useRef<number>();
 
         const uuid = useUuid();
@@ -82,10 +84,17 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const popupPseudoContentRef = useRef<HTMLDivElement>(null);
         const popupRef = useRef<HTMLDivElement>(null);
 
+        useEffect(() => {
+            if (popupPseudoContentRef.current) {
+                const { height, width } = popupPseudoContentRef.current.getBoundingClientRect();
+
+                setPseudoSize({ height, width });
+            }
+        }, []);
+
         const handleShow = useCallback(() => {
-            if (popupRef.current && popupPseudoContentRef.current) {
-                const { height: pseudoHeight, width: pseudoWidth } =
-                    popupPseudoContentRef.current.getBoundingClientRect();
+            if (popupRef.current && pseudoSize) {
+                const { height: pseudoHeight, width: pseudoWidth } = pseudoSize;
 
                 const {
                     height: childrenHeight,
@@ -178,7 +187,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
                 setIsOpen(true);
             }
-        }, [yOffset]);
+        }, [pseudoSize, yOffset]);
 
         const handleChildrenClick = () => {
             if (!shouldShowOnHover) {
@@ -294,9 +303,11 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         return (
             <>
-                <StyledPopupPseudo ref={popupPseudoContentRef} $menuHeight={menuHeight}>
-                    {content}
-                </StyledPopupPseudo>
+                {!pseudoSize && (
+                    <StyledPopupPseudo ref={popupPseudoContentRef} $menuHeight={menuHeight}>
+                        {content}
+                    </StyledPopupPseudo>
+                )}
                 <StyledPopup
                     ref={popupRef}
                     onClick={handleChildrenClick}
