@@ -33,6 +33,10 @@ export type SelectButtonProps = {
      * Whether the search should be displayed inside the dialog.
      */
     shouldShowSearch?: boolean;
+    /**
+     * The title of the dialog.
+     */
+    title?: string;
 };
 
 const SelectButton: FC<SelectButtonProps> = ({
@@ -43,6 +47,7 @@ const SelectButton: FC<SelectButtonProps> = ({
     shouldShowSearch,
     list,
     isDisabled,
+    title,
 }) => {
     const itemList = useMemo(() => {
         const items: DialogSelectListItemType[] = [];
@@ -78,6 +83,7 @@ const SelectButton: FC<SelectButtonProps> = ({
 
     const handleClick = () => {
         void createDialog({
+            text: title ? `[h1]${title}[/h1]` : undefined,
             type: DialogType.SELECT,
             list: itemList,
             multiselect: shouldAllowMultiSelect,
