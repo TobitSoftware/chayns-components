@@ -1,7 +1,7 @@
-import { escapeHtmlInText, unescapeSquareBrackets } from '../escape';
+import { escapeHtmlInText } from '../escape';
 import { parseBBCode, ParseBBCodesOptions } from './bb-code/formatBBCode';
 import { parseMarkdown } from './markdown/formatMarkdown';
-import { parseMarkdownTables, TableObject } from './markdown/formatMarkdownTable';
+import { TableObject } from './markdown/formatMarkdownTable';
 
 interface FormatStringOptions extends ParseBBCodesOptions {
     escapeHtml?: boolean;
@@ -15,6 +15,7 @@ interface FormatStringResult {
     tables: TableObject[];
 }
 
+// TODO Add linkify option.
 // This function takes a string and returns formatted html as a string.
 export const formatStringToHtml = (
     string: string,
@@ -43,25 +44,15 @@ export const formatStringToHtml = (
         formattedString = escapeHtmlInText(formattedString);
     }
 
-    // Escape BB-Code square brackets, to prevent conflicts between markdown and BB Code.
-    /* Conflict example:
-        When Sidekick detects a function call as an entity through NER, then the following text is returned.
-        '[nerReplace <params>]function[/nerReplace](<params>)'
-        Because '[/nerReplace](<params>)' is a valid Markdown link, the Markdown parser would interpret it as a link
-        and thus prevent the BB-Code parser from recognizing the BB-Code. Parsing the BB-Code first would prevent this
-        issue. Unfortunately the Markdown parser doesn't support this.
-     */
-    const shouldTemporarilyEscapeBBCodeBrackets = parseMarkdownOption && parseBBCodeOption;
-    if (shouldTemporarilyEscapeBBCodeBrackets) {
+    if (parseBBCodeOption) {
         try {
             formattedString = parseBBCode(formattedString, {
-                justEscapeSquareBrackets: true,
+                customInlineLevelBBCodeTags,
+                customBlockLevelBBCodeTags,
+                justEscapeSquareBrackets: false,
             });
         } catch (error) {
-            console.warn(
-                '[@chayns-components/format] Warning: Failed to escape bb-code brackets',
-                error,
-            );
+            console.warn('[@chayns-components/format] Warning: Failed to parse bb-code', error);
         }
     }
 
@@ -76,39 +67,13 @@ export const formatStringToHtml = (
 
     const tables: TableObject[] = [];
 
-    // Parses markdown tables to HTML. Also returns the tables content as an array, to allow further processing.
-    if (parseMarkdownTablesOption) {
-        try {
-            const result = parseMarkdownTables(formattedString);
-            formattedString = result.html;
-            tables.push(...result.tables);
-        } catch (error) {
-            console.warn(
-                '[@chayns-components/format] Warning: Failed to parse markdown tables',
-                error,
-            );
-        }
-    }
-
-    // Unescapes BB-Code square brackets, to allow parsing of BB-Code.
-    if (shouldTemporarilyEscapeBBCodeBrackets) {
-        formattedString = unescapeSquareBrackets(formattedString);
-    }
-
-    if (parseBBCodeOption) {
-        try {
-            formattedString = parseBBCode(formattedString, {
-                customInlineLevelBBCodeTags,
-                customBlockLevelBBCodeTags,
-                justEscapeSquareBrackets: false,
-            });
-        } catch (error) {
-            console.warn('[@chayns-components/format] Warning: Failed to parse bb-code', error);
-        }
-    }
-
     return {
         html: formattedString,
         tables,
     };
 };
+
+// TODO Handle following changes:
+// tables dont have id to assign them to table objects. Use the index instead.
+// Inline Code doesn't have class inline-code anymore. Styles have to be applied differently.
+// Code block language is on language attribute of code tag instead of pre tag.

@@ -7,12 +7,12 @@ describe('HTML Formatter Function', () => {
         describe('Line breaks', () => {
             test('should format line breaks correctly', () => {
                 const result = formatStringToHtml('Line 1\nLine 2');
-                expect(result.html).toEqual('Line 1\nLine 2');
+                expect(result.html).toEqual('<p>Line 1\nLine 2</p>\n');
             });
 
             test('should format multiple line breaks correctly', () => {
                 const result = formatStringToHtml('Line 1\n\nLine 2');
-                expect(result.html).toEqual('Line 1\n\nLine 2');
+                expect(result.html).toEqual('<p>Line 1</p>\n<p>Line 2</p>\n');
             });
 
             // TODO Remove trailing and leading new lines.
@@ -21,19 +21,19 @@ describe('HTML Formatter Function', () => {
         describe('Whitespaces', () => {
             test('should not remove repeated whitespaces', () => {
                 const result = formatStringToHtml('Text    with    spaces');
-                expect(result.html).toEqual('Text    with    spaces');
+                expect(result.html).toEqual('<p>Text    with    spaces</p>\n');
             });
 
             // TODO Decide if leading white spaces should be removed.
         });
 
         describe('HTML', () => {
-            test('should escape HTML', () => {
+            test('should escape HTML, when escapeHtml is true', () => {
                 const resultEscape = formatStringToHtml('<div>Test</div>', { escapeHtml: true });
-                expect(resultEscape.html).toEqual('&lt;div&gt;Test&lt;/div&gt;');
+                expect(resultEscape.html).toEqual('<p>&lt;div&gt;Test&lt;/div&gt;</p>\n');
             });
 
-            test('should not escape HTML', () => {
+            test('should not escape HTML, when escapeHtml is false', () => {
                 const resultNoEscape = formatStringToHtml('<div>Test</div>');
                 expect(resultNoEscape.html).toEqual('<div>Test</div>');
             });
@@ -44,83 +44,70 @@ describe('HTML Formatter Function', () => {
         describe('All Elements', () => {
             test('should format text styling correctly', () => {
                 const boldResult = formatStringToHtml('**bold**');
-                expect(boldResult.html).toEqual('<strong>bold</strong>');
+                expect(boldResult.html).toEqual('<p><strong>bold</strong></p>\n');
 
                 const italicResult = formatStringToHtml('*italic*');
-                expect(italicResult.html).toEqual('<em>italic</em>');
+                expect(italicResult.html).toEqual('<p><em>italic</em></p>\n');
 
                 const inlineCodeResult = formatStringToHtml('`inline code`');
                 expect(inlineCodeResult.html).toEqual(
                     // TODO code shouldn't have inline code class.
-                    '<code class="inline-code">inline code</code>',
-                );
-
-                // TODO Move combination to its own test
-                const combinedResult = formatStringToHtml('**bold** *italic* `inline code`');
-                expect(combinedResult.html).toEqual(
-                    '<strong>bold</strong> <em>italic</em> <code class="inline-code">inline code</code>',
-                );
-
-                // TODO Move combination to its own test
-                const combinedResult2 = formatStringToHtml('**bold *italic* `inline code`**');
-                expect(combinedResult2.html).toEqual(
-                    '<strong>bold <em>italic</em> <code class="inline-code">inline code</code></strong>',
+                    '<p><code>inline code</code></p>\n',
                 );
             });
 
             test('should format headings correctly', () => {
                 const h1Result = formatStringToHtml('# h1');
-                expect(h1Result.html).toEqual('<h1>h1</h1>');
+                expect(h1Result.html).toEqual('<h1>h1</h1>\n');
 
                 const h2Result = formatStringToHtml('## h2');
-                expect(h2Result.html).toEqual('<h2>h2</h2>');
+                expect(h2Result.html).toEqual('<h2>h2</h2>\n');
 
                 const h3Result = formatStringToHtml('### h3');
-                expect(h3Result.html).toEqual('<h3>h3</h3>');
+                expect(h3Result.html).toEqual('<h3>h3</h3>\n');
 
                 const h4Result = formatStringToHtml('#### h4');
-                expect(h4Result.html).toEqual('<h4>h4</h4>');
+                expect(h4Result.html).toEqual('<h4>h4</h4>\n');
 
                 const h5Result = formatStringToHtml('##### h5');
-                expect(h5Result.html).toEqual('<h5>h5</h5>');
+                expect(h5Result.html).toEqual('<h5>h5</h5>\n');
 
                 const h6Result = formatStringToHtml('###### h6');
-                expect(h6Result.html).toEqual('<h6>h6</h6>');
+                expect(h6Result.html).toEqual('<h6>h6</h6>\n');
             });
 
             test('should format links correctly', () => {
                 const result = formatStringToHtml('[Link](https://example.com)');
-                expect(result.html).toEqual('<a href="https://example.com">Link</a>');
+                expect(result.html).toEqual('<p><a href="https://example.com">Link</a></p>\n');
             });
 
             test('should format images correctly', () => {
                 const result = formatStringToHtml('![Alt Text](https://example.com/image.jpg)');
                 expect(result.html).toEqual(
-                    '<img src="https://example.com/image.jpg"Alt Text/>',
-                    // TODO This should be the result: '<img src="https://example.com/image.jpg" alt="Alt Text">'
+                    '<p><img src="https://example.com/image.jpg" alt="Alt Text"></p>\n',
                 );
             });
 
-            // test('should format lists correctly', () => {
-            //     // TODO List items should not have trailing \n!
-            //     const expectedUnorderedListResult =
-            //         '<ul><li>Item 1</li><li>Item 2</li><li>Item 3</li></ul>';
-            //     const expectedOrderedListResult =
-            //         '<ol><li>Item 1</li><li>Item 2</li><li>Item 3</li></ol>';
-            //
-            //     const unorderedListResult1 = formatStringToHtml('- Item 1\n- Item 2\n- Item 3');
-            //     expect(unorderedListResult1.html).toEqual(expectedUnorderedListResult);
-            //     const unorderedListResult2 = formatStringToHtml('* Item 1\n* Item 2\n* Item 3');
-            //     expect(unorderedListResult2.html).toEqual(expectedUnorderedListResult);
-            //
-            //     const orderedListResult = formatStringToHtml('1. Item 1\n2. Item 2\n3. Item 3');
-            //     expect(orderedListResult.html).toEqual(expectedOrderedListResult);
-            //     const orderedListResult2 = formatStringToHtml('1) Item 1\n2) Item 2\n3) Item 3');
-            //     expect(orderedListResult2.html).toEqual(expectedOrderedListResult);
-            // });
+            test('should format lists correctly', () => {
+                // TODO List items should not have trailing \n!
+                const expectedUnorderedListResult =
+                    '<ul>\n<li>Item 1</li>\n<li>Item 2</li>\n<li>Item 3</li>\n</ul>\n';
+                const expectedOrderedListResult =
+                    '<ol>\n<li>Item 1</li>\n<li>Item 2</li>\n<li>Item 3</li>\n</ol>\n';
+
+                const unorderedListResult1 = formatStringToHtml('- Item 1\n- Item 2\n- Item 3');
+                expect(unorderedListResult1.html).toEqual(expectedUnorderedListResult);
+                const unorderedListResult2 = formatStringToHtml('* Item 1\n* Item 2\n* Item 3');
+                expect(unorderedListResult2.html).toEqual(expectedUnorderedListResult);
+
+                const orderedListResult = formatStringToHtml('1. Item 1\n2. Item 2\n3. Item 3');
+                expect(orderedListResult.html).toEqual(expectedOrderedListResult);
+                const orderedListResult2 = formatStringToHtml('1) Item 1\n2) Item 2\n3) Item 3');
+                expect(orderedListResult2.html).toEqual(expectedOrderedListResult);
+            });
 
             test('should format thematic breaks correctly', () => {
-                const expectedThematicBreakResult = '<hr />';
+                const expectedThematicBreakResult = '<hr>\n';
 
                 const result1 = formatStringToHtml('---');
                 expect(result1.html).toEqual(expectedThematicBreakResult);
@@ -131,11 +118,11 @@ describe('HTML Formatter Function', () => {
             test('should format code blocks correctly', () => {
                 const resultWithoutLanguage = formatStringToHtml('```\nconst a = 1;\n```');
                 expect(resultWithoutLanguage.html).toEqual(
-                    '<pre language=""><code>const a = 1;</code></pre>',
+                    '<pre><code>const a = 1;\n</code></pre>\n',
                 );
                 const resultWithLanguage = formatStringToHtml('```js\nconst a = 1;\n```');
                 expect(resultWithLanguage.html).toEqual(
-                    '<pre language="js"><code>const a = 1;</code></pre>',
+                    '<pre><code class="language-js">const a = 1;\n</code></pre>\n',
                 );
             });
 
@@ -145,7 +132,19 @@ describe('HTML Formatter Function', () => {
                     { parseMarkdownTables: true },
                 );
                 expect(result.html).toEqual(
-                    '<table id="message-table-0"><thead><th>Header 1</th><th>Header 2</th></thead><tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody></table>',
+                    `<table>
+<thead>
+<tr>
+<th>Header 1</th>
+<th>Header 2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cell 1</td>
+<td>Cell 2</td>
+</tr>
+</tbody></table>
+`,
                 );
             });
         });
@@ -153,74 +152,68 @@ describe('HTML Formatter Function', () => {
         describe('Inline Code', () => {
             test('should escape HTML within inline code', () => {
                 const result1 = formatStringToHtml('`<div>Test</div>`', { escapeHtml: false });
-                expect(result1.html).toEqual(
-                    '<code class="inline-code">&lt;div&gt;Test&lt;/div&gt;</code>',
-                );
+                expect(result1.html).toEqual('<p><code>&lt;div&gt;Test&lt;/div&gt;</code></p>\n');
 
                 const result2 = formatStringToHtml('`<div>Test</div>`', { escapeHtml: true });
-                expect(result2.html).toEqual(
-                    '<code class="inline-code">&lt;div&gt;Test&lt;/div&gt;</code>',
-                );
+                expect(result2.html).toEqual('<p><code>&lt;div&gt;Test&lt;/div&gt;</code></p>\n');
             });
 
             test('should not format markdown within inline code', () => {
                 const result = formatStringToHtml('`**bold** *italic*`');
-                expect(result.html).toEqual('<code class="inline-code">**bold** *italic*</code>');
+                expect(result.html).toEqual('<p><code>**bold** *italic*</code></p>\n');
             });
 
             test('should not format bb-code within inline code', () => {
                 const result = formatStringToHtml('`[b]bold[/b]`', { parseBBCode: true });
-                expect(result.html).toEqual('<code class="inline-code">[b]bold[/b]</code>');
+                expect(result.html).toEqual('<p><code>[b]bold[/b]</code></p>\n');
             });
         });
 
         describe('Codeblock', () => {
             test('should format code blocks with multiple lines correctly', () => {
                 const resultWithoutLanguage = formatStringToHtml(
-                    '```\nconst a = 1;\nconst b = 2;\nconst c = 3;\n```',
+                    '```\nconst a = 1;\nconst b = 2;\n```',
                 );
                 expect(resultWithoutLanguage.html).toEqual(
-                    '<pre language=""><code>const a = 1;\nconst b = 2;\nconst c = 3;</code></pre>',
+                    '<pre><code>const a = 1;\nconst b = 2;\n</code></pre>\n',
                 );
 
                 const resultWithLanguage = formatStringToHtml(
-                    '```js\nconst a = 1;\nconst b = 2;\nconst c = 3;\n```',
+                    '```js\nconst a = 1;\nconst b = 2;\n```',
                 );
                 expect(resultWithLanguage.html).toEqual(
-                    '<pre language="js"><code>const a = 1;\nconst b = 2;\nconst c = 3;</code></pre>',
+                    '<pre><code class="language-js">const a = 1;\nconst b = 2;\n</code></pre>\n',
                 );
             });
 
             test('should escape HTML within code block', () => {
                 const resultWithoutLanguage = formatStringToHtml('```\n<div>Test</div>\n```');
                 expect(resultWithoutLanguage.html).toEqual(
-                    '<pre language=""><code>&lt;div&gt;Test&lt;/div&gt;</code></pre>',
+                    '<pre><code>&lt;div&gt;Test&lt;/div&gt;\n</code></pre>\n',
                 );
                 const resultWithLanguage = formatStringToHtml('```html\n<div>Test</div>\n```');
                 expect(resultWithLanguage.html).toEqual(
-                    '<pre language="html"><code>&lt;div&gt;Test&lt;/div&gt;</code></pre>',
+                    '<pre><code class="language-html">&lt;div&gt;Test&lt;/div&gt;\n</code></pre>\n',
                 );
             });
 
             test('should not format markdown within code block', () => {
                 const resultWithoutLanguage = formatStringToHtml('```\n**Test**\n```');
-                expect(resultWithoutLanguage.html).toEqual(
-                    '<pre language=""><code>**Test**</code></pre>',
-                );
+                expect(resultWithoutLanguage.html).toEqual('<pre><code>**Test**\n</code></pre>\n');
                 const resultWithLanguage = formatStringToHtml('```html\n**Test**\n```');
                 expect(resultWithLanguage.html).toEqual(
-                    '<pre language="html"><code>**Test**</code></pre>',
+                    '<pre><code class="language-html">**Test**\n</code></pre>\n',
                 );
             });
 
             test('should not format bb-code within code block', () => {
                 const resultWithoutLanguage = formatStringToHtml('```\n[b]Test[/b]\n```');
                 expect(resultWithoutLanguage.html).toEqual(
-                    '<pre language=""><code>[b]Test[/b]</code></pre>',
+                    '<pre><code>[b]Test[/b]\n</code></pre>\n',
                 );
                 const resultWithLanguage = formatStringToHtml('```html\n[b]Test[/b]\n```');
                 expect(resultWithLanguage.html).toEqual(
-                    '<pre language="html"><code>[b]Test[/b]</code></pre>',
+                    '<pre><code class="language-html">[b]Test[/b]\n</code></pre>\n',
                 );
             });
         });
@@ -306,7 +299,7 @@ describe('HTML Formatter Function', () => {
                         const outputTokens = [
                             '<strong>bold</strong>',
                             '<em>italic</em>',
-                            '<code class="inline-code">inline code</code>',
+                            '<code>inline code</code>',
                         ].map(textToInlineToken);
 
                         for (let i = 0; i <= 4; i++) {
@@ -331,7 +324,7 @@ describe('HTML Formatter Function', () => {
                             'text',
                             '<em>italic</em>',
                             'text',
-                            '<code class="inline-code">inline code</code>',
+                            '<code>inline code</code>',
                             'text',
                         ].map(textToInlineToken);
 
@@ -383,8 +376,8 @@ describe('HTML Formatter Function', () => {
                             '![Alt Text](https://example.com/image.jpg)',
                         ].map(textToInlineToken);
                         const outputTokens = [
-                            '<img src="https://example.com/image.jpg"Alt Text/>',
-                            '<img src="https://example.com/image.jpg"Alt Text/>',
+                            '<img src="https://example.com/image.jpg" alt="Alt Text"/>',
+                            '<img src="https://example.com/image.jpg" alt="Alt Text"/>',
                             // TODO This should be the result: '<img src="https://example.com/image.jpg" alt="Alt Text">'
                         ].map(textToInlineToken);
 
@@ -402,7 +395,7 @@ describe('HTML Formatter Function', () => {
                         ].map(textToInlineToken);
                         const outputTokens = [
                             'text',
-                            '<img src="https://example.com/image.jpg"Alt Text/>',
+                            '<img src="https://example.com/image.jpg" alt="Alt Text"/>',
                             // TODO This should be the result: '<img src="https://example.com/image.jpg" alt="Alt Text">'
                             'text',
                         ].map(textToInlineToken);
@@ -596,6 +589,9 @@ describe('HTML Formatter Function', () => {
             });
         });
     });
+
+    // TODO Should format bb-code within markdown correctly.
+    // TODO Should format markdown within bb-code correctly.
 
     // describe('BB-Code Formatting', () => {
     //
