@@ -17,7 +17,6 @@ interface FormatStringResult {
     tables: TableObject[];
 }
 
-// TODO Add linkify option.
 // This function takes a string and returns formatted html as a string.
 export const formatStringToHtml = (
     string: string,

@@ -27,7 +27,9 @@ export function findFirstBBCode(inputString: string): BBCodeMatch | null {
             fullMatch === undefined ||
             tag === undefined ||
             params === undefined ||
-            content === undefined
+            content === undefined ||
+            openingTag === undefined ||
+            closingTag === undefined
         )
             return null;
 

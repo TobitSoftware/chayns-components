@@ -1,12 +1,9 @@
-import { marked, Tokens } from 'marked';
 import { findFirstBBCode } from './findBBCode';
 
 const BB_CODE_HTML_TAG_PREFIX = 'bb-code-';
 
 const BLOCK_LEVEL_TAGS = ['center', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'];
 const INLINE_LEVEL_TAGS = ['b', 'strong', 'i', 'em', 'u', 's', 'span', 'img'];
-
-const HTML_CODE_PATTERN = /(?:<code>|<code class="inline-code">)[\s\S]*?<\/code>/;
 
 export interface ParseBBCodesOptions {
     customBlockLevelBBCodeTags?: string[];
@@ -66,6 +63,7 @@ export const parseBBCode = (text: string, options?: ParseBBCodesOptions) => {
             const escapedOpeningTag = escapeBBCodeSquareBrackets(openingTag);
             const escapedClosingTag = escapeBBCodeSquareBrackets(closingTag);
 
+            // Simply escapes the square brackets of the BB-Code opening and closing tag.
             html =
                 html.slice(0, indexOfFullMatch) +
                 escapedOpeningTag +
@@ -91,9 +89,6 @@ export const parseBBCode = (text: string, options?: ParseBBCodesOptions) => {
             if (isBlockLevelTag) {
                 htmlAfterTag = htmlAfterTag.replace(/^\n/, '');
             }
-
-            // TODO Don't alter content of bb-code tags when justEscapeSquareBrackets is true.
-            //  This is necessary to preserve whitespaces in bb-code tags within code blocks.
 
             const isCustomTag = [...customBlockLevelTags, ...customInlineLevelTags].includes(Tag);
             const htmlTag = isCustomTag ? `${BB_CODE_HTML_TAG_PREFIX}${Tag}` : Tag;
@@ -127,34 +122,3 @@ export const escapeBBCodeSquareBrackets = (text: string) =>
 
 export const unescapeBBCodeSquareBrackets = (text: string) =>
     text.replaceAll('&zwj;[&zwj;', '[').replaceAll('&zwj;]&zwj;', ']');
-
-// TODO Remove this
-// This function escapes BB-Code tags in Markdown code blocks and inline code.
-export const escapeBBCodeInCode = (text: string) => {
-    let newText = text;
-    const tokens: Tokens.Table[] = [];
-
-    // marked.parse parses all markdown in the provided text and returns the result.
-    // The parsed result isn't needed. Instead, the parsed tokens are collected.
-    marked.parse(text, {
-        walkTokens: (token) => {
-            tokens.push(token as Tokens.Table);
-        },
-    }) as string;
-
-    let textIndex = 0;
-    tokens.forEach((token) => {
-        if (['code', 'codespan'].includes(token.type)) {
-            const index = newText.slice(textIndex).indexOf(token.raw);
-            if (index > -1) {
-                newText =
-                    newText.slice(0, textIndex + index) +
-                    token.raw.replaceAll('[', '&#91;').replaceAll(']', '&#93;') +
-                    newText.slice(textIndex + index + token.raw.length);
-            }
-            textIndex += index + token.raw.length;
-        }
-    });
-
-    return newText;
-};

@@ -5,8 +5,7 @@ import { stringify } from 'csv-stringify/browser/esm/sync';
 import { escapeBBCodeSquareBrackets } from '../bb-code/formatBBCode';
 
 const inlineCodeRule = /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/;
-const inlineTextRule =
-    /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*_]|\b_|$)|[^ ](?= {2,}\n)))/;
+const inlineTextRule = /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<![`*_]|\b_|$)|[^ ](?= {2,}\n)))/;
 
 const tokenizer = {
     // Codespan Tokenizer is overwritten to prevent html escaping, since html is already escaped.
@@ -30,7 +29,7 @@ const tokenizer = {
 
         return undefined;
     },
-    lheading(src: string): Tokens.Heading | undefined {
+    lheading(): Tokens.Heading | undefined {
         return undefined;
     },
     url() {
