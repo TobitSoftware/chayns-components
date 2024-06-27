@@ -27,6 +27,12 @@ const tokenizer = {
 
         return undefined;
     },
+    lheading(src: string): Tokens.Heading | undefined {
+        return undefined;
+    },
+    url() {
+        return undefined;
+    },
 };
 
 const renderer = {
