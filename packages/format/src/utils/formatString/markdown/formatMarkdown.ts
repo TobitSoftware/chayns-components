@@ -34,7 +34,7 @@ const renderer = {
     code(text: string, lang: string): string {
         const langString = (lang || '').match(/^\S*/)?.[0];
 
-        const code = `${text.replace(/\n$/, '')}\n`;
+        const code = `${text.replace(/\n$/, '')}`;
 
         if (!langString) {
             return `<pre><code>${code}</code></pre>\n`;
