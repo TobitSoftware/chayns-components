@@ -77,6 +77,8 @@ export const formatStringToHtml = (
     if (parseMarkdownOption) {
         try {
             formattedString = parseMarkdown(formattedString);
+            // Remove trailing \n
+            formattedString = formattedString.replace(/\n$/, '');
         } catch (error) {
             console.warn('[@chayns-components/format] Warning: Failed to parse markdown', error);
         }
