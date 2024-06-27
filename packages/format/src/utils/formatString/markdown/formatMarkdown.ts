@@ -2,6 +2,7 @@ import { marked, Tokens } from 'marked';
 import type { TableObject } from '../../../types/format';
 // eslint-disable-next-line import/extensions,import/no-unresolved
 import { stringify } from 'csv-stringify/browser/esm/sync';
+import { escapeBBCodeSquareBrackets } from '../bb-code/formatBBCode';
 
 const inlineCode = /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/;
 const tokenizer = {
@@ -50,7 +51,17 @@ marked.use({ tokenizer, renderer });
 
 // Parses markdown following the Github Flavored Markdown specification.
 // The tokenizer and renderer are slightly modified to prevent html escaping in code block and inline code.
-export const parseMarkdown = (text: string) => marked.parse(text) as string;
+export const parseMarkdown = (text: string, parseBBCode: boolean) =>
+    marked.parse(text, {
+        walkTokens: (token) => {
+            if (parseBBCode && (token.type === 'codespan' || token.type === 'code')) {
+                // eslint-disable-next-line no-param-reassign
+                (token as Tokens.Codespan).text = escapeBBCodeSquareBrackets(
+                    (token as Tokens.Codespan).text,
+                );
+            }
+        },
+    }) as string;
 
 // It is important that, &amp; is replaced lastly to prevent double escaping.
 const unescapeHtml = (text: string) =>

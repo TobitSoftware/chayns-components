@@ -11,7 +11,7 @@ const HTML_CODE_PATTERN = /(?:<code>|<code class="inline-code">)[\s\S]*?<\/code>
 export interface ParseBBCodesOptions {
     customBlockLevelBBCodeTags?: string[];
     customInlineLevelBBCodeTags?: string[];
-    parseMarkdown?: boolean;
+    justEscapeSquareBrackets?: boolean;
 }
 
 // Parses BB-Code to HTML recursively.
@@ -21,6 +21,7 @@ export const parseBBCode = (text: string, options?: ParseBBCodesOptions) => {
     const {
         customBlockLevelBBCodeTags: customBlockLevelTags = [],
         customInlineLevelBBCodeTags: customInlineLevelTags = [],
+        justEscapeSquareBrackets = false,
     } = options || {};
 
     let html = text;
@@ -31,7 +32,6 @@ export const parseBBCode = (text: string, options?: ParseBBCodesOptions) => {
     while (parseBehindIndex < html.length) {
         const htmlToParse = html.slice(parseBehindIndex);
 
-        const firstCodeElementMatch = HTML_CODE_PATTERN.exec(htmlToParse);
         const firstBBCodeMatch = findFirstBBCode(htmlToParse);
 
         // Stops parsing if no BB-Code is found.
@@ -39,19 +39,7 @@ export const parseBBCode = (text: string, options?: ParseBBCodesOptions) => {
             return html;
         }
 
-        // Prevents bb-code parsing within code block.
-        if (
-            firstCodeElementMatch &&
-            firstBBCodeMatch &&
-            firstCodeElementMatch.index < firstBBCodeMatch.index
-        ) {
-            // If a code block is found before a BB-Code tag, BB-Code parsing continues behind the code block.
-            parseBehindIndex += firstCodeElementMatch.index + firstCodeElementMatch[0].length;
-            // eslint-disable-next-line no-continue
-            continue;
-        }
-
-        const { content, fullMatch, parameters, index } = firstBBCodeMatch;
+        const { content, fullMatch, parameters, index, openingTag, closingTag } = firstBBCodeMatch;
 
         const Tag = firstBBCodeMatch.tag.toLowerCase();
         const isValidTag = [
@@ -71,48 +59,78 @@ export const parseBBCode = (text: string, options?: ParseBBCodesOptions) => {
         }
 
         // Converts BB-Code tag's content before converting itself, because it may contain other BB-Codes.
-        let parsedContent = parseBBCode(content);
+        let parsedContent = parseBBCode(content, options);
 
-        // Removes leading and trailing line-breaks from within bb code elements, to prevent unwanted spacing.
-        parsedContent = parsedContent.replace(/^\n+|\n+$/g, '');
+        if (justEscapeSquareBrackets) {
+            const indexOfFullMatch = html.indexOf(fullMatch);
+            const escapedOpeningTag = escapeBBCodeSquareBrackets(openingTag);
+            const escapedClosingTag = escapeBBCodeSquareBrackets(closingTag);
 
-        const indexOfFullMatch = html.indexOf(fullMatch);
+            html =
+                html.slice(0, indexOfFullMatch) +
+                escapedOpeningTag +
+                parsedContent +
+                escapedClosingTag +
+                html.slice(indexOfFullMatch + fullMatch.length);
 
-        let htmlAfterTag = html.slice(indexOfFullMatch + fullMatch.length);
+            // Continues parsing behind the parsed bb-code.
+            parseBehindIndex =
+                indexOfFullMatch +
+                escapedOpeningTag.length +
+                parsedContent.length +
+                escapedClosingTag.length;
+        } else {
+            // Removes leading and trailing line-breaks from within bb code elements, to prevent unwanted spacing.
+            parsedContent = parsedContent.replace(/^\n+|\n+$/g, '');
 
-        // Removes leading line-break (ONE, NOT ALL) after block level elements, to prevent unwanted spacing.
-        if (isBlockLevelTag) {
-            htmlAfterTag = htmlAfterTag.replace(/^\n/, '');
+            const indexOfFullMatch = html.indexOf(fullMatch);
+
+            let htmlAfterTag = html.slice(indexOfFullMatch + fullMatch.length);
+
+            // Removes leading line-break (ONE, NOT ALL) after block level elements, to prevent unwanted spacing.
+            if (isBlockLevelTag) {
+                htmlAfterTag = htmlAfterTag.replace(/^\n/, '');
+            }
+
+            // TODO Don't alter content of bb-code tags when justEscapeSquareBrackets is true.
+            //  This is necessary to preserve whitespaces in bb-code tags within code blocks.
+
+            const isCustomTag = [...customBlockLevelTags, ...customInlineLevelTags].includes(Tag);
+            const htmlTag = isCustomTag ? `${BB_CODE_HTML_TAG_PREFIX}${Tag}` : Tag;
+            const openingHtmlTag = `<${htmlTag}${Object.entries(parameters).length > 0 ? ' ' : ''}${Object.entries(
+                parameters,
+            )
+                .map(([key, value]) => `${key}="${value}"`)
+                .join(' ')}>`;
+            const closingHtmlTag = `</${htmlTag}>`;
+            html =
+                html.slice(0, indexOfFullMatch) +
+                openingHtmlTag +
+                parsedContent +
+                closingHtmlTag +
+                htmlAfterTag;
+
+            // Continues parsing behind the parsed bb-code.
+            parseBehindIndex =
+                indexOfFullMatch +
+                openingHtmlTag.length +
+                parsedContent.length +
+                closingHtmlTag.length;
         }
-
-        // TODO Don't alter content of bb-code tags when justEscapeSquareBrackets is true.
-        //  This is necessary to preserve whitespaces in bb-code tags within code blocks.
-
-        const isCustomTag = [...customBlockLevelTags, ...customInlineLevelTags].includes(Tag);
-        const htmlTag = isCustomTag ? `${BB_CODE_HTML_TAG_PREFIX}${Tag}` : Tag;
-        const openingTag = `<${htmlTag}${Object.entries(parameters).length > 0 ? ' ' : ''}${Object.entries(
-            parameters,
-        )
-            .map(([key, value]) => `${key}="${value}"`)
-            .join(' ')}>`;
-        const closingTag = `</${htmlTag}>`;
-        html =
-            html.slice(0, indexOfFullMatch) +
-            openingTag +
-            parsedContent +
-            closingTag +
-            htmlAfterTag;
-
-        // Continues parsing behind the parsed bb-code.
-        parseBehindIndex =
-            indexOfFullMatch + openingTag.length + parsedContent.length + closingTag.length;
     }
 
     return html;
 };
 
+export const escapeBBCodeSquareBrackets = (text: string) =>
+    text.replaceAll('[', '&zwj;[&zwj;').replaceAll(']', '&zwj;]&zwj;');
+
+export const unescapeBBCodeSquareBrackets = (text: string) =>
+    text.replaceAll('&zwj;[&zwj;', '[').replaceAll('&zwj;]&zwj;', ']');
+
+// TODO Remove this
 // This function escapes BB-Code tags in Markdown code blocks and inline code.
-export const escapeBBCode = (text: string) => {
+export const escapeBBCodeInCode = (text: string) => {
     let newText = text;
     const tokens: Tokens.Table[] = [];
 

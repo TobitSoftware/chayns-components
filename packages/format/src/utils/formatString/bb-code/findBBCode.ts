@@ -1,4 +1,4 @@
-const BB_REGEX = /\[([a-zA-Z0-9_]*)(.*?)\](.*?)\[\/\1\]/s;
+const BB_REGEX = /(\[([a-zA-Z0-9_]*)(.*?)\])(.*?)(\[\/\2\])/s;
 // Also matches "\" before quote to fix button for voucher messages
 const PARAMETER_REGEX = /([\w]*?)=\\?["„](.*?)["“]/g;
 
@@ -8,6 +8,8 @@ export interface BBCodeMatch {
     parameters: Record<string, string>;
     content: string;
     index: number;
+    openingTag: string;
+    closingTag: string;
 }
 
 // TODO Use external package instead of RegExp to parse BBCode.
@@ -18,7 +20,7 @@ export function findFirstBBCode(inputString: string): BBCodeMatch | null {
     const matches = BB_REGEX.exec(inputString);
 
     if (matches !== null) {
-        const [fullMatch, tag, params, content] = matches;
+        const [fullMatch, openingTag, tag, params, content, closingTag] = matches;
         const { index } = matches;
 
         if (
@@ -47,6 +49,8 @@ export function findFirstBBCode(inputString: string): BBCodeMatch | null {
             parameters,
             content,
             index,
+            openingTag,
+            closingTag,
         };
     }
 

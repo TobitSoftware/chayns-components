@@ -1,6 +1,10 @@
 import type { TableObject } from '../../types/format';
 import { escapeHtmlInText } from '../escape';
-import { escapeBBCode, parseBBCode, ParseBBCodesOptions } from './bb-code/formatBBCode';
+import {
+    parseBBCode,
+    ParseBBCodesOptions,
+    unescapeBBCodeSquareBrackets,
+} from './bb-code/formatBBCode';
 import { getMarkdownTables, parseMarkdown } from './markdown/formatMarkdown';
 
 interface FormatStringOptions extends ParseBBCodesOptions {
@@ -51,36 +55,44 @@ export const formatStringToHtml = (
     // Escape HTML entities.
     formattedString = escapeHtmlInText(formattedString);
 
-    if (parseBBCodeOption) {
+    // Escape BB-Code, to prevent conflicts between markdown and bb-code. Specifically [b]test[/b]() would be a problem, since markdown interprets parts of this as a link.
+
+    // Parses markdown to HTML.
+    if (parseMarkdownOption) {
         try {
-            // Escapes square brackets within Markdown code blocks and inline code to prevent bb-code formatting within them.
-            if (parseMarkdownOption) {
-                formattedString = escapeBBCode(formattedString);
+            if (parseBBCodeOption) {
+                // Escapes BB-Code brackets.
+                formattedString = parseBBCode(formattedString, {
+                    customInlineLevelBBCodeTags,
+                    customBlockLevelBBCodeTags,
+                    justEscapeSquareBrackets: true,
+                });
             }
 
-            formattedString = parseBBCode(formattedString, {
-                customInlineLevelBBCodeTags,
-                customBlockLevelBBCodeTags,
-                parseMarkdown: parseMarkdownOption,
-            });
+            formattedString = parseMarkdown(formattedString, parseBBCodeOption);
 
-            // Unescapes square brackets after bb-code formatting to display them correctly.
-            if (parseMarkdownOption) {
-                formattedString = formattedString.replaceAll('&#91;', '[').replaceAll('&#93;', ']');
+            // Remove trailing \n
+            formattedString = formattedString.replace(/\n$/, '');
+
+            if (parseBBCodeOption) {
+                // Unescapes BB-Code brackets.
+                formattedString = unescapeBBCodeSquareBrackets(formattedString);
             }
         } catch (error) {
-            console.warn('[@chayns-components/format] Warning: Failed to parse bb-code', error);
+            console.warn('[@chayns-components/format] Warning: Failed to parse markdown', error);
         }
     }
 
-    // Parses markdown to HTML. Markdown tables are parsed separately.
-    if (parseMarkdownOption) {
+    // Parses BB-Code to HTML.
+    if (parseBBCodeOption) {
         try {
-            formattedString = parseMarkdown(formattedString);
-            // Remove trailing \n
-            formattedString = formattedString.replace(/\n$/, '');
+            formattedString = parseBBCode(formattedString, {
+                customInlineLevelBBCodeTags,
+                customBlockLevelBBCodeTags,
+            });
+            formattedString = unescapeBBCodeSquareBrackets(formattedString);
         } catch (error) {
-            console.warn('[@chayns-components/format] Warning: Failed to parse markdown', error);
+            console.warn('[@chayns-components/format] Warning: Failed to parse bb-code', error);
         }
     }
 
@@ -94,3 +106,4 @@ export const formatStringToHtml = (
 // tables dont have id to assign them to table objects. Use the index instead.
 // Inline Code doesn't have class inline-code anymore. Styles have to be applied differently.
 // Code block language is on language attribute of code tag instead of pre tag.
+// Taks Lists are now supported. Checkboxes need to be replaced.
