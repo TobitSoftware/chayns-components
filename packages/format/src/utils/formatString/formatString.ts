@@ -1,12 +1,10 @@
 import { escapeHtmlInText } from '../escape';
-import { parseBBCode, ParseBBCodesOptions } from './bb-code/formatBBCode';
+import { escapeBBCode, parseBBCode, ParseBBCodesOptions } from './bb-code/formatBBCode';
 import { parseMarkdown } from './markdown/formatMarkdown';
 import { TableObject } from './markdown/formatMarkdownTable';
 
 interface FormatStringOptions extends ParseBBCodesOptions {
-    escapeHtml?: boolean;
     parseMarkdown?: boolean;
-    parseMarkdownTables?: boolean;
     parseBBCode?: boolean;
 }
 
@@ -29,9 +27,7 @@ export const formatStringToHtml = (
     }
 
     const {
-        escapeHtml: escapeHtmlOption = false,
         parseMarkdown: parseMarkdownOption = true,
-        parseMarkdownTables: parseMarkdownTablesOption = false,
         parseBBCode: parseBBCodeOption = false,
         customInlineLevelBBCodeTags = [],
         customBlockLevelBBCodeTags = [],
@@ -39,18 +35,26 @@ export const formatStringToHtml = (
 
     let formattedString = string;
 
-    // Escapes HTML.
-    if (escapeHtmlOption) {
-        formattedString = escapeHtmlInText(formattedString);
-    }
+    // // Escape HTML entities.
+    formattedString = escapeHtmlInText(formattedString);
 
     if (parseBBCodeOption) {
         try {
+            // Escapes square brackets within Markdown code blocks and inline code to prevent bb-code formatting within them.
+            if (parseMarkdownOption) {
+                formattedString = escapeBBCode(formattedString);
+            }
+
             formattedString = parseBBCode(formattedString, {
                 customInlineLevelBBCodeTags,
                 customBlockLevelBBCodeTags,
-                justEscapeSquareBrackets: false,
+                parseMarkdown: parseMarkdownOption,
             });
+
+            // Unescapes square brackets after bb-code formatting to display them correctly.
+            if (parseMarkdownOption) {
+                formattedString = formattedString.replaceAll('&#91;', '[').replaceAll('&#93;', ']');
+            }
         } catch (error) {
             console.warn('[@chayns-components/format] Warning: Failed to parse bb-code', error);
         }

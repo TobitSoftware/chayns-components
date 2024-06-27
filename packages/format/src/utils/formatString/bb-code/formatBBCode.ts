@@ -1,3 +1,4 @@
+import { marked, Tokens } from 'marked';
 import { findFirstBBCode } from './findBBCode';
 
 const BB_CODE_HTML_TAG_PREFIX = 'bb-code-';
@@ -10,19 +11,14 @@ const HTML_CODE_PATTERN = /(?:<code>|<code class="inline-code">)[\s\S]*?<\/code>
 export interface ParseBBCodesOptions {
     customBlockLevelBBCodeTags?: string[];
     customInlineLevelBBCodeTags?: string[];
-}
-
-interface PrivateParseBBCodesOptions extends ParseBBCodesOptions {
-    // When justEscapeSquareBrackets is true, this function is simply used to escape square brackets of bb-code tags and nothing else!
-    justEscapeSquareBrackets?: boolean;
+    parseMarkdown?: boolean;
 }
 
 // Parses BB-Code to HTML recursively.
 // When justEscapeSquareBrackets is true, square brackets are escaped to prevent conflicts between markdown and BB Code.
 // In that case the function only escapes square brackets and doesn't remove line breaks.
-export const parseBBCode = (text: string, options?: PrivateParseBBCodesOptions) => {
+export const parseBBCode = (text: string, options?: ParseBBCodesOptions) => {
     const {
-        justEscapeSquareBrackets = false,
         customBlockLevelBBCodeTags: customBlockLevelTags = [],
         customInlineLevelBBCodeTags: customInlineLevelTags = [],
     } = options || {};
@@ -78,35 +74,28 @@ export const parseBBCode = (text: string, options?: PrivateParseBBCodesOptions) 
         let parsedContent = parseBBCode(content);
 
         // Removes leading and trailing line-breaks from within bb code elements, to prevent unwanted spacing.
-        if (!justEscapeSquareBrackets) {
-            parsedContent = parsedContent.replace(/^\n+|\n+$/g, '');
-        }
+        parsedContent = parsedContent.replace(/^\n+|\n+$/g, '');
 
         const indexOfFullMatch = html.indexOf(fullMatch);
 
         let htmlAfterTag = html.slice(indexOfFullMatch + fullMatch.length);
 
         // Removes leading line-break (ONE, NOT ALL) after block level elements, to prevent unwanted spacing.
-        if (!justEscapeSquareBrackets && isBlockLevelTag) {
+        if (isBlockLevelTag) {
             htmlAfterTag = htmlAfterTag.replace(/^\n/, '');
         }
-
-        // Use escaped square brackets to prevent conflicts between markdown and BB Code.
-        const openTag = justEscapeSquareBrackets ? '&#91;' : '<';
-        const closeTag = justEscapeSquareBrackets ? '&#93;' : '>';
 
         // TODO Don't alter content of bb-code tags when justEscapeSquareBrackets is true.
         //  This is necessary to preserve whitespaces in bb-code tags within code blocks.
 
         const isCustomTag = [...customBlockLevelTags, ...customInlineLevelTags].includes(Tag);
-        const htmlTag =
-            !justEscapeSquareBrackets && isCustomTag ? `${BB_CODE_HTML_TAG_PREFIX}${Tag}` : Tag;
-        const openingTag = `${openTag}${htmlTag}${Object.entries(parameters).length > 0 ? ' ' : ''}${Object.entries(
+        const htmlTag = isCustomTag ? `${BB_CODE_HTML_TAG_PREFIX}${Tag}` : Tag;
+        const openingTag = `<${htmlTag}${Object.entries(parameters).length > 0 ? ' ' : ''}${Object.entries(
             parameters,
         )
             .map(([key, value]) => `${key}="${value}"`)
-            .join(' ')}${closeTag}`;
-        const closingTag = `${openTag}/${htmlTag}${closeTag}`;
+            .join(' ')}>`;
+        const closingTag = `</${htmlTag}>`;
         html =
             html.slice(0, indexOfFullMatch) +
             openingTag +
@@ -120,4 +109,34 @@ export const parseBBCode = (text: string, options?: PrivateParseBBCodesOptions) 
     }
 
     return html;
+};
+
+// This function escapes BB-Code tags in Markdown code blocks and inline code.
+export const escapeBBCode = (text: string) => {
+    let newText = text;
+    const tokens: Tokens.Table[] = [];
+
+    // marked.parse parses all markdown in the provided text and returns the result.
+    // The parsed result isn't needed. Instead, the parsed tokens are collected.
+    marked.parse(text, {
+        walkTokens: (token) => {
+            tokens.push(token as Tokens.Table);
+        },
+    }) as string;
+
+    let textIndex = 0;
+    tokens.forEach((token) => {
+        if (['code', 'codespan'].includes(token.type)) {
+            const index = newText.slice(textIndex).indexOf(token.raw);
+            if (index > -1) {
+                newText =
+                    newText.slice(0, textIndex + index) +
+                    token.raw.replaceAll('[', '&#91;').replaceAll(']', '&#93;') +
+                    newText.slice(textIndex + index + token.raw.length);
+            }
+            textIndex += index + token.raw.length;
+        }
+    });
+
+    return newText;
 };
