@@ -64,11 +64,9 @@ describe('HTML Formatter Function', () => {
         });
 
         describe('URLs', () => {
-            test('should format URLs correctly', () => {
+            test('should not format URLs', () => {
                 const result = formatStringToHtml('https://example.com');
-                expect(result.html).toEqual(
-                    '<p><a href="https://example.com">https://example.com</a></p>',
-                );
+                expect(result.html).toEqual('<p>https://example.com</p>');
                 expect(result.tables).toEqual([]);
             });
         });
@@ -440,6 +438,7 @@ describe('HTML Formatter Function', () => {
     // TODO Should format bb-code within markdown correctly.
     // TODO Should format markdown within bb-code correctly.
 
+    // TODO Nested BB-Code (not same tag nested within each other)
     // describe('BB-Code Formatting', () => {
     //
     //     it('should format bold text correctly', () => {
