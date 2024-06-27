@@ -62,6 +62,16 @@ describe('HTML Formatter Function', () => {
 
             // TODO Decide if & should be escaped, when they are not part of an HTML entity.
         });
+
+        describe('URLs', () => {
+            test('should format URLs correctly', () => {
+                const result = formatStringToHtml('https://example.com');
+                expect(result.html).toEqual(
+                    '<p><a href="https://example.com">https://example.com</a></p>\n',
+                );
+                expect(result.tables).toEqual([]);
+            });
+        });
     });
 
     describe('Format Markdown', () => {
@@ -396,14 +406,13 @@ describe('HTML Formatter Function', () => {
                 expect(result.tables).toEqual([]);
             });
 
-            // test('should format codeblock within list correctly', () => {
-            //     const result = formatStringToHtml(
-            //         '- ```\nconst a = 1;\n```\n- ```js\nconst b = 2;\n```',
-            //     );
-            //     expect(result.html).toEqual(
-            //         '<ul><li><pre language=""><code>const a = 1;</code></pre>\n</li><li><pre language="js"><code>const b = 2;</code></pre></li></ul>'
-            //     );
-            // });
+            test('should format task lists correctly', () => {
+                const result = formatStringToHtml('- [ ] foo\n- [x] bar');
+                expect(removeLinebreaks(result.html)).toEqual(
+                    '<ul><li><input disabled="" type="checkbox"> foo</li><li><input checked="" disabled="" type="checkbox"> bar</li></ul>',
+                );
+                expect(result.tables).toEqual([]);
+            });
         });
 
         describe('Combined Elements', () => {
