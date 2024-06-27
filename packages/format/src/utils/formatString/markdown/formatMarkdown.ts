@@ -1,5 +1,5 @@
 import { marked, Tokens } from 'marked';
-import type { TableObject } from './formatMarkdownTable';
+import type { TableObject } from '../../../types/format';
 // eslint-disable-next-line import/extensions,import/no-unresolved
 import { stringify } from 'csv-stringify/browser/esm/sync';
 

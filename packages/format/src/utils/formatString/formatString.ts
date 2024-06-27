@@ -1,7 +1,7 @@
+import type { TableObject } from '../../types/format';
 import { escapeHtmlInText } from '../escape';
 import { escapeBBCode, parseBBCode, ParseBBCodesOptions } from './bb-code/formatBBCode';
 import { getMarkdownTables, parseMarkdown } from './markdown/formatMarkdown';
-import type { TableObject } from './markdown/formatMarkdownTable';
 
 interface FormatStringOptions extends ParseBBCodesOptions {
     parseMarkdown?: boolean;
