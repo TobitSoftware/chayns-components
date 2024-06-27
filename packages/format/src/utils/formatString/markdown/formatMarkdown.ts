@@ -4,12 +4,15 @@ import type { TableObject } from '../../../types/format';
 import { stringify } from 'csv-stringify/browser/esm/sync';
 import { escapeBBCodeSquareBrackets } from '../bb-code/formatBBCode';
 
-const inlineCode = /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/;
+const inlineCodeRule = /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/;
+const inlineTextRule =
+    /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*_]|\b_|$)|[^ ](?= {2,}\n)))/;
+
 const tokenizer = {
     // Codespan Tokenizer is overwritten to prevent html escaping, since html is already escaped.
     // The function is copied from marked.js and slightly modified: https://github.com/markedjs/marked/blob/42954aaba960b6f815b24ec0d39da464960e4ec9/src/Tokenizer.ts#L749
     codespan(src: string): Tokens.Codespan | undefined {
-        const cap = inlineCode.exec(src);
+        const cap = inlineCodeRule.exec(src);
         if (cap) {
             let text = (cap[2] as string).replace(/\n/g, ' ');
             const hasNonSpaceChars = /[^ ]/.test(text);
@@ -31,6 +34,19 @@ const tokenizer = {
         return undefined;
     },
     url() {
+        return undefined;
+    },
+    // inlineText is overwritten to prevent html escaping, specifically since quote characters are escaped, which breaks the attributes of bb-code elements.
+    // The function is copied from marked.js and slightly modified: https://github.com/markedjs/marked/blob/42954aaba960b6f815b24ec0d39da464960e4ec9/src/Tokenizer.ts#L854
+    inlineText(src: string) {
+        const cap = inlineTextRule.exec(src);
+        if (cap) {
+            return {
+                type: 'text',
+                raw: cap[0],
+                text: cap[0],
+            };
+        }
         return undefined;
     },
 };
