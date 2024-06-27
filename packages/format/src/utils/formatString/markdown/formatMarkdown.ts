@@ -1,4 +1,7 @@
 import { marked, Tokens } from 'marked';
+import type { TableObject } from './formatMarkdownTable';
+// eslint-disable-next-line import/extensions,import/no-unresolved
+import { stringify } from 'csv-stringify/browser/esm/sync';
 
 const inlineCode = /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/;
 const tokenizer = {
@@ -48,3 +51,55 @@ marked.use({ tokenizer, renderer });
 // Parses markdown following the Github Flavored Markdown specification.
 // The tokenizer and renderer are slightly modified to prevent html escaping in code block and inline code.
 export const parseMarkdown = (text: string) => marked.parse(text) as string;
+
+// It is important that, &amp; is replaced lastly to prevent double escaping.
+const unescapeHtml = (text: string) =>
+    text.replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&amp;', '&');
+
+export const getMarkdownTables = (text: string): TableObject[] => {
+    const tableTokens: Tokens.Table[] = [];
+
+    marked.parse(text, {
+        walkTokens: (token) => {
+            if (token.type === 'table') {
+                tableTokens.push(token as Tokens.Table);
+            }
+        },
+    }) as string;
+
+    const tables: TableObject[] = [];
+
+    tableTokens.forEach((tableToken) => {
+        const tableArray: string[][] = [];
+
+        if (tableToken.header?.length > 0) {
+            const rowArray: string[] = [];
+
+            tableToken.header.forEach((header) => {
+                rowArray.push(unescapeHtml(header.text));
+            });
+
+            tableArray.push(rowArray);
+        }
+        if (tableToken.rows?.length > 0) {
+            tableToken.rows.forEach((row) => {
+                const rowArray: string[] = [];
+
+                row.forEach((cell) => {
+                    rowArray.push(unescapeHtml(cell.text));
+                });
+
+                tableArray.push(rowArray);
+            });
+        }
+
+        const csv = stringify(tableArray || []);
+
+        tables.push({
+            raw: unescapeHtml(tableToken.raw),
+            csv,
+        });
+    });
+
+    return tables;
+};

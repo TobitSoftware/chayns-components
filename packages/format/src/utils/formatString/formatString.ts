@@ -1,7 +1,7 @@
 import { escapeHtmlInText } from '../escape';
 import { escapeBBCode, parseBBCode, ParseBBCodesOptions } from './bb-code/formatBBCode';
-import { parseMarkdown } from './markdown/formatMarkdown';
-import { TableObject } from './markdown/formatMarkdownTable';
+import { getMarkdownTables, parseMarkdown } from './markdown/formatMarkdown';
+import type { TableObject } from './markdown/formatMarkdownTable';
 
 interface FormatStringOptions extends ParseBBCodesOptions {
     parseMarkdown?: boolean;
@@ -35,7 +35,20 @@ export const formatStringToHtml = (
 
     let formattedString = string;
 
-    // // Escape HTML entities.
+    // Needs to get the tables before escaping html and parsing bb-code, so the original content can be extracted.
+    const tables: TableObject[] = [];
+    if (parseMarkdownOption) {
+        try {
+            tables.push(...getMarkdownTables(formattedString));
+        } catch (error) {
+            console.warn(
+                '[@chayns-components/format] Warning: Failed to get markdown tables',
+                error,
+            );
+        }
+    }
+
+    // Escape HTML entities.
     formattedString = escapeHtmlInText(formattedString);
 
     if (parseBBCodeOption) {
@@ -68,8 +81,6 @@ export const formatStringToHtml = (
             console.warn('[@chayns-components/format] Warning: Failed to parse markdown', error);
         }
     }
-
-    const tables: TableObject[] = [];
 
     return {
         html: formattedString,

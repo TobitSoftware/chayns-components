@@ -2,7 +2,6 @@ import { stringify } from 'csv-stringify/browser/esm/sync';
 import { marked, Tokens } from 'marked';
 
 export type TableObject = {
-    id: string;
     raw: string;
     csv: string;
 };
@@ -73,7 +72,7 @@ export const parseMarkdownTables = (text: string) => {
         const csv = stringify(tableArray || []);
 
         tables.push({
-            id,
+            // id,
             raw: tableToken.raw,
             csv,
         });
