@@ -7,6 +7,8 @@ import { escapeBBCodeSquareBrackets } from '../bb-code/formatBBCode';
 const inlineCodeRule = /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/;
 const inlineTextRule = /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<![`*_]|\b_|$)|[^ ](?= {2,}\n)))/;
 
+const TABLE_ID_PREFIX = 'formatted-table-';
+
 const tokenizer = {
     // Codespan Tokenizer is overwritten to prevent html escaping, since html is already escaped.
     // The function is copied from marked.js and slightly modified: https://github.com/markedjs/marked/blob/42954aaba960b6f815b24ec0d39da464960e4ec9/src/Tokenizer.ts#L749
@@ -66,9 +68,20 @@ const renderer = {
     },
 };
 
+const postprocess = (html: string): string => {
+    let tableIndex = 0;
+    const modifiedString = html.replace(/(<table>)/g, () => {
+        const result = `<table id="${TABLE_ID_PREFIX}${tableIndex}">`;
+        tableIndex++;
+        return result;
+    });
+
+    return modifiedString;
+};
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-marked.use({ tokenizer, renderer });
+marked.use({ tokenizer, renderer, hooks: { postprocess } });
 
 // Parses markdown following the Github Flavored Markdown specification.
 // The tokenizer and renderer are slightly modified to prevent html escaping in code block and inline code.
@@ -101,7 +114,7 @@ export const getMarkdownTables = (text: string): TableObject[] => {
 
     const tables: TableObject[] = [];
 
-    tableTokens.forEach((tableToken) => {
+    tableTokens.forEach((tableToken, index) => {
         const tableArray: string[][] = [];
 
         if (tableToken.header?.length > 0) {
@@ -130,6 +143,7 @@ export const getMarkdownTables = (text: string): TableObject[] => {
         tables.push({
             raw: unescapeHtml(tableToken.raw),
             csv,
+            id: `${TABLE_ID_PREFIX}${index}`,
         });
     });
 
