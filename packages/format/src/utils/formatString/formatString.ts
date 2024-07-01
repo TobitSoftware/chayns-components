@@ -100,9 +100,3 @@ export const formatStringToHtml = (
         tables,
     };
 };
-
-// TODO Handle following changes:
-// tables dont have id to assign them to table objects. Use the index instead.
-// Inline Code doesn't have class inline-code anymore. Styles have to be applied differently.
-// Code block language is on language attribute of code tag instead of pre tag.
-// Taks Lists are now supported. Checkboxes need to be replaced.
