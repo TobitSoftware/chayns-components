@@ -435,35 +435,269 @@ describe('HTML Formatter Function', () => {
         });
     });
 
-    // TODO Should format bb-code within markdown correctly.
-    // TODO Should format markdown within bb-code correctly.
+    describe('Format BB-Code', () => {
+        describe('All Elements', () => {
+            describe('Inline Elements', () => {
+                // b, strong, i, em, u, s, span, img
+                test('should format b tag correctly', () => {
+                    const result = formatStringToHtml('[b]bold[/b]', {
+                        parseBBCode: true,
+                    });
+                    expect(result.html).toEqual('<p><b>bold</b></p>');
+                    expect(result.tables).toEqual([]);
+                });
 
-    // TODO Nested BB-Code (not same tag nested within each other)
-    // describe('BB-Code Formatting', () => {
-    //
-    //     it('should format bold text correctly', () => {
-    //         // Test for "[b]bold[/b]" to "<strong>bold</strong>"
-    //     });
-    //
-    //     it('should format italic text correctly', () => {
-    //         // Test for "[i]italic[/i]" to "<em>italic</em>"
-    //     });
-    //
-    //     // ... Weitere Tests für alle BB-Code-Elemente
-    //
-    // });
-    //
-    // describe('Combined Formatting (Markdown + BB-Code)', () => {
-    //
-    //     it('should format combined bold and italic text correctly', () => {
-    //         // Test a combination of Markdown and BB-Code
-    //     });
-    //
-    //     it('should handle nested formatting correctly', () => {
-    //         // Test for nested elements like "**[b]text[/b]**"
-    //     });
-    //
-    //     // ... Weitere kombinierte Tests
-    //
-    // });
+                test('should format strong tag correctly', () => {
+                    const result = formatStringToHtml('[strong]bold[/strong]', {
+                        parseBBCode: true,
+                    });
+                    expect(result.html).toEqual('<p><strong>bold</strong></p>');
+                    expect(result.tables).toEqual([]);
+                });
+
+                test('should format i tag correctly', () => {
+                    const result = formatStringToHtml('[i]italic[/i]', {
+                        parseBBCode: true,
+                    });
+                    expect(result.html).toEqual('<p><i>italic</i></p>');
+                    expect(result.tables).toEqual([]);
+                });
+
+                test('should format em tag correctly', () => {
+                    const result = formatStringToHtml('[em]italic[/em]', {
+                        parseBBCode: true,
+                    });
+                    expect(result.html).toEqual('<p><em>italic</em></p>');
+                    expect(result.tables).toEqual([]);
+                });
+
+                test('should format u tag correctly', () => {
+                    const result = formatStringToHtml('[u]underline[/u]', {
+                        parseBBCode: true,
+                    });
+                    expect(result.html).toEqual('<p><u>underline</u></p>');
+                    expect(result.tables).toEqual([]);
+                });
+
+                test('should format s tag correctly', () => {
+                    const result = formatStringToHtml('[s]strike[/s]', {
+                        parseBBCode: true,
+                    });
+                    expect(result.html).toEqual('<p><s>strike</s></p>');
+                    expect(result.tables).toEqual([]);
+                });
+
+                test('should format span tag correctly', () => {
+                    const result = formatStringToHtml('[span]span[/span]', {
+                        parseBBCode: true,
+                    });
+                    expect(result.html).toEqual('<p><span>span</span></p>');
+                    expect(result.tables).toEqual([]);
+                });
+
+                test('should format img tag correctly', () => {
+                    const result = formatStringToHtml(
+                        '[img src="https://example.com/image.jpg"][/img]',
+                        {
+                            parseBBCode: true,
+                        },
+                    );
+                    expect(result.html).toEqual('<p><img src="https://example.com/image.jpg"></p>');
+                    expect(result.tables).toEqual([]);
+                });
+            });
+
+            describe('Block Level Elements', () => {
+                test('should format center tag correctly', () => {
+                    const result = formatStringToHtml('[center]centered text[/center]', {
+                        parseBBCode: true,
+                    });
+                    expect(result.html).toEqual('<p><center>centered text</center></p>');
+                    expect(result.tables).toEqual([]);
+                });
+
+                test('should format ul tag correctly', () => {
+                    const result = formatStringToHtml('[ul][li]Item 1[/li][li]Item 2[/li][/ul]', {
+                        parseBBCode: true,
+                    });
+                    expect(result.html).toEqual('<p><ul><li>Item 1</li><li>Item 2</li></ul></p>');
+                    expect(result.tables).toEqual([]);
+                });
+
+                test('should format ol tag correctly', () => {
+                    const result = formatStringToHtml('[ol][li]Item 1[/li][li]Item 2[/li][/ol]', {
+                        parseBBCode: true,
+                    });
+                    expect(result.html).toEqual('<p><ol><li>Item 1</li><li>Item 2</li></ol></p>');
+                    expect(result.tables).toEqual([]);
+                });
+
+                test('should format li tag correctly', () => {
+                    const result = formatStringToHtml('[li]Item[/li]', {
+                        parseBBCode: true,
+                    });
+                    expect(result.html).toEqual('<p><li>Item</li></p>');
+                    expect(result.tables).toEqual([]);
+                });
+
+                test('should format heading tags correctly', () => {
+                    const getHeadingInput = (tag: string) => `[${tag}]${tag}[/${tag}]`;
+                    const getHeadingOutput = (tag: string) => `<p><${tag}>${tag}</${tag}></p>`;
+                    const headingTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+
+                    headingTags.forEach((tag) => {
+                        const result = formatStringToHtml(getHeadingInput(tag), {
+                            parseBBCode: true,
+                        });
+                        expect(result.html).toEqual(getHeadingOutput(tag));
+                        expect(result.tables).toEqual([]);
+                    });
+                });
+
+                test('should format p tag correctly', () => {
+                    const result = formatStringToHtml('[p]paragraph[/p]', {
+                        parseBBCode: true,
+                    });
+                    expect(result.html).toEqual('<p><p>paragraph</p></p>');
+                    expect(result.tables).toEqual([]);
+                });
+            });
+
+            describe('Custom Elements', () => {
+                test('should format custom tags correctly', () => {
+                    const input = '[custom attribute1="test1" attribute2="test2"]custom[/custom]';
+                    const output =
+                        '<p><bb-code-custom attribute1="test1" attribute2="test2">custom</bb-code-custom></p>';
+                    const result1 = formatStringToHtml(input, {
+                        parseBBCode: true,
+                        customInlineLevelBBCodeTags: ['custom'],
+                    });
+                    expect(result1.html).toEqual(output);
+                    expect(result1.tables).toEqual([]);
+
+                    const result2 = formatStringToHtml(input, {
+                        parseBBCode: true,
+                        customBlockLevelBBCodeTags: ['custom'],
+                    });
+                    expect(result2.html).toEqual(output);
+                    expect(result2.tables).toEqual([]);
+                });
+
+                test('should not format unknown custom tags', () => {
+                    const result = formatStringToHtml('[unknown]unknown[/unknown]', {
+                        parseBBCode: true,
+                    });
+                    expect(result.html).toEqual('<p>[unknown]unknown[/unknown]</p>');
+                    expect(result.tables).toEqual([]);
+                });
+            });
+
+            describe('Line breaks', () => {
+                describe('Between Elements', () => {
+                    test('should format line breaks between block level elements correctly', () => {
+                        const result1 = formatStringToHtml('[h1]h1[/h1]\n[h2]h2[/h2]', {
+                            parseBBCode: true,
+                        });
+                        expect(result1.html).toEqual('<p><h1>h1</h1><h2>h2</h2></p>');
+                        expect(result1.tables).toEqual([]);
+
+                        const result2 = formatStringToHtml('[h1]h1[/h1]\n\n[h2]h2[/h2]', {
+                            parseBBCode: true,
+                        });
+                        expect(result2.html).toEqual('<p><h1>h1</h1></p>\n<p><h2>h2</h2></p>');
+                        expect(result2.tables).toEqual([]);
+                    });
+
+                    test('should format line breaks between inline elements correctly', () => {
+                        const result1 = formatStringToHtml('[b]bold[/b]\n[i]italic[/i]', {
+                            parseBBCode: true,
+                        });
+                        expect(result1.html).toEqual('<p><b>bold</b>\n<i>italic</i></p>');
+                        expect(result1.tables).toEqual([]);
+
+                        const result2 = formatStringToHtml('[b]bold[/b]\n\n[i]italic[/i]', {
+                            parseBBCode: true,
+                        });
+                        expect(result2.html).toEqual('<p><b>bold</b></p>\n<p><i>italic</i></p>');
+                        expect(result2.tables).toEqual([]);
+                    });
+                });
+
+                describe('Within Elements', () => {
+                    test('should format line breaks within block level elements correctly', () => {
+                        const result = formatStringToHtml('[h1]Line 1\nLine 2[/h1]', {
+                            parseBBCode: true,
+                        });
+                        expect(result.html).toEqual('<p><h1>Line 1\nLine 2</h1></p>');
+                        expect(result.tables).toEqual([]);
+                    });
+
+                    // This is a test that would fail!
+                    // test('should format multiple line breaks within block level elements correctly', () => {
+                    //     const result = formatStringToHtml('[h1]Line 1\n\nLine 2[/h1]', {
+                    //         parseBBCode: true,
+                    //     });
+                    //     expect(result.html).toEqual('<p><h1>Line 1\nLine 2</h1></p>');
+                    //     expect(result.tables).toEqual([]);
+                    // });
+
+                    test('should remove trailing and leading new lines within block level elements', () => {
+                        const result = formatStringToHtml('[h1]\n\n\nLine 1\n\n\n[/h1]', {
+                            parseBBCode: true,
+                        });
+                        expect(result.html).toEqual('<p><h1>Line 1</h1></p>');
+                        expect(result.tables).toEqual([]);
+                    });
+                });
+            });
+
+            test('should not format url in tag attributes', () => {
+                const result = formatStringToHtml(
+                    '[link url="https://www.google.com"]Google[/link]',
+                    {
+                        parseBBCode: true,
+                        customInlineLevelBBCodeTags: ['link'],
+                    },
+                );
+                expect(result.html).toEqual(
+                    '<p><bb-code-link url="https://www.google.com">Google</bb-code-link></p>',
+                );
+                expect(result.tables).toEqual([]);
+            });
+
+            test('should apply style attribute correctly', () => {
+                const result = formatStringToHtml('[span style="color: red;"]red text[/span]', {
+                    parseBBCode: true,
+                });
+                expect(result.html).toEqual('<p><span style="color: red;">red text</span></p>');
+                expect(result.tables).toEqual([]);
+            });
+
+            test('should format nested elements correctly', () => {
+                const result = formatStringToHtml('[b][i]bold italic[/i][/b]', {
+                    parseBBCode: true,
+                });
+                expect(result.html).toEqual('<p><b><i>bold italic</i></b></p>');
+                expect(result.tables).toEqual([]);
+            });
+        });
+    });
+
+    describe('Combined Formatting (Markdown + BB-Code)', () => {
+        test('should format bb-code within markdown correctly', () => {
+            const result = formatStringToHtml('*[b]bold[/b]*', {
+                parseBBCode: true,
+            });
+            expect(result.html).toEqual('<p><em><b>bold</b></em></p>');
+            expect(result.tables).toEqual([]);
+        });
+
+        test('should format markdown within bb-code correctly', () => {
+            const result = formatStringToHtml('[b]*bold*[/b]', {
+                parseBBCode: true,
+            });
+            expect(result.html).toEqual('<p><b><em>bold</em></b></p>');
+            expect(result.tables).toEqual([]);
+        });
+    });
 });
