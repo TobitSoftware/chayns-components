@@ -9,6 +9,11 @@ const inlineTextRule = /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<![`*_]|\b_|$)
 
 const TABLE_ID_PREFIX = 'formatted-table-';
 
+/*
+   The marked Pipeline, including tokenizer, renderer and hooks are explained here:
+   https://marked.js.org/using_pro
+*/
+
 const tokenizer = {
     // Codespan Tokenizer is overwritten to prevent html escaping, since html is already escaped.
     // The function is copied from marked.js and slightly modified: https://github.com/markedjs/marked/blob/42954aaba960b6f815b24ec0d39da464960e4ec9/src/Tokenizer.ts#L749
