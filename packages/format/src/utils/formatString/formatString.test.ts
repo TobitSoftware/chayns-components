@@ -180,12 +180,13 @@ describe('HTML Formatter Function', () => {
                     '| Header 1 | Header 2 |\n|----------|----------|\n| Cell 1   | Cell 2   |';
                 const result = formatStringToHtml(inputString);
                 expect(removeLinebreaks(result.html)).toEqual(
-                    '<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead><tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody></table>',
+                    '<table id="formatted-table-0"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead><tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody></table>',
                 );
                 expect(result.tables).toEqual([
                     {
                         csv: 'Header 1,Header 2\nCell 1,Cell 2\n',
                         raw: inputString,
+                        id: 'formatted-table-0',
                     },
                 ]);
             });
@@ -313,12 +314,13 @@ describe('HTML Formatter Function', () => {
                     '| Header 1 | Header 2 |\n|----------|----------|\n| **Cell 1** | *Cell 2* |';
                 const result = formatStringToHtml(inputString);
                 expect(removeLinebreaks(result.html)).toEqual(
-                    '<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead><tbody><tr><td><strong>Cell 1</strong></td><td><em>Cell 2</em></td></tr></tbody></table>',
+                    '<table id="formatted-table-0"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead><tbody><tr><td><strong>Cell 1</strong></td><td><em>Cell 2</em></td></tr></tbody></table>',
                 );
                 expect(result.tables).toEqual([
                     {
                         csv: 'Header 1,Header 2\n**Cell 1**,*Cell 2*\n',
                         raw: inputString,
+                        id: 'formatted-table-0',
                     },
                 ]);
             });
@@ -330,12 +332,13 @@ describe('HTML Formatter Function', () => {
                     parseBBCode: true,
                 });
                 expect(removeLinebreaks(result.html)).toEqual(
-                    '<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead><tbody><tr><td><b>Cell 1</b></td><td><i>Cell 2</i></td></tr></tbody></table>',
+                    '<table id="formatted-table-0"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead><tbody><tr><td><b>Cell 1</b></td><td><i>Cell 2</i></td></tr></tbody></table>',
                 );
                 expect(result.tables).toEqual([
                     {
                         csv: 'Header 1,Header 2\n[b]Cell 1[/b],[i]Cell 2[/i]\n',
                         raw: inputString,
+                        id: 'formatted-table-0',
                     },
                 ]);
             });
@@ -347,12 +350,13 @@ describe('HTML Formatter Function', () => {
                     parseBBCode: true,
                 });
                 expect(removeLinebreaks(result.html)).toEqual(
-                    '<table><thead><tr><th>Header 1</th><th>Header 2</th><th>Header 3</th></tr></thead><tbody><tr><td>&lt;div&gt;Cell 1&lt;/div&gt;</td><td>&lt;div&gt;Cell 2&lt;/div&gt;</td><td>&amp;lt;div&amp;gt;Cell 3&amp;lt;/div&amp;gt;</td></tr></tbody></table>',
+                    '<table id="formatted-table-0"><thead><tr><th>Header 1</th><th>Header 2</th><th>Header 3</th></tr></thead><tbody><tr><td>&lt;div&gt;Cell 1&lt;/div&gt;</td><td>&lt;div&gt;Cell 2&lt;/div&gt;</td><td>&amp;lt;div&amp;gt;Cell 3&amp;lt;/div&amp;gt;</td></tr></tbody></table>',
                 );
                 expect(result.tables).toEqual([
                     {
                         csv: 'Header 1,Header 2,Header 3\n<div>Cell 1</div>,<div>Cell 2</div>,&lt;div&gt;Cell 3&lt;/div&gt;\n',
                         raw: '| Header 1 | Header 2 | Header 3 |\n|----------|----------|----------|\n| <div>Cell 1</div> | <div>Cell 2</div> | &lt;div&gt;Cell 3&lt;/div&gt; |',
+                        id: 'formatted-table-0',
                     },
                 ]);
             });
@@ -360,39 +364,47 @@ describe('HTML Formatter Function', () => {
             test('should format multiple tables correctly', () => {
                 const table1 =
                     '| Header 1 | Header 2 |\n|----------|----------|\n| Cell 1   | Cell 2   |';
-                const table1Result =
-                    '<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead><tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody></table>';
+                const getTable1Result = (index: number) =>
+                    `<table id="formatted-table-${index}"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead><tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody></table>`;
                 const table1Csv = 'Header 1,Header 2\nCell 1,Cell 2\n';
                 const table2 =
                     '| Header 3 | Header 4 |\n|----------|----------|\n| Cell 3   | Cell 4   |';
-                const table2TResult =
-                    '<table><thead><tr><th>Header 3</th><th>Header 4</th></tr></thead><tbody><tr><td>Cell 3</td><td>Cell 4</td></tr></tbody></table>';
+                const getTable2TResult = (index: number) =>
+                    `<table id="formatted-table-${index}"><thead><tr><th>Header 3</th><th>Header 4</th></tr></thead><tbody><tr><td>Cell 3</td><td>Cell 4</td></tr></tbody></table>`;
                 const table2Csv = 'Header 3,Header 4\nCell 3,Cell 4\n';
 
                 const result1 = formatStringToHtml(`${table1}\n\n${table2}`);
-                expect(removeLinebreaks(result1.html)).toEqual(`${table1Result}${table2TResult}`);
+                expect(removeLinebreaks(result1.html)).toEqual(
+                    `${getTable1Result(0)}${getTable2TResult(1)}`,
+                );
                 expect(result1.tables).toEqual([
                     {
                         csv: table1Csv,
                         raw: `${table1}\n\n`,
+                        id: 'formatted-table-0',
                     },
                     {
                         csv: table2Csv,
                         raw: table2,
+                        id: 'formatted-table-1',
                     },
                 ]);
 
                 // Tables in reverse order.
                 const result2 = formatStringToHtml(`${table2}\n\n${table1}`);
-                expect(removeLinebreaks(result2.html)).toEqual(`${table2TResult}${table1Result}`);
+                expect(removeLinebreaks(result2.html)).toEqual(
+                    `${getTable2TResult(0)}${getTable1Result(1)}`,
+                );
                 expect(result2.tables).toEqual([
                     {
                         csv: table2Csv,
                         raw: `${table2}\n\n`,
+                        id: 'formatted-table-0',
                     },
                     {
                         csv: table1Csv,
                         raw: table1,
+                        id: 'formatted-table-1',
                     },
                 ]);
             });
@@ -408,11 +420,11 @@ describe('HTML Formatter Function', () => {
             });
 
             test('should format task lists correctly', () => {
-                const result = formatStringToHtml('- [ ] foo\n- [x] bar');
-                expect(removeLinebreaks(result.html)).toEqual(
-                    '<ul><li><input disabled="" type="checkbox"> foo</li><li><input checked="" disabled="" type="checkbox"> bar</li></ul>',
+                const result1 = formatStringToHtml('- [ ] 1\n- [x] 2\n- [X] 3');
+                expect(removeLinebreaks(result1.html)).toEqual(
+                    '<ul><li>[ ] 1</li><li>[x] 2</li><li>[x] 3</li></ul>',
                 );
-                expect(result.tables).toEqual([]);
+                expect(result1.tables).toEqual([]);
             });
         });
 
