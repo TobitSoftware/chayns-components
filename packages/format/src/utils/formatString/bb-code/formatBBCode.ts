@@ -98,19 +98,14 @@ export const parseBBCode = (text: string, options?: ParseBBCodesOptions) => {
                 .map(([key, value]) => `${key}="${value}"`)
                 .join(' ')}>`;
             const closingHtmlTag = `</${htmlTag}>`;
-            html =
-                html.slice(0, indexOfFullMatch) +
-                openingHtmlTag +
-                parsedContent +
-                closingHtmlTag +
-                htmlAfterTag;
+
+            const element =
+                Tag === 'img' ? openingHtmlTag : openingHtmlTag + parsedContent + closingHtmlTag;
+
+            html = `${html.slice(0, indexOfFullMatch)}${element}${htmlAfterTag}`;
 
             // Continues parsing behind the parsed bb-code.
-            parseBehindIndex =
-                indexOfFullMatch +
-                openingHtmlTag.length +
-                parsedContent.length +
-                closingHtmlTag.length;
+            parseBehindIndex = indexOfFullMatch + element.length;
         }
     }
 
