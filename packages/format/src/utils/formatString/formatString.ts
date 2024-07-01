@@ -1,12 +1,14 @@
-import { escapeHtmlInText, unescapeSquareBrackets } from '../escape';
-import { parseBBCode, ParseBBCodesOptions } from './bb-code/formatBBCode';
-import { parseMarkdown } from './markdown/formatMarkdown';
-import { parseMarkdownTables, TableObject } from './markdown/formatMarkdownTable';
+import type { TableObject } from '../../types/format';
+import { escapeHtmlInText } from '../escape';
+import {
+    parseBBCode,
+    ParseBBCodesOptions,
+    unescapeBBCodeSquareBrackets,
+} from './bb-code/formatBBCode';
+import { getMarkdownTables, parseMarkdown } from './markdown/formatMarkdown';
 
 interface FormatStringOptions extends ParseBBCodesOptions {
-    escapeHtml?: boolean;
     parseMarkdown?: boolean;
-    parseMarkdownTables?: boolean;
     parseBBCode?: boolean;
 }
 
@@ -28,9 +30,7 @@ export const formatStringToHtml = (
     }
 
     const {
-        escapeHtml: escapeHtmlOption = false,
         parseMarkdown: parseMarkdownOption = true,
-        parseMarkdownTables: parseMarkdownTablesOption = false,
         parseBBCode: parseBBCodeOption = false,
         customInlineLevelBBCodeTags = [],
         customBlockLevelBBCodeTags = [],
@@ -38,70 +38,58 @@ export const formatStringToHtml = (
 
     let formattedString = string;
 
-    // Escapes HTML.
-    if (escapeHtmlOption) {
-        formattedString = escapeHtmlInText(formattedString);
-    }
-
-    // Escape BB-Code square brackets, to prevent conflicts between markdown and BB Code.
-    /* Conflict example:
-        When Sidekick detects a function call as an entity through NER, then the following text is returned.
-        '[nerReplace <params>]function[/nerReplace](<params>)'
-        Because '[/nerReplace](<params>)' is a valid Markdown link, the Markdown parser would interpret it as a link
-        and thus prevent the BB-Code parser from recognizing the BB-Code. Parsing the BB-Code first would prevent this
-        issue. Unfortunately the Markdown parser doesn't support this.
-     */
-    const shouldTemporarilyEscapeBBCodeBrackets = parseMarkdownOption && parseBBCodeOption;
-    if (shouldTemporarilyEscapeBBCodeBrackets) {
+    // Needs to get the tables before escaping html and parsing bb-code, so the original content can be extracted.
+    const tables: TableObject[] = [];
+    if (parseMarkdownOption) {
         try {
-            formattedString = parseBBCode(formattedString, {
-                justEscapeSquareBrackets: true,
-            });
+            tables.push(...getMarkdownTables(formattedString));
         } catch (error) {
             console.warn(
-                '[@chayns-components/format] Warning: Failed to escape bb-code brackets',
+                '[@chayns-components/format] Warning: Failed to get markdown tables',
                 error,
             );
         }
     }
 
-    // Parses markdown to HTML. Markdown tables are parsed separately.
+    // Escape HTML entities.
+    formattedString = escapeHtmlInText(formattedString);
+
+    // Escape BB-Code, to prevent conflicts between markdown and bb-code. Specifically [b]test[/b]() would be a problem, since markdown interprets parts of this as a link.
+
+    // Parses markdown to HTML.
     if (parseMarkdownOption) {
         try {
-            formattedString = parseMarkdown(formattedString);
+            if (parseBBCodeOption) {
+                // Escapes BB-Code brackets.
+                formattedString = parseBBCode(formattedString, {
+                    customInlineLevelBBCodeTags,
+                    customBlockLevelBBCodeTags,
+                    justEscapeSquareBrackets: true,
+                });
+            }
+
+            formattedString = parseMarkdown(formattedString, parseBBCodeOption);
+
+            // Remove trailing \n
+            formattedString = formattedString.replace(/\n$/, '');
+
+            if (parseBBCodeOption) {
+                // Unescapes BB-Code brackets.
+                formattedString = unescapeBBCodeSquareBrackets(formattedString);
+            }
         } catch (error) {
             console.warn('[@chayns-components/format] Warning: Failed to parse markdown', error);
         }
     }
 
-    const tables: TableObject[] = [];
-
-    // Parses markdown tables to HTML. Also returns the tables content as an array, to allow further processing.
-    if (parseMarkdownTablesOption) {
-        try {
-            const result = parseMarkdownTables(formattedString);
-            formattedString = result.html;
-            tables.push(...result.tables);
-        } catch (error) {
-            console.warn(
-                '[@chayns-components/format] Warning: Failed to parse markdown tables',
-                error,
-            );
-        }
-    }
-
-    // Unescapes BB-Code square brackets, to allow parsing of BB-Code.
-    if (shouldTemporarilyEscapeBBCodeBrackets) {
-        formattedString = unescapeSquareBrackets(formattedString);
-    }
-
+    // Parses BB-Code to HTML.
     if (parseBBCodeOption) {
         try {
             formattedString = parseBBCode(formattedString, {
                 customInlineLevelBBCodeTags,
                 customBlockLevelBBCodeTags,
-                justEscapeSquareBrackets: false,
             });
+            formattedString = unescapeBBCodeSquareBrackets(formattedString);
         } catch (error) {
             console.warn('[@chayns-components/format] Warning: Failed to parse bb-code', error);
         }
