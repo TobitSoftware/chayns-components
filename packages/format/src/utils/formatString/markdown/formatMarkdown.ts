@@ -66,10 +66,18 @@ const renderer = {
 
         return `<pre><code class="language-${langString}">${code}</code></pre>\n`;
     },
+    // Replaces the checkbox input elements with markdown checkboxes.
+    // This is the easiest way to prevent the formatting of markdown checkboxes in lists.
+    // This can modify the input string slightly, since the capitalization of the checkbox can be lost.
+    // If a user types '- [X]' it will be replaced with '- [x]' => the capitalization is lost.
+    checkbox({ checked }: Tokens.Checkbox) {
+        return checked ? '[x]' : '[ ]';
+    },
 };
 
 const postprocess = (html: string): string => {
     let tableIndex = 0;
+    // Assigns ids to tables.
     const modifiedString = html.replace(/(<table>)/g, () => {
         const result = `<table id="${TABLE_ID_PREFIX}${tableIndex}">`;
         tableIndex++;
