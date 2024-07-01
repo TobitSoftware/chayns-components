@@ -6,15 +6,30 @@ import { ComboBoxDirection } from '../../types/comboBox';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ComboBoxItemProps } from './combobox-item/ComboBoxItem';
 
-export const StyledComboBox = styled.div`
+type StyledComboBoxProps = WithTheme<{
+    $shouldUseFullWidth: boolean;
+    $minWidth: number;
+}>;
+
+export const StyledComboBox = styled.div<StyledComboBoxProps>`
     user-select: none;
-    width: fit-content;
+    position: relative;
+
+    ${({ $shouldUseFullWidth, $minWidth }) =>
+        $shouldUseFullWidth
+            ? css`
+                  min-width: ${$minWidth}px;
+                  width: 100%;
+              `
+            : css`
+                  min-width: ${$minWidth}px;
+                  max-width: ${$minWidth}px;
+              `}
 `;
 
 type StyledComboBoxHeaderProps = WithTheme<{
     $isTouch: boolean;
     $isOpen: boolean;
-    $minWidth: number;
     $direction: ComboBoxDirection;
     $isDisabled?: boolean;
 }>;
@@ -27,8 +42,6 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     cursor: ${({ $isDisabled }) => (!$isDisabled ? 'pointer' : 'default')};
     background: ${({ theme }: StyledComboBoxHeaderProps) => theme['001']};
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
-    min-width: ${({ $minWidth }) => $minWidth}px;
-    max-width: ${({ $minWidth }) => $minWidth}px;
     transition: background-color 0.2s ease-in-out;
 
     ${({ $isOpen, $direction }) => {
@@ -91,7 +104,6 @@ export const StyledComboBoxIconWrapper = styled.div`
 
 type StyledComboBoxBodyProps = WithTheme<{
     $overflowY: CSSProperties['overflowY'];
-    $minWidth: number;
     $maxHeight: CSSProperties['maxHeight'];
     $direction: ComboBoxDirection;
     $browser: Browser | 'bot' | null | undefined;
@@ -105,10 +117,9 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     flex-direction: column;
     border: 1px solid rgba(160, 160, 160, 0.3);
     cursor: pointer;
-    min-width: ${({ $minWidth }) => $minWidth}px;
-    max-width: ${({ $minWidth }) => $minWidth}px;
     max-height: ${({ $maxHeight }) => $maxHeight};
     overflow-y: ${({ $overflowY }) => $overflowY};
+    width: 100%;
 
     ${({ $direction }) => {
         if ($direction === ComboBoxDirection.BOTTOM) {

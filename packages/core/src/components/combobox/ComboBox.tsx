@@ -68,6 +68,10 @@ export type ComboBoxProps = {
      * If true, the images of the items are displayed in a round shape.
      */
     shouldShowRoundImage?: boolean;
+    /**
+     * Whether the width of the 'ComboBox' should be the width of the parent or of the widest item.
+     */
+    shouldUseFullWidth?: boolean;
 };
 
 const ComboBox: FC<ComboBoxProps> = ({
@@ -79,6 +83,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     placeholder,
     selectedItem,
     shouldShowRoundImage,
+    shouldUseFullWidth = false,
 }) => {
     const [item, setItem] = useState<IComboBoxItem>();
     const [isAnimating, setIsAnimating] = useState(false);
@@ -299,7 +304,6 @@ const ComboBox: FC<ComboBoxProps> = ({
                 $overflowY={overflowY}
                 initial={{ height: 0, opacity: 0 }}
                 $maxHeight={maxHeight}
-                $minWidth={minWidth}
                 style={style}
                 $direction={direction}
                 transition={{ duration: 0.2 }}
@@ -316,7 +320,6 @@ const ComboBox: FC<ComboBoxProps> = ({
         isAnimating,
         list,
         maxHeight,
-        minWidth,
         overflowY,
         selectedItem,
         shouldShowRoundImage,
@@ -324,11 +327,14 @@ const ComboBox: FC<ComboBoxProps> = ({
 
     return useMemo(
         () => (
-            <StyledComboBox ref={styledComboBoxElementRef}>
+            <StyledComboBox
+                ref={styledComboBoxElementRef}
+                $shouldUseFullWidth={shouldUseFullWidth}
+                $minWidth={minWidth}
+            >
                 {direction === ComboBoxDirection.TOP && comboBoxBody}
                 <StyledComboBoxHeader
                     $direction={direction}
-                    $minWidth={minWidth}
                     onClick={handleHeaderClick}
                     $isOpen={isAnimating}
                     $isTouch={isTouch}
@@ -365,6 +371,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             placeholderImageUrl,
             placeholderText,
             shouldShowRoundImage,
+            shouldUseFullWidth,
         ],
     );
 };
