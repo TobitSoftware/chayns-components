@@ -63,6 +63,10 @@ export const parseBBCode = (text: string, options?: ParseBBCodesOptions) => {
             const escapedOpeningTag = escapeBBCodeSquareBrackets(openingTag);
             const escapedClosingTag = escapeBBCodeSquareBrackets(closingTag);
 
+            // Removes leading and trailing line-breaks from within bb code elements, to prevent unwanted spacing.
+            // This needs to be done before formatting Markdown, so the Markdown formatting doesn't interpret line breaks unexpectedly.
+            parsedContent = parsedContent.replace(/^\n+|\n+$/g, '');
+
             // Simply escapes the square brackets of the BB-Code opening and closing tag.
             html =
                 html.slice(0, indexOfFullMatch) +
@@ -78,9 +82,6 @@ export const parseBBCode = (text: string, options?: ParseBBCodesOptions) => {
                 parsedContent.length +
                 escapedClosingTag.length;
         } else {
-            // Removes leading and trailing line-breaks from within bb code elements, to prevent unwanted spacing.
-            parsedContent = parsedContent.replace(/^\n+|\n+$/g, '');
-
             const indexOfFullMatch = html.indexOf(fullMatch);
 
             let htmlAfterTag = html.slice(indexOfFullMatch + fullMatch.length);
