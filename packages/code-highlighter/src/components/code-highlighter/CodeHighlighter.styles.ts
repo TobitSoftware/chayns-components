@@ -48,6 +48,11 @@ export const StyledCodeHighlighter = styled.div<StyledCodeHighlighterProps>`
                       }
                   `}
     }
+
+    // Fixes display of tables in code highlighter for markdown.
+    .language-markdown .token.table {
+        display: inline;
+    }
 `;
 
 type StyledCodeHighlighterHeaderProps = WithTheme<{
