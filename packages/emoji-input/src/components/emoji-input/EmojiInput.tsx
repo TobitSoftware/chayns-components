@@ -382,8 +382,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         /**
          * This function prevents formatting from being adopted when texts are inserted. To do this, the
          * plain text is read from the event after the default behavior has been prevented. The plain
-         * text is then inserted at the correct position in the input field using the
-         * 'insertTextAtCursorPosition' function.
+         * text is then inserted at the correct position in the input field using document.execCommand('insertText')
          */
         const handlePaste = useCallback(
             (event: ClipboardEvent<HTMLDivElement>) => {
@@ -400,7 +399,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
                     text = convertEmojisToUnicode(text);
 
-                    insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+                    // This deprecated function is used, because it causes the inserted content to be added to the undo stack.
+                    // If the text were to be inserted directly into the 'innerHTML' of the editor element, the undo stack would not be updated.
+                    // In that case on CTRL+Z the inserted text would not be removed.
+                    document.execCommand('insertText', false, text);
 
                     const newEvent = new Event('input', { bubbles: true });
 
@@ -413,8 +415,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         /**
          * This function prevents formatting from being adopted when texts are dropped. To do this, the
          * plain text is read from the event after the default behavior has been prevented. The plain
-         * text is then inserted at the correct position in the input field using the
-         * 'insertTextAtCursorPosition' function.
+         * text is then inserted at the correct position in the input field using document.execCommand('insertText')
          */
         const handleDrop = useCallback(
             (event: React.DragEvent<HTMLDivElement>) => {
@@ -435,7 +436,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
                     text = convertEmojisToUnicode(text);
 
-                    insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+                    // This deprecated function is used, because it causes the inserted content to be added to the undo stack.
+                    // If the text were to be inserted directly into the 'innerHTML' of the editor element, the undo stack would not be updated.
+                    // In that case on CTRL+Z the inserted text would not be removed.
+                    document.execCommand('insertText', false, text);
 
                     const newEvent = new Event('input', { bubbles: true });
 
