@@ -29,10 +29,23 @@ export type SearchBoxBodyProps = {
     width: number;
     browser: Browser | 'bot' | null | undefined;
     onGroupSelect?: (keys: string[]) => void;
+    coordinates: { x: number; y: number };
 };
 
 const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
-    ({ filterbuttons, selectedGroups, width, browser, height, children, onGroupSelect }, ref) => {
+    (
+        {
+            filterbuttons,
+            coordinates,
+            selectedGroups,
+            width,
+            browser,
+            height,
+            children,
+            onGroupSelect,
+        },
+        ref,
+    ) => {
         const [hasScrolled, setHasScrolled] = useState(false);
         const [currentGroupName, setCurrentGroupName] = useState('');
 
@@ -81,6 +94,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
             () => (
                 <StyledMotionSearchBoxBody
                     $width={width}
+                    style={{ left: coordinates.x, top: coordinates.y }}
                     initial={{ height: 0, opacity: 0 }}
                     exit={{ height: 0, opacity: 0 }}
                     animate={{ height: 'fit-content', opacity: 1 }}
@@ -123,6 +137,8 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
             [
                 browser,
                 children,
+                coordinates.x,
+                coordinates.y,
                 currentGroupName,
                 filterbuttons,
                 handleScroll,

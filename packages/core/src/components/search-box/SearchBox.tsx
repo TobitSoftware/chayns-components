@@ -9,6 +9,7 @@ import React, {
     forwardRef,
     KeyboardEventHandler,
     ReactElement,
+    ReactPortal,
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -16,11 +17,13 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { createPortal } from 'react-dom';
 import { useTheme } from 'styled-components';
 import type { IFilterButtonItem } from '../../types/filterButtons';
 import type { ISearchBoxItem, ISearchBoxItems } from '../../types/searchBox';
 import { calculateContentHeight } from '../../utils/calculate';
 import { searchList } from '../../utils/searchBox';
+import type { ContextMenuCoordinates } from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
 import Input from '../input/Input';
 import GroupName from './group-name/GroupName';
@@ -34,6 +37,10 @@ export type SearchBoxRef = {
 };
 
 export type SearchBoxProps = {
+    /**
+     * The element where the content of the `ComboBox` should be rendered via React Portal.
+     */
+    container?: Element;
     /**
      * List of groups with items that can be searched. It is possible to give only one list; if multiple lists are provided, the 'group name' parameter becomes mandatory.
      */
@@ -90,6 +97,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             onSelect,
             onKeyDown,
             selectedId,
+            container = document.body,
             shouldShowRoundImage,
             shouldShowContentOnEmptyInput = true,
             shouldAddInputToList = true,
@@ -100,7 +108,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const [matchingListsItems, setMatchingListsItems] = useState<ISearchBoxItems[]>(lists);
         const [selectedImage, setSelectedImage] = useState<ReactElement>();
         const [value, setValue] = useState('');
-        const [isAnimating, setIsAnimating] = useState(true);
+        const [isAnimating, setIsAnimating] = useState(false);
         const [height, setHeight] = useState<number>(0);
         const [width, setWidth] = useState(0);
         const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
@@ -108,6 +116,11 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const [filteredChildrenArray, setFilteredChildrenArray] = useState<Element[]>();
         const [inputToListValue, setInputToListValue] = useState<string>('');
         const [groups, setGroups] = useState<string[]>(['all']);
+        const [portal, setPortal] = useState<ReactPortal>();
+        const [internalCoordinates, setInternalCoordinates] = useState<ContextMenuCoordinates>({
+            x: 0,
+            y: 0,
+        });
 
         const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement | null>(null);
@@ -116,6 +129,17 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const theme = useTheme();
 
         const { browser } = getDevice();
+
+        useEffect(() => {
+            if (boxRef.current) {
+                const { x, y } = boxRef.current.getBoundingClientRect();
+
+                setInternalCoordinates({
+                    x,
+                    y,
+                });
+            }
+        }, []);
 
         /**
          * Checks if Lists are smaller then 1
@@ -191,6 +215,23 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             return newLists;
         }, [groups, lists, shouldAddInputToList, value]);
 
+        const handleOpen = useCallback(() => {
+            if (boxRef.current) {
+                const { x, y, height: bodyHeight } = boxRef.current.getBoundingClientRect();
+
+                setInternalCoordinates({
+                    x,
+                    y: y + bodyHeight,
+                });
+
+                setIsAnimating(true);
+            }
+        }, []);
+
+        const handleClose = useCallback(() => {
+            setIsAnimating(false);
+        }, []);
+
         const handleFilterButtonsGroupSelect = (keys: string[]) => {
             setGroups(keys.length === 0 ? ['all'] : keys);
         };
@@ -201,10 +242,10 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const handleOutsideClick = useCallback(
             (event: MouseEvent) => {
                 if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
-                    setIsAnimating(false);
+                    handleClose();
                 }
             },
-            [boxRef],
+            [handleClose],
         );
 
         /**
@@ -212,13 +253,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          */
         useEffect(() => {
             document.addEventListener('click', handleOutsideClick);
-            window.addEventListener('blur', () => setIsAnimating(false));
+            window.addEventListener('blur', () => handleClose());
 
             return () => {
                 document.removeEventListener('click', handleOutsideClick);
-                window.addEventListener('blur', () => setIsAnimating(false));
+                window.addEventListener('blur', () => handleClose());
             };
-        }, [handleOutsideClick, boxRef]);
+        }, [handleOutsideClick, boxRef, handleClose]);
 
         /**
          * This hook calculates the height
@@ -321,9 +362,21 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 }));
 
                 setMatchingListsItems(filteredMatchingListItems);
-                setIsAnimating(filteredMatchingListItems.length !== 0);
+
+                if (filteredMatchingListItems.length !== 0) {
+                    handleOpen();
+                } else {
+                    handleClose();
+                }
             }
-        }, [activeList, shouldAddInputToList, shouldShowContentOnEmptyInput, value]);
+        }, [
+            activeList,
+            handleClose,
+            handleOpen,
+            shouldAddInputToList,
+            shouldShowContentOnEmptyInput,
+            value,
+        ]);
 
         /**
          * This function filters the lists by input
@@ -367,17 +420,25 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             value,
         ]);
 
+        const handleClick = useCallback(() => {
+            if (isAnimating) {
+                handleClose();
+            } else {
+                handleOpen();
+            }
+        }, [handleClose, handleOpen, isAnimating]);
+
         const rightElement = useMemo(() => {
             if (!shouldShowToggleIcon) {
                 return undefined;
             }
 
             return (
-                <StyledSearchBoxIcon onClick={() => setIsAnimating((prevState) => !prevState)}>
+                <StyledSearchBoxIcon onClick={handleClick}>
                     <Icon icons={['fa fa-chevron-down']} color={theme['006'] as string} />
                 </StyledSearchBoxIcon>
             );
-        }, [shouldShowToggleIcon, theme]);
+        }, [handleClick, shouldShowToggleIcon, theme]);
 
         /**
          * This function handles changes of the input
@@ -410,7 +471,11 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     setMatchingListsItems([]);
                 } else {
                     setMatchingListsItems(filteredLists);
-                    setIsAnimating(filteredLists.length !== 0);
+                    if (filteredLists.length !== 0) {
+                        handleOpen();
+                    } else {
+                        handleClose();
+                    }
                 }
 
                 setValue(event.target.value);
@@ -420,7 +485,14 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     onChange(event);
                 }
             },
-            [activeList, onChange, shouldAddInputToList, shouldShowContentOnEmptyInput],
+            [
+                activeList,
+                handleClose,
+                handleOpen,
+                onChange,
+                shouldAddInputToList,
+                shouldShowContentOnEmptyInput,
+            ],
         );
 
         /**
@@ -446,7 +518,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 };
 
                 setValue(newItem.text);
-                setIsAnimating(false);
+                handleClose();
 
                 setSelectedImage(
                     newItem.imageUrl ? (
@@ -463,7 +535,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     onSelect(newItem);
                 }
             },
-            [onSelect, shouldShowRoundImage],
+            [handleClose, onSelect, shouldShowRoundImage],
         );
 
         const content = useMemo(() => {
@@ -517,6 +589,10 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         useEffect(() => {
             const handleKeyDown = (e: KeyboardEvent) => {
+                if (!isAnimating) {
+                    return;
+                }
+
                 if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                     e.preventDefault();
                     const children = contentRef.current?.children;
@@ -582,7 +658,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             return () => {
                 document.removeEventListener('keydown', handleKeyDown);
             };
-        }, [filteredChildrenArray, focusedIndex, handleSelect]);
+        }, [filteredChildrenArray, focusedIndex, handleSelect, isAnimating]);
 
         const handleKeyPress = useCallback((event: KeyboardEvent) => {
             if (event.keyCode === 27) {
@@ -606,6 +682,40 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             };
         }, [handleKeyPress]);
 
+        useEffect(() => {
+            setPortal(() =>
+                createPortal(
+                    <AnimatePresence initial={false}>
+                        {isAnimating && (
+                            <SearchBoxBody
+                                filterbuttons={filterbuttons}
+                                selectedGroups={groups}
+                                width={width}
+                                coordinates={internalCoordinates}
+                                browser={browser?.name}
+                                height={height}
+                                ref={contentRef}
+                                onGroupSelect={handleFilterButtonsGroupSelect}
+                            >
+                                {content}
+                            </SearchBoxBody>
+                        )}
+                    </AnimatePresence>,
+                    container,
+                ),
+            );
+        }, [
+            browser?.name,
+            container,
+            content,
+            filterbuttons,
+            groups,
+            height,
+            internalCoordinates,
+            isAnimating,
+            width,
+        ]);
+
         return useMemo(
             () => (
                 <StyledSearchBox ref={boxRef}>
@@ -622,39 +732,19 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             value={value}
                         />
                     </div>
-                    <AnimatePresence initial={false}>
-                        {isAnimating && (
-                            <SearchBoxBody
-                                filterbuttons={filterbuttons}
-                                selectedGroups={groups}
-                                width={width}
-                                browser={browser?.name}
-                                height={height}
-                                ref={contentRef}
-                                onGroupSelect={handleFilterButtonsGroupSelect}
-                            >
-                                {content}
-                            </SearchBoxBody>
-                        )}
-                    </AnimatePresence>
+                    {portal}
                 </StyledSearchBox>
             ),
             [
-                browser?.name,
-                content,
-                filterbuttons,
-                groups,
                 handleBlur,
                 handleChange,
                 handleFocus,
-                height,
-                isAnimating,
                 onKeyDown,
                 placeholder,
+                portal,
                 rightElement,
                 selectedImage,
                 value,
-                width,
             ],
         );
     },

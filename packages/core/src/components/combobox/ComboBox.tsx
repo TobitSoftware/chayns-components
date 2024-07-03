@@ -124,17 +124,6 @@ const ComboBox: FC<ComboBoxProps> = ({
         [styledComboBoxElementRef],
     );
 
-    useEffect(() => {
-        if (styledComboBoxElementRef.current) {
-            const { x, y, height } = styledComboBoxElementRef.current.getBoundingClientRect();
-
-            setInternalCoordinates({
-                x,
-                y: direction === ComboBoxDirection.TOP ? y : y + height,
-            });
-        }
-    }, [direction]);
-
     const handleOpen = useCallback(() => {
         if (styledComboBoxElementRef.current) {
             const { x, y, height } = styledComboBoxElementRef.current.getBoundingClientRect();

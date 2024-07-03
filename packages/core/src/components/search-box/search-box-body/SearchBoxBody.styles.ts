@@ -17,7 +17,7 @@ export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBo
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
     border-top: none;
-    width: ${({ $width }) => $width}px;
+    width: ${({ $width }) => $width - 2}px;
     max-height: 300px;
     box-shadow: 0 0 0 1px
         rgba(${({ theme }: StyledMotionSearchBoxBodyProps) => theme['009-rgb']}, 0.08) inset;
