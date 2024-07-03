@@ -138,6 +138,10 @@ const ComboBox: FC<ComboBoxProps> = ({
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
+            if (!isAnimating) {
+                return;
+            }
+
             if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 e.preventDefault();
                 const children = contentRef.current?.children;
@@ -185,7 +189,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [focusedIndex, handleSetSelectedItem, list]);
+    }, [focusedIndex, handleSetSelectedItem, isAnimating, list]);
 
     /**
      * This function calculates the greatest width
