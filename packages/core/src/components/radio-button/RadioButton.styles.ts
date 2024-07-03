@@ -8,7 +8,6 @@ export const StyledRadioButton = styled.span<StyledRadioButtonProps>`
     display: flex;
     flex-direction: column;
 
-    width: fit-content;
     position: relative;
 
     opacity: ${({ $isDisabled }: StyledRadioButtonProps) => ($isDisabled ? 0.5 : 1)};
