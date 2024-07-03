@@ -8,6 +8,8 @@ export const StyledTooltipChildren = styled.div<StyledTooltipChildrenProps>`
     ${({ $isOnlyText, theme }: StyledTooltipChildrenProps) =>
         $isOnlyText &&
         css`
+            width: fit-content;
+
             border-bottom-width: 1px;
             border-bottom-style: dotted;
             border-bottom-color: ${theme.text};
