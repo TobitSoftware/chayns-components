@@ -1,6 +1,8 @@
 import { getDevice } from 'chayns-api';
+import { AnimatePresence } from 'framer-motion';
 import React, {
     FC,
+    ReactPortal,
     useCallback,
     useEffect,
     useMemo,
@@ -9,6 +11,7 @@ import React, {
     type CSSProperties,
     type ReactNode,
 } from 'react';
+import { createPortal } from 'react-dom';
 import { ComboBoxDirection } from '../../types/comboBox';
 import {
     calculateContentHeight,
@@ -16,6 +19,7 @@ import {
     getMaxHeightInPixels,
 } from '../../utils/calculate';
 import { getIsTouch } from '../../utils/environment';
+import type { ContextMenuCoordinates } from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
 import ComboBoxItem from './combobox-item/ComboBoxItem';
 import {
@@ -36,6 +40,10 @@ export interface IComboBoxItem {
 }
 
 export type ComboBoxProps = {
+    /**
+     * The element where the content of the `ComboBox` should be rendered via React Portal.
+     */
+    container?: Element;
     /**
      * The direction in which the combobox should open.
      */
@@ -81,6 +89,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     maxHeight = '280px',
     onSelect,
     placeholder,
+    container = document.body,
     selectedItem,
     shouldShowRoundImage,
     shouldUseFullWidth = false,
@@ -90,6 +99,11 @@ const ComboBox: FC<ComboBoxProps> = ({
     const [minWidth, setMinWidth] = useState(0);
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
     const [overflowY, setOverflowY] = useState<CSSProperties['overflowY']>('hidden');
+    const [portal, setPortal] = useState<ReactPortal>();
+    const [internalCoordinates, setInternalCoordinates] = useState<ContextMenuCoordinates>({
+        x: 0,
+        y: 0,
+    });
 
     const styledComboBoxElementRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
@@ -109,6 +123,34 @@ const ComboBox: FC<ComboBoxProps> = ({
         },
         [styledComboBoxElementRef],
     );
+
+    useEffect(() => {
+        if (styledComboBoxElementRef.current) {
+            const { x, y, height } = styledComboBoxElementRef.current.getBoundingClientRect();
+
+            setInternalCoordinates({
+                x,
+                y: direction === ComboBoxDirection.TOP ? y : y + height,
+            });
+        }
+    }, [direction]);
+
+    const handleOpen = useCallback(() => {
+        if (styledComboBoxElementRef.current) {
+            const { x, y, height } = styledComboBoxElementRef.current.getBoundingClientRect();
+
+            setInternalCoordinates({
+                x,
+                y: direction === ComboBoxDirection.TOP ? y : y + height,
+            });
+
+            setIsAnimating(true);
+        }
+    }, [direction]);
+
+    const handleClose = useCallback(() => {
+        setIsAnimating(false);
+    }, []);
 
     /**
      * This function adds an event listener to the document to close the combobox when the user clicks outside of it
@@ -211,16 +253,20 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         textArray.push(placeholder);
 
+        const width = styledComboBoxElementRef.current?.getBoundingClientRect().width ?? 0;
+
         // 45px = padding left + padding right + border left + border right + arrow icon width + arrow icon margin left
         // 32px = image width + flex gap
         // 40px = icon width + flex gap
         setMinWidth(
-            calculateContentWidth([...list, { text: placeholder, value: 'placeholder' }]) +
-                45 +
-                (isAtLeastOneItemWithImageGiven ? 32 : 0) +
-                (isAtLeastOneItemWithIconGiven ? 40 : 0),
+            shouldUseFullWidth
+                ? width
+                : calculateContentWidth([...list, { text: placeholder, value: 'placeholder' }]) +
+                      45 +
+                      (isAtLeastOneItemWithImageGiven ? 32 : 0) +
+                      (isAtLeastOneItemWithIconGiven ? 40 : 0),
         );
-    }, [list, maxHeight, placeholder]);
+    }, [list, maxHeight, placeholder, shouldUseFullWidth]);
 
     /**
      * This function sets the external selected item
@@ -274,59 +320,79 @@ const ComboBox: FC<ComboBoxProps> = ({
      */
     const handleHeaderClick = useCallback(() => {
         if (!isDisabled) {
-            setIsAnimating((prevState) => !prevState);
+            if (isAnimating) {
+                handleClose();
+            } else {
+                handleOpen();
+            }
         }
-    }, [isDisabled]);
+    }, [handleClose, handleOpen, isAnimating, isDisabled]);
 
-    const comboBoxBody = useMemo(() => {
-        const items = list.map(({ imageUrl, icons, suffixElement, text, value }) => (
-            <ComboBoxItem
-                imageUrl={imageUrl}
-                icons={icons}
-                isSelected={selectedItem ? value === selectedItem.value : false}
-                key={value}
-                id={value}
-                onSelect={handleSetSelectedItem}
-                shouldShowRoundImage={shouldShowRoundImage}
-                suffixElement={suffixElement}
-                text={text}
-                value={value}
-            />
-        ));
+    const comboBoxItems = useMemo(
+        () =>
+            list.map(({ imageUrl, icons, suffixElement, text, value }) => (
+                <ComboBoxItem
+                    imageUrl={imageUrl}
+                    icons={icons}
+                    isSelected={selectedItem ? value === selectedItem.value : false}
+                    key={value}
+                    id={value}
+                    onSelect={handleSetSelectedItem}
+                    shouldShowRoundImage={shouldShowRoundImage}
+                    suffixElement={suffixElement}
+                    text={text}
+                    value={value}
+                />
+            )),
+        [handleSetSelectedItem, list, selectedItem, shouldShowRoundImage],
+    );
 
-        const animate = isAnimating
-            ? { height: 'fit-content', opacity: 1 }
-            : { height: 0, opacity: 0 };
+    const bodyStyles = useMemo(() => {
+        let styles: CSSProperties = { left: internalCoordinates.x, top: internalCoordinates.y };
 
-        const style =
-            direction === ComboBoxDirection.TOP ? { transform: 'translateY(-100%)' } : undefined;
+        if (direction === ComboBoxDirection.TOP) {
+            styles = { ...styles, transform: 'translateY(-100%)' };
+        }
 
-        return (
-            <StyledMotionComboBoxBody
-                $browser={browser?.name}
-                animate={animate}
-                $overflowY={overflowY}
-                initial={{ height: 0, opacity: 0 }}
-                $maxHeight={maxHeight}
-                style={style}
-                $direction={direction}
-                transition={{ duration: 0.2 }}
-                tabIndex={0}
-                ref={contentRef}
-            >
-                {items}
-            </StyledMotionComboBoxBody>
+        return styles;
+    }, [direction, internalCoordinates.x, internalCoordinates.y]);
+
+    useEffect(() => {
+        setPortal(() =>
+            createPortal(
+                <AnimatePresence initial={false}>
+                    {isAnimating && (
+                        <StyledMotionComboBoxBody
+                            $browser={browser?.name}
+                            animate={{ height: 'fit-content', opacity: 1 }}
+                            $overflowY={overflowY}
+                            initial={{ height: 0, opacity: 0 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            $maxHeight={maxHeight}
+                            $minWidth={minWidth}
+                            style={bodyStyles}
+                            $direction={direction}
+                            transition={{ duration: 0.2 }}
+                            tabIndex={0}
+                            ref={contentRef}
+                        >
+                            {comboBoxItems}
+                        </StyledMotionComboBoxBody>
+                    )}
+                </AnimatePresence>,
+                container,
+            ),
         );
     }, [
+        bodyStyles,
         browser?.name,
+        comboBoxItems,
+        container,
         direction,
-        handleSetSelectedItem,
         isAnimating,
-        list,
         maxHeight,
+        minWidth,
         overflowY,
-        selectedItem,
-        shouldShowRoundImage,
     ]);
 
     return useMemo(
@@ -336,7 +402,6 @@ const ComboBox: FC<ComboBoxProps> = ({
                 $shouldUseFullWidth={shouldUseFullWidth}
                 $minWidth={minWidth}
             >
-                {direction === ComboBoxDirection.TOP && comboBoxBody}
                 <StyledComboBoxHeader
                     $direction={direction}
                     onClick={handleHeaderClick}
@@ -359,11 +424,10 @@ const ComboBox: FC<ComboBoxProps> = ({
                         <Icon icons={['fa fa-chevron-down']} />
                     </StyledComboBoxIconWrapper>
                 </StyledComboBoxHeader>
-                {direction === ComboBoxDirection.BOTTOM && comboBoxBody}
+                {portal}
             </StyledComboBox>
         ),
         [
-            comboBoxBody,
             direction,
             handleHeaderClick,
             isAnimating,
@@ -374,6 +438,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             placeholderIcon,
             placeholderImageUrl,
             placeholderText,
+            portal,
             shouldShowRoundImage,
             shouldUseFullWidth,
         ],

@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ComboBoxDirection } from '../src';
+import { Accordion, AccordionContent, ComboBoxDirection } from '../src';
 import ComboBox from '../src/components/combobox/ComboBox';
 import Icon from '../src/components/icon/Icon';
 
@@ -72,7 +72,11 @@ const Template: StoryFn<typeof ComboBox> = (args) => (
             sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
             kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
         </p>
-        <ComboBox {...args} />
+        <Accordion title={'test'}>
+            <AccordionContent>
+                <ComboBox {...args} />
+            </AccordionContent>
+        </Accordion>
     </>
 );
 
