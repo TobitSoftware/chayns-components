@@ -112,5 +112,6 @@ export const StyledMotionRadioButtonChildren = styled(
 )<StyledMotionRadioButtonChildrenProps>`
     margin-left: 18px;
     cursor: text;
+    overflow: hidden;
     color: ${({ theme }: StyledMotionRadioButtonChildrenProps) => theme.text};
 `;
