@@ -15,6 +15,8 @@ import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
 import { StyledMotionListItem } from './ListItem.styles';
 
+export type ListItemElements = [ReactNode, ...ReactNode[]];
+
 export type ListItemProps = {
     /**
      * The content of the `ListItem` body. When the `ListItem` has children,
@@ -59,12 +61,12 @@ export type ListItemProps = {
      * Elements that are displayed on the left side of the header. If multiple
      * elements are specified, they are displayed one aside the other.
      */
-    leftElements?: [ReactNode, ...ReactNode[]];
+    leftElements?: ListItemElements;
     /**
      * Elements that are displayed on the right side of the header. If multiple
      * elements are specified, they are displayed one below the other.
      */
-    rightElements?: [ReactNode, ...ReactNode[]];
+    rightElements?: ListItemElements;
     /**
      * Images of users should always be displayed in a round shape. Therefore,
      * this property can be set to true.

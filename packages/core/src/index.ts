@@ -29,7 +29,11 @@ export { default as Icon } from './components/icon/Icon';
 export { default as Input } from './components/input/Input';
 export { default as List } from './components/list/List';
 export { default as ListItemContent } from './components/list/list-item/list-item-content/ListItemContent';
-export { default as ListItem, type ListItemProps } from './components/list/list-item/ListItem';
+export {
+    default as ListItem,
+    type ListItemElements,
+    type ListItemProps,
+} from './components/list/list-item/ListItem';
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
 export type { MentionMember } from './components/mention-finder/MentionFinder';
 export { default as NumberInput } from './components/number-input/NumberInput';
