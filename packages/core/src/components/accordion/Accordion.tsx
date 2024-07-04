@@ -18,6 +18,7 @@ import type { InputProps } from '../input/Input';
 import AccordionBody from './accordion-body/AccordionBody';
 import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';
+import { AccordionWrappedContext } from './accordion-provider/AccordionContextProvider';
 import { StyledAccordion } from './Accordion.styles';
 
 export const AccordionContext = React.createContext({ isWrapped: false });
@@ -164,13 +165,20 @@ const Accordion: FC<AccordionProps> = ({
     titleInputProps,
 }) => {
     const {
-        isWrapped,
+        isWrapped: groupIsWrapped,
         openAccordionUuid,
         accordionGroupUuid,
         accordionUuids,
         updateOpenAccordionUuid,
     } = useContext(AccordionGroupContext);
     const { isWrapped: isParentWrapped } = useContext(AccordionContext);
+
+    const { isWrapped: contextIsWrapped } = useContext(AccordionWrappedContext);
+
+    const isWrapped = useMemo(
+        () => groupIsWrapped ?? contextIsWrapped,
+        [contextIsWrapped, groupIsWrapped],
+    );
 
     const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(isDefaultOpen ?? isOpened);
 
@@ -258,6 +266,8 @@ const Accordion: FC<AccordionProps> = ({
 
     const areaContextProviderValue = useMemo(() => ({ shouldChangeColor: true }), []);
 
+    const accordionWrappedContextProviderValue = useMemo(() => ({ isWrapped: true }), []);
+
     return (
         <StyledAccordion
             data-uuid={`${accordionGroupUuid ?? ''}---${uuid}`}
@@ -299,9 +309,13 @@ const Accordion: FC<AccordionProps> = ({
                                 onScroll={onBodyScroll}
                                 shouldHideBody={shouldRenderClosed && !isOpen}
                             >
-                                <AreaContext.Provider value={areaContextProviderValue}>
-                                    {children}
-                                </AreaContext.Provider>
+                                <AccordionWrappedContext.Provider
+                                    value={accordionWrappedContextProviderValue}
+                                >
+                                    <AreaContext.Provider value={areaContextProviderValue}>
+                                        {children}
+                                    </AreaContext.Provider>
+                                </AccordionWrappedContext.Provider>
                             </AccordionBody>
                         )}
                     </AnimatePresence>

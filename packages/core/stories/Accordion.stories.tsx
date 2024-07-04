@@ -196,7 +196,7 @@ WrappedAccordions.args = {
             aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
             rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor si amet.
         </AccordionContent>,
-        <AccordionGroup isWrapped>
+        <AccordionGroup>
             <Accordion
                 title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
             invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua"
@@ -213,7 +213,7 @@ WrappedAccordions.args = {
                     dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
                     invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
                 </AccordionContent>
-                <AccordionGroup isWrapped>
+                <AccordionGroup>
                     <Accordion title="At vero eos et accusam">
                         <AccordionContent>
                             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
@@ -229,7 +229,7 @@ WrappedAccordions.args = {
                             eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
                             voluptua.
                         </AccordionContent>
-                        <AccordionGroup isWrapped>
+                        <AccordionGroup>
                             <Accordion title="At vero eos et accusam">
                                 <AccordionContent>
                                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed

@@ -57,12 +57,7 @@ type AccordionGroupProps = {
     onOpen?: VoidFunction;
 };
 
-const AccordionGroup: FC<AccordionGroupProps> = ({
-    children,
-    isWrapped = false,
-    onClose,
-    onOpen,
-}) => {
+const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose, onOpen }) => {
     const [openAccordionUuid, setOpenAccordionUuid] =
         useState<IAccordionGroupContext['openAccordionUuid']>(undefined);
     const [accordionUuids, setAccordionUuids] = useState<string[]>();
