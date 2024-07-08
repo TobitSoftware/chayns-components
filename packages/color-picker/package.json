@@ -71,7 +71,7 @@
         "@chayns/colors": "^2.0.0"
     },
     "peerDependencies": {
-        "chayns-api": ">=1.0.50",
+        "chayns-api": ">=1.0.73",
         "framer-motion": ">=10.18.0",
         "react": ">=16.14.0",
         "react-dom": ">=16.14.0",
