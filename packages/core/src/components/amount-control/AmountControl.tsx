@@ -106,33 +106,44 @@ const AmountControl: FC<AmountControlProps> = ({
         setInputValue(checkForValidAmount({ amount, maxAmount, minAmount }).toString());
     }, [amount, maxAmount, minAmount]);
 
-    /**
-     * Function that updates the onChange event
-     */
-    useEffect(() => {
-        if (onChange) {
-            onChange(amountValue);
-        }
-    }, [amountValue, onChange]);
+    const handleAmountAdd = useCallback(() => {
+        setAmountValue((prevState) => {
+            const newAmount = prevState + 1;
 
-    const handleAmountAdd = () => {
-        setAmountValue((prevState) => prevState + 1);
+            if (typeof onChange === 'function') {
+                onChange(newAmount);
+            }
+
+            return newAmount;
+        });
         setInputValue((prevState) => (Number(prevState) + 1).toString());
-    };
+    }, [onChange]);
 
-    const handleAmountRemove = () => {
-        setAmountValue((prevState) => prevState - 1);
+    const handleAmountRemove = useCallback(() => {
+        setAmountValue((prevState) => {
+            const newAmount = prevState - 1;
+
+            if (typeof onChange === 'function') {
+                onChange(newAmount);
+            }
+
+            return newAmount;
+        });
         setInputValue((prevState) => (Number(prevState) - 1).toString());
-    };
+    }, [onChange]);
 
     const handleFirstAmount = useCallback(() => {
         if (amountValue !== 0) {
             return;
         }
 
+        if (typeof onChange === 'function') {
+            onChange(1);
+        }
+
         setAmountValue(1);
         setInputValue('1');
-    }, [amountValue]);
+    }, [amountValue, onChange]);
 
     const handleDeleteIconClick = useCallback(() => {
         if (inputValue === '0') {
@@ -142,15 +153,19 @@ const AmountControl: FC<AmountControlProps> = ({
         } else {
             handleAmountRemove();
         }
-    }, [inputValue]);
+    }, [handleAmountRemove, inputValue]);
 
     const handleInputBlur = useCallback(() => {
         setAmountValue(inputValue === '' ? 0 : Number(inputValue));
 
+        if (typeof onChange === 'function') {
+            onChange(inputValue === '' ? 0 : Number(inputValue));
+        }
+
         if (inputValue === '') {
             setInputValue('0');
         }
-    }, [inputValue]);
+    }, [inputValue, onChange]);
 
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -279,6 +294,8 @@ const AmountControl: FC<AmountControlProps> = ({
         [
             amountValue,
             displayState,
+            handleAmountAdd,
+            handleAmountRemove,
             handleDeleteIconClick,
             handleFirstAmount,
             handleInputBlur,
