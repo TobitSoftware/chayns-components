@@ -59,6 +59,15 @@ export type FileInputProps = {
     onRemove?: (file: File | FileInputFileItem | string) => void;
 };
 
+type DialogInput = {
+    upload: boolean;
+    buttons: {
+        text: string;
+        buttonType: number;
+    }[];
+    initialView: string;
+};
+
 const FileInput: FC<FileInputProps> = ({
     fileSelectionIcons = ['fa fa-upload'],
     imageSelectIcons = ['ts-image'],
@@ -200,7 +209,7 @@ const FileInput: FC<FileInputProps> = ({
             return;
         }
 
-        const { buttonType, result } = (await createDialog({
+        const { buttonType, result } = (await createDialog<DialogInput>({
             dialogInput: {
                 upload: true,
                 buttons: [

@@ -3,7 +3,6 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useStat
 import { deleteUserSignature } from '../../api/signature/delete';
 import { getUserSignature } from '../../api/signature/get';
 import { putUserSignature } from '../../api/signature/put';
-import type { SignatureDialogResult } from '../../types/signature';
 import Button from '../button/Button';
 import Icon from '../icon/Icon';
 import {
@@ -62,14 +61,14 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
 
         const handleCallDialog = useCallback(
             async (shouldSubscribe: boolean) => {
-                const dialog = (await createDialog({
+                const dialog = await createDialog({
                     type: DialogType.SIGNATURE,
-                }).open()) as SignatureDialogResult;
+                }).open();
 
-                if (dialog.buttonType === 1 && dialog.result) {
-                    await putUserSignature(dialog.result).then((success) => {
+                if (dialog.buttonType === 1 && dialog.value) {
+                    await putUserSignature(dialog.value).then((success) => {
                         if (success) {
-                            setSignatureUrl(dialog.result);
+                            setSignatureUrl(dialog.value);
 
                             if (shouldSubscribe) {
                                 setHasSubscribed(true);
@@ -78,7 +77,7 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
                                     onSubscribe();
                                 }
                             } else if (typeof onEdit === 'function') {
-                                onEdit(dialog.result);
+                                onEdit(dialog.value);
                             }
                         }
                     });
