@@ -1,3 +1,4 @@
+import { createDialog, DialogType } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
     forwardRef,
@@ -112,19 +113,18 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             const isTouch = getIsTouch();
 
             if (isTouch) {
-                // ToDo: Replace with new api function if new api is ready
-                const { buttonType, selection } = await chayns.dialog.select({
+                const { value } = await createDialog({
+                    type: DialogType.SELECT,
                     buttons: [],
                     list: items.map(({ icons, text }, index) => ({
                         name: text,
-                        value: index,
+                        id: index,
                         icon: icons[0],
                     })),
-                    type: 2,
-                });
+                }).open();
 
-                if (buttonType === 1 && typeof selection[0]?.value === 'number') {
-                    void items[selection[0].value]?.onClick();
+                if (value[0] !== undefined) {
+                    void items[value[0]]?.onClick();
                 }
             } else if (contextMenuRef.current) {
                 const rootElement = document.querySelector('.tapp') || document.body;
