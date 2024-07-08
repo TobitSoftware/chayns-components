@@ -1,6 +1,5 @@
+import { BB_CODE_HTML_TAG_PREFIX } from '../../../constants/format';
 import { findFirstBBCode } from './findBBCode';
-
-const BB_CODE_HTML_TAG_PREFIX = 'bb-code-';
 
 const BLOCK_LEVEL_TAGS = ['center', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'];
 const INLINE_LEVEL_TAGS = ['b', 'strong', 'i', 'em', 'u', 's', 'span', 'img'];
