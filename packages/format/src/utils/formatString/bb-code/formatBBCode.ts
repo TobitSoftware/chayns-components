@@ -7,13 +7,16 @@ const INLINE_LEVEL_TAGS = ['b', 'strong', 'i', 'em', 'u', 's', 'span', 'img'];
 export interface ParseBBCodesOptions {
     customBlockLevelBBCodeTags?: string[];
     customInlineLevelBBCodeTags?: string[];
+}
+
+interface ParseBBCodePrivateOptions extends ParseBBCodesOptions {
     justEscapeSquareBrackets?: boolean;
 }
 
 // Parses BB-Code to HTML recursively.
 // When justEscapeSquareBrackets is true, square brackets are escaped to prevent conflicts between markdown and BB Code.
 // In that case the function only escapes square brackets and doesn't remove line breaks.
-export const parseBBCode = (text: string, options?: ParseBBCodesOptions) => {
+export const parseBBCode = (text: string, options?: ParseBBCodePrivateOptions) => {
     const {
         customBlockLevelBBCodeTags: customBlockLevelTags = [],
         customInlineLevelBBCodeTags: customInlineLevelTags = [],
