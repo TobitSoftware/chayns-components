@@ -36,10 +36,16 @@ const tokenizer = {
 
         return undefined;
     },
+    // Disables Markdown formatting for setext headings.
     lheading(): Tokens.Heading | undefined {
         return undefined;
     },
+    // Disables converting urls to hyperlinks.
     url() {
+        return undefined;
+    },
+    // Disables converting text with 4 leading spaces to code block.
+    code() {
         return undefined;
     },
     // inlineText is overwritten to prevent html escaping, specifically since quote characters are escaped, which breaks the attributes of bb-code elements.

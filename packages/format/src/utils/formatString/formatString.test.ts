@@ -249,6 +249,12 @@ describe('HTML Formatter Function', () => {
                 expect(resultWithLanguage.tables).toEqual([]);
             });
 
+            test('should not format 4 spaces as code block', () => {
+                const result = formatStringToHtml('    const a = 1;');
+                expect(result.html).toEqual('<p>    const a = 1;</p>');
+                expect(result.tables).toEqual([]);
+            });
+
             describe('HTML In Code', () => {
                 test('should escape < and > within code block', () => {
                     const resultWithoutLanguage = formatStringToHtml('```\n<div>Test</div>\n```');
