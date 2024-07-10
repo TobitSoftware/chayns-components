@@ -37,18 +37,27 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
                     background-color: ${theme['red-4']};
                     border: 1px solid ${theme['red-1']};
                     color: #222;
+
+                    --chayns-color--text: #222;
+                    --chayns-color-rgb--text: rgb(34, 34, 34);
                 `;
             case ContentCardType.Success:
                 return css`
                     background-color: ${theme['green-4']};
                     border: 1px solid ${theme['green-1']};
                     color: #222;
+
+                    --chayns-color--text: #222;
+                    --chayns-color-rgb--text: rgb(34, 34, 34);
                 `;
             case ContentCardType.Warning:
                 return css`
                     background-color: ${theme['yellow-4']};
                     border: 1px solid ${theme['yellow-1']};
                     color: #222;
+
+                    --chayns-color--text: #222;
+                    --chayns-color-rgb--text: rgb(34, 34, 34);
                 `;
             default:
                 return css`
