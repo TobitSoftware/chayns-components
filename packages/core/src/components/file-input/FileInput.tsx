@@ -209,7 +209,7 @@ const FileInput: FC<FileInputProps> = ({
             return;
         }
 
-        const { buttonType, result } = (await createDialog({
+        const { buttonType, result } = (await createDialog<DialogInput>({
             dialogInput: {
                 upload: true,
                 buttons: [
