@@ -13,8 +13,11 @@ import React, {
     useState,
 } from 'react';
 import { AreaContext } from '../area-provider/AreaContextProvider';
+import { StyledInputRightElement } from '../input/Input.styles';
 import {
     StyledTextArea,
+    StyledTextAreaContent,
+    StyledTextAreaContentWrapper,
     StyledTextAreaInput,
     StyledTextAreaLabel,
     StyledTextAreaLabelWrapper,
@@ -42,6 +45,10 @@ export type TextAreaProps = {
      */
     placeholder?: string | ReactElement;
     /**
+     * An element that should be displayed on the right side of the Input.
+     */
+    rightElement?: ReactElement;
+    /**
      * Value if the text area should be controlled.
      */
     value?: string;
@@ -51,6 +58,7 @@ const TextArea: FC<TextAreaProps> = ({
     placeholder,
     value,
     onChange,
+    rightElement,
     onBlur,
     maxHeight = '120px',
     minHeight = '41px',
@@ -62,6 +70,9 @@ const TextArea: FC<TextAreaProps> = ({
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const { browser } = getDevice();
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const shouldShowBorder = rightElement?.props?.style?.backgroundColor === undefined;
 
     const shouldChangeColor = useMemo(
         () => areaProvider.shouldChangeColor ?? false,
@@ -90,22 +101,29 @@ const TextArea: FC<TextAreaProps> = ({
     return useMemo(
         () => (
             <StyledTextArea>
-                <StyledTextAreaInput
-                    $shouldChangeColor={shouldChangeColor}
-                    $browser={browser?.name}
-                    ref={textareaRef}
-                    value={value}
-                    onBlur={onBlur}
-                    onChange={onChange}
-                    $maxHeight={maxHeight}
-                    $minHeight={minHeight}
-                    $isOverflowing={isOverflowing}
-                    rows={1}
-                />
-                {!value && (
-                    <StyledTextAreaLabelWrapper>
-                        <StyledTextAreaLabel>{placeholder}</StyledTextAreaLabel>
-                    </StyledTextAreaLabelWrapper>
+                <StyledTextAreaContentWrapper $shouldChangeColor={shouldChangeColor}>
+                    <StyledTextAreaContent>
+                        <StyledTextAreaInput
+                            $browser={browser?.name}
+                            ref={textareaRef}
+                            value={value}
+                            onBlur={onBlur}
+                            onChange={onChange}
+                            $maxHeight={maxHeight}
+                            $minHeight={minHeight}
+                            $isOverflowing={isOverflowing}
+                            rows={1}
+                        />
+                        {!value && (
+                            <StyledTextAreaLabelWrapper>
+                                <StyledTextAreaLabel>{placeholder}</StyledTextAreaLabel>
+                            </StyledTextAreaLabelWrapper>
+                        )}
+                    </StyledTextAreaContent>
+                    {rightElement && shouldShowBorder && rightElement}
+                </StyledTextAreaContentWrapper>
+                {rightElement && !shouldShowBorder && (
+                    <StyledInputRightElement>{rightElement}</StyledInputRightElement>
                 )}
             </StyledTextArea>
         ),
@@ -117,7 +135,9 @@ const TextArea: FC<TextAreaProps> = ({
             onBlur,
             onChange,
             placeholder,
+            rightElement,
             shouldChangeColor,
+            shouldShowBorder,
             value,
         ],
     );

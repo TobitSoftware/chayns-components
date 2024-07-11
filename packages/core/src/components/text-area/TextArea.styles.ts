@@ -10,20 +10,32 @@ export const StyledTextArea = styled.div`
     position: relative;
 `;
 
+type StyledTextAreaContentWrapperProps = WithTheme<{ $shouldChangeColor: boolean }>;
+
+export const StyledTextAreaContentWrapper = styled.div<StyledTextAreaContentWrapperProps>`
+    background-color: ${({ theme, $shouldChangeColor }: StyledTextAreaContentWrapperProps) =>
+        theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
+    border-radius: 3px;
+    border: 1px solid rgba(160, 160, 160, 0.3);
+    width: 100%;
+    display: flex;
+`;
+
+export const StyledTextAreaContent = styled.div`
+    display: flex;
+    width: 100%;
+`;
+
 type StyledTextAreaInputProps = WithTheme<{
     $maxHeight: CSSProperties['maxHeight'];
     $minHeight: CSSProperties['minHeight'];
-    $shouldChangeColor: boolean;
     $isOverflowing: boolean;
     $browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
-    border-radius: 3px;
-    border: 1px solid rgba(160, 160, 160, 0.3);
-    background-color: ${({ theme, $shouldChangeColor }: StyledTextAreaInputProps) =>
-        theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
     color: ${({ theme }: StyledTextAreaInputProps) => theme.text};
+    border: none;
     resize: none;
     overflow-y: ${({ $isOverflowing }) => ($isOverflowing ? 'scroll' : 'hidden')};
     max-height: ${({ $maxHeight }: StyledTextAreaInputProps) =>
@@ -32,6 +44,7 @@ export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
         typeof $minHeight === 'number' ? `${$minHeight}px` : $minHeight};
     width: 100%;
     padding: 8px 10px;
+    cursor: text;
 
     // Styles for custom scrollbar
     ${({ $browser, theme }: StyledTextAreaInputProps) =>
@@ -75,6 +88,7 @@ export const StyledTextAreaLabelWrapper = styled.label`
     position: absolute;
     user-select: none;
     width: calc(100% - 20px);
+    cursor: text;
 `;
 
 type StyledTextAreaLabelProps = WithTheme<unknown>;
@@ -85,6 +99,7 @@ export const StyledTextAreaLabel = styled.label<StyledTextAreaLabelProps>`
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
+    cursor: text;
     text-overflow: ellipsis;
     color: ${({ theme }: StyledTextAreaLabelProps) => theme['006']};
 `;
