@@ -88,6 +88,10 @@ const SwipeableAction: FC<SwipeableActionProps> = ({
         return listItemXOffset.onChange((newValue) => {
             const lastValue = listItemXOffset.getPrevious();
 
+            if (!lastValue) {
+                return;
+            }
+
             // eslint-disable-next-line default-case
             switch (position) {
                 case 'left':

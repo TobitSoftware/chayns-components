@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 const BB_REGEX = /(\[([a-zA-Z0-9_]*)(.*?)\])(.*?)(\[\/\2\])/s;
 // Also matches "\" before quote to fix button for voucher messages
 const PARAMETER_REGEX = /([\w]*?)=\\?["„](.*?)["“]/g;

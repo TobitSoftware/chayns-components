@@ -140,6 +140,10 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
             listItemXOffset.onChange((newValue: number) => {
                 const previous = listItemXOffset.getPrevious();
 
+                if (!previous) {
+                    return;
+                }
+
                 const hasCrossedLeftThreshold =
                     (previous < leftThreshold && newValue >= leftThreshold) ||
                     (previous > leftThreshold && newValue <= leftThreshold);
