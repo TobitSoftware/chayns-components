@@ -142,7 +142,7 @@ const FileInput: FC<FileInputProps> = ({
 
             setInternalFiles((prevState) => [...prevState, ...tmp]);
         },
-        [files?.length, internalFiles, internalImages.length, maxFiles, onAdd],
+        [fileTypes, files?.length, internalFiles, internalImages.length, maxFiles, onAdd],
     );
 
     const handleDeleteFile = useCallback(
@@ -209,7 +209,7 @@ const FileInput: FC<FileInputProps> = ({
             return;
         }
 
-        const { buttonType, result } = (await createDialog<DialogInput>({
+        const { buttonType, result } = (await createDialog({
             dialogInput: {
                 upload: true,
                 buttons: [

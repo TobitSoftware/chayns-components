@@ -44,6 +44,11 @@ export type SignatureProps = {
     onUnsubscribe?: () => void;
 };
 
+interface SignatureDialogResult {
+    buttonType: number;
+    result?: string;
+}
+
 const Signature = forwardRef<SignatureRef, SignatureProps>(
     ({ onEdit, onRemove, onUnsubscribe, onSubscribe, buttonText, isDisabled }, ref) => {
         const [signatureUrl, setSignatureUrl] = useState<string | undefined>(undefined);
@@ -61,14 +66,14 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
 
         const handleCallDialog = useCallback(
             async (shouldSubscribe: boolean) => {
-                const dialog = await createDialog({
+                const { result, buttonType } = (await createDialog({
                     type: DialogType.SIGNATURE,
-                }).open();
+                }).open()) as SignatureDialogResult;
 
-                if (dialog.buttonType === 1 && dialog.value) {
-                    await putUserSignature(dialog.value).then((success) => {
+                if (buttonType === 1 && result) {
+                    await putUserSignature(result).then((success) => {
                         if (success) {
-                            setSignatureUrl(dialog.value);
+                            setSignatureUrl(result);
 
                             if (shouldSubscribe) {
                                 setHasSubscribed(true);
@@ -77,7 +82,7 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
                                     onSubscribe();
                                 }
                             } else if (typeof onEdit === 'function') {
-                                onEdit(dialog.value);
+                                onEdit(result);
                             }
                         }
                     });
