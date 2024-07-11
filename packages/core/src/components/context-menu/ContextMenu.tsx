@@ -75,6 +75,11 @@ type ContextMenuProps = {
     shouldCloseOnPopupClick?: boolean;
 };
 
+interface SelectDialogResult {
+    buttonType: number;
+    result: number[];
+}
+
 const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
     (
         {
@@ -113,7 +118,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             const isTouch = getIsTouch();
 
             if (isTouch) {
-                const { value } = await createDialog({
+                const { result } = (await createDialog({
                     type: DialogType.SELECT,
                     buttons: [],
                     list: items.map(({ icons, text }, index) => ({
@@ -121,10 +126,10 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                         id: index,
                         icon: icons[0],
                     })),
-                }).open();
+                }).open()) as SelectDialogResult;
 
-                if (value[0] !== undefined) {
-                    void items[value[0]]?.onClick();
+                if (result && typeof result[0] === 'number') {
+                    void items[result[0]]?.onClick();
                 }
             } else if (contextMenuRef.current) {
                 const rootElement = document.querySelector('.tapp') || document.body;
