@@ -73,7 +73,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                 $position={alignment}
                 ref={ref}
                 style={{ left: coordinates.x, top: coordinates.y }}
-                transition={{ type: 'tween' }}
+                transition={{ ease: 'anticipate' }}
                 transformTemplate={({ y = '0px' }) => `
                     translateX(${percentageOffsetX}%)
                     translateY(${percentageOffsetY}%)

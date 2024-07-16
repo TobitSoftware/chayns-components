@@ -16,7 +16,7 @@ export const StyledMotionContextMenuContent = styled(
     box-shadow: 1px 3px 8px rgb(0 0 0 / 30%);
     color: ${({ theme }: StyledMotionContextMenuContentProps) => theme.text};
     position: absolute;
-    z-index: 0;
+    z-index: 10;
 
     &::after {
         background-color: inherit;
