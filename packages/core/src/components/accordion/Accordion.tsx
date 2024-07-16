@@ -51,7 +51,7 @@ export type AccordionProps = {
      */
     isFixed?: boolean;
     /**
-     * This can be used to open the Accordion from the outside
+     * This can be used to open the Accordion from the outside.
      */
     isOpened?: boolean;
     /**
