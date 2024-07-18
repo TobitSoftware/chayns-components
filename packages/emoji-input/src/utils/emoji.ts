@@ -65,7 +65,6 @@ export const unescapeHTML = (text: string) => {
 
 export const escapeHTML = (text: string) => {
     const escaped: { [key: string]: string } = {
-        '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',
         '"': '&quot;',
