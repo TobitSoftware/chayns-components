@@ -3,10 +3,13 @@ import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
-export const StyledTextArea = styled.div`
+type StyledTextAreaProps = WithTheme<{ $isDisabled?: boolean }>;
+
+export const StyledTextArea = styled.div<StyledTextAreaProps>`
     display: flex;
     flex: 1 1 auto;
     min-width: 0;
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     position: relative;
 `;
 

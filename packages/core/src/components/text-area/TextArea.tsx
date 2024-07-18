@@ -25,6 +25,10 @@ import {
 
 export type TextAreaProps = {
     /**
+     * Disables the text area so that it cannot be changed.
+     */
+    isDisabled?: boolean;
+    /**
      * The maximum height of the text area.
      */
     maxHeight?: CSSProperties['maxHeight'];
@@ -55,6 +59,7 @@ export type TextAreaProps = {
 };
 
 const TextArea: FC<TextAreaProps> = ({
+    isDisabled,
     placeholder,
     value,
     onChange,
@@ -100,11 +105,12 @@ const TextArea: FC<TextAreaProps> = ({
 
     return useMemo(
         () => (
-            <StyledTextArea>
+            <StyledTextArea $isDisabled={isDisabled}>
                 <StyledTextAreaContentWrapper $shouldChangeColor={shouldChangeColor}>
                     <StyledTextAreaContent>
                         <StyledTextAreaInput
                             $browser={browser?.name}
+                            disabled={isDisabled}
                             ref={textareaRef}
                             value={value}
                             onBlur={onBlur}
@@ -129,6 +135,7 @@ const TextArea: FC<TextAreaProps> = ({
         ),
         [
             browser?.name,
+            isDisabled,
             isOverflowing,
             maxHeight,
             minHeight,

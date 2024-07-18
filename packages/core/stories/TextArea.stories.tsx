@@ -23,9 +23,15 @@ const Template: StoryFn<typeof TextArea> = (args) => {
 
 export const General = Template.bind({});
 
+export const Disabled = Template.bind({});
+
 export const MaxHeight = Template.bind({});
 
 export const RightElement = Template.bind({});
+
+Disabled.args = {
+    isDisabled: true,
+};
 
 MaxHeight.args = {
     maxHeight: '200px',
