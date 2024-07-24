@@ -95,10 +95,6 @@ export type AccordionProps = {
      */
     rightElement?: ReactNode;
     /**
-     * Icon to be displayed on the right side in the search input
-     */
-    searchIcon?: string[];
-    /**
      * The placeholder to be used for the search
      */
     searchPlaceholder?: string;
@@ -152,7 +148,6 @@ const Accordion: FC<AccordionProps> = ({
     onOpen,
     onSearchChange,
     rightElement,
-    searchIcon,
     searchPlaceholder,
     searchValue,
     shouldForceBackground = false,
@@ -293,7 +288,6 @@ const Accordion: FC<AccordionProps> = ({
                         onClick={handleHeadClick}
                         onSearchChange={onSearchChange}
                         rightElement={rightElement}
-                        searchIcon={searchIcon}
                         searchPlaceholder={searchPlaceholder}
                         searchValue={searchValue}
                         shouldRotateIcon={shouldRotateIcon}

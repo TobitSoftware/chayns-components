@@ -85,19 +85,22 @@ export const StyledMotionTitleElementWrapper = styled(motion.div)<FramerMotionBu
 `;
 
 export const StyledRightWrapper = styled.div`
-    display: grid;
+    display: flex;
     flex: 0 0 auto;
-    grid-template-areas: 'right';
+    gap: 8px;
     margin-right: 5px;
     overflow: hidden;
     position: relative;
 `;
 
+export const StyledMotionSearchWrapper = styled(motion.div)<FramerMotionBugFix>`
+    align-items: center;
+    display: flex;
+`;
+
 export const StyledMotionRightElementWrapper = styled(motion.div)<FramerMotionBugFix>`
     align-items: center;
     display: flex;
-    grid-area: header;
-    justify-content: flex-end;
 `;
 
 type StyledMotionRightInputProps = WithTheme<{

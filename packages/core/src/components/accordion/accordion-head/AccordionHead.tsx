@@ -14,15 +14,15 @@ import { useElementSize } from '../../../hooks/useElementSize';
 import { getAccordionHeadHeight } from '../../../utils/accordion';
 import { AreaContext } from '../../area-provider/AreaContextProvider';
 import Icon from '../../icon/Icon';
-import Input, { type InputProps } from '../../input/Input';
+import Input, { InputSize, type InputProps } from '../../input/Input';
+import SearchInput from '../../search-input/SearchInput';
 import {
     StyledAccordionIcon,
     StyledMotionAccordionHead,
     StyledMotionContentWrapper,
     StyledMotionIconWrapper,
     StyledMotionRightElementWrapper,
-    StyledMotionRightInput,
-    StyledMotionRightInputIconWrapper,
+    StyledMotionSearchWrapper,
     StyledMotionTitle,
     StyledMotionTitleElementWrapper,
     StyledMotionTitleWrapper,
@@ -38,7 +38,6 @@ export type AccordionHeadProps = {
     onClick: MouseEventHandler<HTMLDivElement>;
     onSearchChange?: ChangeEventHandler<HTMLInputElement>;
     rightElement?: ReactNode;
-    searchIcon?: string[];
     searchPlaceholder?: string;
     searchValue?: string;
     shouldRotateIcon?: boolean;
@@ -63,7 +62,6 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     onClick,
     onSearchChange,
     rightElement,
-    searchIcon,
     searchPlaceholder,
     searchValue,
     shouldRotateIcon,
@@ -87,8 +85,6 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         shouldUseChildElement: true,
     });
 
-    const hasSearchIcon = Array.isArray(searchIcon);
-
     useEffect(() => {
         if (typeof onTitleInputChange === 'function') {
             setHeadHeight({ closed: 50, open: 50 });
@@ -108,7 +104,9 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     const iconElement = useMemo(() => {
         if (icon || isFixed) {
             return (
-                <Icon icons={[isFixed ? 'fa fa-horizontal-rule' : icon ?? 'fa fa-chevron-right']} />
+                <Icon
+                    icons={[isFixed ? 'fa fa-horizontal-rule' : (icon ?? 'fa fa-chevron-right')]}
+                />
             );
         }
 
@@ -225,32 +223,22 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             {(typeof onSearchChange === 'function' || rightElement) && (
                 <StyledRightWrapper>
                     <AnimatePresence initial={false} key={`accordionRightWrapper--${uuid}`}>
-                        {typeof onSearchChange === 'function' && isOpen ? (
-                            <>
-                                <StyledMotionRightInput
-                                    animate={{ opacity: 1, width: '165px' }}
-                                    autoComplete="off"
-                                    exit={{ opacity: 0, width: 0 }}
-                                    $hasIcon={hasSearchIcon}
-                                    initial={{ opacity: 0, width: 0 }}
-                                    key={`rightInput--${uuid}`}
+                        {typeof onSearchChange === 'function' && isOpen && (
+                            <StyledMotionSearchWrapper
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                initial={{ opacity: 0 }}
+                                key={`searchWrapper--${uuid}`}
+                            >
+                                <SearchInput
                                     onChange={onSearchChange}
                                     placeholder={searchPlaceholder}
-                                    type="text"
+                                    size={InputSize.Small}
                                     value={searchValue}
                                 />
-                                {hasSearchIcon && (
-                                    <StyledMotionRightInputIconWrapper
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        initial={{ opacity: 0 }}
-                                        key={`rightInputIcon-${uuid}`}
-                                    >
-                                        <Icon icons={searchIcon} />
-                                    </StyledMotionRightInputIconWrapper>
-                                )}
-                            </>
-                        ) : (
+                            </StyledMotionSearchWrapper>
+                        )}
+                        {rightElement && (
                             <StyledMotionRightElementWrapper
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
