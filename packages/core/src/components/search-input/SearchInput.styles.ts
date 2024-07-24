@@ -1,12 +1,17 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import type { FramerMotionBugFix } from '../color-scheme-provider/ColorSchemeProvider';
+import type { InputSize } from '../input/Input';
 
-export const StyledSearchInput = styled.div`
+type StyledSearchInputProps = {
+    $size: InputSize;
+};
+
+export const StyledSearchInput = styled.div<StyledSearchInputProps>`
     align-items: center;
     display: flex;
     gap: 8px;
-    height: 42px;
+    height: ${({ $size }) => ($size === 'medium' ? '42px' : '32px')};
     justify-content: flex-end;
     width: 100%;
 `;

@@ -11,7 +11,7 @@ import React, {
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
-import Input, { InputRef } from '../input/Input';
+import Input, { InputRef, InputSize } from '../input/Input';
 import {
     StyledMotionSearchInputContentWrapper,
     StyledMotionSearchInputIconWrapper,
@@ -45,6 +45,10 @@ export type SearchInputProps = {
      */
     placeholder?: string;
     /**
+     * The size of the input field
+     */
+    size?: InputSize;
+    /**
      * Value if the input field should be controlled
      */
     value?: string;
@@ -57,6 +61,7 @@ const SearchInput: FC<SearchInputProps> = ({
     onChange,
     onKeyDown,
     placeholder,
+    size = InputSize.Medium,
     value,
 }) => {
     const [isSearchInputActive, setIsSearchInputActive] = useState(
@@ -88,7 +93,7 @@ const SearchInput: FC<SearchInputProps> = ({
     }, [isActive]);
 
     return (
-        <StyledSearchInput className="beta-chayns-search-input">
+        <StyledSearchInput className="beta-chayns-search-input" $size={size}>
             <StyledMotionSearchInputIconWrapper>
                 <AnimatePresence initial={false}>
                     <StyledMotionSearchInputIconWrapperContent
@@ -125,6 +130,7 @@ const SearchInput: FC<SearchInputProps> = ({
                             placeholder={placeholder}
                             ref={inputRef}
                             shouldShowClearIcon
+                            size={size}
                             value={value}
                         />
                     </StyledMotionSearchInputContentWrapper>

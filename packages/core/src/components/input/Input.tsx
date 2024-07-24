@@ -47,6 +47,11 @@ type InputMode =
     | 'decimal'
     | undefined;
 
+export enum InputSize {
+    Small = 'small',
+    Medium = 'medium',
+}
+
 export type InputProps = {
     /**
      * An element to be displayed on the left side of the input field
@@ -113,6 +118,10 @@ export type InputProps = {
      */
     shouldUseAutoFocus?: boolean;
     /**
+     * The size of the input field
+     */
+    size?: InputSize;
+    /**
      * Input type set for input element (e.g. 'text', 'number' or 'password')
      */
     type?: HTMLInputTypeAttribute;
@@ -138,6 +147,7 @@ const Input = forwardRef<InputRef, InputProps>(
             shouldRemainPlaceholder = false,
             shouldShowClearIcon = false,
             shouldShowCenteredContent = false,
+            size = InputSize.Medium,
             type = 'text',
             value,
             shouldUseAutoFocus = false,
@@ -213,11 +223,11 @@ const Input = forwardRef<InputRef, InputProps>(
             if (hasValue && !shouldRemainPlaceholder) {
                 return shouldShowOnlyBottomBorder
                     ? { right: 3, top: -1.5 }
-                    : { bottom: -10, right: -6 };
+                    : { bottom: size === InputSize.Small ? -4 : -10, right: -6 };
             }
 
             return { left: -1 };
-        }, [hasValue, shouldRemainPlaceholder, shouldShowOnlyBottomBorder]);
+        }, [hasValue, shouldRemainPlaceholder, shouldShowOnlyBottomBorder, size]);
 
         return (
             <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
@@ -226,6 +236,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     $isInvalid={isInvalid}
                     $shouldRoundRightCorners={shouldShowBorder}
                     $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
+                    $size={size}
                 >
                     {leftElement && <StyledInputIconWrapper>{leftElement}</StyledInputIconWrapper>}
                     <StyledInputContent $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}>
@@ -268,6 +279,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     {shouldShowClearIcon && (
                         <StyledMotionInputClearIcon
                             $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
+                            $size={size}
                             animate={{ opacity: hasValue ? 1 : 0 }}
                             initial={false}
                             onClick={handleClearIconClick}

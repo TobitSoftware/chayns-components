@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { InputSize } from './Input';
 
 type StyledInputProps = WithTheme<{ $isDisabled?: boolean }>;
 
@@ -15,6 +16,7 @@ type StyledInputContentWrapperProps = WithTheme<{
     $shouldShowOnlyBottomBorder?: boolean;
     $isInvalid?: boolean;
     $shouldChangeColor: boolean;
+    $size: InputSize;
 }>;
 
 export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
@@ -30,10 +32,16 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
     width: 100%;
     transition: opacity 0.3s ease;
 
-    ${({ $shouldShowOnlyBottomBorder }) =>
+    ${({ $size }) =>
+        $size === 'small' &&
+        css`
+            height: 32px;
+        `}
+
+    ${({ $shouldShowOnlyBottomBorder, $size }) =>
         !$shouldShowOnlyBottomBorder &&
         css`
-            min-height: 42px;
+            min-height: ${$size === 'medium' ? '42px' : '32px'};
         `}
 
     ${({ $shouldRoundRightCorners, $shouldShowOnlyBottomBorder, theme }) => {
@@ -123,7 +131,10 @@ export const StyledInputLabel = styled.label<StyledInputLabelProps>`
         $isInvalid ? theme.wrong : undefined};
 `;
 
-type StyledMotionInputClearIconProps = WithTheme<{ $shouldShowOnlyBottomBorder?: boolean }>;
+type StyledMotionInputClearIconProps = WithTheme<{
+    $shouldShowOnlyBottomBorder?: boolean;
+    $size: InputSize;
+}>;
 
 export const StyledMotionInputClearIcon = styled(motion.div)<StyledMotionInputClearIconProps>`
     align-items: center;
@@ -132,9 +143,9 @@ export const StyledMotionInputClearIcon = styled(motion.div)<StyledMotionInputCl
     cursor: pointer;
     display: flex;
     flex: 0 0 auto;
-    height: 40px;
+    height: ${({ $size }) => ($size === 'medium' ? '40px' : '30px')};
     justify-content: center;
-    width: 40px;
+    width: ${({ $size }) => ($size === 'medium' ? '40px' : '30px')};
 `;
 
 export const StyledInputIconWrapper = styled.div`
