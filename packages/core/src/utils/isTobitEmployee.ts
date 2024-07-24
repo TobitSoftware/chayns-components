@@ -1,10 +1,11 @@
 import { UacServiceClient } from '@chayns/uac-service';
-import { getAccessToken, getSite, getUser } from 'chayns-api';
+import { getAccessToken, getLanguage, getSite, getUser } from 'chayns-api';
 
 const client = new UacServiceClient({
     getToken: async () => (await getAccessToken()).accessToken || '',
     getDefaultSiteId: () => getSite().id,
     getDefaultPersonId: () => getUser()?.personId || '',
+    getLanguage: () => getLanguage().active,
 });
 
 export const isTobitEmployee = async () => {
