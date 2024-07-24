@@ -38,6 +38,7 @@ type StyledTextAreaInputProps = WithTheme<{
 
 export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
     color: ${({ theme }: StyledTextAreaInputProps) => theme.text};
+    background: none;
     border: none;
     resize: none;
     overflow-y: ${({ $isOverflowing }) => ($isOverflowing ? 'scroll' : 'hidden')};
