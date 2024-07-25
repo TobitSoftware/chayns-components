@@ -85,8 +85,8 @@ const Button: FC<ButtonProps> = ({
         }
 
         return theme.buttonDesign === '2'
-            ? theme.buttonColor ?? theme.buttonBackgroundColor ?? 'white'
-            : theme.buttonColor ?? 'white';
+            ? (theme.buttonColor ?? theme.buttonBackgroundColor ?? 'white')
+            : (theme.buttonColor ?? 'white');
     }, [
         isSecondary,
         theme.buttonBackgroundColor,
@@ -121,21 +121,15 @@ const Button: FC<ButtonProps> = ({
             };
         }
 
-        return {
-            opacity: 0.6,
-        };
+        return { opacity: 0.6 };
     }, [isSecondary, shouldShowAsSelectButton, theme]);
 
     const hoverStyles = useMemo(() => {
         if (theme.buttonDesign === '2') {
-            return {
-                backgroundColor: `rgba(${theme['102-rgb'] ?? ''}, 0.5)`,
-            };
+            return { backgroundColor: `rgba(${theme['102-rgb'] ?? ''}, 0.5)` };
         }
 
-        return {
-            opacity: 1,
-        };
+        return { opacity: 1 };
     }, [theme]);
 
     return (
@@ -149,7 +143,7 @@ const Button: FC<ButtonProps> = ({
             $hasIcon={typeof icon === 'string' && icon !== ''}
             $isSecondary={isSecondary}
             onClick={handleClick}
-            animate={{ backgroundColor }}
+            animate={{ backgroundColor, opacity: isDisabled ? 0.5 : 1 }}
             whileTap={isDisabled ? {} : { ...tapStyles }}
             whileHover={isDisabled ? {} : { ...hoverStyles }}
         >

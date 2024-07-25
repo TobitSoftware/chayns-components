@@ -31,8 +31,8 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
 
         return css`
             color: ${theme.buttonDesign === '2'
-                ? theme.buttonColor ?? theme.buttonBackgroundColor ?? 'white'
-                : theme.buttonColor ?? 'white'};
+                ? (theme.buttonColor ?? theme.buttonBackgroundColor ?? 'white')
+                : (theme.buttonColor ?? 'white')};
         `;
     }}
 
@@ -55,7 +55,6 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
     display: inline-flex;
     line-height: 1.15;
     min-height: 32px;
-    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     position: relative;
     user-select: none;
     transition: opacity 0.3s ease;
