@@ -2,6 +2,7 @@ import type { Browser } from 'detect-browser';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { TextAreaProps } from './TextArea';
 
 type StyledTextAreaProps = WithTheme<{ $isDisabled?: boolean }>;
 
@@ -13,13 +14,18 @@ export const StyledTextArea = styled.div<StyledTextAreaProps>`
     position: relative;
 `;
 
-type StyledTextAreaContentWrapperProps = WithTheme<{ $shouldChangeColor: boolean }>;
+type StyledTextAreaContentWrapperProps = WithTheme<{
+    $isInvalid: TextAreaProps['isInvalid'];
+    $shouldChangeColor: boolean;
+}>;
 
 export const StyledTextAreaContentWrapper = styled.div<StyledTextAreaContentWrapperProps>`
     background-color: ${({ theme, $shouldChangeColor }: StyledTextAreaContentWrapperProps) =>
         theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
     border-radius: 3px;
-    border: 1px solid rgba(160, 160, 160, 0.3);
+    border: 1px solid
+        ${({ theme, $isInvalid }: StyledTextAreaContentWrapperProps) =>
+            $isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)'};
     width: 100%;
     display: flex;
 `;
@@ -30,14 +36,16 @@ export const StyledTextAreaContent = styled.div`
 `;
 
 type StyledTextAreaInputProps = WithTheme<{
+    $browser: Browser | 'bot' | null | undefined;
+    $isInvalid: TextAreaProps['isInvalid'];
+    $isOverflowing: boolean;
     $maxHeight: CSSProperties['maxHeight'];
     $minHeight: CSSProperties['minHeight'];
-    $isOverflowing: boolean;
-    $browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
-    color: ${({ theme }: StyledTextAreaInputProps) => theme.text};
+    color: ${({ theme, $isInvalid }: StyledTextAreaInputProps) =>
+        $isInvalid ? theme.wrong : theme.text};
     background: none;
     border: none;
     resize: none;
@@ -95,10 +103,11 @@ export const StyledTextAreaLabelWrapper = styled.label`
     cursor: text;
 `;
 
-type StyledTextAreaLabelProps = WithTheme<unknown>;
+type StyledTextAreaLabelProps = WithTheme<{ $isInvalid?: TextAreaProps['isInvalid'] }>;
 
 export const StyledTextAreaLabel = styled.label<StyledTextAreaLabelProps>`
-    color: rgba(${({ theme }: StyledTextAreaLabelProps) => theme['text-rgb']}, 0.45);
+    color: ${({ theme, $isInvalid }: StyledTextAreaLabelProps) =>
+        $isInvalid ? theme.wrong : `rgba(${theme['text-rgb'] ?? ''}, 0.45)`};
     line-height: 1.3;
     width: 100%;
     white-space: nowrap;

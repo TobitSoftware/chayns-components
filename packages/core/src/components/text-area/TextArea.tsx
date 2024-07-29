@@ -29,6 +29,10 @@ export type TextAreaProps = {
      */
     isDisabled?: boolean;
     /**
+     * If true, the text area is marked as invalid
+     */
+    isInvalid?: boolean;
+    /**
      * The maximum height of the text area.
      */
     maxHeight?: CSSProperties['maxHeight'];
@@ -60,6 +64,7 @@ export type TextAreaProps = {
 
 const TextArea: FC<TextAreaProps> = ({
     isDisabled,
+    isInvalid,
     placeholder,
     value,
     onChange,
@@ -106,11 +111,15 @@ const TextArea: FC<TextAreaProps> = ({
     return useMemo(
         () => (
             <StyledTextArea $isDisabled={isDisabled}>
-                <StyledTextAreaContentWrapper $shouldChangeColor={shouldChangeColor}>
+                <StyledTextAreaContentWrapper
+                    $isInvalid={isInvalid}
+                    $shouldChangeColor={shouldChangeColor}
+                >
                     <StyledTextAreaContent>
                         <StyledTextAreaInput
                             $browser={browser?.name}
                             disabled={isDisabled}
+                            $isInvalid={isInvalid}
                             ref={textareaRef}
                             value={value}
                             onBlur={onBlur}
@@ -122,7 +131,9 @@ const TextArea: FC<TextAreaProps> = ({
                         />
                         {!value && (
                             <StyledTextAreaLabelWrapper>
-                                <StyledTextAreaLabel>{placeholder}</StyledTextAreaLabel>
+                                <StyledTextAreaLabel $isInvalid={isInvalid}>
+                                    {placeholder}
+                                </StyledTextAreaLabel>
                             </StyledTextAreaLabelWrapper>
                         )}
                     </StyledTextAreaContent>
@@ -136,6 +147,7 @@ const TextArea: FC<TextAreaProps> = ({
         [
             browser?.name,
             isDisabled,
+            isInvalid,
             isOverflowing,
             maxHeight,
             minHeight,
