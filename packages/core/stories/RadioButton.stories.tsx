@@ -1,4 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { useState } from 'react';
+import { Button } from '../src';
 import RadioButtonGroup from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '../src/components/radio-button/RadioButton';
 
@@ -14,25 +16,38 @@ const Template: StoryFn<typeof RadioButton> = ({ ...args }) => (
     <RadioButton {...args}></RadioButton>
 );
 
-const MultipleRadioButtonsTemplate: StoryFn<typeof RadioButton> = () => (
-    <>
-        <h1>Speisen</h1>
-        <RadioButtonGroup>
-            <RadioButton id="0" label="Nudeln" />
-            <RadioButton id="1" label="Pizza" />
-            <RadioButton id="2" label="Pommes" />
-            <RadioButton id="3" label="Salat" />
-        </RadioButtonGroup>
-        <h1>Getränke</h1>
-        <RadioButtonGroup>
-            <RadioButton id="0" label="Wasser" />
-            <RadioButton id="1" label="Cola" />
-            <RadioButton id="2" label="Fanta" />
-            <RadioButton id="3" label="Saft" />
-            <RadioButton id="4" label="Milch" />
-        </RadioButtonGroup>
-    </>
-);
+const MultipleRadioButtonsTemplate: StoryFn<typeof RadioButton> = () => {
+    const [shouldResetSelection, setShouldResetSelection] = useState(false);
+
+    const handleClick = () => {
+        setShouldResetSelection(true);
+
+        window.setTimeout(() => {
+            setShouldResetSelection(false);
+        }, 200);
+    };
+
+    return (
+        <>
+            <Button onClick={handleClick}>Zurücksetzen</Button>
+            <h1>Speisen</h1>
+            <RadioButtonGroup shouldResetSelection={shouldResetSelection}>
+                <RadioButton id="0" label="Nudeln" />
+                <RadioButton id="1" label="Pizza" />
+                <RadioButton id="2" label="Pommes" />
+                <RadioButton id="3" label="Salat" />
+            </RadioButtonGroup>
+            <h1>Getränke</h1>
+            <RadioButtonGroup shouldResetSelection={shouldResetSelection}>
+                <RadioButton id="0" label="Wasser" />
+                <RadioButton id="1" label="Cola" />
+                <RadioButton id="2" label="Fanta" />
+                <RadioButton id="3" label="Saft" />
+                <RadioButton id="4" label="Milch" />
+            </RadioButtonGroup>
+        </>
+    );
+};
 
 const DisabledRadioButtonsTemplate: StoryFn<typeof RadioButton> = () => (
     <>

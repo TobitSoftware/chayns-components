@@ -20,9 +20,13 @@ export type RadioButtonGroupProps = {
      * automatically unchecked when an `RadioButton` of the group is checked.
      */
     children: ReactNode;
+    /**
+     * Whether the selection should be reset.
+     */
+    shouldResetSelection?: boolean;
 };
 
-const RadioButtonGroup: FC<RadioButtonGroupProps> = ({ children }) => {
+const RadioButtonGroup: FC<RadioButtonGroupProps> = ({ children, shouldResetSelection }) => {
     const [selectedRadioButtonId, setSelectedRadioButtonId] =
         useState<IRadioButtonGroupContext['selectedRadioButtonId']>(undefined);
 
@@ -37,6 +41,12 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = ({ children }) => {
             isInitialRenderRef.current = false;
         }
     }, [selectedRadioButtonId]);
+
+    useEffect(() => {
+        if (shouldResetSelection) {
+            setSelectedRadioButtonId(undefined);
+        }
+    }, [shouldResetSelection]);
 
     const providerValue = useMemo<IRadioButtonGroupContext>(
         () => ({
