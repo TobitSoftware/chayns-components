@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useCallback, useMemo } from 'react';
-import { Icon } from '../../../index';
 import { getIsTouch } from '../../../utils/environment';
+import Icon from '../../icon/Icon';
 import type { ComboBoxProps, IComboBoxItem } from '../ComboBox';
 import { StyledComboBoxItem, StyledComboBoxItemImage } from './ComboBoxItem.styles';
 
