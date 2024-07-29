@@ -1,4 +1,13 @@
-import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+    forwardRef,
+    ReactNode,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 
 type IUpdateSelectedRadioButtonId = (id: string) => void;
 
@@ -14,6 +23,10 @@ export const RadioButtonGroupContext = React.createContext<IRadioButtonGroupCont
 
 RadioButtonGroupContext.displayName = 'RadioButtonGroupContext';
 
+export type RadioButtonGroupRef = {
+    updateSelectedRadioButtonId: IUpdateSelectedRadioButtonId;
+};
+
 export type RadioButtonGroupProps = {
     /**
      * The RadioButtons that should be grouped. Radio buttons with the same group are
@@ -22,36 +35,46 @@ export type RadioButtonGroupProps = {
     children: ReactNode;
 };
 
-const RadioButtonGroup: FC<RadioButtonGroupProps> = ({ children }) => {
-    const [selectedRadioButtonId, setSelectedRadioButtonId] =
-        useState<IRadioButtonGroupContext['selectedRadioButtonId']>(undefined);
+const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
+    ({ children }, ref) => {
+        const [selectedRadioButtonId, setSelectedRadioButtonId] =
+            useState<IRadioButtonGroupContext['selectedRadioButtonId']>(undefined);
 
-    const isInitialRenderRef = useRef(true);
+        const isInitialRenderRef = useRef(true);
 
-    const updateSelectedRadioButtonId = useCallback<IUpdateSelectedRadioButtonId>((id) => {
-        setSelectedRadioButtonId(id);
-    }, []);
+        const updateSelectedRadioButtonId = useCallback<IUpdateSelectedRadioButtonId>((id) => {
+            setSelectedRadioButtonId(id);
+        }, []);
 
-    useEffect(() => {
-        if (isInitialRenderRef.current) {
-            isInitialRenderRef.current = false;
-        }
-    }, [selectedRadioButtonId]);
+        useImperativeHandle(
+            ref,
+            () => ({
+                updateSelectedRadioButtonId,
+            }),
+            [updateSelectedRadioButtonId],
+        );
 
-    const providerValue = useMemo<IRadioButtonGroupContext>(
-        () => ({
-            selectedRadioButtonId,
-            updateSelectedRadioButtonId,
-        }),
-        [selectedRadioButtonId, updateSelectedRadioButtonId],
-    );
+        useEffect(() => {
+            if (isInitialRenderRef.current) {
+                isInitialRenderRef.current = false;
+            }
+        }, [selectedRadioButtonId]);
 
-    return (
-        <RadioButtonGroupContext.Provider value={providerValue}>
-            {children}
-        </RadioButtonGroupContext.Provider>
-    );
-};
+        const providerValue = useMemo<IRadioButtonGroupContext>(
+            () => ({
+                selectedRadioButtonId,
+                updateSelectedRadioButtonId,
+            }),
+            [selectedRadioButtonId, updateSelectedRadioButtonId],
+        );
+
+        return (
+            <RadioButtonGroupContext.Provider value={providerValue}>
+                {children}
+            </RadioButtonGroupContext.Provider>
+        );
+    },
+);
 
 RadioButtonGroup.displayName = 'RadioButtonGroup';
 
