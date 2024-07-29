@@ -1,7 +1,9 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { useState } from 'react';
+import { useRef } from 'react';
 import { Button } from '../src';
-import RadioButtonGroup from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
+import RadioButtonGroup, {
+    type RadioButtonGroupRef,
+} from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '../src/components/radio-button/RadioButton';
 
 export default {
@@ -17,34 +19,36 @@ const Template: StoryFn<typeof RadioButton> = ({ ...args }) => (
 );
 
 const MultipleRadioButtonsTemplate: StoryFn<typeof RadioButton> = () => {
-    const [shouldResetSelection, setShouldResetSelection] = useState(false);
+    const drinksRadioButtonGroupRef = useRef<RadioButtonGroupRef>(null);
+    const foodRadioButtonGroupRef = useRef<RadioButtonGroupRef>(null);
 
-    const handleClick = () => {
-        setShouldResetSelection(true);
+    const handleResetDrinksButtonClick = () => {
+        drinksRadioButtonGroupRef.current.updateSelectedRadioButtonId(undefined);
+    };
 
-        window.setTimeout(() => {
-            setShouldResetSelection(false);
-        }, 200);
+    const handleResetFoodButtonClick = () => {
+        foodRadioButtonGroupRef.current.updateSelectedRadioButtonId(undefined);
     };
 
     return (
         <>
-            <Button onClick={handleClick}>Zurücksetzen</Button>
             <h1>Speisen</h1>
-            <RadioButtonGroup shouldResetSelection={shouldResetSelection}>
+            <RadioButtonGroup ref={foodRadioButtonGroupRef}>
                 <RadioButton id="0" label="Nudeln" />
                 <RadioButton id="1" label="Pizza" />
                 <RadioButton id="2" label="Pommes" />
                 <RadioButton id="3" label="Salat" />
             </RadioButtonGroup>
+            <Button onClick={handleResetDrinksButtonClick}>Zurücksetzen</Button>
             <h1>Getränke</h1>
-            <RadioButtonGroup shouldResetSelection={shouldResetSelection}>
+            <RadioButtonGroup ref={drinksRadioButtonGroupRef}>
                 <RadioButton id="0" label="Wasser" />
                 <RadioButton id="1" label="Cola" />
                 <RadioButton id="2" label="Fanta" />
                 <RadioButton id="3" label="Saft" />
                 <RadioButton id="4" label="Milch" />
             </RadioButtonGroup>
+            <Button onClick={handleResetFoodButtonClick}>Zurücksetzen</Button>
         </>
     );
 };
