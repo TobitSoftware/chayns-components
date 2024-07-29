@@ -20,7 +20,7 @@ export type {
 export { default as ComboBox } from './components/combobox/ComboBox';
 export type { IComboBoxItem as ComboBoxItem } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
-export { default as ContextMenu } from './components/context-menu/ContextMenu';
+export { default as ContextMenu, type ContextMenuRef } from './components/context-menu/ContextMenu';
 export { default as ExpandableContent } from './components/expandable-content/ExpandableContent';
 export { default as FileInput } from './components/file-input/FileInput';
 export { default as FilterButtons } from './components/filter-buttons/FilterButtons';
@@ -40,7 +40,10 @@ export { default as NumberInput } from './components/number-input/NumberInput';
 export { default as Popup } from './components/popup/Popup';
 export { default as PopupContent } from './components/popup/popup-content/PopupContent';
 export { default as ProgressBar } from './components/progress-bar/ProgressBar';
-export { default as RadioButtonGroup } from './components/radio-button/radio-button-group/RadioButtonGroup';
+export {
+    default as RadioButtonGroup,
+    type RadioButtonGroupRef,
+} from './components/radio-button/radio-button-group/RadioButtonGroup';
 export { default as RadioButton } from './components/radio-button/RadioButton';
 export { default as ScrollView } from './components/scroll-view/ScrollView';
 export { default as SearchBox } from './components/search-box/SearchBox';
