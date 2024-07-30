@@ -98,9 +98,11 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             x: 0,
             y: 0,
         });
+
         const [internalAlignment, setInternalAlignment] = useState<ContextMenuAlignment>(
             ContextMenuAlignment.TopLeft,
         );
+
         const [isContentShown, setIsContentShown] = useState(false);
         const [portal, setPortal] = useState<ReactPortal>();
 
@@ -135,13 +137,16 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                 const rootElement = document.querySelector('.tapp') || document.body;
 
                 const {
-                    x,
-                    y,
                     height: childrenHeight,
+                    left: childrenLeft,
+                    top: childrenTop,
                     width: childrenWidth,
                 } = contextMenuRef.current.getBoundingClientRect();
 
-                setInternalCoordinates({ x: x + childrenWidth / 2, y: y + childrenHeight / 2 });
+                const x = childrenLeft + window.scrollX + childrenWidth / 2;
+                const y = childrenTop + window.scrollY + childrenHeight / 2;
+
+                setInternalCoordinates({ x, y });
 
                 const { height, width } = rootElement.getBoundingClientRect();
 
