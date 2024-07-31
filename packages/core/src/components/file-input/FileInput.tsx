@@ -1,6 +1,14 @@
 import { createDialog, DialogType } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
-import React, { DragEvent, FC, ReactElement, useCallback, useMemo, useState } from 'react';
+import React, {
+    DragEvent,
+    forwardRef,
+    ReactElement,
+    useCallback,
+    useImperativeHandle,
+    useMemo,
+    useState,
+} from 'react';
 import type { FileInputFileItem, ImageDialogResult } from '../../types/fileInput';
 import { filterDuplicateFile, filterDuplicateFileUrls, isValidFileType } from '../../utils/file';
 import { selectFiles } from '../../utils/fileDialog';
@@ -68,285 +76,307 @@ type DialogInput = {
     initialView: string;
 };
 
-const FileInput: FC<FileInputProps> = ({
-    fileSelectionIcons = ['fa fa-upload'],
-    imageSelectIcons = ['ts-image'],
-    fileTypes,
-    onMaxFilesReached,
-    maxFiles,
-    onRemove,
-    files,
-    onAdd,
-    fileSelectionPlaceholder = 'Dateien hinzufügen',
-    imageSelectPlaceholder,
-}) => {
-    const [internalFiles, setInternalFiles] = useState<File[]>([]);
-    const [internalImages, setInternalImages] = useState<string[]>([]);
+export type FileInputRef = {
+    clear: () => void;
+};
 
-    const handleAddImages = useCallback(
-        (images: string[]) => {
-            const newImages: string[] = [];
-
-            images.forEach((image) => {
-                if (!filterDuplicateFileUrls({ files: internalImages, newFile: image })) {
-                    newImages.push(image);
-                }
-            });
-
-            let tmp = newImages;
-
-            if (maxFiles) {
-                tmp = newImages.slice(
-                    0,
-                    maxFiles -
-                        (internalFiles.length + internalImages.length + (files?.length ?? 0)),
-                );
-            }
-
-            if (tmp.length > 0 && typeof onAdd === 'function') {
-                onAdd(tmp);
-            }
-
-            setInternalImages((prevState) => [...prevState, ...tmp]);
+const FileInput = forwardRef<FileInputRef, FileInputProps>(
+    (
+        {
+            fileSelectionIcons = ['fa fa-upload'],
+            imageSelectIcons = ['ts-image'],
+            fileTypes,
+            onMaxFilesReached,
+            maxFiles,
+            onRemove,
+            files,
+            onAdd,
+            fileSelectionPlaceholder = 'Dateien hinzufügen',
+            imageSelectPlaceholder,
         },
-        [files?.length, internalFiles.length, internalImages, maxFiles, onAdd],
-    );
+        ref,
+    ) => {
+        const [internalFiles, setInternalFiles] = useState<File[]>([]);
+        const [internalImages, setInternalImages] = useState<string[]>([]);
 
-    const handleAddFiles = useCallback(
-        (newFiles: File[]) => {
-            const newFileItems: File[] = [];
+        const handleInputClear = () => {
+            setInternalFiles([]);
+            setInternalImages([]);
+        };
 
-            newFiles.forEach((file) => {
-                if (fileTypes && !isValidFileType({ file, types: fileTypes })) {
+        useImperativeHandle(
+            ref,
+            () => ({
+                clear: handleInputClear,
+            }),
+            [],
+        );
+
+        const handleAddImages = useCallback(
+            (images: string[]) => {
+                const newImages: string[] = [];
+
+                images.forEach((image) => {
+                    if (!filterDuplicateFileUrls({ files: internalImages, newFile: image })) {
+                        newImages.push(image);
+                    }
+                });
+
+                let tmp = newImages;
+
+                if (maxFiles) {
+                    tmp = newImages.slice(
+                        0,
+                        maxFiles -
+                            (internalFiles.length + internalImages.length + (files?.length ?? 0)),
+                    );
+                }
+
+                if (tmp.length > 0 && typeof onAdd === 'function') {
+                    onAdd(tmp);
+                }
+
+                setInternalImages((prevState) => [...prevState, ...tmp]);
+            },
+            [files?.length, internalFiles.length, internalImages, maxFiles, onAdd],
+        );
+
+        const handleAddFiles = useCallback(
+            (newFiles: File[]) => {
+                const newFileItems: File[] = [];
+
+                newFiles.forEach((file) => {
+                    if (fileTypes && !isValidFileType({ file, types: fileTypes })) {
+                        return;
+                    }
+
+                    if (file && !filterDuplicateFile({ files: internalFiles, newFile: file })) {
+                        newFileItems.push(file);
+                    }
+                });
+
+                let tmp = newFileItems;
+
+                if (maxFiles) {
+                    tmp = newFileItems.slice(
+                        0,
+                        maxFiles -
+                            (internalFiles.length + internalImages.length + (files?.length ?? 0)),
+                    );
+                }
+
+                if (tmp.length > 0 && typeof onAdd === 'function') {
+                    onAdd(tmp);
+                }
+
+                setInternalFiles((prevState) => [...prevState, ...tmp]);
+            },
+            [fileTypes, files?.length, internalFiles, internalImages.length, maxFiles, onAdd],
+        );
+
+        const handleDeleteFile = useCallback(
+            (fileName?: string) => {
+                let fileToDelete: File | FileInputFileItem | string | undefined;
+
+                const filteredFiles = internalFiles.filter((file) => {
+                    const { name } = file;
+
+                    if (name === fileName) {
+                        fileToDelete = file;
+                    }
+
+                    return name !== fileName;
+                });
+
+                setInternalFiles(filteredFiles);
+
+                if (!fileToDelete) {
+                    const filteredImages = internalImages.filter((image) => {
+                        if (image === fileName) {
+                            fileToDelete = image;
+                        }
+
+                        return image !== fileName;
+                    });
+
+                    setInternalImages(filteredImages);
+                }
+
+                if (!fileToDelete) {
+                    files?.forEach((file) => {
+                        if (file.url === fileName || file.name === fileName) {
+                            fileToDelete = file;
+                        }
+                    });
+                }
+
+                if (!fileToDelete || typeof onRemove !== 'function') {
                     return;
                 }
 
-                if (file && !filterDuplicateFile({ files: internalFiles, newFile: file })) {
-                    newFileItems.push(file);
-                }
-            });
+                onRemove(fileToDelete);
+            },
+            [files, internalFiles, internalImages, onRemove],
+        );
 
-            let tmp = newFileItems;
-
+        const isDisabled = useMemo(() => {
             if (maxFiles) {
-                tmp = newFileItems.slice(
-                    0,
-                    maxFiles -
-                        (internalFiles.length + internalImages.length + (files?.length ?? 0)),
-                );
-            }
+                if (internalFiles.length + internalImages.length >= maxFiles) {
+                    if (typeof onMaxFilesReached === 'function') {
+                        onMaxFilesReached();
+                    }
 
-            if (tmp.length > 0 && typeof onAdd === 'function') {
-                onAdd(tmp);
-            }
-
-            setInternalFiles((prevState) => [...prevState, ...tmp]);
-        },
-        [fileTypes, files?.length, internalFiles, internalImages.length, maxFiles, onAdd],
-    );
-
-    const handleDeleteFile = useCallback(
-        (fileName?: string) => {
-            let fileToDelete: File | FileInputFileItem | string | undefined;
-
-            const filteredFiles = internalFiles.filter((file) => {
-                const { name } = file;
-
-                if (name === fileName) {
-                    fileToDelete = file;
+                    return true;
                 }
-
-                return name !== fileName;
-            });
-
-            setInternalFiles(filteredFiles);
-
-            if (!fileToDelete) {
-                const filteredImages = internalImages.filter((image) => {
-                    if (image === fileName) {
-                        fileToDelete = image;
-                    }
-
-                    return image !== fileName;
-                });
-
-                setInternalImages(filteredImages);
             }
 
-            if (!fileToDelete) {
-                files?.forEach((file) => {
-                    if (file.url === fileName || file.name === fileName) {
-                        fileToDelete = file;
-                    }
-                });
-            }
+            return false;
+        }, [internalFiles.length, internalImages.length, maxFiles, onMaxFilesReached]);
 
-            if (!fileToDelete || typeof onRemove !== 'function') {
+        const handleImageSelectionClick = useCallback(async () => {
+            if (isDisabled) {
                 return;
             }
 
-            onRemove(fileToDelete);
-        },
-        [files, internalFiles, internalImages, onRemove],
-    );
+            const { buttonType, result } = (await createDialog<DialogInput>({
+                dialogInput: {
+                    upload: true,
+                    buttons: [
+                        { text: 'hello', buttonType: 1 },
+                        { text: 'can', buttonType: -1 },
+                    ],
+                    initialView: 'pixabay',
+                },
+                type: DialogType.MODULE,
+                system: {
+                    url: 'https://tapp.chayns-static.space/api/dialog-image-editor/v1/remoteEntry.js',
+                    scope: 'dialog_image_editor',
+                    module: './ImageEditorEntry',
+                },
+                buttons: [],
+            }).open()) as ImageDialogResult;
 
-    const isDisabled = useMemo(() => {
-        if (maxFiles) {
-            if (internalFiles.length + internalImages.length >= maxFiles) {
-                if (typeof onMaxFilesReached === 'function') {
-                    onMaxFilesReached();
-                }
-
-                return true;
+            if (buttonType === 1 && result?.url) {
+                handleAddImages([result.url]);
             }
-        }
+        }, [handleAddImages, isDisabled]);
 
-        return false;
-    }, [internalFiles.length, internalImages.length, maxFiles, onMaxFilesReached]);
+        const handleFileSelectionClick = useCallback(async () => {
+            if (isDisabled) {
+                return;
+            }
 
-    const handleImageSelectionClick = useCallback(async () => {
-        if (isDisabled) {
-            return;
-        }
+            const newFiles = await selectFiles({
+                multiple: true,
+                type: fileTypes,
+            });
 
-        const { buttonType, result } = (await createDialog<DialogInput>({
-            dialogInput: {
-                upload: true,
-                buttons: [
-                    { text: 'hello', buttonType: 1 },
-                    { text: 'can', buttonType: -1 },
-                ],
-                initialView: 'pixabay',
+            handleAddFiles(newFiles);
+        }, [fileTypes, handleAddFiles, isDisabled]);
+
+        const handleDrop = useCallback(
+            (e: DragEvent<HTMLDivElement>) => {
+                e.preventDefault();
+                const draggedFiles = Array.from(e.dataTransfer.files);
+
+                handleAddFiles(draggedFiles);
             },
-            type: DialogType.MODULE,
-            system: {
-                url: 'https://tapp.chayns-static.space/api/dialog-image-editor/v1/remoteEntry.js',
-                scope: 'dialog_image_editor',
-                module: './ImageEditorEntry',
-            },
-            buttons: [],
-        }).open()) as ImageDialogResult;
+            [handleAddFiles],
+        );
 
-        if (buttonType === 1 && result?.url) {
-            handleAddImages([result.url]);
-        }
-    }, [handleAddImages, isDisabled]);
+        const content = useMemo(() => {
+            const combinedFiles = [...internalImages, ...internalFiles];
 
-    const handleFileSelectionClick = useCallback(async () => {
-        if (isDisabled) {
-            return;
-        }
-
-        const newFiles = await selectFiles({
-            multiple: true,
-            type: fileTypes,
-        });
-
-        handleAddFiles(newFiles);
-    }, [fileTypes, handleAddFiles, isDisabled]);
-
-    const handleDrop = useCallback(
-        (e: DragEvent<HTMLDivElement>) => {
-            e.preventDefault();
-            const draggedFiles = Array.from(e.dataTransfer.files);
-
-            handleAddFiles(draggedFiles);
-        },
-        [handleAddFiles],
-    );
-
-    const content = useMemo(() => {
-        const combinedFiles = [...internalImages, ...internalFiles];
-
-        const items: ReactElement[] = combinedFiles.map((file) => (
-            <StyledMotionFileInputList
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                key={typeof file === 'string' ? file : file.name}
-                transition={{ duration: 0.25, type: 'tween' }}
-            >
-                <FileListItem
-                    fileType={typeof file !== 'string' ? file.type : undefined}
-                    fileName={typeof file !== 'string' ? file.name : undefined}
-                    fileSize={typeof file !== 'string' ? file.size : undefined}
-                    url={typeof file === 'string' ? file : undefined}
-                    onRemove={handleDeleteFile}
-                />
-            </StyledMotionFileInputList>
-        ));
-
-        return items;
-    }, [handleDeleteFile, internalFiles, internalImages]);
-
-    const uploadedFiles = useMemo(() => {
-        const items: ReactElement[] = [];
-
-        const cutFiles = maxFiles ? files?.splice(0, maxFiles) : files;
-
-        cutFiles?.forEach(({ url, id, name }) => {
-            items.push(
+            const items: ReactElement[] = combinedFiles.map((file) => (
                 <StyledMotionFileInputList
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    key={id}
+                    key={typeof file === 'string' ? file : file.name}
                     transition={{ duration: 0.25, type: 'tween' }}
                 >
-                    <FileListItem url={url} onRemove={handleDeleteFile} fileName={name} />
-                </StyledMotionFileInputList>,
-            );
-        });
+                    <FileListItem
+                        fileType={typeof file !== 'string' ? file.type : undefined}
+                        fileName={typeof file !== 'string' ? file.name : undefined}
+                        fileSize={typeof file !== 'string' ? file.size : undefined}
+                        url={typeof file === 'string' ? file : undefined}
+                        onRemove={handleDeleteFile}
+                    />
+                </StyledMotionFileInputList>
+            ));
 
-        return items;
-    }, [files, handleDeleteFile, maxFiles]);
+            return items;
+        }, [handleDeleteFile, internalFiles, internalImages]);
 
-    return useMemo(
-        () => (
-            <StyledFileInput>
-                <StyledFileInputWrapper $isDisabled={isDisabled}>
-                    <StyledFileInputContainer
-                        onClick={() => void handleFileSelectionClick()}
-                        onDragOver={(e: DragEvent<HTMLDivElement>) => e.preventDefault()}
-                        onDrop={(e: DragEvent<HTMLDivElement>) => void handleDrop(e)}
+        const uploadedFiles = useMemo(() => {
+            const items: ReactElement[] = [];
+
+            const cutFiles = maxFiles ? files?.splice(0, maxFiles) : files;
+
+            cutFiles?.forEach(({ url, id, name }) => {
+                items.push(
+                    <StyledMotionFileInputList
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        key={id}
+                        transition={{ duration: 0.25, type: 'tween' }}
                     >
-                        <Icon icons={fileSelectionIcons} />
-                        <StyledFileInputText>{fileSelectionPlaceholder}</StyledFileInputText>
-                    </StyledFileInputContainer>
-                    {imageSelectPlaceholder && (
+                        <FileListItem url={url} onRemove={handleDeleteFile} fileName={name} />
+                    </StyledMotionFileInputList>,
+                );
+            });
+
+            return items;
+        }, [files, handleDeleteFile, maxFiles]);
+
+        return useMemo(
+            () => (
+                <StyledFileInput>
+                    <StyledFileInputWrapper $isDisabled={isDisabled}>
                         <StyledFileInputContainer
-                            $isImageSelection
-                            onClick={() => void handleImageSelectionClick()}
+                            onClick={() => void handleFileSelectionClick()}
+                            onDragOver={(e: DragEvent<HTMLDivElement>) => e.preventDefault()}
+                            onDrop={(e: DragEvent<HTMLDivElement>) => void handleDrop(e)}
                         >
-                            <Icon icons={imageSelectIcons} />
-                            <StyledFileInputText>{imageSelectPlaceholder}</StyledFileInputText>
+                            <Icon icons={fileSelectionIcons} />
+                            <StyledFileInputText>{fileSelectionPlaceholder}</StyledFileInputText>
                         </StyledFileInputContainer>
+                        {imageSelectPlaceholder && (
+                            <StyledFileInputContainer
+                                $isImageSelection
+                                onClick={() => void handleImageSelectionClick()}
+                            >
+                                <Icon icons={imageSelectIcons} />
+                                <StyledFileInputText>{imageSelectPlaceholder}</StyledFileInputText>
+                            </StyledFileInputContainer>
+                        )}
+                    </StyledFileInputWrapper>
+                    <List>
+                        <AnimatePresence initial={false}>{content}</AnimatePresence>
+                    </List>
+                    {uploadedFiles.length > 0 && (
+                        <StyledUploadedFilesList $shouldShowBorder={content.length > 0}>
+                            <List>
+                                <AnimatePresence initial={false}>{uploadedFiles}</AnimatePresence>
+                            </List>
+                        </StyledUploadedFilesList>
                     )}
-                </StyledFileInputWrapper>
-                <List>
-                    <AnimatePresence initial={false}>{content}</AnimatePresence>
-                </List>
-                {uploadedFiles.length > 0 && (
-                    <StyledUploadedFilesList $shouldShowBorder={content.length > 0}>
-                        <List>
-                            <AnimatePresence initial={false}>{uploadedFiles}</AnimatePresence>
-                        </List>
-                    </StyledUploadedFilesList>
-                )}
-            </StyledFileInput>
-        ),
-        [
-            isDisabled,
-            fileSelectionIcons,
-            fileSelectionPlaceholder,
-            imageSelectPlaceholder,
-            imageSelectIcons,
-            content,
-            uploadedFiles,
-            handleFileSelectionClick,
-            handleDrop,
-            handleImageSelectionClick,
-        ],
-    );
-};
+                </StyledFileInput>
+            ),
+            [
+                isDisabled,
+                fileSelectionIcons,
+                fileSelectionPlaceholder,
+                imageSelectPlaceholder,
+                imageSelectIcons,
+                content,
+                uploadedFiles,
+                handleFileSelectionClick,
+                handleDrop,
+                handleImageSelectionClick,
+            ],
+        );
+    },
+);
 
 FileInput.displayName = 'FileInput';
 
