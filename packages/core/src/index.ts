@@ -22,7 +22,7 @@ export type { IComboBoxItem as ComboBoxItem } from './components/combobox/ComboB
 export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as ContextMenu, type ContextMenuRef } from './components/context-menu/ContextMenu';
 export { default as ExpandableContent } from './components/expandable-content/ExpandableContent';
-export { default as FileInput } from './components/file-input/FileInput';
+export { default as FileInput, type FileInputRef } from './components/file-input/FileInput';
 export { default as FilterButtons } from './components/filter-buttons/FilterButtons';
 export { default as GridImage } from './components/grid-image/GridImage';
 export { default as Icon } from './components/icon/Icon';
