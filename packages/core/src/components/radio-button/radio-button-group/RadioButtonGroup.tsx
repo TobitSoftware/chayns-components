@@ -42,7 +42,7 @@ const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
     ({ children, radioButtonsCanBeUnchecked }, ref) => {
         const [selectedRadioButtonId, setSelectedRadioButtonId] =
             useState<IRadioButtonGroupContext['selectedRadioButtonId']>(undefined);
-        console.log('selectedRadioButtonId', selectedRadioButtonId);
+
         const isInitialRenderRef = useRef(true);
 
         const updateSelectedRadioButtonId = useCallback<IUpdateSelectedRadioButtonId>((id) => {

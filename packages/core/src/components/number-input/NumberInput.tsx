@@ -151,7 +151,8 @@ const NumberInput: FC<NumberInputProps> = ({
                       isTimeInput,
                   });
 
-        setFormattedValue(newStringValue);
+        setFormattedValue(`${newStringValue} ${isMoneyInput ? '€' : ''}`);
+
         setPlainText(newStringValue.replaceAll('.', ''));
         setHasFocus(false);
 
@@ -201,11 +202,11 @@ const NumberInput: FC<NumberInputProps> = ({
         setFormattedValue(
             plainText.length === 0
                 ? ''
-                : formateNumber({
+                : `${formateNumber({
                       number: isTimeInput ? plainText : parsedNumber,
                       isMoneyInput,
                       isTimeInput,
-                  }),
+                  })}${isMoneyInput ? ' €' : ''}`,
         );
     }, [hasFocus, isMoneyInput, isTimeInput, maxNumber, minNumber, plainText]);
 
