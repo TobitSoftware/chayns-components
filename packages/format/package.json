@@ -51,8 +51,8 @@
     },
     "devDependencies": {
         "@babel/cli": "^7.24.8",
-        "@babel/core": "^7.24.9",
-        "@babel/preset-env": "^7.24.8",
+        "@babel/core": "^7.25.2",
+        "@babel/preset-env": "^7.25.3",
         "@babel/preset-react": "^7.24.7",
         "@babel/preset-typescript": "^7.24.7",
         "@types/commonmark": "^0.27.9",
@@ -64,9 +64,9 @@
         "vitest": "^1.6.0"
     },
     "dependencies": {
-        "commonmark": "^0.31.0",
-        "csv-stringify": "^6.5.0",
-        "marked": "^13.0.2"
+        "commonmark": "^0.31.1",
+        "csv-stringify": "^6.5.1",
+        "marked": "^13.0.3"
     },
     "publishConfig": {
         "access": "public"
