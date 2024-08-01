@@ -10,6 +10,7 @@ import React, {
     useMemo,
     useRef,
     useState,
+    type CSSProperties,
     type MouseEventHandler,
 } from 'react';
 import { useUuid } from '../../hooks/uuid';
@@ -130,6 +131,10 @@ export type AccordionProps = {
      * The props of the title Input.
      */
     titleInputProps?: InputProps;
+    /**
+     * The title color.
+     */
+    titleColor?: CSSProperties['color'];
 };
 
 const Accordion: FC<AccordionProps> = ({
@@ -158,6 +163,7 @@ const Accordion: FC<AccordionProps> = ({
     titleElement,
     onTitleInputChange,
     titleInputProps,
+    titleColor,
 }) => {
     const {
         isWrapped: groupIsWrapped,
@@ -295,6 +301,7 @@ const Accordion: FC<AccordionProps> = ({
                         titleElement={titleElement}
                         onTitleInputChange={onTitleInputChange}
                         titleInputProps={titleInputProps}
+                        titleColor={titleColor}
                     />
                     <AnimatePresence initial={false}>
                         {(isOpen || shouldRenderClosed) && (
