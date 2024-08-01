@@ -175,7 +175,6 @@ const Accordion: FC<AccordionProps> = ({
     const { isWrapped: isParentWrapped } = useContext(AccordionContext);
 
     const { isWrapped: contextIsWrapped } = useContext(AccordionWrappedContext);
-
     const isWrapped = useMemo(
         () => groupIsWrapped ?? contextIsWrapped,
         [contextIsWrapped, groupIsWrapped],
@@ -268,7 +267,6 @@ const Accordion: FC<AccordionProps> = ({
     const areaContextProviderValue = useMemo(() => ({ shouldChangeColor: true }), []);
 
     const accordionWrappedContextProviderValue = useMemo(() => ({ isWrapped: true }), []);
-
     return (
         <StyledAccordion
             data-uuid={`${accordionGroupUuid ?? ''}---${uuid}`}

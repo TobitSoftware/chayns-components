@@ -71,6 +71,7 @@ export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
     text-overflow: ellipsis;
     transform-origin: top left;
     user-select: none;
+    color: ${({ $color }) => $color};
     white-space: ${({ $isOpen, $isWrapped }) => ($isOpen && !$isWrapped ? 'normal' : 'nowrap')};
 
     ${({ $isWrapped }) =>
