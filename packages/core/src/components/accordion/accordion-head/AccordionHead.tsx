@@ -8,6 +8,7 @@ import React, {
     useMemo,
     useRef,
     useState,
+    type CSSProperties,
 } from 'react';
 import { useTheme } from 'styled-components';
 import { useElementSize } from '../../../hooks/useElementSize';
@@ -46,6 +47,7 @@ export type AccordionHeadProps = {
     uuid: string;
     onTitleInputChange?: ChangeEventHandler<HTMLInputElement>;
     titleInputProps?: InputProps;
+    titleColor?: CSSProperties['color'];
 };
 
 interface HeadHeight {
@@ -70,6 +72,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     uuid,
     titleInputProps,
     onTitleInputChange,
+    titleColor,
 }) => {
     const [headHeight, setHeadHeight] = useState<HeadHeight>({
         closed: isWrapped ? 40 : 33,
@@ -84,7 +87,6 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     const titleElementChildrenSize = useElementSize(titleElementWrapperRef, {
         shouldUseChildElement: true,
     });
-
     useEffect(() => {
         if (typeof onTitleInputChange === 'function') {
             setHeadHeight({ closed: 50, open: 50 });
@@ -193,6 +195,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                     exit={{ opacity: 0 }}
                                     $isOpen={isOpen}
                                     $isWrapped={isWrapped}
+                                    $color={titleColor}
                                     transition={{
                                         opacity: {
                                             duration: 0,

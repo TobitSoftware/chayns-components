@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type {
     FramerMotionBugFix,
@@ -58,6 +59,7 @@ export const StyledMotionTitleWrapper = styled(motion.div)<FramerMotionBugFix>`
 interface StyledMotionTitleProps {
     $isOpen: boolean;
     $isWrapped: boolean;
+    $color?: CSSProperties['color'];
 }
 
 export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
