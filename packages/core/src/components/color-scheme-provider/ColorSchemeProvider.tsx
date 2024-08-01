@@ -195,7 +195,11 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                     href="https://api.chayns-static.space/font/NotoColorEmoji/v1/font.css"
                 />
             </Helmet>
-            <div style={{ ...colors, ...cssVariables, ...style }}>{children}</div>
+            <div
+                style={{ ...colors, ...cssVariables, ...style, color: 'var(--chayns-color--text)' }}
+            >
+                {children}
+            </div>
             <GlobalStyle />
         </ThemeProvider>
     );
