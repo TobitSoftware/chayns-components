@@ -46,6 +46,8 @@ export type RadioButtonProps = {
      * Function to be executed when a button is checked.
      */
     onChange?: (item: RadioButtonItem) => void;
+
+    canBeUnchecked?: boolean;
 };
 
 const RadioButton: FC<RadioButtonProps> = ({
@@ -55,8 +57,9 @@ const RadioButton: FC<RadioButtonProps> = ({
     onChange,
     id,
     isDisabled = false,
+    canBeUnchecked,
 }) => {
-    const { selectedRadioButtonId, updateSelectedRadioButtonId } =
+    const { selectedRadioButtonId, updateSelectedRadioButtonId, radioButtonsCanBeUnchecked } =
         useContext(RadioButtonGroupContext);
 
     const [internalIsChecked, setInternalIsChecked] = useState(false);
@@ -65,6 +68,8 @@ const RadioButton: FC<RadioButtonProps> = ({
     const isInGroup = typeof updateSelectedRadioButtonId === 'function';
 
     const isMarked = isInGroup ? selectedRadioButtonId === id : internalIsChecked;
+
+    const uncheckable = isInGroup ? radioButtonsCanBeUnchecked : canBeUnchecked;
 
     const isInitialRenderRef = useRef(true);
 
@@ -90,13 +95,18 @@ const RadioButton: FC<RadioButtonProps> = ({
         if (isDisabled) {
             return;
         }
-
+        if (uncheckable) {
+            if (updateSelectedRadioButtonId) {
+                updateSelectedRadioButtonId(id === selectedRadioButtonId ? undefined : id);
+            }
+            setInternalIsChecked((prev) => !prev);
+            return;
+        }
         if (typeof updateSelectedRadioButtonId === 'function') {
             updateSelectedRadioButtonId(id);
         }
-
         setInternalIsChecked(true);
-    }, [id, isDisabled, updateSelectedRadioButtonId]);
+    }, [id, isDisabled, uncheckable, selectedRadioButtonId, updateSelectedRadioButtonId]);
 
     const handleMouseEnter = useCallback(() => {
         if (!isDisabled) {

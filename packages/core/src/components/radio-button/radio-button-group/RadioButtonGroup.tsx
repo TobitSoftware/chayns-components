@@ -9,16 +9,18 @@ import React, {
     useState,
 } from 'react';
 
-type IUpdateSelectedRadioButtonId = (id: string) => void;
+type IUpdateSelectedRadioButtonId = (id: string | undefined) => void;
 
 interface IRadioButtonGroupContext {
     selectedRadioButtonId: string | undefined;
     updateSelectedRadioButtonId?: IUpdateSelectedRadioButtonId;
+    radioButtonsCanBeUnchecked?: boolean;
 }
 
 export const RadioButtonGroupContext = React.createContext<IRadioButtonGroupContext>({
     selectedRadioButtonId: undefined,
     updateSelectedRadioButtonId: undefined,
+    radioButtonsCanBeUnchecked: false,
 });
 
 RadioButtonGroupContext.displayName = 'RadioButtonGroupContext';
@@ -33,13 +35,14 @@ export type RadioButtonGroupProps = {
      * automatically unchecked when an `RadioButton` of the group is checked.
      */
     children: ReactNode;
+    radioButtonsCanBeUnchecked?: boolean;
 };
 
 const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
-    ({ children }, ref) => {
+    ({ children, radioButtonsCanBeUnchecked }, ref) => {
         const [selectedRadioButtonId, setSelectedRadioButtonId] =
             useState<IRadioButtonGroupContext['selectedRadioButtonId']>(undefined);
-
+        console.log('selectedRadioButtonId', selectedRadioButtonId);
         const isInitialRenderRef = useRef(true);
 
         const updateSelectedRadioButtonId = useCallback<IUpdateSelectedRadioButtonId>((id) => {
@@ -64,8 +67,9 @@ const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
             () => ({
                 selectedRadioButtonId,
                 updateSelectedRadioButtonId,
+                radioButtonsCanBeUnchecked,
             }),
-            [selectedRadioButtonId, updateSelectedRadioButtonId],
+            [radioButtonsCanBeUnchecked, selectedRadioButtonId, updateSelectedRadioButtonId],
         );
 
         return (
