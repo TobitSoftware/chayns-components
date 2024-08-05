@@ -21,6 +21,8 @@ export type AccordionBodyProps = {
      * Whether the body should be shown.
      */
     shouldHideBody: boolean;
+
+    onAnimationEnd?: VoidFunction;
 };
 
 const AccordionBody: FC<AccordionBodyProps> = ({
@@ -28,6 +30,7 @@ const AccordionBody: FC<AccordionBodyProps> = ({
     maxHeight,
     onScroll,
     shouldHideBody,
+    onAnimationEnd,
 }) => {
     const { browser } = getDevice();
 
@@ -44,6 +47,7 @@ const AccordionBody: FC<AccordionBodyProps> = ({
             initial={{ height: 0, opacity: 0 }}
             $maxHeight={maxHeight}
             $browser={browser?.name}
+            onAnimationEnd={onAnimationEnd}
             onScroll={onScroll}
         >
             <AccordionGroupContext.Provider value={AccordionGroupContextProviderValue}>

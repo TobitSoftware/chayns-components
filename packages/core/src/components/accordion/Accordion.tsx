@@ -79,6 +79,8 @@ export type AccordionProps = {
      * Function that is executed when the accordion will be opened.
      */
     onOpen?: VoidFunction;
+
+    onAnimationEnd?: VoidFunction;
     /**
      * Function that is executed when the text of the search in the accordion
      * head changes. When this function is given, the search field is displayed
@@ -164,6 +166,7 @@ const Accordion: FC<AccordionProps> = ({
     onTitleInputChange,
     titleInputProps,
     titleColor,
+    onAnimationEnd,
 }) => {
     const {
         isWrapped: groupIsWrapped,
@@ -306,6 +309,7 @@ const Accordion: FC<AccordionProps> = ({
                             <AccordionBody
                                 maxHeight={bodyMaxHeight}
                                 onScroll={onBodyScroll}
+                                onAnimationEnd={onAnimationEnd}
                                 shouldHideBody={shouldRenderClosed && !isOpen}
                             >
                                 <AccordionWrappedContext.Provider
