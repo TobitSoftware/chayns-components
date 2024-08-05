@@ -47,7 +47,7 @@ const AccordionBody: FC<AccordionBodyProps> = ({
             initial={{ height: 0, opacity: 0 }}
             $maxHeight={maxHeight}
             $browser={browser?.name}
-            onAnimationEnd={onAnimationEnd}
+            onAnimationComplete={onAnimationEnd}
             onScroll={onScroll}
         >
             <AccordionGroupContext.Provider value={AccordionGroupContextProviderValue}>
