@@ -29,6 +29,21 @@ export const StyledComboBoxItem = styled.div<StyledComboBoxItemProps>`
         `}
 `;
 
+export const StyledComboBoxTopic = styled.div`
+    align-items: center;
+    color: ${({ theme }) => theme.text};
+    position: sticky;
+    top: 0;
+    border: black 5px;
+    cursor: default;
+    font-weight: bold;
+    display: flex;
+    gap: 10px;
+    padding: 4px 10px;
+    transition: background-color 0.2s ease-in-out;
+    backdrop-filter: blur(1000px);
+`;
+
 type StyledComboBoxItemImageProps = WithTheme<{ $shouldShowRoundImage?: boolean }>;
 
 export const StyledComboBoxItemImage = styled.img<StyledComboBoxItemImageProps>`

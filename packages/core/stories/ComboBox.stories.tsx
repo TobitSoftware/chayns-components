@@ -7,50 +7,54 @@ export default {
     title: 'Core/ComboBox',
     component: ComboBox,
     args: {
-        list: [
+        lists: [
             {
-                text: 'Margherita',
-                value: 1,
-            },
-            {
-                text: 'Thunfisch',
-                value: 2,
-            },
-            {
-                text: 'Salami',
-                value: 3,
-            },
-            {
-                text: 'Schinken',
-                value: 4,
-            },
-            {
-                text: 'Champignons',
-                value: 5,
-            },
-            {
-                text: 'Paprika',
-                value: 6,
-            },
-            {
-                text: 'Oliven',
-                value: 7,
-            },
-            {
-                text: 'Zwiebeln',
-                value: 8,
-            },
-            {
-                text: 'Peperoni',
-                value: 9,
-            },
-            {
-                text: 'Ananas',
-                value: 10,
-            },
-            {
-                text: 'Spinat',
-                value: 11,
+                list: [
+                    {
+                        text: 'Margherita',
+                        value: 1,
+                    },
+                    {
+                        text: 'Thunfisch',
+                        value: 2,
+                    },
+                    {
+                        text: 'Salami',
+                        value: 3,
+                    },
+                    {
+                        text: 'Schinken',
+                        value: 4,
+                    },
+                    {
+                        text: 'Champignons',
+                        value: 5,
+                    },
+                    {
+                        text: 'Paprika',
+                        value: 6,
+                    },
+                    {
+                        text: 'Oliven',
+                        value: 7,
+                    },
+                    {
+                        text: 'Zwiebeln',
+                        value: 8,
+                    },
+                    {
+                        text: 'Peperoni',
+                        value: 9,
+                    },
+                    {
+                        text: 'Ananas',
+                        value: 10,
+                    },
+                    {
+                        text: 'Spinat',
+                        value: 11,
+                    },
+                ],
             },
         ],
         placeholder: 'Select Pizza',
@@ -84,33 +88,95 @@ export const WithSuffixElements = Template.bind({});
 
 export const WithIcons = Template.bind({});
 
+export const WithGroups = Template.bind({});
+
+WithGroups.args = {
+    direction: ComboBoxDirection.TOP,
+    lists: [
+        {
+            groupName: 'Autos',
+            list: [
+                {
+                    text: 'Audi',
+                    value: 0,
+                },
+                {
+                    text: 'BMW',
+                    value: 1,
+                },
+                {
+                    text: 'Toyota',
+                    value: 2,
+                },
+                {
+                    text: 'Volkswagen',
+                    value: 3,
+                },
+                {
+                    text: 'Nissan',
+                    value: 4,
+                },
+            ],
+        },
+        {
+            groupName: 'Fußballvereine',
+            list: [
+                {
+                    text: 'Bayern München',
+                    value: 0,
+                },
+                {
+                    text: 'Dortmund',
+                    value: 1,
+                },
+                {
+                    text: 'Real Madrid',
+                    value: 2,
+                },
+                {
+                    text: 'Man City',
+                    value: 3,
+                },
+                {
+                    text: 'Barcelona',
+                    value: 4,
+                },
+            ],
+        },
+    ],
+};
+
 WithImages.args = {
     direction: ComboBoxDirection.TOP,
-    list: [
+    lists: [
         {
-            imageUrl: 'https://picsum.photos/200',
-            text: 'Schnellstart',
-            value: 0,
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            text: 'Flexibles Design',
-            value: 1,
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            text: 'Intuitive Bedienung',
-            value: 2,
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            text: 'Integration',
-            value: 3,
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            text: 'Navigation',
-            value: 4,
+            list: [
+                {
+                    imageUrl: 'https://picsum.photos/200',
+                    text: 'Schnellstart',
+                    value: 0,
+                },
+                {
+                    imageUrl: 'https://picsum.photos/200',
+                    text: 'Flexibles Design',
+                    value: 1,
+                },
+                {
+                    imageUrl: 'https://picsum.photos/200',
+                    text: 'Intuitive Bedienung',
+                    value: 2,
+                },
+                {
+                    imageUrl: 'https://picsum.photos/200',
+                    text: 'Integration',
+                    value: 3,
+                },
+                {
+                    imageUrl: 'https://picsum.photos/200',
+                    text: 'Navigation',
+                    value: 4,
+                },
+            ],
         },
     ],
     selectedItem: {
@@ -122,31 +188,35 @@ WithImages.args = {
 
 WithIcons.args = {
     direction: ComboBoxDirection.TOP,
-    list: [
+    lists: [
         {
-            icons: ['ts-calling-code'],
-            text: 'Schnellstart',
-            value: 0,
-        },
-        {
-            icons: ['ts-calling-code'],
-            text: 'Flexibles Design',
-            value: 1,
-        },
-        {
-            icons: ['ts-calling-code'],
-            text: 'Intuitive Bedienung',
-            value: 2,
-        },
-        {
-            icons: ['ts-calling-code'],
-            text: 'Integration',
-            value: 3,
-        },
-        {
-            icons: ['ts-calling-code'],
-            text: 'Navigation',
-            value: 4,
+            list: [
+                {
+                    icons: ['ts-calling-code'],
+                    text: 'Schnellstart',
+                    value: 0,
+                },
+                {
+                    icons: ['ts-calling-code'],
+                    text: 'Flexibles Design',
+                    value: 1,
+                },
+                {
+                    icons: ['ts-calling-code'],
+                    text: 'Intuitive Bedienung',
+                    value: 2,
+                },
+                {
+                    icons: ['ts-calling-code'],
+                    text: 'Integration',
+                    value: 3,
+                },
+                {
+                    icons: ['ts-calling-code'],
+                    text: 'Navigation',
+                    value: 4,
+                },
+            ],
         },
     ],
     selectedItem: {
@@ -158,33 +228,37 @@ WithIcons.args = {
 
 WithSuffixElements.args = {
     direction: ComboBoxDirection.TOP,
-    list: [
+    lists: [
         {
-            imageUrl: 'https://picsum.photos/200',
-            suffixElement: <Icon icons={['fal fa-image']} />,
-            text: 'Schnellstart',
-            value: 0,
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            text: 'Flexibles Design',
-            value: 1,
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            text: 'Intuitive Bedienung',
-            suffixElement: <Icon icons={['fa fa-user']} />,
-            value: 2,
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            text: 'Integration',
-            value: 3,
-        },
-        {
-            imageUrl: 'https://picsum.photos/200',
-            text: 'Navigation',
-            value: 4,
+            list: [
+                {
+                    imageUrl: 'https://picsum.photos/200',
+                    suffixElement: <Icon icons={['fal fa-image']} />,
+                    text: 'Schnellstart',
+                    value: 0,
+                },
+                {
+                    imageUrl: 'https://picsum.photos/200',
+                    text: 'Flexibles Design',
+                    value: 1,
+                },
+                {
+                    imageUrl: 'https://picsum.photos/200',
+                    text: 'Intuitive Bedienung',
+                    suffixElement: <Icon icons={['fa fa-user']} />,
+                    value: 2,
+                },
+                {
+                    imageUrl: 'https://picsum.photos/200',
+                    text: 'Integration',
+                    value: 3,
+                },
+                {
+                    imageUrl: 'https://picsum.photos/200',
+                    text: 'Navigation',
+                    value: 4,
+                },
+            ],
         },
     ],
     selectedItem: {

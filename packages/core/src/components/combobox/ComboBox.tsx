@@ -1,4 +1,4 @@
-import { getDevice } from 'chayns-api';
+import { useDevice } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
     FC,
@@ -22,6 +22,7 @@ import { getIsTouch } from '../../utils/environment';
 import type { ContextMenuCoordinates } from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
 import ComboBoxItem from './combobox-item/ComboBoxItem';
+import { StyledComboBoxTopic } from './combobox-item/ComboBoxItem.styles';
 import {
     StyledComboBox,
     StyledComboBoxHeader,
@@ -30,6 +31,11 @@ import {
     StyledComboBoxPlaceholderImage,
     StyledMotionComboBoxBody,
 } from './ComboBox.styles';
+
+export interface IComboBoxItems {
+    groupName?: string;
+    list: Array<IComboBoxItem>;
+}
 
 export interface IComboBoxItem {
     icons?: string[];
@@ -55,7 +61,7 @@ export type ComboBoxProps = {
     /**
      * The list of the items that should be displayed.
      */
-    list: IComboBoxItem[];
+    lists: IComboBoxItems[];
     /**
      * The maximum height of the combobox content.
      */
@@ -85,7 +91,7 @@ export type ComboBoxProps = {
 const ComboBox: FC<ComboBoxProps> = ({
     direction = ComboBoxDirection.BOTTOM,
     isDisabled = false,
-    list,
+    lists,
     maxHeight = '280px',
     onSelect,
     placeholder,
@@ -108,7 +114,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     const styledComboBoxElementRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
 
-    const { browser } = getDevice();
+    const { browser } = useDevice();
 
     const isTouch = getIsTouch();
 
@@ -203,9 +209,14 @@ const ComboBox: FC<ComboBoxProps> = ({
 
                 const { id } = element;
 
-                const newSelectedItem = list.find(
-                    ({ value }) => String(value) === id.replace('combobox-item__', ''),
-                );
+                let newSelectedItem: IComboBoxItem | undefined;
+
+                lists.some((list) => {
+                    newSelectedItem = list.list.find(
+                        ({ value }) => String(value) === id.replace('combobox-item__', ''),
+                    );
+                    return !!newSelectedItem;
+                });
 
                 if (!newSelectedItem) {
                     return;
@@ -220,16 +231,18 @@ const ComboBox: FC<ComboBoxProps> = ({
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [focusedIndex, handleSetSelectedItem, isAnimating, list]);
+    }, [focusedIndex, handleSetSelectedItem, isAnimating, lists]);
 
     /**
      * This function calculates the greatest width
      */
     useEffect(() => {
-        const isAtLeastOneItemWithImageGiven = list.some(({ imageUrl }) => imageUrl);
-        const isAtLeastOneItemWithIconGiven = list.some(({ icons }) => icons);
+        const allItems = lists.flatMap((list) => list.list);
 
-        const textArray = list.map(({ text }) => text);
+        const isAtLeastOneItemWithImageGiven = allItems.some(({ imageUrl }) => imageUrl);
+        const isAtLeastOneItemWithIconGiven = allItems.some(({ icons }) => icons);
+
+        const textArray = allItems?.map(({ text }) => text);
 
         const contentHeight = calculateContentHeight(textArray);
 
@@ -250,12 +263,15 @@ const ComboBox: FC<ComboBoxProps> = ({
         setMinWidth(
             shouldUseFullWidth
                 ? width
-                : calculateContentWidth([...list, { text: placeholder, value: 'placeholder' }]) +
+                : calculateContentWidth([
+                      ...allItems,
+                      { text: placeholder, value: 'placeholder' },
+                  ]) +
                       45 +
                       (isAtLeastOneItemWithImageGiven ? 32 : 0) +
                       (isAtLeastOneItemWithIconGiven ? 40 : 0),
         );
-    }, [list, maxHeight, placeholder, shouldUseFullWidth]);
+    }, [lists, maxHeight, placeholder, shouldUseFullWidth]);
 
     /**
      * This function sets the external selected item
@@ -317,23 +333,30 @@ const ComboBox: FC<ComboBoxProps> = ({
         }
     }, [handleClose, handleOpen, isAnimating, isDisabled]);
 
-    const comboBoxItems = useMemo(
+    const comboBoxGroups = useMemo(
         () =>
-            list.map(({ imageUrl, icons, suffixElement, text, value }) => (
-                <ComboBoxItem
-                    imageUrl={imageUrl}
-                    icons={icons}
-                    isSelected={selectedItem ? value === selectedItem.value : false}
-                    key={value}
-                    id={value}
-                    onSelect={handleSetSelectedItem}
-                    shouldShowRoundImage={shouldShowRoundImage}
-                    suffixElement={suffixElement}
-                    text={text}
-                    value={value}
-                />
+            lists.map(({ groupName, list }) => (
+                <div key={groupName ?? 'default-group'}>
+                    {groupName && lists.length > 1 && (
+                        <StyledComboBoxTopic>{groupName}</StyledComboBoxTopic>
+                    )}
+                    {list.map(({ imageUrl, icons, suffixElement, text, value }) => (
+                        <ComboBoxItem
+                            imageUrl={imageUrl}
+                            icons={icons}
+                            isSelected={selectedItem ? value === selectedItem.value : false}
+                            key={value}
+                            id={value}
+                            onSelect={handleSetSelectedItem}
+                            shouldShowRoundImage={shouldShowRoundImage}
+                            suffixElement={suffixElement}
+                            text={text}
+                            value={value}
+                        />
+                    ))}
+                </div>
             )),
-        [handleSetSelectedItem, list, selectedItem, shouldShowRoundImage],
+        [handleSetSelectedItem, lists, selectedItem, shouldShowRoundImage],
     );
 
     const bodyStyles = useMemo(() => {
@@ -365,7 +388,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                             tabIndex={0}
                             ref={contentRef}
                         >
-                            {comboBoxItems}
+                            {comboBoxGroups}
                         </StyledMotionComboBoxBody>
                     )}
                 </AnimatePresence>,
@@ -375,7 +398,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     }, [
         bodyStyles,
         browser?.name,
-        comboBoxItems,
+        comboBoxGroups,
         container,
         direction,
         isAnimating,
