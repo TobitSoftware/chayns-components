@@ -60,6 +60,13 @@ export type OpeningTimesProps = {
      */
     onTimeRemove?: (id: string) => void;
     /**
+     * Function to be executed when Validation is changed.
+     */
+    onValidationStateChange?: (
+        invalidOpeningTimes: { openingTimeId: string; invalidTimeIds: string[] }[],
+    ) => void;
+
+    /**
      * The opening times corresponding to its weekday.
      */
     openingTimes: OpeningTime[];
@@ -79,6 +86,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     weekdays,
     onChange,
     onTimeAdd,
+    onValidationStateChange,
     onTimeRemove,
 }) => {
     const [newOpeningTimes, setNewOpeningTimes] = useState<OpeningTime[]>();
@@ -93,6 +101,12 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     useEffect(() => {
         setNewOpeningTimes(openingTimes);
     }, [openingTimes]);
+
+    useEffect(() => {
+        if (onValidationStateChange) {
+            onValidationStateChange(invalidOpeningTimes);
+        }
+    }, [invalidOpeningTimes, onValidationStateChange]);
 
     const handleCheckBoxChange = useCallback(
         (id: string) => {
@@ -167,7 +181,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     const handleUpdateInvalidIds = useCallback(
         (openingTimeId: string, invalidTimeIds: string[]) => {
             setInvalidOpeningTimes((prevState) => {
-                let updatedInvalidOpeningTimes = prevState.map((invalidOpeningTime) => {
+                const updatedInvalidOpeningTimes = prevState.map((invalidOpeningTime) => {
                     if (invalidOpeningTime.openingTimeId === openingTimeId) {
                         return {
                             openingTimeId,
@@ -188,12 +202,10 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                     updatedInvalidOpeningTimes.push({ openingTimeId, invalidTimeIds });
                 }
 
-                updatedInvalidOpeningTimes = updatedInvalidOpeningTimes.filter(
+                return updatedInvalidOpeningTimes.filter(
                     (updatedInvalidOpeningTime) =>
                         updatedInvalidOpeningTime.invalidTimeIds.length !== 0,
                 );
-
-                return updatedInvalidOpeningTimes;
             });
         },
         [],
