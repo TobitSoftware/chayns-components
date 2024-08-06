@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import Slider from './slider/Slider';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import Slider, { type SliderRef } from './slider/Slider';
 import Timer from './timer/Timer';
 
-export type OnDevalueHandlerResult = { success: boolean };
-export type OnDevalueHandler = () => Promise<OnDevalueHandlerResult>;
+export type DevalueSliderOnDevalueHandlerResult = { success: boolean };
+export type DevalueSliderOnDevalueHandler = () => Promise<DevalueSliderOnDevalueHandlerResult>;
 
-export type OnChangeHandler = (relativeValue: number) => void;
-export type OnCompleteHandler = () => void;
+export type DevalueSliderOnChangeHandler = (relativeValue: number) => void;
+export type DevalueSliderOnCompleteHandler = () => void;
 
 export type DevalueSliderProps = {
     /**
@@ -26,30 +26,36 @@ export type DevalueSliderProps = {
      */
     devalueTime?: Date;
     /**
+     * Disables the slider and cancels any active drags.
+     */
+    isDisabled?: boolean;
+    /**
      * This function is called when the slider is devalued.
      */
-    onDevalue?: OnDevalueHandler;
+    onDevalue?: DevalueSliderOnDevalueHandler;
     /**
      * This function is called when the slider value changes.
      * With this function you can keep track of the movement of the slider.
      */
-    onChange?: OnChangeHandler;
+    onChange?: DevalueSliderOnChangeHandler;
     /**
      * This function is called when the slider is completed.
      * The slider is completed when the user devalues the slider
      * and the animation is completed.
      */
-    onComplete?: OnCompleteHandler;
+    onComplete?: DevalueSliderOnCompleteHandler;
 };
 
 const DevalueSlider: React.FC<DevalueSliderProps> = ({
     color = 'red',
     devalueColor = 'green',
     devalueTime,
+    isDisabled,
     onDevalue,
     onChange,
     onComplete,
 }) => {
+    const sliderRef = useRef<SliderRef>(null);
     const [timerTime, setTimerTime] = useState(devalueTime);
 
     useEffect(() => {
@@ -62,12 +68,21 @@ const DevalueSlider: React.FC<DevalueSliderProps> = ({
         onComplete?.();
     }, [onComplete]);
 
+    useEffect(() => {
+        if (isDisabled) {
+            sliderRef.current?.disable();
+            return;
+        }
+        sliderRef.current?.enable();
+    }, [isDisabled]);
+
     if (timerTime) {
         return <Timer color={devalueColor} devalueTime={timerTime} />;
     }
 
     return (
         <Slider
+            ref={sliderRef}
             onDevalue={onDevalue}
             color={color}
             devalueColor={devalueColor}

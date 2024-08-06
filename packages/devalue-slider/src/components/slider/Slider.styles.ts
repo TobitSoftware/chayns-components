@@ -1,8 +1,6 @@
 import { motion, Variant, Variants } from 'framer-motion';
 import styled from 'styled-components';
 
-import { SmallWaitCursor } from '@chayns-components/core';
-
 interface IBaseVariant extends Variants {
     base: Variant;
 }
@@ -93,11 +91,6 @@ export const ThumbIcon = styled(motion.i).attrs<{ icon: string }>(({ icon }) => 
     z-index: 1;
     color: black;
     padding: 5px;
-`;
-
-export const ThumbWaitCursor = styled(SmallWaitCursor)`
-    border-color: black;
-    border-right-color: transparent;
 `;
 
 export type CreateThumbVariantsArgs = {

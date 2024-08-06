@@ -1,3 +1,4 @@
+import { SmallWaitCursor } from '@chayns-components/core';
 import useSize from '@react-hook/size';
 import { invokeCall, vibrate } from 'chayns-api';
 import {
@@ -25,7 +26,6 @@ import {
     Thumb,
     ThumbIcon,
     ThumbIconContainer,
-    ThumbWaitCursor,
     THUMB_ICON_VARIANTS,
     Track,
     TrackBackground,
@@ -136,38 +136,35 @@ const Slider = forwardRef<SliderRef, SliderProps>(
         }, []);
 
         const handleRedeem = useCallback(async () => {
-            try {
-                setShowWaitCursor(true);
-                setIsCompleted(true);
-                isCompletedRef.current = true;
+            setShowWaitCursor(true);
+            setIsCompleted(true);
+            isCompletedRef.current = true;
 
-                const devaluePromise = onDevalue();
-                const sleepPromise = sleep(1000);
-                const [devalued] = await Promise.all([devaluePromise, sleepPromise]);
+            const devaluePromise = onDevalue();
+            const sleepPromise = sleep(1000);
+            const [devalued] = await Promise.all([devaluePromise, sleepPromise]);
 
-                if (!devalued.success) {
-                    throw new Error('Devalue failed');
-                }
-
-                setShowWaitCursor(false);
-                setIconColor('white');
-                void invokeCall({
-                    action: 19,
-                    value: {
-                        iOSFeedbackVibration: 3,
-                        pattern: [100, 200, 100],
-                    },
-                });
-
-                await containerAnimation.start('completed');
-                await containerAnimation.start('leaving');
-                onComplete?.();
-            } catch (e) {
+            if (!devalued.success) {
                 setShowWaitCursor(false);
                 setIsCompleted(false);
                 isCompletedRef.current = false;
                 await containerAnimation.start('base');
+                return;
             }
+
+            setShowWaitCursor(false);
+            setIconColor('white');
+            void invokeCall({
+                action: 19,
+                value: {
+                    iOSFeedbackVibration: 3,
+                    pattern: [100, 200, 100],
+                },
+            });
+
+            await containerAnimation.start('completed');
+            await containerAnimation.start('leaving');
+            onComplete?.();
         }, [containerAnimation, onComplete, onDevalue]);
 
         const handleTrackRef = useCallback((node: HTMLDivElement | null) => {
@@ -253,7 +250,9 @@ const Slider = forwardRef<SliderRef, SliderProps>(
                                     style={iconStyles}
                                 />
                             )}
-                            {showWaitCursor && <ThumbWaitCursor shouldHideBackground />}
+                            {showWaitCursor && (
+                                <SmallWaitCursor shouldHideBackground color="black" />
+                            )}
                         </ThumbIconContainer>
                     </Thumb>
                     <TrackText
