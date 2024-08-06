@@ -39,6 +39,7 @@ export const StyledComboBoxTopic = styled.div`
     font-weight: bold;
     display: flex;
     gap: 10px;
+    z-index: 10;
     padding: 4px 10px;
     background-color: ${({ theme }) => theme['secondary-101']};
 `;
