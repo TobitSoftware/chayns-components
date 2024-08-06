@@ -16,8 +16,9 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { useThumbIcon } from '../hooks/design';
-import { sleep } from '../utils/common';
+import { useThumbIcon } from '../../hooks/design';
+import { sleep } from '../../utils/common';
+import type { DevalueSliderProps } from '../DevalueSlider';
 import {
     Container,
     createThumbVariants,
@@ -29,21 +30,18 @@ import {
     Track,
     TrackBackground,
     TrackText,
-} from './Slider.components';
+} from './Slider.styles';
 
 export type SliderProps = {
-    className?: string;
-    isOpen?: boolean;
-    trackColor?: string;
-    securityColor: string;
+    color: NonNullable<DevalueSliderProps['color']>;
+    devalueColor: NonNullable<DevalueSliderProps['devalueColor']>;
     thumbSize?: number;
     trackHeight?: number;
     trackText?: string;
     borderSize?: number;
-    onSliderChange?: (relativeValue: number) => void;
-    onRedeemed: () => Promise<void>;
-    onCompleted?: () => void;
-    onDragStart?: () => void | Promise<void>;
+    onChange: DevalueSliderProps['onChange'];
+    onDevalue: DevalueSliderProps['onDevalue'];
+    onComplete: DevalueSliderProps['onComplete'];
 };
 
 export type SliderRef = {
@@ -54,18 +52,15 @@ export type SliderRef = {
 const Slider = forwardRef<SliderRef, SliderProps>(
     (
         {
-            className,
-            isOpen = false,
-            trackColor = 'red',
-            securityColor,
+            color,
+            devalueColor,
             trackHeight = 50,
             thumbSize = 40,
             borderSize = 2,
             trackText = 'EINLÖSEN',
-            onSliderChange = () => {},
-            onRedeemed,
-            onCompleted,
-            onDragStart,
+            onChange = () => {},
+            onDevalue = () => Promise.resolve({ success: true }),
+            onComplete,
         },
         ref,
     ) => {
@@ -125,9 +120,9 @@ const Slider = forwardRef<SliderRef, SliderProps>(
         });
 
         const trackBackground = useTransform(relativeBackgroundValue, (value) => {
-            if (isCompleted) return securityColor;
+            if (isCompleted) return devalueColor;
             if (!value) return 'transparent';
-            return `linear-gradient(to right, ${securityColor} ${value}%, transparent ${value}%)`;
+            return `linear-gradient(to right, ${devalueColor} ${value}%, transparent ${value}%)`;
         });
 
         const handlePointerDownCapture = useCallback(() => {
@@ -146,9 +141,13 @@ const Slider = forwardRef<SliderRef, SliderProps>(
                 setIsCompleted(true);
                 isCompletedRef.current = true;
 
-                const redeemPromise = onRedeemed();
+                const devaluePromise = onDevalue();
                 const sleepPromise = sleep(1000);
-                await Promise.all([redeemPromise, sleepPromise]);
+                const [devalued] = await Promise.all([devaluePromise, sleepPromise]);
+
+                if (!devalued.success) {
+                    throw new Error('Devalue failed');
+                }
 
                 setShowWaitCursor(false);
                 setIconColor('white');
@@ -162,14 +161,14 @@ const Slider = forwardRef<SliderRef, SliderProps>(
 
                 await containerAnimation.start('completed');
                 await containerAnimation.start('leaving');
-                onCompleted?.();
+                onComplete?.();
             } catch (e) {
                 setShowWaitCursor(false);
                 setIsCompleted(false);
                 isCompletedRef.current = false;
                 await containerAnimation.start('base');
             }
-        }, [containerAnimation, onCompleted, onRedeemed]);
+        }, [containerAnimation, onComplete, onDevalue]);
 
         const handleTrackRef = useCallback((node: HTMLDivElement | null) => {
             setTrackRef(node);
@@ -177,8 +176,7 @@ const Slider = forwardRef<SliderRef, SliderProps>(
 
         const handleDragStart = useCallback<NonNullable<DragHandlers['onDragStart']>>(() => {
             void containerAnimation.start('dragging');
-            void onDragStart?.();
-        }, [containerAnimation, onDragStart]);
+        }, [containerAnimation]);
 
         const handleDragEnd = useCallback<NonNullable<DragHandlers['onDragEnd']>>(() => {
             if (relativeValue.get() > 98) {
@@ -190,14 +188,13 @@ const Slider = forwardRef<SliderRef, SliderProps>(
         }, [relativeValue, containerAnimation, handleRedeem]);
 
         useEffect(() => {
-            if (!isOpen) return;
             void containerAnimation.start('base');
-        }, [containerAnimation, isOpen]);
+        }, [containerAnimation]);
 
         useEffect(() => {
             if (isCompleted) return () => {};
-            return relativeValue.on('change', onSliderChange);
-        }, [isCompleted, onSliderChange, relativeValue]);
+            return relativeValue.on('change', onChange);
+        }, [isCompleted, onChange, relativeValue]);
 
         useImperativeHandle(
             ref,
@@ -219,11 +216,11 @@ const Slider = forwardRef<SliderRef, SliderProps>(
         const baseFontSize = useMemo(() => 22, []);
 
         return (
-            <Container className={className} animate={containerAnimation}>
+            <Container animate={containerAnimation}>
                 <Track
                     $height={trackHeight}
                     $borderSize={borderSize}
-                    $backgroundColor={trackColor}
+                    $backgroundColor={color}
                     ref={handleTrackRef}
                 >
                     <TrackBackground

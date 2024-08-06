@@ -19,7 +19,6 @@ interface ILeavingVariant extends Variants {
     leaving: Variant;
 }
 
-// noinspection CssUnresolvedCustomProperty
 export const Container = styled(motion.div)``;
 
 export type TrackProps = {
@@ -28,7 +27,6 @@ export type TrackProps = {
     $backgroundColor: string;
 };
 
-// noinspection CssUnresolvedCustomProperty
 export const Track = styled(motion.div)<TrackProps>`
     user-select: none;
     position: relative;
@@ -61,7 +59,6 @@ export const Thumb = styled(motion.div)<{
     box-shadow: rgba(0, 0, 0, 0.2) 1px 1px 2px 0;
 `;
 
-// noinspection CssUnresolvedCustomProperty
 export const TrackText = styled(motion.div)<{ $color: string; $baseFontSize: number }>`
     position: absolute;
     line-height: 1.15;
