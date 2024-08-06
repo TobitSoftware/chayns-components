@@ -72,6 +72,123 @@ export const TrackText = styled(motion.div)<{ $color: string; $baseFontSize: num
     font-family:
         Roboto Regular,
         sans-serif;
+
+    @font-face {
+        font-family: 'Roboto Regular';
+        font-style: normal;
+        font-weight: normal;
+        src:
+            local('Roboto Regular'),
+            local('Roboto Regular'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/Regular.woff2) format('woff2'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/Regular.woff) format('woff'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/Regular.ttf)
+                format('truetype'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/Regular.svg) format('svg');
+        unicode-range: U+0020-00FF, U+20A0-20CF, U+2122, U+2000-206F;
+    }
+
+    @font-face {
+        font-family: 'Roboto Regular';
+        font-style: italic;
+        font-weight: normal;
+        src:
+            local('Roboto Regular Italic'),
+            local('Roboto Regular-Italic'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/Italic.woff2) format('woff2'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/Italic.woff) format('woff'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/Italic.ttf) format('truetype'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/Italic.svg) format('svg');
+        unicode-range: U+0020-00FF, U+20A0-20CF, U+2122, U+2000-206F;
+    }
+
+    @font-face {
+        font-family: 'Roboto Regular';
+        font-style: normal;
+        font-weight: bold;
+        src:
+            local('Roboto Regular Bold'),
+            local('Roboto Regular-Bold'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/Bold.woff2) format('woff2'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/Bold.woff) format('woff'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/Bold.ttf) format('truetype'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/Bold.svg) format('svg');
+        unicode-range: U+0020-00FF, U+20A0-20CF, U+2122, U+2000-206F;
+    }
+
+    @font-face {
+        font-family: 'Roboto Regular';
+        font-style: italic;
+        font-weight: bold;
+        src:
+            local('Roboto Regular Bold Italic'),
+            local('Roboto Regular-BoldItalic'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/ItalicBold.woff2)
+                format('woff2'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/ItalicBold.woff)
+                format('woff'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/ItalicBold.ttf)
+                format('truetype'),
+            url(https://api.chayns-static.space/font/Roboto%20Regular/ItalicBold.svg) format('svg');
+        unicode-range: U+0020-00FF, U+20A0-20CF, U+2122, U+2000-206F;
+    }
+
+    @font-face {
+        font-family: 'Roboto Bold';
+        font-style: normal;
+        font-weight: normal;
+        src:
+            local('Roboto Bold'),
+            local('Roboto Bold'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/Regular.woff2) format('woff2'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/Regular.woff) format('woff'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/Regular.ttf) format('truetype'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/Regular.svg) format('svg');
+        unicode-range: U+0020-00FF, U+20A0-20CF, U+2122, U+2000-206F;
+    }
+
+    @font-face {
+        font-family: 'Roboto Bold';
+        font-style: italic;
+        font-weight: normal;
+        src:
+            local('Roboto Bold Italic'),
+            local('Roboto Bold-Italic'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/Italic.woff2) format('woff2'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/Italic.woff) format('woff'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/Italic.ttf) format('truetype'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/Italic.svg) format('svg');
+        unicode-range: U+0020-00FF, U+20A0-20CF, U+2122, U+2000-206F;
+    }
+
+    @font-face {
+        font-family: 'Roboto Bold';
+        font-style: normal;
+        font-weight: bold;
+        src:
+            local('Roboto Bold Bold'),
+            local('Roboto Bold-Bold'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/Bold.woff2) format('woff2'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/Bold.woff) format('woff'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/Bold.ttf) format('truetype'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/Bold.svg) format('svg');
+        unicode-range: U+0020-00FF, U+20A0-20CF, U+2122, U+2000-206F;
+    }
+
+    @font-face {
+        font-family: 'Roboto Bold';
+        font-style: italic;
+        font-weight: bold;
+        src:
+            local('Roboto Bold Bold Italic'),
+            local('Roboto Bold-BoldItalic'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/ItalicBold.woff2) format('woff2'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/ItalicBold.woff) format('woff'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/ItalicBold.ttf)
+                format('truetype'),
+            url(https://api.chayns-static.space/font/Roboto%20Bold/ItalicBold.svg) format('svg');
+        unicode-range: U+0020-00FF, U+20A0-20CF, U+2122, U+2000-206F;
+    }
 `;
 
 export const ThumbIconContainer = styled.div`
