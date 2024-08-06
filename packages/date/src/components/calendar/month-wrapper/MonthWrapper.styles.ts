@@ -10,7 +10,9 @@ export const StyledMonthWrapper = styled.div<StyledMonthWrapperProps>`
     height: ${({ $height }) => $height}px;
 `;
 
-export const StyledMotionWrapper = styled(motion.div)`
+type StyledMotionWrapperProps = { $isDisabled?: boolean };
+
+export const StyledMotionWrapper = styled(motion.div)<StyledMotionWrapperProps>`
     display: flex;
     height: 100%;
 `;

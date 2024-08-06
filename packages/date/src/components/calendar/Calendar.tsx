@@ -1,14 +1,14 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Icon } from '@chayns-components/core';
 import { isSameMonth, type Locale } from 'date-fns';
 import { de } from 'date-fns/locale';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Categories, HighlightedDates } from '../../types/calendar';
+import { getNewDate, isDateInRange } from '../../utils/calendar';
 import {
     StyledCalendar,
     StyledCalendarIconWrapper,
     StyledCalendarIconWrapperPseudo,
 } from './Calendar.styles';
-import { getNewDate, isDateInRange } from '../../utils/calendar';
-import type { Categories, HighlightedDates } from '../../types/calendar';
-import { Icon } from '@chayns-components/core';
 import MonthWrapper from './month-wrapper/MonthWrapper';
 
 const END_DATE = new Date(new Date().setFullYear(new Date().getFullYear() + 100));
@@ -43,6 +43,10 @@ export type CalendarProps = {
      * The first Month that can be displayed.
      */
     startDate: Date;
+    /**
+     * To disable the Calendar
+     */
+    isDisabled?: boolean;
 };
 
 const Calendar: FC<CalendarProps> = ({
@@ -53,6 +57,7 @@ const Calendar: FC<CalendarProps> = ({
     onSelect,
     selectedDate,
     categories,
+    isDisabled,
 }) => {
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
@@ -160,7 +165,7 @@ const Calendar: FC<CalendarProps> = ({
     }, [currentDate, endDate]);
 
     return (
-        <StyledCalendar ref={calendarRef}>
+        <StyledCalendar ref={calendarRef} $isDisabled={isDisabled}>
             {ShouldShowLeftArrow ? (
                 <StyledCalendarIconWrapper onClick={handleLeftArrowClick}>
                     <Icon icons={['fa fa-angle-left']} />

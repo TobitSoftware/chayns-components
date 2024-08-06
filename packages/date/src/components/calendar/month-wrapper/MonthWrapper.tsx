@@ -17,6 +17,7 @@ export type MonthWrapperProps = {
     onAnimationFinished: () => void;
     shouldRenderTwo: boolean;
     width: number;
+    isDisabled?: boolean;
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
@@ -30,6 +31,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     onAnimationFinished,
     shouldRenderTwo,
     width,
+    isDisabled,
 }) => {
     const [content, setContent] = useState<ReactElement[]>();
     const [prevSelectedDate, setPrevSelectedDate] = useState<Date>();
@@ -168,6 +170,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
         <StyledMonthWrapper $height={monthHeight} $width={width}>
             <StyledMotionWrapper
                 animate={animate}
+                $isDisabled={isDisabled}
                 transition={{
                     type: 'tween',
                     duration: !direction ? 0 : 0.2,

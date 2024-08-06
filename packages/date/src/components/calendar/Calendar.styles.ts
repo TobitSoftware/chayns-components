@@ -1,8 +1,12 @@
 import styled from 'styled-components';
 
-export const StyledCalendar = styled.div`
+type StyledCalendarProps = { $isDisabled?: boolean };
+
+export const StyledCalendar = styled.div<StyledCalendarProps>`
     display: flex;
     width: 100%;
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
+    pointer-events: ${({ $isDisabled }) => ($isDisabled ? 'none' : undefined)};
 `;
 
 export const StyledCalendarIconWrapper = styled.div`
