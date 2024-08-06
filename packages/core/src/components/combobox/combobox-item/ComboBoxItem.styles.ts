@@ -40,8 +40,7 @@ export const StyledComboBoxTopic = styled.div`
     display: flex;
     gap: 10px;
     padding: 4px 10px;
-    transition: background-color 0.2s ease-in-out;
-    backdrop-filter: blur(1000px);
+    background-color: ${({ theme }) => theme['secondary-101']};
 `;
 
 type StyledComboBoxItemImageProps = WithTheme<{ $shouldShowRoundImage?: boolean }>;
