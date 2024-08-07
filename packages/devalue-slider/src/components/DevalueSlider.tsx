@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import Slider, { type SliderRef } from './slider/Slider';
 import Timer from './timer/Timer';
 
@@ -13,13 +13,13 @@ export type DevalueSliderProps = {
      * The basic color of the slider.
      * This color is the background of the track before the slider is devalued.
      */
-    color?: string;
+    backgroundColor?: CSSProperties['backgroundColor'];
     /**
      * The devalue color of the slider.
      * This color fills the track from the left on user movement.
      * This color is the background of the timer after the slider is devalued.
      */
-    devalueColor?: string;
+    devalueBackgroundColor?: CSSProperties['backgroundColor'];
     /**
      * If this slider was devalued, provide the time when it was devalued.
      * This will show a timer.
@@ -47,45 +47,50 @@ export type DevalueSliderProps = {
 };
 
 const DevalueSlider: React.FC<DevalueSliderProps> = ({
-    color = 'red',
-    devalueColor = 'green',
+    backgroundColor = 'red',
+    devalueBackgroundColor = 'green',
     devalueTime,
     isDisabled,
     onDevalue,
     onChange,
     onComplete,
 }) => {
+    const [timerDevalueTime, setTimerDevalueTime] = useState(devalueTime);
+
     const sliderRef = useRef<SliderRef>(null);
-    const [timerTime, setTimerTime] = useState(devalueTime);
 
     useEffect(() => {
-        if (!devalueTime) return;
-        setTimerTime(devalueTime);
+        if (devalueTime) return;
+
+        setTimerDevalueTime(devalueTime);
     }, [devalueTime]);
 
     const handleCompleted = useCallback(() => {
-        setTimerTime(new Date());
+        setTimerDevalueTime(new Date());
+
         onComplete?.();
     }, [onComplete]);
 
     useEffect(() => {
         if (isDisabled) {
             sliderRef.current?.disable();
+
             return;
         }
+
         sliderRef.current?.enable();
     }, [isDisabled]);
 
-    if (timerTime) {
-        return <Timer color={devalueColor} devalueTime={timerTime} />;
+    if (timerDevalueTime) {
+        return <Timer color={devalueBackgroundColor} devalueTime={timerDevalueTime} />;
     }
 
     return (
         <Slider
             ref={sliderRef}
             onDevalue={onDevalue}
-            color={color}
-            devalueColor={devalueColor}
+            color={backgroundColor}
+            devalueColor={devalueBackgroundColor}
             onComplete={handleCompleted}
             onChange={onChange}
         />
