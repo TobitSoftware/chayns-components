@@ -132,7 +132,15 @@ const ComboBox: FC<ComboBoxProps> = ({
 
     const handleOpen = useCallback(() => {
         if (styledComboBoxElementRef.current) {
-            const { x, y, height } = styledComboBoxElementRef.current.getBoundingClientRect();
+            const {
+                left: comboBoxLeft,
+                top: comboBoxTop,
+                height,
+            } = styledComboBoxElementRef.current.getBoundingClientRect();
+            const { left: containerLeft, top: containerTop } = container.getBoundingClientRect();
+
+            const x = comboBoxLeft - containerLeft + window.scrollX;
+            const y = comboBoxTop - containerTop + window.scrollY;
 
             setInternalCoordinates({
                 x,
@@ -141,7 +149,7 @@ const ComboBox: FC<ComboBoxProps> = ({
 
             setIsAnimating(true);
         }
-    }, [direction]);
+    }, [container, direction]);
 
     const handleClose = useCallback(() => {
         setIsAnimating(false);
