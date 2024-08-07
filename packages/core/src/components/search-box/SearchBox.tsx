@@ -97,7 +97,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             onSelect,
             onKeyDown,
             selectedId,
-            container = document.querySelector('.tapp') || document.body,
+            container = document.body,
             shouldShowRoundImage,
             shouldShowContentOnEmptyInput = true,
             shouldAddInputToList = true,
