@@ -32,6 +32,7 @@ type StyledSmallWaitCursorWaitCursorProps = WithTheme<{
     $size: SmallWaitCursorSize | number;
     $speed: SmallWaitCursorSpeed;
     $shouldHideBackground: boolean;
+    $color?: string;
 }>;
 
 const spin = keyframes`
@@ -50,8 +51,17 @@ export const StyledSmallWaitCursorWaitCursor = styled.div<StyledSmallWaitCursorW
     z-index: 2;
     border-style: solid;
     border-width: 3px;
-    border-color: ${({ theme, $shouldHideBackground }: StyledSmallWaitCursorWaitCursorProps) =>
-        theme.colorMode === 'dark' && $shouldHideBackground ? theme.headline : theme.primary};
+    border-color: ${({
+        theme,
+        $shouldHideBackground,
+        $color,
+    }: StyledSmallWaitCursorWaitCursorProps) => {
+        if ($color) {
+            return $color;
+        }
+
+        return theme.colorMode === 'dark' && $shouldHideBackground ? theme.headline : theme.primary;
+    }};
     height: ${({ $size }) => `${$size - 10}px`};
     width: ${({ $size }) => `${$size - 10}px`};
     border-radius: 50%;

@@ -35,6 +35,10 @@ export type SmallWaitCursorProps = {
      * The speed of the animation in seconds. Use the SmallWaitCursorSpeed enum for this prop.
      */
     speed?: SmallWaitCursorSpeed;
+    /**
+     * The color of the inner circle of the wait cursor.
+     */
+    color?: string;
 };
 
 const SmallWaitCursor: FC<SmallWaitCursorProps> = ({
@@ -42,12 +46,14 @@ const SmallWaitCursor: FC<SmallWaitCursorProps> = ({
     shouldHideWaitCursor = false,
     size = SmallWaitCursorSize.Medium,
     speed = SmallWaitCursorSpeed.Medium,
+    color,
 }) => (
     <StyledSmallWaitCursor $shouldShowWaitCursor={!shouldHideWaitCursor} $size={size}>
         <StyledSmallWaitCursorWaitCursor
             $shouldHideBackground={shouldHideBackground}
             $size={size}
             $speed={speed}
+            $color={color}
         />
         {!shouldHideBackground && <StyledSmallWaitCursorBackground />}
     </StyledSmallWaitCursor>
