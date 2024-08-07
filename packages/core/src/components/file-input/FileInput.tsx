@@ -91,7 +91,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             onRemove,
             files,
             onAdd,
-            fileSelectionPlaceholder = 'Dateien hinzufügen',
+            fileSelectionPlaceholder = 'Dateien hochladen',
             imageSelectPlaceholder,
         },
         ref,
