@@ -139,8 +139,8 @@ const ComboBox: FC<ComboBoxProps> = ({
             } = styledComboBoxElementRef.current.getBoundingClientRect();
             const { left: containerLeft, top: containerTop } = container.getBoundingClientRect();
 
-            const x = comboBoxLeft - containerLeft + window.scrollX;
-            const y = comboBoxTop - containerTop + window.scrollY;
+            const x = comboBoxLeft - containerLeft + container.scrollLeft;
+            const y = comboBoxTop - containerTop + container.scrollTop;
 
             setInternalCoordinates({
                 x,
