@@ -33,8 +33,8 @@ import {
 } from './Slider.styles';
 
 export type SliderProps = {
-    color: NonNullable<DevalueSliderProps['color']>;
-    devalueColor: NonNullable<DevalueSliderProps['devalueColor']>;
+    color: NonNullable<DevalueSliderProps['backgroundColor']>;
+    devalueColor: NonNullable<DevalueSliderProps['devalueBackgroundColor']>;
     thumbSize?: number;
     trackHeight?: number;
     trackText?: string;
