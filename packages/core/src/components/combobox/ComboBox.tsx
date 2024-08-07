@@ -95,7 +95,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     maxHeight = '280px',
     onSelect,
     placeholder,
-    container = document.body,
+    container = document.querySelector('.tapp') || document.body,
     selectedItem,
     shouldShowRoundImage,
     shouldUseFullWidth = false,

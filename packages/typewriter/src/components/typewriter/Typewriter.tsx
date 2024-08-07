@@ -349,7 +349,7 @@ const Typewriter: FC<TypewriterProps> = ({
                         <div style={{ position: 'absolute', visibility: 'hidden' }}>
                             {children}
                         </div>,
-                        document.body,
+                        document.querySelector('.tapp') || document.body,
                     )}
             </StyledTypewriter>
         ),

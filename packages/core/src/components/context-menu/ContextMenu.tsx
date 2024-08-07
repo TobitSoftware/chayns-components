@@ -85,7 +85,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         {
             alignment,
             children = <Icon icons={['ts-ellipsis_v']} size={18} />,
-            container = document.body,
+            container = document.querySelector('.tapp') || document.body,
             coordinates,
             items,
             onHide,
