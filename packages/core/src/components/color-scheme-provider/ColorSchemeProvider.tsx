@@ -39,6 +39,10 @@ type ColorSchemeProviderProps = {
      */
     secondaryColor?: string;
     /**
+     * The site id of the page for which the design settings should be fetched
+     */
+    siteId?: string;
+    /**
      * Additional styles set on the root element
      */
     style?: { [key: string]: string | number };
@@ -69,6 +73,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     colorMode,
     cssVariables = {},
     secondaryColor,
+    siteId,
     style = {},
     designSettings,
 }) => {
@@ -87,14 +92,14 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
             return;
         }
 
-        void getDesignSettings().then((result) => {
+        void getDesignSettings(siteId).then((result) => {
             setInternalDesignSettings(result);
         });
 
-        void getParagraphFormat().then((result) => {
+        void getParagraphFormat(siteId).then((result) => {
             setInternalParagraphFormat(result);
         });
-    }, [designSettings]);
+    }, [designSettings, siteId]);
 
     useEffect(() => {
         const availableColors = getAvailableColorList();
