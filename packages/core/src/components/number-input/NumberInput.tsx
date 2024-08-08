@@ -152,7 +152,6 @@ const NumberInput: FC<NumberInputProps> = ({
                   });
 
         setFormattedValue(`${newStringValue} ${isMoneyInput ? '€' : ''}`);
-
         setPlainText(newStringValue.replaceAll('.', ''));
         setHasFocus(false);
 
