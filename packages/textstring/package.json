@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/textstring",
-    "version": "5.0.0-beta.728",
+    "version": "5.0.0-beta.730",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -67,7 +67,7 @@
         "typescript": "^5.5.4"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.728"
+        "@chayns-components/core": "^5.0.0-beta.730"
     },
     "peerDependencies": {
         "chayns-api": ">=1.0.73",
