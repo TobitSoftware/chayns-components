@@ -24,7 +24,7 @@ const ContextMenu = React.forwardRef(
     (
         {
             parent,
-            position: userPosition,
+            position: userPosition = null,
             minWidth,
             maxWidth,
             className,
