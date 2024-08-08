@@ -1,6 +1,6 @@
 {
     "name": "devalue-slider",
-    "version": "5.0.0-beta.728",
+    "version": "5.0.0-beta.729",
     "description": "A slider to devalue something.",
     "siteEffects": false,
     "browserslist": [
