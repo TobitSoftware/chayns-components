@@ -4,12 +4,14 @@ import React, {
     ReactNode,
     SetStateAction,
     useCallback,
+    useContext,
     useEffect,
     useMemo,
     useRef,
     useState,
 } from 'react';
 import { useUuid } from '../../../hooks/uuid';
+import { AreaContext } from '../../area-provider/AreaContextProvider';
 
 type IUpdateOpenAccordionUuid = (uuid: string, options?: { shouldOnlyOpen?: boolean }) => void;
 type IUpdateAccordionUuids = (uuids: string[]) => void;
@@ -70,6 +72,10 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
         setAccordionUuids(uuids);
     }, []);
 
+    const areaProvider = useContext(AreaContext);
+
+    const shouldWrap = areaProvider.shouldChangeColor ? true : isWrapped;
+
     const updateOpenAccordionUuid = useCallback<IUpdateOpenAccordionUuid>(
         (uuid, { shouldOnlyOpen } = {}) => {
             setOpenAccordionUuid((currentOpenAccordionUuid) => {
@@ -112,7 +118,7 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
 
     const providerValue = useMemo<IAccordionGroupContext>(
         () => ({
-            isWrapped,
+            isWrapped: shouldWrap,
             openAccordionUuid,
             setOpenAccordionUuid,
             updateOpenAccordionUuid,
@@ -123,7 +129,7 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
         [
             accordionGroupId,
             accordionUuids,
-            isWrapped,
+            shouldWrap,
             openAccordionUuid,
             updateAccordionUuids,
             updateOpenAccordionUuid,
