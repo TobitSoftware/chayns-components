@@ -165,7 +165,6 @@ const NumberInput: FC<NumberInputProps> = ({
                 onBlur(newStringValue, newIsInvalid);
             } else {
                 onBlur(parsedNumber === 0 ? null : parsedNumber, newIsInvalid);
-                console.log('parsedNumber', parsedNumber);
             }
         }
     };
