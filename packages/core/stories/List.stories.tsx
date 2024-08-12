@@ -132,35 +132,30 @@ ListItemsWithRightElements.args = {
                     1
                 </Badge>,
             ]}
-            subtitle="Sadipscing elitr dolor sit"
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,
         <ListItem
             images={[locationImages[1]]}
-            rightElements={[
-                <Badge backgroundColor="red" fontColor="white">
-                    2
-                </Badge>,
-            ]}
+            rightElements={['08:59 Uhr']}
             shouldShowSingleRightElementCentered
-            subtitle="Dolor sit ipsum amet"
-            title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
+            title="No sea takimata sanctus est Lorem ipsum dolor sit amet"
         />,
         <ListItem
             images={[locationImages[1]]}
-            rightElements={['07:51 Uhr', undefined]}
+            rightElements={['08:58 Uhr']}
             subtitle="Dolor sit ipsum amet"
-            title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
+            title="gubergren, no sea takimata"
         />,
         <ListItem
             images={[locationImages[2]]}
             rightElements={[
+                '08:57 Uhr',
                 <Badge backgroundColor="red" fontColor="white">
                     4
                 </Badge>,
             ]}
             subtitle="Dolor sit ipsum amet"
-            title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
+            title="sanctus est lorem ipsum dolor sit amet"
         />,
     ],
 };

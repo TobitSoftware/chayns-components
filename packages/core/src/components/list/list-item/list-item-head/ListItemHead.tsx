@@ -90,22 +90,26 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const closedSubtitle = useElementSize(pseudoSubtitleClosedRef);
     const openedSubtitle = useElementSize(pseudoSubtitleOpenRef);
 
+    const shouldShowSubtitleRow = typeof subtitle === 'string' || (rightElements?.length ?? 0) > 1;
+
+    console.debug('TEST', { title, closedSubtitle });
+
     useEffect(() => {
         if (closedTitle && openedTitle) {
             setHeadHeight({
                 closed:
-                    subtitle && closedSubtitle
+                    shouldShowSubtitleRow && closedSubtitle
                         ? closedSubtitle.height + 4 + closedTitle.height + 24
                         : closedTitle.height + 24,
                 open:
-                    subtitle && openedSubtitle
+                    shouldShowSubtitleRow && openedSubtitle
                         ? openedSubtitle.height + 4 + openedTitle.height + 24
                         : openedTitle.height + 24,
             });
         }
-    }, [closedSubtitle, closedTitle, openedSubtitle, openedTitle, subtitle]);
+    }, [closedSubtitle, closedTitle, openedSubtitle, openedTitle, shouldShowSubtitleRow]);
 
-    // This is used to trigger a rerender, so the head height can be calculate
+    // This is used to trigger a rerender, so the head height can be calculated
     useEffect(() => {
         setIsFirstRender(true);
     }, []);
@@ -210,16 +214,16 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                         </StyledListItemHeadTopRightElement>
                     )}
                 </StyledListItemHeadTitle>
-                {subtitle && (
+                {shouldShowSubtitleRow && (
                     <StyledListItemHeadSubtitle>
                         <StyledListItemHeadSubtitleTextPseudo ref={pseudoSubtitleOpenRef} $isOpen>
-                            {subtitle}
+                            {subtitle ?? '​'}
                         </StyledListItemHeadSubtitleTextPseudo>
                         <StyledListItemHeadSubtitleTextPseudo
                             ref={pseudoSubtitleClosedRef}
                             $isOpen={false}
                         >
-                            {subtitle}
+                            {subtitle ?? '​'}
                         </StyledListItemHeadSubtitleTextPseudo>
                         <StyledListItemHeadSubtitleText $isOpen={isOpen}>
                             {subtitle}
