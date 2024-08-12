@@ -21,6 +21,8 @@ export const ListItemsWithGridImage = Template.bind({});
 
 export const ListItemsWithRightElements = Template.bind({});
 
+export const ListItemsWithSeparator = Template.bind({});
+
 export const ListItemsWithButtonAsRightElements = Template.bind({});
 
 export const ListItemsWithHoverItem = Template.bind({});
@@ -159,6 +161,42 @@ ListItemsWithRightElements.args = {
             ]}
             subtitle="Dolor sit ipsum amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
+        />,
+    ],
+};
+
+ListItemsWithSeparator.args = {
+    children: [
+        <ListItem
+            images={[locationImages[0]]}
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+        />,
+        <ListItem
+            images={[locationImages[1]]}
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+        />,
+        <ListItem
+            images={[locationImages[2]]}
+            shouldShowSeparatorBelow
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+        />,
+        <ListItem
+            images={[locationImages[0]]}
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+        />,
+        <ListItem
+            images={[locationImages[1]]}
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+        />,
+        <ListItem
+            images={[locationImages[2]]}
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,
     ],
 };

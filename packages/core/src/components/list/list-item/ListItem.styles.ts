@@ -6,6 +6,7 @@ type StyledListItemProps = WithTheme<{
     $isClickable: boolean;
     $isOpen: boolean;
     $isWrapped: boolean;
+    $shouldShowSeparatorBelow: boolean;
 }>;
 
 export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
@@ -26,11 +27,12 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
             }
         `}
     
-    ${({ theme }: StyledListItemProps) =>
-        theme.accordionLines &&
+    ${({ $shouldShowSeparatorBelow, theme }: StyledListItemProps) =>
+        ($shouldShowSeparatorBelow || theme.accordionLines) &&
         css`
             &&:not(:last-child) {
-                border-bottom: 1px solid ${theme.headline}80;
+                border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
+                    rgba(${theme['headline-rgb']}, 0.5);
             }
         `}}
 

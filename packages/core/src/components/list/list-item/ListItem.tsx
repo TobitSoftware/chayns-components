@@ -73,6 +73,10 @@ export type ListItemProps = {
      */
     shouldShowRoundImage?: boolean;
     /**
+     * Whether a separator should be displayed below this item. In this case, the border is displayed thicker than normal.
+     */
+    shouldShowSeparatorBelow?: boolean;
+    /**
      * Whether a single rightElement should be centered. Only works if one rightElement is given.
      */
     shouldShowSingleRightElementCentered?: boolean;
@@ -104,6 +108,7 @@ const ListItem: FC<ListItemProps> = ({
     shouldShowSingleRightElementCentered = false,
     subtitle,
     shouldShowRoundImage,
+    shouldShowSeparatorBelow = false,
     title,
     titleElement,
 }) => {
@@ -161,6 +166,7 @@ const ListItem: FC<ListItemProps> = ({
             $isClickable={isClickable}
             $isOpen={isItemOpen}
             $isWrapped={isWrapped}
+            $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
         >
             <ListItemHead
                 hoverItem={hoverItem}
