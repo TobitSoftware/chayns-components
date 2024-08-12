@@ -1,7 +1,8 @@
-export { default as DevalueSlider } from './components/DevalueSlider';
-export type {
-    DevalueSliderOnChangeHandler,
-    DevalueSliderOnCompleteHandler,
-    DevalueSliderOnDevalueHandler,
-    DevalueSliderProps,
+export {
+    default as DevalueSlider,
+    type DevalueSliderOnChangeHandler,
+    type DevalueSliderOnCompleteHandler,
+    type DevalueSliderOnDevalueHandler,
+    type DevalueSliderOnDevalueHandlerResult,
+    type DevalueSliderProps,
 } from './components/DevalueSlider';
