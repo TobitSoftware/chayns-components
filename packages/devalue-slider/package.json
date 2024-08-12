@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/devalue-slider",
-    "version": "5.0.0-beta.731",
+    "version": "5.0.0-beta.732",
     "description": "A slider to devalue something.",
     "siteEffects": false,
     "browserslist": [
