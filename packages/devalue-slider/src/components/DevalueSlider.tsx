@@ -60,8 +60,6 @@ const DevalueSlider: React.FC<DevalueSliderProps> = ({
     const sliderRef = useRef<SliderRef>(null);
 
     useEffect(() => {
-        if (devalueTime) return;
-
         setTimerDevalueTime(devalueTime);
     }, [devalueTime]);
 
