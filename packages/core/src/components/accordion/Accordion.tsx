@@ -20,7 +20,7 @@ import AccordionBody from './accordion-body/AccordionBody';
 import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';
 import { AccordionWrappedContext } from './accordion-provider/AccordionContextProvider';
-import { StyledAccordion } from './Accordion.styles';
+import { StyledMotionAccordion } from './Accordion.styles';
 
 export const AccordionContext = React.createContext({ isWrapped: false });
 
@@ -273,9 +273,12 @@ const Accordion: FC<AccordionProps> = ({
 
     const accordionWrappedContextProviderValue = useMemo(() => ({ isWrapped: true }), []);
     return (
-        <StyledAccordion
+        <StyledMotionAccordion
+            animate={{ height: 'auto', opacity: 1 }}
             data-uuid={`${accordionGroupUuid ?? ''}---${uuid}`}
             className="beta-chayns-accordion"
+            exit={{ height: 0, opacity: 0 }}
+            initial={{ height: 0, opacity: 0 }}
             $isOpen={isOpen}
             $shouldShowLines={!isLastAccordion}
             $isParentWrapped={isParentWrapped}
@@ -326,7 +329,7 @@ const Accordion: FC<AccordionProps> = ({
                     </AnimatePresence>
                 </MotionConfig>
             </AccordionContext.Provider>
-        </StyledAccordion>
+        </StyledMotionAccordion>
     );
 };
 

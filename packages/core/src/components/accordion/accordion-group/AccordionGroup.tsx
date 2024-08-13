@@ -1,3 +1,4 @@
+import { AnimatePresence, MotionConfig } from 'framer-motion';
 import React, {
     Dispatch,
     FC,
@@ -138,7 +139,9 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
 
     return (
         <AccordionGroupContext.Provider value={providerValue}>
-            {children}
+            <MotionConfig transition={{ type: 'tween' }}>
+                <AnimatePresence initial={false}>{children}</AnimatePresence>
+            </MotionConfig>
         </AccordionGroupContext.Provider>
     );
 };

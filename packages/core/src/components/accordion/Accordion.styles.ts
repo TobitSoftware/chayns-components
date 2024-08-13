@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
@@ -10,7 +11,7 @@ type StyledMotionAccordionProps = WithTheme<{
     $shouldShowLines?: boolean;
 }>;
 
-export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
+export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionProps>`
     ${({
         $isOpen,
         $isWrapped,
