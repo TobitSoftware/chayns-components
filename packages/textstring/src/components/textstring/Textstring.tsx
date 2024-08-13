@@ -84,7 +84,7 @@ const Textstring: FC<TextstringProps> = ({
         childrenTagName || 'span',
         {
             dangerouslySetInnerHTML: isTextstringHTML ? { __html: text } : undefined,
-            className: childrenClassName,
+            className: `${childrenClassName || ''} notranslate`.trim(),
             onClick: handleClick,
             style: childrenStyles,
         },
