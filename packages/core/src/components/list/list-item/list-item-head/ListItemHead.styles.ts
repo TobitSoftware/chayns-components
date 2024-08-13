@@ -59,10 +59,8 @@ export const StyledListItemHeadContent = styled.div<StyledListItemHeadContentPro
     font-weight: ${({ $isOpen }) => ($isOpen ? 'bold' : 'normal')};
     justify-content: start;
     line-height: normal;
-
-    margin-top: ${({ $marginTop, $isOpen }) => ($isOpen ? 0 : $marginTop)}px;
-
     margin-left: ${({ $isIconOrImageGiven }) => ($isIconOrImageGiven ? '10px' : undefined)};
+    margin-top: ${({ $marginTop }) => $marginTop}px;
     min-width: 0;
 `;
 

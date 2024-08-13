@@ -92,8 +92,6 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     const shouldShowSubtitleRow = typeof subtitle === 'string' || (rightElements?.length ?? 0) > 1;
 
-    console.debug('TEST', { title, closedSubtitle });
-
     useEffect(() => {
         if (closedTitle && openedTitle) {
             setHeadHeight({
@@ -119,12 +117,14 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const handleMouseLeave = useCallback(() => setShouldShowHoverItem(false), []);
 
     const marginTop = useMemo(() => {
-        if (headHeight.closed < 64) {
-            return (64 - headHeight.closed) / 2;
+        const height = headHeight[isOpen ? 'open' : 'closed'];
+
+        if (height < 64) {
+            return (64 - height) / 2;
         }
 
         return 0;
-    }, [headHeight.closed]);
+    }, [headHeight, isOpen]);
 
     const handleTouchStart = useCallback<TouchEventHandler<HTMLDivElement>>(
         (event) => {
