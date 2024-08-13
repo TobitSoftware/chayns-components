@@ -281,7 +281,6 @@ ExpandableListItems.args = {
     children: [
         <ListItem
             images={[images[0]]}
-            subtitle="At vero eos et accusam et justo duo dolores et ea rebum"
             shouldShowRoundImage
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         >
@@ -298,7 +297,6 @@ ExpandableListItems.args = {
         </ListItem>,
         <ListItem
             images={[images[1]]}
-            subtitle="Lorem ipsum dolor sit amet"
             shouldShowRoundImage
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
         >

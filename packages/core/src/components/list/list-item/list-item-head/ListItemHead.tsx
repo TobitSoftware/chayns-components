@@ -19,6 +19,7 @@ import {
     StyledListItemHeadContent,
     StyledListItemHeadLeftWrapper,
     StyledListItemHeadRightElement,
+    StyledListItemHeadRightWrapper,
     StyledListItemHeadSubtitle,
     StyledListItemHeadSubtitleText,
     StyledListItemHeadSubtitleTextPseudo,
@@ -90,7 +91,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const closedSubtitle = useElementSize(pseudoSubtitleClosedRef);
     const openedSubtitle = useElementSize(pseudoSubtitleOpenRef);
 
-    const shouldShowSubtitleRow = typeof subtitle === 'string' || (rightElements?.length ?? 0) > 1;
+    const shouldShowSubtitleRow = typeof subtitle === 'string';
 
     useEffect(() => {
         if (closedTitle && openedTitle) {
@@ -203,41 +204,49 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                             {titleElement}
                         </StyledListItemHeadTitleElement>
                     </StyledListItemHeadTitleContent>
-                    {rightElements?.length === 1 && !shouldShowSingleRightElementCentered && (
-                        <StyledListItemHeadTopRightElement>
-                            {rightElements[0]}
-                        </StyledListItemHeadTopRightElement>
-                    )}
-                    {rightElements && rightElements.length > 1 && rightElements[0] && (
-                        <StyledListItemHeadTopRightElement>
-                            {rightElements[0]}
-                        </StyledListItemHeadTopRightElement>
-                    )}
                 </StyledListItemHeadTitle>
                 {shouldShowSubtitleRow && (
                     <StyledListItemHeadSubtitle>
                         <StyledListItemHeadSubtitleTextPseudo ref={pseudoSubtitleOpenRef} $isOpen>
-                            {subtitle ?? '​'}
+                            {subtitle}
                         </StyledListItemHeadSubtitleTextPseudo>
                         <StyledListItemHeadSubtitleTextPseudo
                             ref={pseudoSubtitleClosedRef}
                             $isOpen={false}
                         >
-                            {subtitle ?? '​'}
+                            {subtitle}
                         </StyledListItemHeadSubtitleTextPseudo>
                         <StyledListItemHeadSubtitleText $isOpen={isOpen}>
                             {subtitle}
                         </StyledListItemHeadSubtitleText>
-                        {rightElements && rightElements.length > 1 && rightElements[1] && (
-                            <StyledListItemHeadBottomRightElement>
-                                {rightElements[1]}
-                            </StyledListItemHeadBottomRightElement>
-                        )}
                     </StyledListItemHeadSubtitle>
                 )}
             </StyledListItemHeadContent>
-            {rightElements?.length === 1 && shouldShowSingleRightElementCentered && (
-                <StyledListItemHeadRightElement>{rightElements[0]}</StyledListItemHeadRightElement>
+            {rightElements && (
+                <StyledListItemHeadRightWrapper
+                    $shouldShowCentered={
+                        rightElements?.length === 1 && shouldShowSingleRightElementCentered
+                    }
+                >
+                    {rightElements?.length === 1 && shouldShowSingleRightElementCentered ? (
+                        <StyledListItemHeadRightElement>
+                            {rightElements[0]}
+                        </StyledListItemHeadRightElement>
+                    ) : (
+                        <>
+                            {rightElements[0] && (
+                                <StyledListItemHeadTopRightElement>
+                                    {rightElements[0]}
+                                </StyledListItemHeadTopRightElement>
+                            )}
+                            {rightElements[1] && (
+                                <StyledListItemHeadBottomRightElement>
+                                    {rightElements[1]}
+                                </StyledListItemHeadBottomRightElement>
+                            )}
+                        </>
+                    )}
+                </StyledListItemHeadRightWrapper>
             )}
             {hoverItem && (
                 <StyledMotionListItemHeadHoverItem
