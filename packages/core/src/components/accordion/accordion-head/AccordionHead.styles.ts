@@ -56,11 +56,11 @@ export const StyledMotionTitleWrapper = styled(motion.div)<FramerMotionBugFix>`
     grid-template-areas: 'header';
 `;
 
-interface StyledMotionTitleProps {
+type StyledMotionTitleProps = WithTheme<{
     $isOpen: boolean;
     $isWrapped: boolean;
     $color?: CSSProperties['color'];
-}
+}>;
 
 export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
     font-size: ${({ $isOpen, $isWrapped }) => ($isOpen && !$isWrapped ? '1.3rem' : undefined)};
@@ -71,7 +71,7 @@ export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
     text-overflow: ellipsis;
     transform-origin: top left;
     user-select: none;
-    color: ${({ $color }) => $color};
+    color: ${({ $color, theme }: StyledMotionTitleProps) => $color ?? theme.text};
     white-space: ${({ $isOpen, $isWrapped }) => ($isOpen && !$isWrapped ? 'normal' : 'nowrap')};
 
     ${({ $isWrapped }) =>
