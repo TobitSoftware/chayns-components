@@ -1,4 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { subHours } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import DevalueSlider, {
     DevalueSliderOnDevalueHandler,
@@ -35,7 +36,6 @@ const LiveUpdateTemplate: StoryFn<typeof DevalueSlider> = (args: DevalueSliderPr
     useEffect(() => {
         setTimeout(() => {
             setDevalueTime(new Date());
-            console.log('setting devalue time');
         }, 5000);
     }, []);
 
@@ -95,3 +95,11 @@ export const FailingDevalue = FailingDevalueTemplate.bind({});
  * the onComplete handler.
  */
 export const SuccessDevalue = SuccessDevalueTemplate.bind({});
+
+/**
+ * This story shows a devalued slider. It will show a timer.
+ */
+export const EarlyDevalueTime = Template.bind({});
+EarlyDevalueTime.args = {
+    devalueTime: subHours(new Date(), 3),
+};

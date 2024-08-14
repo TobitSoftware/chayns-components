@@ -1,8 +1,15 @@
-import { format, intervalToDuration } from 'date-fns';
-import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+    differenceInHours,
+    differenceInMinutes,
+    format,
+    formatDistanceToNow,
+    intervalToDuration,
+} from 'date-fns';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { vibrate } from 'chayns-api';
 
+import { de } from 'date-fns/locale';
 import { Container } from './Timer.styles';
 
 export type TimerProps = {
@@ -12,6 +19,7 @@ export type TimerProps = {
 };
 
 const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 'white' }) => {
+    const refDate = useRef(new Date());
     const [distance, setDistance] = useState(
         intervalToDuration({
             start: devalueTime,
@@ -23,10 +31,11 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
 
     useEffect(() => {
         const interval = setInterval(() => {
+            refDate.current = new Date();
             setDistance(
                 intervalToDuration({
                     start: devalueTime,
-                    end: new Date(),
+                    end: refDate.current,
                 }),
             );
         }, 500);
@@ -39,7 +48,17 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
 
     const label = useMemo(() => {
         let text = 'Vor ##SECONDS## Sek. (##TIME## Uhr)';
-        if (distance.minutes) {
+        if (differenceInHours(refDate.current, devalueTime) > 0) {
+            const distanceLabel =
+                formatDistanceToNow(devalueTime, {
+                    addSuffix: true,
+                    locale: de,
+                })
+                    .charAt(0)
+                    .toUpperCase() +
+                formatDistanceToNow(devalueTime, { addSuffix: true, locale: de }).slice(1);
+            text = `${distanceLabel} (##TIME## Uhr)`;
+        } else if (differenceInMinutes(refDate.current, devalueTime) > 0) {
             text = 'Vor ##MINUTES## Min. ##SECONDS## Sek. (##TIME## Uhr)';
         }
 
@@ -47,7 +66,7 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
             .replace('##MINUTES##', minutesShowValue)
             .replace('##SECONDS##', secondsShowValue)
             .replace('##TIME##', format(devalueTime, 'HH:mm'));
-    }, [distance.minutes, minutesShowValue, secondsShowValue, devalueTime]);
+    }, [distance, minutesShowValue, secondsShowValue, devalueTime]);
 
     return (
         <Container
