@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { Icon } from '../src';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
@@ -99,11 +99,55 @@ const ControlledAccordionTemplate: StoryFn<typeof Accordion> = ({ children, ...a
     );
 };
 
+export const DynamicLoadingTemplate: StoryFn<typeof Accordion> = () => {
+    const [items, setItems] = useState<{ id: number; name: string }[]>([]);
+
+    let countRef = useRef(0);
+
+    const handleCreateItems = () => {
+        const newItems = Array.from({ length: 10 }, (_, index) => ({
+            id: index + countRef.current,
+            name: `Item ${index + countRef.current}`,
+        }));
+
+        setItems((current) => [...current, ...newItems]);
+
+        countRef.current += 10;
+    };
+
+    return (
+        <>
+            <Button onClick={handleCreateItems}>Create Items</Button>
+            <Accordion key="global" title="Items">
+                <AccordionGroup isWrapped>
+                    {items.map((item) => (
+                        <Accordion key={item.id} title={item.name}>
+                            <AccordionContent>
+                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+                                nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+                                erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+                                sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+                                et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+                                accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                                no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                            </AccordionContent>
+                        </Accordion>
+                    ))}
+                </AccordionGroup>
+            </Accordion>
+        </>
+    );
+};
+
 export const General = Template.bind({});
 
 export const ControlledAccordion = ControlledAccordionTemplate.bind({});
 
 export const MultipleAccordions = MultipleAccordionsTemplate.bind({});
+
+export const DynamicLoading = DynamicLoadingTemplate.bind({});
 
 export const WrappedAccordions = Template.bind({});
 
