@@ -75,6 +75,8 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
 
     const areaProvider = useContext(AreaContext);
 
+    const childrenCount = React.Children.count(children);
+
     const shouldWrap = areaProvider.shouldChangeColor ? true : isWrapped;
 
     const updateOpenAccordionUuid = useCallback<IUpdateOpenAccordionUuid>(
@@ -91,19 +93,23 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
     );
 
     useEffect(() => {
+        if (childrenCount === 0) return;
+
         const elements = document.querySelectorAll('[data-uuid]');
-        const newOrder = Array.from(elements).map((el) => el.getAttribute('data-uuid'));
+        const elementUuids = Array.from(elements).map((el) => el.getAttribute('data-uuid'));
 
         const result: string[] = [];
 
-        newOrder.forEach((uuid) => {
-            if (uuid?.includes(accordionGroupId)) {
-                result.push(uuid.replace(`${accordionGroupId}---`, ''));
+        elementUuids.forEach((elementUuid) => {
+            const [groupUuid, accordionUuid] = (elementUuid ?? '').split('---');
+
+            if (groupUuid === accordionGroupId && typeof accordionUuid === 'string') {
+                result.push(accordionUuid);
             }
         });
 
         updateAccordionUuids(result);
-    }, [accordionGroupId, updateAccordionUuids]);
+    }, [accordionGroupId, childrenCount, updateAccordionUuids]);
 
     useEffect(() => {
         if (isInitialRenderRef.current) {
