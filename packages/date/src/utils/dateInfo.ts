@@ -1,15 +1,14 @@
 import { getLanguage as getChaynsLanguage } from 'chayns-api';
-import { format, isPast, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns';
-import de from 'date-fns/locale/de/index';
-import enGB from 'date-fns/locale/en-GB/index';
-import es from 'date-fns/locale/es/index';
-import fr from 'date-fns/locale/fr/index';
-import it from 'date-fns/locale/it/index';
-import nl from 'date-fns/locale/nl/index';
-import pl from 'date-fns/locale/pl/index';
-import pt from 'date-fns/locale/pt/index';
-import tr from 'date-fns/locale/tr/index';
-import uk from 'date-fns/locale/uk/index';
+import {
+    format,
+    isPast,
+    isThisYear,
+    isToday,
+    isTomorrow,
+    isYesterday,
+    type Locale,
+} from 'date-fns';
+import { de, enGB, es, fr, it, nl, pl, pt, tr, uk } from 'date-fns/locale';
 import { TIME_TYPE_STRINGS, type TimeTypeStringsRecord } from '../constants/dateInfo';
 
 export const getLanguage = (): Locale => {

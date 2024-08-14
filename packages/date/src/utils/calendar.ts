@@ -1,4 +1,4 @@
-import { format, isAfter, isBefore, startOfMonth } from 'date-fns';
+import { format, isAfter, isBefore, startOfMonth, type Locale } from 'date-fns';
 import type { EMonth, IMonth } from '../types/calendar';
 
 export const getMonthAndYear = (date: Date): IMonth => {
