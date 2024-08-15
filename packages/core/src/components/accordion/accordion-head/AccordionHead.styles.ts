@@ -74,6 +74,8 @@ export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
     color: ${({ $color, theme }: StyledMotionTitleProps) => $color ?? theme.text};
     white-space: ${({ $isOpen, $isWrapped }) => ($isOpen && !$isWrapped ? 'normal' : 'nowrap')};
 
+    will-change: unset !important;
+
     ${({ $isWrapped }) =>
         $isWrapped &&
         css`
@@ -104,6 +106,8 @@ export const StyledMotionSearchWrapper = styled(motion.div)<FramerMotionBugFix>`
 export const StyledMotionRightElementWrapper = styled(motion.div)<FramerMotionBugFix>`
     align-items: center;
     display: flex;
+
+    will-change: unset !important;
 `;
 
 type StyledMotionRightInputProps = WithTheme<{

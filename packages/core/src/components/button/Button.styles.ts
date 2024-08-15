@@ -88,7 +88,9 @@ export const StyledIconWrapper = styled.span`
     width: 30px;
 `;
 
-export const StyledMotionChildrenWrapper = styled(motion.div)<FramerMotionBugFix>``;
+export const StyledMotionChildrenWrapper = styled(motion.div)<FramerMotionBugFix>`
+    will-change: unset !important;
+`;
 
 export const StyledMotionWaitCursorWrapper = styled(motion.div)<FramerMotionBugFix>`
     align-items: center;
