@@ -42,6 +42,7 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
         border-radius 0.3s ease,
         box-shadow 0.3s ease,
         margin-bottom 0.3s ease;
+    will-change: unset !important;
 
     ${({
         $isOpen,
