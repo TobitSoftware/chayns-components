@@ -113,7 +113,7 @@ type StyledComboBoxBodyProps = WithTheme<{
 export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyProps>`
     background: ${({ theme }: StyledComboBoxBodyProps) => theme['101']};
     display: flex;
-    position: absolute;
+    position: fixed;
     z-index: 4;
     flex-direction: column;
     border: 1px solid rgba(160, 160, 160, 0.3);
