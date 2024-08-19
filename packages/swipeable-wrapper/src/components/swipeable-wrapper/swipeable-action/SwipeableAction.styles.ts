@@ -14,6 +14,7 @@ export const StyledMotionSwipeableAction = styled(motion.div)<StyledSwipeableAct
     position: absolute;
     top: 0;
     width: 200vw;
+    margin-left: 1px;
 
     ${({ $position }) => {
         if ($position === 'left') {
