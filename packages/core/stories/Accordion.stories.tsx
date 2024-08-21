@@ -27,7 +27,7 @@ const InputAsTitleTemplate: StoryFn<typeof Accordion> = ({ children, ...args }) 
 
 const MultipleAccordionsTemplate: StoryFn<typeof Accordion> = () => (
     <AccordionGroup>
-        <Accordion title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr">
+        <Accordion key="first" title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr">
             <AccordionContent>
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
                 tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
@@ -39,7 +39,10 @@ const MultipleAccordionsTemplate: StoryFn<typeof Accordion> = () => (
                 ipsum dolor sit amet.
             </AccordionContent>
         </Accordion>
-        <Accordion title="Stet clita kasd gubergren, no sea takimata sanctus est dolor sit amet">
+        <Accordion
+            key="second"
+            title="Stet clita kasd gubergren, no sea takimata sanctus est dolor sit amet"
+        >
             <AccordionContent>
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
                 tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
@@ -47,7 +50,10 @@ const MultipleAccordionsTemplate: StoryFn<typeof Accordion> = () => (
                 takimata sanctus est Lorem ipsum dolor sit amet.
             </AccordionContent>
         </Accordion>
-        <Accordion title="At vero eos et accusam et justo duo dolores et ea rebum sit amet dolor">
+        <Accordion
+            key="third"
+            title="At vero eos et accusam et justo duo dolores et ea rebum sit amet dolor"
+        >
             <AccordionContent>
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
                 tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
@@ -90,10 +96,12 @@ const ControlledAccordionTemplate: StoryFn<typeof Accordion> = ({ children, ...a
         <>
             <Button onClick={handleToggle}>Toggle</Button>
             <AccordionGroup>
-                <Accordion {...args} isOpened={isOpened}>
+                <Accordion key="first" {...args} isOpened={isOpened}>
                     {children}
                 </Accordion>
-                <Accordion {...args}>{children}</Accordion>
+                <Accordion key="second" {...args}>
+                    {children}
+                </Accordion>
             </AccordionGroup>
         </>
     );
@@ -242,6 +250,7 @@ WrappedAccordions.args = {
         </AccordionContent>,
         <AccordionGroup>
             <Accordion
+                key="first"
                 title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
             invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua"
             >
@@ -250,7 +259,7 @@ WrappedAccordions.args = {
                     tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
                 </AccordionContent>
             </Accordion>
-            <Accordion title="Justo duo dolores et ea rebum">
+            <Accordion key="second" title="Justo duo dolores et ea rebum">
                 <AccordionContent>
                     At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
                     gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
@@ -258,14 +267,14 @@ WrappedAccordions.args = {
                     invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
                 </AccordionContent>
                 <AccordionGroup>
-                    <Accordion title="At vero eos et accusam">
+                    <Accordion key="first_wrapped" title="At vero eos et accusam">
                         <AccordionContent>
                             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
                             eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
                             voluptua.
                         </AccordionContent>
                     </Accordion>
-                    <Accordion title="Justo duo dolores et ea rebum">
+                    <Accordion key="second_wrapped" title="Justo duo dolores et ea rebum">
                         <AccordionContent>
                             At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
                             gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem
@@ -274,14 +283,17 @@ WrappedAccordions.args = {
                             voluptua.
                         </AccordionContent>
                         <AccordionGroup>
-                            <Accordion title="At vero eos et accusam">
+                            <Accordion key="first_deep_wrapped" title="At vero eos et accusam">
                                 <AccordionContent>
                                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                                     diam nonumy eirmod tempor invidunt ut labore et dolore magna
                                     aliquyam erat, sed diam voluptua.
                                 </AccordionContent>
                             </Accordion>
-                            <Accordion title="Justo duo dolores et ea rebum">
+                            <Accordion
+                                key="first_deep_wrapped"
+                                title="Justo duo dolores et ea rebum"
+                            >
                                 <AccordionContent>
                                     At vero eos et accusam et justo duo dolores et ea rebum. Stet
                                     clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
@@ -394,7 +406,7 @@ WithAccordionItems.args = {
             <AccordionItem>Sed diam nonumy eirmod tempor invidunt ut labore</AccordionItem>
             <AccordionItem>Et dolore magna aliquyam erat</AccordionItem>
             <AccordionGroup isWrapped>
-                <Accordion title="At vero eos et accusam">
+                <Accordion key="first" title="At vero eos et accusam">
                     <AccordionItem>Consetetur sadipscing elitr</AccordionItem>
                     <AccordionItem>Sed diam nonumy eirmod tempor invidunt ut labore</AccordionItem>
                 </Accordion>
