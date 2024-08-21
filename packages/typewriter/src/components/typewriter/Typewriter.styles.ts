@@ -25,7 +25,7 @@ const typewriterCursorElement = ({
     !$shouldHideCursor &&
     css`
         &:after {
-            animation: ${blinkAnimation} 2s steps(2, start) infinite;
+            animation: ${blinkAnimation} 1s steps(2, start) infinite;
             color: ${({ theme }: StyledTypewriterTextProps) => theme.text};
             content: '▋';
             margin-left: 0.25rem;
