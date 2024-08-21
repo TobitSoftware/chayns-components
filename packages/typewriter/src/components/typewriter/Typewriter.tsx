@@ -26,9 +26,11 @@ export enum TypewriterResetDelay {
 
 // noinspection JSUnusedGlobalSymbols
 export enum TypewriterSpeed {
-    Slow = 30,
-    Medium = 20,
-    Fast = 10,
+    ExtraSlow = 40,
+    Slow = 20,
+    Medium = 10,
+    Fast = 5,
+    ExtraFast = 2.5,
 }
 
 export type TypewriterProps = {
