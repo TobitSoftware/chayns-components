@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { subHours } from 'date-fns';
+import { addSeconds, subHours } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import DevalueSlider, {
     DevalueSliderOnDevalueHandler,
@@ -35,7 +35,7 @@ const LiveUpdateTemplate: StoryFn<typeof DevalueSlider> = (args: DevalueSliderPr
 
     useEffect(() => {
         setTimeout(() => {
-            setDevalueTime(new Date());
+            setDevalueTime(addSeconds(new Date(), 5));
         }, 5000);
     }, []);
 
