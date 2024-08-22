@@ -671,7 +671,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             if (
                 prefixElementRef.current &&
                 prefixElement &&
-                prefixElement === convertHTMLToText(editorRef.current?.innerHTML ?? '')
+                prefixElement === (convertEmojisToUnicode(prefixElement) ?? '')
             ) {
                 setPrefixElementWidth(prefixElementRef.current.offsetWidth + 2);
             } else {
