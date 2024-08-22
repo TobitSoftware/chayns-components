@@ -1,4 +1,4 @@
-import { getDevice } from 'chayns-api';
+import { useDevice } from 'chayns-api';
 import { format } from 'prettier/standalone';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -40,6 +40,11 @@ export type CodeHighlighterProps = {
      */
     shouldFormatCode?: boolean;
     /**
+     * Callback-Funktion, die aufgerufen wird, wenn das Formatieren des Codes fehlschlägt.
+     */
+    onFormatError?: (error: unknown) => void;
+
+    /**
      * Whether the line numbers should be displayed.
      */
     shouldShowLineNumbers?: boolean;
@@ -56,13 +61,14 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     language,
     highlightedLines,
     shouldFormatCode = false,
+    onFormatError,
     shouldShowLineNumbers = false,
 }) => {
     const [width, setWidth] = useState(0);
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const { browser } = getDevice();
+    const { browser } = useDevice();
 
     useEffect(() => {
         if (ref.current) {
@@ -106,14 +112,18 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
             const config = getParserForLanguage(language);
 
             if (shouldFormatCode && config) {
-                return format(code, config) as unknown as string;
+                try {
+                    return format(code, config) as unknown as string;
+                } catch (error) {
+                    if (typeof onFormatError !== 'undefined') onFormatError(error);
+                }
             }
 
             return code;
         }
 
         return code;
-    }, [code, language, shouldFormatCode]);
+    }, [code, language, shouldFormatCode, onFormatError]);
 
     return useMemo(
         () => (
