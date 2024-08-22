@@ -26,10 +26,17 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
             end: new Date(),
         }),
     );
-    const minutesShowValue = useMemo(() => (distance.minutes || 0).toString(), [distance.minutes]);
-    const secondsShowValue = useMemo(() => (distance.seconds || 0).toString(), [distance.seconds]);
+    const minutesShowValue = useMemo(
+        () => Math.max(distance.minutes ?? 0, 0).toString(),
+        [distance.minutes],
+    );
+    const secondsShowValue = useMemo(
+        () => Math.max(distance.seconds ?? 0, 0).toString(),
+        [distance.seconds],
+    );
 
     useEffect(() => {
+        refDate.current = new Date();
         const interval = setInterval(() => {
             refDate.current = new Date();
             setDistance(
@@ -66,7 +73,7 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
             .replace('##MINUTES##', minutesShowValue)
             .replace('##SECONDS##', secondsShowValue)
             .replace('##TIME##', format(devalueTime, 'HH:mm'));
-    }, [distance, minutesShowValue, secondsShowValue, devalueTime]);
+    }, [minutesShowValue, secondsShowValue, devalueTime]);
 
     return (
         <Container
