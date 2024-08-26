@@ -605,8 +605,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             }
 
             const isJustPrefixElement =
-                prefixElement &&
-                prefixElement === convertHTMLToText(editorRef.current?.innerHTML ?? '');
+                prefixElement && convertTextToHTML(prefixElement) === editorRef.current?.innerHTML;
 
             const shouldRenderPlaceholder =
                 (prefixElement && !plainTextValue) ||
@@ -671,7 +670,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             if (
                 prefixElementRef.current &&
                 prefixElement &&
-                prefixElement === (convertEmojisToUnicode(prefixElement) ?? '')
+                convertTextToHTML(prefixElement) === editorRef.current?.innerHTML
             ) {
                 setPrefixElementWidth(prefixElementRef.current.offsetWidth + 2);
             } else {
