@@ -18,10 +18,12 @@ import {
 import { getCharactersCount, getSubTextFromHTML, shuffleArray } from './utils';
 
 // noinspection JSUnusedGlobalSymbols
-export enum TypewriterResetDelay {
-    Slow = 4000,
-    Medium = 2000,
-    Fast = 1000,
+export enum TypewriterDelay {
+    ExtraSlow = 4000,
+    Slow = 2000,
+    Medium = 1000,
+    Fast = 500,
+    ExtraFast = 250,
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -39,6 +41,11 @@ export type TypewriterProps = {
      */
     children: ReactElement | ReactElement[] | string | string[];
     /**
+     * The delay in milliseconds before the next text is shown.
+     * This prop is only used if multiple texts are given.
+     */
+    nextTextDelay?: TypewriterDelay;
+    /**
      * Function that is executed when the typewriter animation has finished. This function will not
      * be executed if multiple texts are used.
      */
@@ -49,9 +56,10 @@ export type TypewriterProps = {
      */
     pseudoChildren?: ReactElement | string;
     /**
-     * Waiting time before the typewriter resets the content if multiple texts are given
+     * Waiting time in milliseconds before the typewriter resets the text.
+     * This prop is only used if multiple texts are given.
      */
-    resetDelay?: TypewriterResetDelay;
+    resetDelay?: TypewriterDelay;
     /**
      * Specifies whether the cursor should be forced to animate even if no text is currently animated.
      */
@@ -92,9 +100,10 @@ export type TypewriterProps = {
 
 const Typewriter: FC<TypewriterProps> = ({
     children,
+    nextTextDelay = TypewriterDelay.Medium,
     onFinish,
     pseudoChildren,
-    resetDelay = TypewriterResetDelay.Medium,
+    resetDelay = TypewriterDelay.Medium,
     shouldForceCursorAnimation = false,
     shouldHideCursor = false,
     shouldSortChildrenRandomly = false,
@@ -218,7 +227,7 @@ const Typewriter: FC<TypewriterProps> = ({
                             setTimeout(() => {
                                 setIsResetAnimationActive(false);
                                 handleSetNextChildrenIndex();
-                            }, resetDelay);
+                            }, nextTextDelay);
                         }
                     }
 
@@ -253,7 +262,7 @@ const Typewriter: FC<TypewriterProps> = ({
                                         setIsResetAnimationActive(true);
                                     } else {
                                         setShownCharCount(0);
-                                        setTimeout(handleSetNextChildrenIndex, resetDelay / 2);
+                                        setTimeout(handleSetNextChildrenIndex, nextTextDelay);
                                     }
                                 }, resetDelay);
                             }
@@ -281,6 +290,7 @@ const Typewriter: FC<TypewriterProps> = ({
         shouldUseResetAnimation,
         shouldCount,
         shouldWaitForContent,
+        nextTextDelay,
     ]);
 
     useEffect(() => {
