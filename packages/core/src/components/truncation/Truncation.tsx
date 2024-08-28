@@ -61,7 +61,6 @@ const Truncation: FC<TruncationProps> = ({
     onChange,
     children,
 }) => {
-    console.log('local');
     const [internalIsOpen, setInternalIsOpen] = useState(false);
     const [showClamp, setShowClamp] = useState(true);
     const [newCollapsedHeight, setNewCollapsedHeight] = useState(collapsedHeight);
