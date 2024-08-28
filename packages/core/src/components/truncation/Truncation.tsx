@@ -138,7 +138,7 @@ const Truncation: FC<TruncationProps> = ({
 
         setNewCollapsedHeight(pseudoChildrenRef.current.offsetHeight);
         setOriginalSmallHeight(pseudoChildrenRef.current.offsetHeight);
-    }, [collapsedHeight, pseudoChildrenRef, children]);
+    }, [collapsedHeight, pseudoChildrenRef]);
 
     // Checks if the clamp should be shown
     useEffect(() => {
