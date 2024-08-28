@@ -61,6 +61,7 @@ const Truncation: FC<TruncationProps> = ({
     onChange,
     children,
 }) => {
+    console.log('local');
     const [internalIsOpen, setInternalIsOpen] = useState(false);
     const [showClamp, setShowClamp] = useState(true);
     const [newCollapsedHeight, setNewCollapsedHeight] = useState(collapsedHeight);
@@ -138,7 +139,7 @@ const Truncation: FC<TruncationProps> = ({
 
         setNewCollapsedHeight(pseudoChildrenRef.current.offsetHeight);
         setOriginalSmallHeight(pseudoChildrenRef.current.offsetHeight);
-    }, [collapsedHeight, pseudoChildrenRef]);
+    }, [collapsedHeight, pseudoChildrenRef, children]);
 
     // Checks if the clamp should be shown
     useEffect(() => {
