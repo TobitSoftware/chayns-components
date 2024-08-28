@@ -151,7 +151,7 @@ const Typewriter: FC<TypewriterProps> = ({
             if (currentChildren) {
                 return React.isValidElement(currentChildren)
                     ? renderToString(
-                          <ChaynsProvider data={values} functions={functions}>
+                          <ChaynsProvider data={values} functions={functions} isModule>
                               <ColorSchemeProvider
                                   color="#005EB8"
                                   colorMode={0}
@@ -169,7 +169,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
         return React.isValidElement(sortedChildren)
             ? renderToString(
-                  <ChaynsProvider data={values} functions={functions}>
+                  <ChaynsProvider data={values} functions={functions} isModule>
                       <ColorSchemeProvider
                           color="#005EB8"
                           colorMode={0}
@@ -320,7 +320,7 @@ const Typewriter: FC<TypewriterProps> = ({
         if (pseudoChildren) {
             const pseudoText = React.isValidElement(pseudoChildren)
                 ? renderToString(
-                      <ChaynsProvider data={values} functions={functions}>
+                      <ChaynsProvider data={values} functions={functions} isModule>
                           <ColorSchemeProvider
                               color="#005EB8"
                               colorMode={0}
