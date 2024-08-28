@@ -1,4 +1,5 @@
 import { ColorSchemeProvider } from '@chayns-components/core';
+import { ChaynsProvider, useFunctions, useValues } from 'chayns-api';
 import React, {
     FC,
     ReactElement,
@@ -117,6 +118,9 @@ const Typewriter: FC<TypewriterProps> = ({
     const [shouldCount, setShouldCount] = useState(true);
     const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
 
+    const functions = useFunctions();
+    const values = useValues();
+
     useLayoutEffect(() => {
         if (children) {
             setHasRenderedChildrenOnce(false);
@@ -147,13 +151,15 @@ const Typewriter: FC<TypewriterProps> = ({
             if (currentChildren) {
                 return React.isValidElement(currentChildren)
                     ? renderToString(
-                          <ColorSchemeProvider
-                              color="#005EB8"
-                              colorMode={0}
-                              style={{ display: 'inline' }}
-                          >
-                              {currentChildren}
-                          </ColorSchemeProvider>,
+                          <ChaynsProvider data={values} functions={functions}>
+                              <ColorSchemeProvider
+                                  color="#005EB8"
+                                  colorMode={0}
+                                  style={{ display: 'inline' }}
+                              >
+                                  {currentChildren}
+                              </ColorSchemeProvider>
+                          </ChaynsProvider>,
                       )
                     : (currentChildren as string);
             }
@@ -163,9 +169,15 @@ const Typewriter: FC<TypewriterProps> = ({
 
         return React.isValidElement(sortedChildren)
             ? renderToString(
-                  <ColorSchemeProvider color="#005EB8" colorMode={0} style={{ display: 'inline' }}>
-                      {sortedChildren}
-                  </ColorSchemeProvider>,
+                  <ChaynsProvider data={values} functions={functions}>
+                      <ColorSchemeProvider
+                          color="#005EB8"
+                          colorMode={0}
+                          style={{ display: 'inline' }}
+                      >
+                          {sortedChildren}
+                      </ColorSchemeProvider>
+                  </ChaynsProvider>,
               )
             : (sortedChildren as string);
     }, [areMultipleChildrenGiven, currentChildrenIndex, sortedChildren]);
@@ -308,13 +320,15 @@ const Typewriter: FC<TypewriterProps> = ({
         if (pseudoChildren) {
             const pseudoText = React.isValidElement(pseudoChildren)
                 ? renderToString(
-                      <ColorSchemeProvider
-                          color="#005EB8"
-                          colorMode={0}
-                          style={{ display: 'inline' }}
-                      >
-                          {pseudoChildren}
-                      </ColorSchemeProvider>,
+                      <ChaynsProvider data={values} functions={functions}>
+                          <ColorSchemeProvider
+                              color="#005EB8"
+                              colorMode={0}
+                              style={{ display: 'inline' }}
+                          >
+                              {pseudoChildren}
+                          </ColorSchemeProvider>
+                      </ChaynsProvider>,
                   )
                 : (pseudoChildren as string);
 
