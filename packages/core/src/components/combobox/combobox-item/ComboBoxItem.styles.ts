@@ -29,32 +29,49 @@ export const StyledComboBoxItem = styled.div<StyledComboBoxItemProps>`
         `}
 `;
 
-export const StyledComboBoxTopic = styled.div`
-    align-items: center;
-    color: ${({ theme }) => theme.text};
-    position: sticky;
-    top: 0;
-    border: black 5px;
-    cursor: default;
-    font-weight: bold;
-    display: flex;
-    gap: 10px;
-    z-index: 10;
-    padding: 4px 10px;
-    background-color: ${({ theme }) => theme['secondary-101']};
-`;
-
-type StyledComboBoxItemImageProps = WithTheme<{ $shouldShowRoundImage?: boolean }>;
+type StyledComboBoxItemImageProps = WithTheme<{
+    $shouldShowBigImage?: boolean;
+    $shouldShowRoundImage?: boolean;
+}>;
 
 export const StyledComboBoxItemImage = styled.img<StyledComboBoxItemImageProps>`
-    box-shadow: 0 0 0 1px
-        rgba(${({ theme }: StyledComboBoxItemImageProps) => theme['009-rgb']}, 0.15);
-    height: 22px;
-    width: 22px;
-
     ${({ $shouldShowRoundImage }) =>
         $shouldShowRoundImage &&
         css`
             border-radius: 50%;
         `}
+
+    box-shadow: 0 0 0 1px
+        rgba(${({ theme }: StyledComboBoxItemImageProps) => theme['009-rgb']}, 0.15);
+    flex: 0 0 auto;
+    height: ${({ $shouldShowBigImage }) => ($shouldShowBigImage ? '40px' : '22px')};
+    width: ${({ $shouldShowBigImage }) => ($shouldShowBigImage ? '40px' : '22px')};
+`;
+
+export const StyledComboBoxItemContent = styled.div`
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    line-height: normal;
+`;
+
+export const StyledComboBoxItemContentHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+type StyledComboBoxItemContentHeaderTextProps = WithTheme<{ $shouldShowBoldText?: boolean }>;
+
+export const StyledComboBoxItemContentHeaderText = styled.div<StyledComboBoxItemContentHeaderTextProps>`
+    display: flex;
+    font-weight: ${({ $shouldShowBoldText }) => ($shouldShowBoldText ? 'bold' : 'normal')};
+    gap: 4px;
+`;
+
+export const StyledComboBoxItemContentHeaderRightElement = styled.div``;
+
+export const StyledComboBoxItemContentSubtext = styled.div`
+    font-size: 85%;
+    margin-top: 2px;
+    opacity: 0.85;
 `;

@@ -63,18 +63,11 @@ export default {
 
 const Template: StoryFn<typeof ComboBox> = (args) => (
     <>
-        <h1>Pizza auswählen</h1>
         <p>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-            accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-            sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-            aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-            rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-            amet. Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-            sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-            kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+            diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+            gubergren, no sea takimata sanctus est.
         </p>
         <ComboBox {...args} />
     </>
@@ -89,6 +82,8 @@ export const WithSuffixElements = Template.bind({});
 export const WithIcons = Template.bind({});
 
 export const WithGroups = Template.bind({});
+
+export const WithSubtextAndRightElement = Template.bind({});
 
 WithGroups.args = {
     direction: ComboBoxDirection.TOP,
@@ -267,4 +262,87 @@ WithSuffixElements.args = {
         suffixElement: <Icon icons={['far fa-user']} />,
         value: 2,
     },
+};
+
+WithSubtextAndRightElement.args = {
+    lists: [
+        {
+            groupName: 'Häufig ausgewählt',
+            list: [
+                {
+                    imageUrl: 'https://tsimg.cloud/HUK-F4KJD/profile_w128.png',
+                    value: 'HUK-F4KJD',
+                    text: 'Linda Schuster',
+                    subtext: 'Journalistin, Analytisch',
+                    rightElement: (
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>OpenAI GPT-4o</span>
+                    ),
+                },
+                {
+                    imageUrl: 'https://tsimg.cloud/Q8V-45A2G/profile_w128.png',
+                    value: 'Q8V-45A2G',
+                    text: 'Jonas Fischer',
+                    subtext: 'IT-Sicherheitsexperte, Aggressiv',
+                    rightElement: (
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>
+                            Google Gemini 1.0 Pro
+                        </span>
+                    ),
+                },
+            ],
+        },
+        {
+            groupName: 'Weitere Avatare',
+            list: [
+                {
+                    imageUrl: 'https://tsimg.cloud/3X1-8KA3H/profile_w128.png',
+                    value: '3X1-8KA3H',
+                    text: 'Prof. Dr. Hans Köhler',
+                    subtext: 'Ökonom, Pragmatisch',
+                    rightElement: (
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>Claude 3</span>
+                    ),
+                },
+                {
+                    imageUrl: 'https://tsimg.cloud/U28-2F8C3/profile_w128.png',
+                    value: 'U28-2F8C3',
+                    text: 'Elena Novak',
+                    subtext: 'Menschenrechtsaktivistin, Radikal',
+                    rightElement: (
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>OpenAI GPT-4o</span>
+                    ),
+                },
+                {
+                    imageUrl: 'https://tsimg.cloud/TTC-ANK55/profile_w128.png',
+                    value: 'TTC-ANK55',
+                    text: 'Thomas Becker',
+                    subtext: 'Polizist, Moderat',
+                    rightElement: (
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>Mistral Large 1</span>
+                    ),
+                },
+                {
+                    imageUrl: 'https://tsimg.cloud/LBN-WHS1A/profile_w128.png',
+                    value: 'LBN-WHS1A',
+                    text: 'Dr. Clara Baumann',
+                    subtext: 'Klimaforscherin, Idealistisch',
+                    rightElement: (
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>Claude 3</span>
+                    ),
+                },
+                {
+                    imageUrl: 'https://tsimg.cloud/DQM-BINQP/profile_w128.png',
+                    value: 'DQM-BINQP',
+                    text: 'Maximilian Weber',
+                    subtext: 'Unternehmer, Pragmatisch',
+                    rightElement: (
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>Mistral Large 1</span>
+                    ),
+                },
+            ],
+        },
+    ],
+    placeholder: 'Avatar auswählen',
+    shouldShowRoundImage: true,
+    shouldUseFullWidth: true,
 };
