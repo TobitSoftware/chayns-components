@@ -5,26 +5,30 @@ import type { ComboBoxProps, IComboBoxItem } from '../ComboBox';
 import { StyledComboBoxItem, StyledComboBoxItemImage } from './ComboBoxItem.styles';
 
 export type ComboBoxItemProps = {
+    icons?: IComboBoxItem['icons'];
+    id: IComboBoxItem['value'];
     imageUrl: IComboBoxItem['imageUrl'];
     isSelected: boolean;
     onSelect: (itemToSelect: IComboBoxItem) => void;
+    rightElement: IComboBoxItem['rightElement'];
     shouldShowRoundImage: ComboBoxProps['shouldShowRoundImage'];
-    icons?: IComboBoxItem['icons'];
+    subtext: IComboBoxItem['subtext'];
     suffixElement?: ReactNode;
     text: IComboBoxItem['text'];
     value: IComboBoxItem['value'];
-    id: IComboBoxItem['value'];
 };
 
 const ComboBoxItem: FC<ComboBoxItemProps> = ({
+    icons,
+    id,
     imageUrl,
     isSelected,
-    icons,
     onSelect,
+    rightElement,
     shouldShowRoundImage,
+    subtext,
     suffixElement,
     text,
-    id,
     value,
 }) => {
     const handleItemClick = useCallback(() => {

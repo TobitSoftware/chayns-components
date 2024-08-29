@@ -40,6 +40,8 @@ export interface IComboBoxItems {
 export interface IComboBoxItem {
     icons?: string[];
     imageUrl?: string;
+    rightElement?: ReactNode;
+    subtext?: string;
     suffixElement?: ReactNode;
     text: string;
     value: string | number;
@@ -252,7 +254,9 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         const textArray = allItems?.map(({ text }) => text);
 
-        const contentHeight = calculateContentHeight(textArray);
+        const groupNames = lists.map(({ groupName }) => groupName || 'Unnamed');
+
+        const contentHeight = calculateContentHeight([...textArray, ...groupNames]);
 
         const maxHeightInPixels = getMaxHeightInPixels(
             maxHeight,
@@ -348,20 +352,32 @@ const ComboBox: FC<ComboBoxProps> = ({
                     {groupName && lists.length > 1 && (
                         <StyledComboBoxTopic>{groupName}</StyledComboBoxTopic>
                     )}
-                    {list.map(({ imageUrl, icons, suffixElement, text, value }) => (
-                        <ComboBoxItem
-                            imageUrl={imageUrl}
-                            icons={icons}
-                            isSelected={selectedItem ? value === selectedItem.value : false}
-                            key={value}
-                            id={value}
-                            onSelect={handleSetSelectedItem}
-                            shouldShowRoundImage={shouldShowRoundImage}
-                            suffixElement={suffixElement}
-                            text={text}
-                            value={value}
-                        />
-                    ))}
+                    {list.map(
+                        ({
+                            imageUrl,
+                            icons,
+                            rightElement,
+                            subtext,
+                            suffixElement,
+                            text,
+                            value,
+                        }) => (
+                            <ComboBoxItem
+                                icons={icons}
+                                id={value}
+                                imageUrl={imageUrl}
+                                isSelected={selectedItem ? value === selectedItem.value : false}
+                                key={value}
+                                onSelect={handleSetSelectedItem}
+                                rightElement={rightElement}
+                                shouldShowRoundImage={shouldShowRoundImage}
+                                subtext={subtext}
+                                suffixElement={suffixElement}
+                                text={text}
+                                value={value}
+                            />
+                        ),
+                    )}
                 </div>
             )),
         [handleSetSelectedItem, lists, selectedItem, shouldShowRoundImage],
