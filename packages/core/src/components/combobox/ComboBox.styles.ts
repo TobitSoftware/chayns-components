@@ -72,13 +72,14 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
         `}
 `;
 
-type StyledComboBoxPlaceholderProps = WithTheme<unknown>;
+type StyledComboBoxPlaceholderProps = WithTheme<{ $shouldReduceOpacity: boolean }>;
 
 export const StyledComboBoxPlaceholder = styled.div<StyledComboBoxPlaceholderProps>`
     align-items: center;
     color: ${({ theme }: StyledComboBoxPlaceholderProps) => theme.text};
     display: flex;
     gap: 10px;
+    opacity: ${({ $shouldReduceOpacity }) => ($shouldReduceOpacity ? 0.5 : 1)};
 `;
 
 type StyledComboBoxPlaceholderImageProps = WithTheme<

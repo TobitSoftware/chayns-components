@@ -267,7 +267,8 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         textArray.push(placeholder);
 
-        const width = styledComboBoxElementRef.current?.getBoundingClientRect().width ?? 0;
+        const width =
+            styledComboBoxElementRef.current?.parentElement?.getBoundingClientRect().width ?? 0;
 
         // 45px = padding left + padding right + border left + border right + arrow icon width + arrow icon margin left
         // 32px = image width + flex gap
@@ -445,7 +446,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                     $isTouch={isTouch}
                     $isDisabled={isDisabled}
                 >
-                    <StyledComboBoxPlaceholder>
+                    <StyledComboBoxPlaceholder $shouldReduceOpacity={!selectedItem && !item}>
                         {placeholderImageUrl && (
                             <StyledComboBoxPlaceholderImage
                                 src={placeholderImageUrl}
@@ -475,6 +476,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             placeholderImageUrl,
             placeholderText,
             portal,
+            selectedItem,
             shouldShowRoundImage,
             shouldUseFullWidth,
         ],
