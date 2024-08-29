@@ -22,13 +22,13 @@ import { getIsTouch } from '../../utils/environment';
 import type { ContextMenuCoordinates } from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
 import ComboBoxItem from './combobox-item/ComboBoxItem';
-import { StyledComboBoxTopic } from './combobox-item/ComboBoxItem.styles';
 import {
     StyledComboBox,
     StyledComboBoxHeader,
     StyledComboBoxIconWrapper,
     StyledComboBoxPlaceholder,
     StyledComboBoxPlaceholderImage,
+    StyledComboBoxTopic,
     StyledMotionComboBoxBody,
 } from './ComboBox.styles';
 

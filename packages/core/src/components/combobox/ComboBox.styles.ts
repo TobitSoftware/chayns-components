@@ -167,3 +167,20 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
                   }
               `}
 `;
+
+type StyledComboBoxTopicProps = WithTheme<unknown>;
+
+export const StyledComboBoxTopic = styled.div`
+    align-items: center;
+    color: rgba(${({ theme }: StyledComboBoxTopicProps) => theme['text-rgb']}, 0.65);
+    position: sticky;
+    top: 0;
+    border: black 5px;
+    cursor: default;
+    font-weight: bold;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+    padding: 4px 10px;
+    background-color: ${({ theme }: StyledComboBoxTopicProps) => theme['secondary-101']};
+`;

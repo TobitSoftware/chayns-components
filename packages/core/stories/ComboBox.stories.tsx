@@ -275,7 +275,7 @@ WithSubtextAndRightElement.args = {
                     text: 'Linda Schuster',
                     subtext: 'Journalistin, Analytisch',
                     rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.85 }}>OpenAI GPT-4o</span>
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>OpenAI GPT-4o</span>
                     ),
                 },
                 {
@@ -284,7 +284,7 @@ WithSubtextAndRightElement.args = {
                     text: 'Jonas Fischer',
                     subtext: 'IT-Sicherheitsexperte, Aggressiv',
                     rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.85 }}>
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>
                             Google Gemini 1.0 Pro
                         </span>
                     ),
@@ -300,7 +300,7 @@ WithSubtextAndRightElement.args = {
                     text: 'Prof. Dr. Hans Köhler',
                     subtext: 'Ökonom, Pragmatisch',
                     rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.85 }}>Claude 3</span>
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>Claude 3</span>
                     ),
                 },
                 {
@@ -309,7 +309,7 @@ WithSubtextAndRightElement.args = {
                     text: 'Elena Novak',
                     subtext: 'Menschenrechtsaktivistin, Radikal',
                     rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.85 }}>OpenAI GPT-4o</span>
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>OpenAI GPT-4o</span>
                     ),
                 },
                 {
@@ -318,7 +318,7 @@ WithSubtextAndRightElement.args = {
                     text: 'Thomas Becker',
                     subtext: 'Polizist, Moderat',
                     rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.85 }}>Mistral Large 1</span>
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>Mistral Large 1</span>
                     ),
                 },
                 {
@@ -327,7 +327,7 @@ WithSubtextAndRightElement.args = {
                     text: 'Dr. Clara Baumann',
                     subtext: 'Klimaforscherin, Idealistisch',
                     rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.85 }}>Claude 3</span>
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>Claude 3</span>
                     ),
                 },
                 {
@@ -336,7 +336,7 @@ WithSubtextAndRightElement.args = {
                     text: 'Maximilian Weber',
                     subtext: 'Unternehmer, Pragmatisch',
                     rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.85 }}>Mistral Large 1</span>
+                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>Mistral Large 1</span>
                     ),
                 },
             ],

@@ -2,7 +2,15 @@ import React, { FC, ReactNode, useCallback, useMemo } from 'react';
 import { getIsTouch } from '../../../utils/environment';
 import Icon from '../../icon/Icon';
 import type { ComboBoxProps, IComboBoxItem } from '../ComboBox';
-import { StyledComboBoxItem, StyledComboBoxItemImage } from './ComboBoxItem.styles';
+import {
+    StyledComboBoxItem,
+    StyledComboBoxItemContent,
+    StyledComboBoxItemContentHeader,
+    StyledComboBoxItemContentHeaderRightElement,
+    StyledComboBoxItemContentHeaderText,
+    StyledComboBoxItemContentSubtext,
+    StyledComboBoxItemImage,
+} from './ComboBoxItem.styles';
 
 export type ComboBoxItemProps = {
     icons?: IComboBoxItem['icons'];
@@ -48,12 +56,25 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
                 {imageUrl && (
                     <StyledComboBoxItemImage
                         src={imageUrl}
+                        $shouldShowBigImage={typeof subtext === 'string'}
                         $shouldShowRoundImage={shouldShowRoundImage}
                     />
                 )}
                 {icons && <Icon icons={icons} />}
-                {text}
-                {suffixElement}
+                <StyledComboBoxItemContent>
+                    <StyledComboBoxItemContentHeader>
+                        <StyledComboBoxItemContentHeaderText
+                            $shouldShowBoldText={typeof subtext === 'string'}
+                        >
+                            {text}
+                            {suffixElement}
+                        </StyledComboBoxItemContentHeaderText>
+                        <StyledComboBoxItemContentHeaderRightElement>
+                            {rightElement}
+                        </StyledComboBoxItemContentHeaderRightElement>
+                    </StyledComboBoxItemContentHeader>
+                    <StyledComboBoxItemContentSubtext>{subtext}</StyledComboBoxItemContentSubtext>
+                </StyledComboBoxItemContent>
             </StyledComboBoxItem>
         ),
         [
@@ -63,7 +84,9 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
             imageUrl,
             isSelected,
             isTouch,
+            rightElement,
             shouldShowRoundImage,
+            subtext,
             suffixElement,
             text,
         ],
