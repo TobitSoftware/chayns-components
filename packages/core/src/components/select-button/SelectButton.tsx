@@ -30,6 +30,10 @@ export type SelectButtonProps = {
      */
     shouldAllowMultiSelect?: boolean;
     /**
+     * Whether the button text should be displayed also if items are selected.
+     */
+    shouldShowButtonTextWithSelection?: boolean;
+    /**
      * Whether the search should be displayed inside the dialog.
      */
     shouldShowSearch?: boolean;
@@ -40,13 +44,14 @@ export type SelectButtonProps = {
 };
 
 const SelectButton: FC<SelectButtonProps> = ({
+    buttonText,
+    isDisabled,
+    list,
     onSelect,
     selectedItemIds,
     shouldAllowMultiSelect,
-    buttonText,
+    shouldShowButtonTextWithSelection,
     shouldShowSearch,
-    list,
-    isDisabled,
     title,
 }) => {
     const itemList = useMemo(() => {
@@ -65,21 +70,29 @@ const SelectButton: FC<SelectButtonProps> = ({
         return items;
     }, [list, selectedItemIds]);
 
-    const selectedItemText = useMemo(() => {
-        if (!selectedItemIds || selectedItemIds.length === 0) {
-            return null;
+    const internalButtonText = useMemo(() => {
+        if (shouldShowButtonTextWithSelection || !selectedItemIds || selectedItemIds.length === 0) {
+            return buttonText;
         }
 
+        let addedCount = 0;
         let newText = '';
 
+        const additionalCount = selectedItemIds.length - 2;
+
         list.forEach(({ text, id }) => {
-            if (selectedItemIds?.includes(id)) {
+            if ((addedCount < 2 || additionalCount <= 1) && selectedItemIds?.includes(id)) {
+                addedCount += 1;
                 newText += newText.length === 0 ? `${text}` : `, ${text}`;
             }
         });
 
+        if (additionalCount > 1) {
+            newText += `, ${additionalCount} weitere`;
+        }
+
         return newText;
-    }, [list, selectedItemIds]);
+    }, [buttonText, list, selectedItemIds, shouldShowButtonTextWithSelection]);
 
     const handleClick = () => {
         void createDialog({
@@ -111,7 +124,7 @@ const SelectButton: FC<SelectButtonProps> = ({
                 isSecondary
                 shouldShowTextAsRobotoMedium={false}
             >
-                {selectedItemText ?? buttonText}
+                {internalButtonText}
             </Button>
         </StyledSelectButton>
     );
