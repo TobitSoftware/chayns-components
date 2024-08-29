@@ -180,7 +180,7 @@ const Typewriter: FC<TypewriterProps> = ({
                   </ChaynsProvider>,
               )
             : (sortedChildren as string);
-    }, [areMultipleChildrenGiven, currentChildrenIndex, sortedChildren]);
+    }, [areMultipleChildrenGiven, currentChildrenIndex, functions, sortedChildren, values]);
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 
@@ -344,7 +344,7 @@ const Typewriter: FC<TypewriterProps> = ({
         }
 
         return textContent || '&#8203;';
-    }, [pseudoChildren, shouldUseAnimationHeight, shownCharCount, textContent]);
+    }, [functions, pseudoChildren, shouldUseAnimationHeight, shownCharCount, textContent, values]);
 
     return useMemo(
         () => (
