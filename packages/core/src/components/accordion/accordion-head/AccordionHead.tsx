@@ -1,5 +1,6 @@
 import { AnimatePresence, LayoutGroup } from 'framer-motion';
 import React, {
+    ChangeEvent,
     ChangeEventHandler,
     FC,
     MouseEventHandler,
@@ -83,6 +84,19 @@ const AccordionHead: FC<AccordionHeadProps> = ({
 
     const titleElementWrapperRef = useRef<HTMLDivElement>(null);
     const titleWrapperRef = useRef<HTMLDivElement>(null);
+
+    const [internalSearchValue, setInternalSearchValue] = useState<string>();
+
+    useEffect(() => {
+        setInternalSearchValue(searchValue);
+    }, [searchValue]);
+
+    const handleOnSearchChance = (event: ChangeEvent<HTMLInputElement>) => {
+        setInternalSearchValue(event.target.value);
+        if (typeof onSearchChange === 'function') {
+            onSearchChange(event);
+        }
+    };
 
     const titleElementChildrenSize = useElementSize(titleElementWrapperRef, {
         shouldUseChildElement: true,
@@ -234,10 +248,10 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                 key={`searchWrapper--${uuid}`}
                             >
                                 <SearchInput
-                                    onChange={onSearchChange}
+                                    onChange={handleOnSearchChance}
                                     placeholder={searchPlaceholder}
                                     size={InputSize.Small}
-                                    value={searchValue}
+                                    value={internalSearchValue}
                                 />
                             </StyledMotionSearchWrapper>
                         )}
