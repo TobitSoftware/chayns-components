@@ -290,14 +290,17 @@ const Typewriter: FC<TypewriterProps> = ({
             window.clearInterval(interval);
         };
     }, [
-        shouldStopAnimation,
         speed,
-        textContent.length,
-        charactersCount,
-        isResetAnimationActive,
-        areMultipleChildrenGiven,
         resetDelay,
+        shouldCount,
         childrenCount,
+        charactersCount,
+        textContent.length,
+        shouldStopAnimation,
+        shouldWaitForContent,
+        isResetAnimationActive,
+        shouldUseResetAnimation,
+        areMultipleChildrenGiven,
         handleSetNextChildrenIndex,
         shouldUseResetAnimation,
         shouldCount,

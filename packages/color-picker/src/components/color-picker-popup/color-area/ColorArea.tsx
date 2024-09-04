@@ -17,14 +17,14 @@ import {
 import { hsvToHex } from '@chayns/colors';
 import { setRefreshScrollEnabled } from 'chayns-api';
 import { useDragControls, useMotionValue } from 'framer-motion';
-import type { Scale } from '../../../../../types/colorPicker';
+import type { Scale } from '../../../types/colorPicker';
 import {
     extractRgbValues,
     getColorFromCoordinates,
     getCoordinatesFromColor,
     rgbToHsv,
-} from '../../../../../utils/color';
-import { ColorPickerContext } from '../../../../ColorPickerProvider';
+} from '../../../utils/color';
+import { ColorPickerContext } from '../../ColorPickerProvider';
 
 const ColorArea = () => {
     const {
