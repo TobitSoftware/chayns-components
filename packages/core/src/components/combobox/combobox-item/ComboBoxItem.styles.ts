@@ -60,18 +60,14 @@ export const StyledComboBoxItemContentHeader = styled.div`
     justify-content: space-between;
 `;
 
-type StyledComboBoxItemContentHeaderTextProps = WithTheme<{ $shouldShowBoldText?: boolean }>;
-
-export const StyledComboBoxItemContentHeaderText = styled.div<StyledComboBoxItemContentHeaderTextProps>`
+export const StyledComboBoxItemContentHeaderText = styled.div`
     display: flex;
-    font-weight: ${({ $shouldShowBoldText }) => ($shouldShowBoldText ? 'bold' : 'normal')};
     gap: 4px;
 `;
 
 export const StyledComboBoxItemContentHeaderRightElement = styled.div``;
 
 export const StyledComboBoxItemContentSubtext = styled.div`
-    font-size: 85%;
+    font-size: 90%;
     margin-top: 2px;
-    opacity: 0.85;
 `;

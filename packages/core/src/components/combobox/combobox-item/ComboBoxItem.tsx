@@ -63,9 +63,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
                 {icons && <Icon icons={icons} />}
                 <StyledComboBoxItemContent>
                     <StyledComboBoxItemContentHeader>
-                        <StyledComboBoxItemContentHeaderText
-                            $shouldShowBoldText={typeof subtext === 'string'}
-                        >
+                        <StyledComboBoxItemContentHeaderText>
                             {text}
                             {suffixElement}
                         </StyledComboBoxItemContentHeaderText>
