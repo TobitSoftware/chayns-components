@@ -18,7 +18,7 @@ export const Container = styled(Track)<{
 `;
 
 export const Time = styled.div`
-    font-size: 5cqw;
+    font-size: 6cqw;
     font-weight: 700;
     color: white;
 `;
