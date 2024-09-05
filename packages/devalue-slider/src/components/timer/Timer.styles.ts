@@ -12,24 +12,13 @@ export const Container = styled(Track)<{
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    font-size: 4.5vw;
-    font-weight: 700;
     cursor: pointer;
     color: white;
+    container-type: inline-size;
+`;
 
-    @media (min-width: 450px) {
-        font-size: 4vw;
-    }
-
-    @media (min-width: 768px) {
-        font-size: 2vw;
-    }
-
-    @media (min-width: 1024px) {
-        font-size: 1.5vw;
-    }
-
-    @media (min-width: 1200px) {
-        font-size: 25px;
-    }
+export const Time = styled.div`
+    font-size: 5cqw;
+    font-weight: 700;
+    color: white;
 `;

@@ -10,7 +10,7 @@ import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useS
 import { vibrate } from 'chayns-api';
 
 import { de } from 'date-fns/locale';
-import { Container } from './Timer.styles';
+import { Container, Time } from './Timer.styles';
 
 export type TimerProps = {
     color: string;
@@ -85,7 +85,7 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
             $backgroundColor={color}
             onPointerDownCapture={handlePointerDownCapture}
         >
-            {label}
+            <Time>{label}</Time>
         </Container>
     );
 };
