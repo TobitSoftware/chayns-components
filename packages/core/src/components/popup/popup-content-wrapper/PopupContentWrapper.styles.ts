@@ -20,6 +20,7 @@ export const StyledMotionPopupContentWrapper = styled(
     color: ${({ theme }: StyledMotionPopupContentWrapperProps) => theme.text};
     z-index: 100;
     position: fixed;
+    pointer-events: all;
 
     &::after {
         background-color: inherit;
