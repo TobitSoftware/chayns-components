@@ -62,16 +62,11 @@ export const getTimeString = ({ language, isMorning }: GetTimeStringProps) => {
 
 interface GetFormattedYearOptions {
     date: Date;
-    shouldShowThisYear?: boolean;
+    shouldShowYear?: boolean;
 }
 
-export const getYearFormat = ({ date, shouldShowThisYear }: GetFormattedYearOptions) => {
-    if (shouldShowThisYear) {
-        return ' yyyy';
-    }
-
-    return isThisYear(date) ? '' : ' yyyy';
-};
+export const getYearFormat = ({ date, shouldShowYear }: GetFormattedYearOptions) =>
+    (typeof shouldShowYear === 'boolean' && !shouldShowYear) || isThisYear(date) ? '' : ' yyyy';
 
 interface GetFormattedMonthOptions {
     shouldUseShortText?: boolean;
