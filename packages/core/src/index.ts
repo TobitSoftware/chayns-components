@@ -78,6 +78,7 @@ export type { FileItem, Image, InternalFileItem, Meta, Video } from './types/fil
 export type { FileInputFileItem } from './types/fileInput';
 export { FilterButtonItemShape, FilterButtonSize } from './types/filterButtons';
 export type { IFilterButtonItem as FilterButtonItem } from './types/filterButtons';
+export type { IListItemRightElements } from './types/list';
 export type { PopupRef } from './types/popup';
 export type { RadioButtonItem } from './types/radioButton';
 export type {

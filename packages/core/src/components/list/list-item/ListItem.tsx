@@ -9,6 +9,7 @@ import React, {
     useEffect,
 } from 'react';
 import { useUuid } from '../../../hooks/uuid';
+import type { IListItemRightElements } from '../../../types/list';
 import AreaContextProvider from '../../area-provider/AreaContextProvider';
 import { ListContext } from '../List';
 import ListItemBody from './list-item-body/ListItemBody';
@@ -66,7 +67,7 @@ export type ListItemProps = {
      * Elements that are displayed on the right side of the header. If multiple
      * elements are specified, they are displayed one below the other.
      */
-    rightElements?: ListItemElements;
+    rightElements?: IListItemRightElements;
     /**
      * Images of users should always be displayed in a round shape. Therefore,
      * this property can be set to true.
@@ -76,10 +77,6 @@ export type ListItemProps = {
      * Whether a separator should be displayed below this item. In this case, the border is displayed thicker than normal.
      */
     shouldShowSeparatorBelow?: boolean;
-    /**
-     * Whether a single rightElement should be centered. Only works if one rightElement is given.
-     */
-    shouldShowSingleRightElementCentered?: boolean;
     /**
      * Subtitle of the `ListItem` displayed in the head below the title
      */
@@ -105,7 +102,6 @@ const ListItem: FC<ListItemProps> = ({
     onLongPress,
     leftElements,
     rightElements,
-    shouldShowSingleRightElementCentered = false,
     subtitle,
     shouldShowRoundImage,
     shouldShowSeparatorBelow = false,
@@ -181,7 +177,6 @@ const ListItem: FC<ListItemProps> = ({
                 rightElements={rightElements}
                 subtitle={subtitle}
                 shouldShowRoundImage={shouldShowRoundImage}
-                shouldShowSingleRightElementCentered={shouldShowSingleRightElementCentered}
                 title={title}
                 titleElement={titleElement}
             />

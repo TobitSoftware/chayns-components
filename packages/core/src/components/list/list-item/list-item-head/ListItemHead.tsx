@@ -10,16 +10,15 @@ import React, {
     useState,
 } from 'react';
 import { useElementSize } from '../../../../hooks/useElementSize';
+import type { IListItemRightElements } from '../../../../types/list';
 import Icon from '../../../icon/Icon';
 import ListItemIcon from './list-item-icon/ListItemIcon';
 import ListItemImage from './list-item-image/ListItemImage';
+import ListItemRightElements from './list-item-right-elements/ListItemRightElements';
 import {
     StyledListItemHead,
-    StyledListItemHeadBottomRightElement,
     StyledListItemHeadContent,
     StyledListItemHeadLeftWrapper,
-    StyledListItemHeadRightElement,
-    StyledListItemHeadRightWrapper,
     StyledListItemHeadSubtitle,
     StyledListItemHeadSubtitleText,
     StyledListItemHeadSubtitleTextPseudo,
@@ -28,7 +27,6 @@ import {
     StyledListItemHeadTitleElement,
     StyledListItemHeadTitleText,
     StyledListItemHeadTitleTextPseudo,
-    StyledListItemHeadTopRightElement,
     StyledMotionListItemHeadHoverItem,
     StyledMotionListItemHeadIndicator,
 } from './ListItemHead.styles';
@@ -48,10 +46,9 @@ type ListItemHeadProps = {
     leftElements?: ReactNode;
     onClick?: MouseEventHandler<HTMLDivElement>;
     onLongPress?: TouchEventHandler<HTMLDivElement>;
-    rightElements?: [ReactNode, ...ReactNode[]];
+    rightElements?: IListItemRightElements;
     subtitle?: ReactNode;
     shouldShowRoundImage?: boolean;
-    shouldShowSingleRightElementCentered: boolean;
     title: ReactNode;
     titleElement?: ReactNode;
 };
@@ -69,7 +66,6 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     rightElements,
     subtitle,
     shouldShowRoundImage,
-    shouldShowSingleRightElementCentered,
     title,
     titleElement,
 }) => {
@@ -222,32 +218,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     </StyledListItemHeadSubtitle>
                 )}
             </StyledListItemHeadContent>
-            {rightElements && (
-                <StyledListItemHeadRightWrapper
-                    $shouldShowCentered={
-                        rightElements?.length === 1 && shouldShowSingleRightElementCentered
-                    }
-                >
-                    {rightElements?.length === 1 && shouldShowSingleRightElementCentered ? (
-                        <StyledListItemHeadRightElement>
-                            {rightElements[0]}
-                        </StyledListItemHeadRightElement>
-                    ) : (
-                        <>
-                            {rightElements[0] && (
-                                <StyledListItemHeadTopRightElement>
-                                    {rightElements[0]}
-                                </StyledListItemHeadTopRightElement>
-                            )}
-                            {rightElements[1] && (
-                                <StyledListItemHeadBottomRightElement>
-                                    {rightElements[1]}
-                                </StyledListItemHeadBottomRightElement>
-                            )}
-                        </>
-                    )}
-                </StyledListItemHeadRightWrapper>
-            )}
+            {rightElements && <ListItemRightElements rightElements={rightElements} />}
             {hoverItem && (
                 <StyledMotionListItemHeadHoverItem
                     animate={{

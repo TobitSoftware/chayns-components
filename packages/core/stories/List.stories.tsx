@@ -126,34 +126,41 @@ ListItemsWithRightElements.args = {
     children: [
         <ListItem
             images={[locationImages[0]]}
-            rightElements={[
-                '09:01 Uhr',
-                <Badge backgroundColor="red" fontColor="white">
-                    1
-                </Badge>,
-            ]}
+            rightElements={{
+                top: '09:01 Uhr',
+                bottom: (
+                    <Badge backgroundColor="red" fontColor="white">
+                        1
+                    </Badge>
+                ),
+            }}
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,
         <ListItem
             images={[locationImages[1]]}
-            rightElements={['08:59 Uhr']}
-            shouldShowSingleRightElementCentered
+            rightElements="08:59 Uhr"
             title="No sea takimata sanctus est Lorem ipsum dolor sit amet"
         />,
         <ListItem
             images={[locationImages[1]]}
-            rightElements={['08:58 Uhr']}
+            rightElements={{
+                top: 'Top',
+                bottom: 'Bottom',
+                center: 'Center',
+            }}
             subtitle="Dolor sit ipsum amet"
             title="gubergren, no sea takimata"
         />,
         <ListItem
             images={[locationImages[2]]}
-            rightElements={[
-                '08:57 Uhr',
-                <Badge backgroundColor="red" fontColor="white">
-                    4
-                </Badge>,
-            ]}
+            rightElements={{
+                top: '08:57 Uhr',
+                bottom: (
+                    <Badge backgroundColor="red" fontColor="white">
+                        4
+                    </Badge>
+                ),
+            }}
             subtitle="Dolor sit ipsum amet"
             title="sanctus est lorem ipsum dolor sit amet"
         />,

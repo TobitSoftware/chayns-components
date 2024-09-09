@@ -148,35 +148,6 @@ export const StyledListItemHeadSubtitleTextPseudo = styled.span<StyledListItemHe
     position: absolute;
 `;
 
-type StyledListItemHeadRightWrapperProps = WithTheme<{ $shouldShowCentered: boolean }>;
-
-export const StyledListItemHeadRightWrapper = styled.div<StyledListItemHeadRightWrapperProps>`
-    align-items: flex-end;
-    display: flex;
-    flex-direction: column;
-    justify-content: ${({ $shouldShowCentered }) =>
-        $shouldShowCentered ? 'center' : 'flex-start'};
-    margin-left: 8px;
-`;
-
-export const StyledListItemHeadTopRightElement = styled.div`
-    display: flex;
-    flex: 0 0 auto;
-    font-size: 85%;
-`;
-
-export const StyledListItemHeadBottomRightElement = styled.div`
-    display: flex;
-    flex: 0 0 auto;
-    font-size: 85%;
-`;
-
-export const StyledListItemHeadRightElement = styled.div`
-    align-items: center;
-    display: flex;
-    flex: 0 0 auto;
-`;
-
 export const StyledMotionListItemHeadHoverItem = styled(motion.div)<FramerMotionBugFix>`
     overflow: hidden;
     flex-shrink: 0;
