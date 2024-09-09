@@ -30,6 +30,10 @@ export type DevalueSliderProps = {
      */
     isDisabled?: boolean;
     /**
+     * The label of the slider. The default value is "EINLÖSEN"
+     */
+    label?: string;
+    /**
      * This function is called when the slider is devalued.
      */
     onDevalue?: DevalueSliderOnDevalueHandler;
@@ -51,6 +55,7 @@ const DevalueSlider: React.FC<DevalueSliderProps> = ({
     devalueBackgroundColor = 'green',
     devalueTime,
     isDisabled,
+    label = 'EINLÖSEN',
     onDevalue,
     onChange,
     onComplete,
@@ -91,6 +96,7 @@ const DevalueSlider: React.FC<DevalueSliderProps> = ({
             devalueColor={devalueBackgroundColor}
             onComplete={handleCompleted}
             onChange={onChange}
+            trackText={label}
         />
     );
 };

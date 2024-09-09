@@ -103,3 +103,8 @@ export const EarlyDevalueTime = Template.bind({});
 EarlyDevalueTime.args = {
     devalueTime: subHours(new Date(), 3),
 };
+
+export const CustomLabel = Template.bind({});
+CustomLabel.args = {
+    label: 'ENTWERTEN',
+};
