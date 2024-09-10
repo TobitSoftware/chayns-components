@@ -34,6 +34,8 @@ const FilterButtons: FC<FilterButtonsProps> = ({
 }) => {
     const [selectedIds, setSelectedIds] = useState<string[]>(['all']);
 
+    console.log(selectedItemIds);
+
     /**
      * This function set the selectedItemKey
      */
@@ -81,7 +83,10 @@ const FilterButtons: FC<FilterButtonsProps> = ({
                 id="all"
                 key="all"
                 onSelect={handleSelect}
-                isSelected={selectedIds.includes('all')}
+                isSelected={
+                    selectedIds.includes('all') ||
+                    (Array.isArray(selectedIds) && selectedIds.length === 0)
+                }
                 shape={FilterButtonItemShape.Rectangular}
                 size={size}
                 text="Alle"
