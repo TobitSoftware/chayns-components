@@ -144,9 +144,13 @@ ListItemsWithRightElements.args = {
         <ListItem
             images={[locationImages[1]]}
             rightElements={{
-                top: 'Top',
+                top: (
+                    <Badge backgroundColor="lightgreen" fontColor="white">
+                        - 13,54%
+                    </Badge>
+                ),
                 bottom: 'Bottom',
-                center: 'Center',
+                center: <Icon icons={['fa fa-star']} />,
             }}
             subtitle="Dolor sit ipsum amet"
             title="gubergren, no sea takimata"
@@ -155,11 +159,24 @@ ListItemsWithRightElements.args = {
             images={[locationImages[2]]}
             rightElements={{
                 top: '08:57 Uhr',
-                bottom: (
-                    <Badge backgroundColor="red" fontColor="white">
-                        4
-                    </Badge>
-                ),
+            }}
+            subtitle="Dolor sit ipsum amet"
+            title="sanctus est lorem ipsum dolor sit amet"
+        />,
+        <ListItem
+            images={[locationImages[2]]}
+            rightElements={{
+                bottom: '08:57 Uhr',
+            }}
+            subtitle="Dolor sit ipsum amet"
+            title="sanctus est lorem ipsum dolor sit amet"
+        />,
+        <ListItem
+            images={[locationImages[2]]}
+            rightElements={{
+                top: 'Top',
+                bottom: '08:57 Uhr',
+                topAlignment: 'start',
             }}
             subtitle="Dolor sit ipsum amet"
             title="sanctus est lorem ipsum dolor sit amet"

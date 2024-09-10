@@ -4,6 +4,7 @@ import {
     StyledListItemRightElements,
     StyledListItemRightElementsLeft,
     StyledListItemRightElementsLeftBottom,
+    StyledListItemRightElementsLeftPseudo,
     StyledListItemRightElementsLeftTop,
     StyledListItemRightElementsRight,
 } from './ListItemRightElements.styles';
@@ -41,17 +42,36 @@ const ListItemRightElements: FC<ListItemRightElementsProps> = ({ rightElements }
         return undefined;
     }, [rightElements]);
 
+    const { topAlignment, bottomAlignment } = useMemo(() => {
+        if (
+            typeof rightElements === 'object' &&
+            ((rightElements && 'topAlignment' in rightElements) ||
+                (rightElements && 'bottomAlignment' in rightElements))
+        ) {
+            return {
+                topAlignment: rightElements.topAlignment,
+                bottomAlignment: rightElements.bottomAlignment,
+            };
+        }
+
+        return { topAlignment: undefined, bottomAlignment: undefined };
+    }, [rightElements]);
+
     return (
         <StyledListItemRightElements>
             {(topElement || bottomElement) && (
                 <StyledListItemRightElementsLeft>
-                    {topElement && (
-                        <StyledListItemRightElementsLeftTop>
+                    {topElement ? (
+                        <StyledListItemRightElementsLeftTop $alignment={topAlignment}>
                             {topElement}
                         </StyledListItemRightElementsLeftTop>
+                    ) : (
+                        <StyledListItemRightElementsLeftPseudo>
+                            .
+                        </StyledListItemRightElementsLeftPseudo>
                     )}
                     {bottomElement && (
-                        <StyledListItemRightElementsLeftBottom>
+                        <StyledListItemRightElementsLeftBottom $alignment={bottomAlignment}>
                             {bottomElement}
                         </StyledListItemRightElementsLeftBottom>
                     )}
