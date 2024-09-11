@@ -1,7 +1,7 @@
 import { action as brokenAction } from '@storybook/addon-actions';
 import { ChaynsProvider } from 'chayns-api';
 import { BaseSyntheticEvent, useEffect } from 'react';
-import ColorSchemeProvider from '../packages/core/src/components/color-scheme-provider/ColorSchemeProvider';
+import PageProvider from '../packages/core/src/components/page-provider/PageProvider';
 
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
@@ -80,11 +80,11 @@ export const decorators = [
         // endregion
 
         return (
-            <div className="tapp" style={{ margin: 0, maxWidth: '556px', padding: 0 }}>
+            <div style={{ maxWidth: '556px' }}>
                 <ChaynsProvider>
-                    <ColorSchemeProvider colorMode={colorMode}>
+                    <PageProvider colorMode={colorMode} shouldRemovePadding>
                         <Story />
-                    </ColorSchemeProvider>
+                    </PageProvider>
                 </ChaynsProvider>
             </div>
         );

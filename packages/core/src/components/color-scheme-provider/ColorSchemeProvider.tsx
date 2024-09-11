@@ -13,7 +13,7 @@ enum ColorMode {
     Light,
 }
 
-type ColorSchemeProviderProps = {
+export type ColorSchemeProviderProps = {
     /**
      * The content of the application or the components for which the styles should be set
      */
@@ -201,6 +201,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                 />
             </Helmet>
             <div
+                className="color-scheme-provider"
                 style={{ ...colors, ...cssVariables, ...style, color: 'var(--chayns-color--text)' }}
             >
                 {children}
