@@ -13,7 +13,7 @@ enum ColorMode {
     Light,
 }
 
-type ColorSchemeProviderProps = {
+export type ColorSchemeProviderProps = {
     /**
      * The content of the application or the components for which the styles should be set
      */
