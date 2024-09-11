@@ -66,7 +66,7 @@ const getPageProviderInformation = (customPadding?: string): PaddingValues => {
 export const getUsableHeight = async (customPadding?: string) => {
     let usableHeight;
 
-    const { bottomBarHeight, offsetTop, windowHeight } = await getWindowMetrics();
+    const { bottomBarHeight, topBarHeight, windowHeight } = await getWindowMetrics();
 
     const { top, bottom } = getPageProviderInformation(customPadding);
 
@@ -76,8 +76,8 @@ export const getUsableHeight = async (customPadding?: string) => {
         usableHeight -= bottomBarHeight;
     }
 
-    if (offsetTop) {
-        usableHeight -= offsetTop;
+    if (topBarHeight) {
+        usableHeight -= topBarHeight;
     }
 
     return usableHeight;
