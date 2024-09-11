@@ -7,9 +7,9 @@ import { StyledPageProvider } from './PageProvider.styles';
 
 interface PageProviderProps extends ColorSchemeProviderProps {
     /**
-     * The padding of the page. If not set, the provider will calculate the padding based on the device size.
+     * Whether the padding should be removed.
      */
-    padding?: CSSProperties['padding'];
+    shouldRemovePadding?: boolean;
     /**
      * Whether the usable height should be used.
      */
@@ -25,11 +25,11 @@ const PageProvider: FC<PageProviderProps> = ({
     siteId,
     style = {},
     designSettings,
-    padding,
+    shouldRemovePadding,
     shouldUseUsableHeight,
 }) => {
     const [usableHeight, setUsableHeight] = useState(0);
-    const [newPadding, setNewPadding] = useState<CSSProperties['padding']>();
+    const [padding, setPadding] = useState<CSSProperties['padding']>();
 
     useEffect(() => {
         const fetchUsableHeight = async () => {
@@ -42,14 +42,12 @@ const PageProvider: FC<PageProviderProps> = ({
 
     useEffect(() => {
         const handleResize = () => {
-            setNewPadding(getPagePadding());
+            setPadding(getPagePadding());
         };
 
-        setNewPadding(padding ?? getPagePadding());
+        setPadding(getPagePadding());
 
-        if (!padding) {
-            window.addEventListener('resize', handleResize);
-        }
+        window.addEventListener('resize', handleResize);
 
         return () => {
             window.removeEventListener('resize', handleResize);
@@ -58,7 +56,8 @@ const PageProvider: FC<PageProviderProps> = ({
 
     return (
         <StyledPageProvider
-            $padding={newPadding}
+            className="page-provider"
+            $padding={shouldRemovePadding ? 0 : padding}
             $usableHeight={shouldUseUsableHeight ? usableHeight : undefined}
         >
             <ColorSchemeProvider
