@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState, type CSSProperties } from 'react';
+import { createGlobalStyle } from 'styled-components';
 import { getPagePadding, getUsableHeight } from '../../utils/pageProvider';
 import ColorSchemeProvider, {
     type ColorSchemeProviderProps,
@@ -15,6 +16,12 @@ interface PageProviderProps extends ColorSchemeProviderProps {
      */
     shouldUseUsableHeight?: boolean;
 }
+
+const GlobalStyle = createGlobalStyle`
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+`;
 
 const PageProvider: FC<PageProviderProps> = ({
     children,
@@ -71,6 +78,7 @@ const PageProvider: FC<PageProviderProps> = ({
             >
                 {children}
             </ColorSchemeProvider>
+            <GlobalStyle />
         </StyledPageProvider>
     );
 };
