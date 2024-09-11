@@ -40,7 +40,6 @@ export {
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
 export type { MentionMember } from './components/mention-finder/MentionFinder';
 export { default as NumberInput } from './components/number-input/NumberInput';
-export { default as PageProvider } from './components/page-provider/PageProvider';
 export { default as Popup } from './components/popup/Popup';
 export { default as PopupContent } from './components/popup/popup-content/PopupContent';
 export { default as ProgressBar } from './components/progress-bar/ProgressBar';
@@ -92,5 +91,4 @@ export { ClampPosition } from './types/truncation';
 export { getIsTouch } from './utils/environment';
 export { getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
 export { isTobitEmployee } from './utils/isTobitEmployee';
-export { getUsableHeight } from './utils/pageProvider';
 export { uploadFile } from './utils/uploadFile';
