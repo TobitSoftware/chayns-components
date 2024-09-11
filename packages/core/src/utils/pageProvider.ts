@@ -1,5 +1,4 @@
-import { getWindowMetrics } from 'chayns-api';
-import { getEnvironment } from 'chayns-api/dist/types/calls';
+import { getEnvironment, getWindowMetrics } from 'chayns-api';
 import { PAGE_BREAKPOINTS } from '../constants/pageProvider';
 
 export const getPagePadding = () => {
@@ -9,7 +8,7 @@ export const getPagePadding = () => {
         return '0';
     }
 
-    if (matchMedia(PAGE_BREAKPOINTS.desktop)) {
+    if (matchMedia(PAGE_BREAKPOINTS.desktop).matches) {
         return '35px 43px 30px';
     }
 

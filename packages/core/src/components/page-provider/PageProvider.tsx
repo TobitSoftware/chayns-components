@@ -29,6 +29,7 @@ const PageProvider: FC<PageProviderProps> = ({
     shouldUseUsableHeight,
 }) => {
     const [usableHeight, setUsableHeight] = useState(0);
+    const [newPadding, setNewPadding] = useState<CSSProperties['padding']>();
 
     useEffect(() => {
         const fetchUsableHeight = async () => {
@@ -39,9 +40,25 @@ const PageProvider: FC<PageProviderProps> = ({
         void fetchUsableHeight();
     }, []);
 
+    useEffect(() => {
+        const handleResize = () => {
+            setNewPadding(getPagePadding());
+        };
+
+        setNewPadding(padding ?? getPagePadding());
+
+        if (!padding) {
+            window.addEventListener('resize', handleResize);
+        }
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [padding]);
+
     return (
         <StyledPageProvider
-            $padding={padding ?? getPagePadding()}
+            $padding={newPadding}
             $usableHeight={shouldUseUsableHeight ? usableHeight : undefined}
         >
             <ColorSchemeProvider

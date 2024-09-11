@@ -8,5 +8,5 @@ type StyledPageProviderProps = {
 
 export const StyledPageProvider = styled.div<StyledPageProviderProps>`
     padding: ${({ $padding }) => $padding};
-    height: ${({ $usableHeight }) => $usableHeight}px;
+    height: ${({ $usableHeight }) => ($usableHeight ? `${$usableHeight}px` : undefined)};
 `;
