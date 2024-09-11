@@ -201,6 +201,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                 />
             </Helmet>
             <div
+                className="color-scheme-provider"
                 style={{ ...colors, ...cssVariables, ...style, color: 'var(--chayns-color--text)' }}
             >
                 {children}
