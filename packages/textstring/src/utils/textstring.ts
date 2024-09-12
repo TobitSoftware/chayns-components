@@ -47,10 +47,10 @@ export const getTextstringValue = ({
     textstring,
     replacements,
 }: GetTextstringValueOptions) => {
-    const textstrings = window.Textstrings[libraryName];
+    const textstrings = window.Textstrings ? window.Textstrings[libraryName] : undefined;
 
     if (!textstrings) {
-        return undefined;
+        return textstring.fallback;
     }
 
     const value = textstrings[textstring.name] ?? textstring.fallback;
