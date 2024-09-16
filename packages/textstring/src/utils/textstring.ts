@@ -46,8 +46,9 @@ export const getTextstringValue = ({
     libraryName,
     textstring,
     replacements,
-}: GetTextstringValueOptions) => {
-    const textstrings = window.Textstrings ? window.Textstrings[libraryName] : undefined;
+}: GetTextstringValueOptions): string => {
+    const textstrings =
+        typeof window !== 'undefined' ? window.Textstrings?.[libraryName] : undefined;
 
     if (!textstrings) {
         return textstring.fallback;
