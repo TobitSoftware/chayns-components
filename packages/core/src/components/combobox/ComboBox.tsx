@@ -13,11 +13,7 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { ComboBoxDirection } from '../../types/comboBox';
-import {
-    calculateContentHeight,
-    calculateContentWidth,
-    getMaxHeightInPixels,
-} from '../../utils/calculate';
+import { calculateContentWidth, getMaxHeightInPixels } from '../../utils/calculate';
 import { getIsTouch } from '../../utils/environment';
 import type { ContextMenuCoordinates } from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
@@ -184,6 +180,19 @@ const ComboBox: FC<ComboBoxProps> = ({
     );
 
     useEffect(() => {
+        if (isAnimating) {
+            const scrollHeight = contentRef.current?.scrollHeight ?? 0;
+
+            const maxHeightInPixels = getMaxHeightInPixels(
+                maxHeight,
+                styledComboBoxElementRef.current ?? document.body,
+            );
+
+            setOverflowY(scrollHeight > maxHeightInPixels ? 'scroll' : 'hidden');
+        }
+    }, [isAnimating, maxHeight]);
+
+    useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (!isAnimating) {
                 return;
@@ -251,21 +260,6 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         const isAtLeastOneItemWithImageGiven = allItems.some(({ imageUrl }) => imageUrl);
         const isAtLeastOneItemWithIconGiven = allItems.some(({ icons }) => icons);
-
-        const textArray = allItems?.map(({ text }) => text);
-
-        const groupNames = lists.map(({ groupName }) => groupName || 'Unnamed');
-
-        const contentHeight = calculateContentHeight([...textArray, ...groupNames]);
-
-        const maxHeightInPixels = getMaxHeightInPixels(
-            maxHeight,
-            styledComboBoxElementRef.current ?? document.body,
-        );
-
-        setOverflowY(contentHeight > maxHeightInPixels ? 'scroll' : 'hidden');
-
-        textArray.push(placeholder);
 
         const width =
             styledComboBoxElementRef.current?.parentElement?.getBoundingClientRect().width ?? 0;
