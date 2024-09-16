@@ -2,7 +2,6 @@ import { useDevice } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
     FC,
-    ReactPortal,
     useCallback,
     useEffect,
     useMemo,
@@ -103,7 +102,6 @@ const ComboBox: FC<ComboBoxProps> = ({
     const [minWidth, setMinWidth] = useState(0);
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
     const [overflowY, setOverflowY] = useState<CSSProperties['overflowY']>('hidden');
-    const [portal, setPortal] = useState<ReactPortal>();
     const [internalCoordinates, setInternalCoordinates] = useState<ContextMenuCoordinates>({
         x: 0,
         y: 0,
@@ -388,8 +386,8 @@ const ComboBox: FC<ComboBoxProps> = ({
         return styles;
     }, [direction, internalCoordinates.x, internalCoordinates.y]);
 
-    useEffect(() => {
-        setPortal(() =>
+    const portal = useMemo(
+        () =>
             createPortal(
                 <AnimatePresence initial={false}>
                     {isAnimating && (
@@ -413,18 +411,18 @@ const ComboBox: FC<ComboBoxProps> = ({
                 </AnimatePresence>,
                 container,
             ),
-        );
-    }, [
-        bodyStyles,
-        browser?.name,
-        comboBoxGroups,
-        container,
-        direction,
-        isAnimating,
-        maxHeight,
-        minWidth,
-        overflowY,
-    ]);
+        [
+            bodyStyles,
+            browser?.name,
+            comboBoxGroups,
+            container,
+            direction,
+            isAnimating,
+            maxHeight,
+            minWidth,
+            overflowY,
+        ],
+    );
 
     return useMemo(
         () => (
