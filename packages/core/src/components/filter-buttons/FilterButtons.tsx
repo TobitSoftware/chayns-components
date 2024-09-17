@@ -34,8 +34,6 @@ const FilterButtons: FC<FilterButtonsProps> = ({
 }) => {
     const [selectedIds, setSelectedIds] = useState<string[]>(['all']);
 
-    console.log(selectedItemIds);
-
     /**
      * This function set the selectedItemKey
      */
