@@ -33,13 +33,13 @@ const MultipleRadioButtonsTemplate: StoryFn<typeof RadioButton> = () => {
     return (
         <>
             <h1>Speisen</h1>
-            <RadioButtonGroup ref={foodRadioButtonGroupRef}>
+            <RadioButtonGroup ref={foodRadioButtonGroupRef} selectedId={'2'}>
                 <RadioButton id="0" label="Nudeln" />
                 <RadioButton id="1" label="Pizza" />
                 <RadioButton id="2" label="Pommes" />
                 <RadioButton id="3" label="Salat" />
             </RadioButtonGroup>
-            <Button onClick={handleResetDrinksButtonClick}>Zurücksetzen</Button>
+            <Button onClick={handleResetFoodButtonClick}>Zurücksetzen</Button>
             <h1>Getränke</h1>
             <RadioButtonGroup ref={drinksRadioButtonGroupRef}>
                 <RadioButton id="0" label="Wasser" />
@@ -48,7 +48,7 @@ const MultipleRadioButtonsTemplate: StoryFn<typeof RadioButton> = () => {
                 <RadioButton id="3" label="Saft" />
                 <RadioButton id="4" label="Milch" />
             </RadioButtonGroup>
-            <Button onClick={handleResetFoodButtonClick}>Zurücksetzen</Button>
+            <Button onClick={handleResetDrinksButtonClick}>Zurücksetzen</Button>
         </>
     );
 };
@@ -73,14 +73,14 @@ const DisabledRadioButtonsTemplate: StoryFn<typeof RadioButton> = () => (
 const WithChildrenTemplate: StoryFn<typeof RadioButton> = () => (
     <>
         <h1>StarWars Filme</h1>
-        <RadioButtonGroup>
+        <RadioButtonGroup selectedId={'2'}>
             <RadioButton id="0" label="Episode I">
                 The Phantom Menace
             </RadioButton>
             <RadioButton id="1" label="Episode II">
                 Attack of the Clones
             </RadioButton>
-            <RadioButton id="2" label="Episode III" isChecked>
+            <RadioButton id="2" label="Episode III">
                 Revenge of the Sith
             </RadioButton>
             <RadioButton id="3" label="Episode IV">

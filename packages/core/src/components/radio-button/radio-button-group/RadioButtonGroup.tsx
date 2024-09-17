@@ -31,23 +31,45 @@ export type RadioButtonGroupRef = {
 
 export type RadioButtonGroupProps = {
     /**
+     * Whether the RadioButtons can be unchecked.
+     */
+    canUncheckRadioButtons?: boolean;
+    /**
      * The RadioButtons that should be grouped. Radio buttons with the same group are
      * automatically unchecked when an `RadioButton` of the group is checked.
      */
     children: ReactNode;
-    radioButtonsCanBeUnchecked?: boolean;
+    /**
+     * Function to be executed when an id is selected.
+     */
+    onSelect?: (id?: string) => void;
+    /**
+     * The id of the current selected RadioButton.
+     */
+    selectedId?: string;
 };
 
 const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
-    ({ children, radioButtonsCanBeUnchecked }, ref) => {
+    ({ children, canUncheckRadioButtons, selectedId, onSelect }, ref) => {
         const [selectedRadioButtonId, setSelectedRadioButtonId] =
             useState<IRadioButtonGroupContext['selectedRadioButtonId']>(undefined);
 
         const isInitialRenderRef = useRef(true);
 
-        const updateSelectedRadioButtonId = useCallback<IUpdateSelectedRadioButtonId>((id) => {
-            setSelectedRadioButtonId(id);
-        }, []);
+        useEffect(() => {
+            setSelectedRadioButtonId(selectedId);
+        }, [selectedId]);
+
+        const updateSelectedRadioButtonId = useCallback<IUpdateSelectedRadioButtonId>(
+            (id) => {
+                if (typeof onSelect === 'function') {
+                    onSelect(id);
+                }
+
+                setSelectedRadioButtonId(id);
+            },
+            [onSelect],
+        );
 
         useImperativeHandle(
             ref,
@@ -67,9 +89,9 @@ const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
             () => ({
                 selectedRadioButtonId,
                 updateSelectedRadioButtonId,
-                radioButtonsCanBeUnchecked,
+                canUncheckRadioButtons,
             }),
-            [radioButtonsCanBeUnchecked, selectedRadioButtonId, updateSelectedRadioButtonId],
+            [canUncheckRadioButtons, selectedRadioButtonId, updateSelectedRadioButtonId],
         );
 
         return (

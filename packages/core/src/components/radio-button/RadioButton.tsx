@@ -5,11 +5,9 @@ import React, {
     useContext,
     useEffect,
     useMemo,
-    useRef,
     useState,
     type ReactNode,
 } from 'react';
-import type { RadioButtonItem } from '../../types/radioButton';
 import { RadioButtonGroupContext } from './radio-button-group/RadioButtonGroup';
 import {
     StyledMotionRadioButtonChildren,
@@ -27,10 +25,6 @@ export type RadioButtonProps = {
      */
     children?: ReactNode;
     /**
-     * Whether the radio button should be checked.
-     */
-    isChecked?: boolean;
-    /**
      * whether the RadioButton should be shown.
      */
     isDisabled?: boolean;
@@ -42,23 +36,9 @@ export type RadioButtonProps = {
      * The label that should be displayed next to the radio button.
      */
     label?: string;
-    /**
-     * Function to be executed when a button is checked.
-     */
-    onChange?: (item: RadioButtonItem) => void;
-
-    canBeUnchecked?: boolean;
 };
 
-const RadioButton: FC<RadioButtonProps> = ({
-    children,
-    isChecked,
-    label,
-    onChange,
-    id,
-    isDisabled = false,
-    canBeUnchecked,
-}) => {
+const RadioButton: FC<RadioButtonProps> = ({ children, label, id, isDisabled = false }) => {
     const { selectedRadioButtonId, updateSelectedRadioButtonId, radioButtonsCanBeUnchecked } =
         useContext(RadioButtonGroupContext);
 
@@ -69,27 +49,15 @@ const RadioButton: FC<RadioButtonProps> = ({
 
     const isMarked = isInGroup ? selectedRadioButtonId === id : internalIsChecked;
 
-    const uncheckable = isInGroup ? radioButtonsCanBeUnchecked : canBeUnchecked;
-
-    const isInitialRenderRef = useRef(true);
+    const uncheckable = radioButtonsCanBeUnchecked;
 
     useEffect(() => {
-        if (typeof isChecked === 'boolean' && isChecked) {
+        if (selectedRadioButtonId === id) {
             if (typeof updateSelectedRadioButtonId === 'function') {
                 updateSelectedRadioButtonId(id);
-            } else {
-                setInternalIsChecked(isChecked);
             }
         }
-    }, [id, isChecked, updateSelectedRadioButtonId]);
-
-    useEffect(() => {
-        if (isInitialRenderRef.current) {
-            isInitialRenderRef.current = false;
-        } else if (typeof onChange === 'function') {
-            onChange({ isChecked: isMarked, id });
-        }
-    }, [id, isMarked, onChange]);
+    }, [id, selectedRadioButtonId, updateSelectedRadioButtonId]);
 
     const handleClick = useCallback(() => {
         if (isDisabled) {
