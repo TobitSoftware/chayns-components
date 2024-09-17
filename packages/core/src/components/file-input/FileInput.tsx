@@ -54,6 +54,10 @@ export type FileInputProps = {
      */
     maxFiles?: number;
     /**
+     * The maximum size of a file in MB.
+     */
+    maxFileSizeInMB?: number;
+    /**
      * A function to be executed when files are added.
      */
     onAdd?: (files: File[] | string[]) => void;
@@ -90,6 +94,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             maxFiles,
             onRemove,
             files,
+            maxFileSizeInMB,
             onAdd,
             fileSelectionPlaceholder = 'Dateien hochladen',
             imageSelectPlaceholder,
@@ -269,10 +274,11 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             const newFiles = await selectFiles({
                 multiple: true,
                 type: fileTypes,
+                maxFileSizeInMB,
             });
 
             handleAddFiles(newFiles);
-        }, [fileTypes, handleAddFiles, isDisabled]);
+        }, [fileTypes, handleAddFiles, isDisabled, maxFileSizeInMB]);
 
         const handleDrop = useCallback(
             (e: DragEvent<HTMLDivElement>) => {

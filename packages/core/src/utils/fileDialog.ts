@@ -1,9 +1,16 @@
+import { createDialog, DialogType } from 'chayns-api';
+
 interface SelectFilesOptions {
     type?: string;
     multiple: boolean;
+    maxFileSizeInMB?: number;
 }
 
-export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<File[]> =>
+export const selectFiles = ({
+    type,
+    multiple,
+    maxFileSizeInMB,
+}: SelectFilesOptions): Promise<File[]> =>
     new Promise((resolve) => {
         const input = document.createElement('input');
 
@@ -47,19 +54,18 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<Fil
             const filteredFileArray = fileArray.filter((file) => {
                 const sizeInMB = file.size / 1024 / 1024;
 
-                if (file.type.includes('video/') && sizeInMB > 500) {
+                if (file.type.includes('video/') && sizeInMB > (maxFileSizeInMB ?? 500)) {
                     return false;
                 }
 
-                return !(file.type.includes('image/') && sizeInMB > 64);
+                return !(file.type.includes('image/') && sizeInMB > (maxFileSizeInMB ?? 64));
             });
 
             if (fileArray.length !== filteredFileArray.length) {
-                // ToDo show dialog that some files are to big
-            }
-
-            if (filteredFileArray.length === 0) {
-                // ToDo show dialog that all files are to big
+                void createDialog({
+                    type: DialogType.ALERT,
+                    text: 'Einige Deiner ausgewählten Dateien sind zu groß.',
+                }).open();
             }
 
             resolve(filteredFileArray);
