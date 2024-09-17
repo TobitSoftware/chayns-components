@@ -56,7 +56,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
                 {imageUrl && (
                     <StyledComboBoxItemImage
                         src={imageUrl}
-                        $shouldShowBigImage={typeof subtext === 'string'}
+                        $shouldShowBigImage={typeof subtext === 'string' && subtext.trim() !== ''}
                         $shouldShowRoundImage={shouldShowRoundImage}
                     />
                 )}
@@ -67,11 +67,17 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
                             {text}
                             {suffixElement}
                         </StyledComboBoxItemContentHeaderText>
-                        <StyledComboBoxItemContentHeaderRightElement>
-                            {rightElement}
-                        </StyledComboBoxItemContentHeaderRightElement>
+                        {rightElement && (
+                            <StyledComboBoxItemContentHeaderRightElement>
+                                {rightElement}
+                            </StyledComboBoxItemContentHeaderRightElement>
+                        )}
                     </StyledComboBoxItemContentHeader>
-                    <StyledComboBoxItemContentSubtext>{subtext}</StyledComboBoxItemContentSubtext>
+                    {subtext && (
+                        <StyledComboBoxItemContentSubtext>
+                            {subtext}
+                        </StyledComboBoxItemContentSubtext>
+                    )}
                 </StyledComboBoxItemContent>
             </StyledComboBoxItem>
         ),
