@@ -77,6 +77,10 @@ export type ComboBoxProps = {
      */
     selectedItem?: IComboBoxItem;
     /**
+     * If true, the images of the items are displayed in a bigger shape. This prop will automatically be set to true if the subtext of an item is given.
+     */
+    shouldShowBigImage?: boolean;
+    /**
      * If true, the images of the items are displayed in a round shape.
      */
     shouldShowRoundImage?: boolean;
@@ -95,6 +99,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     placeholder,
     container = document.body,
     selectedItem,
+    shouldShowBigImage,
     shouldShowRoundImage,
     shouldUseFullWidth = false,
 }) => {
@@ -367,6 +372,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                                 key={value}
                                 onSelect={handleSetSelectedItem}
                                 rightElement={rightElement}
+                                shouldShowBigImage={shouldShowBigImage}
                                 shouldShowRoundImage={shouldShowRoundImage}
                                 subtext={subtext}
                                 suffixElement={suffixElement}
@@ -377,7 +383,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                     )}
                 </div>
             )),
-        [handleSetSelectedItem, lists, selectedItem, shouldShowRoundImage],
+        [handleSetSelectedItem, lists, selectedItem, shouldShowBigImage, shouldShowRoundImage],
     );
 
     const bodyStyles = useMemo(() => {

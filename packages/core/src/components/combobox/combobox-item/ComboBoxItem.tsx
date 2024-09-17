@@ -19,6 +19,7 @@ export type ComboBoxItemProps = {
     isSelected: boolean;
     onSelect: (itemToSelect: IComboBoxItem) => void;
     rightElement: IComboBoxItem['rightElement'];
+    shouldShowBigImage: ComboBoxProps['shouldShowBigImage'];
     shouldShowRoundImage: ComboBoxProps['shouldShowRoundImage'];
     subtext: IComboBoxItem['subtext'];
     suffixElement?: ReactNode;
@@ -33,6 +34,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
     isSelected,
     onSelect,
     rightElement,
+    shouldShowBigImage,
     shouldShowRoundImage,
     subtext,
     suffixElement,
@@ -56,7 +58,10 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
                 {imageUrl && (
                     <StyledComboBoxItemImage
                         src={imageUrl}
-                        $shouldShowBigImage={typeof subtext === 'string' && subtext.trim() !== ''}
+                        $shouldShowBigImage={
+                            shouldShowBigImage ||
+                            (typeof subtext === 'string' && subtext.trim() !== '')
+                        }
                         $shouldShowRoundImage={shouldShowRoundImage}
                     />
                 )}
@@ -89,6 +94,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
             isSelected,
             isTouch,
             rightElement,
+            shouldShowBigImage,
             shouldShowRoundImage,
             subtext,
             suffixElement,
