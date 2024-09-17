@@ -180,8 +180,10 @@ const ComboBox: FC<ComboBoxProps> = ({
     );
 
     useEffect(() => {
-        if (isAnimating) {
-            const scrollHeight = contentRef.current?.scrollHeight ?? 0;
+        const currentContent = contentRef.current;
+
+        if (portal && isAnimating && currentContent) {
+            const scrollHeight = currentContent.scrollHeight ?? 0;
 
             const maxHeightInPixels = getMaxHeightInPixels(
                 maxHeight,
@@ -190,7 +192,7 @@ const ComboBox: FC<ComboBoxProps> = ({
 
             setOverflowY(scrollHeight > maxHeightInPixels ? 'scroll' : 'hidden');
         }
-    }, [isAnimating, maxHeight]);
+    }, [isAnimating, maxHeight, portal]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
