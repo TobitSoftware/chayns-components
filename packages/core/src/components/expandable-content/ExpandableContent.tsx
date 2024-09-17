@@ -18,6 +18,7 @@ const ExpandableContent: FC<ExpandableContentProps> = ({ children, isOpen }) =>
         () => (
             <AnimatePresence initial={false}>
                 <StyledMotionExpandableContent
+                    $isOpen={isOpen}
                     animate={{ height: isOpen ? 'auto' : '0px' }}
                     transition={{ duration: 0.2, type: 'tween' }}
                 >
