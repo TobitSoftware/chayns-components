@@ -74,7 +74,10 @@ export const StyledSliderInput = styled(motion.input).attrs<StyledSliderInputPro
     }
 `;
 
-type StyledSliderThumbProps = WithTheme<{ $position: number; $isBigSlider: boolean }>;
+type StyledSliderThumbProps = WithTheme<{
+    $position: number;
+    $isBigSlider: boolean;
+}>;
 
 export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $position }) => ({
     style: {
@@ -98,9 +101,37 @@ export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $po
     top: 5px;
 
     transition: top 0.2s ease 0s;
+`;
 
-    ${({ $isBigSlider }) =>
-        $isBigSlider &&
+type StyledSliderThumbLabelProps = WithTheme<{
+    $label: string | number;
+    $shouldShowTooltip?: boolean;
+}>;
+
+// ToDo add atters funktion
+export const StyledSliderThumbLabel = styled.span<StyledSliderThumbLabelProps>`
+    pointer-events: none;
+    color: #222;
+
+    min-width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border-radius: 100px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    z-index: 3;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    white-space: nowrap;
+    top: 5px;
+
+    transition: top 0.2s ease 0s;
+
+    ${({ $shouldShowTooltip }) =>
+        $shouldShowTooltip &&
         css`
             top: -30px;
 
@@ -131,11 +162,4 @@ export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $po
                 z-index: -1;
             }
         `}
-`;
-
-type StyledSliderThumbLabelProps = WithTheme<unknown>;
-
-export const StyledSliderThumbLabel = styled.span<StyledSliderThumbLabelProps>`
-    pointer-events: none;
-    color: #222;
 `;

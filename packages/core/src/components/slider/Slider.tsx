@@ -306,19 +306,30 @@ const Slider: FC<SliderProps> = ({
                     $position={fromSliderThumbPosition}
                     $isBigSlider={isBigSlider}
                 >
-                    {shouldShowThumbLabel && (
-                        <StyledSliderThumbLabel>
-                            {typeof thumbLabelFormatter === 'function'
+                    <StyledSliderThumbLabel
+                        $shouldShowTooltip={shouldShowThumbLabel}
+                        $label={
+                            typeof thumbLabelFormatter === 'function'
                                 ? thumbLabelFormatter(fromValue)
-                                : fromValue}
-                        </StyledSliderThumbLabel>
-                    )}
+                                : fromValue
+                        }
+                    >
+                        {typeof thumbLabelFormatter === 'function'
+                            ? thumbLabelFormatter(fromValue)
+                            : fromValue}
+                    </StyledSliderThumbLabel>
                 </StyledSliderThumb>
                 {interval && (
                     <StyledSliderThumb
                         ref={toSliderThumbRef}
                         $position={toSliderThumbPosition}
                         $isBigSlider={isBigSlider}
+                        $shouldShowTooltip={shouldShowThumbLabel}
+                        $label={
+                            typeof thumbLabelFormatter === 'function'
+                                ? thumbLabelFormatter(toValue)
+                                : toValue
+                        }
                     >
                         {shouldShowThumbLabel && (
                             <StyledSliderThumbLabel>
