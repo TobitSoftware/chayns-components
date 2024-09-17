@@ -177,7 +177,7 @@ export const getFormattedDayOfWeek = ({
     }
 
     if (shouldUseShortText) {
-        return format(date, 'E., ', { locale: language });
+        return format(date, 'E, ', { locale: language });
     }
 
     return format(date, 'EEEE, ', { locale: language });
