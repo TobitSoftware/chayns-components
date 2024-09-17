@@ -54,11 +54,15 @@ export const selectFiles = ({
             const filteredFileArray = fileArray.filter((file) => {
                 const sizeInMB = file.size / 1024 / 1024;
 
-                if (file.type.includes('video/') && sizeInMB > (maxFileSizeInMB ?? 500)) {
+                if (maxFileSizeInMB && maxFileSizeInMB < sizeInMB) {
                     return false;
                 }
 
-                return !(file.type.includes('image/') && sizeInMB > (maxFileSizeInMB ?? 64));
+                if (file.type.includes('video/') && sizeInMB > 500) {
+                    return false;
+                }
+
+                return !(file.type.includes('image/') && sizeInMB > 64);
             });
 
             if (fileArray.length !== filteredFileArray.length) {
