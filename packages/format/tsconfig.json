@@ -5,7 +5,6 @@
         "esModuleInterop": true,
         "emitDeclarationOnly": true,
         "forceConsistentCasingInFileNames": true,
-        "importsNotUsedAsValues": "error",
         "isolatedModules": true,
         "jsx": "react",
         "lib": ["DOM", "ESNext", "DOM.Iterable"],
