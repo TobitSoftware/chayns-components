@@ -56,6 +56,7 @@ export const StyledComboBoxItemContent = styled.div`
 `;
 
 export const StyledComboBoxItemContentHeader = styled.div`
+    align-items: center;
     display: flex;
     justify-content: space-between;
 `;
