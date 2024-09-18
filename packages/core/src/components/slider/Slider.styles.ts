@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledSlider = styled.div`
@@ -104,19 +104,23 @@ export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $po
 `;
 
 type StyledSliderThumbLabelProps = WithTheme<{
-    $label: string | number;
-    $shouldShowTooltip?: boolean;
+    $left: number;
 }>;
 
-// ToDo add atters funktion
-export const StyledSliderThumbLabel = styled.span<StyledSliderThumbLabelProps>`
+export const StyledSliderThumbLabel = styled.span.attrs<StyledSliderThumbLabelProps>(
+    ({ $left }) => ({
+        style: {
+            '--left': `${$left}px`,
+        },
+    }),
+)<StyledSliderThumbLabelProps>`
     pointer-events: none;
     color: #222;
 
-    min-width: 20px;
+    min-width: 35px;
     height: 20px;
     cursor: pointer;
-    border-radius: 100px;
+    border-radius: 3px;
     background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     z-index: 3;
@@ -126,40 +130,37 @@ export const StyledSliderThumbLabel = styled.span<StyledSliderThumbLabelProps>`
     justify-content: center;
     padding: 0 8px;
     white-space: nowrap;
-    top: 5px;
 
     transition: top 0.2s ease 0s;
 
-    ${({ $shouldShowTooltip }) =>
-        $shouldShowTooltip &&
-        css`
-            top: -30px;
+    left: var(--left);
+    top: -35px;
 
-            &::after {
-                background-color: inherit;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-                border-right: 1px solid rgba(0, 0, 0, 0.1);
-                box-shadow: 2px 2px 8px rgb(4 3 4 / 10%);
-                content: '';
-                height: 14px;
-                position: absolute;
-                width: 14px;
-                z-index: -2;
+    &::after {
+        background-color: inherit;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 2px 2px 8px rgb(4 3 4 / 10%);
+        content: '';
+        height: 14px;
+        position: absolute;
+        width: 14px;
+        z-index: -2;
+        left: var(--left);
 
-                transform: rotate(225deg);
-                bottom: -7px;
-            }
+        transform: rotate(225deg);
+        bottom: -7px;
+    }
 
-            &::before {
-                background-color: inherit;
-                bottom: 0;
-                content: '';
-                left: 0;
-                position: absolute;
-                right: 0;
-                border-radius: 3px;
-                top: 0;
-                z-index: -1;
-            }
-        `}
+    &::before {
+        background-color: inherit;
+        bottom: 0;
+        content: '';
+        left: 0;
+        position: absolute;
+        right: 0;
+        border-radius: 3px;
+        top: 0;
+        z-index: -1;
+    }
 `;

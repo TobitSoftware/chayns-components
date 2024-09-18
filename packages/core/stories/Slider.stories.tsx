@@ -11,7 +11,12 @@ export default {
 } as Meta<typeof Slider>;
 
 const Template: StoryFn<typeof Slider> = (args) => {
-    return <Slider {...args} />;
+    return (
+        <>
+            <div style={{ marginTop: 40 }} />
+            <Slider {...args} />
+        </>
+    );
 };
 
 const WithFormatterTemplate: StoryFn<typeof Slider> = (args) => {
@@ -19,7 +24,12 @@ const WithFormatterTemplate: StoryFn<typeof Slider> = (args) => {
         return `${value} €`;
     };
 
-    return <Slider {...args} thumbLabelFormatter={formatter} />;
+    return (
+        <>
+            <div style={{ marginTop: 40 }} />
+            <Slider {...args} thumbLabelFormatter={formatter} />
+        </>
+    );
 };
 
 export const General = Template.bind({});
