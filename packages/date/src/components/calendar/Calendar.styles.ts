@@ -7,6 +7,7 @@ export const StyledCalendar = styled.div<StyledCalendarProps>`
     width: 100%;
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     pointer-events: ${({ $isDisabled }) => ($isDisabled ? 'none' : undefined)};
+    user-select: none;
 `;
 
 export const StyledCalendarIconWrapper = styled.div`
