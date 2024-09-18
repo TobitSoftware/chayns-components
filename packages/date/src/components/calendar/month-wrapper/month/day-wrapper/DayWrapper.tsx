@@ -81,7 +81,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
             let isWithinIntervalSelection = false;
             let showHoverEffect = false;
 
-            const { start, end } = selectedDate as DateInterval;
+            const { start, end } = selectedDate || ({} as DateInterval);
 
             if (type === CalendarType.Single && selectedDate instanceof Date) {
                 isSelected = isSameDay(selectedDate, day);
