@@ -5,7 +5,7 @@ export default {
     title: 'Date/Calendar',
     component: Calendar,
     args: {
-        startDate: new Date('2023-02-01T00:00:00+00:00'),
+        minDate: new Date('2023-02-01T00:00:00+00:00'),
         highlightedDates: [
             {
                 dates: [

@@ -1,5 +1,5 @@
 import { Icon } from '@chayns-components/core';
-import { isSameMonth, type Locale } from 'date-fns';
+import { addYears, isSameMonth, subYears, type Locale } from 'date-fns';
 import { de } from 'date-fns/locale';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Categories, HighlightedDates } from '../../types/calendar';
@@ -19,17 +19,25 @@ export type CalendarProps = {
      */
     categories?: Categories[];
     /**
-     * The last Month that can be displayed.
-     */
-    endDate?: Date;
-    /**
      * An array with dates and corresponding styles to highlight.
      */
     highlightedDates?: HighlightedDates[];
     /**
+     * To disable the Calendar
+     */
+    isDisabled?: boolean;
+    /**
      * The locale language to format the dates.
      */
     locale?: Locale;
+    /**
+     * The maximum date that can be selected.
+     */
+    maxDate?: Date;
+    /**
+     * The minimum date that can be selected.
+     */
+    minDate?: Date;
     /**
      * Function to be executed when a date is selected.
      * @param date
@@ -39,26 +47,22 @@ export type CalendarProps = {
      * A date that should be preselected.
      */
     selectedDate?: Date;
-    /**
-     * The first Month that can be displayed.
-     */
-    startDate: Date;
-    /**
-     * To disable the Calendar
-     */
-    isDisabled?: boolean;
 };
+
+const defaultMaxDate = addYears(new Date(), 1);
+const defaultMinDate = subYears(new Date(), 1);
 
 const Calendar: FC<CalendarProps> = ({
     locale = de,
-    endDate = END_DATE,
-    startDate,
+    maxDate = defaultMaxDate,
+    minDate = defaultMinDate,
     highlightedDates,
     onSelect,
     selectedDate,
     categories,
     isDisabled,
 }) => {
+    console.log('Calendar', minDate, maxDate);
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
     const [internalSelectedDate, setInternalSelectedDate] = useState<Date>();
@@ -102,8 +106,8 @@ const Calendar: FC<CalendarProps> = ({
     useEffect(() => {
         const date = new Date();
 
-        setCurrentDate(isDateInRange({ startDate, endDate, currentDate: date }));
-    }, [endDate, startDate]);
+        setCurrentDate(isDateInRange({ minDate, maxDate, currentDate: date }));
+    }, [maxDate, minDate]);
 
     const handleLeftArrowClick = useCallback(() => {
         setDirection('left');
@@ -115,9 +119,9 @@ const Calendar: FC<CalendarProps> = ({
 
             const newDate = getNewDate(-1, prevDate);
 
-            return isDateInRange({ startDate, endDate, currentDate: newDate });
+            return isDateInRange({ minDate, maxDate, currentDate: newDate });
         });
-    }, [endDate, startDate]);
+    }, [maxDate, minDate]);
 
     const handleRightArrowClick = useCallback(() => {
         setDirection('right');
@@ -129,9 +133,9 @@ const Calendar: FC<CalendarProps> = ({
 
             const newDate = getNewDate(1, prevDate);
 
-            return isDateInRange({ startDate, endDate, currentDate: newDate });
+            return isDateInRange({ minDate, maxDate, currentDate: newDate });
         });
-    }, [endDate, startDate]);
+    }, [maxDate, minDate]);
 
     const handleSelect = useCallback(
         (date: Date) => {
@@ -153,16 +157,16 @@ const Calendar: FC<CalendarProps> = ({
             return false;
         }
 
-        return !isSameMonth(currentDate, startDate);
-    }, [currentDate, startDate]);
+        return !isSameMonth(currentDate, minDate);
+    }, [currentDate, minDate]);
 
     const ShouldShowRightArrow = useMemo(() => {
         if (!currentDate) {
             return false;
         }
 
-        return !isSameMonth(currentDate, endDate);
-    }, [currentDate, endDate]);
+        return !isSameMonth(currentDate, maxDate);
+    }, [currentDate, maxDate]);
 
     return (
         <StyledCalendar ref={calendarRef} $isDisabled={isDisabled}>
