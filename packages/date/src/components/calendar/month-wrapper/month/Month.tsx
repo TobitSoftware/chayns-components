@@ -12,7 +12,7 @@ export type MonthProps = {
     locale: Locale;
     highlightedDates?: HighlightedDates[];
     onSelect: (date: Date) => void;
-    selectedDate?: Date;
+    selectedDate?: Date | Date[];
     categories?: Categories[];
     height: number;
     minDate: Date;

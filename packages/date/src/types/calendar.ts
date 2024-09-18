@@ -35,3 +35,8 @@ export enum EMonth {
     November,
     December,
 }
+
+export enum CalendarType {
+    Single = 'single',
+    Multiple = 'multiple',
+}

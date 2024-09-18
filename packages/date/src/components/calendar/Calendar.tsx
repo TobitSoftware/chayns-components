@@ -1,8 +1,9 @@
 import { Icon } from '@chayns-components/core';
-import { addYears, isSameMonth, subYears, type Locale } from 'date-fns';
+import { addYears, isSameDay, isSameMonth, subYears, type Locale } from 'date-fns';
 import { de } from 'date-fns/locale';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Categories, HighlightedDates } from '../../types/calendar';
+import { CalendarType } from '../../types/calendar';
 import { getNewDate, isDateInRange } from '../../utils/calendar';
 import {
     StyledCalendar,
@@ -11,7 +12,7 @@ import {
 } from './Calendar.styles';
 import MonthWrapper from './month-wrapper/MonthWrapper';
 
-export type CalendarProps = {
+interface BaseProps {
     /**
      * An array to group dates into a category.
      */
@@ -36,16 +37,35 @@ export type CalendarProps = {
      * The minimum date that can be selected.
      */
     minDate?: Date;
+}
+
+interface SingleSelectionProps extends BaseProps {
+    type?: CalendarType.Single;
     /**
-     * Function to be executed when a date is selected.
+     * Function to be executed when the selected date changes.
      * @param date
      */
-    onSelect?: (date: Date) => void;
+    onChange?: (date: Date) => void;
     /**
      * A date that should be preselected.
      */
     selectedDate?: Date;
-};
+}
+
+interface MultipleSelectionProps extends BaseProps {
+    type?: CalendarType.Multiple;
+    /**
+     * Function to be executed when the selected dates change.
+     * @param date
+     */
+    onChange?: (date: Date[]) => void;
+    /**
+     * An array of dates that should be preselected.
+     */
+    selectedDate?: Date[];
+}
+
+export type CalendarProps = SingleSelectionProps | MultipleSelectionProps;
 
 const DEFAULT_MAX_DATE = addYears(new Date(), 1);
 const DEFAULT_MIN_DATE = subYears(new Date(), 1);
@@ -55,25 +75,31 @@ const Calendar: FC<CalendarProps> = ({
     maxDate = DEFAULT_MAX_DATE,
     minDate = DEFAULT_MIN_DATE,
     highlightedDates,
-    onSelect,
+    onChange,
     selectedDate,
     categories,
     isDisabled,
+    type = CalendarType.Single,
 }) => {
-    console.log('Calendar', minDate, maxDate);
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
-    const [internalSelectedDate, setInternalSelectedDate] = useState<Date>();
+    const [internalSelectedDate, setInternalSelectedDate] = useState<Date | Date[]>();
     const [direction, setDirection] = useState<'left' | 'right'>();
     const [width, setWidth] = useState(0);
 
     const calendarRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (selectedDate) {
+        if (
+            selectedDate &&
+            ((type === CalendarType.Single && selectedDate instanceof Date) ||
+                (type === CalendarType.Multiple && Array.isArray(selectedDate)))
+        ) {
             setInternalSelectedDate(selectedDate);
+        } else if (type === CalendarType.Multiple) {
+            setInternalSelectedDate([]);
         }
-    }, [selectedDate]);
+    }, [type, selectedDate]);
 
     useEffect(() => {
         if (calendarRef.current) {
@@ -137,13 +163,33 @@ const Calendar: FC<CalendarProps> = ({
 
     const handleSelect = useCallback(
         (date: Date) => {
-            setInternalSelectedDate(date);
+            setInternalSelectedDate((prevDate) => {
+                let onChangePayload: Date | Date[];
+                let newInternalSelectedDate: Date | Date[];
 
-            if (typeof onSelect === 'function') {
-                onSelect(date);
-            }
+                if (type === CalendarType.Single) {
+                    onChangePayload = date;
+                    newInternalSelectedDate = date;
+                } else if (type === CalendarType.Multiple) {
+                    if ((prevDate as Date[]).some((d) => isSameDay(d, date))) {
+                        newInternalSelectedDate = (prevDate as Date[]).filter(
+                            (d) => !isSameDay(d, date),
+                        );
+                    } else {
+                        newInternalSelectedDate = [...prevDate, date];
+                    }
+
+                    onChangePayload = newInternalSelectedDate;
+                }
+
+                if (typeof onChange === 'function') {
+                    onChange(onChangePayload);
+                }
+
+                return newInternalSelectedDate;
+            });
         },
-        [onSelect],
+        [type, onChange],
     );
 
     const handleAnimationFinished = () => {

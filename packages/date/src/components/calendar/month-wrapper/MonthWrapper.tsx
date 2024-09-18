@@ -10,7 +10,7 @@ export type MonthWrapperProps = {
     locale: Locale;
     highlightedDates?: HighlightedDates[];
     onSelect: (date: Date) => void;
-    selectedDate?: Date;
+    selectedDate?: Date | Date[];
     categories?: Categories[];
     currentDate: Date;
     direction?: 'left' | 'right';
@@ -38,19 +38,12 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     maxDate,
 }) => {
     const [content, setContent] = useState<ReactElement[]>();
-    const [prevSelectedDate, setPrevSelectedDate] = useState<Date>();
 
     const monthHeight = useMemo(() => width / (shouldRenderTwo ? 2 : 1), [width, shouldRenderTwo]);
 
     useEffect(() => {
         setContent(undefined);
     }, [monthHeight]);
-
-    useEffect(() => {
-        if (prevSelectedDate !== selectedDate) {
-            setPrevSelectedDate(selectedDate);
-        }
-    }, [prevSelectedDate, selectedDate]);
 
     useEffect(() => {
         setContent((prevState) => {
@@ -139,7 +132,6 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
         locale,
         monthHeight,
         onSelect,
-        prevSelectedDate,
         selectedDate,
         minDate,
         maxDate,

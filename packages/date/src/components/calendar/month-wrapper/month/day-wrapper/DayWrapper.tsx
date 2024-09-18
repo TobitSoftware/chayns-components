@@ -16,7 +16,7 @@ export type DayWrapperProps = {
     year: string;
     highlightedDates?: HighlightedDates[];
     onSelect: (date: Date) => void;
-    selectedDate?: Date;
+    selectedDate?: Date | Date[];
     categories?: Categories[];
     minDate: Date;
     maxDate: Date;
@@ -62,12 +62,20 @@ const DayWrapper: FC<DayWrapperProps> = ({
         const items: ReactElement[] = [];
 
         days.forEach((day) => {
+            let isSelected = false;
+
+            if (Array.isArray(selectedDate)) {
+                isSelected = selectedDate.some((date) => isSameDay(date, day));
+            } else if (selectedDate) {
+                isSelected = isSameDay(selectedDate, day);
+            }
+
             items.push(
                 <Day
                     key={`single-day-${day.toDateString()}`}
                     categories={categories}
                     date={day}
-                    isSelected={selectedDate ? isSameDay(day, selectedDate) : false}
+                    isSelected={isSelected}
                     isDisabled={!isWithinInterval(day, { start: minDate, end: maxDate })}
                     isSameMonth={isSameMonth(day, dayOfCurrentMonth)}
                     onClick={handleDayClick}
