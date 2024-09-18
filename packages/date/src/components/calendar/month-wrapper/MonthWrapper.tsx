@@ -1,7 +1,12 @@
 import type { Locale } from 'date-fns';
 import type { MotionProps } from 'framer-motion';
 import React, { FC, useEffect, useMemo, useState, type ReactElement } from 'react';
-import type { Categories, HighlightedDates } from '../../../types/calendar';
+import type {
+    CalendarType,
+    Categories,
+    DateInterval,
+    HighlightedDates,
+} from '../../../types/calendar';
 import { getMonthAndYear, getNewDate } from '../../../utils/calendar';
 import Month from './month/Month';
 import { StyledMonthWrapper, StyledMotionWrapper } from './MonthWrapper.styles';
@@ -10,7 +15,7 @@ export type MonthWrapperProps = {
     locale: Locale;
     highlightedDates?: HighlightedDates[];
     onSelect: (date: Date) => void;
-    selectedDate?: Date | Date[];
+    selectedDate?: Date | Date[] | DateInterval;
     categories?: Categories[];
     currentDate: Date;
     direction?: 'left' | 'right';
@@ -20,6 +25,7 @@ export type MonthWrapperProps = {
     isDisabled?: boolean;
     maxDate: Date;
     minDate: Date;
+    type: CalendarType;
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
@@ -36,8 +42,11 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     isDisabled,
     minDate,
     maxDate,
+    type,
 }) => {
     const [content, setContent] = useState<ReactElement[]>();
+
+    const [hoveringDay, setHoveringDay] = useState<Date | null>(null);
 
     const monthHeight = useMemo(() => width / (shouldRenderTwo ? 2 : 1), [width, shouldRenderTwo]);
 
@@ -69,6 +78,9 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                             selectedDate={selectedDate}
                             minDate={minDate}
                             maxDate={maxDate}
+                            type={type}
+                            hoveringDay={hoveringDay}
+                            setHoveringDay={setHoveringDay}
                         />,
                     );
                 }
@@ -94,6 +106,9 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         selectedDate={selectedDate}
                         minDate={minDate}
                         maxDate={maxDate}
+                        type={type}
+                        hoveringDay={hoveringDay}
+                        setHoveringDay={setHoveringDay}
                     />,
                 );
                 prevState.pop();
@@ -117,6 +132,9 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         selectedDate={selectedDate}
                         minDate={minDate}
                         maxDate={maxDate}
+                        type={type}
+                        hoveringDay={hoveringDay}
+                        setHoveringDay={setHoveringDay}
                     />,
                 );
                 prevState.shift();
@@ -135,6 +153,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
         selectedDate,
         minDate,
         maxDate,
+        type,
+        hoveringDay,
     ]);
 
     useEffect(() => {
@@ -142,11 +162,11 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
             setContent((prevState) =>
                 (prevState ?? []).map((element) => ({
                     ...element,
-                    props: { ...element.props, selectedDate } as ReactElement,
+                    props: { ...element.props, selectedDate, hoveringDay } as ReactElement,
                 })),
             );
         }
-    }, [selectedDate]);
+    }, [selectedDate, hoveringDay]);
 
     const animate: MotionProps['animate'] = useMemo(() => {
         if (shouldRenderTwo) {

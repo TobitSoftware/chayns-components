@@ -26,6 +26,41 @@ export const StyledDay = styled.div<StyledDayProps>`
     align-items: center;
     justify-content: center;
     aspect-ratio: 1;
+    pointer-events: ${({ $isSameMonth, $isDisabled }) =>
+        $isSameMonth && !$isDisabled ? 'auto' : 'none'};
+
+    ${({ $isIntervalStart, $isIntervalEnd, $isWithinIntervalSelection, $showHoverEffect }) => {
+        if ($isIntervalStart && $isIntervalEnd) {
+            return css`
+                border-radius: 5px;
+                background-color: rgba(0, 0, 0, 0.5);
+            `;
+        }
+        if ($isIntervalStart) {
+            return css`
+                border-top-left-radius: 5px;
+                border-bottom-left-radius: 5px;
+                background-color: rgba(0, 0, 0, 0.5);
+            `;
+        }
+        if ($isIntervalEnd) {
+            return css`
+                border-top-right-radius: 5px;
+                border-bottom-right-radius: 5px;
+                background-color: rgba(0, 0, 0, 0.5);
+            `;
+        }
+        if ($isWithinIntervalSelection) {
+            return css`
+                background-color: rgba(0, 0, 0, 0.2);
+            `;
+        }
+        if ($showHoverEffect) {
+            return css`
+                background-color: rgba(0, 0, 0, 0.2);
+            `;
+        }
+    }}
 
     ${({ $backgroundColor, $textColor }) =>
         $backgroundColor &&

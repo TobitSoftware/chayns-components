@@ -1,6 +1,12 @@
 import type { Locale } from 'date-fns';
 import React, { FC, useState } from 'react';
-import type { Categories, EMonth, HighlightedDates } from '../../../../types/calendar';
+import type {
+    CalendarType,
+    Categories,
+    DateInterval,
+    EMonth,
+    HighlightedDates,
+} from '../../../../types/calendar';
 import { formatMonth } from '../../../../utils/calendar';
 import DayWrapper from './day-wrapper/DayWrapper';
 import { StyledMonth, StyledMonthHead, StyledMonthName } from './Month.styles';
@@ -12,11 +18,14 @@ export type MonthProps = {
     locale: Locale;
     highlightedDates?: HighlightedDates[];
     onSelect: (date: Date) => void;
-    selectedDate?: Date | Date[];
+    selectedDate?: Date | Date[] | DateInterval;
     categories?: Categories[];
     height: number;
     minDate: Date;
     maxDate: Date;
+    type: CalendarType;
+    hoveringDay: Date | null;
+    setHoveringDay: (date: Date | null) => void;
 };
 
 const Month: FC<MonthProps> = ({
@@ -30,6 +39,9 @@ const Month: FC<MonthProps> = ({
     height,
     minDate,
     maxDate,
+    type,
+    hoveringDay,
+    setHoveringDay,
 }) => {
     const [currentYear] = useState(new Date().getFullYear());
 
@@ -49,6 +61,9 @@ const Month: FC<MonthProps> = ({
                 highlightedDates={highlightedDates}
                 minDate={minDate}
                 maxDate={maxDate}
+                type={type}
+                hoveringDay={hoveringDay}
+                setHoveringDay={setHoveringDay}
             />
         </StyledMonth>
     );

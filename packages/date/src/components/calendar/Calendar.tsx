@@ -2,7 +2,7 @@ import { Icon } from '@chayns-components/core';
 import { addYears, isSameDay, isSameMonth, subYears, type Locale } from 'date-fns';
 import { de } from 'date-fns/locale';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Categories, HighlightedDates } from '../../types/calendar';
+import type { Categories, DateInterval, HighlightedDates } from '../../types/calendar';
 import { CalendarType } from '../../types/calendar';
 import { getNewDate, isDateInRange } from '../../utils/calendar';
 import {
@@ -65,7 +65,20 @@ interface MultipleSelectionProps extends BaseProps {
     selectedDate?: Date[];
 }
 
-export type CalendarProps = SingleSelectionProps | MultipleSelectionProps;
+interface IntervalSelectionProps extends BaseProps {
+    type?: CalendarType.Interval;
+    /**
+     * Function to be executed when the selected interval changes.
+     * @param date
+     */
+    onChange?: (date: DateInterval) => void;
+    /**
+     * An interval that should be preselected.
+     */
+    selectedDate?: DateInterval;
+}
+
+export type CalendarProps = SingleSelectionProps | MultipleSelectionProps | IntervalSelectionProps;
 
 const DEFAULT_MAX_DATE = addYears(new Date(), 1);
 const DEFAULT_MIN_DATE = subYears(new Date(), 1);
@@ -83,7 +96,9 @@ const Calendar: FC<CalendarProps> = ({
 }) => {
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
-    const [internalSelectedDate, setInternalSelectedDate] = useState<Date | Date[]>();
+    const [internalSelectedDate, setInternalSelectedDate] = useState<
+        Date | Date[] | DateInterval
+    >();
     const [direction, setDirection] = useState<'left' | 'right'>();
     const [width, setWidth] = useState(0);
 
@@ -93,11 +108,17 @@ const Calendar: FC<CalendarProps> = ({
         if (
             selectedDate &&
             ((type === CalendarType.Single && selectedDate instanceof Date) ||
-                (type === CalendarType.Multiple && Array.isArray(selectedDate)))
+                (type === CalendarType.Multiple && Array.isArray(selectedDate)) ||
+                (type === CalendarType.Interval &&
+                    ((selectedDate as DateInterval).start || (selectedDate as DateInterval).end)))
         ) {
             setInternalSelectedDate(selectedDate);
         } else if (type === CalendarType.Multiple) {
             setInternalSelectedDate([]);
+        } else if (type === CalendarType.Interval) {
+            setInternalSelectedDate({});
+        } else {
+            setInternalSelectedDate(undefined);
         }
     }, [type, selectedDate]);
 
@@ -164,8 +185,8 @@ const Calendar: FC<CalendarProps> = ({
     const handleSelect = useCallback(
         (date: Date) => {
             setInternalSelectedDate((prevDate) => {
-                let onChangePayload: Date | Date[];
-                let newInternalSelectedDate: Date | Date[];
+                let onChangePayload: Date | Date[] | DateInterval;
+                let newInternalSelectedDate: Date | Date[] | DateInterval;
 
                 if (type === CalendarType.Single) {
                     onChangePayload = date;
@@ -180,6 +201,25 @@ const Calendar: FC<CalendarProps> = ({
                     }
 
                     onChangePayload = newInternalSelectedDate;
+                } else if (type === CalendarType.Interval) {
+                    if ((prevDate as DateInterval).start && !(prevDate as DateInterval).end) {
+                        if (date < (prevDate as DateInterval).start) {
+                            onChangePayload = { start: date, end: undefined };
+                            newInternalSelectedDate = { start: date, end: undefined };
+                        } else {
+                            onChangePayload = {
+                                start: (prevDate as DateInterval).start,
+                                end: date,
+                            };
+                            newInternalSelectedDate = {
+                                start: (prevDate as DateInterval).start,
+                                end: date,
+                            };
+                        }
+                    } else {
+                        onChangePayload = { start: date, end: undefined };
+                        newInternalSelectedDate = { start: date, end: undefined };
+                    }
                 }
 
                 if (typeof onChange === 'function') {
@@ -235,6 +275,7 @@ const Calendar: FC<CalendarProps> = ({
                     onAnimationFinished={handleAnimationFinished}
                     minDate={minDate}
                     maxDate={maxDate}
+                    type={type}
                 />
             )}
             {ShouldShowRightArrow ? (

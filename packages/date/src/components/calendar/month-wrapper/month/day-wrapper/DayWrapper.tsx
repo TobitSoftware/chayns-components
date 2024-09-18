@@ -7,7 +7,13 @@ import {
     startOfWeek,
 } from 'date-fns';
 import React, { FC, useCallback, useMemo, type ReactElement } from 'react';
-import type { Categories, EMonth, HighlightedDates } from '../../../../../types/calendar';
+import {
+    CalendarType,
+    type Categories,
+    type DateInterval,
+    type EMonth,
+    type HighlightedDates,
+} from '../../../../../types/calendar';
 import Day from './day/Day';
 import { StyledDayWrapper } from './DayWrapper.styles';
 
@@ -16,10 +22,13 @@ export type DayWrapperProps = {
     year: string;
     highlightedDates?: HighlightedDates[];
     onSelect: (date: Date) => void;
-    selectedDate?: Date | Date[];
+    selectedDate?: Date | Date[] | DateInterval;
     categories?: Categories[];
     minDate: Date;
     maxDate: Date;
+    type: CalendarType;
+    hoveringDay: Date | null;
+    setHoveringDay: (date: Date | null) => void;
 };
 
 const DayWrapper: FC<DayWrapperProps> = ({
@@ -31,6 +40,9 @@ const DayWrapper: FC<DayWrapperProps> = ({
     categories,
     minDate,
     maxDate,
+    type,
+    hoveringDay,
+    setHoveringDay,
 }) => {
     const dayOfCurrentMonth = useMemo(() => new Date(Number(year), month - 1, 13), [month, year]);
 
@@ -62,12 +74,47 @@ const DayWrapper: FC<DayWrapperProps> = ({
         const items: ReactElement[] = [];
 
         days.forEach((day) => {
+            const isThisMonth = isSameMonth(day, dayOfCurrentMonth);
             let isSelected = false;
+            let isIntervalStart = false;
+            let isIntervalEnd = false;
+            let isWithinIntervalSelection = false;
+            let showHoverEffect = false;
 
-            if (Array.isArray(selectedDate)) {
-                isSelected = selectedDate.some((date) => isSameDay(date, day));
-            } else if (selectedDate) {
+            const { start, end } = selectedDate as DateInterval;
+
+            if (type === CalendarType.Single && selectedDate instanceof Date) {
                 isSelected = isSameDay(selectedDate, day);
+            } else if (type === CalendarType.Multiple && Array.isArray(selectedDate)) {
+                isSelected = selectedDate.some((date) => isSameDay(date, day));
+            } else if (type === CalendarType.Interval && (start || end)) {
+                if (start) {
+                    isIntervalStart = isSameDay(start, day);
+                }
+                if (end) {
+                    isIntervalEnd = isSameDay(end, day);
+                }
+                if (start && end) {
+                    isWithinIntervalSelection = isWithinInterval(day, {
+                        start,
+                        end,
+                    });
+                }
+            }
+
+            if (type === CalendarType.Interval && hoveringDay) {
+                if (!start) {
+                    showHoverEffect = isSameDay(day, hoveringDay);
+                } else if (start && !end) {
+                    if (start > day) {
+                        showHoverEffect = isSameDay(day, hoveringDay);
+                    } else {
+                        showHoverEffect = isWithinInterval(day, { start, end: hoveringDay });
+                        isIntervalEnd = isSameDay(hoveringDay, day);
+                    }
+                } else if (start && end && isSameDay(hoveringDay, day)) {
+                    showHoverEffect = !isWithinInterval(day, { start, end });
+                }
             }
 
             items.push(
@@ -76,10 +123,15 @@ const DayWrapper: FC<DayWrapperProps> = ({
                     categories={categories}
                     date={day}
                     isSelected={isSelected}
+                    isIntervalStart={isIntervalStart}
+                    isIntervalEnd={isIntervalEnd}
+                    isWithinIntervalSelection={isWithinIntervalSelection}
                     isDisabled={!isWithinInterval(day, { start: minDate, end: maxDate })}
                     isSameMonth={isSameMonth(day, dayOfCurrentMonth)}
                     onClick={handleDayClick}
                     highlightedDates={highlightedDates}
+                    setHoveringDay={setHoveringDay}
+                    showHoverEffect={showHoverEffect}
                 />,
             );
         });
@@ -94,6 +146,8 @@ const DayWrapper: FC<DayWrapperProps> = ({
         selectedDate,
         minDate,
         maxDate,
+        type,
+        hoveringDay,
     ]);
 
     return <StyledDayWrapper>{dayElements}</StyledDayWrapper>;

@@ -16,6 +16,12 @@ export type DayProps = {
     highlightedDates?: HighlightedDates[];
     categories?: Categories[];
     isDisabled: boolean;
+    isIntervalStart: boolean;
+    isIntervalEnd: boolean;
+    isWithinIntervalSelection: boolean;
+    hoveringDay: Date | null;
+    setHoveringDay: (date: Date | null) => void;
+    showHoverEffect: boolean;
 };
 
 const Day: FC<DayProps> = ({
@@ -26,11 +32,16 @@ const Day: FC<DayProps> = ({
     isSelected,
     onClick,
     isDisabled,
+    isIntervalStart,
+    isIntervalEnd,
+    isWithinIntervalSelection,
+    setHoveringDay,
+    showHoverEffect,
 }) => {
     const dayRef = useRef<HTMLDivElement>(null);
 
     const styles: HighlightedDateStyles | undefined = useMemo(() => {
-        if (!highlightedDates || !isSameMonth) {
+        if (!highlightedDates) {
             return undefined;
         }
 
@@ -59,6 +70,12 @@ const Day: FC<DayProps> = ({
             $isDisabled={isDisabled}
             $backgroundColor={styles?.backgroundColor}
             $textColor={styles?.textColor}
+            $isIntervalStart={isIntervalStart}
+            $isIntervalEnd={isIntervalEnd}
+            $isWithinIntervalSelection={isWithinIntervalSelection}
+            $showHoverEffect={showHoverEffect}
+            onMouseEnter={() => setHoveringDay(date)}
+            onMouseLeave={() => setHoveringDay(null)}
         >
             <StyledDayNumber $isSelected={isSelected}>{date.getDate()}</StyledDayNumber>
             {categoryElements && (
