@@ -10,9 +10,18 @@ type StyledDayProps = WithTheme<{
 
 export const StyledDay = styled.div<StyledDayProps>`
     position: relative;
-    cursor: ${({ $isSameMonth }) => ($isSameMonth ? 'pointer' : 'default')};
-    color: ${({ $isSameMonth, theme }: StyledDayProps) =>
-        $isSameMonth ? theme.text : `rgba(${theme['text-rgb'] ?? ''}, 0.5)`};
+    cursor: ${({ $isSameMonth, $isDisabled }) =>
+        $isSameMonth && !$isDisabled ? 'pointer' : 'default'};
+    color: ${({ theme }: StyledDayProps) => theme.text};
+    opacity: ${({ $isSameMonth, $isDisabled }) => {
+        if ($isSameMonth && !$isDisabled) {
+            return '1';
+        }
+        if ($isDisabled) {
+            return '0.2';
+        }
+        return '0.5';
+    }};
     display: flex;
     align-items: center;
     justify-content: center;

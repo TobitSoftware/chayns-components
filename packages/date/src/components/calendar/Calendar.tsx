@@ -11,8 +11,6 @@ import {
 } from './Calendar.styles';
 import MonthWrapper from './month-wrapper/MonthWrapper';
 
-const END_DATE = new Date(new Date().setFullYear(new Date().getFullYear() + 100));
-
 export type CalendarProps = {
     /**
      * An array to group dates into a category.
@@ -49,13 +47,13 @@ export type CalendarProps = {
     selectedDate?: Date;
 };
 
-const defaultMaxDate = addYears(new Date(), 1);
-const defaultMinDate = subYears(new Date(), 1);
+const DEFAULT_MAX_DATE = addYears(new Date(), 1);
+const DEFAULT_MIN_DATE = subYears(new Date(), 1);
 
 const Calendar: FC<CalendarProps> = ({
     locale = de,
-    maxDate = defaultMaxDate,
-    minDate = defaultMinDate,
+    maxDate = DEFAULT_MAX_DATE,
+    minDate = DEFAULT_MIN_DATE,
     highlightedDates,
     onSelect,
     selectedDate,
@@ -189,6 +187,8 @@ const Calendar: FC<CalendarProps> = ({
                     highlightedDates={highlightedDates}
                     categories={categories}
                     onAnimationFinished={handleAnimationFinished}
+                    minDate={minDate}
+                    maxDate={maxDate}
                 />
             )}
             {ShouldShowRightArrow ? (

@@ -1,8 +1,15 @@
-import React, { FC, type ReactElement, useCallback, useMemo } from 'react';
-import { startOfMonth, startOfWeek, addDays, isSameMonth, isSameDay } from 'date-fns';
-import { StyledDayWrapper } from './DayWrapper.styles';
-import Day from './day/Day';
+import {
+    addDays,
+    isSameDay,
+    isSameMonth,
+    isWithinInterval,
+    startOfMonth,
+    startOfWeek,
+} from 'date-fns';
+import React, { FC, useCallback, useMemo, type ReactElement } from 'react';
 import type { Categories, EMonth, HighlightedDates } from '../../../../../types/calendar';
+import Day from './day/Day';
+import { StyledDayWrapper } from './DayWrapper.styles';
 
 export type DayWrapperProps = {
     month: EMonth;
@@ -11,6 +18,8 @@ export type DayWrapperProps = {
     onSelect: (date: Date) => void;
     selectedDate?: Date;
     categories?: Categories[];
+    minDate: Date;
+    maxDate: Date;
 };
 
 const DayWrapper: FC<DayWrapperProps> = ({
@@ -20,6 +29,8 @@ const DayWrapper: FC<DayWrapperProps> = ({
     onSelect,
     selectedDate,
     categories,
+    minDate,
+    maxDate,
 }) => {
     const dayOfCurrentMonth = useMemo(() => new Date(Number(year), month - 1, 13), [month, year]);
 
@@ -57,6 +68,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
                     categories={categories}
                     date={day}
                     isSelected={selectedDate ? isSameDay(day, selectedDate) : false}
+                    isDisabled={!isWithinInterval(day, { start: minDate, end: maxDate })}
                     isSameMonth={isSameMonth(day, dayOfCurrentMonth)}
                     onClick={handleDayClick}
                     highlightedDates={highlightedDates}
@@ -65,7 +77,16 @@ const DayWrapper: FC<DayWrapperProps> = ({
         });
 
         return items;
-    }, [categories, dayOfCurrentMonth, days, handleDayClick, highlightedDates, selectedDate]);
+    }, [
+        categories,
+        dayOfCurrentMonth,
+        days,
+        handleDayClick,
+        highlightedDates,
+        selectedDate,
+        minDate,
+        maxDate,
+    ]);
 
     return <StyledDayWrapper>{dayElements}</StyledDayWrapper>;
 };

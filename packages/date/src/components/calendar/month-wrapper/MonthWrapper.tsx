@@ -18,6 +18,8 @@ export type MonthWrapperProps = {
     shouldRenderTwo: boolean;
     width: number;
     isDisabled?: boolean;
+    maxDate: Date;
+    minDate: Date;
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
@@ -32,6 +34,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     shouldRenderTwo,
     width,
     isDisabled,
+    minDate,
+    maxDate,
 }) => {
     const [content, setContent] = useState<ReactElement[]>();
     const [prevSelectedDate, setPrevSelectedDate] = useState<Date>();
@@ -70,6 +74,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                             highlightedDates={highlightedDates}
                             categories={categories}
                             selectedDate={selectedDate}
+                            minDate={minDate}
+                            maxDate={maxDate}
                         />,
                     );
                 }
@@ -93,6 +99,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         highlightedDates={highlightedDates}
                         categories={categories}
                         selectedDate={selectedDate}
+                        minDate={minDate}
+                        maxDate={maxDate}
                     />,
                 );
                 prevState.pop();
@@ -114,6 +122,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         highlightedDates={highlightedDates}
                         categories={categories}
                         selectedDate={selectedDate}
+                        minDate={minDate}
+                        maxDate={maxDate}
                     />,
                 );
                 prevState.shift();
@@ -131,6 +141,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
         onSelect,
         prevSelectedDate,
         selectedDate,
+        minDate,
+        maxDate,
     ]);
 
     useEffect(() => {

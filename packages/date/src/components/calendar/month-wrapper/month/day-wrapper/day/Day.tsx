@@ -12,9 +12,10 @@ export type DayProps = {
     date: Date;
     isSameMonth: boolean;
     isSelected: boolean;
-    onClick: (date: Date, isSameMonth: boolean) => void;
+    onClick: (date: Date, shouldFireEvent: boolean) => void;
     highlightedDates?: HighlightedDates[];
     categories?: Categories[];
+    isDisabled: boolean;
 };
 
 const Day: FC<DayProps> = ({
@@ -24,6 +25,7 @@ const Day: FC<DayProps> = ({
     isSameMonth,
     isSelected,
     onClick,
+    isDisabled,
 }) => {
     const dayRef = useRef<HTMLDivElement>(null);
 
@@ -52,8 +54,9 @@ const Day: FC<DayProps> = ({
     return (
         <StyledDay
             ref={dayRef}
-            onClick={() => onClick(date, isSameMonth)}
+            onClick={() => onClick(date, isSameMonth && !isDisabled)}
             $isSameMonth={isSameMonth}
+            $isDisabled={isDisabled}
             $backgroundColor={styles?.backgroundColor}
             $textColor={styles?.textColor}
         >

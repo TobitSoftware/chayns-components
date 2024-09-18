@@ -15,6 +15,8 @@ export type MonthProps = {
     selectedDate?: Date;
     categories?: Categories[];
     height: number;
+    minDate: Date;
+    maxDate: Date;
 };
 
 const Month: FC<MonthProps> = ({
@@ -26,6 +28,8 @@ const Month: FC<MonthProps> = ({
     onSelect,
     categories,
     height,
+    minDate,
+    maxDate,
 }) => {
     const [currentYear] = useState(new Date().getFullYear());
 
@@ -43,6 +47,8 @@ const Month: FC<MonthProps> = ({
                 year={year}
                 onSelect={onSelect}
                 highlightedDates={highlightedDates}
+                minDate={minDate}
+                maxDate={maxDate}
             />
         </StyledMonth>
     );
