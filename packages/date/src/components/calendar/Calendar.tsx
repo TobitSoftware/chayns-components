@@ -108,11 +108,14 @@ const Calendar: FC<CalendarProps> = ({
         if (
             selectedDate &&
             ((type === CalendarType.Single && selectedDate instanceof Date) ||
-                (type === CalendarType.Multiple && Array.isArray(selectedDate)) ||
-                (type === CalendarType.Interval &&
-                    ((selectedDate as DateInterval).start || (selectedDate as DateInterval).end)))
+                (type === CalendarType.Multiple && Array.isArray(selectedDate)))
         ) {
             setInternalSelectedDate(selectedDate);
+        } else if (selectedDate && (selectedDate as DateInterval).start) {
+            setInternalSelectedDate({
+                start: (selectedDate as DateInterval).start,
+                end: (selectedDate as DateInterval).end,
+            });
         } else if (type === CalendarType.Multiple) {
             setInternalSelectedDate([]);
         } else if (type === CalendarType.Interval) {
