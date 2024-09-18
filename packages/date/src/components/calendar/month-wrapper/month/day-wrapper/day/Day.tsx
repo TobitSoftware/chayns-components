@@ -70,14 +70,24 @@ const Day: FC<DayProps> = ({
             $isDisabled={isDisabled}
             $backgroundColor={styles?.backgroundColor}
             $textColor={styles?.textColor}
-            $isIntervalStart={isIntervalStart}
-            $isIntervalEnd={isIntervalEnd}
-            $isWithinIntervalSelection={isWithinIntervalSelection}
-            $showHoverEffect={showHoverEffect}
             onMouseEnter={() => setHoveringDay(date)}
             onMouseLeave={() => setHoveringDay(null)}
         >
-            <StyledDayNumber $isSelected={isSelected}>{date.getDate()}</StyledDayNumber>
+            <StyledDayNumber
+                $isSelected={
+                    isSelected ||
+                    isIntervalStart ||
+                    isIntervalEnd ||
+                    isWithinIntervalSelection ||
+                    showHoverEffect
+                }
+                $isIntervalStart={isIntervalStart}
+                $isIntervalEnd={isIntervalEnd}
+                $isWithinIntervalSelection={isWithinIntervalSelection}
+                $showHoverEffect={showHoverEffect}
+            >
+                {date.getDate()}
+            </StyledDayNumber>
             {categoryElements && (
                 <StyledDayCategoryWrapper>{categoryElements}</StyledDayCategoryWrapper>
             )}

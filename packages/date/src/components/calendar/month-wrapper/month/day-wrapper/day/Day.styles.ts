@@ -23,44 +23,12 @@ export const StyledDay = styled.div<StyledDayProps>`
         return '0.5';
     }};
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     aspect-ratio: 1;
     pointer-events: ${({ $isSameMonth, $isDisabled }) =>
         $isSameMonth && !$isDisabled ? 'auto' : 'none'};
-
-    ${({ $isIntervalStart, $isIntervalEnd, $isWithinIntervalSelection, $showHoverEffect }) => {
-        if ($isIntervalStart && $isIntervalEnd) {
-            return css`
-                border-radius: 5px;
-                background-color: rgba(0, 0, 0, 0.5);
-            `;
-        }
-        if ($isIntervalStart) {
-            return css`
-                border-top-left-radius: 5px;
-                border-bottom-left-radius: 5px;
-                background-color: rgba(0, 0, 0, 0.5);
-            `;
-        }
-        if ($isIntervalEnd) {
-            return css`
-                border-top-right-radius: 5px;
-                border-bottom-right-radius: 5px;
-                background-color: rgba(0, 0, 0, 0.5);
-            `;
-        }
-        if ($isWithinIntervalSelection) {
-            return css`
-                background-color: rgba(0, 0, 0, 0.2);
-            `;
-        }
-        if ($showHoverEffect) {
-            return css`
-                background-color: rgba(0, 0, 0, 0.2);
-            `;
-        }
-    }}
 
     ${({ $backgroundColor, $textColor }) =>
         $backgroundColor &&
@@ -83,6 +51,47 @@ export const StyledDayNumber = styled.div<StyledDayNumberProps>`
     width: 80%;
     height: 80%;
     font-size: 90%;
+
+    ${({
+        $isIntervalStart,
+        $isIntervalEnd,
+        $isWithinIntervalSelection,
+        $showHoverEffect,
+        theme,
+    }) => {
+        if ($isIntervalStart && $isIntervalEnd) {
+            return css`
+                border-radius: 5px;
+            `;
+        }
+        if ($isIntervalStart) {
+            return css`
+                border-radius: 5px 0 0 5px;
+                width: 90%;
+                align-self: end;
+            `;
+        }
+        if ($isIntervalEnd) {
+            return css`
+                border-radius: 0 5px 5px 0;
+                width: 90%;
+                align-self: start;
+            `;
+        }
+        if ($isWithinIntervalSelection) {
+            return css`
+                border-radius: 0;
+                width: 100%;
+            `;
+        }
+        if ($showHoverEffect) {
+            return css`
+                width: 100%;
+            `;
+        }
+
+        return '';
+    }}
 
     ${({ $isSelected, theme }) =>
         $isSelected &&
