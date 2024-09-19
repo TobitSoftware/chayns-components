@@ -43,6 +43,6 @@ export enum CalendarType {
 }
 
 export type DateInterval = {
-    start?: Date;
+    start: Date;
     end?: Date;
 };

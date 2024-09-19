@@ -44,7 +44,10 @@ interface BaseProps {
 }
 
 interface SingleSelectionProps extends BaseProps {
-    /* type?: CalendarType.Single; */
+    /**
+     * The type of the calendar selection.
+     */
+    type?: CalendarType.Single;
     /**
      * Function to be executed when the selected date changes.
      * @param date
@@ -57,7 +60,10 @@ interface SingleSelectionProps extends BaseProps {
 }
 
 interface MultipleSelectionProps extends BaseProps {
-    type?: CalendarType.Multiple;
+    /**
+     * The type of the calendar selection.
+     */
+    type: CalendarType.Multiple;
     /**
      * Function to be executed when the selected dates change.
      * @param date
@@ -70,7 +76,10 @@ interface MultipleSelectionProps extends BaseProps {
 }
 
 interface IntervalSelectionProps extends BaseProps {
-    type?: CalendarType.Interval;
+    /**
+     * The type of the calendar selection.
+     */
+    type: CalendarType.Interval;
     /**
      * Function to be executed when the selected interval changes.
      * @param date
@@ -82,8 +91,7 @@ interface IntervalSelectionProps extends BaseProps {
     selectedDate?: DateInterval;
 }
 
-export type CalendarProps =
-    SingleSelectionProps /* | MultipleSelectionProps | IntervalSelectionProps */;
+export type CalendarProps = SingleSelectionProps | MultipleSelectionProps | IntervalSelectionProps;
 
 const DEFAULT_MAX_DATE = addYears(new Date(), 1);
 const DEFAULT_MIN_DATE = subYears(new Date(), 1);
@@ -97,11 +105,9 @@ const Calendar: FC<CalendarProps> = ({
     selectedDate,
     categories,
     isDisabled,
-    // type = CalendarType.Single,
+    type = CalendarType.Single,
     disabledDates = [],
 }) => {
-    const type = CalendarType.Single;
-
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
     const [internalSelectedDate, setInternalSelectedDate] = useState<
@@ -123,24 +129,26 @@ const Calendar: FC<CalendarProps> = ({
             setInternalSelectedDate(undefined);
         }
 
-        // if (
-        //     selectedDate &&
-        //     ((type === CalendarType.Single && selectedDate instanceof Date) ||
-        //         (type === CalendarType.Multiple && Array.isArray(selectedDate)))
-        // ) {
-        //     setInternalSelectedDate(selectedDate);
-        // } else if (type === CalendarType.Interval && (selectedDate as DateInterval)?.start) {
-        //     setInternalSelectedDate({
-        //         start: (selectedDate as DateInterval).start,
-        //         end: (selectedDate as DateInterval).end,
-        //     });
-        // } else if (type === CalendarType.Multiple) {
-        //     setInternalSelectedDate([]);
-        // } else if (type === CalendarType.Interval) {
-        //     setInternalSelectedDate({});
-        // } else {
-        //     setInternalSelectedDate(undefined);
-        // }
+        // TODO Adjust this! invalidate if it is disabled or outside of min-max date. If selectedDate is invalid, fire warning log and dont set internalSelectedDate.
+        // TODO Normalize selectedDate to start of day
+        if (
+            selectedDate &&
+            ((type === CalendarType.Single && selectedDate instanceof Date) ||
+                (type === CalendarType.Multiple && Array.isArray(selectedDate)))
+        ) {
+            setInternalSelectedDate(selectedDate);
+        } else if (type === CalendarType.Interval && (selectedDate as DateInterval)?.start) {
+            setInternalSelectedDate({
+                start: (selectedDate as DateInterval).start,
+                end: (selectedDate as DateInterval).end,
+            });
+        } else if (type === CalendarType.Multiple) {
+            setInternalSelectedDate([]);
+        } else if (type === CalendarType.Interval) {
+            setInternalSelectedDate({});
+        } else {
+            setInternalSelectedDate(undefined);
+        }
     }, [type, selectedDate, disabledDates]);
 
     useEffect(() => {
@@ -206,13 +214,13 @@ const Calendar: FC<CalendarProps> = ({
     const handleSelect = useCallback(
         (date: Date) => {
             setInternalSelectedDate((prevDate) => {
-                let onChangePayload: Date /* | Date[] | DateInterval */;
-                let newInternalSelectedDate: Date /* | Date[] | DateInterval */;
+                let onChangePayload: Date | Date[] | DateInterval;
+                let newInternalSelectedDate: Date | Date[] | DateInterval;
 
-                /* if (type === CalendarType.Single) { */
-                onChangePayload = date;
-                newInternalSelectedDate = date;
-                /* } else if (type === CalendarType.Multiple) {
+                if (type === CalendarType.Single) {
+                    onChangePayload = date;
+                    newInternalSelectedDate = date;
+                } else if (type === CalendarType.Multiple) {
                     if ((prevDate as Date[]).some((d) => isSameDay(d, date))) {
                         newInternalSelectedDate = (prevDate as Date[]).filter(
                             (d) => !isSameDay(d, date),
@@ -241,9 +249,10 @@ const Calendar: FC<CalendarProps> = ({
                         onChangePayload = { start: date, end: undefined };
                         newInternalSelectedDate = { start: date, end: undefined };
                     }
-                } */
+                }
 
                 if (typeof onChange === 'function') {
+                    console.log('onChange', onChangePayload);
                     onChange(onChangePayload);
                 }
 

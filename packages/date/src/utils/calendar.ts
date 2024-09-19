@@ -55,3 +55,11 @@ export const getNewDate = (index: number, currentDate: Date) => {
 
 export const formatMonth = ({ month, locale }: FormatMonthOptions) =>
     format(new Date(2022, month - 1, 1), 'MMMM', { locale });
+
+export const findNextDate = (date: Date, dateArray: Date[]): Date | undefined => {
+    const futureDates = dateArray.filter((d) => d > date);
+
+    futureDates.sort((a, b) => a.getTime() - b.getTime());
+
+    return futureDates[0];
+};

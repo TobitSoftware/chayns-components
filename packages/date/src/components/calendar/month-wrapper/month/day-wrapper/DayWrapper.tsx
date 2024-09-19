@@ -1,5 +1,6 @@
 import {
     addDays,
+    isAfter,
     isSameDay,
     isSameMonth,
     isWithinInterval,
@@ -14,6 +15,7 @@ import {
     type EMonth,
     type HighlightedDates,
 } from '../../../../../types/calendar';
+import { findNextDate } from '../../../../../utils/calendar';
 import Day from './day/Day';
 import { StyledDayWrapper } from './DayWrapper.styles';
 
@@ -75,6 +77,9 @@ const DayWrapper: FC<DayWrapperProps> = ({
     const dayElements = useMemo(() => {
         const items: ReactElement[] = [];
 
+        const { start, end } = (selectedDate || {}) as DateInterval;
+        const firstDisabledDateAfterStart = findNextDate(start, disabledDates);
+
         days.forEach((day) => {
             let isSelected = false;
             let isIntervalStart = false;
@@ -82,51 +87,55 @@ const DayWrapper: FC<DayWrapperProps> = ({
             let isWithinIntervalSelection = false;
             let showHoverEffect = false;
 
-            // const { start, end } = selectedDate || ({} as DateInterval);
+            let isDisabled =
+                // Disables dates, that are not between minDate and maxDate.
+                !isWithinInterval(day, { start: minDate, end: maxDate }) ||
+                // Disables
+                disabledDates.some((disabledDate) => isSameDay(disabledDate, day));
 
             if (type === CalendarType.Single && selectedDate instanceof Date) {
                 isSelected = isSameDay(selectedDate, day);
-            } /* else if (type === CalendarType.Multiple && Array.isArray(selectedDate)) {
+            } else if (type === CalendarType.Multiple && Array.isArray(selectedDate)) {
                 isSelected = selectedDate.some((date) => isSameDay(date, day));
-            } else if (type === CalendarType.Interval && (start || end)) {
-                if (start) {
-                    isIntervalStart = isSameDay(start, day);
-                }
+            } else if (type === CalendarType.Interval && start) {
+                isIntervalStart = isSameDay(start, day);
                 if (end) {
                     isIntervalEnd = isSameDay(end, day);
-                }
-                if (start && end) {
+
                     isWithinIntervalSelection = isWithinInterval(day, {
                         start,
                         end,
                     });
+                } else if (
+                    firstDisabledDateAfterStart &&
+                    !isDisabled &&
+                    isAfter(day, firstDisabledDateAfterStart)
+                ) {
+                    // Ensures, that the interval end can't be set in a way, that the interval includes disabled dates.
+                    isDisabled = true;
                 }
-            } */
+            }
 
-            // if (type === CalendarType.Interval && hoveringDay) {
-            //     if (!start) {
-            //         showHoverEffect = isSameDay(day, hoveringDay);
-            //         isIntervalStart = showHoverEffect;
-            //     } else if (start && !end) {
-            //         if (start > day) {
-            //             showHoverEffect = isSameDay(day, hoveringDay);
-            //             isIntervalStart = showHoverEffect;
-            //         } else {
-            //             showHoverEffect = isWithinInterval(day, { start, end: hoveringDay });
-            //             isWithinIntervalSelection = showHoverEffect;
-            //             isIntervalEnd = isSameDay(hoveringDay, day);
-            //         }
-            //     } else if (start && end && isSameDay(hoveringDay, day)) {
-            //         showHoverEffect = !isWithinInterval(day, { start, end });
-            //         if (showHoverEffect) {
-            //             isIntervalStart = showHoverEffect;
-            //         }
-            //     }
-            // }
-
-            const isDisabled =
-                !isWithinInterval(day, { start: minDate, end: maxDate }) ||
-                disabledDates.some((disabledDate) => isSameDay(disabledDate, day));
+            if (type === CalendarType.Interval && hoveringDay) {
+                if (!start) {
+                    showHoverEffect = isSameDay(day, hoveringDay);
+                    isIntervalStart = showHoverEffect;
+                } else if (start && !end) {
+                    if (start > day) {
+                        showHoverEffect = isSameDay(day, hoveringDay);
+                        isIntervalStart = showHoverEffect;
+                    } else {
+                        showHoverEffect = isWithinInterval(day, { start, end: hoveringDay });
+                        isWithinIntervalSelection = showHoverEffect;
+                        isIntervalEnd = isSameDay(hoveringDay, day);
+                    }
+                } else if (start && end && isSameDay(hoveringDay, day)) {
+                    showHoverEffect = !isWithinInterval(day, { start, end });
+                    if (showHoverEffect) {
+                        isIntervalStart = showHoverEffect;
+                    }
+                }
+            }
 
             items.push(
                 <Day

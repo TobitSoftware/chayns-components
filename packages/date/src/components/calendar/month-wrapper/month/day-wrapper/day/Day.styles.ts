@@ -53,54 +53,55 @@ export const StyledDayNumber = styled.div<StyledDayNumberProps>`
     height: 80%;
     font-size: 90%;
 
-    ${(
-        {
-            // $isIntervalStart,
-            // $isIntervalEnd,
-            // $isWithinIntervalSelection,
-            // $showHoverEffect,
-        },
-    ) => {
-        // if ($isIntervalStart && $isIntervalEnd) {
-        //     return css`
-        //         border-radius: 5px;
-        //     `;
-        // }
-        // if ($isIntervalStart) {
-        //     return css`
-        //         border-radius: 5px 0 0 5px;
-        //         width: 90%;
-        //         align-self: end;
-        //     `;
-        // }
-        // if ($isIntervalEnd) {
-        //     return css`
-        //         border-radius: 0 5px 5px 0;
-        //         width: 90%;
-        //         align-self: start;
-        //     `;
-        // }
-        // if ($isWithinIntervalSelection) {
-        //     return css`
-        //         border-radius: 0;
-        //         width: 100%;
-        //     `;
-        // }
-        // if ($showHoverEffect) {
-        //     return css`
-        //         width: 100%;
-        //     `;
-        // }
-
-        return '';
-    }}
-
-    ${({ $isSelected, theme }) =>
-        $isSelected &&
+    ${({ $isSelected, $isIntervalEnd, $isIntervalStart, theme }) =>
+        !!($isSelected || $isIntervalStart || $isIntervalEnd) &&
         css`
             background-color: ${theme['404']};
             color: ${theme['409']};
         `}
+
+    ${({
+        $isIntervalStart,
+        $isIntervalEnd,
+        $isWithinIntervalSelection,
+        $showHoverEffect,
+        theme,
+    }) => {
+        if ($isIntervalStart && $isIntervalEnd) {
+            return css`
+                border-radius: 5px;
+            `;
+        }
+        if ($isIntervalStart) {
+            return css`
+                border-radius: 5px 0 0 5px;
+                width: 90%;
+                align-self: end;
+            `;
+        }
+        if ($isIntervalEnd) {
+            return css`
+                border-radius: 0 5px 5px 0;
+                width: 90%;
+                align-self: start;
+            `;
+        }
+        if ($isWithinIntervalSelection) {
+            return css`
+                border-radius: 0;
+                width: 100%;
+                background-color: ${theme['403']};
+                color: ${theme['409']};
+            `;
+        }
+        if ($showHoverEffect) {
+            return css`
+                width: 100%;
+            `;
+        }
+
+        return '';
+    }}
 `;
 
 export const StyledDayCategoryWrapper = styled.div`
