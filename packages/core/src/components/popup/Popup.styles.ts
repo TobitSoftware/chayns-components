@@ -8,11 +8,11 @@ type StyledPopupProps = WithTheme<{
 export const StyledPopup = styled.span<StyledPopupProps>`
     cursor: pointer;
     position: relative;
-    display: flex;
 
     ${({ $shouldUseChildrenWidth }) =>
         $shouldUseChildrenWidth &&
         css`
+            display: flex;
             width: fit-content;
             height: fit-content;
         `}
