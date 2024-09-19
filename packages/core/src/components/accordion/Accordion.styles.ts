@@ -56,13 +56,13 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
         if (theme.accordionLines) {
             if ($isWrapped && $shouldShowLines) {
                 return css`
-                    border-bottom-color: ${theme.headline}80;
+                    border-bottom-color: rgba(${theme['headline-rgb']}, 0.5);
                 `;
             }
 
             if (!$isOpen && $shouldShowLines) {
                 return css`
-                    border-bottom-color: ${theme.headline};
+                    border-bottom-color: rgba(${theme['headline-rgb']}, 0.5);
                 `;
             }
         }
