@@ -21,7 +21,6 @@ export type DayProps = {
     isWithinIntervalSelection: boolean;
     hoveringDay: Date | null;
     setHoveringDay: (date: Date | null) => void;
-    showHoverEffect: boolean;
 };
 
 const Day: FC<DayProps> = ({
@@ -36,7 +35,6 @@ const Day: FC<DayProps> = ({
     isIntervalEnd,
     isWithinIntervalSelection,
     setHoveringDay,
-    showHoverEffect,
 }) => {
     const dayRef = useRef<HTMLDivElement>(null);
 
@@ -78,7 +76,6 @@ const Day: FC<DayProps> = ({
                 $isIntervalStart={isIntervalStart}
                 $isIntervalEnd={isIntervalEnd}
                 $isWithinIntervalSelection={isWithinIntervalSelection}
-                $showHoverEffect={showHoverEffect}
             >
                 {date.getDate()}
             </StyledDayNumber>

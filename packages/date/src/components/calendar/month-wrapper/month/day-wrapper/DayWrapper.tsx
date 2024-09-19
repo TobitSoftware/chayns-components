@@ -118,22 +118,19 @@ const DayWrapper: FC<DayWrapperProps> = ({
 
             if (type === CalendarType.Interval && hoveringDay) {
                 if (!start) {
-                    showHoverEffect = isSameDay(day, hoveringDay);
-                    isIntervalStart = showHoverEffect;
+                    isIntervalStart = isSameDay(day, hoveringDay);
                 } else if (start && !end) {
                     if (start > day) {
-                        showHoverEffect = isSameDay(day, hoveringDay);
-                        isIntervalStart = showHoverEffect;
+                        isIntervalStart = isSameDay(day, hoveringDay);
                     } else {
-                        showHoverEffect = isWithinInterval(day, { start, end: hoveringDay });
-                        isWithinIntervalSelection = showHoverEffect;
+                        isWithinIntervalSelection = isWithinInterval(day, {
+                            start,
+                            end: hoveringDay,
+                        });
                         isIntervalEnd = isSameDay(hoveringDay, day);
                     }
                 } else if (start && end && isSameDay(hoveringDay, day)) {
-                    showHoverEffect = !isWithinInterval(day, { start, end });
-                    if (showHoverEffect) {
-                        isIntervalStart = showHoverEffect;
-                    }
+                    isIntervalStart = !isWithinInterval(day, { start, end });
                 }
             }
 
@@ -151,7 +148,6 @@ const DayWrapper: FC<DayWrapperProps> = ({
                     onClick={handleDayClick}
                     highlightedDates={highlightedDates}
                     setHoveringDay={setHoveringDay}
-                    showHoverEffect={showHoverEffect}
                 />,
             );
         });
