@@ -75,6 +75,7 @@ const Tooltip: FC<TooltipProps> = ({
                         content={content}
                         ref={tooltipRef}
                         container={container}
+                        shouldUseChildrenWidth={false}
                     >
                         <StyledTooltipChildren
                             $isOnlyText={isTextOnlyElement(children)}

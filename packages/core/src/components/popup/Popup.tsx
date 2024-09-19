@@ -43,6 +43,10 @@ export type PopupProps = {
      */
     shouldShowOnHover?: boolean;
     /**
+     * Whether the width of the children should be used.
+     */
+    shouldUseChildrenWidth?: boolean;
+    /**
      * The Y offset of the popup to the children.
      */
     yOffset?: number;
@@ -57,6 +61,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             onHide,
             children,
             shouldShowOnHover = false,
+            shouldUseChildrenWidth = true,
             yOffset = 0,
         },
         ref,
@@ -313,6 +318,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     onClick={handleChildrenClick}
                     onMouseLeave={handleMouseLeave}
                     onMouseEnter={handleMouseEnter}
+                    $shouldUseChildrenWidth={shouldUseChildrenWidth}
                 >
                     {children}
                 </StyledPopup>

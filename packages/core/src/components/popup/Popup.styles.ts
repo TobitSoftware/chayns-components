@@ -1,11 +1,21 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
-export const StyledPopup = styled.span`
+type StyledPopupProps = WithTheme<{
+    $shouldUseChildrenWidth: boolean;
+}>;
+
+export const StyledPopup = styled.span<StyledPopupProps>`
     cursor: pointer;
     position: relative;
     display: flex;
-    width: fit-content;
-    height: fit-content;
+
+    ${({ $shouldUseChildrenWidth }) =>
+        $shouldUseChildrenWidth &&
+        css`
+            width: fit-content;
+            height: fit-content;
+        `}
 `;
 
 export const StyledPopupPseudo = styled.div<{
