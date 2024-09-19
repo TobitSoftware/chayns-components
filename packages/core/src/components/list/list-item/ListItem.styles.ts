@@ -27,18 +27,14 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
             }
         `}
     
-    ${({ $isWrapped, $shouldShowSeparatorBelow, theme }: StyledListItemProps) =>
-        ($shouldShowSeparatorBelow || theme.accordionLines) && $isWrapped
-            ? css`
-                  &&:not(:last-child) {
-                      border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
-                          rgba(${theme['headline-rgb']}, 0.5);
-                  }
-              `
-            : css`
-                  border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
-                      rgba(${theme['headline-rgb']}, 0.5);
-              `}}
+    ${({ $shouldShowSeparatorBelow, theme }: StyledListItemProps) =>
+        ($shouldShowSeparatorBelow || theme.accordionLines) &&
+        css`
+            &&:not(:last-child) {
+                border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
+                    rgba(${theme['headline-rgb']}, 0.5);
+            }
+        `}}
 
     ${({ $isWrapped }) =>
         $isWrapped &&
