@@ -164,15 +164,36 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     ]);
 
     useEffect(() => {
-        if (selectedDate || hoveringDay) {
-            setContent((prevState) =>
-                (prevState ?? []).map((element) => ({
-                    ...element,
-                    props: { ...element.props, selectedDate, hoveringDay } as ReactElement,
-                })),
-            );
-        }
-    }, [selectedDate, hoveringDay]);
+        setContent((prevState) =>
+            (prevState ?? []).map((element) => ({
+                ...element,
+                props: {
+                    ...element.props,
+                    categories,
+                    highlightedDates,
+                    locale,
+                    onSelect,
+                    selectedDate,
+                    minDate,
+                    maxDate,
+                    type,
+                    hoveringDay,
+                    disabledDates,
+                } as ReactElement,
+            })),
+        );
+    }, [
+        categories,
+        disabledDates,
+        highlightedDates,
+        hoveringDay,
+        locale,
+        maxDate,
+        minDate,
+        onSelect,
+        selectedDate,
+        type,
+    ]);
 
     const animate: MotionProps['animate'] = useMemo(() => {
         if (shouldRenderTwo) {
