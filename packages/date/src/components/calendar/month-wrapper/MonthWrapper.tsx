@@ -26,6 +26,7 @@ export type MonthWrapperProps = {
     maxDate: Date;
     minDate: Date;
     type: CalendarType;
+    disabledDates: Date[];
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
@@ -43,6 +44,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     minDate,
     maxDate,
     type,
+    disabledDates,
 }) => {
     const [content, setContent] = useState<ReactElement[]>();
 
@@ -81,6 +83,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                             type={type}
                             hoveringDay={hoveringDay}
                             setHoveringDay={setHoveringDay}
+                            disabledDates={disabledDates}
                         />,
                     );
                 }
@@ -109,6 +112,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         type={type}
                         hoveringDay={hoveringDay}
                         setHoveringDay={setHoveringDay}
+                        disabledDates={disabledDates}
                     />,
                 );
                 prevState.pop();
@@ -135,6 +139,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         type={type}
                         hoveringDay={hoveringDay}
                         setHoveringDay={setHoveringDay}
+                        disabledDates={disabledDates}
                     />,
                 );
                 prevState.shift();
@@ -155,10 +160,11 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
         maxDate,
         type,
         hoveringDay,
+        disabledDates,
     ]);
 
     useEffect(() => {
-        if (selectedDate) {
+        if (selectedDate || hoveringDay) {
             setContent((prevState) =>
                 (prevState ?? []).map((element) => ({
                     ...element,

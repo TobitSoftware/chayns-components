@@ -70,8 +70,8 @@ const Day: FC<DayProps> = ({
             $isDisabled={isDisabled}
             $backgroundColor={styles?.backgroundColor}
             $textColor={styles?.textColor}
-            onMouseEnter={() => setHoveringDay(date)}
-            onMouseLeave={() => setHoveringDay(null)}
+            // onMouseEnter={() => setHoveringDay(date)}
+            // onMouseLeave={() => setHoveringDay(null)}
         >
             <StyledDayNumber
                 $isSelected={

@@ -1,6 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Calendar from '../src/components/calendar/Calendar';
-import { CalendarType } from '../src/types/calendar';
 
 const getDayOfCurrentMonth = (day: number) => {
     const today = new Date();
@@ -16,7 +15,7 @@ export default {
     title: 'Date/Calendar',
     component: Calendar,
     args: {
-        type: CalendarType.Interval,
+        // type: CalendarType.Interval,
         minDate: new Date('2024-02-01T00:00:00+00:00'),
         highlightedDates: [
             {
@@ -36,6 +35,7 @@ export default {
                 style: { textColor: 'white', backgroundColor: 'green' },
             },
         ],
+        disabledDates: [getDayOfCurrentMonth(10), getDayOfCurrentMonth(15)],
         categories: [
             {
                 dates: [getDayOfCurrentMonth(35), getDayOfCurrentMonth(13)],

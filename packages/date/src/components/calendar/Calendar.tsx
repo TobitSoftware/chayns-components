@@ -37,10 +37,14 @@ interface BaseProps {
      * The minimum date that can be selected.
      */
     minDate?: Date;
+    /**
+     * An array of dates that should be disabled.
+     */
+    disabledDates?: Date[];
 }
 
 interface SingleSelectionProps extends BaseProps {
-    type?: CalendarType.Single;
+    /* type?: CalendarType.Single; */
     /**
      * Function to be executed when the selected date changes.
      * @param date
@@ -78,7 +82,8 @@ interface IntervalSelectionProps extends BaseProps {
     selectedDate?: DateInterval;
 }
 
-export type CalendarProps = SingleSelectionProps | MultipleSelectionProps | IntervalSelectionProps;
+export type CalendarProps =
+    SingleSelectionProps /* | MultipleSelectionProps | IntervalSelectionProps */;
 
 const DEFAULT_MAX_DATE = addYears(new Date(), 1);
 const DEFAULT_MIN_DATE = subYears(new Date(), 1);
@@ -92,8 +97,11 @@ const Calendar: FC<CalendarProps> = ({
     selectedDate,
     categories,
     isDisabled,
-    type = CalendarType.Single,
+    // type = CalendarType.Single,
+    disabledDates = [],
 }) => {
+    const type = CalendarType.Single;
+
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
     const [internalSelectedDate, setInternalSelectedDate] = useState<
@@ -107,23 +115,33 @@ const Calendar: FC<CalendarProps> = ({
     useEffect(() => {
         if (
             selectedDate &&
-            ((type === CalendarType.Single && selectedDate instanceof Date) ||
-                (type === CalendarType.Multiple && Array.isArray(selectedDate)))
+            type === CalendarType.Single &&
+            !disabledDates.some((disabledDate) => isSameDay(selectedDate, disabledDate))
         ) {
             setInternalSelectedDate(selectedDate);
-        } else if (type === CalendarType.Interval && (selectedDate as DateInterval)?.start) {
-            setInternalSelectedDate({
-                start: (selectedDate as DateInterval).start,
-                end: (selectedDate as DateInterval).end,
-            });
-        } else if (type === CalendarType.Multiple) {
-            setInternalSelectedDate([]);
-        } else if (type === CalendarType.Interval) {
-            setInternalSelectedDate({});
         } else {
             setInternalSelectedDate(undefined);
         }
-    }, [type, selectedDate]);
+
+        // if (
+        //     selectedDate &&
+        //     ((type === CalendarType.Single && selectedDate instanceof Date) ||
+        //         (type === CalendarType.Multiple && Array.isArray(selectedDate)))
+        // ) {
+        //     setInternalSelectedDate(selectedDate);
+        // } else if (type === CalendarType.Interval && (selectedDate as DateInterval)?.start) {
+        //     setInternalSelectedDate({
+        //         start: (selectedDate as DateInterval).start,
+        //         end: (selectedDate as DateInterval).end,
+        //     });
+        // } else if (type === CalendarType.Multiple) {
+        //     setInternalSelectedDate([]);
+        // } else if (type === CalendarType.Interval) {
+        //     setInternalSelectedDate({});
+        // } else {
+        //     setInternalSelectedDate(undefined);
+        // }
+    }, [type, selectedDate, disabledDates]);
 
     useEffect(() => {
         if (calendarRef.current) {
@@ -279,6 +297,7 @@ const Calendar: FC<CalendarProps> = ({
                     minDate={minDate}
                     maxDate={maxDate}
                     type={type}
+                    disabledDates={disabledDates}
                 />
             )}
             {ShouldShowRightArrow ? (

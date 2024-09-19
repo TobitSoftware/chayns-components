@@ -26,6 +26,7 @@ export type MonthProps = {
     type: CalendarType;
     hoveringDay: Date | null;
     setHoveringDay: (date: Date | null) => void;
+    disabledDates: Date[];
 };
 
 const Month: FC<MonthProps> = ({
@@ -42,6 +43,7 @@ const Month: FC<MonthProps> = ({
     type,
     hoveringDay,
     setHoveringDay,
+    disabledDates,
 }) => {
     const [currentYear] = useState(new Date().getFullYear());
 
@@ -64,6 +66,7 @@ const Month: FC<MonthProps> = ({
                 type={type}
                 hoveringDay={hoveringDay}
                 setHoveringDay={setHoveringDay}
+                disabledDates={disabledDates}
             />
         </StyledMonth>
     );
