@@ -116,7 +116,13 @@ const DayWrapper: FC<DayWrapperProps> = ({
                 }
             }
 
-            if (type === CalendarType.Interval && hoveringDay) {
+            if (
+                type === CalendarType.Interval &&
+                hoveringDay &&
+                !isIntervalStart &&
+                !isIntervalEnd &&
+                !isWithinIntervalSelection
+            ) {
                 if (!start) {
                     isIntervalStart = isSameDay(day, hoveringDay);
                 } else if (start && !end) {

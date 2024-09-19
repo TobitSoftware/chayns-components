@@ -301,7 +301,6 @@ const Calendar: FC<CalendarProps> = ({
             setInternalSelectedDate((prevDate) => {
                 let onChangePayload: Date | Date[] | DateInterval;
                 let newInternalSelectedDate: Date | Date[] | DateInterval;
-                let preventOnChange = false;
 
                 if (type === CalendarType.Single) {
                     onChangePayload = date;
@@ -330,24 +329,21 @@ const Calendar: FC<CalendarProps> = ({
                     // Sets first selection as interval start.
                     if (!prevSelectedDateInterval) {
                         updateInterval(date);
-                        preventOnChange = true;
                     } else if (prevSelectedDateInterval.start && !prevSelectedDateInterval.end) {
                         // Sets second selection as interval start, if it is earlier than the previous interval start.
                         // Else sets it as interval end.
                         if (date < prevSelectedDateInterval.start) {
                             updateInterval(date);
-                            preventOnChange = true;
                         } else {
                             updateInterval(prevSelectedDateInterval.start, date);
                         }
                     } else {
                         // Resets interval if a third date is selected.
                         updateInterval(date);
-                        preventOnChange = true;
                     }
                 }
 
-                if (typeof onChange === 'function' && !preventOnChange) {
+                if (typeof onChange === 'function') {
                     console.log('onChange', onChangePayload);
                     onChange(onChangePayload);
                 }
