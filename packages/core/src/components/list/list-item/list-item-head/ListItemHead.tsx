@@ -47,6 +47,7 @@ type ListItemHeadProps = {
     onClick?: MouseEventHandler<HTMLDivElement>;
     onLongPress?: TouchEventHandler<HTMLDivElement>;
     rightElements?: IListItemRightElements;
+    shouldHideIndicator?: boolean;
     subtitle?: ReactNode;
     shouldShowRoundImage?: boolean;
     title: ReactNode;
@@ -64,6 +65,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     onClick,
     onLongPress,
     rightElements,
+    shouldHideIndicator,
     subtitle,
     shouldShowRoundImage,
     title,
@@ -165,7 +167,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             onTouchEnd={typeof onLongPress === 'function' ? handleTouchEnd : undefined}
         >
             <StyledListItemHeadLeftWrapper>
-                {isAnyItemExpandable && (
+                {isAnyItemExpandable && !shouldHideIndicator && (
                     <StyledMotionListItemHeadIndicator
                         animate={{ rotate: isOpen ? 90 : 0 }}
                         initial={false}

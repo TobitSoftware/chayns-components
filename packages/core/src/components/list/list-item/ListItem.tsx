@@ -69,6 +69,12 @@ export type ListItemProps = {
      */
     rightElements?: IListItemRightElements;
     /**
+     * If the `ListItem` is expandable, the indicator is displayed on the left
+     * side of the header. If this property is set to true, the indicator is
+     * hidden.
+     */
+    shouldHideIndicator?: boolean;
+    /**
      * Images of users should always be displayed in a round shape. Therefore,
      * this property can be set to true.
      */
@@ -102,6 +108,7 @@ const ListItem: FC<ListItemProps> = ({
     onLongPress,
     leftElements,
     rightElements,
+    shouldHideIndicator,
     subtitle,
     shouldShowRoundImage,
     shouldShowSeparatorBelow = false,
@@ -175,6 +182,7 @@ const ListItem: FC<ListItemProps> = ({
                 onClick={isClickable ? handleHeadClick : undefined}
                 onLongPress={onLongPress}
                 rightElements={rightElements}
+                shouldHideIndicator={shouldHideIndicator}
                 subtitle={subtitle}
                 shouldShowRoundImage={shouldShowRoundImage}
                 title={title}
