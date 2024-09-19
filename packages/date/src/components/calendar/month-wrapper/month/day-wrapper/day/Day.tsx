@@ -19,7 +19,7 @@ export type DayProps = {
     isIntervalStart: boolean;
     isIntervalEnd: boolean;
     isWithinIntervalSelection: boolean;
-    hoveringDay: Date | null;
+    // hoveringDay: Date | null;
     setHoveringDay: (date: Date | null) => void;
     showHoverEffect: boolean;
 };
@@ -81,10 +81,10 @@ const Day: FC<DayProps> = ({
                     isWithinIntervalSelection ||
                     showHoverEffect
                 }
-                $isIntervalStart={isIntervalStart}
-                $isIntervalEnd={isIntervalEnd}
-                $isWithinIntervalSelection={isWithinIntervalSelection}
-                $showHoverEffect={showHoverEffect}
+                // $isIntervalStart={isIntervalStart}
+                // $isIntervalEnd={isIntervalEnd}
+                // $isWithinIntervalSelection={isWithinIntervalSelection}
+                // $showHoverEffect={showHoverEffect}
             >
                 {date.getDate()}
             </StyledDayNumber>
