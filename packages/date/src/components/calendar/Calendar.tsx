@@ -206,13 +206,13 @@ const Calendar: FC<CalendarProps> = ({
     const handleSelect = useCallback(
         (date: Date) => {
             setInternalSelectedDate((prevDate) => {
-                let onChangePayload: Date | Date[] | DateInterval;
-                let newInternalSelectedDate: Date | Date[] | DateInterval;
+                let onChangePayload: Date /* | Date[] | DateInterval */;
+                let newInternalSelectedDate: Date /* | Date[] | DateInterval */;
 
-                if (type === CalendarType.Single) {
-                    onChangePayload = date;
-                    newInternalSelectedDate = date;
-                } else if (type === CalendarType.Multiple) {
+                /* if (type === CalendarType.Single) { */
+                onChangePayload = date;
+                newInternalSelectedDate = date;
+                /* } else if (type === CalendarType.Multiple) {
                     if ((prevDate as Date[]).some((d) => isSameDay(d, date))) {
                         newInternalSelectedDate = (prevDate as Date[]).filter(
                             (d) => !isSameDay(d, date),
@@ -241,7 +241,7 @@ const Calendar: FC<CalendarProps> = ({
                         onChangePayload = { start: date, end: undefined };
                         newInternalSelectedDate = { start: date, end: undefined };
                     }
-                }
+                } */
 
                 if (typeof onChange === 'function') {
                     onChange(onChangePayload);
