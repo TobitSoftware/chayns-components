@@ -11,6 +11,8 @@ export const StyledMonth = styled.div<StyledMonthProps>`
 export const StyledMonthHead = styled.div`
     display: flex;
     align-items: center;
+    justify-content: center;
+    column-gap: 10px;
 `;
 
 export const StyledMonthName = styled.div`

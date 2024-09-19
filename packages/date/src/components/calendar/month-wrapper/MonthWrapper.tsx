@@ -27,6 +27,7 @@ export type MonthWrapperProps = {
     minDate: Date;
     type: CalendarType;
     disabledDates: Date[];
+    setCurrentDate: (date: Date) => void;
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
@@ -45,6 +46,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     maxDate,
     type,
     disabledDates,
+    setCurrentDate,
 }) => {
     const [content, setContent] = useState<ReactElement[]>();
 
@@ -84,6 +86,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                             hoveringDay={hoveringDay}
                             setHoveringDay={setHoveringDay}
                             disabledDates={disabledDates}
+                            setCurrentDate={setCurrentDate}
+                            displayIndex={i}
                         />,
                     );
                 }
@@ -113,6 +117,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         hoveringDay={hoveringDay}
                         setHoveringDay={setHoveringDay}
                         disabledDates={disabledDates}
+                        setCurrentDate={setCurrentDate}
                     />,
                 );
                 prevState.pop();
@@ -140,6 +145,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         hoveringDay={hoveringDay}
                         setHoveringDay={setHoveringDay}
                         disabledDates={disabledDates}
+                        setCurrentDate={setCurrentDate}
                     />,
                 );
                 prevState.shift();
@@ -161,26 +167,37 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
         type,
         hoveringDay,
         disabledDates,
+        setCurrentDate,
     ]);
 
     useEffect(() => {
+        if (direction) return;
         setContent((prevState) =>
-            (prevState ?? []).map((element) => ({
-                ...element,
-                props: {
-                    ...element.props,
-                    categories,
-                    highlightedDates,
-                    locale,
-                    onSelect,
-                    selectedDate,
-                    minDate,
-                    maxDate,
-                    type,
-                    hoveringDay,
-                    disabledDates,
-                } as ReactElement,
-            })),
+            (prevState ?? []).map((element, index) => {
+                const date = getNewDate(index - 1, currentDate);
+
+                const { month, year } = getMonthAndYear(date);
+
+                return {
+                    ...element,
+                    props: {
+                        ...element.props,
+                        categories,
+                        highlightedDates,
+                        locale,
+                        onSelect,
+                        selectedDate,
+                        minDate,
+                        maxDate,
+                        type,
+                        hoveringDay,
+                        disabledDates,
+                        month,
+                        year,
+                        displayIndex: index - 1,
+                    } as ReactElement,
+                };
+            }),
         );
     }, [
         categories,
@@ -193,6 +210,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
         onSelect,
         selectedDate,
         type,
+        currentDate,
+        direction,
     ]);
 
     const animate: MotionProps['animate'] = useMemo(() => {

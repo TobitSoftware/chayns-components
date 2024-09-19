@@ -18,7 +18,7 @@ export interface Categories {
 
 export interface IMonth {
     month: EMonth;
-    year: string;
+    year: number;
 }
 
 export enum EMonth {

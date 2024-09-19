@@ -1,4 +1,4 @@
-import { Icon } from '@chayns-components/core';
+import { ComboBox, Icon } from '@chayns-components/core';
 import {
     addYears,
     isSameDay,
@@ -344,7 +344,6 @@ const Calendar: FC<CalendarProps> = ({
                 }
 
                 if (typeof onChange === 'function') {
-                    console.log('onChange', onChangePayload);
                     onChange(onChangePayload);
                 }
 
@@ -378,7 +377,27 @@ const Calendar: FC<CalendarProps> = ({
         <StyledCalendar ref={calendarRef} $isDisabled={isDisabled}>
             {ShouldShowLeftArrow ? (
                 <StyledCalendarIconWrapper onClick={handleLeftArrowClick}>
-                    <Icon icons={['fa fa-angle-left']} />
+                    <div // TODO Use styled-components instead of inline styles
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            flexWrap: 'nowrap',
+                            height: 'fit-content',
+                        }}
+                    >
+                        <div
+                            style={{
+                                height: 'fit-content',
+                                width: '0',
+                                overflow: 'hidden',
+                                pointerEvents: 'none',
+                                userSelect: 'none',
+                            }}
+                        >
+                            <ComboBox lists={[{ list: [] }]} />
+                        </div>
+                        <Icon icons={['fa fa-angle-left']} />
+                    </div>
                 </StyledCalendarIconWrapper>
             ) : (
                 <StyledCalendarIconWrapperPseudo />
@@ -399,11 +418,32 @@ const Calendar: FC<CalendarProps> = ({
                     maxDate={maxDate}
                     type={type}
                     disabledDates={disabledDates}
+                    setCurrentDate={setCurrentDate}
                 />
             )}
             {ShouldShowRightArrow ? (
                 <StyledCalendarIconWrapper onClick={handleRightArrowClick}>
-                    <Icon icons={['fa fa-angle-right']} />
+                    <div // TODO Use styled-components instead of inline styles
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            flexWrap: 'nowrap',
+                            height: 'fit-content',
+                        }}
+                    >
+                        <div
+                            style={{
+                                height: 'fit-content',
+                                width: '0',
+                                overflow: 'hidden',
+                                pointerEvents: 'none',
+                                userSelect: 'none',
+                            }}
+                        >
+                            <ComboBox lists={[{ list: [] }]} />
+                        </div>
+                        <Icon icons={['fa fa-angle-right']} />
+                    </div>
                 </StyledCalendarIconWrapper>
             ) : (
                 <StyledCalendarIconWrapperPseudo />

@@ -4,7 +4,7 @@ import type { EMonth, IMonth } from '../types/calendar';
 export const getMonthAndYear = (date: Date): IMonth => {
     const month = date.getMonth() + 1;
 
-    const year = String(date.getFullYear());
+    const year = date.getFullYear();
 
     return {
         month,
@@ -62,4 +62,16 @@ export const findNextDate = (date: Date, dateArray: Date[]): Date | undefined =>
     futureDates.sort((a, b) => a.getTime() - b.getTime());
 
     return futureDates[0];
+};
+
+export const getYearsBetween = (startDate: Date, endDate: Date): number[] => {
+    const startYear = startDate.getFullYear();
+    const endYear = endDate.getFullYear();
+    const years: number[] = [];
+
+    for (let year = startYear; year <= endYear; year++) {
+        years.push(year);
+    }
+
+    return years;
 };
