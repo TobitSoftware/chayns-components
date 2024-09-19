@@ -1,49 +1,55 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Calendar from '../src/components/calendar/Calendar';
 
+const getDayOfCurrentMonth = (day: number) => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+
+    const date = new Date(year, month, day);
+    date.setHours(0, 0, 0, 0);
+    return date;
+};
+
 export default {
     title: 'Date/Calendar',
     component: Calendar,
     args: {
-        startDate: new Date('2023-02-01T00:00:00+00:00'),
+        // type: CalendarType.Interval,
+        minDate: new Date('2024-02-01T00:00:00+00:00'),
         highlightedDates: [
             {
                 dates: [
-                    new Date('Sat Feb 03 2024 00:00:00 GMT+0000'),
-                    new Date('Thu Feb 01 2024 00:00:00 GMT+0000'),
-                    new Date('Thu Feb 22 2024 00:00:00 GMT+0000'),
+                    getDayOfCurrentMonth(-3),
+                    getDayOfCurrentMonth(1),
+                    getDayOfCurrentMonth(22),
                 ],
                 style: { textColor: 'white', backgroundColor: 'blue' },
             },
             {
-                dates: [new Date('Wed Feb 21 2024 00:00:00 GMT+0000')],
+                dates: [getDayOfCurrentMonth(21)],
                 style: { textColor: 'white', backgroundColor: 'red' },
             },
             {
-                dates: [new Date('Tue Feb 20 2024 00:00:00 GMT+0000')],
+                dates: [getDayOfCurrentMonth(20), getDayOfCurrentMonth(28)],
                 style: { textColor: 'white', backgroundColor: 'green' },
             },
         ],
+        disabledDates: [getDayOfCurrentMonth(10), getDayOfCurrentMonth(15)],
         categories: [
             {
-                dates: [
-                    new Date('Sun Feb 18 2024 00:00:00 GMT+0000'),
-                    new Date('Thu Feb 13 2024 00:00:00 GMT+0000'),
-                ],
-                color: 'pink',
+                dates: [getDayOfCurrentMonth(35), getDayOfCurrentMonth(13)],
+                color: 'green',
                 id: 'meeting',
             },
             {
-                dates: [
-                    new Date('Wed Feb 14 2024 00:00:00 GMT+0000'),
-                    new Date('Mon Mar 4 2024 00:00:00 GMT+0000'),
-                ],
-                color: 'yellow',
+                dates: [getDayOfCurrentMonth(3), getDayOfCurrentMonth(14)],
+                color: 'black',
                 id: 'holiday',
             },
             {
-                dates: [new Date('Wed Feb 14 2024 00:00:00 GMT+0000')],
-                color: 'grey',
+                dates: [getDayOfCurrentMonth(14)],
+                color: 'purple',
                 id: 'birthday',
             },
         ],

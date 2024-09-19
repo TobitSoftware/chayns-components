@@ -1,8 +1,9 @@
 import { Icon } from '@chayns-components/core';
-import { isSameMonth, type Locale } from 'date-fns';
+import { addYears, isSameDay, isSameMonth, subYears, type Locale } from 'date-fns';
 import { de } from 'date-fns/locale';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Categories, HighlightedDates } from '../../types/calendar';
+import type { Categories, DateInterval, HighlightedDates } from '../../types/calendar';
+import { CalendarType } from '../../types/calendar';
 import { getNewDate, isDateInRange } from '../../utils/calendar';
 import {
     StyledCalendar,
@@ -11,67 +12,136 @@ import {
 } from './Calendar.styles';
 import MonthWrapper from './month-wrapper/MonthWrapper';
 
-const END_DATE = new Date(new Date().setFullYear(new Date().getFullYear() + 100));
-
-export type CalendarProps = {
+interface BaseProps {
     /**
      * An array to group dates into a category.
      */
     categories?: Categories[];
     /**
-     * The last Month that can be displayed.
-     */
-    endDate?: Date;
-    /**
      * An array with dates and corresponding styles to highlight.
      */
     highlightedDates?: HighlightedDates[];
+    /**
+     * To disable the Calendar
+     */
+    isDisabled?: boolean;
     /**
      * The locale language to format the dates.
      */
     locale?: Locale;
     /**
-     * Function to be executed when a date is selected.
+     * The maximum date that can be selected.
+     */
+    maxDate?: Date;
+    /**
+     * The minimum date that can be selected.
+     */
+    minDate?: Date;
+    /**
+     * An array of dates that should be disabled.
+     */
+    disabledDates?: Date[];
+}
+
+interface SingleSelectionProps extends BaseProps {
+    /* type?: CalendarType.Single; */
+    /**
+     * Function to be executed when the selected date changes.
      * @param date
      */
-    onSelect?: (date: Date) => void;
+    onChange?: (date: Date) => void;
     /**
      * A date that should be preselected.
      */
     selectedDate?: Date;
+}
+
+interface MultipleSelectionProps extends BaseProps {
+    type?: CalendarType.Multiple;
     /**
-     * The first Month that can be displayed.
+     * Function to be executed when the selected dates change.
+     * @param date
      */
-    startDate: Date;
+    onChange?: (date: Date[]) => void;
     /**
-     * To disable the Calendar
+     * An array of dates that should be preselected.
      */
-    isDisabled?: boolean;
-};
+    selectedDate?: Date[];
+}
+
+interface IntervalSelectionProps extends BaseProps {
+    type?: CalendarType.Interval;
+    /**
+     * Function to be executed when the selected interval changes.
+     * @param date
+     */
+    onChange?: (date: DateInterval) => void;
+    /**
+     * An interval that should be preselected.
+     */
+    selectedDate?: DateInterval;
+}
+
+export type CalendarProps =
+    SingleSelectionProps /* | MultipleSelectionProps | IntervalSelectionProps */;
+
+const DEFAULT_MAX_DATE = addYears(new Date(), 1);
+const DEFAULT_MIN_DATE = subYears(new Date(), 1);
 
 const Calendar: FC<CalendarProps> = ({
     locale = de,
-    endDate = END_DATE,
-    startDate,
+    maxDate = DEFAULT_MAX_DATE,
+    minDate = DEFAULT_MIN_DATE,
     highlightedDates,
-    onSelect,
+    onChange,
     selectedDate,
     categories,
     isDisabled,
+    // type = CalendarType.Single,
+    disabledDates = [],
 }) => {
+    const type = CalendarType.Single;
+
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
-    const [internalSelectedDate, setInternalSelectedDate] = useState<Date>();
+    const [internalSelectedDate, setInternalSelectedDate] = useState<
+        Date | Date[] | DateInterval
+    >();
     const [direction, setDirection] = useState<'left' | 'right'>();
     const [width, setWidth] = useState(0);
 
     const calendarRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (selectedDate) {
+        if (
+            selectedDate &&
+            type === CalendarType.Single &&
+            !disabledDates.some((disabledDate) => isSameDay(selectedDate, disabledDate))
+        ) {
             setInternalSelectedDate(selectedDate);
+        } else {
+            setInternalSelectedDate(undefined);
         }
-    }, [selectedDate]);
+
+        // if (
+        //     selectedDate &&
+        //     ((type === CalendarType.Single && selectedDate instanceof Date) ||
+        //         (type === CalendarType.Multiple && Array.isArray(selectedDate)))
+        // ) {
+        //     setInternalSelectedDate(selectedDate);
+        // } else if (type === CalendarType.Interval && (selectedDate as DateInterval)?.start) {
+        //     setInternalSelectedDate({
+        //         start: (selectedDate as DateInterval).start,
+        //         end: (selectedDate as DateInterval).end,
+        //     });
+        // } else if (type === CalendarType.Multiple) {
+        //     setInternalSelectedDate([]);
+        // } else if (type === CalendarType.Interval) {
+        //     setInternalSelectedDate({});
+        // } else {
+        //     setInternalSelectedDate(undefined);
+        // }
+    }, [type, selectedDate, disabledDates]);
 
     useEffect(() => {
         if (calendarRef.current) {
@@ -102,8 +172,8 @@ const Calendar: FC<CalendarProps> = ({
     useEffect(() => {
         const date = new Date();
 
-        setCurrentDate(isDateInRange({ startDate, endDate, currentDate: date }));
-    }, [endDate, startDate]);
+        setCurrentDate(isDateInRange({ minDate, maxDate, currentDate: date }));
+    }, [maxDate, minDate]);
 
     const handleLeftArrowClick = useCallback(() => {
         setDirection('left');
@@ -115,9 +185,9 @@ const Calendar: FC<CalendarProps> = ({
 
             const newDate = getNewDate(-1, prevDate);
 
-            return isDateInRange({ startDate, endDate, currentDate: newDate });
+            return isDateInRange({ minDate, maxDate, currentDate: newDate });
         });
-    }, [endDate, startDate]);
+    }, [maxDate, minDate]);
 
     const handleRightArrowClick = useCallback(() => {
         setDirection('right');
@@ -129,19 +199,58 @@ const Calendar: FC<CalendarProps> = ({
 
             const newDate = getNewDate(1, prevDate);
 
-            return isDateInRange({ startDate, endDate, currentDate: newDate });
+            return isDateInRange({ minDate, maxDate, currentDate: newDate });
         });
-    }, [endDate, startDate]);
+    }, [maxDate, minDate]);
 
     const handleSelect = useCallback(
         (date: Date) => {
-            setInternalSelectedDate(date);
+            setInternalSelectedDate((prevDate) => {
+                let onChangePayload: Date | Date[] | DateInterval;
+                let newInternalSelectedDate: Date | Date[] | DateInterval;
 
-            if (typeof onSelect === 'function') {
-                onSelect(date);
-            }
+                if (type === CalendarType.Single) {
+                    onChangePayload = date;
+                    newInternalSelectedDate = date;
+                } else if (type === CalendarType.Multiple) {
+                    if ((prevDate as Date[]).some((d) => isSameDay(d, date))) {
+                        newInternalSelectedDate = (prevDate as Date[]).filter(
+                            (d) => !isSameDay(d, date),
+                        );
+                    } else {
+                        newInternalSelectedDate = [...prevDate, date];
+                    }
+
+                    onChangePayload = newInternalSelectedDate;
+                } else if (type === CalendarType.Interval) {
+                    if ((prevDate as DateInterval).start && !(prevDate as DateInterval).end) {
+                        if (date < (prevDate as DateInterval).start) {
+                            onChangePayload = { start: date, end: undefined };
+                            newInternalSelectedDate = { start: date, end: undefined };
+                        } else {
+                            onChangePayload = {
+                                start: (prevDate as DateInterval).start,
+                                end: date,
+                            };
+                            newInternalSelectedDate = {
+                                start: (prevDate as DateInterval).start,
+                                end: date,
+                            };
+                        }
+                    } else {
+                        onChangePayload = { start: date, end: undefined };
+                        newInternalSelectedDate = { start: date, end: undefined };
+                    }
+                }
+
+                if (typeof onChange === 'function') {
+                    onChange(onChangePayload);
+                }
+
+                return newInternalSelectedDate;
+            });
         },
-        [onSelect],
+        [type, onChange],
     );
 
     const handleAnimationFinished = () => {
@@ -153,16 +262,16 @@ const Calendar: FC<CalendarProps> = ({
             return false;
         }
 
-        return !isSameMonth(currentDate, startDate);
-    }, [currentDate, startDate]);
+        return !isSameMonth(currentDate, minDate);
+    }, [currentDate, minDate]);
 
     const ShouldShowRightArrow = useMemo(() => {
         if (!currentDate) {
             return false;
         }
 
-        return !isSameMonth(currentDate, endDate);
-    }, [currentDate, endDate]);
+        return !isSameMonth(currentDate, maxDate);
+    }, [currentDate, maxDate]);
 
     return (
         <StyledCalendar ref={calendarRef} $isDisabled={isDisabled}>
@@ -185,6 +294,10 @@ const Calendar: FC<CalendarProps> = ({
                     highlightedDates={highlightedDates}
                     categories={categories}
                     onAnimationFinished={handleAnimationFinished}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    type={type}
+                    disabledDates={disabledDates}
                 />
             )}
             {ShouldShowRightArrow ? (

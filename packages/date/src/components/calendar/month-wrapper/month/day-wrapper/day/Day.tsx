@@ -12,9 +12,16 @@ export type DayProps = {
     date: Date;
     isSameMonth: boolean;
     isSelected: boolean;
-    onClick: (date: Date, isSameMonth: boolean) => void;
+    onClick: (date: Date, shouldFireEvent: boolean) => void;
     highlightedDates?: HighlightedDates[];
     categories?: Categories[];
+    isDisabled: boolean;
+    isIntervalStart: boolean;
+    isIntervalEnd: boolean;
+    isWithinIntervalSelection: boolean;
+    hoveringDay: Date | null;
+    setHoveringDay: (date: Date | null) => void;
+    showHoverEffect: boolean;
 };
 
 const Day: FC<DayProps> = ({
@@ -24,11 +31,17 @@ const Day: FC<DayProps> = ({
     isSameMonth,
     isSelected,
     onClick,
+    isDisabled,
+    isIntervalStart,
+    isIntervalEnd,
+    isWithinIntervalSelection,
+    setHoveringDay,
+    showHoverEffect,
 }) => {
     const dayRef = useRef<HTMLDivElement>(null);
 
     const styles: HighlightedDateStyles | undefined = useMemo(() => {
-        if (!highlightedDates || !isSameMonth) {
+        if (!highlightedDates) {
             return undefined;
         }
 
@@ -52,12 +65,29 @@ const Day: FC<DayProps> = ({
     return (
         <StyledDay
             ref={dayRef}
-            onClick={() => onClick(date, isSameMonth)}
+            onClick={() => onClick(date, isSameMonth && !isDisabled)}
             $isSameMonth={isSameMonth}
+            $isDisabled={isDisabled}
             $backgroundColor={styles?.backgroundColor}
             $textColor={styles?.textColor}
+            // onMouseEnter={() => setHoveringDay(date)}
+            // onMouseLeave={() => setHoveringDay(null)}
         >
-            <StyledDayNumber $isSelected={isSelected}>{date.getDate()}</StyledDayNumber>
+            <StyledDayNumber
+                $isSelected={
+                    isSelected ||
+                    isIntervalStart ||
+                    isIntervalEnd ||
+                    isWithinIntervalSelection ||
+                    showHoverEffect
+                }
+                $isIntervalStart={isIntervalStart}
+                $isIntervalEnd={isIntervalEnd}
+                $isWithinIntervalSelection={isWithinIntervalSelection}
+                $showHoverEffect={showHoverEffect}
+            >
+                {date.getDate()}
+            </StyledDayNumber>
             {categoryElements && (
                 <StyledDayCategoryWrapper>{categoryElements}</StyledDayCategoryWrapper>
             )}

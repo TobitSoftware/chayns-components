@@ -18,21 +18,21 @@ interface FormatMonthOptions {
 }
 
 interface IsDateInRange {
-    startDate: Date;
-    endDate: Date;
+    minDate: Date;
+    maxDate: Date;
     currentDate: Date;
 }
 
-export const isDateInRange = ({ startDate, endDate, currentDate }: IsDateInRange): Date => {
+export const isDateInRange = ({ minDate, maxDate, currentDate }: IsDateInRange): Date => {
     const monthStartOfCurrentDate = startOfMonth(currentDate);
-    const monthStartOfEndDate = startOfMonth(endDate);
-    const monthStartOfStartDate = startOfMonth(startDate);
+    const monthStartOfMaxDate = startOfMonth(maxDate);
+    const monthStartOfMinDate = startOfMonth(minDate);
 
     switch (true) {
-        case isAfter(monthStartOfCurrentDate, monthStartOfEndDate):
-            return monthStartOfEndDate;
-        case isBefore(monthStartOfCurrentDate, monthStartOfStartDate):
-            return monthStartOfStartDate;
+        case isAfter(monthStartOfCurrentDate, monthStartOfMaxDate):
+            return monthStartOfMaxDate;
+        case isBefore(monthStartOfCurrentDate, monthStartOfMinDate):
+            return monthStartOfMinDate;
         default:
             return monthStartOfCurrentDate;
     }
