@@ -26,7 +26,7 @@ export const StyledSliderInput = styled(motion.input).attrs<StyledSliderInputPro
     ({ $isInterval, $value, $thumbWidth, $min, $max, theme }) => ({
         style: {
             pointerEvents: $isInterval ? 'none' : 'all',
-            width: `calc(100% - ${$thumbWidth / 2}px)`,
+            width: `calc(100% - ${$thumbWidth}px)`,
             background: !$isInterval
                 ? `linear-gradient(
             to right,
@@ -104,20 +104,15 @@ export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $po
 `;
 
 type StyledSliderThumbLabelProps = WithTheme<{
-    $left: number;
+    $position: number;
+    $width: number;
 }>;
 
-export const StyledSliderThumbLabel = styled.span.attrs<StyledSliderThumbLabelProps>(
-    ({ $left }) => ({
-        style: {
-            '--left': `${$left}px`,
-        },
-    }),
-)<StyledSliderThumbLabelProps>`
+export const StyledSliderThumbLabel = styled.span<StyledSliderThumbLabelProps>`
     pointer-events: none;
     color: #222;
 
-    min-width: 35px;
+    min-width: ${({ $width }) => $width}px;
     height: 20px;
     cursor: pointer;
     border-radius: 3px;
@@ -133,21 +128,21 @@ export const StyledSliderThumbLabel = styled.span.attrs<StyledSliderThumbLabelPr
 
     transition: top 0.2s ease 0s;
 
-    left: var(--left);
+    left: ${({ $position }) => $position}px;
+
     top: -35px;
 
     &::after {
         background-color: inherit;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         border-right: 1px solid rgba(0, 0, 0, 0.1);
-        box-shadow: 2px 2px 8px rgb(4 3 4 / 10%);
+        box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.4);
         content: '';
         height: 14px;
         position: absolute;
         width: 14px;
         z-index: -2;
-        left: var(--left);
-
+        left: ${({ $position }) => $position * -1}px;
         transform: rotate(225deg);
         bottom: -7px;
     }
