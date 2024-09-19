@@ -3,12 +3,18 @@ import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledTooltip = styled.div``;
 
-type StyledTooltipChildrenProps = WithTheme<{ $isOnlyText: boolean }>;
+type StyledTooltipChildrenProps = WithTheme<{
+    $isOnlyText: boolean;
+    $shouldUseChildrenWidth: boolean;
+}>;
 export const StyledTooltipChildren = styled.div<StyledTooltipChildrenProps>`
-    ${({ $isOnlyText, theme }: StyledTooltipChildrenProps) =>
+    ${({ $isOnlyText, theme, $shouldUseChildrenWidth }: StyledTooltipChildrenProps) =>
         $isOnlyText &&
         css`
-            width: fit-content;
+            ${$shouldUseChildrenWidth &&
+            css`
+                width: fit-content;
+            `}
 
             border-bottom-width: 1px;
             border-bottom-style: dotted;

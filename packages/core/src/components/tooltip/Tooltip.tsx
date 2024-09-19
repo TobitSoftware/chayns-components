@@ -27,9 +27,20 @@ export type TooltipProps = {
      * whether the tooltip should be shown.
      */
     isDisabled?: boolean;
+    /**
+     * Whether the width of the children should be used.
+     */
+    shouldUseChildrenWidth?: boolean;
 };
 
-const Tooltip: FC<TooltipProps> = ({ item, children, container, isDisabled, itemWidth }) => {
+const Tooltip: FC<TooltipProps> = ({
+    item,
+    children,
+    container,
+    isDisabled,
+    itemWidth,
+    shouldUseChildrenWidth = true,
+}) => {
     const tooltipRef = useRef<PopupRef>(null);
 
     const content = useMemo(() => {
@@ -52,7 +63,10 @@ const Tooltip: FC<TooltipProps> = ({ item, children, container, isDisabled, item
         () => (
             <StyledTooltip>
                 {isDisabled ? (
-                    <StyledTooltipChildren $isOnlyText={isTextOnlyElement(children)}>
+                    <StyledTooltipChildren
+                        $isOnlyText={isTextOnlyElement(children)}
+                        $shouldUseChildrenWidth={shouldUseChildrenWidth}
+                    >
                         {children}
                     </StyledTooltipChildren>
                 ) : (
@@ -62,14 +76,17 @@ const Tooltip: FC<TooltipProps> = ({ item, children, container, isDisabled, item
                         ref={tooltipRef}
                         container={container}
                     >
-                        <StyledTooltipChildren $isOnlyText={isTextOnlyElement(children)}>
+                        <StyledTooltipChildren
+                            $isOnlyText={isTextOnlyElement(children)}
+                            $shouldUseChildrenWidth={shouldUseChildrenWidth}
+                        >
                             {children}
                         </StyledTooltipChildren>
                     </Popup>
                 )}
             </StyledTooltip>
         ),
-        [isDisabled, children, content, container],
+        [isDisabled, children, shouldUseChildrenWidth, content, container],
     );
 };
 
