@@ -53,19 +53,19 @@ interface BaseProps {
     /**
      * Shows the month and year pickers, if there are multiple months/years to select from.
      */
-    showMonthYearPickers: boolean;
+    showMonthYearPickers?: boolean;
+    /**
+     * Function to be executed when the selected date, dates or date interval change.
+     * @param date
+     */
+    onChange?: (date: Date | Date[] | DateInterval) => void;
 }
 
-interface SingleSelectionProps extends BaseProps {
+interface SingleSelectionProps {
     /**
      * The type of the calendar selection.
      */
     type?: CalendarType.Single;
-    /**
-     * Function to be executed when the selected date changes.
-     * @param date
-     */
-    onChange?: (date: Date) => void;
     /**
      * A date that should be preselected.
      */
@@ -74,16 +74,11 @@ interface SingleSelectionProps extends BaseProps {
     selectedDateInterval: never;
 }
 
-interface MultipleSelectionProps extends BaseProps {
+interface MultipleSelectionProps {
     /**
      * The type of the calendar selection.
      */
     type: CalendarType.Multiple;
-    /**
-     * Function to be executed when the selected dates change.
-     * @param date
-     */
-    onChange?: (date: Date[]) => void;
     /**
      * An array of dates that should be preselected.
      */
@@ -92,16 +87,11 @@ interface MultipleSelectionProps extends BaseProps {
     selectedDateInterval: never;
 }
 
-interface IntervalSelectionProps extends BaseProps {
+interface IntervalSelectionProps {
     /**
      * The type of the calendar selection.
      */
     type: CalendarType.Interval;
-    /**
-     * Function to be executed when the selected interval changes.
-     * @param date
-     */
-    onChange?: (date: DateInterval) => void;
     /**
      * An interval that should be preselected.
      */
@@ -110,7 +100,8 @@ interface IntervalSelectionProps extends BaseProps {
     selectedDate: never;
 }
 
-export type CalendarProps = SingleSelectionProps | MultipleSelectionProps | IntervalSelectionProps;
+export type CalendarProps = BaseProps &
+    (SingleSelectionProps | MultipleSelectionProps | IntervalSelectionProps);
 
 const DEFAULT_MAX_DATE = addYears(new Date(), 1);
 const DEFAULT_MIN_DATE = subYears(new Date(), 1);
@@ -142,7 +133,7 @@ const Calendar: FC<CalendarProps> = ({
         const hasMultipleMonths = differenceInCalendarMonths(maxDate, minDate) > 0;
         const hasMultipleYears = getYearsBetween(minDate, maxDate).length > 1;
 
-        return showMonthYearPickersProp && (hasMultipleMonths || hasMultipleYears);
+        return !!(showMonthYearPickersProp && (hasMultipleMonths || hasMultipleYears));
     }, [minDate, maxDate, showMonthYearPickersProp]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
@@ -313,7 +304,7 @@ const Calendar: FC<CalendarProps> = ({
     const handleSelect = useCallback(
         (date: Date) => {
             setInternalSelectedDate((prevDate) => {
-                let onChangePayload: Date | Date[] | DateInterval;
+                let onChangePayload: Date | Date[] | DateInterval | null = null;
                 let newInternalSelectedDate: Date | Date[] | DateInterval | undefined = undefined;
 
                 if (type === CalendarType.Single) {
@@ -357,7 +348,7 @@ const Calendar: FC<CalendarProps> = ({
                     }
                 }
 
-                if (typeof onChange === 'function') {
+                if (typeof onChange === 'function' && onChangePayload) {
                     onChange(onChangePayload);
                 }
 
