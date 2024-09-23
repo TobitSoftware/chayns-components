@@ -17,7 +17,7 @@ type MonthYearPickerProps = {
     minDate: Date;
     maxDate: Date;
     setCurrentDate: (date: Date) => void;
-    displayIndex: number;
+    displayIndex?: number;
     showMonthYearPickers: boolean;
 };
 
@@ -28,7 +28,7 @@ const MonthYearPickers: FC<MonthYearPickerProps> = ({
     minDate,
     maxDate,
     setCurrentDate,
-    displayIndex,
+    displayIndex = 0,
     showMonthYearPickers,
 }) => {
     const [currentYear] = useState(new Date().getFullYear());
@@ -66,7 +66,11 @@ const MonthYearPickers: FC<MonthYearPickerProps> = ({
                         const tempSelectedDate = isDateInRange({
                             minDate,
                             maxDate,
-                            currentDate: new Date(year, selectedItem.value - 1 - displayIndex, 1),
+                            currentDate: new Date(
+                                year,
+                                (selectedItem.value as number) - 1 - displayIndex,
+                                1,
+                            ),
                         });
 
                         setCurrentDate(tempSelectedDate);

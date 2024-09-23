@@ -42,6 +42,9 @@ export const StyledDay = styled.div<StyledDayProps>`
 
 type StyledDayNumberProps = WithTheme<{
     $isSelected: boolean;
+    $isIntervalEnd: boolean;
+    $isIntervalStart: boolean;
+    $isWithinIntervalSelection: boolean;
 }>;
 
 export const StyledDayNumber = styled.div<StyledDayNumberProps>`

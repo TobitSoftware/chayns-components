@@ -28,7 +28,7 @@ export type MonthProps = {
     setHoveringDay: (date: Date | null) => void;
     disabledDates: Date[];
     setCurrentDate: (date: Date) => void;
-    displayIndex: number;
+    displayIndex?: number;
     showMonthYearPickers: boolean;
 };
 

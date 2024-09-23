@@ -19,7 +19,6 @@ export type DayProps = {
     isIntervalStart: boolean;
     isIntervalEnd: boolean;
     isWithinIntervalSelection: boolean;
-    hoveringDay: Date | null;
     setHoveringDay: (date: Date | null) => void;
 };
 

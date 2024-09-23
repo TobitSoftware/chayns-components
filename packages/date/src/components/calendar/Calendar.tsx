@@ -132,15 +132,15 @@ const Calendar: FC<CalendarProps> = ({
 }) => {
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
-    const [internalSelectedDate, setInternalSelectedDate] = useState<Date | Date[] | DateInterval>(
-        type === CalendarType.Multiple ? [] : null,
-    );
+    const [internalSelectedDate, setInternalSelectedDate] = useState<
+        Date | Date[] | DateInterval | undefined
+    >(type === CalendarType.Multiple ? [] : undefined);
     const [direction, setDirection] = useState<'left' | 'right'>();
     const [width, setWidth] = useState(0);
 
     const showMonthYearPickers = useMemo(() => {
         const hasMultipleMonths = differenceInCalendarMonths(maxDate, minDate) > 0;
-        const hasMultipleYears = getYearsBetween(minDate, maxDate) > 1;
+        const hasMultipleYears = getYearsBetween(minDate, maxDate).length > 1;
 
         return showMonthYearPickersProp && (hasMultipleMonths || hasMultipleYears);
     }, [minDate, maxDate, showMonthYearPickersProp]);
@@ -171,10 +171,10 @@ const Calendar: FC<CalendarProps> = ({
                             ? []
                             : ['\nselectedDate is outside of bounds:', { minDate, maxDate }]),
                     );
-                    setInternalSelectedDate(null);
+                    setInternalSelectedDate(undefined);
                 }
             } else {
-                setInternalSelectedDate(null);
+                setInternalSelectedDate(undefined);
             }
         } else if (type === CalendarType.Multiple) {
             if (selectedDates) {
@@ -244,7 +244,7 @@ const Calendar: FC<CalendarProps> = ({
                             : []),
                         ...(intervalIsInBounds ? [] : ['\nbounds:', { minDate, maxDate }]),
                     );
-                    setInternalSelectedDate(null);
+                    setInternalSelectedDate(undefined);
                 }
             }
         }
@@ -314,7 +314,7 @@ const Calendar: FC<CalendarProps> = ({
         (date: Date) => {
             setInternalSelectedDate((prevDate) => {
                 let onChangePayload: Date | Date[] | DateInterval;
-                let newInternalSelectedDate: Date | Date[] | DateInterval;
+                let newInternalSelectedDate: Date | Date[] | DateInterval | undefined = undefined;
 
                 if (type === CalendarType.Single) {
                     onChangePayload = date;

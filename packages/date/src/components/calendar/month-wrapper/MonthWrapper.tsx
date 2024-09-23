@@ -57,7 +57,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     const monthHeight = useMemo(() => width / (shouldRenderTwo ? 2 : 1), [width, shouldRenderTwo]);
 
     useEffect(() => {
-        setContent(null);
+        setContent(undefined);
     }, [monthHeight]);
 
     useEffect(() => {
