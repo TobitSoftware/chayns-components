@@ -143,7 +143,11 @@ const Button: FC<ButtonProps> = ({
             $hasIcon={typeof icon === 'string' && icon !== ''}
             $isSecondary={isSecondary}
             onClick={handleClick}
-            animate={{ backgroundColor, opacity: isDisabled ? 0.5 : 1 }}
+            style={{ visibility: !backgroundColor ? 'hidden' : 'visible', backgroundColor }}
+            initial={{ opacity: 0.5 }}
+            animate={{
+                opacity: isDisabled ? 0.5 : 1,
+            }}
             whileTap={isDisabled ? {} : { ...tapStyles }}
             whileHover={isDisabled ? {} : { ...hoverStyles }}
         >
