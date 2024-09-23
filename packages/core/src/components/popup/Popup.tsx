@@ -7,6 +7,7 @@ import React, {
     useCallback,
     useEffect,
     useImperativeHandle,
+    useLayoutEffect,
     useRef,
     useState,
 } from 'react';
@@ -76,7 +77,6 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const [isOpen, setIsOpen] = useState(false);
         const [portal, setPortal] = useState<ReactPortal>();
         const [menuHeight, setMenuHeight] = useState(0);
-
         const [pseudoSize, setPseudoSize] = useState<{ height: number; width: number }>();
 
         const timeout = useRef<number>();
@@ -95,6 +95,27 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
                 setPseudoSize({ height, width });
             }
+        }, []);
+
+        useLayoutEffect(() => {
+            if (popupPseudoContentRef.current) {
+                const resizeObserver = new ResizeObserver((entries) => {
+                    if (entries && entries[0]) {
+                        const observedHeight = entries[0].contentRect.height;
+                        const observedWidth = entries[0].contentRect.width;
+
+                        setPseudoSize({ height: observedHeight, width: observedWidth });
+                    }
+                });
+
+                resizeObserver.observe(popupPseudoContentRef.current);
+
+                return () => {
+                    resizeObserver.disconnect();
+                };
+            }
+
+            return () => {};
         }, []);
 
         const handleShow = useCallback(() => {
@@ -317,11 +338,9 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         return (
             <>
-                {!pseudoSize && (
-                    <StyledPopupPseudo ref={popupPseudoContentRef} $menuHeight={menuHeight}>
-                        {content}
-                    </StyledPopupPseudo>
-                )}
+                <StyledPopupPseudo ref={popupPseudoContentRef} $menuHeight={menuHeight}>
+                    {content}
+                </StyledPopupPseudo>
                 <StyledPopup
                     ref={popupRef}
                     onClick={handleChildrenClick}
