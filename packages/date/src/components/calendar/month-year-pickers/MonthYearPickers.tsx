@@ -56,6 +56,8 @@ const MonthYearPickers: FC<MonthYearPickerProps> = ({
         [minDate, maxDate],
     );
 
+    const hasMultipleYears = useMemo(() => years.length > 1, [years]);
+
     return (
         <>
             {showMonthYearPickers && hasMultipleMonths ? (
@@ -83,7 +85,7 @@ const MonthYearPickers: FC<MonthYearPickerProps> = ({
             ) : (
                 <StyledMonthName>{formatMonth({ locale, month })}</StyledMonthName>
             )}
-            {showMonthYearPickers && years.length > 1 ? (
+            {showMonthYearPickers && hasMultipleYears ? (
                 <ComboBox
                     onSelect={(selectedItem) => {
                         const tempSelectedDate = isDateInRange({

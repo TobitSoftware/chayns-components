@@ -1,6 +1,7 @@
 import { ComboBox, Icon } from '@chayns-components/core';
 import {
     addYears,
+    differenceInCalendarMonths,
     isSameDay,
     isSameMonth,
     isWithinInterval,
@@ -11,7 +12,7 @@ import { de } from 'date-fns/locale';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Categories, DateInterval, HighlightedDates } from '../../types/calendar';
 import { CalendarType } from '../../types/calendar';
-import { getNewDate, isDateInRange } from '../../utils/calendar';
+import { getNewDate, getYearsBetween, isDateInRange } from '../../utils/calendar';
 import {
     StyledCalendar,
     StyledCalendarIconWrapper,
@@ -127,7 +128,7 @@ const Calendar: FC<CalendarProps> = ({
     isDisabled,
     type = CalendarType.Single,
     disabledDates = [],
-    showMonthYearPickers,
+    showMonthYearPickers: showMonthYearPickersProp,
 }) => {
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
@@ -136,6 +137,13 @@ const Calendar: FC<CalendarProps> = ({
     );
     const [direction, setDirection] = useState<'left' | 'right'>();
     const [width, setWidth] = useState(0);
+
+    const showMonthYearPickers = useMemo(() => {
+        const hasMultipleMonths = differenceInCalendarMonths(maxDate, minDate) > 0;
+        const hasMultipleYears = getYearsBetween(minDate, maxDate) > 1;
+
+        return showMonthYearPickersProp && (hasMultipleMonths || hasMultipleYears);
+    }, [minDate, maxDate, showMonthYearPickersProp]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
 
