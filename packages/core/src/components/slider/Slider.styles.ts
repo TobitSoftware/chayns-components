@@ -79,11 +79,14 @@ type StyledSliderThumbProps = WithTheme<{
     $isBigSlider: boolean;
 }>;
 
-export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $position }) => ({
-    style: {
-        left: `${$position}px`,
-    },
-}))`
+export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(
+    ({ $position, $isBigSlider }) => ({
+        style: {
+            left: `${$position}px`,
+            height: `${$isBigSlider ? 0 : 20}px`,
+        },
+    }),
+)`
     min-width: 20px;
     height: 20px;
     cursor: pointer;
@@ -106,6 +109,7 @@ export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $po
 type StyledSliderThumbLabelProps = WithTheme<{
     $position: number;
     $width: number;
+    $isBigSlider: boolean;
 }>;
 
 export const StyledSliderThumbLabel = styled.span<StyledSliderThumbLabelProps>`
@@ -130,7 +134,7 @@ export const StyledSliderThumbLabel = styled.span<StyledSliderThumbLabelProps>`
 
     left: ${({ $position }) => $position}px;
 
-    top: -35px;
+    top: ${({ $isBigSlider }) => `-${$isBigSlider ? 45 : 35}px`};
 
     &::after {
         background-color: inherit;

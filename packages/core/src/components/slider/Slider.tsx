@@ -338,6 +338,7 @@ const Slider: FC<SliderProps> = ({
                     {shouldShowThumbLabel && (
                         <StyledSliderThumbLabel
                             $width={thumbWidth}
+                            $isBigSlider={isBigSlider}
                             $position={fromSliderThumbContentPosition}
                             ref={fromSliderThumbContentRef}
                         >
@@ -356,6 +357,7 @@ const Slider: FC<SliderProps> = ({
                         {shouldShowThumbLabel && (
                             <StyledSliderThumbLabel
                                 $width={thumbWidth}
+                                $isBigSlider={isBigSlider}
                                 $position={toSliderThumbContentPosition}
                                 ref={toSliderThumbContentRef}
                             >
@@ -392,7 +394,6 @@ const Slider: FC<SliderProps> = ({
         ),
         [
             isBigSlider,
-            thumbWidth,
             interval,
             fromValue,
             steps,
@@ -404,9 +405,11 @@ const Slider: FC<SliderProps> = ({
             handleMouseUp,
             fromSliderThumbPosition,
             shouldShowThumbLabel,
-            toSliderThumbContentPosition,
+            thumbWidth,
+            fromSliderThumbContentPosition,
             thumbLabelFormatter,
             toSliderThumbPosition,
+            toSliderThumbContentPosition,
             toValue,
             handleControlToSlider,
         ],
