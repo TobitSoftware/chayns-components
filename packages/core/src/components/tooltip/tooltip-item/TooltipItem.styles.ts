@@ -7,6 +7,8 @@ type StyledTooltipItemProps = WithTheme<{ $width?: CSSProperties['width'] }>;
 export const StyledTooltipItem = styled.div<StyledTooltipItemProps>`
     padding: 5px;
 
+    width: ${({ $width }) => ($width ? `${$width}px` : '100%')};
+
     ${({ $width }) =>
         $width &&
         css`

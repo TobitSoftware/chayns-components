@@ -23,8 +23,9 @@ export const StyledPopupPseudo = styled.div<{
 }>`
     top: ${({ $menuHeight }) => `${$menuHeight - 0}px`};
     left: 0;
+    margin: 2px;
     pointer-events: none;
-    padding: 0 20px;
     visibility: hidden;
     position: absolute;
+    border: red solid 1px;
 `;

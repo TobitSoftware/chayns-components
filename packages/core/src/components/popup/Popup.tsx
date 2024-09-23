@@ -298,6 +298,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     <AnimatePresence initial={false}>
                         {isOpen && (
                             <PopupContentWrapper
+                                width={pseudoSize?.width ?? 0}
                                 offset={offset}
                                 coordinates={coordinates}
                                 key={`tooltip_${uuid}`}
@@ -324,6 +325,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             handleMouseLeave,
             isOpen,
             offset,
+            pseudoSize?.width,
             uuid,
         ]);
 
