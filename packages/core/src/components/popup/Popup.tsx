@@ -222,7 +222,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, [pseudoSize, yOffset]);
 
         const handleChildrenClick = () => {
-            console.debug('handleChildrenClick');
+            console.debug('handleChildrenClick', shouldShowOnHover);
 
             if (!shouldShowOnHover) {
                 handleShow();
@@ -234,6 +234,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, []);
 
         const handleMouseEnter = useCallback(() => {
+            console.debug('handleMouseEnter');
+
             if (shouldShowOnHover) {
                 window.clearTimeout(timeout.current);
                 handleShow();
@@ -241,6 +243,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, [handleShow, shouldShowOnHover]);
 
         const handleMouseLeave = useCallback(() => {
+            console.debug('handleMouseLeave');
+
             if (!shouldShowOnHover) {
                 return;
             }
