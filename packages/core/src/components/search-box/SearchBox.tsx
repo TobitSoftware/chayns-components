@@ -123,7 +123,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         });
 
         const boxRef = useRef<HTMLDivElement>(null);
-        const contentRef = useRef<HTMLDivElement | null>(null);
+        const contentRef = useRef<HTMLDivElement>(null);
         const inputRef = useRef<HTMLInputElement | null>(null);
 
         const theme = useTheme();
@@ -241,7 +241,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          */
         const handleOutsideClick = useCallback(
             (event: MouseEvent) => {
-                if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
+                if (
+                    boxRef.current &&
+                    !boxRef.current.contains(event.target as Node) &&
+                    contentRef.current &&
+                    !contentRef.current.contains(event.target as Node)
+                ) {
                     handleClose();
                 }
             },
@@ -597,8 +602,18 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     e.preventDefault();
                     const children = contentRef.current?.children;
 
-                    if (children && children.length > 0) {
-                        const filteredChildren = Array.from(children).filter(
+                    if (!children) {
+                        return;
+                    }
+
+                    const childrenArray = Array.from(children);
+
+                    const newChildren = childrenArray.find((child) =>
+                        child.id.startsWith('searchbox-content__'),
+                    )?.children;
+
+                    if (newChildren && newChildren.length > 0) {
+                        const filteredChildren = Array.from(newChildren).filter(
                             (child) => (child as HTMLElement).dataset.isgroupname !== 'true',
                         );
                         setFilteredChildrenArray(filteredChildren);

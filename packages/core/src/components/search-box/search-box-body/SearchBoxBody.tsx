@@ -93,6 +93,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
         return useMemo(
             () => (
                 <StyledMotionSearchBoxBody
+                    ref={ref}
                     $width={width}
                     style={{ left: coordinates.x, top: coordinates.y }}
                     initial={{ height: 0, opacity: 0 }}
@@ -126,7 +127,6 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                         key="content"
                         id={`searchbox-content__${uuid}`}
                         $browser={browser}
-                        ref={ref}
                         tabIndex={0}
                         onScroll={handleScroll}
                     >
