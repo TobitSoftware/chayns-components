@@ -75,7 +75,10 @@ export const StyledComboBoxItemContentHeaderText = styled.div`
     gap: 4px;
 `;
 
-export const StyledComboBoxItemContentHeaderRightElement = styled.div``;
+export const StyledComboBoxItemContentHeaderRightElement = styled.div`
+    align-items: center;
+    display: flex;
+`;
 
 export const StyledComboBoxItemContentSubtext = styled.div`
     font-size: 90%;
