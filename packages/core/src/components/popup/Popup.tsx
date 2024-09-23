@@ -108,6 +108,15 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     width: childrenWidth,
                 } = popupRef.current.getBoundingClientRect();
 
+                console.debug('Popup', {
+                    pseudoHeight,
+                    pseudoWidth,
+                    childrenHeight,
+                    childrenLeft,
+                    childrenTop,
+                    childrenWidth,
+                });
+
                 if (pseudoHeight > childrenTop - 25) {
                     let isRight = false;
 
