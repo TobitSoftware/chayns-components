@@ -242,7 +242,7 @@ const Slider: FC<SliderProps> = ({
                 max: maxValue,
                 min: minValue,
                 value: fromValue,
-                thumbWidth: 35,
+                thumbWidth: 40,
                 containerWidth: fromSliderRef.current.offsetWidth,
             });
         }
@@ -256,7 +256,7 @@ const Slider: FC<SliderProps> = ({
                 max: maxValue,
                 min: minValue,
                 value: toValue,
-                thumbWidth: toSliderThumbRef.current.offsetWidth,
+                thumbWidth: 40,
                 containerWidth: toSliderRef.current.offsetWidth,
             });
         }
@@ -314,7 +314,7 @@ const Slider: FC<SliderProps> = ({
                     animate={{ height: isBigSlider ? 30 : 10 }}
                     initial={{ height: 10 }}
                     exit={{ height: 10 }}
-                    $thumbWidth={35}
+                    $thumbWidth={40}
                     ref={fromSliderRef}
                     $isInterval={!!interval}
                     type="range"
@@ -373,7 +373,7 @@ const Slider: FC<SliderProps> = ({
                         animate={{ height: isBigSlider ? 30 : 10 }}
                         initial={{ height: 10 }}
                         exit={{ height: 10 }}
-                        $thumbWidth={35}
+                        $thumbWidth={40}
                         $max={maxValue}
                         $min={minValue}
                         $value={toValue}
