@@ -53,13 +53,37 @@ export const calculateGradientOffset = ({
 
     const adjustedWidth = containerWidth - thumbWidth * 0.25;
 
-    return percentage * adjustedWidth;
+    return percentage * adjustedWidth + thumbWidth / 2;
 };
 
 interface GetThumbMaxWidthOptions {
     maxNumber: number;
     thumbLabelFormatter?: (value: number) => string;
 }
+
+interface CalculatePopupPositionOptions {
+    sliderValue: number;
+    min: number;
+    max: number;
+    popupWidth: number;
+}
+
+export const calculatePopupPosition = ({
+    sliderValue,
+    min,
+    max,
+    popupWidth,
+}: CalculatePopupPositionOptions) => {
+    // Berechnung des Prozentwerts des Sliders zwischen min und max
+    const percentage = (sliderValue - min) / (max - min);
+
+    // Berechnung des linken Versatzes bei 0% (-10px) und bei 100% (-popupWidth + 20px)
+    const leftAtMin = -10;
+    const leftAtMax = -popupWidth + 25;
+
+    // Berechnung des dynamischen Left-Werts basierend auf dem Slider-Prozentwert
+    return leftAtMin + percentage * (leftAtMax - leftAtMin);
+};
 
 export const getThumbMaxWidth = ({ maxNumber, thumbLabelFormatter }: GetThumbMaxWidthOptions) => {
     const element = document.createElement('span');

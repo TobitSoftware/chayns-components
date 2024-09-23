@@ -2,7 +2,12 @@ import { setRefreshScrollEnabled } from 'chayns-api';
 import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from 'styled-components';
 import { useElementSize } from '../../hooks/useElementSize';
-import { calculateGradientOffset, fillSlider, getThumbMaxWidth } from '../../utils/slider';
+import {
+    calculateGradientOffset,
+    calculatePopupPosition,
+    fillSlider,
+    getThumbMaxWidth,
+} from '../../utils/slider';
 import {
     StyledSlider,
     StyledSliderInput,
@@ -74,6 +79,8 @@ const Slider: FC<SliderProps> = ({
     const toSliderRef = useRef<HTMLInputElement>(null);
     const fromSliderThumbRef = useRef<HTMLDivElement>(null);
     const toSliderThumbRef = useRef<HTMLDivElement>(null);
+    const fromSliderThumbContentRef = useRef<HTMLDivElement>(null);
+    const toSliderThumbContentRef = useRef<HTMLDivElement>(null);
     const sliderWrapperRef = useRef<HTMLDivElement>(null);
 
     const sliderWrapperSize = useElementSize(sliderWrapperRef);
@@ -235,7 +242,7 @@ const Slider: FC<SliderProps> = ({
                 max: maxValue,
                 min: minValue,
                 value: fromValue,
-                thumbWidth: fromSliderThumbRef.current.offsetWidth,
+                thumbWidth: 35,
                 containerWidth: fromSliderRef.current.offsetWidth,
             });
         }
@@ -255,6 +262,28 @@ const Slider: FC<SliderProps> = ({
         }
         return 0;
     }, [toValue, minValue, maxValue, sliderWrapperSize]);
+
+    const toSliderThumbContentPosition = useMemo(
+        () =>
+            calculatePopupPosition({
+                min: minValue,
+                max: maxValue,
+                sliderValue: toValue,
+                popupWidth: thumbWidth,
+            }),
+        [maxValue, minValue, thumbWidth, toValue],
+    );
+
+    const fromSliderThumbContentPosition = useMemo(
+        () =>
+            calculatePopupPosition({
+                min: minValue,
+                max: maxValue,
+                sliderValue: fromValue,
+                popupWidth: thumbWidth,
+            }),
+        [fromValue, maxValue, minValue, thumbWidth],
+    );
 
     const handleTouchStart = useCallback(() => {
         if (shouldShowThumbLabel) {
@@ -285,7 +314,7 @@ const Slider: FC<SliderProps> = ({
                     animate={{ height: isBigSlider ? 30 : 10 }}
                     initial={{ height: 10 }}
                     exit={{ height: 10 }}
-                    $thumbWidth={thumbWidth}
+                    $thumbWidth={35}
                     ref={fromSliderRef}
                     $isInterval={!!interval}
                     type="range"
@@ -307,7 +336,12 @@ const Slider: FC<SliderProps> = ({
                     $isBigSlider={isBigSlider}
                 >
                     {shouldShowThumbLabel && (
-                        <StyledSliderThumbLabel>
+                        <StyledSliderThumbLabel
+                            $width={thumbWidth}
+                            $isBigSlider={isBigSlider}
+                            $position={fromSliderThumbContentPosition}
+                            ref={fromSliderThumbContentRef}
+                        >
                             {typeof thumbLabelFormatter === 'function'
                                 ? thumbLabelFormatter(fromValue)
                                 : fromValue}
@@ -321,7 +355,12 @@ const Slider: FC<SliderProps> = ({
                         $isBigSlider={isBigSlider}
                     >
                         {shouldShowThumbLabel && (
-                            <StyledSliderThumbLabel>
+                            <StyledSliderThumbLabel
+                                $width={thumbWidth}
+                                $isBigSlider={isBigSlider}
+                                $position={toSliderThumbContentPosition}
+                                ref={toSliderThumbContentRef}
+                            >
                                 {typeof thumbLabelFormatter === 'function'
                                     ? thumbLabelFormatter(toValue)
                                     : toValue}
@@ -334,7 +373,7 @@ const Slider: FC<SliderProps> = ({
                         animate={{ height: isBigSlider ? 30 : 10 }}
                         initial={{ height: 10 }}
                         exit={{ height: 10 }}
-                        $thumbWidth={thumbWidth}
+                        $thumbWidth={35}
                         $max={maxValue}
                         $min={minValue}
                         $value={toValue}
@@ -355,7 +394,6 @@ const Slider: FC<SliderProps> = ({
         ),
         [
             isBigSlider,
-            thumbWidth,
             interval,
             fromValue,
             steps,
@@ -367,8 +405,11 @@ const Slider: FC<SliderProps> = ({
             handleMouseUp,
             fromSliderThumbPosition,
             shouldShowThumbLabel,
+            thumbWidth,
+            fromSliderThumbContentPosition,
             thumbLabelFormatter,
             toSliderThumbPosition,
+            toSliderThumbContentPosition,
             toValue,
             handleControlToSlider,
         ],

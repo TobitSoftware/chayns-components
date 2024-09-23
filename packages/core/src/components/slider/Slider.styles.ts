@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledSlider = styled.div`
@@ -26,7 +26,7 @@ export const StyledSliderInput = styled(motion.input).attrs<StyledSliderInputPro
     ({ $isInterval, $value, $thumbWidth, $min, $max, theme }) => ({
         style: {
             pointerEvents: $isInterval ? 'none' : 'all',
-            width: `calc(100% - ${$thumbWidth / 2}px)`,
+            width: `calc(100% - ${$thumbWidth}px)`,
             background: !$isInterval
                 ? `linear-gradient(
             to right,
@@ -74,13 +74,19 @@ export const StyledSliderInput = styled(motion.input).attrs<StyledSliderInputPro
     }
 `;
 
-type StyledSliderThumbProps = WithTheme<{ $position: number; $isBigSlider: boolean }>;
+type StyledSliderThumbProps = WithTheme<{
+    $position: number;
+    $isBigSlider: boolean;
+}>;
 
-export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $position }) => ({
-    style: {
-        left: `${$position}px`,
-    },
-}))`
+export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(
+    ({ $position, $isBigSlider }) => ({
+        style: {
+            left: `${$position}px`,
+            height: `${$isBigSlider ? 0 : 20}px`,
+        },
+    }),
+)`
     min-width: 20px;
     height: 20px;
     cursor: pointer;
@@ -98,44 +104,62 @@ export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(({ $po
     top: 5px;
 
     transition: top 0.2s ease 0s;
-
-    ${({ $isBigSlider }) =>
-        $isBigSlider &&
-        css`
-            top: -30px;
-
-            &::after {
-                background-color: inherit;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-                border-right: 1px solid rgba(0, 0, 0, 0.1);
-                box-shadow: 2px 2px 8px rgb(4 3 4 / 10%);
-                content: '';
-                height: 14px;
-                position: absolute;
-                width: 14px;
-                z-index: -2;
-
-                transform: rotate(225deg);
-                bottom: -7px;
-            }
-
-            &::before {
-                background-color: inherit;
-                bottom: 0;
-                content: '';
-                left: 0;
-                position: absolute;
-                right: 0;
-                border-radius: 3px;
-                top: 0;
-                z-index: -1;
-            }
-        `}
 `;
 
-type StyledSliderThumbLabelProps = WithTheme<unknown>;
+type StyledSliderThumbLabelProps = WithTheme<{
+    $position: number;
+    $width: number;
+    $isBigSlider: boolean;
+}>;
 
 export const StyledSliderThumbLabel = styled.span<StyledSliderThumbLabelProps>`
     pointer-events: none;
     color: #222;
+
+    min-width: ${({ $width }) => $width}px;
+    height: 20px;
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    z-index: 3;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    white-space: nowrap;
+
+    transition: top 0.2s ease 0s;
+
+    left: ${({ $position }) => $position}px;
+
+    top: ${({ $isBigSlider }) => `-${$isBigSlider ? 45 : 35}px`};
+
+    &::after {
+        background-color: inherit;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.4);
+        content: '';
+        height: 14px;
+        position: absolute;
+        width: 14px;
+        z-index: -2;
+        left: ${({ $position }) => $position * -1}px;
+        transform: rotate(225deg);
+        bottom: -7px;
+    }
+
+    &::before {
+        background-color: inherit;
+        bottom: 0;
+        content: '';
+        left: 0;
+        position: absolute;
+        right: 0;
+        border-radius: 3px;
+        top: 0;
+        z-index: -1;
+    }
 `;
