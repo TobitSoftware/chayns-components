@@ -90,6 +90,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const popupRef = useRef<HTMLDivElement>(null);
 
         useEffect(() => {
+            console.debug('popupPseudoContentRef', popupPseudoContentRef.current);
+
             if (popupPseudoContentRef.current) {
                 const { height, width } = popupPseudoContentRef.current.getBoundingClientRect();
 
@@ -98,6 +100,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, []);
 
         useLayoutEffect(() => {
+            console.debug('resize', popupPseudoContentRef.current);
+
             if (popupPseudoContentRef.current) {
                 const resizeObserver = new ResizeObserver((entries) => {
                     if (entries && entries[0]) {
@@ -119,6 +123,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, []);
 
         const handleShow = useCallback(() => {
+            console.debug('handleShow', { ref: popupRef.current, pseudoSize });
+
             if (popupRef.current && pseudoSize) {
                 const { height: pseudoHeight, width: pseudoWidth } = pseudoSize;
 
@@ -216,6 +222,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, [pseudoSize, yOffset]);
 
         const handleChildrenClick = () => {
+            console.debug('handleChildrenClick');
+
             if (!shouldShowOnHover) {
                 handleShow();
             }
