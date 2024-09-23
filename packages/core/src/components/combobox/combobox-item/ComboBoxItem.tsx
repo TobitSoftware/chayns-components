@@ -16,6 +16,7 @@ export type ComboBoxItemProps = {
     icons?: IComboBoxItem['icons'];
     id: IComboBoxItem['value'];
     imageUrl: IComboBoxItem['imageUrl'];
+    isDisabled?: IComboBoxItem['isDisabled'];
     isSelected: boolean;
     onSelect: (itemToSelect: IComboBoxItem) => void;
     rightElement: IComboBoxItem['rightElement'];
@@ -31,6 +32,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
     icons,
     id,
     imageUrl,
+    isDisabled,
     isSelected,
     onSelect,
     rightElement,
@@ -42,8 +44,10 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
     value,
 }) => {
     const handleItemClick = useCallback(() => {
-        onSelect({ text, value, suffixElement, imageUrl });
-    }, [imageUrl, onSelect, suffixElement, text, value]);
+        if (!isDisabled) {
+            onSelect({ text, value, suffixElement, imageUrl });
+        }
+    }, [imageUrl, isDisabled, onSelect, suffixElement, text, value]);
 
     const isTouch = getIsTouch();
 
@@ -52,8 +56,9 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
             <StyledComboBoxItem
                 id={`combobox-item__${typeof id === 'number' ? String(id) : id}`}
                 onClick={handleItemClick}
-                $isTouch={isTouch}
+                $isDisabled={isDisabled}
                 $isSelected={isSelected}
+                $isTouch={isTouch}
             >
                 {imageUrl && (
                     <StyledComboBoxItemImage
@@ -91,6 +96,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
             icons,
             id,
             imageUrl,
+            isDisabled,
             isSelected,
             isTouch,
             rightElement,

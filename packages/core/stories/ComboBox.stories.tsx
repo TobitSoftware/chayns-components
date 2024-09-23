@@ -31,6 +31,7 @@ export default {
                         value: 5,
                     },
                     {
+                        isDisabled: true,
                         text: 'Paprika',
                         value: 6,
                     },
@@ -39,14 +40,17 @@ export default {
                         value: 7,
                     },
                     {
+                        isDisabled: true,
                         text: 'Zwiebeln',
                         value: 8,
                     },
                     {
+                        isDisabled: true,
                         text: 'Peperoni',
                         value: 9,
                     },
                     {
+                        isDisabled: true,
                         text: 'Ananas',
                         value: 10,
                     },

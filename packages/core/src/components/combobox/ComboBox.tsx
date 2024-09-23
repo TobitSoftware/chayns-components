@@ -36,6 +36,7 @@ export interface IComboBoxItems {
 export interface IComboBoxItem {
     icons?: string[];
     imageUrl?: string;
+    isDisabled?: boolean;
     rightElement?: ReactNode;
     subtext?: string;
     suffixElement?: ReactNode;
@@ -103,7 +104,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     shouldShowRoundImage,
     shouldUseFullWidth = false,
 }) => {
-    const [item, setItem] = useState<IComboBoxItem>();
+    const [internalSelectedItem, setInternalSelectedItem] = useState<IComboBoxItem>();
     const [isAnimating, setIsAnimating] = useState(false);
     const [minWidth, setMinWidth] = useState(0);
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
@@ -125,7 +126,9 @@ const ComboBox: FC<ComboBoxProps> = ({
         (event: MouseEvent) => {
             if (
                 styledComboBoxElementRef.current &&
-                !styledComboBoxElementRef.current.contains(event.target as Node)
+                !styledComboBoxElementRef.current.contains(event.target as Node) &&
+                contentRef.current &&
+                !contentRef.current.contains(event.target as Node)
             ) {
                 setIsAnimating(false);
             }
@@ -174,7 +177,7 @@ const ComboBox: FC<ComboBoxProps> = ({
      */
     const handleSetSelectedItem = useCallback(
         (itemToSelect: IComboBoxItem) => {
-            setItem(itemToSelect);
+            setInternalSelectedItem(itemToSelect);
             setIsAnimating(false);
 
             if (onSelect) {
@@ -292,7 +295,7 @@ const ComboBox: FC<ComboBoxProps> = ({
      */
     useEffect(() => {
         setIsAnimating(false);
-        setItem(selectedItem);
+        setInternalSelectedItem(selectedItem);
     }, [selectedItem]);
 
     const placeholderImageUrl = useMemo(() => {
@@ -300,24 +303,24 @@ const ComboBox: FC<ComboBoxProps> = ({
             return selectedItem.imageUrl;
         }
 
-        if (item) {
-            return item.imageUrl;
+        if (internalSelectedItem) {
+            return internalSelectedItem.imageUrl;
         }
 
         return undefined;
-    }, [item, selectedItem]);
+    }, [internalSelectedItem, selectedItem]);
 
     const placeholderIcon = useMemo(() => {
         if (selectedItem) {
             return selectedItem.icons;
         }
 
-        if (item) {
-            return item.icons;
+        if (internalSelectedItem) {
+            return internalSelectedItem.icons;
         }
 
         return undefined;
-    }, [item, selectedItem]);
+    }, [internalSelectedItem, selectedItem]);
 
     /**
      * This function resets the placeholder
@@ -327,12 +330,12 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         if (selectedItem) {
             text = selectedItem.text;
-        } else if (item) {
-            text = item.text;
+        } else if (internalSelectedItem) {
+            text = internalSelectedItem.text;
         }
 
         return text;
-    }, [item, placeholder, selectedItem]);
+    }, [internalSelectedItem, placeholder, selectedItem]);
 
     /**
      * This function opens the content of the combobox
@@ -354,33 +357,25 @@ const ComboBox: FC<ComboBoxProps> = ({
                     {groupName && lists.length > 1 && (
                         <StyledComboBoxTopic>{groupName}</StyledComboBoxTopic>
                     )}
-                    {list.map(
-                        ({
-                            imageUrl,
-                            icons,
-                            rightElement,
-                            subtext,
-                            suffixElement,
-                            text,
-                            value,
-                        }) => (
-                            <ComboBoxItem
-                                icons={icons}
-                                id={value}
-                                imageUrl={imageUrl}
-                                isSelected={selectedItem ? value === selectedItem.value : false}
-                                key={value}
-                                onSelect={handleSetSelectedItem}
-                                rightElement={rightElement}
-                                shouldShowBigImage={shouldShowBigImage}
-                                shouldShowRoundImage={shouldShowRoundImage}
-                                subtext={subtext}
-                                suffixElement={suffixElement}
-                                text={text}
-                                value={value}
-                            />
-                        ),
-                    )}
+                    {list.map((item) => (
+                        // ToDo: Cleanup this - item should be given as a prop to avoid full spreading
+                        <ComboBoxItem
+                            icons={item.icons}
+                            id={item.value}
+                            imageUrl={item.imageUrl}
+                            isDisabled={item.isDisabled}
+                            isSelected={selectedItem ? item.value === selectedItem.value : false}
+                            key={item.value}
+                            onSelect={handleSetSelectedItem}
+                            rightElement={item.rightElement}
+                            shouldShowBigImage={shouldShowBigImage}
+                            shouldShowRoundImage={shouldShowRoundImage}
+                            subtext={item.subtext}
+                            suffixElement={item.suffixElement}
+                            text={item.text}
+                            value={item.value}
+                        />
+                    ))}
                 </div>
             )),
         [handleSetSelectedItem, lists, selectedItem, shouldShowBigImage, shouldShowRoundImage],
@@ -448,7 +443,9 @@ const ComboBox: FC<ComboBoxProps> = ({
                     $isTouch={isTouch}
                     $isDisabled={isDisabled}
                 >
-                    <StyledComboBoxPlaceholder $shouldReduceOpacity={!selectedItem && !item}>
+                    <StyledComboBoxPlaceholder
+                        $shouldReduceOpacity={!selectedItem && !internalSelectedItem}
+                    >
                         {placeholderImageUrl && (
                             <StyledComboBoxPlaceholderImage
                                 src={placeholderImageUrl}
@@ -457,7 +454,9 @@ const ComboBox: FC<ComboBoxProps> = ({
                         )}
                         {placeholderIcon && <Icon icons={placeholderIcon} />}
                         {placeholderText}
-                        {item && item.suffixElement && item.suffixElement}
+                        {internalSelectedItem &&
+                            internalSelectedItem.suffixElement &&
+                            internalSelectedItem.suffixElement}
                     </StyledComboBoxPlaceholder>
                     <StyledComboBoxIconWrapper>
                         <Icon icons={['fa fa-chevron-down']} />
@@ -472,7 +471,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             isAnimating,
             isDisabled,
             isTouch,
-            item,
+            internalSelectedItem,
             minWidth,
             placeholderIcon,
             placeholderImageUrl,
