@@ -12,12 +12,11 @@ export const StyledMonthHead = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    column-gap: 10px;
+    column-gap: 7px;
 `;
 
 export const StyledMonthName = styled.div`
     font-weight: bold;
-    width: 100%;
     text-align: center;
     user-select: none;
 `;

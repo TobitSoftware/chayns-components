@@ -21,7 +21,7 @@ import { StyledDayWrapper } from './DayWrapper.styles';
 
 export type DayWrapperProps = {
     month: EMonth;
-    year: string;
+    year: number;
     highlightedDates?: HighlightedDates[];
     onSelect: (date: Date) => void;
     selectedDate?: Date | Date[] | DateInterval;
@@ -48,7 +48,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
     setHoveringDay,
     disabledDates,
 }) => {
-    const dayOfCurrentMonth = useMemo(() => new Date(Number(year), month - 1, 13), [month, year]);
+    const dayOfCurrentMonth = useMemo(() => new Date(year, month - 1, 13), [month, year]);
 
     const days = useMemo(() => {
         const dateArray: Date[] = [];

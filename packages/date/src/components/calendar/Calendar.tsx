@@ -16,6 +16,7 @@ import {
     StyledCalendar,
     StyledCalendarIconWrapper,
     StyledCalendarIconWrapperPseudo,
+    StyledPseudoMonthYearPicker,
 } from './Calendar.styles';
 import MonthWrapper from './month-wrapper/MonthWrapper';
 
@@ -48,6 +49,10 @@ interface BaseProps {
      * An array of dates that should be disabled.
      */
     disabledDates?: Date[];
+    /**
+     * Shows the month and year pickers, if there are multiple months/years to select from.
+     */
+    showMonthYearPickers: boolean;
 }
 
 interface SingleSelectionProps extends BaseProps {
@@ -122,6 +127,7 @@ const Calendar: FC<CalendarProps> = ({
     isDisabled,
     type = CalendarType.Single,
     disabledDates = [],
+    showMonthYearPickers,
 }) => {
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
@@ -385,17 +391,11 @@ const Calendar: FC<CalendarProps> = ({
                             height: 'fit-content',
                         }}
                     >
-                        <div
-                            style={{
-                                height: 'fit-content',
-                                width: '0',
-                                overflow: 'hidden',
-                                pointerEvents: 'none',
-                                userSelect: 'none',
-                            }}
-                        >
-                            <ComboBox lists={[{ list: [] }]} />
-                        </div>
+                        {showMonthYearPickers && (
+                            <StyledPseudoMonthYearPicker>
+                                <ComboBox lists={[{ list: [] }]} placeholder="" />
+                            </StyledPseudoMonthYearPicker>
+                        )}
                         <Icon icons={['fa fa-angle-left']} />
                     </div>
                 </StyledCalendarIconWrapper>
@@ -419,6 +419,7 @@ const Calendar: FC<CalendarProps> = ({
                     type={type}
                     disabledDates={disabledDates}
                     setCurrentDate={setCurrentDate}
+                    showMonthYearPickers={showMonthYearPickers}
                 />
             )}
             {ShouldShowRightArrow ? (
@@ -431,17 +432,11 @@ const Calendar: FC<CalendarProps> = ({
                             height: 'fit-content',
                         }}
                     >
-                        <div
-                            style={{
-                                height: 'fit-content',
-                                width: '0',
-                                overflow: 'hidden',
-                                pointerEvents: 'none',
-                                userSelect: 'none',
-                            }}
-                        >
-                            <ComboBox lists={[{ list: [] }]} />
-                        </div>
+                        {showMonthYearPickers && (
+                            <StyledPseudoMonthYearPicker>
+                                <ComboBox lists={[{ list: [] }]} placeholder="" />
+                            </StyledPseudoMonthYearPicker>
+                        )}
                         <Icon icons={['fa fa-angle-right']} />
                     </div>
                 </StyledCalendarIconWrapper>

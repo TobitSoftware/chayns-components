@@ -28,6 +28,7 @@ export type MonthWrapperProps = {
     type: CalendarType;
     disabledDates: Date[];
     setCurrentDate: (date: Date) => void;
+    showMonthYearPickers: boolean;
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
@@ -47,6 +48,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     type,
     disabledDates,
     setCurrentDate,
+    showMonthYearPickers,
 }) => {
     const [content, setContent] = useState<ReactElement[]>();
 
@@ -55,7 +57,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     const monthHeight = useMemo(() => width / (shouldRenderTwo ? 2 : 1), [width, shouldRenderTwo]);
 
     useEffect(() => {
-        setContent(undefined);
+        setContent(null);
     }, [monthHeight]);
 
     useEffect(() => {
@@ -88,6 +90,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                             disabledDates={disabledDates}
                             setCurrentDate={setCurrentDate}
                             displayIndex={i}
+                            showMonthYearPickers={showMonthYearPickers}
                         />,
                     );
                 }
@@ -118,6 +121,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         setHoveringDay={setHoveringDay}
                         disabledDates={disabledDates}
                         setCurrentDate={setCurrentDate}
+                        showMonthYearPickers={showMonthYearPickers}
                     />,
                 );
                 prevState.pop();
@@ -146,6 +150,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         setHoveringDay={setHoveringDay}
                         disabledDates={disabledDates}
                         setCurrentDate={setCurrentDate}
+                        showMonthYearPickers={showMonthYearPickers}
                     />,
                 );
                 prevState.shift();
@@ -168,6 +173,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
         hoveringDay,
         disabledDates,
         setCurrentDate,
+        showMonthYearPickers,
     ]);
 
     useEffect(() => {
@@ -195,6 +201,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         month,
                         year,
                         displayIndex: index - 1,
+                        showMonthYearPickers,
                     } as ReactElement,
                 };
             }),
@@ -212,6 +219,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
         type,
         currentDate,
         direction,
+        showMonthYearPickers,
     ]);
 
     const animate: MotionProps['animate'] = useMemo(() => {
