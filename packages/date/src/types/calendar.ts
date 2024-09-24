@@ -18,7 +18,7 @@ export interface Categories {
 
 export interface IMonth {
     month: EMonth;
-    year: string;
+    year: number;
 }
 
 export enum EMonth {
@@ -43,6 +43,6 @@ export enum CalendarType {
 }
 
 export type DateInterval = {
-    start?: Date;
+    start: Date;
     end?: Date;
 };

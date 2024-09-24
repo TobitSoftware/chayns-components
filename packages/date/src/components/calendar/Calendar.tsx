@@ -1,14 +1,23 @@
-import { Icon } from '@chayns-components/core';
-import { addYears, isSameDay, isSameMonth, subYears, type Locale } from 'date-fns';
+import { ComboBox, Icon } from '@chayns-components/core';
+import {
+    addYears,
+    differenceInCalendarMonths,
+    isSameDay,
+    isSameMonth,
+    isWithinInterval,
+    subYears,
+    type Locale,
+} from 'date-fns';
 import { de } from 'date-fns/locale';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Categories, DateInterval, HighlightedDates } from '../../types/calendar';
 import { CalendarType } from '../../types/calendar';
-import { getNewDate, isDateInRange } from '../../utils/calendar';
+import { getNewDate, getYearsBetween, isDateInRange } from '../../utils/calendar';
 import {
     StyledCalendar,
     StyledCalendarIconWrapper,
     StyledCalendarIconWrapperPseudo,
+    StyledPseudoMonthYearPicker,
 } from './Calendar.styles';
 import MonthWrapper from './month-wrapper/MonthWrapper';
 
@@ -41,49 +50,58 @@ interface BaseProps {
      * An array of dates that should be disabled.
      */
     disabledDates?: Date[];
-}
-
-interface SingleSelectionProps extends BaseProps {
-    /* type?: CalendarType.Single; */
     /**
-     * Function to be executed when the selected date changes.
+     * Shows the month and year pickers, if there are multiple months/years to select from.
+     */
+    showMonthYearPickers?: boolean;
+    /**
+     * Function to be executed when the selected date, dates or date interval change.
      * @param date
      */
-    onChange?: (date: Date) => void;
+    onChange?: (date: Date | Date[] | DateInterval) => void;
+}
+
+interface SingleSelectionProps {
+    /**
+     * The type of the calendar selection.
+     */
+    type?: CalendarType.Single;
     /**
      * A date that should be preselected.
      */
     selectedDate?: Date;
+    selectedDates: never;
+    selectedDateInterval: never;
 }
 
-interface MultipleSelectionProps extends BaseProps {
-    type?: CalendarType.Multiple;
+interface MultipleSelectionProps {
     /**
-     * Function to be executed when the selected dates change.
-     * @param date
+     * The type of the calendar selection.
      */
-    onChange?: (date: Date[]) => void;
+    type: CalendarType.Multiple;
     /**
      * An array of dates that should be preselected.
      */
-    selectedDate?: Date[];
+    selectedDates?: Date[];
+    selectedDate: never;
+    selectedDateInterval: never;
 }
 
-interface IntervalSelectionProps extends BaseProps {
-    type?: CalendarType.Interval;
+interface IntervalSelectionProps {
     /**
-     * Function to be executed when the selected interval changes.
-     * @param date
+     * The type of the calendar selection.
      */
-    onChange?: (date: DateInterval) => void;
+    type: CalendarType.Interval;
     /**
      * An interval that should be preselected.
      */
-    selectedDate?: DateInterval;
+    selectedDateInterval?: DateInterval;
+    selectedDates: never;
+    selectedDate: never;
 }
 
-export type CalendarProps =
-    SingleSelectionProps /* | MultipleSelectionProps | IntervalSelectionProps */;
+export type CalendarProps = BaseProps &
+    (SingleSelectionProps | MultipleSelectionProps | IntervalSelectionProps);
 
 const DEFAULT_MAX_DATE = addYears(new Date(), 1);
 const DEFAULT_MIN_DATE = subYears(new Date(), 1);
@@ -95,53 +113,133 @@ const Calendar: FC<CalendarProps> = ({
     highlightedDates,
     onChange,
     selectedDate,
+    selectedDates,
+    selectedDateInterval,
     categories,
     isDisabled,
-    // type = CalendarType.Single,
+    type = CalendarType.Single,
     disabledDates = [],
+    showMonthYearPickers: showMonthYearPickersProp,
 }) => {
-    const type = CalendarType.Single;
-
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
     const [internalSelectedDate, setInternalSelectedDate] = useState<
-        Date | Date[] | DateInterval
-    >();
+        Date | Date[] | DateInterval | undefined
+    >(type === CalendarType.Multiple ? [] : undefined);
     const [direction, setDirection] = useState<'left' | 'right'>();
     const [width, setWidth] = useState(0);
+
+    const showMonthYearPickers = useMemo(() => {
+        const hasMultipleMonths = differenceInCalendarMonths(maxDate, minDate) > 0;
+        const hasMultipleYears = getYearsBetween(minDate, maxDate).length > 1;
+
+        return !!(showMonthYearPickersProp && (hasMultipleMonths || hasMultipleYears));
+    }, [minDate, maxDate, showMonthYearPickersProp]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (
-            selectedDate &&
-            type === CalendarType.Single &&
-            !disabledDates.some((disabledDate) => isSameDay(selectedDate, disabledDate))
-        ) {
-            setInternalSelectedDate(selectedDate);
-        } else {
-            setInternalSelectedDate(undefined);
-        }
+        const bounds = {
+            start: minDate,
+            end: maxDate,
+        };
+        if (type === CalendarType.Single) {
+            if (selectedDate) {
+                const isDisabledDate = disabledDates.some((disabledDate) =>
+                    isSameDay(selectedDate, disabledDate),
+                );
+                const isDateInBounds = isWithinInterval(selectedDate, bounds);
 
-        // if (
-        //     selectedDate &&
-        //     ((type === CalendarType.Single && selectedDate instanceof Date) ||
-        //         (type === CalendarType.Multiple && Array.isArray(selectedDate)))
-        // ) {
-        //     setInternalSelectedDate(selectedDate);
-        // } else if (type === CalendarType.Interval && (selectedDate as DateInterval)?.start) {
-        //     setInternalSelectedDate({
-        //         start: (selectedDate as DateInterval).start,
-        //         end: (selectedDate as DateInterval).end,
-        //     });
-        // } else if (type === CalendarType.Multiple) {
-        //     setInternalSelectedDate([]);
-        // } else if (type === CalendarType.Interval) {
-        //     setInternalSelectedDate({});
-        // } else {
-        //     setInternalSelectedDate(undefined);
-        // }
-    }, [type, selectedDate, disabledDates]);
+                if (!isDisabledDate && isDateInBounds) {
+                    setInternalSelectedDate(selectedDate);
+                } else {
+                    console.warn(
+                        '[@chayns-components/date] Warning: Failed to set selectedDate, because it is disabled or out of bounds.',
+                        '\nselectedDate:',
+                        selectedDate,
+                        ...(isDisabledDate ? ['\nselectedDate is disabled'] : []),
+                        ...(isDateInBounds
+                            ? []
+                            : ['\nselectedDate is outside of bounds:', { minDate, maxDate }]),
+                    );
+                    setInternalSelectedDate(undefined);
+                }
+            } else {
+                setInternalSelectedDate(undefined);
+            }
+        } else if (type === CalendarType.Multiple) {
+            if (selectedDates) {
+                const disabledSelectedDates: Date[] = [];
+                const datesOutsideOfBounds: Date[] = [];
+
+                const filteredDates = selectedDates.filter((date) => {
+                    if (disabledDates.some((disabledDate) => isSameDay(date, disabledDate))) {
+                        disabledSelectedDates.push(date);
+                        return false;
+                    }
+
+                    if (!isWithinInterval(date, bounds)) {
+                        datesOutsideOfBounds.push(date);
+                        return false;
+                    }
+
+                    return true;
+                });
+
+                if (disabledSelectedDates.length > 0 || datesOutsideOfBounds.length > 0) {
+                    console.warn(
+                        '[@chayns-components/date] Warning: Failed to set all selectedDates, because some are disabled or out of bounds.',
+                        ...(disabledSelectedDates.length > 0
+                            ? ['\nselectedDates that are disabled:', disabledSelectedDates]
+                            : []),
+                        ...(datesOutsideOfBounds.length > 0
+                            ? [
+                                  '\nselectedDates that are outside of bounds:',
+                                  datesOutsideOfBounds,
+                                  'bounds:',
+                                  { minDate, maxDate },
+                              ]
+                            : []),
+                    );
+                }
+
+                setInternalSelectedDate(filteredDates);
+            } else {
+                setInternalSelectedDate([]);
+            }
+        } else if (type === CalendarType.Interval) {
+            if (selectedDateInterval) {
+                const intervalIncludesDisabledDate =
+                    selectedDateInterval.end &&
+                    disabledDates.some((disabledDate) =>
+                        isWithinInterval(disabledDate, {
+                            start: selectedDateInterval.start,
+                            end: selectedDateInterval.end as Date,
+                        }),
+                    );
+
+                const intervalIsInBounds =
+                    isWithinInterval(selectedDateInterval.start, bounds) &&
+                    (!selectedDateInterval.end ||
+                        isWithinInterval(selectedDateInterval.end, bounds));
+
+                if (!intervalIncludesDisabledDate && intervalIsInBounds) {
+                    setInternalSelectedDate(selectedDateInterval);
+                } else {
+                    console.warn(
+                        '[@chayns-components/date] Warning: Failed to set selectedDateInterval, because it includes disabled dates or dates that are out of bounds.',
+                        '\nselectedDateInterval:',
+                        selectedDateInterval,
+                        ...(intervalIncludesDisabledDate
+                            ? ['\ndisabled dates:', disabledDates]
+                            : []),
+                        ...(intervalIsInBounds ? [] : ['\nbounds:', { minDate, maxDate }]),
+                    );
+                    setInternalSelectedDate(undefined);
+                }
+            }
+        }
+    }, [type, selectedDate, selectedDates, selectedDateInterval, disabledDates, minDate, maxDate]);
 
     useEffect(() => {
         if (calendarRef.current) {
@@ -206,44 +304,51 @@ const Calendar: FC<CalendarProps> = ({
     const handleSelect = useCallback(
         (date: Date) => {
             setInternalSelectedDate((prevDate) => {
-                let onChangePayload: Date /* | Date[] | DateInterval */;
-                let newInternalSelectedDate: Date /* | Date[] | DateInterval */;
+                let onChangePayload: Date | Date[] | DateInterval | null = null;
+                let newInternalSelectedDate: Date | Date[] | DateInterval | undefined = undefined;
 
-                /* if (type === CalendarType.Single) { */
-                onChangePayload = date;
-                newInternalSelectedDate = date;
-                /* } else if (type === CalendarType.Multiple) {
-                    if ((prevDate as Date[]).some((d) => isSameDay(d, date))) {
-                        newInternalSelectedDate = (prevDate as Date[]).filter(
+                if (type === CalendarType.Single) {
+                    onChangePayload = date;
+                    newInternalSelectedDate = date;
+                } else if (type === CalendarType.Multiple) {
+                    const prevSelectedDates = prevDate as Date[];
+                    // Selects or unselects date , depending on if it is already selected.
+                    if (prevSelectedDates.some((d) => isSameDay(d, date))) {
+                        newInternalSelectedDate = prevSelectedDates.filter(
                             (d) => !isSameDay(d, date),
                         );
                     } else {
-                        newInternalSelectedDate = [...prevDate, date];
+                        newInternalSelectedDate = [...prevSelectedDates, date];
                     }
 
                     onChangePayload = newInternalSelectedDate;
                 } else if (type === CalendarType.Interval) {
-                    if ((prevDate as DateInterval).start && !(prevDate as DateInterval).end) {
-                        if (date < (prevDate as DateInterval).start) {
-                            onChangePayload = { start: date, end: undefined };
-                            newInternalSelectedDate = { start: date, end: undefined };
+                    const prevSelectedDateInterval = prevDate as DateInterval;
+
+                    const updateInterval = (start: Date, end?: Date): void => {
+                        const newInterval = { start, end };
+                        onChangePayload = newInterval;
+                        newInternalSelectedDate = newInterval;
+                    };
+
+                    // Sets first selection as interval start.
+                    if (!prevSelectedDateInterval) {
+                        updateInterval(date);
+                    } else if (prevSelectedDateInterval.start && !prevSelectedDateInterval.end) {
+                        // Sets second selection as interval start, if it is earlier than the previous interval start.
+                        // Else sets it as interval end.
+                        if (date < prevSelectedDateInterval.start) {
+                            updateInterval(date);
                         } else {
-                            onChangePayload = {
-                                start: (prevDate as DateInterval).start,
-                                end: date,
-                            };
-                            newInternalSelectedDate = {
-                                start: (prevDate as DateInterval).start,
-                                end: date,
-                            };
+                            updateInterval(prevSelectedDateInterval.start, date);
                         }
                     } else {
-                        onChangePayload = { start: date, end: undefined };
-                        newInternalSelectedDate = { start: date, end: undefined };
+                        // Resets interval if a third date is selected.
+                        updateInterval(date);
                     }
-                } */
+                }
 
-                if (typeof onChange === 'function') {
+                if (typeof onChange === 'function' && onChangePayload) {
                     onChange(onChangePayload);
                 }
 
@@ -277,7 +382,21 @@ const Calendar: FC<CalendarProps> = ({
         <StyledCalendar ref={calendarRef} $isDisabled={isDisabled}>
             {ShouldShowLeftArrow ? (
                 <StyledCalendarIconWrapper onClick={handleLeftArrowClick}>
-                    <Icon icons={['fa fa-angle-left']} />
+                    <div // TODO Use styled-components instead of inline styles
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            flexWrap: 'nowrap',
+                            height: 'fit-content',
+                        }}
+                    >
+                        {showMonthYearPickers && (
+                            <StyledPseudoMonthYearPicker>
+                                <ComboBox lists={[{ list: [] }]} placeholder="" />
+                            </StyledPseudoMonthYearPicker>
+                        )}
+                        <Icon icons={['fa fa-angle-left']} />
+                    </div>
                 </StyledCalendarIconWrapper>
             ) : (
                 <StyledCalendarIconWrapperPseudo />
@@ -298,11 +417,27 @@ const Calendar: FC<CalendarProps> = ({
                     maxDate={maxDate}
                     type={type}
                     disabledDates={disabledDates}
+                    setCurrentDate={setCurrentDate}
+                    showMonthYearPickers={showMonthYearPickers}
                 />
             )}
             {ShouldShowRightArrow ? (
                 <StyledCalendarIconWrapper onClick={handleRightArrowClick}>
-                    <Icon icons={['fa fa-angle-right']} />
+                    <div // TODO Use styled-components instead of inline styles
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            flexWrap: 'nowrap',
+                            height: 'fit-content',
+                        }}
+                    >
+                        {showMonthYearPickers && (
+                            <StyledPseudoMonthYearPicker>
+                                <ComboBox lists={[{ list: [] }]} placeholder="" />
+                            </StyledPseudoMonthYearPicker>
+                        )}
+                        <Icon icons={['fa fa-angle-right']} />
+                    </div>
                 </StyledCalendarIconWrapper>
             ) : (
                 <StyledCalendarIconWrapperPseudo />

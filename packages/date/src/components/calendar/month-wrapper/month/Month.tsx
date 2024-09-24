@@ -1,5 +1,5 @@
 import type { Locale } from 'date-fns';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import type {
     CalendarType,
     Categories,
@@ -7,14 +7,14 @@ import type {
     EMonth,
     HighlightedDates,
 } from '../../../../types/calendar';
-import { formatMonth } from '../../../../utils/calendar';
+import MonthYearPickers from '../../month-year-pickers/MonthYearPickers';
 import DayWrapper from './day-wrapper/DayWrapper';
-import { StyledMonth, StyledMonthHead, StyledMonthName } from './Month.styles';
+import { StyledMonth, StyledMonthHead } from './Month.styles';
 import WeekdayWrapper from './weekday-wrapper/WeekdayWrapper';
 
 export type MonthProps = {
     month: EMonth;
-    year: string;
+    year: number;
     locale: Locale;
     highlightedDates?: HighlightedDates[];
     onSelect: (date: Date) => void;
@@ -27,6 +27,9 @@ export type MonthProps = {
     hoveringDay: Date | null;
     setHoveringDay: (date: Date | null) => void;
     disabledDates: Date[];
+    setCurrentDate: (date: Date) => void;
+    displayIndex?: number;
+    showMonthYearPickers: boolean;
 };
 
 const Month: FC<MonthProps> = ({
@@ -44,33 +47,41 @@ const Month: FC<MonthProps> = ({
     hoveringDay,
     setHoveringDay,
     disabledDates,
-}) => {
-    const [currentYear] = useState(new Date().getFullYear());
-
-    return (
-        <StyledMonth $height={height}>
-            <StyledMonthHead>
-                <StyledMonthName>{`${formatMonth({ locale, month })} ${String(currentYear) !== year ? year : ''}`}</StyledMonthName>
-            </StyledMonthHead>
-            <WeekdayWrapper locale={locale} />
-            <DayWrapper
-                key={`day-wrapper-${month}`}
-                categories={categories}
-                selectedDate={selectedDate}
+    setCurrentDate,
+    displayIndex,
+    showMonthYearPickers,
+}) => (
+    <StyledMonth $height={height}>
+        <StyledMonthHead>
+            <MonthYearPickers
                 month={month}
                 year={year}
-                onSelect={onSelect}
-                highlightedDates={highlightedDates}
+                locale={locale}
                 minDate={minDate}
                 maxDate={maxDate}
-                type={type}
-                hoveringDay={hoveringDay}
-                setHoveringDay={setHoveringDay}
-                disabledDates={disabledDates}
+                setCurrentDate={setCurrentDate}
+                displayIndex={displayIndex}
+                showMonthYearPickers={showMonthYearPickers}
             />
-        </StyledMonth>
-    );
-};
+        </StyledMonthHead>
+        <WeekdayWrapper locale={locale} />
+        <DayWrapper
+            key={`day-wrapper-${month}`}
+            categories={categories}
+            selectedDate={selectedDate}
+            month={month}
+            year={year}
+            onSelect={onSelect}
+            highlightedDates={highlightedDates}
+            minDate={minDate}
+            maxDate={maxDate}
+            type={type}
+            hoveringDay={hoveringDay}
+            setHoveringDay={setHoveringDay}
+            disabledDates={disabledDates}
+        />
+    </StyledMonth>
+);
 
 Month.displayName = 'Month';
 

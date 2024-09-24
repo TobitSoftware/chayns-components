@@ -27,6 +27,8 @@ export type MonthWrapperProps = {
     minDate: Date;
     type: CalendarType;
     disabledDates: Date[];
+    setCurrentDate: (date: Date) => void;
+    showMonthYearPickers: boolean;
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
@@ -45,6 +47,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     maxDate,
     type,
     disabledDates,
+    setCurrentDate,
+    showMonthYearPickers,
 }) => {
     const [content, setContent] = useState<ReactElement[]>();
 
@@ -84,6 +88,9 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                             hoveringDay={hoveringDay}
                             setHoveringDay={setHoveringDay}
                             disabledDates={disabledDates}
+                            setCurrentDate={setCurrentDate}
+                            displayIndex={i}
+                            showMonthYearPickers={showMonthYearPickers}
                         />,
                     );
                 }
@@ -113,6 +120,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         hoveringDay={hoveringDay}
                         setHoveringDay={setHoveringDay}
                         disabledDates={disabledDates}
+                        setCurrentDate={setCurrentDate}
+                        showMonthYearPickers={showMonthYearPickers}
                     />,
                 );
                 prevState.pop();
@@ -140,6 +149,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         hoveringDay={hoveringDay}
                         setHoveringDay={setHoveringDay}
                         disabledDates={disabledDates}
+                        setCurrentDate={setCurrentDate}
+                        showMonthYearPickers={showMonthYearPickers}
                     />,
                 );
                 prevState.shift();
@@ -161,18 +172,55 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
         type,
         hoveringDay,
         disabledDates,
+        setCurrentDate,
+        showMonthYearPickers,
     ]);
 
     useEffect(() => {
-        if (selectedDate || hoveringDay) {
-            setContent((prevState) =>
-                (prevState ?? []).map((element) => ({
+        if (direction) return;
+        setContent((prevState) =>
+            (prevState ?? []).map((element, index) => {
+                const date = getNewDate(index - 1, currentDate);
+
+                const { month, year } = getMonthAndYear(date);
+
+                return {
                     ...element,
-                    props: { ...element.props, selectedDate, hoveringDay } as ReactElement,
-                })),
-            );
-        }
-    }, [selectedDate, hoveringDay]);
+                    props: {
+                        ...element.props,
+                        categories,
+                        highlightedDates,
+                        locale,
+                        onSelect,
+                        selectedDate,
+                        minDate,
+                        maxDate,
+                        type,
+                        hoveringDay,
+                        disabledDates,
+                        month,
+                        year,
+                        displayIndex: index - 1,
+                        showMonthYearPickers,
+                    } as ReactElement,
+                };
+            }),
+        );
+    }, [
+        categories,
+        disabledDates,
+        highlightedDates,
+        hoveringDay,
+        locale,
+        maxDate,
+        minDate,
+        onSelect,
+        selectedDate,
+        type,
+        currentDate,
+        direction,
+        showMonthYearPickers,
+    ]);
 
     const animate: MotionProps['animate'] = useMemo(() => {
         if (shouldRenderTwo) {

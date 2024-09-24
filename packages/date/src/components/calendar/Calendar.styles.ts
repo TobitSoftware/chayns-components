@@ -18,3 +18,11 @@ export const StyledCalendarIconWrapper = styled.div`
 export const StyledCalendarIconWrapperPseudo = styled.div`
     width: 15px;
 `;
+
+export const StyledPseudoMonthYearPicker = styled.div`
+    height: fit-content;
+    width: 0;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+`;
