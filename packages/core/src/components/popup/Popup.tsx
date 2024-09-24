@@ -7,7 +7,6 @@ import React, {
     useCallback,
     useEffect,
     useImperativeHandle,
-    useLayoutEffect,
     useRef,
     useState,
 } from 'react';
@@ -77,6 +76,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const [isOpen, setIsOpen] = useState(false);
         const [portal, setPortal] = useState<ReactPortal>();
         const [menuHeight, setMenuHeight] = useState(0);
+        const [isMeasuring, setIsMeasuring] = useState(true);
         const [pseudoSize, setPseudoSize] = useState<{ height: number; width: number }>();
 
         const timeout = useRef<number>();
@@ -89,42 +89,39 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const popupPseudoContentRef = useRef<HTMLDivElement>(null);
         const popupRef = useRef<HTMLDivElement>(null);
 
-        useEffect(() => {
-            console.debug('popupPseudoContentRef', popupPseudoContentRef.current);
-
+        const measureHeight = () => {
             if (popupPseudoContentRef.current) {
-                const { height, width } = popupPseudoContentRef.current.getBoundingClientRect();
+                const height = popupPseudoContentRef.current.offsetHeight;
+                const width = popupPseudoContentRef.current.offsetWidth;
 
                 setPseudoSize({ height, width });
             }
+        };
+
+        useEffect(() => {
+            measureHeight();
+
+            setIsMeasuring(false);
         }, []);
 
-        useLayoutEffect(() => {
-            console.debug('resize', popupPseudoContentRef.current);
+        useEffect(() => {
+            const handleResize = () => {
+                setIsMeasuring(true);
 
-            if (popupPseudoContentRef.current) {
-                const resizeObserver = new ResizeObserver((entries) => {
-                    if (entries && entries[0]) {
-                        const observedHeight = entries[0].contentRect.height;
-                        const observedWidth = entries[0].contentRect.width;
+                setTimeout(() => {
+                    measureHeight();
+                    setIsMeasuring(false);
+                }, 0);
+            };
 
-                        setPseudoSize({ height: observedHeight, width: observedWidth });
-                    }
-                });
+            window.addEventListener('resize', handleResize);
 
-                resizeObserver.observe(popupPseudoContentRef.current);
-
-                return () => {
-                    resizeObserver.disconnect();
-                };
-            }
-
-            return () => {};
+            return () => {
+                window.removeEventListener('resize', handleResize);
+            };
         }, []);
 
         const handleShow = useCallback(() => {
-            console.debug('handleShow', { ref: popupRef.current, pseudoSize });
-
             if (popupRef.current && pseudoSize) {
                 const { height: pseudoHeight, width: pseudoWidth } = pseudoSize;
 
@@ -222,8 +219,6 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, [pseudoSize, yOffset]);
 
         const handleChildrenClick = () => {
-            console.debug('handleChildrenClick', shouldShowOnHover);
-
             if (!shouldShowOnHover) {
                 handleShow();
             }
@@ -234,8 +229,6 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, []);
 
         const handleMouseEnter = useCallback(() => {
-            console.debug('handleMouseEnter');
-
             if (shouldShowOnHover) {
                 window.clearTimeout(timeout.current);
                 handleShow();
@@ -243,8 +236,6 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, [handleShow, shouldShowOnHover]);
 
         const handleMouseLeave = useCallback(() => {
-            console.debug('handleMouseLeave');
-
             if (!shouldShowOnHover) {
                 return;
             }
@@ -343,9 +334,11 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         return (
             <>
-                <StyledPopupPseudo ref={popupPseudoContentRef} $menuHeight={menuHeight}>
-                    {content}
-                </StyledPopupPseudo>
+                {isMeasuring && (
+                    <StyledPopupPseudo ref={popupPseudoContentRef} $menuHeight={menuHeight}>
+                        {content}
+                    </StyledPopupPseudo>
+                )}
                 <StyledPopup
                     ref={popupRef}
                     onClick={handleChildrenClick}
