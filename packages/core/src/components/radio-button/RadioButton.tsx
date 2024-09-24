@@ -1,13 +1,5 @@
 import { AnimatePresence } from 'framer-motion';
-import React, {
-    FC,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
-    type ReactNode,
-} from 'react';
+import React, { FC, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { RadioButtonGroupContext } from './radio-button-group/RadioButtonGroup';
 import {
     StyledMotionRadioButtonChildren,
@@ -51,18 +43,11 @@ const RadioButton: FC<RadioButtonProps> = ({ children, label, id, isDisabled = f
 
     const uncheckable = radioButtonsCanBeUnchecked;
 
-    useEffect(() => {
-        if (selectedRadioButtonId === id) {
-            if (typeof updateSelectedRadioButtonId === 'function') {
-                updateSelectedRadioButtonId(id);
-            }
-        }
-    }, [id, selectedRadioButtonId, updateSelectedRadioButtonId]);
-
     const handleClick = useCallback(() => {
         if (isDisabled) {
             return;
         }
+
         if (uncheckable) {
             if (updateSelectedRadioButtonId) {
                 updateSelectedRadioButtonId(id === selectedRadioButtonId ? undefined : id);
