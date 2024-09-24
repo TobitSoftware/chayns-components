@@ -89,7 +89,7 @@ const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
             () => ({
                 selectedRadioButtonId,
                 updateSelectedRadioButtonId,
-                canUncheckRadioButtons,
+                radioButtonsCanBeUnchecked: canUncheckRadioButtons,
             }),
             [canUncheckRadioButtons, selectedRadioButtonId, updateSelectedRadioButtonId],
         );
