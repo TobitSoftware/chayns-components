@@ -110,12 +110,13 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                     isWrapped,
                     title,
                     width: (titleWrapperRef.current?.clientWidth ?? 0) - 10,
+                    hasSearch: typeof onSearchChange === 'function',
                 }),
             );
         }
         // The fontSize need to be included to trigger a new calculation.
         // After the size is increased, the Title is cut at the bottom.
-    }, [isWrapped, onTitleInputChange, theme.fontSize, title]);
+    }, [isWrapped, onSearchChange, onTitleInputChange, theme.fontSize, title]);
 
     const iconElement = useMemo(() => {
         if (icon || isFixed) {
@@ -210,6 +211,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                     $isOpen={isOpen}
                                     $isWrapped={isWrapped}
                                     $color={titleColor}
+                                    $hasSearch={typeof onSearchChange === 'function'}
                                     transition={{
                                         opacity: {
                                             duration: 0,

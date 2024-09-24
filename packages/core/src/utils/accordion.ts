@@ -2,6 +2,7 @@ import type { AccordionHeadProps } from '../components/accordion/accordion-head/
 
 type GetAccordionHeadHeightOptions = Pick<AccordionHeadProps, 'isWrapped' | 'title'> & {
     width: number;
+    hasSearch: boolean;
 };
 
 interface GetAccordionHeadHeightResult {
@@ -13,6 +14,7 @@ export const getAccordionHeadHeight = ({
     isWrapped,
     title,
     width,
+    hasSearch,
 }: GetAccordionHeadHeightOptions): GetAccordionHeadHeightResult => {
     const element = document.createElement('div');
 
@@ -33,7 +35,7 @@ export const getAccordionHeadHeight = ({
         element.style.whiteSpace = 'nowrap';
     } else {
         element.style.fontSize = '1.3rem';
-        element.style.whiteSpace = 'normal';
+        element.style.whiteSpace = hasSearch ? 'nowrap' : 'normal';
     }
 
     const openHeight = Math.max(element.clientHeight + 8, isWrapped ? 40 : 33);

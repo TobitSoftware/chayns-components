@@ -60,19 +60,21 @@ type StyledMotionTitleProps = WithTheme<{
     $isOpen: boolean;
     $isWrapped: boolean;
     $color?: CSSProperties['color'];
+    $hasSearch: boolean;
 }>;
 
 export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
     font-size: ${({ $isOpen, $isWrapped }) => ($isOpen && !$isWrapped ? '1.3rem' : undefined)};
     font-weight: ${({ $isOpen, $isWrapped }) => ($isOpen && $isWrapped ? 700 : 'normal')};
     grid-area: header;
-    height: ${({ $isWrapped }) => ($isWrapped ? '100%' : undefined)};
+    height: ${({ $isWrapped, $hasSearch }) => ($isWrapped || $hasSearch ? '100%' : undefined)};
     overflow: hidden;
     text-overflow: ellipsis;
     transform-origin: top left;
     user-select: none;
     color: ${({ $color, theme }: StyledMotionTitleProps) => $color ?? theme.text};
-    white-space: ${({ $isOpen, $isWrapped }) => ($isOpen && !$isWrapped ? 'normal' : 'nowrap')};
+    white-space: ${({ $isOpen, $isWrapped, $hasSearch }) =>
+        $isOpen && !$isWrapped && !$hasSearch ? 'normal' : 'nowrap'};
 
     will-change: unset !important;
 
