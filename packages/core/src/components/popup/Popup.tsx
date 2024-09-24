@@ -219,9 +219,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, [pseudoSize, yOffset]);
 
         const handleChildrenClick = () => {
-            if (!shouldShowOnHover) {
-                handleShow();
-            }
+            handleShow();
         };
 
         const handleHide = useCallback(() => {
@@ -247,17 +245,14 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         const handleDocumentClick = useCallback<EventListener>(
             (event) => {
-                if (
-                    !popupContentRef.current?.contains(event.target as Node) &&
-                    !shouldShowOnHover
-                ) {
+                if (!popupContentRef.current?.contains(event.target as Node)) {
                     event.preventDefault();
                     event.stopPropagation();
 
                     handleHide();
                 }
             },
-            [handleHide, shouldShowOnHover],
+            [handleHide],
         );
 
         useImperativeHandle(
