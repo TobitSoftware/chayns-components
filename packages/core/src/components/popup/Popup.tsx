@@ -246,9 +246,6 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const handleDocumentClick = useCallback<EventListener>(
             (event) => {
                 if (!popupContentRef.current?.contains(event.target as Node)) {
-                    event.preventDefault();
-                    event.stopPropagation();
-
                     handleHide();
                 }
             },
