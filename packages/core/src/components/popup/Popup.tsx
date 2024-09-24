@@ -94,6 +94,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 const height = popupPseudoContentRef.current.offsetHeight;
                 const width = popupPseudoContentRef.current.offsetWidth;
 
+                console.debug({ width, height });
+
                 setPseudoSize({ height, width });
             }
         };
