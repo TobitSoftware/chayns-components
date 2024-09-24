@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import React, { FC, ReactNode, useRef, useState } from 'react';
 import { StyledMotionListItemBody } from './ListItemBody.styles';
 
 interface ListItemBodyProps {
@@ -8,31 +8,7 @@ interface ListItemBodyProps {
 
 const ListItemBody: FC<ListItemBodyProps> = ({ children, id }) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const [height, setHeight] = useState<number | 'auto'>('auto');
-
-    useEffect(() => {
-        if (containerRef.current) {
-            const resizeObserver = new ResizeObserver((entries) => {
-                if (entries && entries[0]) {
-                    const observedHeight = entries[0].contentBoxSize[0]?.blockSize;
-
-                    if (!observedHeight) {
-                        return;
-                    }
-
-                    setHeight(observedHeight);
-                }
-            });
-
-            resizeObserver.observe(containerRef.current);
-
-            return () => {
-                resizeObserver.disconnect();
-            };
-        }
-
-        return () => {};
-    }, []);
+    const [height] = useState<number | 'auto'>('auto');
 
     return (
         <StyledMotionListItemBody
