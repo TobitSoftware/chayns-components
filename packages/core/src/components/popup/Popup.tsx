@@ -92,9 +92,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const measureHeight = () => {
             if (popupPseudoContentRef.current) {
                 const height = popupPseudoContentRef.current.offsetHeight;
-                const width = popupPseudoContentRef.current.offsetWidth;
-
-                console.debug({ width, height });
+                const width = popupPseudoContentRef.current.offsetWidth + 1;
 
                 setPseudoSize({ height, width });
             }
