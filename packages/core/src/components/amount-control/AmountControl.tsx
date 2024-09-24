@@ -42,6 +42,10 @@ export type AmountControlProps = {
      */
     maxAmount?: number;
     /**
+     * The minimum allowed amount.
+     */
+    minAmount?: number;
+    /**
      * A Function that is executed when the amount is changed
      */
     onChange?: (amount: number) => void;
@@ -62,14 +66,13 @@ const AmountControl: FC<AmountControlProps> = ({
     label,
     iconColor,
     maxAmount,
+    minAmount = 0,
     onChange,
     shouldShowWideInput = false,
 }) => {
-    const [amountValue, setAmountValue] = useState(0);
-    const [inputValue, setInputValue] = useState('0');
+    const [amountValue, setAmountValue] = useState(minAmount);
+    const [inputValue, setInputValue] = useState(minAmount.toString());
     const [displayState, setDisplayState] = useState<DisplayState>('default');
-
-    const minAmount = 0;
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -84,13 +87,13 @@ const AmountControl: FC<AmountControlProps> = ({
             case maxAmount && amountValue >= maxAmount:
                 setDisplayState('maxAmount');
                 return;
-            case amountValue > 0:
+            case amountValue > minAmount:
                 setDisplayState('normal');
                 return;
             default:
                 setDisplayState('default');
         }
-    }, [amountValue, maxAmount]);
+    }, [amountValue, maxAmount, minAmount]);
 
     const hasFocus = useMemo(() => displayState !== 'default', [displayState]);
 
@@ -120,6 +123,10 @@ const AmountControl: FC<AmountControlProps> = ({
     }, [onChange]);
 
     const handleAmountRemove = useCallback(() => {
+        if (displayState === 'default') {
+            return;
+        }
+
         setAmountValue((prevState) => {
             const newAmount = prevState - 1;
 
@@ -130,20 +137,20 @@ const AmountControl: FC<AmountControlProps> = ({
             return newAmount;
         });
         setInputValue((prevState) => (Number(prevState) - 1).toString());
-    }, [onChange]);
+    }, [displayState, onChange]);
 
     const handleFirstAmount = useCallback(() => {
-        if (amountValue !== 0) {
+        if (amountValue !== minAmount) {
             return;
         }
 
         if (typeof onChange === 'function') {
-            onChange(1);
+            onChange(minAmount + 1);
         }
 
-        setAmountValue(1);
-        setInputValue('1');
-    }, [amountValue, onChange]);
+        setAmountValue(minAmount + 1);
+        setInputValue((minAmount + 1).toString());
+    }, [amountValue, minAmount, onChange]);
 
     const handleDeleteIconClick = useCallback(() => {
         if (inputValue === '0') {
@@ -156,16 +163,16 @@ const AmountControl: FC<AmountControlProps> = ({
     }, [handleAmountRemove, inputValue]);
 
     const handleInputBlur = useCallback(() => {
-        setAmountValue(inputValue === '' ? 0 : Number(inputValue));
+        setAmountValue(inputValue === '' ? minAmount : Number(inputValue));
 
         if (typeof onChange === 'function') {
-            onChange(inputValue === '' ? 0 : Number(inputValue));
+            onChange(inputValue === '' ? minAmount : Number(inputValue));
         }
 
         if (inputValue === '') {
-            setInputValue('0');
+            setInputValue(minAmount.toString());
         }
-    }, [inputValue, onChange]);
+    }, [inputValue, minAmount, onChange]);
 
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
