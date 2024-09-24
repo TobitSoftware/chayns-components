@@ -16,8 +16,7 @@ export default {
     title: 'Date/Calendar',
     component: Calendar,
     args: {
-        type: CalendarType.Interval,
-        minDate: new Date('2024-02-01T00:00:00+00:00'),
+        type: CalendarType.Single,
         highlightedDates: [
             {
                 dates: [
