@@ -143,12 +143,12 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     width: childrenWidth,
                 } = contextMenuRef.current.getBoundingClientRect();
 
-                const x = childrenLeft + window.scrollX + childrenWidth / 2;
-                const y = childrenTop + window.scrollY + childrenHeight / 2;
-
                 const { height, width, top, left } = container.getBoundingClientRect();
 
-                setInternalCoordinates({ x: x - left, y: y - top });
+                const x = childrenLeft + window.scrollX + childrenWidth / 2 - left;
+                const y = childrenTop + window.scrollY + childrenHeight / 2 - top;
+
+                setInternalCoordinates({ x, y });
 
                 if (x < width / 2) {
                     if (y < height / 2) {
