@@ -69,16 +69,20 @@ export type ListItemProps = {
      */
     rightElements?: IListItemRightElements;
     /**
+     * Whether the background and border of the shape on which the image or icon of the element is displayed should be
+     * hidden.
+     */
+    shouldHideImageOrIconBackground?: boolean;
+    /**
      * If the `ListItem` is expandable, the indicator is displayed on the left
      * side of the header. If this property is set to true, the indicator is
      * hidden.
      */
     shouldHideIndicator?: boolean;
     /**
-     * Images of users should always be displayed in a round shape. Therefore,
-     * this property can be set to true.
+     * Whether the image or icon should be displayed in a round shape. This should be always used for images of persons.
      */
-    shouldShowRoundImage?: boolean;
+    shouldShowRoundImageOrIcon?: boolean;
     /**
      * Whether a separator should be displayed below this item. In this case, the border is displayed thicker than normal.
      */
@@ -108,9 +112,10 @@ const ListItem: FC<ListItemProps> = ({
     onLongPress,
     leftElements,
     rightElements,
+    shouldHideImageOrIconBackground,
     shouldHideIndicator,
     subtitle,
-    shouldShowRoundImage,
+    shouldShowRoundImageOrIcon,
     shouldShowSeparatorBelow = false,
     title,
     titleElement,
@@ -182,9 +187,10 @@ const ListItem: FC<ListItemProps> = ({
                 onClick={isClickable ? handleHeadClick : undefined}
                 onLongPress={onLongPress}
                 rightElements={rightElements}
+                shouldHideImageOrIconBackground={shouldHideImageOrIconBackground}
                 shouldHideIndicator={shouldHideIndicator}
                 subtitle={subtitle}
-                shouldShowRoundImage={shouldShowRoundImage}
+                shouldShowRoundImageOrIcon={shouldShowRoundImageOrIcon}
                 title={title}
                 titleElement={titleElement}
             />

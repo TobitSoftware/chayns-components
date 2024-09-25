@@ -47,9 +47,10 @@ type ListItemHeadProps = {
     onClick?: MouseEventHandler<HTMLDivElement>;
     onLongPress?: TouchEventHandler<HTMLDivElement>;
     rightElements?: IListItemRightElements;
+    shouldHideImageOrIconBackground?: boolean;
     shouldHideIndicator?: boolean;
     subtitle?: ReactNode;
-    shouldShowRoundImage?: boolean;
+    shouldShowRoundImageOrIcon?: boolean;
     title: ReactNode;
     titleElement?: ReactNode;
 };
@@ -65,9 +66,10 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     onClick,
     onLongPress,
     rightElements,
+    shouldHideImageOrIconBackground,
     shouldHideIndicator,
     subtitle,
-    shouldShowRoundImage,
+    shouldShowRoundImageOrIcon,
     title,
     titleElement,
 }) => {
@@ -142,15 +144,27 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     const iconOrImageElement = useMemo(() => {
         if (icons) {
-            return <ListItemIcon icons={icons} />;
+            return (
+                <ListItemIcon
+                    icons={icons}
+                    shouldHideBackground={!!shouldHideImageOrIconBackground}
+                    shouldShowRoundIcon={!!shouldShowRoundImageOrIcon}
+                />
+            );
         }
 
         if (images) {
-            return <ListItemImage images={images} shouldShowRoundImage={!!shouldShowRoundImage} />;
+            return (
+                <ListItemImage
+                    images={images}
+                    shouldHideBackground={!!shouldHideImageOrIconBackground}
+                    shouldShowRoundImage={!!shouldShowRoundImageOrIcon}
+                />
+            );
         }
 
         return undefined;
-    }, [icons, images, shouldShowRoundImage]);
+    }, [icons, images, shouldHideImageOrIconBackground, shouldShowRoundImageOrIcon]);
 
     return (
         <StyledListItemHead

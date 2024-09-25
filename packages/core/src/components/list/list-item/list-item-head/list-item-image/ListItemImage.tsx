@@ -4,10 +4,15 @@ import { StyledListItemHeadImage, StyledListItemHeadImageWrapper } from './ListI
 
 type ListItemImageProps = {
     images: string[];
+    shouldHideBackground: boolean;
     shouldShowRoundImage: boolean;
 };
 
-const ListItemImage: React.FC<ListItemImageProps> = ({ images, shouldShowRoundImage }) => {
+const ListItemImage: React.FC<ListItemImageProps> = ({
+    images,
+    shouldHideBackground,
+    shouldShowRoundImage,
+}) => {
     const [hasLoadedImage, setHasLoadedImage] = useState(false);
     const handleImageLoaded = useCallback(() => {
         setHasLoadedImage(true);
@@ -23,7 +28,10 @@ const ListItemImage: React.FC<ListItemImageProps> = ({ images, shouldShowRoundIm
 
     if (images && images[0]) {
         return (
-            <StyledListItemHeadImageWrapper $shouldShowRoundImage={shouldShowRoundImage}>
+            <StyledListItemHeadImageWrapper
+                $shouldHideBackground={shouldHideBackground}
+                $shouldShowRoundImage={shouldShowRoundImage}
+            >
                 <StyledListItemHeadImage
                     $isHidden={!hasLoadedImage}
                     onLoad={handleImageLoaded}

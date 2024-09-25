@@ -81,25 +81,25 @@ ListItemsWithImage.args = {
         <ListItem
             images={[images[0]]}
             subtitle="Sadipscing elitr dolor sit"
-            shouldShowRoundImage
+            shouldShowRoundImageOrIcon
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,
         <ListItem
             images={[images[1]]}
             subtitle="Stet clita kasd gubergren"
-            shouldShowRoundImage
+            shouldShowRoundImageOrIcon
             title="Stet clita kasd gubergren, no sea takimata sanctus est"
         />,
         <ListItem
             images={[images[2]]}
             subtitle="At vero eos et accusam"
-            shouldShowRoundImage
+            shouldShowRoundImageOrIcon
             title="At vero eos et accusam et justo duo dolores et ea rebum sit amet dolor"
         />,
         <ListItem
             images={[images[3]]}
             subtitle="Dolor sit ipsum amet"
-            shouldShowRoundImage
+            shouldShowRoundImageOrIcon
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,
     ],
@@ -110,13 +110,13 @@ ListItemsWithGridImage.args = {
         <ListItem
             images={images}
             subtitle="Sadipscing elitr dolor sit"
-            shouldShowRoundImage
+            shouldShowRoundImageOrIcon
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,
         <ListItem
             images={otherImages}
             subtitle="Dolor sit ipsum amet"
-            shouldShowRoundImage
+            shouldShowRoundImageOrIcon
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
         />,
     ],
@@ -228,30 +228,31 @@ ListItemsWithButtonAsRightElements.args = {
                     images={[locationImages[0]]}
                     subtitle="Julian Sommer"
                     title="Oben Ohne"
-                    rightElements={[
-                        <Button icon="fa fa-plus" onClick={() => {}}>
-                            Hinzufügen
-                        </Button>,
-                    ]}
-                    shouldShowSingleRightElementCentered
+                    rightElements={{
+                        center: (
+                            <Button icon="fa fa-plus" onClick={() => {}}>
+                                Hinzufügen
+                            </Button>
+                        ),
+                    }}
                 />
                 <ListItem
                     images={[locationImages[1]]}
                     subtitle="Julian Sommer"
                     title="Morgen kickt der Kater"
-                    rightElements={[
-                        <Button icon="fa fa-plus" onClick={() => {}}>
-                            Hinzufügen
-                        </Button>,
-                    ]}
-                    shouldShowSingleRightElementCentered
+                    rightElements={{
+                        center: (
+                            <Button icon="fa fa-plus" onClick={() => {}}>
+                                Hinzufügen
+                            </Button>
+                        ),
+                    }}
                 />
                 <ListItem
                     images={[locationImages[2]]}
                     subtitle="Bierkapitän x Eko Fresh"
                     title="Ihr könnt mich alle"
-                    rightElements={[<Badge>Hinzugefügt</Badge>]}
-                    shouldShowSingleRightElementCentered
+                    rightElements={{ center: <Badge>Hinzugefügt</Badge> }}
                 />
             </List>
         </ListItem>,
@@ -305,7 +306,7 @@ ExpandableListItems.args = {
     children: [
         <ListItem
             images={[images[0]]}
-            shouldShowRoundImage
+            shouldShowRoundImageOrIcon
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         >
             <ListItemContent>
@@ -321,7 +322,7 @@ ExpandableListItems.args = {
         </ListItem>,
         <ListItem
             images={[images[1]]}
-            shouldShowRoundImage
+            shouldShowRoundImageOrIcon
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
         >
             <ListItemContent>
@@ -334,7 +335,7 @@ ExpandableListItems.args = {
         <ListItem
             images={[images[2]]}
             subtitle="Stet clita kasd gubergren, no sea takimata sanctus"
-            shouldShowRoundImage
+            shouldShowRoundImageOrIcon
             title="At vero eos et accusam et justo duo dolores et ea rebum sit amet dolor"
         >
             <ListItemContent>
@@ -349,7 +350,7 @@ ExpandableListItems.args = {
         <ListItem
             images={[images[3]]}
             subtitle="Labore et dolore magna aliquyam erat"
-            shouldShowRoundImage
+            shouldShowRoundImageOrIcon
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         >
             <ListItemContent>
