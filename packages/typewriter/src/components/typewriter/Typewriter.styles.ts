@@ -39,8 +39,7 @@ export const StyledTypewriterPseudoText = styled.span<StyledTypewriterTextProps>
     opacity: 0;
     pointer-events: none;
     user-select: none;
-
-    ${typewriterCursorElement}
+    width: 100%;
 `;
 
 type StyledTypewriterTextProps = WithTheme<{
