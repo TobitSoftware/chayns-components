@@ -9,6 +9,7 @@ type StyledPageProviderProps = {
 export const StyledPageProvider = styled.div<StyledPageProviderProps>`
     padding: ${({ $padding }) => $padding};
     height: ${({ $usableHeight }) => ($usableHeight ? `${$usableHeight}px` : undefined)};
+    position: relative;
 
     .color-scheme-provider:first-child:not(td) {
         & > h1,

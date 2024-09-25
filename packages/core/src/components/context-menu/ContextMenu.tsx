@@ -136,11 +136,6 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     void items[result[0]]?.onClick();
                 }
             } else if (contextMenuRef.current) {
-                const rootElement =
-                    document.querySelector('.page-provider') ||
-                    document.querySelector('.tapp') ||
-                    document.body;
-
                 const {
                     height: childrenHeight,
                     left: childrenLeft,
@@ -151,9 +146,9 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                 const x = childrenLeft + window.scrollX + childrenWidth / 2;
                 const y = childrenTop + window.scrollY + childrenHeight / 2;
 
-                setInternalCoordinates({ x, y });
+                const { height, width, top, left } = container.getBoundingClientRect();
 
-                const { height, width } = rootElement.getBoundingClientRect();
+                setInternalCoordinates({ x: x - left, y: y - top });
 
                 if (x < width / 2) {
                     if (y < height / 2) {
@@ -169,7 +164,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 setIsContentShown(true);
             }
-        }, [items]);
+        }, [container, items]);
 
         const handleClick = useCallback<MouseEventHandler<HTMLDivElement>>(
             (event) => {
