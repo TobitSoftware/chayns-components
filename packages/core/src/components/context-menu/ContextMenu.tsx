@@ -136,7 +136,10 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     void items[result[0]]?.onClick();
                 }
             } else if (contextMenuRef.current) {
-                const rootElement = document.querySelector('.page-provider') || document.body;
+                const rootElement =
+                    document.querySelector('.page-provider') ||
+                    document.querySelector('.tapp') ||
+                    document.body;
 
                 const {
                     height: childrenHeight,
