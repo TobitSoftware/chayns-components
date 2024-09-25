@@ -25,6 +25,7 @@ export enum TypewriterDelay {
     Medium = 1000,
     Fast = 500,
     ExtraFast = 250,
+    None = 0,
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -94,6 +95,10 @@ export type TypewriterProps = {
      */
     speed?: TypewriterSpeed | number;
     /**
+     * The delay in milliseconds before the typewriter starts typing.
+     */
+    startDelay?: TypewriterDelay;
+    /**
      * The style of the typewriter text element
      */
     textStyle?: React.CSSProperties;
@@ -112,6 +117,7 @@ const Typewriter: FC<TypewriterProps> = ({
     shouldUseResetAnimation = false,
     shouldWaitForContent,
     speed = TypewriterSpeed.Medium,
+    startDelay = TypewriterDelay.None,
     textStyle,
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
@@ -247,43 +253,45 @@ const Typewriter: FC<TypewriterProps> = ({
                 });
             }, speed);
         } else {
-            interval = window.setInterval(() => {
-                setShownCharCount((prevState) => {
-                    let nextState = prevState;
+            setTimeout(() => {
+                interval = window.setInterval(() => {
+                    setShownCharCount((prevState) => {
+                        let nextState = prevState;
 
-                    if (shouldCount) {
-                        nextState = prevState + 1;
-                    }
+                        if (shouldCount) {
+                            nextState = prevState + 1;
+                        }
 
-                    if (nextState >= charactersCount) {
-                        if (shouldWaitForContent) {
-                            setShouldCount(false);
-                        } else {
-                            window.clearInterval(interval);
+                        if (nextState >= charactersCount) {
+                            if (shouldWaitForContent) {
+                                setShouldCount(false);
+                            } else {
+                                window.clearInterval(interval);
 
-                            /**
-                             * At this point, the next value for "shownCharCount" is deliberately set to
-                             * the length of the textContent in order to correctly display HTML elements
-                             * after the last letter.
-                             */
-                            nextState = textContent.length;
+                                /**
+                                 * At this point, the next value for "shownCharCount" is deliberately set to
+                                 * the length of the textContent in order to correctly display HTML elements
+                                 * after the last letter.
+                                 */
+                                nextState = textContent.length;
 
-                            if (areMultipleChildrenGiven) {
-                                setTimeout(() => {
-                                    if (shouldUseResetAnimation) {
-                                        setIsResetAnimationActive(true);
-                                    } else {
-                                        setShownCharCount(0);
-                                        setTimeout(handleSetNextChildrenIndex, nextTextDelay);
-                                    }
-                                }, resetDelay);
+                                if (areMultipleChildrenGiven) {
+                                    setTimeout(() => {
+                                        if (shouldUseResetAnimation) {
+                                            setIsResetAnimationActive(true);
+                                        } else {
+                                            setShownCharCount(0);
+                                            setTimeout(handleSetNextChildrenIndex, nextTextDelay);
+                                        }
+                                    }, resetDelay);
+                                }
                             }
                         }
-                    }
 
-                    return nextState;
-                });
-            }, speed);
+                        return nextState;
+                    });
+                }, speed);
+            }, startDelay);
         }
 
         return () => {
@@ -302,10 +310,8 @@ const Typewriter: FC<TypewriterProps> = ({
         shouldUseResetAnimation,
         areMultipleChildrenGiven,
         handleSetNextChildrenIndex,
-        shouldUseResetAnimation,
-        shouldCount,
-        shouldWaitForContent,
         nextTextDelay,
+        startDelay,
     ]);
 
     useEffect(() => {
