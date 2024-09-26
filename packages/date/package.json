@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/date",
-    "version": "5.0.0-beta.818",
+    "version": "5.0.0-beta.819",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
