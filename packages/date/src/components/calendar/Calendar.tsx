@@ -162,7 +162,7 @@ const Calendar: FC<CalendarProps> = ({
                 });
             }
         }
-    }, [currentDate, shouldRenderTwoMonths, onShownDatesChange]);
+    }, [currentDate, shouldRenderTwoMonths]);
 
     useEffect(() => {
         const bounds = {
