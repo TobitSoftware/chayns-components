@@ -300,6 +300,8 @@ const Calendar: FC<CalendarProps> = ({
     }, [maxDate, minDate]);
 
     const handleLeftArrowClick = useCallback(() => {
+        if (direction) return;
+
         setDirection('left');
 
         setCurrentDate((prevDate) => {
@@ -311,9 +313,11 @@ const Calendar: FC<CalendarProps> = ({
 
             return isDateInRange({ minDate, maxDate, currentDate: newDate });
         });
-    }, [maxDate, minDate]);
+    }, [maxDate, minDate, direction]);
 
     const handleRightArrowClick = useCallback(() => {
+        if (direction) return;
+
         setDirection('right');
 
         setCurrentDate((prevDate) => {
@@ -325,7 +329,7 @@ const Calendar: FC<CalendarProps> = ({
 
             return isDateInRange({ minDate, maxDate, currentDate: newDate });
         });
-    }, [maxDate, minDate]);
+    }, [maxDate, minDate, direction]);
 
     const handleSelect = useCallback(
         (date: Date) => {
