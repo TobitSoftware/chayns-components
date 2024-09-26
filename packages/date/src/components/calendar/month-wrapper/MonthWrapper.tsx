@@ -57,127 +57,47 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     const monthHeight = useMemo(() => width / (shouldRenderTwo ? 2 : 1), [width, shouldRenderTwo]);
 
     useEffect(() => {
-        setContent(undefined);
+        setContent(() => {
+            // Initial render of months
+            const items: ReactElement[] = [];
+
+            for (let i = -1; i < 3; i++) {
+                const date = getNewDate(i, currentDate);
+
+                const { month, year } = getMonthAndYear(date);
+
+                items.push(
+                    <Month
+                        height={monthHeight}
+                        key={`${month}-${year}`}
+                        month={month}
+                        year={year}
+                        locale={locale}
+                        onSelect={onSelect}
+                        highlightedDates={highlightedDates}
+                        categories={categories}
+                        selectedDate={selectedDate}
+                        minDate={minDate}
+                        maxDate={maxDate}
+                        type={type}
+                        hoveringDay={hoveringDay}
+                        setHoveringDay={setHoveringDay}
+                        disabledDates={disabledDates}
+                        setCurrentDate={setCurrentDate}
+                        displayIndex={i}
+                        showMonthYearPickers={showMonthYearPickers}
+                    />,
+                );
+            }
+
+            return items;
+        });
     }, [monthHeight]);
 
     useEffect(() => {
-        setContent((prevState) => {
-            // Initial render of months
-            if (!prevState) {
-                const items: ReactElement[] = [];
-
-                for (let i = -1; i < 3; i++) {
-                    const date = getNewDate(i, currentDate);
-
-                    const { month, year } = getMonthAndYear(date);
-
-                    items.push(
-                        <Month
-                            height={monthHeight}
-                            key={`${month}-${year}`}
-                            month={month}
-                            year={year}
-                            locale={locale}
-                            onSelect={onSelect}
-                            highlightedDates={highlightedDates}
-                            categories={categories}
-                            selectedDate={selectedDate}
-                            minDate={minDate}
-                            maxDate={maxDate}
-                            type={type}
-                            hoveringDay={hoveringDay}
-                            setHoveringDay={setHoveringDay}
-                            disabledDates={disabledDates}
-                            setCurrentDate={setCurrentDate}
-                            displayIndex={i}
-                            showMonthYearPickers={showMonthYearPickers}
-                        />,
-                    );
-                }
-
-                return items;
-            }
-
-            if (direction === 'left') {
-                const date = getNewDate(-1, currentDate);
-
-                const { month, year } = getMonthAndYear(date);
-
-                prevState.unshift(
-                    <Month
-                        height={monthHeight}
-                        key={`${month}-${year}`}
-                        month={month}
-                        year={year}
-                        locale={locale}
-                        onSelect={onSelect}
-                        highlightedDates={highlightedDates}
-                        categories={categories}
-                        selectedDate={selectedDate}
-                        minDate={minDate}
-                        maxDate={maxDate}
-                        type={type}
-                        hoveringDay={hoveringDay}
-                        setHoveringDay={setHoveringDay}
-                        disabledDates={disabledDates}
-                        setCurrentDate={setCurrentDate}
-                        showMonthYearPickers={showMonthYearPickers}
-                    />,
-                );
-                prevState.pop();
-            }
-
-            if (direction === 'right') {
-                const date = getNewDate(2, currentDate);
-
-                const { month, year } = getMonthAndYear(date);
-
-                prevState.push(
-                    <Month
-                        height={monthHeight}
-                        key={`${month}-${year}`}
-                        month={month}
-                        year={year}
-                        locale={locale}
-                        onSelect={onSelect}
-                        highlightedDates={highlightedDates}
-                        categories={categories}
-                        selectedDate={selectedDate}
-                        minDate={minDate}
-                        maxDate={maxDate}
-                        type={type}
-                        hoveringDay={hoveringDay}
-                        setHoveringDay={setHoveringDay}
-                        disabledDates={disabledDates}
-                        setCurrentDate={setCurrentDate}
-                        showMonthYearPickers={showMonthYearPickers}
-                    />,
-                );
-                prevState.shift();
-            }
-
-            return prevState;
-        });
-    }, [
-        categories,
-        currentDate,
-        direction,
-        highlightedDates,
-        locale,
-        monthHeight,
-        onSelect,
-        selectedDate,
-        minDate,
-        maxDate,
-        type,
-        hoveringDay,
-        disabledDates,
-        setCurrentDate,
-        showMonthYearPickers,
-    ]);
-
-    useEffect(() => {
+        // Doesn't update props until animation is completed
         if (direction) return;
+
         setContent((prevState) =>
             (prevState ?? []).map((element, index) => {
                 const date = getNewDate(index - 1, currentDate);
@@ -189,37 +109,42 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                     props: {
                         ...element.props,
                         categories,
+                        disabledDates,
+                        displayIndex: index - 1,
                         highlightedDates,
+                        hoveringDay,
                         locale,
                         onSelect,
-                        selectedDate,
-                        minDate,
                         maxDate,
-                        type,
-                        hoveringDay,
-                        disabledDates,
+                        minDate,
                         month,
-                        year,
-                        displayIndex: index - 1,
+                        selectedDate,
+                        setCurrentDate,
+                        setHoveringDay,
                         showMonthYearPickers,
+                        type,
+                        year,
                     } as ReactElement,
                 };
             }),
         );
     }, [
         categories,
+        currentDate,
+        direction,
         disabledDates,
         highlightedDates,
         hoveringDay,
         locale,
+        onAnimationFinished,
+        onSelect,
         maxDate,
         minDate,
-        onSelect,
         selectedDate,
-        type,
-        currentDate,
-        direction,
+        setCurrentDate,
+        setHoveringDay,
         showMonthYearPickers,
+        type,
     ]);
 
     const animate: MotionProps['animate'] = useMemo(() => {
