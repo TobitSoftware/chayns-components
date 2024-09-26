@@ -59,6 +59,11 @@ interface BaseProps {
      * @param date
      */
     onChange?: (date: Date | Date[] | DateInterval) => void;
+    /**
+     * Function to be executed when the shown dates change. Returns the start of the displayed month and the end of the last displayed month (since depending on the available widths, there are one or two months displayed).
+     @param { start: Date, end: Date }
+     */
+    onShownDatesChange?: (dates: { start: Date; end: Date }) => void;
 }
 
 interface SingleSelectionProps {
@@ -120,6 +125,7 @@ const Calendar: FC<CalendarProps> = ({
     type = CalendarType.Single,
     disabledDates = [],
     showMonthYearPickers: showMonthYearPickersProp,
+    onShownDatesChange = () => {},
 }) => {
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
@@ -137,6 +143,26 @@ const Calendar: FC<CalendarProps> = ({
     }, [minDate, maxDate, showMonthYearPickersProp]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (currentDate) {
+            const start = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+
+            if (shouldRenderTwoMonths) {
+                const end = new Date(currentDate.getFullYear(), currentDate.getMonth() + 2, 0);
+                onShownDatesChange({
+                    start,
+                    end,
+                });
+            } else {
+                const end = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                onShownDatesChange({
+                    start,
+                    end,
+                });
+            }
+        }
+    }, [currentDate, shouldRenderTwoMonths, onShownDatesChange]);
 
     useEffect(() => {
         const bounds = {
