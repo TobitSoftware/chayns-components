@@ -15,6 +15,7 @@ export const StyledMotionContextMenuContent = styled(
     border-radius: 3px;
     box-shadow: 1px 3px 8px rgb(0 0 0 / 30%);
     color: ${({ theme }: StyledMotionContextMenuContentProps) => theme.text};
+    pointer-events: all;
     position: absolute;
     z-index: 10;
 
