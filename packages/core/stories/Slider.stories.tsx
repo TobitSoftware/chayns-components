@@ -40,6 +40,8 @@ export const RangeSlider = Template.bind({});
 
 WithThumbLabelFormatter.args = {
     shouldShowThumbLabel: true,
+    maxValue: 13.37,
+    minValue: 0,
 };
 
 RangeSlider.args = {
