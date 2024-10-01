@@ -64,7 +64,7 @@
         "vitest": "^1.6.0"
     },
     "dependencies": {
-        "commonmark": "^0.31.1",
+        "commonmark": "^0.31.2",
         "csv-stringify": "^6.5.1",
         "marked": "^13.0.3"
     },
