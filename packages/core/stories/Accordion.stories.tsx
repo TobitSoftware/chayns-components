@@ -7,6 +7,9 @@ import AccordionGroup from '../src/components/accordion/accordion-group/Accordio
 import AccordionItem from '../src/components/accordion/accordion-item/AccordionItem';
 import Badge from '../src/components/badge/Badge';
 import Button from '../src/components/button/Button';
+import List from '../src/components/list/List';
+import ListItemContent from '../src/components/list/list-item/list-item-content/ListItemContent';
+import ListItem from '../src/components/list/list-item/ListItem';
 
 export default {
     title: 'Core/Accordion',
@@ -174,6 +177,8 @@ export const ScrollableAccordion = Template.bind({});
 export const WithAccordionItems = Template.bind({});
 
 export const InputAsTitle = InputAsTitleTemplate.bind({});
+
+export const WrappedAccordionWithListItems = Template.bind({});
 
 General.args = {
     children: (
@@ -414,4 +419,53 @@ WithAccordionItems.args = {
         </>
     ),
     title: 'Lorem ipsum dolor sit amet',
+};
+
+WrappedAccordionWithListItems.args = {
+    children: (
+        <AccordionGroup isWrapped>
+            <Accordion title="Lorem ipsum">
+                <AccordionGroup isWrapped>
+                    <Accordion title="Dolor sit amet">
+                        <AccordionItem>Lorem ipsum dolor sit amet</AccordionItem>
+                        <AccordionItem>Consetetur sadipscing elitr</AccordionItem>
+                        <AccordionItem>
+                            Sed diam nonumy eirmod tempor invidunt ut labore
+                        </AccordionItem>
+                        <AccordionItem>Et dolore magna aliquyam erat</AccordionItem>
+                    </Accordion>
+                </AccordionGroup>
+            </Accordion>
+            <Accordion title="Lorem ipsum sit dolor atem">
+                <AccordionGroup isWrapped>
+                    <Accordion title="Dolor sit amet">
+                        <List>
+                            <ListItem title="Tolor tantem">
+                                <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                            </ListItem>
+                            <ListItem title="Tolor tantem">
+                                <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                            </ListItem>
+                            <ListItem title="Tolor tantem">
+                                <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                            </ListItem>
+                        </List>
+                    </Accordion>
+                </AccordionGroup>
+            </Accordion>
+            <Accordion title="Lorem ipsum sit dolor atem">
+                <List>
+                    <ListItem title="Tolor tantem">
+                        <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                    </ListItem>
+                    <ListItem title="Tolor tantem">
+                        <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                    </ListItem>
+                    <ListItem title="Tolor tantem">
+                        <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                    </ListItem>
+                </List>
+            </Accordion>
+        </AccordionGroup>
+    ),
 };
