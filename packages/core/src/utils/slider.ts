@@ -3,13 +3,15 @@ import type { Theme } from '../components/color-scheme-provider/ColorSchemeProvi
 export interface FillSlider {
     fromSlider: HTMLInputElement;
     toSlider: HTMLInputElement;
+    fromValue?: number;
+    toValue?: number;
     theme: Theme;
 }
 
-export const fillSlider = ({ fromSlider, toSlider, theme }: FillSlider) => {
+export const fillSlider = ({ fromSlider, toSlider, theme, fromValue, toValue }: FillSlider) => {
     const rangeDistance = Number(toSlider.max) - Number(toSlider.min);
-    const fromPosition = Number(fromSlider.value) - Number(toSlider.min);
-    const toPosition = Number(toSlider.value) - Number(toSlider.min);
+    const fromPosition = Number(fromValue ?? fromSlider.value) - Number(toSlider.min);
+    const toPosition = Number(toValue ?? toSlider.value) - Number(toSlider.min);
 
     const backgroundColor = theme['403'];
     const trackColor = theme['409'];

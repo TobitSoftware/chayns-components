@@ -136,28 +136,38 @@ const Slider: FC<SliderProps> = ({
                 return;
             }
 
-            setFromValue(Number(event.target.value));
+            let newValue = Number(event.target.value);
 
-            const from = Number(fromSliderRef.current.value);
+            if (newValue > maxValue || newValue > maxValue - (maxValue % steps)) {
+                newValue = maxValue;
+            } else if (newValue < minValue) {
+                newValue = minValue;
+            } else {
+                newValue = Math.round(newValue / steps) * steps;
+            }
+
+            setFromValue(newValue);
+
             const to = Number(toSliderRef.current.value);
 
             if (typeof onChange === 'function') {
-                onChange(undefined, { maxValue: to, minValue: from });
+                onChange(undefined, { maxValue: to, minValue: newValue });
             }
 
             fillSlider({
                 toSlider: toSliderRef.current,
                 fromSlider: fromSliderRef.current,
+                fromValue: newValue,
                 theme,
             });
 
-            if (from > to) {
+            if (newValue > to) {
                 fromSliderRef.current.value = String(to);
             } else {
-                fromSliderRef.current.value = String(from);
+                fromSliderRef.current.value = String(newValue);
             }
         },
-        [onChange, theme],
+        [maxValue, minValue, onChange, steps, theme],
     );
 
     const handleControlToSlider = useCallback(
@@ -168,28 +178,38 @@ const Slider: FC<SliderProps> = ({
                 return;
             }
 
-            setToValue(Number(event.target.value));
+            let newValue = Number(event.target.value);
+
+            if (newValue > maxValue || newValue > maxValue - (maxValue % steps)) {
+                newValue = maxValue;
+            } else if (newValue < minValue) {
+                newValue = minValue;
+            } else {
+                newValue = Math.round(newValue / steps) * steps;
+            }
+
+            setToValue(newValue);
 
             const from = Number(fromSliderRef.current.value);
-            const to = Number(toSliderRef.current.value);
 
             if (typeof onChange === 'function') {
-                onChange(undefined, { maxValue: to, minValue: from });
+                onChange(undefined, { maxValue: newValue, minValue: from });
             }
 
             fillSlider({
                 toSlider: toSliderRef.current,
                 fromSlider: fromSliderRef.current,
+                toValue: newValue,
                 theme,
             });
 
-            if (from <= to) {
-                toSliderRef.current.value = String(to);
+            if (from <= newValue) {
+                toSliderRef.current.value = String(newValue);
             } else {
                 toSliderRef.current.value = String(from);
             }
         },
-        [onChange, theme],
+        [maxValue, minValue, onChange, steps, theme],
     );
 
     useEffect(() => {
@@ -389,7 +409,7 @@ const Slider: FC<SliderProps> = ({
                         $isInterval={!!interval}
                         type="range"
                         value={toValue}
-                        step={steps}
+                        step={0.01}
                         max={maxValue}
                         min={minValue}
                         onTouchStart={handleTouchStart}
@@ -418,7 +438,6 @@ const Slider: FC<SliderProps> = ({
             toSliderThumbPosition,
             toSliderThumbContentPosition,
             toValue,
-            steps,
             handleControlToSlider,
         ],
     );
