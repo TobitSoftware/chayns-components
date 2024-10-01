@@ -51,7 +51,7 @@ export const calculateGradientOffset = ({
 }: CalculateGradientOffset): number => {
     const percentage = (value - min) / (max - min);
 
-    const adjustedWidth = containerWidth - thumbWidth * 0.25;
+    const adjustedWidth = containerWidth - thumbWidth / 2;
 
     return percentage * adjustedWidth + thumbWidth / 2;
 };
