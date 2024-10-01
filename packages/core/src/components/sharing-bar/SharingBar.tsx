@@ -1,5 +1,5 @@
 import { getSite } from 'chayns-api';
-import React, { FC, useRef } from 'react';
+import React, { FC, MouseEventHandler, useCallback, useRef } from 'react';
 import { SHAREPROVIDER } from '../../constants/sharingBar';
 import type { ContextMenuAlignment } from '../../types/contextMenu';
 import { getIsTouch } from '../../utils/environment';
@@ -140,12 +140,15 @@ const SharingBar: FC<SharingBarProps> = ({
         },
     ];
 
-    const handleSharingBarClick = () => {
+    const handleSharingBarClick = useCallback<MouseEventHandler<HTMLDivElement>>((event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
         contextMenuRef.current?.show();
-    };
+    }, []);
 
     return (
-        <StyledSharingBar onClick={handleSharingBarClick} onTouchStart={handleSharingBarClick}>
+        <StyledSharingBar onClick={handleSharingBarClick}>
             <StyledSharingBarIconWrapper>
                 <Icon icons={['fa-solid fa-share-nodes']} />
             </StyledSharingBarIconWrapper>
