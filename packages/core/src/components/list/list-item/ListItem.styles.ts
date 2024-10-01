@@ -11,12 +11,6 @@ type StyledListItemProps = WithTheme<{
 }>;
 
 export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
-    ${({ $isOpen, theme }) =>
-        $isOpen &&
-        css`
-            background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
-        `}
-
     overflow: hidden;
     transition: background-color 0.3s ease;
 
@@ -24,6 +18,12 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
         $isParentAccordionWrapped &&
         css`
             padding-left: 8px;
+        `}
+
+    ${({ $isOpen, theme }) =>
+        $isOpen &&
+        css`
+            background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
         `}
 
     ${({ $isClickable, theme }) =>
@@ -34,8 +34,15 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
             }
         `}
     
-    ${({ $isOpen, $isWrapped, $shouldShowSeparatorBelow, theme }: StyledListItemProps) =>
-        ($shouldShowSeparatorBelow || ((!$isOpen || $isWrapped) && theme.accordionLines)) &&
+    ${({
+        $isOpen,
+        $isParentAccordionWrapped,
+        $isWrapped,
+        $shouldShowSeparatorBelow,
+        theme,
+    }: StyledListItemProps) =>
+        ($shouldShowSeparatorBelow ||
+            ((!$isOpen || $isWrapped || $isParentAccordionWrapped) && theme.accordionLines)) &&
         css`
             &&:not(:last-child) {
                 border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
