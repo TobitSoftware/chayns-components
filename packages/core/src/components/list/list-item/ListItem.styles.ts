@@ -5,6 +5,7 @@ import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider'
 type StyledListItemProps = WithTheme<{
     $isClickable: boolean;
     $isOpen: boolean;
+    $isParentAccordionWrapped: boolean;
     $isWrapped: boolean;
     $shouldShowSeparatorBelow: boolean;
 }>;
@@ -18,6 +19,12 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
 
     overflow: hidden;
     transition: background-color 0.3s ease;
+
+    ${({ $isParentAccordionWrapped }: StyledListItemProps) =>
+        $isParentAccordionWrapped &&
+        css`
+            padding-left: 8px;
+        `}
 
     ${({ $isClickable, theme }) =>
         $isClickable &&

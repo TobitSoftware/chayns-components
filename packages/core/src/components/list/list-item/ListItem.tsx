@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 import { useUuid } from '../../../hooks/uuid';
 import type { IListItemRightElements } from '../../../types/list';
+import { AccordionContext } from '../../accordion/Accordion';
 import AreaContextProvider from '../../area-provider/AreaContextProvider';
 import { ListContext } from '../List';
 import ListItemBody from './list-item-body/ListItemBody';
@@ -128,6 +129,8 @@ const ListItem: FC<ListItemProps> = ({
         updateOpenItemUuid,
     } = useContext(ListContext);
 
+    const { isWrapped: isParentAccordionWrapped } = useContext(AccordionContext);
+
     const uuid = useUuid();
 
     const isExpandable = children !== undefined;
@@ -173,6 +176,7 @@ const ListItem: FC<ListItemProps> = ({
             key={`list-item-${uuid}`}
             $isClickable={isClickable}
             $isOpen={isItemOpen}
+            $isParentAccordionWrapped={isParentAccordionWrapped}
             $isWrapped={isWrapped}
             $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
         >
