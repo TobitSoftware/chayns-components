@@ -221,10 +221,12 @@ const Slider: FC<SliderProps> = ({
 
             let newValue = Number(event.target.value);
 
-            if (newValue > maxValue) {
+            if (newValue > maxValue || newValue > maxValue - (maxValue % steps)) {
                 newValue = maxValue;
             } else if (newValue < minValue) {
                 newValue = minValue;
+            } else {
+                newValue = Math.round(newValue / steps) * steps;
             }
 
             if (interval) {
@@ -239,7 +241,7 @@ const Slider: FC<SliderProps> = ({
                 onChange(newValue);
             }
         },
-        [handleControlFromSlider, interval, maxValue, minValue, onChange],
+        [handleControlFromSlider, interval, maxValue, minValue, onChange, steps],
     );
 
     const fromSliderThumbPosition = useMemo(() => {
@@ -248,7 +250,7 @@ const Slider: FC<SliderProps> = ({
                 max: maxValue,
                 min: minValue,
                 value: fromValue,
-                thumbWidth: 40,
+                thumbWidth: 20,
                 containerWidth: fromSliderRef.current.offsetWidth,
             });
         }
@@ -262,7 +264,7 @@ const Slider: FC<SliderProps> = ({
                 max: maxValue,
                 min: minValue,
                 value: toValue,
-                thumbWidth: 40,
+                thumbWidth: 20,
                 containerWidth: toSliderRef.current.offsetWidth,
             });
         }
@@ -325,9 +327,9 @@ const Slider: FC<SliderProps> = ({
                     $isInterval={!!interval}
                     type="range"
                     value={fromValue}
-                    step={steps}
-                    max={maxValue % steps === 0 ? maxValue : maxValue + steps - (maxValue % steps)}
-                    min={minValue % steps === 0 ? minValue : minValue - (minValue % steps)}
+                    step={0.01}
+                    max={maxValue}
+                    min={minValue}
                     onTouchStart={handleTouchStart}
                     onTouchEnd={handleTouchEnd}
                     onChange={handleInputChange}
@@ -402,7 +404,6 @@ const Slider: FC<SliderProps> = ({
             isBigSlider,
             interval,
             fromValue,
-            steps,
             maxValue,
             minValue,
             handleTouchStart,
@@ -417,6 +418,7 @@ const Slider: FC<SliderProps> = ({
             toSliderThumbPosition,
             toSliderThumbContentPosition,
             toValue,
+            steps,
             handleControlToSlider,
         ],
     );
