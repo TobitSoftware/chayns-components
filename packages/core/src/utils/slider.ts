@@ -90,7 +90,7 @@ export const getThumbMaxWidth = ({ maxNumber, thumbLabelFormatter }: GetThumbMax
 
     element.style.height = '20px';
     element.style.display = 'flex';
-    element.style.padding = '0 8px';
+    element.style.padding = '16px';
     element.style.whiteSpace = 'nowrap';
     element.style.minWidth = '20px';
     element.style.opacity = '0';

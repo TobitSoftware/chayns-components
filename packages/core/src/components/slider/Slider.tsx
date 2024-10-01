@@ -87,6 +87,8 @@ const Slider: FC<SliderProps> = ({
 
     const theme = useTheme();
 
+    console.log(thumbWidth);
+
     useEffect(() => {
         if (shouldShowThumbLabel) {
             setThumbWidth(getThumbMaxWidth({ maxNumber: maxValue, thumbLabelFormatter }));
