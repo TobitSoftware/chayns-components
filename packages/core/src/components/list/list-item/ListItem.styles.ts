@@ -48,7 +48,7 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
                 border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
                     rgba(${theme['headline-rgb']}, 0.5);
             }
-        `}}
+        `}
 
     ${({ $isWrapped }) =>
         $isWrapped &&
