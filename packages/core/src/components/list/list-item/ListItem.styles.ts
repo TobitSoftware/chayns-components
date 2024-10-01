@@ -34,8 +34,8 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
             }
         `}
     
-    ${({ $shouldShowSeparatorBelow, theme }: StyledListItemProps) =>
-        ($shouldShowSeparatorBelow || theme.accordionLines) &&
+    ${({ $isOpen, $isWrapped, $shouldShowSeparatorBelow, theme }: StyledListItemProps) =>
+        ($shouldShowSeparatorBelow || ((!$isOpen || $isWrapped) && theme.accordionLines)) &&
         css`
             &&:not(:last-child) {
                 border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
