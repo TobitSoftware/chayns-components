@@ -14,6 +14,10 @@ import {
 
 export type SharingBarProps = {
     /**
+     * The element where the content of the `SharingBar` should be rendered via React Portal.
+     */
+    container?: Element;
+    /**
      * The label that should be displayed.
      */
     label: string;
@@ -27,7 +31,7 @@ export type SharingBarProps = {
     popupAlignment: ContextMenuAlignment;
 };
 
-const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment }) => {
+const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment, container }) => {
     const contextMenuRef = useRef<{ hide: VoidFunction; show: VoidFunction }>(null);
 
     const handleImageDownload = () => {
@@ -135,7 +139,12 @@ const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment }) => {
             <StyledSharingBarIconWrapper>
                 <Icon icons={['fa-solid fa-share-nodes']} />
             </StyledSharingBarIconWrapper>
-            <ContextMenu items={contextMenuItems} ref={contextMenuRef} alignment={popupAlignment}>
+            <ContextMenu
+                items={contextMenuItems}
+                ref={contextMenuRef}
+                alignment={popupAlignment}
+                container={container}
+            >
                 {null}
             </ContextMenu>
             <StyledSharingBarText>{label}</StyledSharingBarText>
