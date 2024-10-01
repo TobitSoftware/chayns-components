@@ -116,7 +116,7 @@ export const StyledSliderThumbLabel = styled.span.attrs<StyledSliderThumbLabelPr
     ({ $position, $isBigSlider, $width }) => ({
         style: {
             minWidth: `${$width}px`,
-            top: `-${$isBigSlider ? 45 : 35}px`,
+            top: `-${$isBigSlider ? 56 : 48}px`,
             left: `${$position}px`,
         },
     }),
@@ -134,7 +134,7 @@ export const StyledSliderThumbLabel = styled.span.attrs<StyledSliderThumbLabelPr
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 8px;
+    padding: 16px;
     white-space: nowrap;
 
     transition: top 0.2s ease 0s;
@@ -143,7 +143,7 @@ export const StyledSliderThumbLabel = styled.span.attrs<StyledSliderThumbLabelPr
         background-color: inherit;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         border-right: 1px solid rgba(0, 0, 0, 0.1);
-        box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.4);
         content: '';
         height: 14px;
         position: absolute;
