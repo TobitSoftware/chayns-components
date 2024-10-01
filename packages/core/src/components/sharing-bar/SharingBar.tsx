@@ -150,6 +150,7 @@ const SharingBar: FC<SharingBarProps> = ({
                 <Icon icons={['fa-solid fa-share-nodes']} />
             </StyledSharingBarIconWrapper>
             <ContextMenu
+                isInDialog={isInDialog}
                 items={contextMenuItems}
                 ref={contextMenuRef}
                 alignment={popupAlignment}
