@@ -14,6 +14,12 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
     overflow: hidden;
     transition: background-color 0.3s ease;
 
+    ${({ $isParentAccordionWrapped }: StyledListItemProps) =>
+        $isParentAccordionWrapped &&
+        css`
+            padding-left: 8px;
+        `}
+
     ${({ $isOpen, theme }) =>
         $isOpen &&
         css`
