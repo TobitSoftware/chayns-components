@@ -58,6 +58,10 @@ type ContextMenuProps = {
      */
     coordinates?: ContextMenuCoordinates;
     /**
+     * Whether the ContextMenu is inside a dialog.
+     */
+    isInDialog?: boolean;
+    /**
      * The items that will be displayed in the content of the `ContextMenu`.
      */
     items: ContextMenuItem[];
@@ -89,6 +93,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                 document.querySelector('.tapp') ||
                 document.body,
             coordinates,
+            isInDialog = false,
             items,
             onHide,
             onShow,
@@ -145,8 +150,10 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 const { height, width, top, left } = container.getBoundingClientRect();
 
-                const x = childrenLeft + window.scrollX + childrenWidth / 2 - left;
-                const y = childrenTop + window.scrollY + childrenHeight / 2 - top;
+                const x =
+                    childrenLeft + (isInDialog ? 0 : window.scrollX) + childrenWidth / 2 - left;
+                const y =
+                    childrenTop + (isInDialog ? 0 : window.scrollY) + childrenHeight / 2 - top;
 
                 setInternalCoordinates({ x, y });
 
@@ -164,7 +171,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 setIsContentShown(true);
             }
-        }, [container, items]);
+        }, [container, isInDialog, items]);
 
         const handleClick = useCallback<MouseEventHandler<HTMLDivElement>>(
             (event) => {
