@@ -52,6 +52,8 @@ export type TruncationProps = {
     onChange?: (event: MouseEvent<HTMLAnchorElement>, isOpen: boolean) => void;
 };
 
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
 const Truncation: FC<TruncationProps> = ({
     collapsedHeight = 150,
     clampPosition = ClampPosition.Right,
@@ -169,7 +171,7 @@ const Truncation: FC<TruncationProps> = ({
         }
     }, [children, internalIsOpen, shouldShowCollapsedElement]);
 
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         if (originalChildrenRef.current) {
             const resizeObserver = new ResizeObserver((entries) => {
                 if (entries && entries[0]) {
@@ -204,7 +206,7 @@ const Truncation: FC<TruncationProps> = ({
         return () => {};
     }, [originalBigHeight]);
 
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         if (pseudoChildrenRef.current) {
             const resizeObserver = new ResizeObserver((entries) => {
                 if (entries && entries[0]) {

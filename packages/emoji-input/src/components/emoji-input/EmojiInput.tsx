@@ -42,6 +42,8 @@ import {
 } from './EmojiInput.styles';
 import PrefixElement from './prefix-element/PrefixElement';
 
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
 export type EmojiInputProps = {
     /**
      * Access token of the logged-in user. Is needed to load and save the history of the emojis.
@@ -522,7 +524,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         // This effect is used to call the 'handleUpdateHTML' function once after the component has been
         // rendered. This is necessary because the 'contentEditable' element otherwise does not display
         // the HTML content correctly when the component is rendered for the first time.
-        useLayoutEffect(() => {
+        useIsomorphicLayoutEffect(() => {
             handleUpdateHTML(valueRef.current);
         }, [handleUpdateHTML]);
 

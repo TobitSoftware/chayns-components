@@ -18,6 +18,8 @@ import {
 } from './Typewriter.styles';
 import { getCharactersCount, getSubTextFromHTML, shuffleArray } from './utils';
 
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
 // noinspection JSUnusedGlobalSymbols
 export enum TypewriterDelay {
     ExtraSlow = 4000,
@@ -127,7 +129,7 @@ const Typewriter: FC<TypewriterProps> = ({
     const functions = useFunctions();
     const values = useValues();
 
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         if (children) {
             setHasRenderedChildrenOnce(false);
         }
