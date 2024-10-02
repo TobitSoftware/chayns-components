@@ -28,6 +28,12 @@ const InputAsTitleTemplate: StoryFn<typeof Accordion> = ({ children, ...args }) 
     </Accordion>
 );
 
+const locationImages = [
+    'https://sub60.tobit.com/l/1',
+    'https://sub60.tobit.com/l/2',
+    'https://sub60.tobit.com/l/3',
+];
+
 const MultipleAccordionsTemplate: StoryFn<typeof Accordion> = () => (
     <AccordionGroup>
         <Accordion key="first" title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr">
@@ -423,49 +429,51 @@ WithAccordionItems.args = {
 
 WrappedAccordionWithListItems.args = {
     children: (
-        <AccordionGroup isWrapped>
-            <Accordion title="Lorem ipsum">
-                <AccordionGroup isWrapped>
-                    <Accordion title="Dolor sit amet">
-                        <AccordionItem>Lorem ipsum dolor sit amet</AccordionItem>
-                        <AccordionItem>Consetetur sadipscing elitr</AccordionItem>
-                        <AccordionItem>
-                            Sed diam nonumy eirmod tempor invidunt ut labore
-                        </AccordionItem>
-                        <AccordionItem>Et dolore magna aliquyam erat</AccordionItem>
-                    </Accordion>
-                </AccordionGroup>
-            </Accordion>
-            <Accordion title="Lorem ipsum sit dolor atem">
-                <AccordionGroup isWrapped>
-                    <Accordion title="Dolor sit amet">
-                        <List>
-                            <ListItem title="Tolor tantem">
-                                <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
-                            </ListItem>
-                            <ListItem title="Tolor tantem">
-                                <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
-                            </ListItem>
-                            <ListItem title="Tolor tantem">
-                                <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
-                            </ListItem>
-                        </List>
-                    </Accordion>
-                </AccordionGroup>
-            </Accordion>
-            <Accordion title="Lorem ipsum sit dolor atem">
-                <List>
-                    <ListItem title="Tolor tantem">
-                        <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
-                    </ListItem>
-                    <ListItem title="Tolor tantem">
-                        <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
-                    </ListItem>
-                    <ListItem title="Tolor tantem">
-                        <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
-                    </ListItem>
-                </List>
-            </Accordion>
-        </AccordionGroup>
+        <>
+            <List>
+                <ListItem images={[locationImages[0]]} title="Tolor tantem">
+                    <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                </ListItem>
+                <ListItem images={[locationImages[1]]} title="Tolor tantem">
+                    <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                </ListItem>
+                <ListItem images={[locationImages[2]]} title="Tolor tantem">
+                    <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                </ListItem>
+            </List>
+            <AccordionGroup isWrapped>
+                <Accordion title="Lorem ipsum">
+                    <List>
+                        <ListItem images={[locationImages[0]]} title="Tolor tantem">
+                            <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                        </ListItem>
+                        <ListItem images={[locationImages[1]]} title="Tolor tantem">
+                            <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                        </ListItem>
+                        <ListItem images={[locationImages[2]]} title="Tolor tantem">
+                            <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                        </ListItem>
+                    </List>
+                </Accordion>
+                <Accordion title="Lorem ipsum sit dolor atem">
+                    <AccordionGroup isWrapped>
+                        <Accordion title="Dolor sit amet">
+                            <List>
+                                <ListItem images={[locationImages[0]]} title="Tolor tantem">
+                                    <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                                </ListItem>
+                                <ListItem images={[locationImages[1]]} title="Tolor tantem">
+                                    <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                                </ListItem>
+                                <ListItem images={[locationImages[2]]} title="Tolor tantem">
+                                    <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                                </ListItem>
+                            </List>
+                        </Accordion>
+                    </AccordionGroup>
+                </Accordion>
+            </AccordionGroup>
+        </>
     ),
+    title: 'Lorem ipsum dolor sit amet',
 };
