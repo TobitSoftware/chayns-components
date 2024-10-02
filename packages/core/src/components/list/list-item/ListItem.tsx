@@ -114,7 +114,7 @@ const ListItem: FC<ListItemProps> = ({
     leftElements,
     rightElements,
     shouldHideImageOrIconBackground,
-    shouldHideIndicator,
+    shouldHideIndicator = false,
     subtitle,
     shouldShowRoundImageOrIcon,
     shouldShowSeparatorBelow = false,
@@ -178,6 +178,7 @@ const ListItem: FC<ListItemProps> = ({
             $isOpen={isItemOpen}
             $isInAccordion={typeof isParentAccordionWrapped === 'boolean'}
             $isWrapped={isWrapped}
+            $shouldHideIndicator={shouldHideIndicator}
             $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
         >
             <ListItemHead

@@ -434,10 +434,13 @@ WrappedAccordionWithListItems.args = {
                 <ListItem images={[locationImages[0]]} title="Tolor tantem">
                     <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
                 </ListItem>
-                <ListItem images={[locationImages[1]]} title="Tolor tantem">
+                <ListItem images={[locationImages[0]]} shouldHideIndicator title="Tolor tantem">
                     <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
                 </ListItem>
-                <ListItem images={[locationImages[2]]} title="Tolor tantem">
+                <ListItem title="Tolor tantem">
+                    <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                </ListItem>
+                <ListItem shouldHideIndicator title="Tolor tantem">
                     <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
                 </ListItem>
             </List>
@@ -447,10 +450,17 @@ WrappedAccordionWithListItems.args = {
                         <ListItem images={[locationImages[0]]} title="Tolor tantem">
                             <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
                         </ListItem>
-                        <ListItem images={[locationImages[1]]} title="Tolor tantem">
+                        <ListItem
+                            images={[locationImages[0]]}
+                            shouldHideIndicator
+                            title="Tolor tantem"
+                        >
                             <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
                         </ListItem>
-                        <ListItem images={[locationImages[2]]} title="Tolor tantem">
+                        <ListItem title="Tolor tantem">
+                            <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                        </ListItem>
+                        <ListItem shouldHideIndicator title="Tolor tantem">
                             <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
                         </ListItem>
                     </List>
@@ -462,10 +472,17 @@ WrappedAccordionWithListItems.args = {
                                 <ListItem images={[locationImages[0]]} title="Tolor tantem">
                                     <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
                                 </ListItem>
-                                <ListItem images={[locationImages[1]]} title="Tolor tantem">
+                                <ListItem
+                                    images={[locationImages[0]]}
+                                    shouldHideIndicator
+                                    title="Tolor tantem"
+                                >
                                     <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
                                 </ListItem>
-                                <ListItem images={[locationImages[2]]} title="Tolor tantem">
+                                <ListItem title="Tolor tantem">
+                                    <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
+                                </ListItem>
+                                <ListItem shouldHideIndicator title="Tolor tantem">
                                     <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
                                 </ListItem>
                             </List>

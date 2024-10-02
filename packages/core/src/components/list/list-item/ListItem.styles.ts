@@ -7,6 +7,7 @@ type StyledListItemProps = WithTheme<{
     $isOpen: boolean;
     $isInAccordion: boolean;
     $isWrapped: boolean;
+    $shouldHideIndicator: boolean;
     $shouldShowSeparatorBelow: boolean;
 }>;
 
@@ -14,10 +15,10 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
     overflow: hidden;
     transition: background-color 0.3s ease;
 
-    ${({ $isInAccordion }: StyledListItemProps) =>
+    ${({ $isInAccordion, $shouldHideIndicator }: StyledListItemProps) =>
         $isInAccordion &&
         css`
-            padding-left: 8px;
+            padding-left: ${$shouldHideIndicator ? '16px' : '8px'};
         `}
 
     ${({ $isOpen, theme }) =>
