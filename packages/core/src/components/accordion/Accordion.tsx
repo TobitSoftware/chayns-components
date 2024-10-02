@@ -22,7 +22,9 @@ import AccordionHead from './accordion-head/AccordionHead';
 import { AccordionWrappedContext } from './accordion-provider/AccordionContextProvider';
 import { StyledMotionAccordion } from './Accordion.styles';
 
-export const AccordionContext = React.createContext({ isWrapped: false });
+export const AccordionContext = React.createContext<{ isWrapped?: boolean }>({
+    isWrapped: undefined,
+});
 
 export type AccordionProps = {
     /**

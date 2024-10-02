@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledAccordionItemProps = WithTheme<{
-    $isWrapped: boolean;
+    $isWrapped?: boolean;
 }>;
 
 export const StyledAccordionItem = styled.div<StyledAccordionItemProps>`

@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledAccordionContentProps = WithTheme<{
-    $isWrapped: boolean;
+    $isWrapped?: boolean;
     $maxHeight?: number;
     $browser: Browser | 'bot' | null | undefined;
 }>;

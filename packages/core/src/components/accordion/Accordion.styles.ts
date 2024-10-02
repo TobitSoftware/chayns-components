@@ -4,7 +4,7 @@ import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledMotionAccordionProps = WithTheme<{
     $isOpen: boolean;
-    $isParentWrapped: boolean;
+    $isParentWrapped?: boolean;
     $isWrapped?: boolean;
     $shouldForceBackground?: boolean;
     $shouldHideBackground?: boolean;
