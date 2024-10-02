@@ -176,7 +176,7 @@ const ListItem: FC<ListItemProps> = ({
             key={`list-item-${uuid}`}
             $isClickable={isClickable}
             $isOpen={isItemOpen}
-            $isParentAccordionWrapped={isParentAccordionWrapped}
+            $isInAccordion={typeof isParentAccordionWrapped === 'boolean'}
             $isWrapped={isWrapped}
             $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
         >
