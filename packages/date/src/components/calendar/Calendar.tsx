@@ -294,9 +294,7 @@ const Calendar: FC<CalendarProps> = ({
     }, []);
 
     useEffect(() => {
-        const date = new Date();
-
-        setCurrentDate(isDateInRange({ minDate, maxDate, currentDate: date }));
+        setCurrentDate((prevDate) => isDateInRange({ minDate, maxDate, currentDate: prevDate || new Date() }));
     }, [maxDate, minDate]);
 
     const handleLeftArrowClick = useCallback(() => {
