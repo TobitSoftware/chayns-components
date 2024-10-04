@@ -91,7 +91,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const closedSubtitle = useElementSize(pseudoSubtitleClosedRef);
     const openedSubtitle = useElementSize(pseudoSubtitleOpenRef);
 
-    const shouldShowSubtitleRow = typeof subtitle === 'string';
+    const shouldShowSubtitleRow = subtitle || typeof subtitle === 'string';
 
     useEffect(() => {
         if (closedTitle && openedTitle) {
