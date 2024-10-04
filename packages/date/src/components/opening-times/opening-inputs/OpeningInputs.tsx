@@ -6,16 +6,46 @@ import OpeningInput from './opening-input/OpeningInput';
 import { StyledOpeningInputPreview, StyledOpeningInputs } from './OpeningInputs.styles';
 
 export type OpeningInputsProps = {
+    /**
+     * Array of opening times
+     */
     times: Time[];
+    /**
+     * If the inputs are disabled
+     */
     isDisabled?: boolean;
+    /**
+     * Function that is called when a time is changed
+     */
     onChange?: (time: Time) => void;
+    /**
+     * Function that is called when a new time is added
+     */
     onAdd?: (time: Time, id: string) => void;
+    /**
+     * Function that is called when a time is removed
+     */
     onRemove?: (id: Time['id']) => void;
+    /**
+     * Function that is called when the times are invalid
+     */
     onInvalid?: (openingTimeId: string, timeIds: string[]) => void;
+    /**
+     * The id of the opening time
+     */
     id: string;
+    /**
+     * The id of the current day
+     */
     currentDayId?: OpeningTime['id'];
-    editMode: boolean;
-    closedText: string;
+    /**
+     * If the edit mode is enabled
+     */
+    editMode?: boolean;
+    /**
+     * The text to show when the inputs are disabled
+     */
+    closedText?: string;
 };
 
 const OpeningInputs: FC<OpeningInputsProps> = ({
@@ -27,8 +57,8 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
     id,
     onChange,
     currentDayId,
-    editMode,
-    closedText,
+    editMode = false,
+    closedText = '',
 }) => {
     const [newTimes, setNewTimes] = useState<Time[]>();
     const [invalidTimes, setInvalidTimes] = useState<string[]>([]);
