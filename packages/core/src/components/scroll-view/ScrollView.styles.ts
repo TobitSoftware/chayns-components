@@ -8,31 +8,34 @@ type StyledScrollViewProps = WithTheme<{
     $height?: CSSProperties['height'];
     $maxWidth?: CSSProperties['width'];
     $width?: CSSProperties['width'];
+    $overflowX: 'scroll' | 'auto';
+    $overflowY: 'scroll' | 'auto';
     $browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledScrollView = styled.div<StyledScrollViewProps>`
     ${({ $maxHeight }) =>
-        !!$maxHeight &&
+        $maxHeight &&
         css`
-            max-height: ${$maxHeight};
+            max-height: ${typeof $maxHeight === 'number' ? `${$maxHeight}px` : $maxHeight};
         `}
     ${({ $height }) =>
-        !!$height &&
+        $height &&
         css`
-            height: ${$height};
+            height: ${typeof $height === 'number' ? `${$height}px` : $height};
         `} 
     ${({ $maxWidth }) =>
-        !!$maxWidth &&
+        $maxWidth &&
         css`
-            max-width: ${$maxWidth};
+            max-width: ${typeof $maxWidth === 'number' ? `${$maxWidth}px` : $maxWidth};
         `} 
     ${({ $width }) =>
-        !!$width &&
+        $width &&
         css`
-            width: ${$width};
+            width: ${typeof $width === 'number' ? `${$width}px` : $width};
         `} 
-    overflow: auto;
+    ${({ $overflowX }) => css`overflow-x: ${$overflowX};`}
+    ${({ $overflowY }) => css`overflow-y: ${$overflowY};`}
 
     // Styles for custom scrollbar
     ${({ $browser, theme }: StyledScrollViewProps) =>
@@ -60,6 +63,10 @@ export const StyledScrollView = styled.div<StyledScrollViewProps>`
                       border-radius: 20px;
                       background-clip: padding-box;
                       border: solid 3px transparent;
+                  }
+            
+                  &::-webkit-scrollbar-corner {
+                      background-color: transparent;
                   }
               `}
 `;
