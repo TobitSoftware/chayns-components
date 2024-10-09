@@ -1,5 +1,5 @@
 import { getDevice } from 'chayns-api';
-import React, { CSSProperties, FC, ReactNode, useMemo } from 'react';
+import React, { CSSProperties, forwardRef, ReactNode, useMemo } from 'react';
 import { StyledScrollView } from './ScrollView.styles';
 
 export type ScrollViewProps = {
@@ -25,24 +25,27 @@ export type ScrollViewProps = {
     width?: CSSProperties['width'];
 };
 
-const ScrollView: FC<ScrollViewProps> = ({ maxHeight, height, maxWidth, width, children }) => {
-    const { browser } = getDevice();
+const ScrollView = forwardRef<HTMLDivElement, ScrollViewProps>(
+    ({ maxHeight, height, maxWidth, width, children }, ref) => {
+        const { browser } = getDevice();
 
-    return useMemo(
-        () => (
-            <StyledScrollView
-                $browser={browser?.name}
-                $maxHeight={maxHeight}
-                $height={height}
-                $maxWidth={maxWidth}
-                $width={width}
-            >
-                {children}
-            </StyledScrollView>
-        ),
-        [browser?.name, children, height, maxHeight, maxWidth, width],
-    );
-};
+        return useMemo(
+            () => (
+                <StyledScrollView
+                    $browser={browser?.name}
+                    $maxHeight={maxHeight}
+                    $height={height}
+                    $maxWidth={maxWidth}
+                    $width={width}
+                    ref={ref}
+                >
+                    {children}
+                </StyledScrollView>
+            ),
+            [browser?.name, children, height, maxHeight, maxWidth, ref, width],
+        );
+    },
+);
 
 ScrollView.displayName = 'ScrollView';
 
