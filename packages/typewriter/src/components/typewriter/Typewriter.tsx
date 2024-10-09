@@ -123,7 +123,6 @@ const Typewriter: FC<TypewriterProps> = ({
     textStyle,
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
-    const [shouldCount, setShouldCount] = useState(true);
     const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
 
     const functions = useFunctions();
@@ -197,14 +196,6 @@ const Typewriter: FC<TypewriterProps> = ({
         charactersCount > 0 ? 0 : textContent.length,
     );
     const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
-    const [prevChildren, setPrevChildren] = useState<TypewriterProps['children']>(children);
-
-    useEffect(() => {
-        if (children !== prevChildren) {
-            setShouldCount(true);
-            setPrevChildren(children);
-        }
-    }, [children, prevChildren]);
 
     const isAnimatingText =
         shownCharCount < textContent.length ||
@@ -258,35 +249,27 @@ const Typewriter: FC<TypewriterProps> = ({
             setTimeout(() => {
                 interval = window.setInterval(() => {
                     setShownCharCount((prevState) => {
-                        let nextState = prevState;
+                        let nextState = Math.min(prevState + 1, charactersCount);
 
-                        if (shouldCount) {
-                            nextState = prevState + 1;
-                        }
+                        if (nextState >= charactersCount && !shouldWaitForContent) {
+                            window.clearInterval(interval);
 
-                        if (nextState >= charactersCount) {
-                            if (shouldWaitForContent) {
-                                setShouldCount(false);
-                            } else {
-                                window.clearInterval(interval);
+                            /**
+                             * At this point, the next value for "shownCharCount" is deliberately set to
+                             * the length of the textContent in order to correctly display HTML elements
+                             * after the last letter.
+                             */
+                            nextState = textContent.length;
 
-                                /**
-                                 * At this point, the next value for "shownCharCount" is deliberately set to
-                                 * the length of the textContent in order to correctly display HTML elements
-                                 * after the last letter.
-                                 */
-                                nextState = textContent.length;
-
-                                if (areMultipleChildrenGiven) {
-                                    setTimeout(() => {
-                                        if (shouldUseResetAnimation) {
-                                            setIsResetAnimationActive(true);
-                                        } else {
-                                            setShownCharCount(0);
-                                            setTimeout(handleSetNextChildrenIndex, nextTextDelay);
-                                        }
-                                    }, resetDelay);
-                                }
+                            if (areMultipleChildrenGiven) {
+                                setTimeout(() => {
+                                    if (shouldUseResetAnimation) {
+                                        setIsResetAnimationActive(true);
+                                    } else {
+                                        setShownCharCount(0);
+                                        setTimeout(handleSetNextChildrenIndex, nextTextDelay);
+                                    }
+                                }, resetDelay);
                             }
                         }
 
@@ -302,7 +285,6 @@ const Typewriter: FC<TypewriterProps> = ({
     }, [
         speed,
         resetDelay,
-        shouldCount,
         childrenCount,
         charactersCount,
         textContent.length,
