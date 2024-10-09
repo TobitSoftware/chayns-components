@@ -47,6 +47,7 @@ export const StyledScrollView = styled.div<StyledScrollViewProps>`
             : css`
                   &::-webkit-scrollbar {
                       width: 10px;
+                      height: 10px
                   }
 
                   &::-webkit-scrollbar-track {
@@ -56,6 +57,7 @@ export const StyledScrollView = styled.div<StyledScrollViewProps>`
                   &::-webkit-scrollbar-button {
                       background-color: transparent;
                       height: 5px;
+                      width: 5px;
                   }
 
                   &::-webkit-scrollbar-thumb {
