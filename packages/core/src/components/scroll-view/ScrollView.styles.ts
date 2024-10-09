@@ -4,13 +4,35 @@ import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledScrollViewProps = WithTheme<{
-    $maxHeight: CSSProperties['height'];
+    $maxHeight?: CSSProperties['height'];
+    $height?: CSSProperties['height'];
+    $maxWidth?: CSSProperties['width'];
+    $width?: CSSProperties['width'];
     $browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledScrollView = styled.div<StyledScrollViewProps>`
-    max-height: ${({ $maxHeight }) => $maxHeight};
-    overflow-y: scroll;
+    ${({ $maxHeight }) =>
+        !!$maxHeight &&
+        css`
+            max-height: ${$maxHeight};
+        `}
+    ${({ $height }) =>
+        !!$height &&
+        css`
+            height: ${$height};
+        `} 
+    ${({ $maxWidth }) =>
+        !!$maxWidth &&
+        css`
+            max-width: ${$maxWidth};
+        `} 
+    ${({ $width }) =>
+        !!$width &&
+        css`
+            width: ${$width};
+        `} 
+    overflow: auto;
 
     // Styles for custom scrollbar
     ${({ $browser, theme }: StyledScrollViewProps) =>
