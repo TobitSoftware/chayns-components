@@ -34,7 +34,7 @@ export type ScrollViewProps = {
 };
 
 const ScrollView = forwardRef<HTMLDivElement, ScrollViewProps>(
-    ({ maxHeight, height, maxWidth, width, children, overflowX = 'auto', overflowY = 'auto' }, ref) => {
+    ({ maxHeight = 300, height, maxWidth, width, children, overflowX = 'auto', overflowY = 'auto' }, ref) => {
         const { browser } = getDevice();
 
         return useMemo(
