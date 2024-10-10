@@ -203,7 +203,10 @@ const Typewriter: FC<TypewriterProps> = ({
         areMultipleChildrenGiven ||
         textContent.length === 0;
 
-    const handleClick = useCallback(() => {
+    const handleClick = useCallback((event: React.MouseEvent) => {
+        event.stopPropagation();
+        event.preventDefault();
+
         setShouldStopAnimation(true);
     }, []);
 
@@ -341,13 +344,13 @@ const Typewriter: FC<TypewriterProps> = ({
 
     return useMemo(
         () => (
-            <StyledTypewriter onClick={handleClick}>
+            <StyledTypewriter onClick={isAnimatingText ? handleClick : undefined}>
                 {isAnimatingText ? (
                     <StyledTypewriterText
                         dangerouslySetInnerHTML={{ __html: shownText }}
+                        style={textStyle}
                         $isAnimatingText
                         $shouldHideCursor={shouldHideCursor}
-                        style={textStyle}
                     />
                 ) : (
                     <StyledTypewriterText style={textStyle}>{sortedChildren}</StyledTypewriterText>

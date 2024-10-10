@@ -52,5 +52,11 @@ export const StyledTypewriterText = styled.span<StyledTypewriterTextProps>`
     position: ${({ $isAnimatingText }) => ($isAnimatingText ? 'absolute' : 'relative')};
     width: 100%;
 
+    ${({ $isAnimatingText }) =>
+        $isAnimatingText &&
+        css`
+            pointer-events: none;
+        `}
+
     ${typewriterCursorElement}
 `;
