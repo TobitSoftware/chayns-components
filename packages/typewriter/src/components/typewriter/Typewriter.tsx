@@ -322,6 +322,16 @@ const Typewriter: FC<TypewriterProps> = ({
         }
     }, [isAnimatingText, onFinish]);
 
+    useEffect(() => {
+        // @ts-expect-error: This is a custom property for debugging purposes
+        window.getCharactersCount = () => {
+            getCharactersCount(textContent);
+        };
+
+        // @ts-expect-error: This is a custom property for debugging purposes
+        window.textContent = textContent;
+    }, [textContent]);
+
     const shownText = useMemo(
         () => getSubTextFromHTML(textContent, shownCharCount),
         [shownCharCount, textContent],
