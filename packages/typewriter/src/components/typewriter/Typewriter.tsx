@@ -249,12 +249,12 @@ const Typewriter: FC<TypewriterProps> = ({
                 });
             }, speed);
         } else {
-            setTimeout(() => {
+            const setInterval = () => {
                 interval = window.setInterval(() => {
                     setShownCharCount((prevState) => {
                         let nextState = Math.min(prevState + 1, charactersCount);
 
-                        // @ts-expect-error: TypewriterDebugInfo is a custom property for debugging purposes
+                        // @ts-expect-error: This is a custom property for debugging purposes
                         window.TypewriterDebugInfo = {
                             nextState,
                             prevState,
@@ -288,7 +288,13 @@ const Typewriter: FC<TypewriterProps> = ({
                         return nextState;
                     });
                 }, speed);
-            }, startDelay);
+            };
+
+            if (startDelay) {
+                setTimeout(setInterval, startDelay);
+            } else {
+                setInterval();
+            }
         }
 
         return () => {
