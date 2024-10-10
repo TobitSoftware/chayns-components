@@ -254,15 +254,6 @@ const Typewriter: FC<TypewriterProps> = ({
                     setShownCharCount((prevState) => {
                         let nextState = Math.min(prevState + 1, charactersCount);
 
-                        // @ts-expect-error: This is a custom property for debugging purposes
-                        window.TypewriterDebugInfo = {
-                            nextState,
-                            prevState,
-                            charactersCount,
-                            shouldWaitForContent,
-                            textContentLength: textContent.length,
-                        };
-
                         if (nextState >= charactersCount && !shouldWaitForContent) {
                             window.clearInterval(interval);
 
@@ -321,16 +312,6 @@ const Typewriter: FC<TypewriterProps> = ({
             onFinish();
         }
     }, [isAnimatingText, onFinish]);
-
-    useEffect(() => {
-        // @ts-expect-error: This is a custom property for debugging purposes
-        window.getCharactersCount = () => {
-            getCharactersCount(textContent);
-        };
-
-        // @ts-expect-error: This is a custom property for debugging purposes
-        window.textContent = textContent;
-    }, [textContent]);
 
     const shownText = useMemo(
         () => getSubTextFromHTML(textContent, shownCharCount),
