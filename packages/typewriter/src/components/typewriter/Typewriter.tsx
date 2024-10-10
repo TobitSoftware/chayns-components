@@ -254,6 +254,15 @@ const Typewriter: FC<TypewriterProps> = ({
                     setShownCharCount((prevState) => {
                         let nextState = Math.min(prevState + 1, charactersCount);
 
+                        // @ts-expect-error: TypewriterDebugInfo is a custom property for debugging purposes
+                        window.TypewriterDebugInfo = {
+                            nextState,
+                            prevState,
+                            charactersCount,
+                            shouldWaitForContent,
+                            textContentLength: textContent.length,
+                        };
+
                         if (nextState >= charactersCount && !shouldWaitForContent) {
                             window.clearInterval(interval);
 
