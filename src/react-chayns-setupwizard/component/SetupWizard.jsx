@@ -65,6 +65,9 @@ class SetupWizard extends Component {
                               i === initialStep,
                     i
                 );
+                if (i < initialStep) {
+                    this.stepComplete(true, i);
+                }
             }
         }
     }
