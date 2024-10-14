@@ -73,13 +73,16 @@ const AmountControl: FC<AmountControlProps> = ({
     minAmount = 0,
     onChange,
     shouldShowWideInput = false,
-    step: stepProp = 1
+    step: stepProp = 1,
 }) => {
     const [amountValue, setAmountValue] = useState(minAmount);
     const [inputValue, setInputValue] = useState(minAmount.toString());
     const [displayState, setDisplayState] = useState<DisplayState>('default');
 
-    const step = useMemo(() => Number.isSafeInteger(stepProp) && stepProp >= 1 ? stepProp : 1, [stepProp]);
+    const step = useMemo(
+        () => (Number.isSafeInteger(stepProp) && stepProp >= 1 ? stepProp : 1),
+        [stepProp],
+    );
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -118,7 +121,11 @@ const AmountControl: FC<AmountControlProps> = ({
 
     const handleAmountAdd = useCallback(() => {
         setAmountValue((prevState) => {
-            const newAmount = checkForValidAmount({ amount: prevState + step, minAmount, maxAmount });
+            const newAmount = checkForValidAmount({
+                amount: prevState + step,
+                minAmount,
+                maxAmount,
+            });
 
             if (typeof onChange === 'function') {
                 onChange(newAmount);
@@ -126,7 +133,13 @@ const AmountControl: FC<AmountControlProps> = ({
 
             return typeof amount === 'number' ? prevState : newAmount;
         });
-        setInputValue((prevState) =>  checkForValidAmount({ amount:  (Number(prevState) + step), minAmount, maxAmount }).toString());
+        setInputValue((prevState) =>
+            checkForValidAmount({
+                amount: Number(prevState) + step,
+                minAmount,
+                maxAmount,
+            }).toString(),
+        );
     }, [amount, maxAmount, minAmount, onChange, step]);
 
     const handleAmountRemove = useCallback(() => {
@@ -135,7 +148,11 @@ const AmountControl: FC<AmountControlProps> = ({
         }
 
         setAmountValue((prevState) => {
-            const newAmount = checkForValidAmount({ amount: prevState - step, minAmount, maxAmount });
+            const newAmount = checkForValidAmount({
+                amount: prevState - step,
+                minAmount,
+                maxAmount,
+            });
 
             if (typeof onChange === 'function') {
                 onChange(newAmount);
@@ -143,8 +160,14 @@ const AmountControl: FC<AmountControlProps> = ({
 
             return newAmount;
         });
-        setInputValue((prevState) => checkForValidAmount({ amount:  (Number(prevState) - step), minAmount, maxAmount }).toString());
-    }, [displayState, onChange, step]);
+        setInputValue((prevState) =>
+            checkForValidAmount({
+                amount: Number(prevState) - step,
+                minAmount,
+                maxAmount,
+            }).toString(),
+        );
+    }, [displayState, maxAmount, minAmount, onChange, step]);
 
     const handleFirstAmount = useCallback(() => {
         if (amountValue !== minAmount) {
@@ -177,7 +200,7 @@ const AmountControl: FC<AmountControlProps> = ({
         });
 
         setAmountValue(checkedValue);
-        setInputValue(checkedValue.toString())
+        setInputValue(checkedValue.toString());
 
         if (typeof onChange === 'function') {
             onChange(checkedValue);
@@ -186,7 +209,7 @@ const AmountControl: FC<AmountControlProps> = ({
         if (inputValue === '') {
             setInputValue(minAmount.toString());
         }
-    }, [inputValue, minAmount, onChange, step]);
+    }, [inputValue, maxAmount, minAmount, onChange, step]);
 
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -202,7 +225,7 @@ const AmountControl: FC<AmountControlProps> = ({
 
             setInputValue(valueBefore === 0 ? '' : valueBefore.toString());
         },
-        [maxAmount, minAmount],
+        [minAmount],
     );
 
     const leftIcon = useMemo(() => {
@@ -320,6 +343,7 @@ const AmountControl: FC<AmountControlProps> = ({
             label,
             leftIcon,
             maxAmount,
+            minAmount,
             shouldShowIcon,
             shouldShowLeftIcon,
             shouldShowWideInput,
