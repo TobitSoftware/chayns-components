@@ -57,6 +57,10 @@ export type AmountControlProps = {
      * Whether the input should be wider
      */
     shouldShowWideInput?: boolean;
+    /**
+     * Defines the amount that will change when adjusted
+     */
+    step?: number;
 };
 
 const AmountControl: FC<AmountControlProps> = ({
@@ -69,10 +73,13 @@ const AmountControl: FC<AmountControlProps> = ({
     minAmount = 0,
     onChange,
     shouldShowWideInput = false,
+    step: stepProp = 1
 }) => {
     const [amountValue, setAmountValue] = useState(minAmount);
     const [inputValue, setInputValue] = useState(minAmount.toString());
     const [displayState, setDisplayState] = useState<DisplayState>('default');
+
+    const step = useMemo(() => Number.isSafeInteger(stepProp) && stepProp >= 1 ? stepProp : 1, [stepProp]);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -111,16 +118,16 @@ const AmountControl: FC<AmountControlProps> = ({
 
     const handleAmountAdd = useCallback(() => {
         setAmountValue((prevState) => {
-            const newAmount = prevState + 1;
+            const newAmount = checkForValidAmount({ amount: prevState + step, minAmount, maxAmount });
 
             if (typeof onChange === 'function') {
                 onChange(newAmount);
             }
 
-            return newAmount;
+            return typeof amount === 'number' ? prevState : newAmount;
         });
-        setInputValue((prevState) => (Number(prevState) + 1).toString());
-    }, [onChange]);
+        setInputValue((prevState) =>  checkForValidAmount({ amount:  (Number(prevState) + step), minAmount, maxAmount }).toString());
+    }, [amount, maxAmount, minAmount, onChange, step]);
 
     const handleAmountRemove = useCallback(() => {
         if (displayState === 'default') {
@@ -128,7 +135,7 @@ const AmountControl: FC<AmountControlProps> = ({
         }
 
         setAmountValue((prevState) => {
-            const newAmount = prevState - 1;
+            const newAmount = checkForValidAmount({ amount: prevState - step, minAmount, maxAmount });
 
             if (typeof onChange === 'function') {
                 onChange(newAmount);
@@ -136,8 +143,8 @@ const AmountControl: FC<AmountControlProps> = ({
 
             return newAmount;
         });
-        setInputValue((prevState) => (Number(prevState) - 1).toString());
-    }, [displayState, onChange]);
+        setInputValue((prevState) => checkForValidAmount({ amount:  (Number(prevState) - step), minAmount, maxAmount }).toString());
+    }, [displayState, onChange, step]);
 
     const handleFirstAmount = useCallback(() => {
         if (amountValue !== minAmount) {
@@ -145,12 +152,12 @@ const AmountControl: FC<AmountControlProps> = ({
         }
 
         if (typeof onChange === 'function') {
-            onChange(minAmount + 1);
+            onChange(minAmount + step);
         }
 
-        setAmountValue(minAmount + 1);
-        setInputValue((minAmount + 1).toString());
-    }, [amountValue, minAmount, onChange]);
+        setAmountValue(minAmount + step);
+        setInputValue((minAmount + step).toString());
+    }, [amountValue, minAmount, onChange, step]);
 
     const handleDeleteIconClick = useCallback(() => {
         if (inputValue === '0') {
@@ -163,36 +170,37 @@ const AmountControl: FC<AmountControlProps> = ({
     }, [handleAmountRemove, inputValue]);
 
     const handleInputBlur = useCallback(() => {
-        setAmountValue(inputValue === '' ? minAmount : Number(inputValue));
+        const checkedValue = checkForValidAmount({
+            minAmount,
+            maxAmount,
+            amount: Math.round(Number(inputValue) / step) * step,
+        });
+
+        setAmountValue(checkedValue);
+        setInputValue(checkedValue.toString())
 
         if (typeof onChange === 'function') {
-            onChange(inputValue === '' ? minAmount : Number(inputValue));
+            onChange(checkedValue);
         }
 
         if (inputValue === '') {
             setInputValue(minAmount.toString());
         }
-    }, [inputValue, minAmount, onChange]);
+    }, [inputValue, minAmount, onChange, step]);
 
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             const { value } = event.target;
 
-            const valueBeforeCheck = Number(value.replace(/\D/g, ''));
+            const valueBefore = Number(value.replace(/\D/g, ''));
 
-            const checkedValue = checkForValidAmount({
-                minAmount,
-                maxAmount,
-                amount: valueBeforeCheck,
-            });
-
-            if (valueBeforeCheck < minAmount && minAmount === 0) {
+            if (valueBefore < minAmount && minAmount === 0) {
                 setInputValue('0');
 
                 return;
             }
 
-            setInputValue(checkedValue === 0 ? '' : checkedValue.toString());
+            setInputValue(valueBefore === 0 ? '' : valueBefore.toString());
         },
         [maxAmount, minAmount],
     );
