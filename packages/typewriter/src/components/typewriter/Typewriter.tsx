@@ -18,6 +18,7 @@ import {
     StyledTypewriterText,
 } from './Typewriter.styles';
 import { getCharactersCount, getSubTextFromHTML, shuffleArray } from './utils';
+import AnimatedTypewriterText from "./AnimatedTypewriterText";
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
@@ -349,41 +350,6 @@ const Typewriter: FC<TypewriterProps> = ({
         return textContent || '&#8203;';
     }, [functions, pseudoChildren, shouldUseAnimationHeight, shownCharCount, textContent, values]);
 
-    const typewriterTextRef = useRef<HTMLSpanElement>(null);
-    const updateTypewriterCursor = useCallback(() => {
-        if (typewriterTextRef.current && !shouldHideCursor) {
-            let lastParentWithContent: HTMLElement | null = null;
-
-            // Finds the last text node with content.
-            const traverseNodes = (node: Node): void => {
-                if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) {
-                    lastParentWithContent = node.parentElement;
-                }
-
-                node.childNodes.forEach(child => traverseNodes(child));
-            }
-
-            traverseNodes(typewriterTextRef.current);
-
-            // Removes lastWithContent class from all elements
-            typewriterTextRef.current.classList.remove('typewriter-lastWithContent');
-            typewriterTextRef.current.querySelectorAll('.lastWithContent').forEach(element => {
-                element.classList.remove('typewriter-lastWithContent');
-            });
-
-            // Adds lastWithContent class to the last element with content
-            if (lastParentWithContent) {
-                (lastParentWithContent as HTMLElement).classList.add('typewriter-lastWithContent');
-            } else {
-                typewriterTextRef.current.classList.add('typewriter-lastWithContent');
-            }
-        }
-    }, [shouldHideCursor]);
-
-    useEffect(() => {
-        updateTypewriterCursor();
-    }, [shownText, updateTypewriterCursor]);
-
     return useMemo(
         () => (
             <StyledTypewriter
@@ -392,11 +358,10 @@ const Typewriter: FC<TypewriterProps> = ({
                 $shouldHideCursor={shouldHideCursor}
             >
                 {isAnimatingText ? (
-                    <StyledTypewriterText
-                        ref={typewriterTextRef}
-                        dangerouslySetInnerHTML={{ __html: shownText }}
-                        style={textStyle}
-                        $isAnimatingText
+                    <AnimatedTypewriterText
+                        shouldHideCursor={shouldHideCursor}
+                        shownText={shownText}
+                        textStyle={textStyle}
                     />
                 ) : (
                     <StyledTypewriterText style={textStyle}>{sortedChildren}</StyledTypewriterText>
