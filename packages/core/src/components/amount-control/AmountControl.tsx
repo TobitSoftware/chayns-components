@@ -50,6 +50,10 @@ export type AmountControlProps = {
      */
     onChange?: (amount: number) => void;
     /**
+     * Whether the add icon should be displayed if the minAmount is reached.
+     */
+    shouldShowAddIconOnMinAmount?: boolean;
+    /**
      * Whether the icon should be displayed if no amount is selected
      */
     shouldShowIcon?: boolean;
@@ -66,6 +70,7 @@ export type AmountControlProps = {
 const AmountControl: FC<AmountControlProps> = ({
     amount,
     icon,
+    shouldShowAddIconOnMinAmount = false,
     shouldShowIcon = true,
     label,
     iconColor,
@@ -100,13 +105,13 @@ const AmountControl: FC<AmountControlProps> = ({
             case amountValue > minAmount:
                 setDisplayState('normal');
                 return;
-            case amountValue === minAmount && amountValue > 0:
+            case amountValue === minAmount && amountValue >= 0 && shouldShowAddIconOnMinAmount:
                 setDisplayState('minAmount');
                 return;
             default:
                 setDisplayState('default');
         }
-    }, [amountValue, maxAmount, minAmount]);
+    }, [amountValue, maxAmount, minAmount, shouldShowAddIconOnMinAmount]);
 
     const hasFocus = useMemo(() => displayState !== 'default', [displayState]);
 
@@ -255,12 +260,16 @@ const AmountControl: FC<AmountControlProps> = ({
     }, [displayState, icon, iconColor]);
 
     const shouldShowLeftIcon = useMemo(() => {
+        if (shouldShowAddIconOnMinAmount && displayState === 'minAmount') {
+            return false;
+        }
+
         if (shouldShowIcon) {
             return true;
         }
 
         return !((displayState === 'default' || displayState === 'minAmount') && !shouldShowIcon);
-    }, [displayState, shouldShowIcon]);
+    }, [displayState, shouldShowAddIconOnMinAmount, shouldShowIcon]);
 
     return useMemo(
         () => (
