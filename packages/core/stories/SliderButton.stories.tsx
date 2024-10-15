@@ -31,6 +31,8 @@ const ScrollableTemplate: StoryFn<typeof SliderButton> = (args) => {
 
 export const General = Template.bind({});
 
+export const FullWidth = Template.bind({});
+
 export const Scrollable = ScrollableTemplate.bind({});
 
 Scrollable.args = {
@@ -61,5 +63,14 @@ Scrollable.args = {
         { id: 'x', text: 'X' },
         { id: 'y', text: 'Y' },
         { id: 'z', text: 'Z' },
+    ],
+};
+
+FullWidth.args = {
+    shouldUseFullWidth: true,
+    items: [
+        { id: 'a', text: 'A' },
+        { id: 'b', text: 'B' },
+        { id: 'c', text: 'C' },
     ],
 };

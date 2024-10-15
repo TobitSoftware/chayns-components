@@ -33,9 +33,19 @@ export type SliderButtonProps = {
      * The id of a button that should be selected.
      */
     selectedButtonId?: string;
+    /**
+     * Whether the full width should be used if the slider is smaller.
+     */
+    shouldUseFullWidth?: boolean;
 };
 
-const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, items, onChange }) => {
+const SliderButton: FC<SliderButtonProps> = ({
+    selectedButtonId,
+    isDisabled,
+    items,
+    onChange,
+    shouldUseFullWidth = false,
+}) => {
     const [selectedButton, setSelectedButton] = useState<string | undefined>(undefined);
     const [dragRange, setDragRange] = useState({ left: 0, right: 0 });
 
@@ -46,16 +56,26 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
     const [scope, animate] = useAnimate();
 
-    const itemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
-
+    const initialItemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
     const sliderSize = useElementSize(sliderButtonRef);
 
     const theme: Theme = useTheme();
 
     const isSliderBigger = useMemo(
-        () => sliderSize && Math.floor(sliderSize.width / itemWidth) < items.length,
-        [itemWidth, items.length, sliderSize],
+        () => sliderSize && Math.floor(sliderSize.width / initialItemWidth) < items.length,
+        [initialItemWidth, items.length, sliderSize],
     );
+
+    const itemWidth = useMemo(() => {
+        if (!isSliderBigger && shouldUseFullWidth) {
+            const sliderWidth = sliderSize?.width || 0;
+            const itemCount = items.length || 1;
+
+            return sliderWidth / itemCount;
+        }
+
+        return calculateBiggestWidth(items);
+    }, [isSliderBigger, items, shouldUseFullWidth, sliderSize?.width]);
 
     useEffect(() => {
         if (sliderSize) {
