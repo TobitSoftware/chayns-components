@@ -18,7 +18,7 @@ import {
     StyledMotionAmountControlButton,
 } from './AmountControl.styles';
 
-export type DisplayState = 'default' | 'delete' | 'normal' | 'maxAmount';
+export type DisplayState = 'default' | 'delete' | 'normal' | 'maxAmount' | 'minAmount';
 
 export type AmountControlProps = {
     /**
@@ -96,6 +96,9 @@ const AmountControl: FC<AmountControlProps> = ({
                 return;
             case amountValue > minAmount:
                 setDisplayState('normal');
+                return;
+            case amountValue === minAmount && amountValue > 0:
+                setDisplayState('minAmount');
                 return;
             default:
                 setDisplayState('default');
@@ -233,7 +236,7 @@ const AmountControl: FC<AmountControlProps> = ({
             return true;
         }
 
-        return !(displayState === 'default' && !shouldShowIcon);
+        return !((displayState === 'default' || displayState === 'minAmount') && !shouldShowIcon);
     }, [displayState, shouldShowIcon]);
 
     return useMemo(
@@ -284,7 +287,7 @@ const AmountControl: FC<AmountControlProps> = ({
                     />
                 )}
                 <AnimatePresence initial={false}>
-                    {displayState === 'normal' && (
+                    {(displayState === 'normal' || displayState === 'minAmount') && (
                         <StyledMotionAmountControlButton
                             key="right_button"
                             initial={{ width: 0, opacity: 0, padding: 0 }}
@@ -296,7 +299,7 @@ const AmountControl: FC<AmountControlProps> = ({
                             exit={{ width: 0, opacity: 0, padding: 0 }}
                             transition={{ duration: 0.2, type: 'tween' }}
                             onClick={handleAmountAdd}
-                            $isWide={displayState === 'normal' || displayState === 'maxAmount'}
+                            $isWide
                             disabled={maxAmount ? amountValue >= maxAmount : false}
                             $isDisabled={maxAmount ? amountValue >= maxAmount : false}
                         >
