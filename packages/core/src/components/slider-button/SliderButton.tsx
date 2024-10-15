@@ -74,8 +74,8 @@ const SliderButton: FC<SliderButtonProps> = ({
             return sliderWidth / itemCount;
         }
 
-        return calculateBiggestWidth(items);
-    }, [isSliderBigger, items, shouldUseFullWidth, sliderSize?.width]);
+        return initialItemWidth;
+    }, [initialItemWidth, isSliderBigger, items.length, shouldUseFullWidth, sliderSize?.width]);
 
     useEffect(() => {
         if (sliderSize) {
@@ -367,6 +367,7 @@ const SliderButton: FC<SliderButtonProps> = ({
             isSliderBigger,
             itemWidth,
             scope,
+            theme,
             thumbText,
         ],
     );
