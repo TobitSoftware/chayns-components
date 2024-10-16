@@ -53,6 +53,7 @@ export const StyledSliderButtonItem = styled.div<StyledSliderButtonItemProps>`
     min-width: ${({ $width }) => $width}px;
     max-width: ${({ $width }) => $width}px;
     display: flex;
+    white-space: nowrap;
     justify-content: center;
     color: white;
 `;
@@ -73,6 +74,7 @@ export const StyledMotionSliderButtonThumb = styled(motion.div)<StyledMotionSlid
     position: absolute;
     border-radius: 3px;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
     z-index: 3;
     height: 32px;
     padding: 7px 12px;
