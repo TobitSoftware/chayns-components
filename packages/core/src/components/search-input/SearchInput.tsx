@@ -102,6 +102,11 @@ const SearchInput: FC<SearchInputProps> = ({
                         initial={{ opacity: 0 }}
                         key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
                         transition={{ duration: 0.3 }}
+                        id={
+                            isSearchInputActive
+                                ? 'search-input-backIcon'
+                                : 'search-input-searchIcon'
+                        }
                     >
                         <Icon
                             color={iconColor}
