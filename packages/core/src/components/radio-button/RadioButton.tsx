@@ -33,10 +33,15 @@ export type RadioButtonProps = {
      * An element that should be displayed on the right side of the label.
      */
     rightElement?: ReactNode;
+    /**
+     * Whether the rightElement should only be displayed when the RadioButton is checked
+     */
+    shouldShowRightElementOnlyOnChecked?: boolean;
 };
 
 const RadioButton: FC<RadioButtonProps> = ({
     children,
+    shouldShowRightElementOnlyOnChecked = false,
     label,
     id,
     rightElement,
@@ -82,6 +87,18 @@ const RadioButton: FC<RadioButtonProps> = ({
         setIsHovered(false);
     };
 
+    const shouldShowRightElement = useMemo(() => {
+        if (rightElement) {
+            if (shouldShowRightElementOnlyOnChecked) {
+                return isMarked;
+            }
+
+            return true;
+        }
+
+        return false;
+    }, [isMarked, rightElement, shouldShowRightElementOnlyOnChecked]);
+
     return useMemo(
         () => (
             <StyledRadioButton $isDisabled={isDisabled}>
@@ -120,7 +137,7 @@ const RadioButton: FC<RadioButtonProps> = ({
                                 {label}
                             </StyledRadioButtonLabel>
                         )}
-                        {rightElement && rightElement}
+                        {shouldShowRightElement && rightElement}
                     </StyledLabelWrapper>
                 </StyledRadioButtonWrapper>
                 {children && (
