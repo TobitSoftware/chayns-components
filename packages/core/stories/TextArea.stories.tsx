@@ -1,7 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import Icon from '../src/components/icon/Icon';
 import TextArea from '../src/components/text-area/TextArea';
+import Button from '../src/components/button/Button';
 
 export default {
     title: 'Core/TextArea',
@@ -21,6 +22,30 @@ const Template: StoryFn<typeof TextArea> = (args) => {
     return <TextArea {...args} onChange={handleChange} value={value} />;
 };
 
+const RefTemplate: StoryFn<typeof TextArea> = (args) => {
+    const [value, setValue] = useState<string>(args.value);
+
+    const ref = useRef<HTMLTextAreaElement>(null);
+
+    const handleChange = (event: ChangeEvent) => {
+        setValue((event.target as HTMLInputElement).value);
+    };
+
+    const test = () => {
+        if (ref.current) {
+            ref.current.focus();
+        }
+    };
+
+    return (
+        <>
+            <TextArea {...args} ref={ref} onChange={handleChange} value={value} />
+            <div style={{ marginTop: 20 }} />
+            <Button onClick={test}>Focus</Button>
+        </>
+    );
+};
+
 export const General = Template.bind({});
 
 export const Disabled = Template.bind({});
@@ -28,6 +53,8 @@ export const Disabled = Template.bind({});
 export const MaxHeight = Template.bind({});
 
 export const RightElement = Template.bind({});
+
+export const WithRef = RefTemplate.bind({});
 
 Disabled.args = {
     isDisabled: true,
