@@ -1,8 +1,12 @@
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { RadioButtonRightElementMargin } from '../../types/radioButton';
 
-type StyledRadioButtonProps = WithTheme<{ $isDisabled: boolean }>;
+type StyledRadioButtonProps = WithTheme<{
+    $isDisabled: boolean;
+    $radioButtonRightElementMargin: RadioButtonRightElementMargin;
+}>;
 
 export const StyledRadioButton = styled.span<StyledRadioButtonProps>`
     display: flex;
@@ -11,6 +15,28 @@ export const StyledRadioButton = styled.span<StyledRadioButtonProps>`
     position: relative;
 
     opacity: ${({ $isDisabled }: StyledRadioButtonProps) => ($isDisabled ? 0.5 : 1)};
+
+    ${({ $radioButtonRightElementMargin }: StyledRadioButtonProps) => {
+        switch ($radioButtonRightElementMargin) {
+            case 'BOTH':
+                return css`
+                    margin: 6px 0;
+                `;
+            case 'TOP':
+                return css`
+                    margin-top: 6px;
+                `;
+            case 'BOTTOM':
+                return css`
+                    margin-bottom: 6px;
+                `;
+            case 'NONE':
+            default:
+                return css`
+                    margin: 0;
+                `;
+        }
+    }}
 `;
 
 export const StyledRadioButtonWrapper = styled.div`

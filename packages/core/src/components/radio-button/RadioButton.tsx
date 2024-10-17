@@ -1,5 +1,13 @@
 import { AnimatePresence } from 'framer-motion';
-import React, { FC, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import React, {
+    FC,
+    useCallback,
+    useContext,
+    useMemo,
+    useState,
+    type ReactNode,
+    useEffect,
+} from 'react';
 import { RadioButtonGroupContext } from './radio-button-group/RadioButtonGroup';
 import {
     StyledLabelWrapper,
@@ -11,6 +19,7 @@ import {
     StyledRadioButtonPseudoCheckBox,
     StyledRadioButtonWrapper,
 } from './RadioButton.styles';
+import { RadioButtonRightElementMargin } from '../../types/radioButton';
 
 export type RadioButtonProps = {
     /**
@@ -47,8 +56,13 @@ const RadioButton: FC<RadioButtonProps> = ({
     rightElement,
     isDisabled = false,
 }) => {
-    const { selectedRadioButtonId, updateSelectedRadioButtonId, radioButtonsCanBeUnchecked } =
-        useContext(RadioButtonGroupContext);
+    const {
+        selectedRadioButtonId,
+        updateSelectedRadioButtonId,
+        radioButtonRightElements,
+        updateHasRightElement,
+        radioButtonsCanBeUnchecked,
+    } = useContext(RadioButtonGroupContext);
 
     const [internalIsChecked, setInternalIsChecked] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -87,6 +101,39 @@ const RadioButton: FC<RadioButtonProps> = ({
         setIsHovered(false);
     };
 
+    const radioButtonRightElementMargin: RadioButtonRightElementMargin = useMemo(() => {
+        if (!radioButtonRightElements) {
+            return 'NONE';
+        }
+
+        const index = radioButtonRightElements.findIndex((element) => element.id === id);
+
+        if (index < 0) {
+            return 'NONE';
+        }
+
+        const prevButton = radioButtonRightElements[index - 1];
+        const currentButton = radioButtonRightElements[index];
+        const nextButton = radioButtonRightElements[index + 1];
+
+        if (!currentButton?.hasRightElement) {
+            return 'NONE';
+        }
+
+        switch (true) {
+            case prevButton?.hasRightElement && !nextButton?.hasRightElement:
+                return 'TOP';
+            case !prevButton?.hasRightElement && nextButton?.hasRightElement:
+                return 'BOTTOM';
+            case currentButton?.hasRightElement &&
+                !nextButton?.hasRightElement &&
+                !prevButton?.hasRightElement:
+                return 'NONE';
+            default:
+                return 'BOTH';
+        }
+    }, [id, radioButtonRightElements]);
+
     const shouldShowRightElement = useMemo(() => {
         if (rightElement) {
             if (shouldShowRightElementOnlyOnChecked) {
@@ -99,9 +146,20 @@ const RadioButton: FC<RadioButtonProps> = ({
         return false;
     }, [isMarked, rightElement, shouldShowRightElementOnlyOnChecked]);
 
+    useEffect(() => {
+        if (typeof updateHasRightElement === 'function') {
+            window.setTimeout(() => {
+                updateHasRightElement(id, shouldShowRightElement);
+            }, 10);
+        }
+    }, [id, shouldShowRightElement, updateHasRightElement]);
+
     return useMemo(
         () => (
-            <StyledRadioButton $isDisabled={isDisabled}>
+            <StyledRadioButton
+                $isDisabled={isDisabled}
+                $radioButtonRightElementMargin={radioButtonRightElementMargin}
+            >
                 <StyledRadioButtonWrapper>
                     <StyledRadioButtonPseudoCheckBox
                         $isDisabled={isDisabled}
@@ -156,7 +214,18 @@ const RadioButton: FC<RadioButtonProps> = ({
                 )}
             </StyledRadioButton>
         ),
-        [children, handleClick, handleMouseEnter, isDisabled, isHovered, isMarked, label],
+        [
+            children,
+            handleClick,
+            handleMouseEnter,
+            isDisabled,
+            isHovered,
+            isMarked,
+            label,
+            radioButtonRightElementMargin,
+            rightElement,
+            shouldShowRightElement,
+        ],
     );
 };
 

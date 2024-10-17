@@ -8,12 +8,19 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { getRadioButtonOrder } from '../../../utils/radioButton';
 
 type IUpdateSelectedRadioButtonId = (id: string | undefined) => void;
+
+type IUpdateHasRightElement = (id: string, hasRightElement: boolean) => void;
+
+type IRadioButtonRightElements = { id: string; hasRightElement: boolean }[];
 
 interface IRadioButtonGroupContext {
     selectedRadioButtonId: string | undefined;
     updateSelectedRadioButtonId?: IUpdateSelectedRadioButtonId;
+    radioButtonRightElements: IRadioButtonRightElements;
+    updateHasRightElement?: IUpdateHasRightElement;
     radioButtonsCanBeUnchecked?: boolean;
 }
 
@@ -21,6 +28,8 @@ export const RadioButtonGroupContext = React.createContext<IRadioButtonGroupCont
     selectedRadioButtonId: undefined,
     updateSelectedRadioButtonId: undefined,
     radioButtonsCanBeUnchecked: false,
+    radioButtonRightElements: [],
+    updateHasRightElement: undefined,
 });
 
 RadioButtonGroupContext.displayName = 'RadioButtonGroupContext';
@@ -53,6 +62,8 @@ const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
     ({ children, canUncheckRadioButtons, selectedId, onSelect }, ref) => {
         const [selectedRadioButtonId, setSelectedRadioButtonId] =
             useState<IRadioButtonGroupContext['selectedRadioButtonId']>(undefined);
+        const [radioButtonRightElements, setRadioButtonRightElements] =
+            useState<IRadioButtonRightElements>([]);
 
         const isInitialRenderRef = useRef(true);
 
@@ -70,6 +81,20 @@ const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
             },
             [onSelect],
         );
+
+        const updateHasRightElement = useCallback<IUpdateHasRightElement>((id, hasRightElement) => {
+            setRadioButtonRightElements((prevState) =>
+                prevState.map((prev) => (id === prev.id ? { id, hasRightElement } : prev)),
+            );
+        }, []);
+
+        useEffect(() => {
+            const ids = getRadioButtonOrder(children);
+
+            const rightElements = ids.map((id) => ({ id, hasRightElement: false }));
+
+            setRadioButtonRightElements(rightElements);
+        }, [children]);
 
         useImperativeHandle(
             ref,
@@ -90,8 +115,16 @@ const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
                 selectedRadioButtonId,
                 updateSelectedRadioButtonId,
                 radioButtonsCanBeUnchecked: canUncheckRadioButtons,
+                updateHasRightElement,
+                radioButtonRightElements,
             }),
-            [canUncheckRadioButtons, selectedRadioButtonId, updateSelectedRadioButtonId],
+            [
+                canUncheckRadioButtons,
+                radioButtonRightElements,
+                selectedRadioButtonId,
+                updateHasRightElement,
+                updateSelectedRadioButtonId,
+            ],
         );
 
         return (

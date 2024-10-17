@@ -35,10 +35,28 @@ const MultipleRadioButtonsTemplate: StoryFn<typeof RadioButton> = () => {
         <>
             <h1>Speisen</h1>
             <RadioButtonGroup ref={foodRadioButtonGroupRef} selectedId={'2'}>
-                <RadioButton id="0" label="Nudeln" />
-                <RadioButton id="1" label="Pizza" />
-                <RadioButton id="2" label="Pommes" />
-                <RadioButton id="3" label="Salat" />
+                <RadioButton
+                    id="0"
+                    label="Nudeln"
+                    shouldShowRightElementOnlyOnChecked
+                    rightElement={<Button onClick={() => {}}>ca. 10 Min</Button>}
+                />
+                <RadioButton
+                    id="1"
+                    label="Pizza"
+                    shouldShowRightElementOnlyOnChecked
+                    rightElement={<Button onClick={() => {}}>ca. 10 Min</Button>}
+                />
+                <RadioButton
+                    id="2"
+                    label="Pommes"
+                    rightElement={<Button onClick={() => {}}>ca. 10 Min</Button>}
+                />
+                <RadioButton
+                    id="3"
+                    label="Salat"
+                    rightElement={<Button onClick={() => {}}>ca. 10 Min</Button>}
+                />
             </RadioButtonGroup>
             <Button onClick={handleResetFoodButtonClick}>Zurücksetzen</Button>
             <h1>Getränke</h1>
