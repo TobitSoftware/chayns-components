@@ -67,11 +67,12 @@ const SliderButton: FC<SliderButtonProps> = ({
     );
 
     const itemWidth = useMemo(() => {
-        if (!isSliderBigger && shouldUseFullWidth) {
+        if (shouldUseFullWidth) {
             const sliderWidth = sliderSize?.width || 0;
+            const maxShownItemsCount = Math.floor(sliderWidth / initialItemWidth);
             const itemCount = items.length || 1;
 
-            return sliderWidth / itemCount;
+            return sliderWidth / (isSliderBigger ? maxShownItemsCount : itemCount);
         }
 
         return initialItemWidth;
