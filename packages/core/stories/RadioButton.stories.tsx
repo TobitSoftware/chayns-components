@@ -1,10 +1,11 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { useRef } from 'react';
-import { Button } from '../src';
 import RadioButtonGroup, {
     type RadioButtonGroupRef,
 } from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '../src/components/radio-button/RadioButton';
+import Button from '../src/components/button/Button';
+import Input from '../src/components/input/Input';
 
 export default {
     title: 'Core/RadioButton',
@@ -107,8 +108,28 @@ const WithChildrenTemplate: StoryFn<typeof RadioButton> = () => (
 
 export const General = Template.bind({});
 
+export const WithRightElement = Template.bind({});
+
 export const MultipleRadioButtons = MultipleRadioButtonsTemplate.bind({});
 
 export const DisabledRadioButtons = DisabledRadioButtonsTemplate.bind({});
 
 export const WithChildren = WithChildrenTemplate.bind({});
+
+WithRightElement.args = {
+    label: 'Bestellung zum Tisch (Beach)',
+    rightElement: <Button onClick={() => {}}>ca. 10 Min</Button>,
+    children: (
+        <>
+            <p style={{ margin: '12px 0' }}>
+                Sag uns bitte noch wo Du sitzt. Wir bringen Dir Deine Bestellung dann zum Tisch.
+            </p>
+            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                <div style={{ width: '80%' }}>
+                    <Input placeholder="Tischnummer" />
+                </div>
+                <Button onClick={() => {}}>Scannen</Button>
+            </div>
+        </>
+    ),
+};

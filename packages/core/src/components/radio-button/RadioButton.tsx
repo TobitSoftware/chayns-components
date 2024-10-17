@@ -2,6 +2,7 @@ import { AnimatePresence } from 'framer-motion';
 import React, { FC, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { RadioButtonGroupContext } from './radio-button-group/RadioButtonGroup';
 import {
+    StyledLabelWrapper,
     StyledMotionRadioButtonChildren,
     StyledRadioButton,
     StyledRadioButtonCheckBox,
@@ -28,9 +29,19 @@ export type RadioButtonProps = {
      * The label that should be displayed next to the radio button.
      */
     label?: string;
+    /**
+     * An element that should be displayed on the right side of the label.
+     */
+    rightElement?: ReactNode;
 };
 
-const RadioButton: FC<RadioButtonProps> = ({ children, label, id, isDisabled = false }) => {
+const RadioButton: FC<RadioButtonProps> = ({
+    children,
+    label,
+    id,
+    rightElement,
+    isDisabled = false,
+}) => {
     const { selectedRadioButtonId, updateSelectedRadioButtonId, radioButtonsCanBeUnchecked } =
         useContext(RadioButtonGroupContext);
 
@@ -73,27 +84,44 @@ const RadioButton: FC<RadioButtonProps> = ({ children, label, id, isDisabled = f
 
     return useMemo(
         () => (
-            <StyledRadioButton
-                $isDisabled={isDisabled}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-            >
-                <StyledRadioButtonWrapper $isDisabled={isDisabled} onClick={handleClick}>
-                    <StyledRadioButtonPseudoCheckBox $isDisabled={isDisabled} $isChecked={isMarked}>
+            <StyledRadioButton $isDisabled={isDisabled}>
+                <StyledRadioButtonWrapper>
+                    <StyledRadioButtonPseudoCheckBox
+                        $isDisabled={isDisabled}
+                        $isChecked={isMarked}
+                        onClick={handleClick}
+                    >
                         <StyledRadioButtonCheckBoxMark
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
                             $isHovered={isHovered}
                             $isSelected={isMarked}
                             $isDisabled={isDisabled}
                         />
                     </StyledRadioButtonPseudoCheckBox>
                     <StyledRadioButtonCheckBox
+                        onClick={handleClick}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
                         disabled={isDisabled}
                         $isDisabled={isDisabled}
                         type="radio"
                         checked={isMarked}
                         onChange={() => {}}
                     />
-                    {label && <StyledRadioButtonLabel>{label}</StyledRadioButtonLabel>}
+                    <StyledLabelWrapper>
+                        {label && (
+                            <StyledRadioButtonLabel
+                                $isDisabled={isDisabled}
+                                onClick={handleClick}
+                                onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}
+                            >
+                                {label}
+                            </StyledRadioButtonLabel>
+                        )}
+                        {rightElement && rightElement}
+                    </StyledLabelWrapper>
                 </StyledRadioButtonWrapper>
                 {children && (
                     <AnimatePresence initial={false}>

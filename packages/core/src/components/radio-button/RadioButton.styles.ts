@@ -13,17 +13,12 @@ export const StyledRadioButton = styled.span<StyledRadioButtonProps>`
     opacity: ${({ $isDisabled }: StyledRadioButtonProps) => ($isDisabled ? 0.5 : 1)};
 `;
 
-type StyledRadioButtonWrapperProps = WithTheme<{ $isDisabled: boolean }>;
-
-export const StyledRadioButtonWrapper = styled.div<StyledRadioButtonWrapperProps>`
+export const StyledRadioButtonWrapper = styled.div`
     display: flex;
     align-items: center;
     position: relative;
     gap: 5px;
     user-select: none;
-
-    cursor: ${({ $isDisabled }: StyledRadioButtonWrapperProps) =>
-        $isDisabled ? 'default !important' : 'pointer !important'};
 `;
 
 type StyledRadioButtonCheckBoxProps = WithTheme<{ $isDisabled: boolean }>;
@@ -99,10 +94,21 @@ export const StyledRadioButtonCheckBoxMark = styled.span<StyledRadioButtonCheckB
     }}
 `;
 
-type StyledRadioButtonLabelProps = WithTheme<unknown>;
+type StyledRadioButtonLabelProps = WithTheme<{ $isDisabled: boolean }>;
 
 export const StyledRadioButtonLabel = styled.p<StyledRadioButtonLabelProps>`
     color: ${({ theme }: StyledRadioButtonLabelProps) => theme.text};
+    margin: 0;
+    cursor: ${({ $isDisabled }: StyledRadioButtonLabelProps) =>
+        $isDisabled ? 'default !important' : 'pointer !important'};
+`;
+
+export const StyledLabelWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
 `;
 
 type StyledMotionRadioButtonChildrenProps = WithTheme<unknown>;
