@@ -31,7 +31,7 @@ export const convertTextToHTML = (text: string) => {
         .replace(HTML_A_TAG_REGEX, '$1')
         .replace(
             BB_LC_MENTION_REGEX,
-            '<lc_mention contenteditable="false" id="$1"><span>@</span>$2</lc_mention>',
+            '<lc_mention contenteditable="false" id="$1"><span>@</span>$2</lc_mention>​',
         )
         .replace(BB_NER_IGNORE_REGEX, '<nerIgnore contenteditable="false">$1</nerIgnore>')
         .replace(
