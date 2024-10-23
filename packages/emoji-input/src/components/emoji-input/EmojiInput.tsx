@@ -29,6 +29,7 @@ import {
     getCharCodeThatWillBeDeleted,
     restoreSelection,
     saveSelection,
+    setSelectionRange,
 } from '../../utils/selection';
 import { convertHTMLToText, convertTextToHTML } from '../../utils/text';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
@@ -261,14 +262,22 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     event.preventDefault();
                 }
 
-                const { target } = event;
-
                 if (shouldDeleteOneMoreBackwards.current) {
                     shouldDeleteOneMoreBackwards.current = false;
                     shouldDeleteOneMoreForwards.current = false;
 
                     event.preventDefault();
                     event.stopPropagation();
+
+                    const range = window.getSelection()?.getRangeAt(0);
+
+                    if (range) {
+                        const { endOffset, startOffset } = range;
+
+                        window.setTimeout(() => {
+                            setSelectionRange({ startOffset, endOffset });
+                        }, 10);
+                    }
 
                     // noinspection JSDeprecatedSymbols
                     document.execCommand('delete', false);

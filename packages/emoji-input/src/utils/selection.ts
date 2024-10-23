@@ -156,6 +156,32 @@ export const restoreSelection = (element: HTMLDivElement) => {
     range.collapse(true);
 };
 
+interface SetSelectionRangeOptions {
+    startOffset: number;
+    endOffset: number;
+}
+
+export const setSelectionRange = ({
+    endOffset: endOffsetNumber,
+    startOffset: startOffsetNumber,
+}: SetSelectionRangeOptions) => {
+    const selection = window.getSelection();
+
+    // Überprüfen, ob es eine aktive Auswahl gibt
+    if (!selection?.rangeCount) return;
+
+    // Hole den aktuellen Range
+    const range = selection.getRangeAt(0);
+
+    // Setze den Start- und Endoffset neu, basierend auf dem aktuellen Startknoten
+    range.setStart(range.startContainer, startOffsetNumber);
+    range.setEnd(range.endContainer, endOffsetNumber);
+
+    // Optional: Die neue Range wieder setzen (kann helfen bei Visualisierung der Auswahl)
+    selection.removeAllRanges();
+    selection.addRange(range);
+};
+
 export const moveSelectionOffset = (distance: number) => {
     endOffset += distance;
     startOffset += distance;
