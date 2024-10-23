@@ -31,6 +31,7 @@ export const StyledSliderButtonWrapper = styled.div<StyledSliderButtonWrapperPro
 
     max-width: 100%;
     overflow-x: ${({ $isDisabled }) => ($isDisabled ? 'hidden' : 'scroll')};
+    overflow-y: hidden;
 
     // Chrome
     &::-webkit-scrollbar {
