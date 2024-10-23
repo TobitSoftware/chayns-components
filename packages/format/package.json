@@ -44,7 +44,9 @@
         "build:cjs": "cross-env NODE_ENV=cjs babel src --out-dir lib/cjs --extensions=.ts,.tsx --source-maps --ignore=src/stories",
         "build:esm": "cross-env NODE_ENV=esm babel src --out-dir lib/esm --extensions=.ts,.tsx --source-maps --ignore=src/stories",
         "prepublishOnly": "npm run build",
-        "test": "vitest"
+        "test": "vitest",
+        "watch:js": "npm run build:esm -- --watch",
+        "link": "npm link && npm run watch:js"
     },
     "bugs": {
         "url": "https://github.com/TobitSoftware/chayns-components/issues"
