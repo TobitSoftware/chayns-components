@@ -183,12 +183,12 @@ export const getCharCodeThatWillBeDeleted = (event: KeyboardEvent<HTMLDivElement
     if (
         !range ||
         range.endOffset !== range.startOffset ||
-        (event.key !== 'Backspace' && event.key !== 'Delete')
+        (event.key !== 'Backspace' && event.key !== 'Delete' && event.key !== 'Unidentified')
     ) {
         return null;
     }
 
-    if (event.key === 'Backspace') {
+    if (event.key === 'Backspace' || event.key === 'Unidentified') {
         const { nodeValue, previousSibling } = range.startContainer;
 
         if (range.startOffset > 0) {

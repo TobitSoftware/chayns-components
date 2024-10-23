@@ -263,29 +263,6 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
                 const { target } = event;
 
-                const newLength = target.innerHTML.length;
-
-                setTextLength((prevState) => {
-                    if (newLength < prevState) {
-                        event.preventDefault();
-                        event.stopPropagation();
-
-                        const keyboardEvent = new KeyboardEvent('keydown', {
-                            key: 'Backspace',
-                            code: 'Backspace',
-                            keyCode: 8,
-                            which: 8,
-                            location: 0,
-                            bubbles: true, // Ensures the event bubbles up through the DOM
-                            cancelable: true, // Allows the event to be canceled
-                        });
-
-                        target.dispatchEvent(keyboardEvent);
-                    }
-
-                    return newLength;
-                });
-
                 if (shouldDeleteOneMoreBackwards.current) {
                     shouldDeleteOneMoreBackwards.current = false;
                     shouldDeleteOneMoreForwards.current = false;
@@ -351,11 +328,15 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     document.execCommand('insertLineBreak', false);
                 }
 
-                if (event.key === 'Backspace' || event.key === 'Delete') {
+                if (
+                    event.key === 'Backspace' ||
+                    event.key === 'Delete' ||
+                    event.key === 'Unidentified'
+                ) {
                     const charCodeThatWillBeDeleted = getCharCodeThatWillBeDeleted(event);
 
                     if (charCodeThatWillBeDeleted === 8203) {
-                        if (event.key === 'Backspace') {
+                        if (event.key === 'Backspace' || event.key === 'Unidentified') {
                             shouldDeleteOneMoreBackwards.current = true;
                         } else {
                             shouldDeleteOneMoreForwards.current = true;
