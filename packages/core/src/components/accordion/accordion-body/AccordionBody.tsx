@@ -49,6 +49,7 @@ const AccordionBody: FC<AccordionBodyProps> = ({
             $browser={browser?.name}
             onAnimationComplete={onAnimationComplete}
             onScroll={onScroll}
+            transition={{ opacity: { duration: 0.1 } }}
         >
             <AccordionGroupContext.Provider value={AccordionGroupContextProviderValue}>
                 {children}
