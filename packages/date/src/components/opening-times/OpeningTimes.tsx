@@ -103,7 +103,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     }, [openingTimes]);
 
     useEffect(() => {
-        if (onValidationStateChange) {
+        if (typeof onValidationStateChange === 'function') {
             onValidationStateChange(invalidOpeningTimes);
         }
     }, [invalidOpeningTimes, onValidationStateChange]);
