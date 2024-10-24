@@ -48,6 +48,7 @@ export const StyledMotionContentWrapper = styled(motion.div)<FramerMotionBugFix>
     height: 100%;
     overflow: hidden;
     margin-right: 10px;
+    align-items: center;
 `;
 
 export const StyledMotionTitleWrapper = styled(motion.div)<FramerMotionBugFix>`
