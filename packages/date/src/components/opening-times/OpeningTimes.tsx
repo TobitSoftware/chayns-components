@@ -54,7 +54,7 @@ export type OpeningTimesProps = {
     /**
      * Function to be executed when a time is added.
      */
-    onTimeAdd?: ({ time, dayId }: OnTimeAdd) => void;
+    onTimeAdd?: ({ time, dayId,invalidOpeningTimes }: OnTimeAdd ) => void;
     /**
      * Function to be executed when a time is removed.
      */
@@ -172,10 +172,10 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
             );
 
             if (typeof onTimeAdd === 'function') {
-                onTimeAdd({ dayId: id, time });
+                onTimeAdd({ invalidOpeningTimes, dayId: id, time });
             }
         },
-        [onTimeAdd],
+        [invalidOpeningTimes, onTimeAdd],
     );
 
     const handleUpdateInvalidIds = useCallback(
@@ -188,7 +188,6 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                             invalidTimeIds,
                         };
                     }
-
                     return invalidOpeningTime;
                 });
 
@@ -217,7 +216,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                 (prevOpeningTimes ?? []).map((openingTime) => {
                     const newTimes = openingTime.times.filter((time) => time.id !== id);
 
-                    return { ...openingTime, times: newTimes };
+                    return {...openingTime, times: newTimes};
                 }),
             );
 
