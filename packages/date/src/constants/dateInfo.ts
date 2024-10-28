@@ -16,6 +16,7 @@ export interface TimeTypeStringCollection {
 export interface TimeTypeStringsRecord {
     past: TimeTypeStringCollection;
     future: TimeTypeStringCollection;
+    and: string;
 }
 
 interface TimeTypeStrings {
@@ -24,6 +25,7 @@ interface TimeTypeStrings {
 
 export const TIME_TYPE_STRINGS: TimeTypeStrings = {
     de: {
+        and: 'und',
         past: {
             seconds: {
                 singular: 'Sekunde',
@@ -86,6 +88,7 @@ export const TIME_TYPE_STRINGS: TimeTypeStrings = {
         },
     },
     en: {
+        and: 'and',
         past: {
             seconds: {
                 singular: 'second',
@@ -148,6 +151,7 @@ export const TIME_TYPE_STRINGS: TimeTypeStrings = {
         },
     },
     nl: {
+        and: 'en',
         past: {
             seconds: {
                 singular: 'seconde',
@@ -210,6 +214,7 @@ export const TIME_TYPE_STRINGS: TimeTypeStrings = {
         },
     },
     fr: {
+        and: 'et',
         past: {
             seconds: {
                 singular: 'seconde',
@@ -272,6 +277,7 @@ export const TIME_TYPE_STRINGS: TimeTypeStrings = {
         },
     },
     it: {
+        and: 'e',
         past: {
             seconds: {
                 singular: 'secondo',
@@ -334,6 +340,7 @@ export const TIME_TYPE_STRINGS: TimeTypeStrings = {
         },
     },
     pl: {
+        and: 'oraz',
         past: {
             seconds: {
                 singular: 'sekunda',
@@ -396,6 +403,7 @@ export const TIME_TYPE_STRINGS: TimeTypeStrings = {
         },
     },
     pt: {
+        and: 'e',
         past: {
             seconds: {
                 singular: 'segundo',
@@ -458,6 +466,7 @@ export const TIME_TYPE_STRINGS: TimeTypeStrings = {
         },
     },
     es: {
+        and: 'y',
         past: {
             seconds: {
                 singular: 'segundo',
@@ -520,6 +529,7 @@ export const TIME_TYPE_STRINGS: TimeTypeStrings = {
         },
     },
     tr: {
+        and: 've',
         past: {
             seconds: {
                 singular: 'saniye',
@@ -582,6 +592,7 @@ export const TIME_TYPE_STRINGS: TimeTypeStrings = {
         },
     },
     uk: {
+        and: 'i',
         past: {
             seconds: {
                 singular: 'секунда',

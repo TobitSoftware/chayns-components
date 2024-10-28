@@ -257,9 +257,10 @@ export const getTimeTillNow = ({ date, currentDate, language }: GetTimeTillNowOp
                 time.type = TimeType.Minutes;
                 break;
             case elapsedMilliseconds < 86400000:
-                time.value = Math.floor(elapsedMilliseconds / 3600000);
-                time.type = TimeType.Hours;
-                break;
+                const hours = Math.floor(elapsedMilliseconds / 3600000);
+                const minutes = Math.floor((elapsedMilliseconds % 3600000) / 60000);
+                return `${hours} ${getFormattedPastTimeString({ value: hours, type: TimeType.Hours, isPast: true }, language)} 
+                        ${minutes > 0 ? `${getTimeTypeStrings(language.code ?? 'de')?.and ?? ''} ${minutes} ${getFormattedPastTimeString({ value: minutes, type: TimeType.Minutes, isPast: true }, language)}` : ''}`;
             case elapsedMilliseconds < 604800000:
                 time.value = Math.floor(elapsedMilliseconds / 86400000);
                 time.type = TimeType.Days;
@@ -293,9 +294,10 @@ export const getTimeTillNow = ({ date, currentDate, language }: GetTimeTillNowOp
             time.type = TimeType.Minutes;
             break;
         case remainingMilliseconds < 86400000:
-            time.value = Math.floor(remainingMilliseconds / 3600000);
-            time.type = TimeType.Hours;
-            break;
+            const hours = Math.floor(remainingMilliseconds / 3600000);
+            const minutes = Math.floor((remainingMilliseconds % 3600000) / 60000);
+            return `${hours} ${getFormattedFutureTimeString({ value: hours, type: TimeType.Hours, isPast: false }, language)} 
+                    ${minutes > 0 ? `${getTimeTypeStrings(language.code ?? 'de')?.and ?? ''} ${minutes} ${getFormattedFutureTimeString({ value: minutes, type: TimeType.Minutes, isPast: false }, language)}` : ''}`;
         case remainingMilliseconds < 604800000:
             time.value = Math.floor(remainingMilliseconds / 86400000);
             time.type = TimeType.Days;
