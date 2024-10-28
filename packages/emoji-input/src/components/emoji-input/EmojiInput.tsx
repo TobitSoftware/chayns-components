@@ -27,9 +27,9 @@ import { convertEmojisToUnicode } from '../../utils/emoji';
 import { insertTextAtCursorPosition, replaceText } from '../../utils/insert';
 import {
     getCharCodeThatWillBeDeleted,
+    insertInvisibleCursorMarker,
     restoreSelection,
     saveSelection,
-    setSelectionRange,
 } from '../../utils/selection';
 import { convertHTMLToText, convertTextToHTML } from '../../utils/text';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
@@ -269,18 +269,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     event.preventDefault();
                     event.stopPropagation();
 
-                    const range = window.getSelection()?.getRangeAt(0);
-
-                    if (range) {
-                        const { endOffset, startOffset } = range;
-
-                        window.setTimeout(() => {
-                            setSelectionRange({ startOffset, endOffset });
-                        }, 10);
-                    }
-
-                    // noinspection JSDeprecatedSymbols
-                    document.execCommand('delete', false);
+                    // Remove content and set cursor to the right position
+                    insertInvisibleCursorMarker();
 
                     return;
                 }

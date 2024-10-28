@@ -156,30 +156,53 @@ export const restoreSelection = (element: HTMLDivElement) => {
     range.collapse(true);
 };
 
-interface SetSelectionRangeOptions {
-    startOffset: number;
-    endOffset: number;
-}
-
-export const setSelectionRange = ({
-    endOffset: endOffsetNumber,
-    startOffset: startOffsetNumber,
-}: SetSelectionRangeOptions) => {
+export const insertInvisibleCursorMarker = (): void => {
     const selection = window.getSelection();
 
-    // Überprüfen, ob es eine aktive Auswahl gibt
-    if (!selection?.rangeCount) return;
+    if (!selection || selection.rangeCount === 0) {
+        return;
+    }
 
-    // Hole den aktuellen Range
     const range = selection.getRangeAt(0);
+    const textNode = range.startContainer;
+    const offset = range.startOffset;
 
-    // Setze den Start- und Endoffset neu, basierend auf dem aktuellen Startknoten
-    range.setStart(range.startContainer, startOffsetNumber);
-    range.setEnd(range.endContainer, endOffsetNumber);
+    // noinspection JSDeprecatedSymbols
+    document.execCommand('delete', false);
 
-    // Optional: Die neue Range wieder setzen (kann helfen bei Visualisierung der Auswahl)
-    selection.removeAllRanges();
-    selection.addRange(range);
+    const span = document.createElement('span');
+    span.style.display = 'inline-block';
+    span.style.width = '0';
+    span.style.height = '0';
+    span.className = 'invisible-cursor-marker';
+
+    const parent = textNode.parentNode;
+
+    if (parent) {
+        if (textNode.nodeType === Node.TEXT_NODE) {
+            const textContent = textNode.textContent || '';
+            const beforeText = textContent.slice(0, offset);
+            const afterText = textContent.slice(offset);
+
+            textNode.textContent = beforeText;
+
+            parent.insertBefore(span, textNode.nextSibling);
+            const afterTextNode = document.createTextNode(afterText);
+            parent.insertBefore(afterTextNode, span.nextSibling);
+
+            setTimeout(() => {
+                // Set cursor to cursor element
+                const newRange = document.createRange();
+                newRange.setStartAfter(span);
+                newRange.setEndAfter(span);
+                selection.removeAllRanges();
+                selection.addRange(newRange);
+
+                // Remove cursor element
+                span.remove();
+            }, 10);
+        }
+    }
 };
 
 export const moveSelectionOffset = (distance: number) => {
