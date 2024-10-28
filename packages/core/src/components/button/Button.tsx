@@ -148,6 +148,7 @@ const Button: FC<ButtonProps> = ({
             animate={{
                 opacity: isDisabled ? 0.5 : 1,
             }}
+            transition={{ visibility: { duration: 0 } }}
             whileTap={isDisabled ? {} : { ...tapStyles }}
             whileHover={isDisabled ? {} : { ...hoverStyles }}
         >

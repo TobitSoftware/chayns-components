@@ -57,7 +57,6 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
     min-height: 32px;
     position: relative;
     user-select: none;
-    transition: opacity 0.3s ease;
 
     ${({ $hasIcon, $hasChildren }) => {
         if ($hasIcon) {
