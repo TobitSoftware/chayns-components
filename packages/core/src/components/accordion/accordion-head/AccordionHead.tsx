@@ -172,6 +172,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 initial={false}
                 onClick={!isFixed && tmp ? onClick : undefined}
                 ref={titleWrapperRef}
+                $isWrapped={isWrapped}
                 key={`accordionHeadContentWrapper--${uuid}`}
             >
                 {typeof onTitleInputChange === 'function' ? (
