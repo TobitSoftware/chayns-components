@@ -162,6 +162,24 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
 
     const handleAdd = useCallback(
         (time: Time, id: string) => {
+            const updatedInvalidOpeningTimes = newOpeningTimes?.reduce(
+                (acc: { openingTimeId: string; invalidTimeIds: string[] }[], openingTime) => {
+                    const invalidTimesIds = openingTime.times.filter((ivalidTime) =>
+                        (ivalidTime.start < time.end && ivalidTime.end > time.start)
+                    ).map((t) => t.id);
+
+                    if (invalidTimesIds.length > 0) {
+                        acc.push({ openingTimeId: id, invalidTimeIds: invalidTimesIds });
+                    }
+                    return acc;
+                },
+                [],
+            ) || [];
+
+            if (typeof onTimeAdd === 'function') {
+                onTimeAdd({ invalidOpeningTimes: updatedInvalidOpeningTimes, dayId: id, time });
+            }
+
             setNewOpeningTimes((prevOpeningTimes) =>
                 (prevOpeningTimes ?? []).map((openingTime) => {
                     if (openingTime.id === id) {
@@ -170,12 +188,8 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                     return openingTime;
                 }),
             );
-
-            if (typeof onTimeAdd === 'function') {
-                onTimeAdd({ invalidOpeningTimes, dayId: id, time });
-            }
         },
-        [invalidOpeningTimes, onTimeAdd],
+        [newOpeningTimes, onTimeAdd],
     );
 
     const handleUpdateInvalidIds = useCallback(
