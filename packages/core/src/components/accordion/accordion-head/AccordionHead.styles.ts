@@ -40,7 +40,9 @@ export const StyledAccordionIcon = styled.i<StyledAccordionIconProps>`
     }
 `;
 
-export const StyledMotionContentWrapper = styled(motion.div)<FramerMotionBugFix>`
+type StyledMotionContentWrapperProps = WithTheme<{ $isWrapped: boolean }>;
+
+export const StyledMotionContentWrapper = styled(motion.div)<StyledMotionContentWrapperProps>`
     align-self: flex-start;
     cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};
     display: flex;
@@ -48,6 +50,12 @@ export const StyledMotionContentWrapper = styled(motion.div)<FramerMotionBugFix>
     height: 100%;
     overflow: hidden;
     margin-right: 10px;
+
+    ${({ $isWrapped }) =>
+        $isWrapped &&
+        css`
+            align-items: center;
+        `}
 `;
 
 export const StyledMotionTitleWrapper = styled(motion.div)<FramerMotionBugFix>`
