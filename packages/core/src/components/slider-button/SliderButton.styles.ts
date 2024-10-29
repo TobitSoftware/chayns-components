@@ -14,7 +14,7 @@ type StyledSliderButtonWrapperProps = WithTheme<{ $width: number; $isDisabled?: 
 
 export const StyledSliderButtonWrapper = styled.div<StyledSliderButtonWrapperProps>`
     align-items: center;
-    background-color: ${({ theme }: StyledSliderButtonProps) => theme['404']};
+    background-color: ${({ theme }: StyledMotionSliderButtonThumbProps) => theme['408']};
     border-radius: 3px;
     border: none;
     color: white;
@@ -25,7 +25,6 @@ export const StyledSliderButtonWrapper = styled.div<StyledSliderButtonWrapperPro
     position: relative;
     user-select: none;
     transition: opacity 0.3s ease;
-    z-index: 1;
 
     width: ${({ $width }) => $width}px;
 
@@ -45,7 +44,7 @@ export const StyledSliderButtonWrapper = styled.div<StyledSliderButtonWrapperPro
     scrollbar-width: none;
 `;
 
-type StyledSliderButtonItemProps = WithTheme<{ $isSelected: boolean; $width: number }>;
+type StyledSliderButtonItemProps = WithTheme<{ $width: number }>;
 
 export const StyledSliderButtonItem = styled.div<StyledSliderButtonItemProps>`
     font-size: 110%;
@@ -59,10 +58,28 @@ export const StyledSliderButtonItem = styled.div<StyledSliderButtonItemProps>`
     color: white;
 `;
 
-export const StyledSliderButtonButtonsWrapper = styled.div`
-    position: absolute;
+export const StyledSliderButtonPopupContent = styled.div`
     display: flex;
+    flex-direction: column;
+    padding: 7px 12px;
+`;
+
+export const StyledSliderButtonPopupContentItem = styled.div`
+    font-size: 110%;
+    font-family: 'Roboto Medium', serif;
+    cursor: pointer;
+`;
+
+type StyledSliderButtonButtonsWrapperProps = WithTheme<{ $isInvisible?: boolean }>;
+
+export const StyledSliderButtonButtonsWrapper = styled.div<StyledSliderButtonButtonsWrapperProps>`
+    position: absolute;
+    z-index: ${({ $isInvisible }) => ($isInvisible ? '2' : '4')};
+    opacity: ${({ $isInvisible }) => ($isInvisible ? 0 : 1)};
+    display: flex;
+    cursor: pointer;
     align-items: center;
+    pointer-events: ${({ $isInvisible }) => ($isInvisible ? 'auto' : 'none')};
 `;
 
 type StyledMotionSliderButtonThumbProps = WithTheme<{ $width: number }>;
@@ -70,14 +87,16 @@ type StyledMotionSliderButtonThumbProps = WithTheme<{ $width: number }>;
 export const StyledMotionSliderButtonThumb = styled(motion.div)<StyledMotionSliderButtonThumbProps>`
     font-size: 110%;
     font-family: 'Roboto Medium', serif;
-    background-color: ${({ theme }: StyledMotionSliderButtonThumbProps) => theme['408']};
-    width: ${({ $width }) => $width}px;
+    background-color: ${({ theme }: StyledSliderButtonProps) => theme['405']};
+    opacity: 1;
+    width: ${({ $width }) => $width - 8}px;
     position: absolute;
-    border-radius: 3px;
-    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+    top: 4px;
+    left: 4px;
     white-space: nowrap;
     z-index: 3;
-    height: 32px;
+    height: 24px;
     padding: 7px 12px;
     display: flex;
     color: white;

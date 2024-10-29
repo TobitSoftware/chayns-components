@@ -1,17 +1,20 @@
 import { setRefreshScrollEnabled } from 'chayns-api';
 import { AnimatePresence, useAnimate } from 'framer-motion';
-import React, { FC, UIEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTheme } from 'styled-components';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useElementSize } from '../../hooks/useElementSize';
+import { PopupRef } from '../../types/popup';
 import type { SliderButtonItem } from '../../types/slider-button';
 import { calculateBiggestWidth } from '../../utils/calculate';
 import { getNearestPoint, getThumbPosition } from '../../utils/sliderButton';
-import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
+import Icon from '../icon/Icon';
+import Popup from '../popup/Popup';
 import {
     StyledMotionSliderButtonThumb,
     StyledSliderButton,
     StyledSliderButtonButtonsWrapper,
     StyledSliderButtonItem,
+    StyledSliderButtonPopupContent,
+    StyledSliderButtonPopupContentItem,
     StyledSliderButtonWrapper,
 } from './SliderButton.styles';
 
@@ -33,50 +36,40 @@ export type SliderButtonProps = {
      * The id of a button that should be selected.
      */
     selectedButtonId?: string;
-    /**
-     * Whether the full width should be used if the slider is smaller.
-     */
-    shouldUseFullWidth?: boolean;
 };
 
-const SliderButton: FC<SliderButtonProps> = ({
-    selectedButtonId,
-    isDisabled,
-    items,
-    onChange,
-    shouldUseFullWidth = false,
-}) => {
-    const [selectedButton, setSelectedButton] = useState<string | undefined>(undefined);
+const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, items, onChange }) => {
     const [dragRange, setDragRange] = useState({ left: 0, right: 0 });
+    const [shownItemsCount, setShownItemsCount] = useState(items.length);
+    const [sliderSize, setSliderSize] = useState({ width: 0 });
 
     const sliderButtonRef = useRef<HTMLDivElement>(null);
     const sliderButtonWrapperRef = useRef<HTMLDivElement>(null);
-    const timeout = useRef<number>();
-    const preventHandleScroll = useRef(false);
+    const popupRef = useRef<PopupRef>(null);
 
     const [scope, animate] = useAnimate();
 
     const initialItemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
-    const sliderSize = useElementSize(sliderButtonRef);
+    const elementSize = useElementSize(sliderButtonRef);
 
-    const theme: Theme = useTheme();
+    useEffect(() => {
+        if (elementSize) setSliderSize(elementSize);
+    }, [elementSize]);
 
     const isSliderBigger = useMemo(
-        () => sliderSize && Math.floor(sliderSize.width / initialItemWidth) < items.length,
+        () => sliderSize && Math.floor(sliderSize.width / initialItemWidth) < items.length - 1,
         [initialItemWidth, items.length, sliderSize],
     );
 
     const itemWidth = useMemo(() => {
-        if (shouldUseFullWidth) {
-            const sliderWidth = sliderSize?.width || 0;
-            const maxShownItemsCount = Math.floor(sliderWidth / initialItemWidth);
-            const itemCount = items.length || 1;
+        const sliderWidth = sliderSize?.width || 0;
+        const maxShownItemsCount = Math.floor(sliderWidth / initialItemWidth);
+        const itemCount = items.length || 1;
 
-            return sliderWidth / (isSliderBigger ? maxShownItemsCount : itemCount);
-        }
+        setShownItemsCount(isSliderBigger ? maxShownItemsCount : itemCount);
 
-        return initialItemWidth;
-    }, [initialItemWidth, isSliderBigger, items.length, shouldUseFullWidth, sliderSize?.width]);
+        return sliderWidth / (isSliderBigger ? maxShownItemsCount : itemCount);
+    }, [initialItemWidth, isSliderBigger, items.length, sliderSize?.width]);
 
     useEffect(() => {
         if (sliderSize) {
@@ -104,38 +97,22 @@ const SliderButton: FC<SliderButtonProps> = ({
 
     const setItemPosition = useCallback(
         (index: number) => {
-            if (!isSliderBigger) {
-                void animation(itemWidth * index);
-
-                return;
-            }
-
-            const count = dragRange.right / itemWidth;
-
-            if (items.length - count >= index) {
-                void animation(0);
-            } else {
-                void animation(itemWidth * (count - (items.length - index)));
-            }
-
-            if (sliderButtonWrapperRef.current) {
-                sliderButtonWrapperRef.current.scrollLeft = itemWidth * index;
-            }
+            void animation(itemWidth * index);
         },
-        [animation, dragRange.right, isSliderBigger, itemWidth, items.length],
+        [animation, itemWidth],
     );
 
     useEffect(() => {
-        if (selectedButtonId) {
-            setSelectedButton(selectedButtonId);
+        if (typeof selectedButtonId === 'string') {
+            let index = items.findIndex(({ id }) => id === selectedButtonId);
 
-            const index = items.findIndex(({ id }) => id === selectedButtonId);
+            if (items.length > shownItemsCount && index > shownItemsCount - 1) {
+                index = shownItemsCount - 1;
+            }
 
             if (index >= 0) {
                 setItemPosition(index);
             }
-        } else {
-            setSelectedButton(items[0]?.id);
         }
     }, [
         animation,
@@ -145,6 +122,7 @@ const SliderButton: FC<SliderButtonProps> = ({
         items,
         selectedButtonId,
         setItemPosition,
+        shownItemsCount,
     ]);
 
     const handleClick = useCallback(
@@ -153,10 +131,16 @@ const SliderButton: FC<SliderButtonProps> = ({
                 return;
             }
 
-            setSelectedButton(id);
-
-            if (typeof onChange === 'function') {
+            if (typeof onChange === 'function' && id !== 'more') {
                 onChange(id);
+            }
+
+            if (popupRef.current) {
+                if (id === 'more') {
+                    popupRef.current.show();
+                } else {
+                    popupRef.current.hide();
+                }
             }
 
             setItemPosition(index);
@@ -164,26 +148,94 @@ const SliderButton: FC<SliderButtonProps> = ({
         [isDisabled, onChange, setItemPosition],
     );
 
-    const buttons = useMemo(
-        () =>
-            items.map(({ id, text }, index) => (
+    const buttons = useMemo(() => {
+        if (items.length > shownItemsCount) {
+            const newItems = items.slice(0, shownItemsCount - 1);
+            const otherItems = items.slice(shownItemsCount - 1);
+
+            const elements = newItems.map(({ id, text }, index) => (
                 <StyledSliderButtonItem
                     $width={itemWidth}
                     key={`slider-button-${id}`}
                     onClick={() => handleClick(id, index)}
-                    $isSelected={id === selectedButton}
                 >
                     {text}
                 </StyledSliderButtonItem>
-            )),
-        [handleClick, itemWidth, items, selectedButton],
-    );
+            ));
 
-    const thumbText = useMemo(() => {
-        const selectedItem = items.find(({ id }) => id === selectedButton);
+            const popupContent = otherItems.map(({ id, text }) => (
+                <StyledSliderButtonPopupContentItem
+                    key={`slider-button-${id}`}
+                    onClick={() => handleClick(id, newItems.length)}
+                >
+                    {text}
+                </StyledSliderButtonPopupContentItem>
+            ));
 
-        return selectedItem ? selectedItem.text : items[0]?.text;
-    }, [items, selectedButton]);
+            const id = 'more';
+
+            elements.push(
+                <StyledSliderButtonItem $width={itemWidth} key={`slider-button-${id}`}>
+                    <Popup
+                        ref={popupRef}
+                        content={
+                            <StyledSliderButtonPopupContent>
+                                {popupContent}
+                            </StyledSliderButtonPopupContent>
+                        }
+                    >
+                        <Icon icons={['fa fa-ellipsis']} color="white" />
+                    </Popup>
+                </StyledSliderButtonItem>,
+            );
+
+            return elements;
+        }
+        return items.map(({ id, text }) => (
+            <StyledSliderButtonItem $width={itemWidth} key={`slider-button-${id}`}>
+                {text}
+            </StyledSliderButtonItem>
+        ));
+    }, [handleClick, itemWidth, items, shownItemsCount]);
+
+    const pseudoButtons = useMemo(() => {
+        if (items.length > shownItemsCount) {
+            const newItems = items.slice(0, shownItemsCount - 1);
+
+            const elements = newItems.map(({ id, text }, index) => (
+                <StyledSliderButtonItem
+                    $width={itemWidth}
+                    key={`pseudo-slider-button-${id}`}
+                    onClick={() => handleClick(id, index)}
+                >
+                    {text}
+                </StyledSliderButtonItem>
+            ));
+
+            const id = 'more';
+
+            elements.push(
+                <StyledSliderButtonItem
+                    $width={itemWidth}
+                    key={`pseudo-slider-button-${id}`}
+                    onClick={() => handleClick(id, newItems.length)}
+                >
+                    <Icon icons={['fa fa-ellipsis']} />
+                </StyledSliderButtonItem>,
+            );
+
+            return elements;
+        }
+        return items.map(({ id, text }, index) => (
+            <StyledSliderButtonItem
+                $width={itemWidth}
+                key={`pseudo-slider-button-${id}`}
+                onClick={() => handleClick(id, index)}
+            >
+                {text}
+            </StyledSliderButtonItem>
+        ));
+    }, [handleClick, itemWidth, items, shownItemsCount]);
 
     /**
      * Creates an array with the snap points relative to the width of the items
@@ -236,97 +288,34 @@ const SliderButton: FC<SliderButtonProps> = ({
         if (nearestPoint >= 0 && nearestIndex >= 0) {
             void animation(nearestPoint);
 
-            const id = items[nearestIndex]?.id;
+            let id;
 
-            setSelectedButton(id);
+            if (nearestIndex === shownItemsCount - 1) {
+                id = 'more';
+            } else {
+                id = items[nearestIndex]?.id;
+            }
 
-            if (typeof onChange === 'function' && id) {
+            if (popupRef.current) {
+                if (id === 'more') {
+                    popupRef.current.show();
+                } else {
+                    popupRef.current.hide();
+                }
+            }
+
+            if (typeof onChange === 'function' && id && id !== 'more') {
                 onChange(id);
             }
         }
-
-        preventHandleScroll.current = false;
-    }, [animation, itemWidth, items, onChange, scope, snapPoints]);
-
-    const handleWhileDrag = useCallback(() => {
-        preventHandleScroll.current = true;
-        void setRefreshScrollEnabled(false);
-
-        const position = getThumbPosition({ scope, itemWidth });
-
-        if (!position) {
-            return;
-        }
-
-        const { right, left, middle } = position;
-
-        let scrollLeft = 0;
-
-        const scrollSpeed = 3;
-
-        if (sliderButtonWrapperRef.current) {
-            if (right >= dragRange.right) {
-                sliderButtonWrapperRef.current.scrollLeft += scrollSpeed;
-            }
-
-            if (left <= dragRange.left) {
-                sliderButtonWrapperRef.current.scrollLeft -= scrollSpeed;
-            }
-
-            scrollLeft = sliderButtonWrapperRef.current.scrollLeft;
-        }
-
-        const { nearestIndex } = getNearestPoint({ snapPoints, position: middle, scrollLeft });
-
-        if (nearestIndex >= 0) {
-            setSelectedButton(items[nearestIndex]?.id);
-        }
-    }, [dragRange, itemWidth, items, scope, snapPoints]);
-
-    // With this, the handleScroll works before the thumb is moved the first time.
-    useEffect(() => {
-        void animation(1);
-        void animation(0);
-    }, [animation]);
-
-    const handleScroll = useCallback(
-        (event: UIEvent<HTMLElement>) => {
-            if (preventHandleScroll.current) {
-                return;
-            }
-
-            void setRefreshScrollEnabled(false);
-
-            const position = getThumbPosition({ scope, itemWidth });
-
-            if (!position) {
-                return;
-            }
-
-            const { middle } = position;
-
-            const { scrollLeft } = event.target as HTMLDivElement;
-
-            const { nearestIndex } = getNearestPoint({ snapPoints, position: middle, scrollLeft });
-
-            if (nearestIndex >= 0) {
-                setSelectedButton(items[nearestIndex]?.id);
-            }
-
-            if (timeout.current) {
-                clearTimeout(timeout.current);
-            }
-
-            timeout.current = window.setTimeout(() => {
-                handleDragEnd();
-            }, 200);
-        },
-        [handleDragEnd, itemWidth, items, scope, snapPoints],
-    );
+    }, [animation, itemWidth, items, onChange, scope, shownItemsCount, snapPoints]);
 
     return useMemo(
         () => (
             <StyledSliderButton $isDisabled={isDisabled} ref={sliderButtonRef}>
+                <StyledSliderButtonButtonsWrapper $isInvisible>
+                    {pseudoButtons}
+                </StyledSliderButtonButtonsWrapper>
                 <StyledMotionSliderButtonThumb
                     ref={scope}
                     drag={isDisabled ? false : 'x'}
@@ -337,18 +326,12 @@ const SliderButton: FC<SliderButtonProps> = ({
                             : { ...dragRange }
                     }
                     $width={itemWidth}
-                    onDrag={handleWhileDrag}
                     onDragEnd={handleDragEnd}
-                    whileTap={isDisabled ? {} : { backgroundColor: theme['407'] }}
-                    whileHover={isDisabled ? {} : { backgroundColor: theme['409'] }}
-                >
-                    {thumbText}
-                </StyledMotionSliderButtonThumb>
+                />
                 <StyledSliderButtonWrapper
                     $isDisabled={isDisabled}
                     $width={!isSliderBigger ? dragRange.right + itemWidth : dragRange.right}
                     ref={sliderButtonWrapperRef}
-                    onScroll={handleScroll}
                 >
                     <AnimatePresence>
                         <StyledSliderButtonButtonsWrapper>
@@ -362,14 +345,11 @@ const SliderButton: FC<SliderButtonProps> = ({
             buttons,
             dragRange,
             handleDragEnd,
-            handleScroll,
-            handleWhileDrag,
             isDisabled,
             isSliderBigger,
             itemWidth,
+            pseudoButtons,
             scope,
-            theme,
-            thumbText,
         ],
     );
 };
