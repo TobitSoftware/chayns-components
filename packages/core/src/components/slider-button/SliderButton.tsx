@@ -33,19 +33,9 @@ export type SliderButtonProps = {
      * The id of a button that should be selected.
      */
     selectedButtonId?: string;
-    /**
-     * Whether the full width should be used if the slider is smaller.
-     */
-    shouldUseFullWidth?: boolean;
 };
 
-const SliderButton: FC<SliderButtonProps> = ({
-    selectedButtonId,
-    isDisabled,
-    items,
-    onChange,
-    shouldUseFullWidth = false,
-}) => {
+const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, items, onChange }) => {
     const [selectedButton, setSelectedButton] = useState<string | undefined>(undefined);
     const [dragRange, setDragRange] = useState({ left: 0, right: 0 });
 
@@ -59,24 +49,18 @@ const SliderButton: FC<SliderButtonProps> = ({
     const initialItemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
     const sliderSize = useElementSize(sliderButtonRef);
 
-    const theme: Theme = useTheme();
-
     const isSliderBigger = useMemo(
         () => sliderSize && Math.floor(sliderSize.width / initialItemWidth) < items.length,
         [initialItemWidth, items.length, sliderSize],
     );
 
     const itemWidth = useMemo(() => {
-        if (shouldUseFullWidth) {
-            const sliderWidth = sliderSize?.width || 0;
-            const maxShownItemsCount = Math.floor(sliderWidth / initialItemWidth);
-            const itemCount = items.length || 1;
+        const sliderWidth = sliderSize?.width || 0;
+        const maxShownItemsCount = Math.floor(sliderWidth / initialItemWidth);
+        const itemCount = items.length || 1;
 
-            return sliderWidth / (isSliderBigger ? maxShownItemsCount : itemCount);
-        }
-
-        return initialItemWidth;
-    }, [initialItemWidth, isSliderBigger, items.length, shouldUseFullWidth, sliderSize?.width]);
+        return sliderWidth / (isSliderBigger ? maxShownItemsCount : itemCount);
+    }, [initialItemWidth, isSliderBigger, items.length, sliderSize?.width]);
 
     useEffect(() => {
         if (sliderSize) {
@@ -178,12 +162,6 @@ const SliderButton: FC<SliderButtonProps> = ({
             )),
         [handleClick, itemWidth, items, selectedButton],
     );
-
-    const thumbText = useMemo(() => {
-        const selectedItem = items.find(({ id }) => id === selectedButton);
-
-        return selectedItem ? selectedItem.text : items[0]?.text;
-    }, [items, selectedButton]);
 
     /**
      * Creates an array with the snap points relative to the width of the items
@@ -339,11 +317,7 @@ const SliderButton: FC<SliderButtonProps> = ({
                     $width={itemWidth}
                     onDrag={handleWhileDrag}
                     onDragEnd={handleDragEnd}
-                    whileTap={isDisabled ? {} : { backgroundColor: theme['407'] }}
-                    whileHover={isDisabled ? {} : { backgroundColor: theme['409'] }}
-                >
-                    {thumbText}
-                </StyledMotionSliderButtonThumb>
+                />
                 <StyledSliderButtonWrapper
                     $isDisabled={isDisabled}
                     $width={!isSliderBigger ? dragRange.right + itemWidth : dragRange.right}
@@ -368,8 +342,6 @@ const SliderButton: FC<SliderButtonProps> = ({
             isSliderBigger,
             itemWidth,
             scope,
-            theme,
-            thumbText,
         ],
     );
 };
