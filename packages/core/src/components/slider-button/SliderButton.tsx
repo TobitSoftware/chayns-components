@@ -250,6 +250,10 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         return points;
     }, [itemWidth, items.length]);
 
+    const handleDragStart = useCallback(() => {
+        void setRefreshScrollEnabled(false);
+    }, []);
+
     const handleDragEnd = useCallback(() => {
         void setRefreshScrollEnabled(true);
 
@@ -327,6 +331,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                     }
                     $width={itemWidth}
                     onDragEnd={handleDragEnd}
+                    onDragStart={handleDragStart}
                 />
                 <StyledSliderButtonWrapper
                     $isDisabled={isDisabled}
@@ -345,6 +350,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
             buttons,
             dragRange,
             handleDragEnd,
+            handleDragStart,
             isDisabled,
             isSliderBigger,
             itemWidth,
