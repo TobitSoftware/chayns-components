@@ -64,6 +64,7 @@ Scrollable.args = {
         { id: 'y', text: 'Y' },
         { id: 'z', text: 'Z' },
     ],
+    selectedId: 'm',
 };
 
 FullWidth.args = {
