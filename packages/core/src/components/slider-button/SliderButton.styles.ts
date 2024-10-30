@@ -61,13 +61,17 @@ export const StyledSliderButtonItem = styled.div<StyledSliderButtonItemProps>`
 export const StyledSliderButtonPopupContent = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 7px 12px;
 `;
 
-export const StyledSliderButtonPopupContentItem = styled.div`
+type StyledSliderButtonPopupContentItemProps = WithTheme<{ $isSelected?: boolean }>;
+
+export const StyledSliderButtonPopupContentItem = styled.div<StyledSliderButtonPopupContentItemProps>`
     font-size: 110%;
     font-family: 'Roboto Medium', serif;
     cursor: pointer;
+    background-color: ${({ $isSelected, theme }: StyledSliderButtonPopupContentItemProps) =>
+        $isSelected ? theme['secondary-102'] : undefined};
+    padding: 4px 12px;
 `;
 
 type StyledSliderButtonButtonsWrapperProps = WithTheme<{ $isInvisible?: boolean }>;

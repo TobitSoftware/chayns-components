@@ -42,6 +42,9 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
     const [dragRange, setDragRange] = useState({ left: 0, right: 0 });
     const [shownItemsCount, setShownItemsCount] = useState(items.length);
     const [sliderSize, setSliderSize] = useState({ width: 0 });
+    const [currentId, setCurrentId] = useState('');
+    const [currentPopupId, setCurrentPopupId] = useState('');
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     const sliderButtonRef = useRef<HTMLDivElement>(null);
     const sliderButtonWrapperRef = useRef<HTMLDivElement>(null);
@@ -55,6 +58,24 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
     useEffect(() => {
         if (elementSize) setSliderSize(elementSize);
     }, [elementSize]);
+
+    const setPopupId = useCallback(
+        (selectedId: string) => {
+            const ids = items.slice(shownItemsCount - 1).map(({ id }) => id);
+
+            const newId = ids.find((id) => id === selectedId);
+
+            if (newId) {
+                setCurrentId('more');
+                setCurrentPopupId(newId);
+
+                return;
+            }
+
+            setCurrentId(selectedId);
+        },
+        [items, shownItemsCount],
+    );
 
     const isSliderBigger = useMemo(
         () => sliderSize && Math.floor(sliderSize.width / initialItemWidth) < items.length - 1,
@@ -97,6 +118,8 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
     const setItemPosition = useCallback(
         (index: number) => {
+            setCurrentIndex(index);
+
             void animation(itemWidth * index);
         },
         [animation, itemWidth],
@@ -105,6 +128,10 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
     useEffect(() => {
         if (typeof selectedButtonId === 'string') {
             let index = items.findIndex(({ id }) => id === selectedButtonId);
+
+            setCurrentId(selectedButtonId);
+
+            setPopupId(selectedButtonId);
 
             if (items.length > shownItemsCount && index > shownItemsCount - 1) {
                 index = shownItemsCount - 1;
@@ -122,6 +149,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         items,
         selectedButtonId,
         setItemPosition,
+        setPopupId,
         shownItemsCount,
     ]);
 
@@ -130,6 +158,8 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
             if (isDisabled) {
                 return;
             }
+
+            setPopupId(id);
 
             if (typeof onChange === 'function' && id !== 'more') {
                 onChange(id);
@@ -145,7 +175,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
             setItemPosition(index);
         },
-        [isDisabled, onChange, setItemPosition],
+        [isDisabled, onChange, setItemPosition, setPopupId],
     );
 
     const buttons = useMemo(() => {
@@ -167,6 +197,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                 <StyledSliderButtonPopupContentItem
                     key={`slider-button-${id}`}
                     onClick={() => handleClick(id, newItems.length)}
+                    $isSelected={id === currentPopupId}
                 >
                     {text}
                 </StyledSliderButtonPopupContentItem>
@@ -196,7 +227,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                 {text}
             </StyledSliderButtonItem>
         ));
-    }, [handleClick, itemWidth, items, shownItemsCount]);
+    }, [currentPopupId, handleClick, itemWidth, items, shownItemsCount]);
 
     const pseudoButtons = useMemo(() => {
         if (items.length > shownItemsCount) {
@@ -332,6 +363,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                     $width={itemWidth}
                     onDragEnd={handleDragEnd}
                     onDragStart={handleDragStart}
+                    onClick={() => handleClick(currentId, currentIndex)}
                 />
                 <StyledSliderButtonWrapper
                     $isDisabled={isDisabled}
@@ -348,7 +380,10 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         ),
         [
             buttons,
+            currentId,
+            currentIndex,
             dragRange,
+            handleClick,
             handleDragEnd,
             handleDragStart,
             isDisabled,
