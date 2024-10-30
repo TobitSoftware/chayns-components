@@ -82,15 +82,31 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         [initialItemWidth, items.length, sliderSize],
     );
 
+    const maxShownItemsCount = useMemo(() => {
+        let totalWidth = 0;
+        let count = 0;
+
+        while (count < items.length) {
+            const visibleItems = items.slice(0, count + 1);
+            const currentMaxWidth = calculateBiggestWidth(visibleItems) + 8;
+
+            if (totalWidth + currentMaxWidth > sliderSize.width) break;
+
+            totalWidth += currentMaxWidth;
+            count++;
+        }
+
+        return count;
+    }, [items, sliderSize.width]);
+
     const itemWidth = useMemo(() => {
         const sliderWidth = sliderSize?.width || 0;
-        const maxShownItemsCount = Math.floor(sliderWidth / initialItemWidth);
         const itemCount = items.length || 1;
 
         setShownItemsCount(isSliderBigger ? maxShownItemsCount : itemCount);
 
         return sliderWidth / (isSliderBigger ? maxShownItemsCount : itemCount);
-    }, [initialItemWidth, isSliderBigger, items.length, sliderSize?.width]);
+    }, [isSliderBigger, items.length, maxShownItemsCount, sliderSize?.width]);
 
     useEffect(() => {
         if (sliderSize) {
