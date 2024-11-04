@@ -161,8 +161,15 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                     return openingTime;
                 });
 
+                const changedOpeningTime = updatedOpeningTimes.find(
+                    (updatedOpeningTime) => updatedOpeningTime.id === id,
+                );
+
                 if (isValid && typeof onChange === 'function') {
-                    onChange({ dayId: newTime.id, time: newTime });
+                    onChange({
+                        dayId: changedOpeningTime?.id,
+                        time: newTime,
+                    });
                 }
 
                 return updatedOpeningTimes;
