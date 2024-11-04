@@ -60,13 +60,6 @@ export type OpeningTimesProps = {
      */
     onTimeRemove?: (id: string) => void;
     /**
-     * Function to be executed when Validation is changed.
-     */
-    onValidationStateChange?: (
-        invalidOpeningTimes: { openingTimeId: string; invalidTimeIds: string[] }[],
-    ) => void;
-
-    /**
      * The opening times corresponding to its weekday.
      */
     openingTimes: OpeningTime[];
