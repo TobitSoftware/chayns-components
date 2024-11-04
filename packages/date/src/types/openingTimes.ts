@@ -23,6 +23,7 @@ export interface OnTimeAdd {
 
 export interface OnChange {
     enabledDays?: OpeningTime['id'][];
+    dayId?: OpeningTime['id'];
     time?: Time;
 }
 

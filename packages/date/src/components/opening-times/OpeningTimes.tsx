@@ -50,7 +50,7 @@ export type OpeningTimesProps = {
      * Function to be executed when a time is changed or a day is enabled/disabled.
      * @param openingTimes
      */
-    onChange?: ({ time, enabledDays }: OnChange) => void;
+    onChange?: ({ time, enabledDays, dayId }: OnChange) => void;
     /**
      * Function to be executed when a time is added.
      */
@@ -162,7 +162,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                 });
 
                 if (isValid && typeof onChange === 'function') {
-                    onChange({ time: newTime });
+                    onChange({ dayId: newTime.id, time: newTime });
                 }
 
                 return updatedOpeningTimes;
