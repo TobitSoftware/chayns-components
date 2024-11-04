@@ -19,7 +19,6 @@ export interface OpeningTime {
 export interface OnTimeAdd {
     dayId: OpeningTime['id'];
     time: Time;
-    invalidOpeningTimes: { openingTimeId: string; invalidTimeIds: string[] }[]
 }
 
 export interface OnChange {

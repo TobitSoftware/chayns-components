@@ -54,7 +54,7 @@ export type OpeningTimesProps = {
     /**
      * Function to be executed when a time is added.
      */
-    onTimeAdd?: ({ time, dayId,invalidOpeningTimes }: OnTimeAdd ) => void;
+    onTimeAdd?: ({ time, dayId }: OnTimeAdd) => void;
     /**
      * Function to be executed when a time is removed.
      */
@@ -74,6 +74,10 @@ export type OpeningTimesProps = {
      * The weekdays that should be displayed.
      */
     weekdays: Weekday[];
+    /**
+     * When set to true, events are triggered without validation.
+     */
+    shouldNotValidate?: boolean;
 };
 
 const OpeningTimes: FC<OpeningTimesProps> = ({
@@ -86,8 +90,8 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     weekdays,
     onChange,
     onTimeAdd,
-    onValidationStateChange,
     onTimeRemove,
+    shouldNotValidate = false,
 }) => {
     const [newOpeningTimes, setNewOpeningTimes] = useState<OpeningTime[]>();
     const [invalidOpeningTimes, setInvalidOpeningTimes] = useState<
@@ -102,11 +106,22 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
         setNewOpeningTimes(openingTimes);
     }, [openingTimes]);
 
-    useEffect(() => {
-        if (typeof onValidationStateChange === 'function') {
-            onValidationStateChange(invalidOpeningTimes);
-        }
-    }, [invalidOpeningTimes, onValidationStateChange]);
+    const validateTime = useCallback(
+        (newTime: Time, dayId: string): boolean => {
+            if (newTime.start === newTime.end) {
+                return false;
+            }
+            const dayTimes = newOpeningTimes?.find((day) => day.id === dayId)?.times || [];
+
+            return dayTimes.every(
+                (time) =>
+                    time.id === newTime.id ||
+                    newTime.end <= time.start ||
+                    newTime.start >= time.end,
+            );
+        },
+        [newOpeningTimes],
+    );
 
     const handleCheckBoxChange = useCallback(
         (id: string) => {
@@ -134,6 +149,11 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
 
     const handleChange = useCallback(
         (newTime: Time, id: string) => {
+            const isValid = shouldNotValidate || validateTime(newTime, id);
+            if (!isValid) {
+                return;
+            }
+
             setNewOpeningTimes((prevOpeningTimes) => {
                 const updatedOpeningTimes = (prevOpeningTimes ?? []).map((openingTime) => {
                     if (openingTime.id === id) {
@@ -141,43 +161,29 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                             if (time.id === newTime.id) {
                                 return newTime;
                             }
-
                             return time;
                         });
-
                         return { ...openingTime, times: newTimes };
                     }
                     return openingTime;
                 });
 
-                if (typeof onChange === 'function') {
+                if (isValid && typeof onChange === 'function') {
                     onChange({ time: newTime });
                 }
 
                 return updatedOpeningTimes;
             });
         },
-        [onChange],
+        [onChange, shouldNotValidate, validateTime],
     );
 
     const handleAdd = useCallback(
         (time: Time, id: string) => {
-            const updatedInvalidOpeningTimes = newOpeningTimes?.reduce(
-                (acc: { openingTimeId: string; invalidTimeIds: string[] }[], openingTime) => {
-                    const invalidTimesIds = openingTime.times.filter((ivalidTime) =>
-                        (ivalidTime.start < time.end && ivalidTime.end > time.start)
-                    ).map((t) => t.id);
+            const isValid = shouldNotValidate || validateTime(time, id);
 
-                    if (invalidTimesIds.length > 0) {
-                        acc.push({ openingTimeId: id, invalidTimeIds: invalidTimesIds });
-                    }
-                    return acc;
-                },
-                [],
-            ) || [];
-
-            if (typeof onTimeAdd === 'function') {
-                onTimeAdd({ invalidOpeningTimes: updatedInvalidOpeningTimes, dayId: id, time });
+            if (isValid && typeof onTimeAdd === 'function') {
+                onTimeAdd({ time, dayId: id });
             }
 
             setNewOpeningTimes((prevOpeningTimes) =>
@@ -189,7 +195,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                 }),
             );
         },
-        [newOpeningTimes, onTimeAdd],
+        [onTimeAdd, shouldNotValidate, validateTime],
     );
 
     const handleUpdateInvalidIds = useCallback(
@@ -230,7 +236,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                 (prevOpeningTimes ?? []).map((openingTime) => {
                     const newTimes = openingTime.times.filter((time) => time.id !== id);
 
-                    return {...openingTime, times: newTimes};
+                    return { ...openingTime, times: newTimes };
                 }),
             );
 
