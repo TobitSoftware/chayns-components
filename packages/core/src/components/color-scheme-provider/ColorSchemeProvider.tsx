@@ -111,8 +111,8 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     theme,
     colors,
 }) => {
-    const [internalColors, setInternalColors] = useState<Theme>({});
-    const [internalTheme, setInternalTheme] = useState<Theme>({});
+    const [internalColors, setInternalColors] = useState<Theme>(colors ?? {});
+    const [internalTheme, setInternalTheme] = useState<Theme>(theme ?? {});
     const [internalDesignSettings, setInternalDesignSettings] = useState<DesignSettings>();
     const [internalParagraphFormat, setInternalParagraphFormat] = useState<ParagraphFormat[]>();
 
