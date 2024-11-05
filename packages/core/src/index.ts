@@ -95,3 +95,4 @@ export { getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
 export { isTobitEmployee } from './utils/isTobitEmployee';
 export { getUsableHeight } from './utils/pageProvider';
 export { uploadFile } from './utils/uploadFile';
+export { useColorScheme } from './components/color-scheme-provider/ColorSchemeProvider';

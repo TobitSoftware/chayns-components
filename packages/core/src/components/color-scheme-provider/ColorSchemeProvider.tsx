@@ -1,6 +1,14 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
 import { useSite } from 'chayns-api';
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, {
+    createContext,
+    FC,
+    ReactNode,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import { Helmet } from 'react-helmet';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { getDesignSettings, getParagraphFormat } from '../../api/theme/get';
@@ -35,6 +43,10 @@ export type ColorSchemeProviderProps = {
      */
     designSettings?: DesignSettings;
     /**
+     * The general format settings.
+     */
+    paragraphFormat?: ParagraphFormat[];
+    /**
      * The secondary hex color to be used for the children
      */
     secondaryColor?: string;
@@ -67,6 +79,15 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
+interface ColorSchemeContextProps {
+    designSettings: DesignSettings;
+    paragraphFormat: ParagraphFormat[];
+}
+
+export const ColorSchemeContext = createContext<ColorSchemeContextProps | undefined>(undefined);
+
+export const useColorScheme = () => useContext(ColorSchemeContext);
+
 const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     children,
     color,
@@ -75,6 +96,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     secondaryColor,
     siteId,
     style = {},
+    paragraphFormat,
     designSettings,
 }) => {
     const [colors, setColors] = useState<Theme>({});
@@ -88,18 +110,20 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     useEffect(() => {
         if (designSettings) {
             setInternalDesignSettings(designSettings);
-
-            return;
+        } else {
+            void getDesignSettings(siteId).then((result) => {
+                setInternalDesignSettings(result);
+            });
         }
 
-        void getDesignSettings(siteId).then((result) => {
-            setInternalDesignSettings(result);
-        });
-
-        void getParagraphFormat(siteId).then((result) => {
-            setInternalParagraphFormat(result);
-        });
-    }, [designSettings, siteId]);
+        if (paragraphFormat) {
+            setInternalParagraphFormat(paragraphFormat);
+        } else {
+            void getParagraphFormat(siteId).then((result) => {
+                setInternalParagraphFormat(result);
+            });
+        }
+    }, [designSettings, paragraphFormat, siteId]);
 
     useEffect(() => {
         const availableColors = getAvailableColorList();
@@ -192,21 +216,39 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         secondaryColor,
     ]);
 
+    const contextValue = useMemo(() => {
+        if (internalDesignSettings && internalParagraphFormat) {
+            return {
+                paragraphFormat: internalParagraphFormat,
+                designSettings: internalDesignSettings,
+            };
+        }
+
+        return undefined;
+    }, [internalDesignSettings, internalParagraphFormat]);
+
     return (
         <ThemeProvider theme={theme}>
-            <Helmet>
-                <link
-                    rel="stylesheet"
-                    href="https://api.chayns-static.space/font/NotoColorEmoji/v1/font.css"
-                />
-            </Helmet>
-            <div
-                className="color-scheme-provider"
-                style={{ ...colors, ...cssVariables, ...style, color: 'var(--chayns-color--text)' }}
-            >
-                {children}
-            </div>
-            <GlobalStyle />
+            <ColorSchemeContext.Provider value={contextValue}>
+                <Helmet>
+                    <link
+                        rel="stylesheet"
+                        href="https://api.chayns-static.space/font/NotoColorEmoji/v1/font.css"
+                    />
+                </Helmet>
+                <div
+                    className="color-scheme-provider"
+                    style={{
+                        ...colors,
+                        ...cssVariables,
+                        ...style,
+                        color: 'var(--chayns-color--text)',
+                    }}
+                >
+                    {children}
+                </div>
+                <GlobalStyle />
+            </ColorSchemeContext.Provider>
         </ThemeProvider>
     );
 };
