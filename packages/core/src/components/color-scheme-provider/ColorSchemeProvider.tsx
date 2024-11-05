@@ -31,6 +31,10 @@ export type ColorSchemeProviderProps = {
      */
     color?: string;
     /**
+     * The colors of the components
+     */
+    colors?: Theme;
+    /**
      * The color mode to be used for the children
      */
     colorMode?: ColorMode;
@@ -58,6 +62,10 @@ export type ColorSchemeProviderProps = {
      * Additional styles set on the root element
      */
     style?: { [key: string]: string | number };
+    /**
+     * The theme for the components
+     */
+    theme?: Theme;
 };
 
 export interface Theme {
@@ -79,9 +87,11 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
-interface ColorSchemeContextProps {
+export interface ColorSchemeContextProps {
     designSettings: DesignSettings;
     paragraphFormat: ParagraphFormat[];
+    colors: Theme;
+    theme: Theme;
 }
 
 export const ColorSchemeContext = createContext<ColorSchemeContextProps | undefined>(undefined);
@@ -98,9 +108,11 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     style = {},
     paragraphFormat,
     designSettings,
+    theme,
+    colors,
 }) => {
-    const [colors, setColors] = useState<Theme>({});
-    const [theme, setTheme] = useState<Theme>({});
+    const [internalColors, setInternalColors] = useState<Theme>({});
+    const [internalTheme, setInternalTheme] = useState<Theme>({});
     const [internalDesignSettings, setInternalDesignSettings] = useState<DesignSettings>();
     const [internalParagraphFormat, setInternalParagraphFormat] = useState<ParagraphFormat[]>();
 
@@ -126,109 +138,135 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     }, [designSettings, paragraphFormat, siteId]);
 
     useEffect(() => {
+        let newColors: Theme = {};
+        let newTheme: Theme = {};
+
         const availableColors = getAvailableColorList();
 
-        const newColors: Theme = {};
-        const newTheme: Theme = {};
+        if (!colors || !theme) {
+            availableColors.forEach((colorName: string) => {
+                const hexColor = getColorFromPalette(colorName, {
+                    color: color ?? internalColor,
+                    colorMode: colorMode ?? internalColorMode,
+                    secondaryColor,
+                });
 
-        availableColors.forEach((colorName: string) => {
-            const hexColor = getColorFromPalette(colorName, {
-                color: color ?? internalColor,
-                colorMode: colorMode ?? internalColorMode,
-                secondaryColor,
-            });
+                if (hexColor) {
+                    const rgbColor = hexToRgb255(hexColor);
 
-            if (hexColor) {
-                const rgbColor = hexToRgb255(hexColor);
+                    if (!theme) {
+                        newTheme[colorName] = hexColor;
+                    }
 
-                newColors[`--chayns-color--${colorName}`] = hexColor;
-                newTheme[colorName] = hexColor;
+                    if (!colors) {
+                        newColors[`--chayns-color--${colorName}`] = hexColor;
+                    }
 
-                if (rgbColor) {
-                    newColors[`--chayns-color-rgb--${colorName}`] =
-                        `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
-                    newTheme[`${colorName}-rgb`] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+                    if (rgbColor) {
+                        if (!theme) {
+                            newTheme[`${colorName}-rgb`] =
+                                `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+                        }
+
+                        if (!colors) {
+                            newColors[`--chayns-color-rgb--${colorName}`] =
+                                `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+                        }
+                    }
                 }
+            });
+        }
+
+        if (colors) {
+            newColors = colors;
+        }
+
+        if (!theme) {
+            switch (colorMode ?? internalColorMode) {
+                case ColorMode.Light:
+                    newTheme.colorMode = 'light';
+                    break;
+                case ColorMode.Dark:
+                    newTheme.colorMode = 'dark';
+                    break;
+                default:
+                    newTheme.colorMode = 'classic';
+                    break;
             }
-        });
 
-        switch (colorMode ?? internalColorMode) {
-            case ColorMode.Light:
-                newTheme.colorMode = 'light';
-                break;
-            case ColorMode.Dark:
-                newTheme.colorMode = 'dark';
-                break;
-            default:
-                newTheme.colorMode = 'classic';
-                break;
+            if (internalDesignSettings) {
+                Object.keys(internalDesignSettings).forEach((key) => {
+                    if (key === 'iconStyle') {
+                        newTheme[key] = convertIconStyle(internalDesignSettings.iconStyle);
+
+                        return;
+                    }
+
+                    // ToDo: Find better solution
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    newTheme[key] = internalDesignSettings[key];
+                });
+            }
+
+            if (internalParagraphFormat) {
+                const { colorResult, themeResult } =
+                    getHeadlineColorSelector(internalParagraphFormat);
+
+                // Update chayns-colors
+                Object.keys(colorResult).forEach((key) => {
+                    // ToDo: Find better solution
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    newColors[key] = colorResult[key];
+                });
+
+                // Update Theme
+                Object.keys(themeResult).forEach((key) => {
+                    // ToDo: Find better solution
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    newTheme[key] = themeResult[key];
+                });
+            }
+
+            newTheme.fontSize = getFontSize();
+        } else {
+            newTheme = theme;
         }
 
-        if (internalDesignSettings) {
-            Object.keys(internalDesignSettings).forEach((key) => {
-                if (key === 'iconStyle') {
-                    newTheme[key] = convertIconStyle(internalDesignSettings.iconStyle);
-
-                    return;
-                }
-
-                // ToDo: Find better solution
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                newTheme[key] = internalDesignSettings[key];
-            });
-        }
-
-        if (internalParagraphFormat) {
-            const { colorResult, themeResult } = getHeadlineColorSelector(internalParagraphFormat);
-
-            // Update chayns-colors
-            Object.keys(colorResult).forEach((key) => {
-                // ToDo: Find better solution
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                newColors[key] = colorResult[key];
-            });
-
-            // Update Theme
-            Object.keys(themeResult).forEach((key) => {
-                // ToDo: Find better solution
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                newTheme[key] = themeResult[key];
-            });
-        }
-
-        newTheme.fontSize = getFontSize();
-
-        setTheme(newTheme);
-        setColors(newColors);
+        setInternalTheme(newTheme);
+        setInternalColors(newColors);
     }, [
         color,
         colorMode,
+        colors,
         internalColor,
         internalColorMode,
         internalDesignSettings,
         internalParagraphFormat,
         secondaryColor,
+        theme,
     ]);
 
-    const contextValue = useMemo(() => {
+    const contextValue: ColorSchemeContextProps | undefined = useMemo(() => {
         if (internalDesignSettings && internalParagraphFormat) {
             return {
                 paragraphFormat: internalParagraphFormat,
                 designSettings: internalDesignSettings,
+                colors: internalColors,
+                theme: internalTheme,
             };
         }
 
         return undefined;
-    }, [internalDesignSettings, internalParagraphFormat]);
+    }, [internalColors, internalDesignSettings, internalParagraphFormat, internalTheme]);
 
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={internalTheme}>
             <ColorSchemeContext.Provider value={contextValue}>
                 <Helmet>
                     <link
@@ -239,7 +277,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                 <div
                     className="color-scheme-provider"
                     style={{
-                        ...colors,
+                        ...internalColors,
                         ...cssVariables,
                         ...style,
                         color: 'var(--chayns-color--text)',
