@@ -104,6 +104,10 @@ export type ComboBoxProps = {
      */
     shouldShowRoundImage?: boolean;
     /**
+     * Whether the width of the ComboBox should be the width of the current item.
+     */
+    shouldUseCurrentItemWidth?: boolean;
+    /**
      * Whether the width of the 'ComboBox' should be the width of the parent or of the widest item.
      */
     shouldUseFullWidth?: boolean;
@@ -123,12 +127,14 @@ const ComboBox: FC<ComboBoxProps> = ({
     onInputFocus,
     shouldUseFullWidth = false,
     onInputChange,
+    shouldUseCurrentItemWidth = false,
     onInputBlur,
     inputValue,
 }) => {
     const [internalSelectedItem, setInternalSelectedItem] = useState<IComboBoxItem>();
     const [isAnimating, setIsAnimating] = useState(false);
     const [minWidth, setMinWidth] = useState(0);
+    const [bodyMinWidth, setBodyMinWidth] = useState(0);
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
     const [overflowY, setOverflowY] = useState<CSSProperties['overflowY']>('hidden');
     const [portal, setPortal] = useState<ReactPortal>();
@@ -289,28 +295,47 @@ const ComboBox: FC<ComboBoxProps> = ({
      */
     useEffect(() => {
         const allItems = lists.flatMap((list) => list.list);
+        const hasImage = allItems.some(({ imageUrl }) => imageUrl);
+        const hasIcon = allItems.some(({ icons }) => icons);
 
-        const isAtLeastOneItemWithImageGiven = allItems.some(({ imageUrl }) => imageUrl);
-        const isAtLeastOneItemWithIconGiven = allItems.some(({ icons }) => icons);
-
-        const width =
+        const parentWidth =
             styledComboBoxElementRef.current?.parentElement?.getBoundingClientRect().width ?? 0;
 
-        // 45px = padding left + padding right + border left + border right + arrow icon width + arrow icon margin left
-        // 32px = image width + flex gap
-        // 40px = icon width + flex gap
-        setMinWidth(
-            shouldUseFullWidth
-                ? width
-                : calculateContentWidth([
-                      ...allItems,
-                      { text: placeholder, value: 'placeholder' },
-                  ]) +
-                      45 +
-                      (isAtLeastOneItemWithImageGiven ? 32 : 0) +
-                      (isAtLeastOneItemWithIconGiven ? 40 : 0),
-        );
-    }, [lists, maxHeight, placeholder, shouldUseFullWidth]);
+        const paddingWidth = 45; // padding + border + arrow icon
+        const imageWidth = hasImage ? 32 : 0; // image width + gap if images present
+        const iconWidth = hasIcon ? 40 : 0; // icon width + gap if icons present
+
+        const baseWidth = calculateContentWidth([
+            ...allItems,
+            { text: placeholder, value: 'placeholder' },
+        ]);
+        const calculatedWidth = baseWidth + paddingWidth + imageWidth + iconWidth;
+
+        let tmpMinWidth = calculatedWidth;
+        let tmpBodyMinWidth = calculatedWidth;
+
+        // Full width settings
+        if (shouldUseFullWidth) {
+            tmpMinWidth = parentWidth;
+            tmpBodyMinWidth = calculatedWidth > parentWidth ? calculatedWidth : parentWidth;
+        }
+
+        // Current item width settings
+        else if (shouldUseCurrentItemWidth && internalSelectedItem) {
+            const itemWidth =
+                calculateContentWidth([internalSelectedItem]) +
+                paddingWidth +
+                imageWidth +
+                iconWidth;
+
+            tmpMinWidth = itemWidth;
+
+            tmpBodyMinWidth = itemWidth < calculatedWidth ? calculatedWidth : itemWidth;
+        }
+
+        setMinWidth(tmpMinWidth);
+        setBodyMinWidth(tmpBodyMinWidth);
+    }, [lists, placeholder, shouldUseFullWidth, shouldUseCurrentItemWidth, internalSelectedItem]);
 
     /**
      * This function sets the external selected item
@@ -425,7 +450,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                             initial={{ height: 0, opacity: 0 }}
                             exit={{ height: 0, opacity: 0 }}
                             $maxHeight={maxHeight}
-                            $minWidth={minWidth}
+                            $minWidth={bodyMinWidth}
                             style={bodyStyles}
                             $direction={direction}
                             transition={{ duration: 0.2 }}
@@ -440,6 +465,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             ),
         );
     }, [
+        bodyMinWidth,
         bodyStyles,
         browser?.name,
         comboBoxGroups,
