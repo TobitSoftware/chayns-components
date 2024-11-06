@@ -10,6 +10,8 @@ import React, {
     useState,
     type CSSProperties,
     type ReactNode,
+    ChangeEventHandler,
+    FocusEventHandler,
 } from 'react';
 import { createPortal } from 'react-dom';
 import { ComboBoxDirection } from '../../types/comboBox';
@@ -22,6 +24,7 @@ import {
     StyledComboBox,
     StyledComboBoxHeader,
     StyledComboBoxIconWrapper,
+    StyledComboBoxInput,
     StyledComboBoxPlaceholder,
     StyledComboBoxPlaceholderImage,
     StyledComboBoxTopic,
@@ -54,6 +57,10 @@ export type ComboBoxProps = {
      */
     direction?: ComboBoxDirection;
     /**
+     * The value of the optional input.
+     */
+    inputValue?: string;
+    /**
      * Whether the combobox should be disabled.
      */
     isDisabled?: boolean;
@@ -65,6 +72,14 @@ export type ComboBoxProps = {
      * The maximum height of the combobox content.
      */
     maxHeight?: CSSProperties['maxHeight'];
+    /**
+     * Function to be executed when the value of the optional input is changed.
+     */
+    onInputChange?: ChangeEventHandler<HTMLInputElement>;
+    /**
+     * Function to be executed when the optional input lost its focus.
+     */
+    onInputBlur?: FocusEventHandler<HTMLInputElement>;
     /**
      * Function that should be executed when an item is selected.
      */
@@ -103,6 +118,9 @@ const ComboBox: FC<ComboBoxProps> = ({
     shouldShowBigImage,
     shouldShowRoundImage,
     shouldUseFullWidth = false,
+    onInputChange,
+    onInputBlur,
+    inputValue,
 }) => {
     const [internalSelectedItem, setInternalSelectedItem] = useState<IComboBoxItem>();
     const [isAnimating, setIsAnimating] = useState(false);
@@ -443,21 +461,31 @@ const ComboBox: FC<ComboBoxProps> = ({
                     $isTouch={isTouch}
                     $isDisabled={isDisabled}
                 >
-                    <StyledComboBoxPlaceholder
-                        $shouldReduceOpacity={!selectedItem && !internalSelectedItem}
-                    >
-                        {placeholderImageUrl && (
-                            <StyledComboBoxPlaceholderImage
-                                src={placeholderImageUrl}
-                                shouldShowRoundImage={shouldShowRoundImage}
-                            />
-                        )}
-                        {placeholderIcon && <Icon icons={placeholderIcon} />}
-                        {placeholderText}
-                        {internalSelectedItem &&
-                            internalSelectedItem.suffixElement &&
-                            internalSelectedItem.suffixElement}
-                    </StyledComboBoxPlaceholder>
+                    {typeof inputValue === 'string' ? (
+                        <StyledComboBoxInput
+                            disabled={isDisabled}
+                            value={inputValue}
+                            onChange={onInputChange}
+                            onBlur={onInputBlur}
+                            placeholder={placeholderText}
+                        />
+                    ) : (
+                        <StyledComboBoxPlaceholder
+                            $shouldReduceOpacity={!selectedItem && !internalSelectedItem}
+                        >
+                            {placeholderImageUrl && (
+                                <StyledComboBoxPlaceholderImage
+                                    src={placeholderImageUrl}
+                                    shouldShowRoundImage={shouldShowRoundImage}
+                                />
+                            )}
+                            {placeholderIcon && <Icon icons={placeholderIcon} />}
+                            {placeholderText}
+                            {internalSelectedItem &&
+                                internalSelectedItem.suffixElement &&
+                                internalSelectedItem.suffixElement}
+                        </StyledComboBoxPlaceholder>
+                    )}
                     <StyledComboBoxIconWrapper>
                         <Icon icons={['fa fa-chevron-down']} />
                     </StyledComboBoxIconWrapper>
@@ -466,20 +494,23 @@ const ComboBox: FC<ComboBoxProps> = ({
             </StyledComboBox>
         ),
         [
+            shouldUseFullWidth,
+            minWidth,
             direction,
             handleHeaderClick,
             isAnimating,
-            isDisabled,
             isTouch,
-            internalSelectedItem,
-            minWidth,
-            placeholderIcon,
-            placeholderImageUrl,
+            isDisabled,
+            inputValue,
+            onInputChange,
+            onInputBlur,
             placeholderText,
-            portal,
             selectedItem,
+            internalSelectedItem,
+            placeholderImageUrl,
             shouldShowRoundImage,
-            shouldUseFullWidth,
+            placeholderIcon,
+            portal,
         ],
     );
 };

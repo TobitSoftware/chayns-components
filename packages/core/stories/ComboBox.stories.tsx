@@ -2,6 +2,8 @@ import { Meta, StoryFn } from '@storybook/react';
 import { ComboBoxDirection } from '../src';
 import ComboBox from '../src/components/combobox/ComboBox';
 import Icon from '../src/components/icon/Icon';
+import { IComboBoxItem } from '../src/components/combobox/ComboBox';
+import { ChangeEvent, useState } from 'react';
 
 export default {
     title: 'Core/ComboBox',
@@ -77,6 +79,35 @@ const Template: StoryFn<typeof ComboBox> = (args) => (
     </>
 );
 
+const WithInputTemplate: StoryFn<typeof ComboBox> = (args) => {
+    const [value, setValue] = useState('');
+
+    const handleChange = (event: ChangeEvent) => {
+        setValue((event.target as HTMLInputElement).value);
+    };
+
+    const handleSelect = (item: IComboBoxItem) => {
+        setValue(item.text);
+    };
+
+    return (
+        <>
+            <p>
+                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
+                diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
+                kasd gubergren, no sea takimata sanctus est.
+            </p>
+            <ComboBox
+                {...args}
+                inputValue={value}
+                onInputChange={handleChange}
+                onSelect={handleSelect}
+            />
+        </>
+    );
+};
+
 export const General = Template.bind({});
 
 export const WithImages = Template.bind({});
@@ -88,6 +119,8 @@ export const WithIcons = Template.bind({});
 export const WithGroups = Template.bind({});
 
 export const WithSubtextAndRightElement = Template.bind({});
+
+export const WithInput = WithInputTemplate.bind({});
 
 WithGroups.args = {
     direction: ComboBoxDirection.TOP,
@@ -349,4 +382,42 @@ WithSubtextAndRightElement.args = {
     placeholder: 'Avatar auswählen',
     shouldShowRoundImage: true,
     shouldUseFullWidth: true,
+};
+
+WithInput.args = {
+    lists: [
+        {
+            list: [
+                {
+                    text: '12px',
+                    value: 0,
+                },
+                {
+                    text: '13px',
+                    value: 1,
+                },
+                {
+                    text: '14px',
+                    value: 2,
+                },
+                {
+                    text: '15px',
+                    value: 3,
+                },
+                {
+                    text: '16px',
+                    value: 4,
+                },
+                {
+                    text: '20px',
+                    value: 5,
+                },
+                {
+                    text: '24px',
+                    value: 6,
+                },
+            ],
+        },
+    ],
+    placeholder: 'Fontsize',
 };

@@ -82,6 +82,12 @@ export const StyledComboBoxPlaceholder = styled.div<StyledComboBoxPlaceholderPro
     opacity: ${({ $shouldReduceOpacity }) => ($shouldReduceOpacity ? 0.5 : 1)};
 `;
 
+export const StyledComboBoxInput = styled.input`
+    border: none;
+    background-color: transparent;
+    width: 100%;
+`;
+
 type StyledComboBoxPlaceholderImageProps = WithTheme<
     Pick<ComboBoxItemProps, 'shouldShowRoundImage'>
 >;
