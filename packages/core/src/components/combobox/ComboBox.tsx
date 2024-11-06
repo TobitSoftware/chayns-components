@@ -317,7 +317,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         // Full width settings
         if (shouldUseFullWidth) {
             tmpMinWidth = parentWidth;
-            tmpBodyMinWidth = calculatedWidth > parentWidth ? calculatedWidth : parentWidth;
+            tmpBodyMinWidth = calculatedWidth > parentWidth + 25 ? calculatedWidth : parentWidth;
         }
 
         // Current item width settings
@@ -330,7 +330,7 @@ const ComboBox: FC<ComboBoxProps> = ({
 
             tmpMinWidth = itemWidth;
 
-            tmpBodyMinWidth = itemWidth < calculatedWidth ? calculatedWidth : itemWidth;
+            tmpBodyMinWidth = itemWidth + 25 < calculatedWidth ? calculatedWidth : itemWidth;
         }
 
         setMinWidth(tmpMinWidth);
