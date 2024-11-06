@@ -79,7 +79,10 @@ export type ComboBoxProps = {
     /**
      * Function to be executed when the optional input lost its focus.
      */
-    onInputBlur?: FocusEventHandler<HTMLInputElement>;
+    onInputBlur?: FocusEventHandler<HTMLInputElement> /**
+     * Function to be executed when the optional input gets its focus.
+     */;
+    onInputFocus?: FocusEventHandler<HTMLInputElement>;
     /**
      * Function that should be executed when an item is selected.
      */
@@ -117,6 +120,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     selectedItem,
     shouldShowBigImage,
     shouldShowRoundImage,
+    onInputFocus,
     shouldUseFullWidth = false,
     onInputChange,
     onInputBlur,
@@ -467,6 +471,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                             value={inputValue}
                             onChange={onInputChange}
                             onBlur={onInputBlur}
+                            onFocus={onInputFocus}
                             placeholder={placeholderText}
                         />
                     ) : (
@@ -504,6 +509,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             inputValue,
             onInputChange,
             onInputBlur,
+            onInputFocus,
             placeholderText,
             selectedItem,
             internalSelectedItem,
