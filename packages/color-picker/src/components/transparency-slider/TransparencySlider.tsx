@@ -1,6 +1,6 @@
 import { setRefreshScrollEnabled } from 'chayns-api';
 import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { splitRgb } from '../../utils/color';
+import { hexToRgb, isValidRGBA, splitRgb } from '../../utils/color';
 import {
     StyledTransparencySlider,
     StyledTransparencySliderBackground,
@@ -44,7 +44,13 @@ const TransparencySlider = ({
 
     useEffect(() => {
         if (color) {
-            const rgb = splitRgb(color);
+            let rgb;
+
+            if (isValidRGBA(color)) {
+                rgb = splitRgb(color);
+            } else {
+                rgb = hexToRgb(color);
+            }
 
             if (!rgb) {
                 return;
