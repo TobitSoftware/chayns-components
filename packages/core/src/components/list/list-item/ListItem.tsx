@@ -150,14 +150,14 @@ const ListItem: FC<ListItemProps> = ({
     );
 
     useEffect(() => {
-        if (isExpandable) {
+        if (isExpandable && !shouldHideIndicator) {
             // The incrementExpandableItemCount function returns an cleanup
             // function to decrement expandableItemCount if component unmounts
             return incrementExpandableItemCount();
         }
 
         return undefined;
-    }, [incrementExpandableItemCount, isExpandable]);
+    }, [incrementExpandableItemCount, isExpandable, shouldHideIndicator]);
 
     useEffect(() => {
         if (isDefaultOpen) {

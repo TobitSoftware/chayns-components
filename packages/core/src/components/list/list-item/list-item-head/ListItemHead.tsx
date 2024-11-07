@@ -181,13 +181,15 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             onTouchEnd={typeof onLongPress === 'function' ? handleTouchEnd : undefined}
         >
             <StyledListItemHeadLeftWrapper>
-                {isAnyItemExpandable && !shouldHideIndicator && (
+                {isAnyItemExpandable && (
                     <StyledMotionListItemHeadIndicator
                         animate={{ rotate: isOpen ? 90 : 0 }}
                         initial={false}
                         transition={{ type: 'tween' }}
                     >
-                        {isExpandable && <Icon icons={['fa fa-chevron-right']} />}
+                        {isExpandable && !shouldHideIndicator && (
+                            <Icon icons={['fa fa-chevron-right']} />
+                        )}
                     </StyledMotionListItemHeadIndicator>
                 )}
                 {leftElements}
