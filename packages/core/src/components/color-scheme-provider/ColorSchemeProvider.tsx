@@ -122,20 +122,22 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     useEffect(() => {
         if (designSettings) {
             setInternalDesignSettings(designSettings);
-        } else {
+        } else if (!internalDesignSettings) {
             void getDesignSettings(siteId).then((result) => {
                 setInternalDesignSettings(result);
             });
         }
+    }, [designSettings, internalDesignSettings, siteId]);
 
+    useEffect(() => {
         if (paragraphFormat) {
             setInternalParagraphFormat(paragraphFormat);
-        } else {
+        } else if (!internalParagraphFormat) {
             void getParagraphFormat(siteId).then((result) => {
                 setInternalParagraphFormat(result);
             });
         }
-    }, [designSettings, paragraphFormat, siteId]);
+    }, [internalParagraphFormat, paragraphFormat, siteId]);
 
     useEffect(() => {
         let newColors: Theme = {};
