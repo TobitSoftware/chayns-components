@@ -10,7 +10,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { convertColorToHsl, extractHsl, splitRgb } from '../../utils/color';
+import { convertColorToHsl, extractHsl, hexToRgb, isValidRGBA, splitRgb } from '../../utils/color';
 import { StyledHueSlider, StyledHueSliderInput, StyledHueSliderThumb } from './HueSlider.styles';
 
 export type HueSliderProps = {
@@ -52,7 +52,13 @@ const HueSlider: FC<HueSliderProps> = ({
 
     useEffect(() => {
         if (color) {
-            const rgb = splitRgb(color);
+            let rgb;
+
+            if (isValidRGBA(color)) {
+                rgb = splitRgb(color);
+            } else {
+                rgb = hexToRgb(color);
+            }
 
             if (!rgb) {
                 return;
