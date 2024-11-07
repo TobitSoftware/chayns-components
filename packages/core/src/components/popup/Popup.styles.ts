@@ -25,6 +25,6 @@ export const StyledPopupPseudo = styled.div<{
     left: 0;
     margin: 2px;
     pointer-events: none;
-    visibility: hidden;
+    opacity: 0;
     position: absolute;
 `;
