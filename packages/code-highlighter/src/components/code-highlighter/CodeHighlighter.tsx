@@ -75,7 +75,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
             const { children } = ref.current;
 
             const preElement = Array.from(children).find(
-                ({ tagName }) => tagName.toLowerCase() === 'pre',
+                ({ tagName }) => tagName.toLowerCase() === 'pre'
             );
 
             if (preElement) {
@@ -104,7 +104,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
             return { style };
         },
-        [highlightedLines, width],
+        [highlightedLines, width]
     );
 
     const formattedCode = useMemo(() => {
@@ -125,12 +125,28 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
         return code;
     }, [code, language, shouldFormatCode, onFormatError]);
 
+    useEffect(() => {
+        const elements = document.getElementsByClassName('linenumber');
+
+        Array.from(elements).forEach((element) => {
+            const wrapper = document.createElement('twIgnore');
+
+            while (element.firstChild) {
+                wrapper.appendChild(element.firstChild);
+            }
+
+            element.appendChild(wrapper);
+        });
+    }, []);
+
     return useMemo(
         () => (
             <StyledCodeHighlighter $browser={browser?.name} $codeTheme={theme} ref={ref}>
                 <StyledCodeHighlighterHeader $codeTheme={theme}>
                     <StyledCodeHighlighterFileName $codeTheme={theme}>
-                        {formatLanguage(language)}
+                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                        {/* @ts-ignore */}
+                        <twIgnore>{formatLanguage(language)}</twIgnore>
                     </StyledCodeHighlighterFileName>
                     <CopyToClipboard text={code} theme={theme} copyButtonText={copyButtonText} />
                 </StyledCodeHighlighterHeader>
@@ -154,7 +170,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
             shouldShowLineNumbers,
             lineWrapper,
             formattedCode,
-        ],
+        ]
     );
 };
 

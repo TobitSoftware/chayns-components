@@ -29,7 +29,9 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, text, theme
                 />
                 {copyButtonText && (
                     <StyledCopyToClipboardText $codeTheme={theme}>
-                        {copyButtonText}
+                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                        {/* @ts-ignore */}
+                        <twIgnore>{copyButtonText}</twIgnore>
                     </StyledCopyToClipboardText>
                 )}
             </StyledCopyToClipboard>

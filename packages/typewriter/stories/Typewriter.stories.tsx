@@ -71,12 +71,16 @@ WithIgnoreTags.args = {
             in odio. In tortor sapien, bibendum id ligula vel, pretium fringilla lorem. Quisque
             facilisis erat vel orci semper tempus. Fusce a purus ac risus ullamcorper gravida sed in
             libero. In eu diam nec eros egestas iaculis.
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
             <twIgnore>
                 Donec dignissim urna eget luctus sagittis. Class aptent taciti sociosqu ad litora
                 torquent per conubia nostra, per inceptos himenaeos. Donec ut ex a mi accumsan
                 pretium at sit amet nulla. Integer non mi sollicitudin, luctus elit eget, commodo
                 tortor. Duis vehicula lorem ante, eu fringilla purus vehicula et. Nunc sit amet
                 blandit turpis. Morbi eget ipsum sit amet erat bibendum porttitor.
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
             </twIgnore>
             Pellentesque sit amet odio orci. Donec nibh elit, pellentesque ut ultrices quis, dictum
             in erat. Pellentesque a nibh placerat, eleifend augue at, iaculis urna. In et mi
@@ -145,7 +149,12 @@ WithCodeHighlighter.args = {
         <>
             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
             invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-            <CodeHighlighter shouldShowLineNumbers code={code} language={'tsx'} />
+            <CodeHighlighter
+                shouldShowLineNumbers
+                code={code}
+                language={'tsx'}
+                copyButtonText="Code kopieren"
+            />
             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
             invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
             <button onClick={() => alert('Button clicked')}>Button</button>
