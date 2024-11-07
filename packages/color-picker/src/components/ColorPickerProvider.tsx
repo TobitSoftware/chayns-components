@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { hexToRgb, isValidRGBA } from '../utils/color';
 
 interface IColorPickerContext {
     selectedColor?: string;
@@ -71,8 +72,16 @@ const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerP
     }, []);
 
     useEffect(() => {
-        setInternalSelectedColor(selectedColor);
-        setInternalHueColor(selectedColor);
+        let newColor = selectedColor;
+
+        if (newColor && !isValidRGBA(newColor)) {
+            const { r, g, b, a } = hexToRgb(newColor);
+
+            newColor = `rgba(${r},${g},${b},${a})`;
+        }
+
+        setInternalSelectedColor(newColor);
+        setInternalHueColor(newColor);
         setInternalIsPresetColor(true);
     }, [selectedColor]);
 

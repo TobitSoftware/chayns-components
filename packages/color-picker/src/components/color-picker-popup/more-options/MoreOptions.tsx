@@ -2,13 +2,7 @@ import { Accordion, AccordionGroup, AreaContext } from '@chayns-components/core'
 import { isHex } from '@chayns/colors';
 import React, { useContext, useEffect, useMemo, useState, type ChangeEvent } from 'react';
 
-import {
-    extractRgbValues,
-    hexToRgb,
-    isValidRGB,
-    isValidRGBA,
-    rgbToHex,
-} from '../../../utils/color';
+import { extractRgbValues, hexToRgb, isValidRGBA, rgbToHex } from '../../../utils/color';
 import { ColorPickerContext } from '../../ColorPickerProvider';
 import {
     StyledMoreOptions,
@@ -67,7 +61,7 @@ const MoreOptions = () => {
 
     useEffect(() => {
         if (selectedColor) {
-            if (isValidRGB(selectedColor)) {
+            if (isValidRGBA(selectedColor)) {
                 setTmpRgbValue(selectedColor);
                 setTmpHexValue(rgbToHex(extractRgbValues(selectedColor ?? '')));
             } else {
