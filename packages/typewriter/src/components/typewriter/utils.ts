@@ -17,7 +17,9 @@ export const getSubTextFromHTML = (html: string, length: number): string => {
     let currLength = 0;
 
     const traverse = (element: Element): boolean => {
-        if (element.nodeType === 3 && typeof element.textContent === 'string') {
+        if (element.nodeName === 'TWIGNORE') {
+            text += element.innerHTML;
+        } else if (element.nodeType === 3 && typeof element.textContent === 'string') {
             const nodeText = element.textContent;
 
             if (currLength + nodeText.length <= length) {
@@ -75,7 +77,9 @@ export const getCharactersCount = (html: string): number => {
     let count = 0;
 
     const traverse = (node: Node): void => {
-        if (node.nodeType === 3 && typeof node.textContent === 'string') {
+        if (node.nodeName === 'TWIGNORE') {
+            count += 1;
+        } else if (node.nodeType === 3 && typeof node.textContent === 'string') {
             count += node.textContent.trim().length;
         } else if (node.nodeType === 1) {
             if (node.nodeName === 'CODE' && node.textContent !== null) {
