@@ -26,6 +26,7 @@ export type ComboBoxItemProps = {
     suffixElement?: ReactNode;
     text: IComboBoxItem['text'];
     value: IComboBoxItem['value'];
+    textStyles?: IComboBoxItem['textStyles'];
 };
 
 const ComboBoxItem: FC<ComboBoxItemProps> = ({
@@ -40,6 +41,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
     shouldShowRoundImage,
     subtext,
     suffixElement,
+    textStyles,
     text,
     value,
 }) => {
@@ -73,7 +75,10 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
                 {icons && <Icon icons={icons} />}
                 <StyledComboBoxItemContent>
                     <StyledComboBoxItemContentHeader>
-                        <StyledComboBoxItemContentHeaderText>
+                        <StyledComboBoxItemContentHeaderText
+                            as={textStyles?.tagName}
+                            style={textStyles?.styles}
+                        >
                             {text}
                             {suffixElement}
                         </StyledComboBoxItemContentHeaderText>

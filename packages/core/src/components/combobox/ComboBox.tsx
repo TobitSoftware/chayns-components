@@ -12,6 +12,7 @@ import React, {
     type ReactNode,
     ChangeEventHandler,
     FocusEventHandler,
+    ReactHTML,
 } from 'react';
 import { createPortal } from 'react-dom';
 import { ComboBoxDirection } from '../../types/comboBox';
@@ -36,6 +37,11 @@ export interface IComboBoxItems {
     list: Array<IComboBoxItem>;
 }
 
+export interface ComboBoxTextStyles {
+    tagName?: keyof ReactHTML;
+    styles?: CSSProperties;
+}
+
 export interface IComboBoxItem {
     icons?: string[];
     imageUrl?: string;
@@ -45,6 +51,7 @@ export interface IComboBoxItem {
     suffixElement?: ReactNode;
     text: string;
     value: string | number;
+    textStyles?: ComboBoxTextStyles;
 }
 
 export type ComboBoxProps = {
@@ -317,7 +324,9 @@ const ComboBox: FC<ComboBoxProps> = ({
         // Full width settings
         if (shouldUseFullWidth) {
             tmpMinWidth = parentWidth;
-            tmpBodyMinWidth = calculatedWidth > parentWidth + 25 ? calculatedWidth : parentWidth;
+
+            tmpBodyMinWidth =
+                parentWidth < calculatedWidth - 20 ? calculatedWidth - 20 : parentWidth;
         }
 
         // Current item width settings
@@ -330,7 +339,7 @@ const ComboBox: FC<ComboBoxProps> = ({
 
             tmpMinWidth = itemWidth;
 
-            tmpBodyMinWidth = itemWidth + 25 < calculatedWidth ? calculatedWidth : itemWidth;
+            tmpBodyMinWidth = itemWidth < calculatedWidth - 20 ? calculatedWidth - 20 : itemWidth;
         }
 
         setMinWidth(tmpMinWidth);
@@ -421,6 +430,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                             suffixElement={item.suffixElement}
                             text={item.text}
                             value={item.value}
+                            textStyles={item.textStyles}
                         />
                     ))}
                 </div>

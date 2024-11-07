@@ -20,6 +20,7 @@ export type {
 export {
     default as ComboBox,
     type IComboBoxItem as ComboBoxItem,
+    type ComboBoxTextStyles,
     type IComboBoxItems as ComboBoxItems,
 } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';

@@ -7,8 +7,15 @@ import type { SliderButtonItem } from '../types/slider-button';
 export const calculateContentWidth = (list: IComboBoxItem[]) => {
     const length: number[] = [];
 
-    list.forEach(({ suffixElement, text }) => {
-        const div = document.createElement('div');
+    list.forEach(({ suffixElement, text, textStyles }) => {
+        const tagName = textStyles?.tagName ?? 'div';
+        const styles = textStyles?.styles;
+
+        const div = document.createElement(tagName);
+
+        if (styles) {
+            Object.assign(div.style, styles);
+        }
 
         div.style.display = 'flex';
         div.style.gap = '10px';

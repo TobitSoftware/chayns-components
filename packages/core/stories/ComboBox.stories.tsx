@@ -122,6 +122,8 @@ export const WithSubtextAndRightElement = Template.bind({});
 
 export const WithInput = WithInputTemplate.bind({});
 
+export const WithTextStyle = Template.bind({});
+
 WithGroups.args = {
     direction: ComboBoxDirection.TOP,
     lists: [
@@ -415,6 +417,60 @@ WithInput.args = {
                 {
                     text: '24px',
                     value: 6,
+                },
+            ],
+        },
+    ],
+    placeholder: 'Fontsize',
+};
+
+WithTextStyle.args = {
+    lists: [
+        {
+            list: [
+                {
+                    text: 'Normal',
+                    value: 0,
+                },
+                {
+                    text: 'Headline 1',
+                    value: 1,
+                    textStyles: {
+                        tagName: 'h1',
+                        styles: { margin: 0 },
+                    },
+                },
+                {
+                    text: 'Headline 2',
+                    value: 2,
+                    textStyles: {
+                        tagName: 'h2',
+                        styles: { margin: 0 },
+                    },
+                },
+                {
+                    text: 'Headline 3',
+                    value: 3,
+                    textStyles: {
+                        tagName: 'h3',
+                        styles: { margin: 0 },
+                    },
+                },
+                {
+                    text: 'headline 4',
+                    value: 4,
+                    textStyles: {
+                        tagName: 'h4',
+                        styles: { margin: 0 },
+                    },
+                },
+                {
+                    text: 'Footer',
+                    value: 5,
+                    textStyles: {
+                        tagName: 'footer',
+                        styles: { margin: 0 },
+                    },
                 },
             ],
         },
