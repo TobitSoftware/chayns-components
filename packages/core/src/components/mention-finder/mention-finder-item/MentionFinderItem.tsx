@@ -23,11 +23,14 @@ const MentionFinderItem: FC<MentionFinderItemProps> = ({ isActive, member, onCli
     return (
         <StyledMentionFinderItem
             className="prevent-lose-focus"
-            $isActive={isActive}
             onClick={handleItemClick}
             onMouseEnter={handleItemMouseEnter}
+            $isActive={isActive}
         >
-            <StyledMentionFinderItemImage src={member.imageUrl} />
+            <StyledMentionFinderItemImage
+                src={member.imageUrl}
+                $shouldShowRoundImage={member.shouldShowRoundImage}
+            />
             <StyledMentionFinderItemContent>
                 <StyledMentionFinderItemContentName>
                     {member.name}

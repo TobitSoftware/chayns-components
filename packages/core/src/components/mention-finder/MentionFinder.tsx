@@ -9,6 +9,7 @@ export type MentionMember = {
     info: string;
     imageUrl: string;
     name: string;
+    shouldShowRoundImage?: boolean;
 };
 
 export type MentionFinderProps = {

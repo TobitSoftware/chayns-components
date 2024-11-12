@@ -25,14 +25,16 @@ export const StyledMentionFinderItem = styled.div<StyledMentionFinderItemProps>`
         `}
 `;
 
-type StyledMentionFinderItemImageProps = WithTheme<unknown>;
+type StyledMentionFinderItemImageProps = WithTheme<{
+    $shouldShowRoundImage?: boolean;
+}>;
 
-export const StyledMentionFinderItemImage = styled.img`
+export const StyledMentionFinderItemImage = styled.img<StyledMentionFinderItemImageProps>`
     background-color: rgba(
         ${({ theme }: StyledMentionFinderItemImageProps) => theme['text-rgb']},
         0.1
     );
-    border-radius: 50%;
+    border-radius: ${({ $shouldShowRoundImage }) => ($shouldShowRoundImage ? '50%' : 'initial')};
     box-shadow: 0 0 0 1px
         rgba(${({ theme }: StyledMentionFinderItemImageProps) => theme['009-rgb']}, 0.08) inset;
     flex: 0 0 auto;
