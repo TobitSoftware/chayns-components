@@ -1,4 +1,4 @@
-import { format, isPast } from 'date-fns';
+import { format, isPast, isToday, isTomorrow, isYesterday } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
 import {
     getFormattedDayOfWeek,
@@ -59,6 +59,8 @@ export const useDateInfo = ({
 
     const formattedDate = useMemo(() => new Date(date), [date]);
 
+    const isDateNearToday = isToday(date) || isYesterday(date) || isTomorrow(date);
+
     useEffect(() => {
         // This useEffect is used for normal date formation
         if (shouldShowDateToNowDifference) {
@@ -73,16 +75,22 @@ export const useDateInfo = ({
             language,
         });
 
-        let formatString = 'dd. ';
+        console.log({ isDateNearToday, shouldShowRelativeDayOfWeek, shouldShowTime });
 
-        formatString += `${getMonthFormat({ shouldUseShortText })}`;
+        if (!isDateNearToday || !shouldShowRelativeDayOfWeek || !shouldShowTime) {
+            let formatString = 'dd. ';
 
-        formatString += `${getYearFormat({
-            date: formattedDate,
-            shouldShowYear,
-        })}`;
+            formatString += `${getMonthFormat({ shouldUseShortText })}`;
 
-        newFormattedDateString += format(formattedDate, formatString, { locale: language });
+            formatString += `${getYearFormat({
+                date: formattedDate,
+                shouldShowYear,
+            })}`;
+
+            newFormattedDateString += format(formattedDate, formatString, { locale: language });
+        } else {
+            newFormattedDateString = newFormattedDateString.replace(', ', '');
+        }
 
         newFormattedDateString += getFormattedTime({
             date: formattedDate,
@@ -101,6 +109,7 @@ export const useDateInfo = ({
         shouldShowYear,
         shouldShowTime,
         shouldUseShortText,
+        isDateNearToday,
     ]);
 
     // Calculate remaining time till next minute to update time according to time left
