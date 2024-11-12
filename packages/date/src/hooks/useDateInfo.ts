@@ -75,8 +75,6 @@ export const useDateInfo = ({
             language,
         });
 
-        console.log({ isDateNearToday, shouldShowRelativeDayOfWeek, shouldShowTime });
-
         if (!isDateNearToday || !shouldShowRelativeDayOfWeek || !shouldShowTime) {
             let formatString = 'dd. ';
 
