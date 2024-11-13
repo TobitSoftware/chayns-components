@@ -26,6 +26,10 @@ export type SliderProps = {
      */
     interval?: SliderInterval;
     /**
+     * Whether the slider is disabled.
+     */
+    isDisabled?: boolean;
+    /**
      * The maximum value of the slider.
      */
     maxValue: number;
@@ -66,6 +70,7 @@ const Slider: FC<SliderProps> = ({
     onSelect,
     onChange,
     interval,
+    isDisabled,
     thumbLabelFormatter,
     shouldShowThumbLabel = false,
     steps = 1,
@@ -117,6 +122,10 @@ const Slider: FC<SliderProps> = ({
     }, [fromValue, toValue]);
 
     const handleMouseUp = useCallback(() => {
+        if (isDisabled) {
+            return;
+        }
+
         void setRefreshScrollEnabled(true);
 
         const from = Number(fromSliderRef.current?.value);
@@ -128,7 +137,7 @@ const Slider: FC<SliderProps> = ({
                 interval ? { maxValue: to, minValue: from } : undefined,
             );
         }
-    }, [interval, onSelect]);
+    }, [interval, isDisabled, onSelect]);
 
     const handleControlFromSlider = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -172,6 +181,10 @@ const Slider: FC<SliderProps> = ({
 
     const handleControlToSlider = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
+            if (isDisabled) {
+                return;
+            }
+
             void setRefreshScrollEnabled(false);
 
             if (!fromSliderRef.current || !toSliderRef.current) {
@@ -209,7 +222,7 @@ const Slider: FC<SliderProps> = ({
                 toSliderRef.current.value = String(from);
             }
         },
-        [maxValue, minValue, onChange, steps, theme],
+        [isDisabled, maxValue, minValue, onChange, steps, theme],
     );
 
     useEffect(() => {
@@ -237,6 +250,10 @@ const Slider: FC<SliderProps> = ({
      */
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
+            if (isDisabled) {
+                return;
+            }
+
             void setRefreshScrollEnabled(false);
 
             let newValue = Number(event.target.value);
@@ -261,7 +278,7 @@ const Slider: FC<SliderProps> = ({
                 onChange(newValue);
             }
         },
-        [handleControlFromSlider, interval, maxValue, minValue, onChange, steps],
+        [handleControlFromSlider, interval, isDisabled, maxValue, minValue, onChange, steps],
     );
 
     const fromSliderThumbPosition = useMemo(() => {
@@ -314,12 +331,20 @@ const Slider: FC<SliderProps> = ({
     );
 
     const handleTouchStart = useCallback(() => {
+        if (isDisabled) {
+            return;
+        }
+
         if (shouldShowThumbLabel) {
             setIsBigSlider(true);
         }
-    }, [shouldShowThumbLabel]);
+    }, [isDisabled, shouldShowThumbLabel]);
 
     const handleTouchEnd = useCallback(() => {
+        if (isDisabled) {
+            return;
+        }
+
         const from = Number(fromSliderRef.current?.value);
         const to = Number(toSliderRef.current?.value);
 
@@ -333,11 +358,11 @@ const Slider: FC<SliderProps> = ({
         if (shouldShowThumbLabel) {
             setIsBigSlider(false);
         }
-    }, [interval, onSelect, shouldShowThumbLabel]);
+    }, [interval, isDisabled, onSelect, shouldShowThumbLabel]);
 
     return useMemo(
         () => (
-            <StyledSlider ref={sliderWrapperRef}>
+            <StyledSlider ref={sliderWrapperRef} $isDisabled={isDisabled}>
                 <StyledSliderInput
                     animate={{ height: isBigSlider ? 30 : 10 }}
                     initial={{ height: 10 }}

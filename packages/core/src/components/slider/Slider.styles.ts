@@ -2,16 +2,19 @@ import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
-export const StyledSlider = styled.div`
+type StyledSliderProps = WithTheme<{ $isDisabled?: boolean }>;
+
+export const StyledSlider = styled.div<StyledSliderProps>`
     width: 100%;
     height: 30px;
-    cursor: pointer;
+    cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')} !important;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     touch-action: none;
     user-select: none;
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
 `;
 
 type StyledSliderInputProps = WithTheme<{
