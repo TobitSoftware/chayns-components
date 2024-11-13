@@ -287,7 +287,7 @@ export const findAndSelectText = ({
 
                 return true;
             }
-        } else {
+        } else if (node.nodeName !== 'LC_MENTION') {
             return Array.from(node.childNodes).some(searchNodesForText);
         }
 
