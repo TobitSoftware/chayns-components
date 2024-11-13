@@ -6,11 +6,18 @@ type StyledAccordionContentProps = WithTheme<{
     $isWrapped?: boolean;
     $maxHeight?: number;
     $browser: Browser | 'bot' | null | undefined;
+    $shouldPreventBottomSpace: boolean;
 }>;
 
 export const StyledAccordionContent = styled.div<StyledAccordionContentProps>`
     color: ${({ theme }: StyledAccordionContentProps) => theme.text};
     padding: ${({ $isWrapped }) => ($isWrapped ? '0 9px 18px 26px' : '0 9px 9px 10px')};
+
+    ${({ $shouldPreventBottomSpace }) =>
+        $shouldPreventBottomSpace &&
+        css`
+            padding-bottom: 0;
+        `}
 
     ${({ $maxHeight }) =>
         typeof $maxHeight === 'number' &&

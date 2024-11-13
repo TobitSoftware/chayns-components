@@ -16,9 +16,18 @@ export type AccordionContentProps = {
      * Function that is executed when the element will be scrolled
      */
     onScroll?: (event: UIEvent<HTMLDivElement>) => void;
+    /**
+     * Whether the bottom space should be removed.
+     */
+    shouldPreventBottomSpace?: boolean;
 };
 
-const AccordionContent: FC<AccordionContentProps> = ({ children, maxHeight, onScroll }) => {
+const AccordionContent: FC<AccordionContentProps> = ({
+    children,
+    maxHeight,
+    onScroll,
+    shouldPreventBottomSpace = false,
+}) => {
     const { browser } = getDevice();
 
     return (
@@ -30,6 +39,7 @@ const AccordionContent: FC<AccordionContentProps> = ({ children, maxHeight, onSc
                     $browser={browser?.name}
                     $maxHeight={maxHeight}
                     onScroll={onScroll}
+                    $shouldPreventBottomSpace={shouldPreventBottomSpace}
                 >
                     {children}
                 </StyledAccordionContent>
