@@ -446,6 +446,7 @@ const Slider: FC<SliderProps> = ({
             </StyledSlider>
         ),
         [
+            isDisabled,
             isBigSlider,
             interval,
             fromValue,
