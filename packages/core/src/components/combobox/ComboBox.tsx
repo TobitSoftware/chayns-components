@@ -1,7 +1,10 @@
 import { useDevice } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
+    ChangeEventHandler,
     FC,
+    FocusEventHandler,
+    ReactHTML,
     ReactPortal,
     useCallback,
     useEffect,
@@ -10,9 +13,6 @@ import React, {
     useState,
     type CSSProperties,
     type ReactNode,
-    ChangeEventHandler,
-    FocusEventHandler,
-    ReactHTML,
 } from 'react';
 import { createPortal } from 'react-dom';
 import { ComboBoxDirection } from '../../types/comboBox';
@@ -91,9 +91,9 @@ export type ComboBoxProps = {
      */;
     onInputFocus?: FocusEventHandler<HTMLInputElement>;
     /**
-     * Function that should be executed when an item is selected.
+     * Function that should be executed when an item is selected. If the function returns false, the item will not be selected.
      */
-    onSelect?: (comboboxItem: IComboBoxItem) => void;
+    onSelect?: (comboboxItem: IComboBoxItem) => boolean | void;
     /**
      * A text that should be displayed when no item is selected.
      */
@@ -212,12 +212,14 @@ const ComboBox: FC<ComboBoxProps> = ({
      */
     const handleSetSelectedItem = useCallback(
         (itemToSelect: IComboBoxItem) => {
+            if (typeof onSelect === 'function') {
+                const shouldPreventSelection = onSelect(itemToSelect) === false;
+
+                if (shouldPreventSelection) return;
+            }
+
             setInternalSelectedItem(itemToSelect);
             setIsAnimating(false);
-
-            if (onSelect) {
-                onSelect(itemToSelect);
-            }
         },
         [onSelect],
     );
