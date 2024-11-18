@@ -6,6 +6,10 @@ import { StyledSelectButton } from './SelectButton.styles';
 
 export type SelectButtonProps = {
     /**
+     * Text used when there are more selected items than maxDisplayedItems. '##count##' will be displayed with the additional count.
+     */
+    additionalText?: string;
+    /**
      * The text that should be displayed inside the button.
      */
     buttonText: string;
@@ -17,6 +21,10 @@ export type SelectButtonProps = {
      * A list of item that could be selected.
      */
     list: SelectButtonItem[];
+    /**
+     * The maximum number of items displayed in the button text.
+     */
+    maxDisplayedItems?: number;
     /**
      * Function to be executed after an item is selected.
      */
@@ -55,6 +63,8 @@ const SelectButton: FC<SelectButtonProps> = ({
     selectedItemIds,
     shouldAllowMultiSelect,
     shouldShowButtonTextWithSelection,
+    maxDisplayedItems = 3,
+    additionalText = ', ##count## weitere',
     shouldShowSearch,
     selectAllText,
     title,
@@ -83,21 +93,28 @@ const SelectButton: FC<SelectButtonProps> = ({
         let addedCount = 0;
         let newText = '';
 
-        const additionalCount = selectedItemIds.length - 2;
+        const additionalCount = selectedItemIds.length - maxDisplayedItems;
 
         list.forEach(({ text, id }) => {
-            if ((addedCount < 2 || additionalCount <= 1) && selectedItemIds?.includes(id)) {
-                addedCount += 1;
+            if (addedCount < maxDisplayedItems && selectedItemIds?.includes(id)) {
+                addedCount++;
                 newText += newText.length === 0 ? `${text}` : `, ${text}`;
             }
         });
 
-        if (additionalCount > 1) {
-            newText += `, ${additionalCount} weitere`;
+        if (additionalCount >= 1) {
+            newText += additionalText.replace('##count##', String(additionalCount));
         }
 
         return newText;
-    }, [buttonText, list, selectedItemIds, shouldShowButtonTextWithSelection]);
+    }, [
+        additionalText,
+        buttonText,
+        list,
+        maxDisplayedItems,
+        selectedItemIds,
+        shouldShowButtonTextWithSelection,
+    ]);
 
     const handleClick = () => {
         void createDialog({
