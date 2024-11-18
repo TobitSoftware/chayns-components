@@ -127,7 +127,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     maxHeight = '280px',
     onSelect,
     placeholder,
-    container = document.body,
+    container,
     selectedItem,
     shouldShowBigImage,
     shouldShowRoundImage,
@@ -149,6 +149,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         x: 0,
         y: 0,
     });
+    const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
 
     const styledComboBoxElementRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
@@ -156,6 +157,16 @@ const ComboBox: FC<ComboBoxProps> = ({
     const { browser } = useDevice();
 
     const isTouch = getIsTouch();
+
+    useEffect(() => {
+        if (styledComboBoxElementRef.current && !container) {
+            const el = styledComboBoxElementRef.current as HTMLElement;
+
+            const element = el.closest('.dialog-inner') || el.closest('body');
+
+            setNewContainer(element);
+        }
+    }, [container]);
 
     const handleClick = useCallback(
         (event: MouseEvent) => {
@@ -172,16 +183,16 @@ const ComboBox: FC<ComboBoxProps> = ({
     );
 
     const handleOpen = useCallback(() => {
-        if (styledComboBoxElementRef.current) {
+        if (styledComboBoxElementRef.current && newContainer) {
             const {
                 left: comboBoxLeft,
                 top: comboBoxTop,
                 height,
             } = styledComboBoxElementRef.current.getBoundingClientRect();
-            const { left: containerLeft, top: containerTop } = container.getBoundingClientRect();
+            const { left: containerLeft, top: containerTop } = newContainer.getBoundingClientRect();
 
-            const x = comboBoxLeft - containerLeft + container.scrollLeft;
-            const y = comboBoxTop - containerTop + container.scrollTop;
+            const x = comboBoxLeft - containerLeft + newContainer.scrollLeft;
+            const y = comboBoxTop - containerTop + newContainer.scrollTop;
 
             setInternalCoordinates({
                 x,
@@ -190,7 +201,7 @@ const ComboBox: FC<ComboBoxProps> = ({
 
             setIsAnimating(true);
         }
-    }, [container, direction]);
+    }, [newContainer, direction]);
 
     const handleClose = useCallback(() => {
         setIsAnimating(false);
@@ -451,6 +462,10 @@ const ComboBox: FC<ComboBoxProps> = ({
     }, [direction, internalCoordinates.x, internalCoordinates.y]);
 
     useEffect(() => {
+        if (!newContainer) {
+            return;
+        }
+
         setPortal(() =>
             createPortal(
                 <AnimatePresence initial={false}>
@@ -473,7 +488,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                         </StyledMotionComboBoxBody>
                     )}
                 </AnimatePresence>,
-                container,
+                newContainer,
             ),
         );
     }, [
@@ -481,7 +496,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         bodyStyles,
         browser?.name,
         comboBoxGroups,
-        container,
+        newContainer,
         direction,
         isAnimating,
         maxHeight,

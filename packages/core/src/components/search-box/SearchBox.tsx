@@ -97,7 +97,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             onSelect,
             onKeyDown,
             selectedId,
-            container = document.body,
+            container,
             shouldShowRoundImage,
             shouldShowContentOnEmptyInput = true,
             shouldAddInputToList = true,
@@ -121,6 +121,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             x: 0,
             y: 0,
         });
+        const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
 
         const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement>(null);
@@ -129,6 +130,16 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const theme = useTheme();
 
         const { browser } = getDevice();
+
+        useEffect(() => {
+            if (boxRef.current && !container) {
+                const el = boxRef.current as HTMLElement;
+
+                const element = el.closest('.dialog-inner') || el.closest('body');
+
+                setNewContainer(element);
+            }
+        }, [container]);
 
         useEffect(() => {
             if (boxRef.current) {
@@ -698,6 +709,10 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         }, [handleKeyPress]);
 
         useEffect(() => {
+            if (!newContainer) {
+                return;
+            }
+
             setPortal(() =>
                 createPortal(
                     <AnimatePresence initial={false}>
@@ -716,12 +731,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             </SearchBoxBody>
                         )}
                     </AnimatePresence>,
-                    container,
+                    newContainer,
                 ),
             );
         }, [
             browser?.name,
-            container,
+            newContainer,
             content,
             filterbuttons,
             groups,

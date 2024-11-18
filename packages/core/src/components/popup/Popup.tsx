@@ -57,9 +57,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         {
             content,
             onShow,
-            container = document.querySelector('.page-provider') ||
-                document.querySelector('.tapp') ||
-                document.body,
+            container,
             onHide,
             children,
             shouldShowOnHover = false,
@@ -80,6 +78,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const [menuHeight, setMenuHeight] = useState(0);
         const [isMeasuring, setIsMeasuring] = useState(true);
         const [pseudoSize, setPseudoSize] = useState<{ height: number; width: number }>();
+        const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
 
         const timeout = useRef<number>();
 
@@ -90,6 +89,20 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const popupContentRef = useRef<HTMLDivElement>(null);
         const popupPseudoContentRef = useRef<HTMLDivElement>(null);
         const popupRef = useRef<HTMLDivElement>(null);
+
+        useEffect(() => {
+            if (popupRef.current && !container) {
+                const el = popupRef.current as HTMLElement;
+
+                const element =
+                    el.closest('.dialog-inner') ||
+                    el.closest('.page-provider') ||
+                    el.closest('.tapp') ||
+                    el.closest('body');
+
+                setNewContainer(element);
+            }
+        }, [container]);
 
         const measureHeight = () => {
             if (popupPseudoContentRef.current) {
@@ -290,6 +303,10 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, [handleDocumentClick, handleHide, isOpen, onHide, onShow]);
 
         useEffect(() => {
+            if (!newContainer) {
+                return;
+            }
+
             setPortal(() =>
                 createPortal(
                     <AnimatePresence initial={false}>
@@ -310,12 +327,12 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                             </PopupContentWrapper>
                         )}
                     </AnimatePresence>,
-                    container,
+                    newContainer,
                 ),
             );
         }, [
             alignment,
-            container,
+            newContainer,
             content,
             coordinates,
             handleMouseEnter,

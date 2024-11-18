@@ -89,9 +89,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         {
             alignment,
             children = <Icon icons={['ts-ellipsis_v']} size={18} />,
-            container = document.querySelector('.page-provider') ||
-                document.querySelector('.tapp') ||
-                document.body,
+            container,
             coordinates,
             isInDialog = false,
             items,
@@ -105,6 +103,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             x: 0,
             y: 0,
         });
+        const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
 
         const [internalAlignment, setInternalAlignment] = useState<ContextMenuAlignment>(
             ContextMenuAlignment.TopLeft,
@@ -118,6 +117,20 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         // ToDo: Replace with hook if new chayns api is ready
         const contextMenuContentRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<HTMLSpanElement>(null);
+
+        useEffect(() => {
+            if (contextMenuRef.current && !container) {
+                const el = contextMenuRef.current as HTMLElement;
+
+                const element =
+                    el.closest('.dialog-inner') ||
+                    el.closest('.page-provider') ||
+                    el.closest('.tapp') ||
+                    el.closest('body');
+
+                setNewContainer(element);
+            }
+        }, [container]);
 
         const handleHide = useCallback(() => {
             setIsContentShown(false);
@@ -141,6 +154,10 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     void items[result[0]]?.onClick();
                 }
             } else if (contextMenuRef.current) {
+                if (!newContainer) {
+                    return;
+                }
+
                 const {
                     height: childrenHeight,
                     left: childrenLeft,
@@ -148,7 +165,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     width: childrenWidth,
                 } = contextMenuRef.current.getBoundingClientRect();
 
-                const { height, width, top, left } = container.getBoundingClientRect();
+                const { height, width, top, left } = newContainer.getBoundingClientRect();
 
                 const x =
                     childrenLeft + (isInDialog ? 0 : window.scrollX) + childrenWidth / 2 - left;
@@ -171,7 +188,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 setIsContentShown(true);
             }
-        }, [container, isInDialog, items]);
+        }, [isInDialog, items, newContainer]);
 
         const handleClick = useCallback<MouseEventHandler<HTMLDivElement>>(
             (event) => {
@@ -225,6 +242,10 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         }, [handleDocumentClick, handleHide, isContentShown, onHide, onShow]);
 
         useEffect(() => {
+            if (!newContainer) {
+                return;
+            }
+
             setPortal(() =>
                 createPortal(
                     <AnimatePresence initial={false}>
@@ -238,12 +259,12 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                             />
                         )}
                     </AnimatePresence>,
-                    container,
+                    newContainer,
                 ),
             );
         }, [
             alignment,
-            container,
+            newContainer,
             coordinates,
             internalAlignment,
             internalCoordinates,
