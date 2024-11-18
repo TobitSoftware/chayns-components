@@ -8,6 +8,7 @@ export const StyledCheckbox = styled.div`
     display: flex;
     position: relative;
     width: 100%;
+    min-height: 20px;
 `;
 
 export const StyledCheckboxInput = styled.input`
