@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledScrollViewProps = WithTheme<{
-    $maxHeight?: CSSProperties['height'];
+    $maxHeight?: CSSProperties['height'] | null;
     $height?: CSSProperties['height'];
     $maxWidth?: CSSProperties['width'];
     $width?: CSSProperties['width'];
@@ -34,8 +34,12 @@ export const StyledScrollView = styled.div<StyledScrollViewProps>`
         css`
             width: ${typeof $width === 'number' ? `${$width}px` : $width};
         `} 
-    ${({ $overflowX }) => css`overflow-x: ${$overflowX};`}
-    ${({ $overflowY }) => css`overflow-y: ${$overflowY};`}
+    ${({ $overflowX }) => css`
+        overflow-x: ${$overflowX};
+    `}
+    ${({ $overflowY }) => css`
+        overflow-y: ${$overflowY};
+    `}
 
     // Styles for custom scrollbar
     ${({ $browser, theme }: StyledScrollViewProps) =>
@@ -47,7 +51,7 @@ export const StyledScrollView = styled.div<StyledScrollViewProps>`
             : css`
                   &::-webkit-scrollbar {
                       width: 10px;
-                      height: 10px
+                      height: 10px;
                   }
 
                   &::-webkit-scrollbar-track {
@@ -66,7 +70,7 @@ export const StyledScrollView = styled.div<StyledScrollViewProps>`
                       background-clip: padding-box;
                       border: solid 3px transparent;
                   }
-            
+
                   &::-webkit-scrollbar-corner {
                       background-color: transparent;
                   }

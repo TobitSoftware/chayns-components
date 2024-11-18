@@ -10,7 +10,7 @@ export type ScrollViewProps = {
     /**
      * The maximum height of the scroll view.
      */
-    maxHeight?: CSSProperties['height'];
+    maxHeight?: CSSProperties['height'] | null;
     /**
      * The height of the scroll view.
      */
@@ -34,7 +34,18 @@ export type ScrollViewProps = {
 };
 
 const ScrollView = forwardRef<HTMLDivElement, ScrollViewProps>(
-    ({ maxHeight = 300, height, maxWidth, width, children, overflowX = 'auto', overflowY = 'auto' }, ref) => {
+    (
+        {
+            maxHeight = 300,
+            height,
+            maxWidth,
+            width,
+            children,
+            overflowX = 'auto',
+            overflowY = 'auto',
+        },
+        ref,
+    ) => {
         const { browser } = getDevice();
 
         return useMemo(
@@ -52,7 +63,17 @@ const ScrollView = forwardRef<HTMLDivElement, ScrollViewProps>(
                     {children}
                 </StyledScrollView>
             ),
-            [browser?.name, children, height, maxHeight, maxWidth, overflowX, overflowY, ref, width],
+            [
+                browser?.name,
+                children,
+                height,
+                maxHeight,
+                maxWidth,
+                overflowX,
+                overflowY,
+                ref,
+                width,
+            ],
         );
     },
 );
