@@ -22,6 +22,10 @@ export type SelectButtonProps = {
      */
     onSelect?: (ids: number[]) => void;
     /**
+     * If a string is given and `shouldAllowMultiSelect` is true, the dialog displays a checkbox to select all items at once.
+     */
+    selectAllText?: string;
+    /**
      * The id of an item that should be preselected.
      */
     selectedItemIds?: number[];
@@ -52,6 +56,7 @@ const SelectButton: FC<SelectButtonProps> = ({
     shouldAllowMultiSelect,
     shouldShowButtonTextWithSelection,
     shouldShowSearch,
+    selectAllText,
     title,
 }) => {
     const itemList = useMemo(() => {
@@ -101,6 +106,7 @@ const SelectButton: FC<SelectButtonProps> = ({
             list: itemList,
             multiselect: shouldAllowMultiSelect,
             quickfind: shouldShowSearch,
+            selectAllCheckbox: selectAllText,
         })
             .open()
             .then((result) => {
