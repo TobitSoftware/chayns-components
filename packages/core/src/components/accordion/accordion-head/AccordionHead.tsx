@@ -13,7 +13,7 @@ import React, {
 } from 'react';
 import { useTheme } from 'styled-components';
 import { useElementSize } from '../../../hooks/useElementSize';
-import { getAccordionHeadHeight } from '../../../utils/accordion';
+import { getAccordionHeadHeight, getElementClickEvent } from '../../../utils/accordion';
 import { AreaContext } from '../../area-provider/AreaContextProvider';
 import Icon from '../../icon/Icon';
 import Input, { InputSize, type InputProps } from '../../input/Input';
@@ -101,6 +101,12 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     const titleElementChildrenSize = useElementSize(titleElementWrapperRef, {
         shouldUseChildElement: true,
     });
+
+    const shouldPreventRightElementClick = useMemo(
+        () => getElementClickEvent(rightElement),
+        [rightElement],
+    );
+
     useEffect(() => {
         if (typeof onTitleInputChange === 'function') {
             setHeadHeight({ closed: 50, open: 50 });
@@ -264,6 +270,11 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                 exit={{ opacity: 0 }}
                                 initial={{ opacity: 0 }}
                                 key={`rightElementWrapper--${uuid}`}
+                                onClick={
+                                    !isFixed && !shouldPreventRightElementClick
+                                        ? onClick
+                                        : undefined
+                                }
                             >
                                 {rightElement}
                             </StyledMotionRightElementWrapper>

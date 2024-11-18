@@ -117,6 +117,8 @@ export const StyledMotionRightElementWrapper = styled(motion.div)<FramerMotionBu
     align-items: center;
     display: flex;
 
+    cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};
+
     will-change: unset !important;
 `;
 

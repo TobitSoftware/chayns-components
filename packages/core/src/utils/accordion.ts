@@ -1,4 +1,5 @@
 import type { AccordionHeadProps } from '../components/accordion/accordion-head/AccordionHead';
+import { Children, isValidElement, ReactNode } from 'react';
 
 type GetAccordionHeadHeightOptions = Pick<AccordionHeadProps, 'isWrapped' | 'title'> & {
     width: number;
@@ -43,4 +44,26 @@ export const getAccordionHeadHeight = ({
     document.body.removeChild(element);
 
     return { closed: closedHeight, open: openHeight };
+};
+
+export const getElementClickEvent = (element: ReactNode) => {
+    let hasClickHandler = false;
+
+    const checkForClickHandler = (el: ReactNode) => {
+        if (!isValidElement(el)) return;
+
+        if (el.props.onClick) {
+            hasClickHandler = true;
+
+            return;
+        }
+
+        if (el.props.children) {
+            Children.forEach(el.props.children, checkForClickHandler);
+        }
+    };
+
+    checkForClickHandler(element);
+
+    return hasClickHandler;
 };
