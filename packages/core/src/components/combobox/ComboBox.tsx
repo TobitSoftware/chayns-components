@@ -7,6 +7,7 @@ import React, {
     ReactHTML,
     ReactPortal,
     useCallback,
+    useContext,
     useEffect,
     useMemo,
     useRef,
@@ -18,6 +19,7 @@ import { createPortal } from 'react-dom';
 import { ComboBoxDirection } from '../../types/comboBox';
 import { calculateContentWidth, getMaxHeightInPixels } from '../../utils/calculate';
 import { getIsTouch } from '../../utils/environment';
+import { AreaContext } from '../area-provider/AreaContextProvider';
 import type { ContextMenuCoordinates } from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
 import ComboBoxItem from './combobox-item/ComboBoxItem';
@@ -157,6 +159,13 @@ const ComboBox: FC<ComboBoxProps> = ({
     const { browser } = useDevice();
 
     const isTouch = getIsTouch();
+
+    const areaProvider = useContext(AreaContext);
+
+    const shouldChangeColor = useMemo(
+        () => areaProvider.shouldChangeColor ?? false,
+        [areaProvider.shouldChangeColor],
+    );
 
     useEffect(() => {
         if (styledComboBoxElementRef.current && !container) {
@@ -517,6 +526,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                     $isOpen={isAnimating}
                     $isTouch={isTouch}
                     $isDisabled={isDisabled}
+                    $shouldChangeColor={shouldChangeColor}
                 >
                     {typeof inputValue === 'string' ? (
                         <StyledComboBoxInput
@@ -559,6 +569,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             isAnimating,
             isTouch,
             isDisabled,
+            shouldChangeColor,
             inputValue,
             onInputChange,
             onInputBlur,

@@ -32,6 +32,7 @@ type StyledComboBoxHeaderProps = WithTheme<{
     $isOpen: boolean;
     $direction: ComboBoxDirection;
     $isDisabled?: boolean;
+    $shouldChangeColor: boolean;
 }>;
 
 export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
@@ -40,7 +41,8 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     border: 1px solid rgba(160, 160, 160, 0.3);
     padding: 4px 10px;
     cursor: ${({ $isDisabled }) => (!$isDisabled ? 'pointer' : 'default')};
-    background: ${({ theme }: StyledComboBoxHeaderProps) => theme['001']};
+    background-color: ${({ theme, $shouldChangeColor }: StyledComboBoxHeaderProps) =>
+        theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     transition: background-color 0.2s ease-in-out;
 
