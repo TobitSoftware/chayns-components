@@ -20,6 +20,7 @@ export type DayProps = {
     isIntervalEnd: boolean;
     isWithinIntervalSelection: boolean;
     setHoveringDay: (date: Date | null) => void;
+    shouldShowHighlightsInMonthOverlay: boolean;
 };
 
 const Day: FC<DayProps> = ({
@@ -33,22 +34,23 @@ const Day: FC<DayProps> = ({
     isIntervalStart,
     isIntervalEnd,
     isWithinIntervalSelection,
+    shouldShowHighlightsInMonthOverlay,
     setHoveringDay,
 }) => {
     const dayRef = useRef<HTMLDivElement>(null);
 
     const styles: HighlightedDateStyles | undefined = useMemo(() => {
-        if (!highlightedDates) {
+        if (!highlightedDates || (!shouldShowHighlightsInMonthOverlay && !isSameMonth)) {
             return undefined;
         }
 
         return highlightedDates.find((highlightedDate) =>
             highlightedDate.dates.some((highlighted) => isSameDay(highlighted, date)),
         )?.style;
-    }, [date, highlightedDates, isSameMonth]);
+    }, [date, highlightedDates, isSameMonth, shouldShowHighlightsInMonthOverlay]);
 
     const categoryElements = useMemo(() => {
-        if (!categories) return [];
+        if (!categories || (!shouldShowHighlightsInMonthOverlay && !isSameMonth)) return [];
 
         return categories.flatMap((category) =>
             category.dates
@@ -57,7 +59,7 @@ const Day: FC<DayProps> = ({
                     <Category key={day.getTime() * Math.random()} color={category.color} />
                 )),
         );
-    }, [categories, date]);
+    }, [categories, date, isSameMonth, shouldShowHighlightsInMonthOverlay]);
 
     return (
         <StyledDay

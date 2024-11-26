@@ -28,6 +28,7 @@ export type MonthWrapperProps = {
     type: CalendarType;
     disabledDates: Date[];
     setCurrentDate: (date: Date) => void;
+    shouldShowHighlightsInMonthOverlay: boolean;
     showMonthYearPickers: boolean;
 };
 
@@ -45,6 +46,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     isDisabled,
     minDate,
     maxDate,
+    shouldShowHighlightsInMonthOverlay,
     type,
     disabledDates,
     setCurrentDate,
@@ -75,6 +77,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         locale={locale}
                         onSelect={onSelect}
                         highlightedDates={highlightedDates}
+                        shouldShowHighlightsInMonthOverlay={shouldShowHighlightsInMonthOverlay}
                         categories={categories}
                         selectedDate={selectedDate}
                         minDate={minDate}
@@ -115,6 +118,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         hoveringDay,
                         locale,
                         onSelect,
+                        shouldShowHighlightsInMonthOverlay,
                         maxDate,
                         minDate,
                         month,
@@ -145,6 +149,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
         setHoveringDay,
         showMonthYearPickers,
         type,
+        shouldShowHighlightsInMonthOverlay,
     ]);
 
     const animate: MotionProps['animate'] = useMemo(() => {

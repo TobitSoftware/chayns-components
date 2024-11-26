@@ -51,6 +51,10 @@ interface BaseProps {
      */
     disabledDates?: Date[];
     /**
+     * Whether the highlighted dates should be displayed for the greyed month overlay days.
+     */
+    shouldShowHighlightsInMonthOverlay?: boolean;
+    /**
      * Shows the month and year pickers, if there are multiple months/years to select from.
      */
     showMonthYearPickers?: boolean;
@@ -123,6 +127,7 @@ const Calendar: FC<CalendarProps> = ({
     categories,
     isDisabled,
     type = CalendarType.Single,
+    shouldShowHighlightsInMonthOverlay = true,
     disabledDates = [],
     showMonthYearPickers: showMonthYearPickersProp,
     onShownDatesChange = () => {},
@@ -294,7 +299,9 @@ const Calendar: FC<CalendarProps> = ({
     }, []);
 
     useEffect(() => {
-        setCurrentDate((prevDate) => isDateInRange({ minDate, maxDate, currentDate: prevDate || new Date() }));
+        setCurrentDate((prevDate) =>
+            isDateInRange({ minDate, maxDate, currentDate: prevDate || new Date() }),
+        );
     }, [maxDate, minDate]);
 
     const handleLeftArrowClick = useCallback(() => {
@@ -333,7 +340,7 @@ const Calendar: FC<CalendarProps> = ({
         (date: Date) => {
             setInternalSelectedDate((prevDate) => {
                 let onChangePayload: Date | Date[] | DateInterval | null = null;
-                let newInternalSelectedDate: Date | Date[] | DateInterval | undefined = undefined;
+                let newInternalSelectedDate: Date | Date[] | DateInterval | undefined;
 
                 if (type === CalendarType.Single) {
                     onChangePayload = date;
@@ -446,6 +453,7 @@ const Calendar: FC<CalendarProps> = ({
                     type={type}
                     disabledDates={disabledDates}
                     setCurrentDate={setCurrentDate}
+                    shouldShowHighlightsInMonthOverlay={shouldShowHighlightsInMonthOverlay}
                     showMonthYearPickers={showMonthYearPickers}
                 />
             )}

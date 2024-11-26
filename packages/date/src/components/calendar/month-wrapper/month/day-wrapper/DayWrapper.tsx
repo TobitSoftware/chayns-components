@@ -32,6 +32,7 @@ export type DayWrapperProps = {
     hoveringDay: Date | null;
     setHoveringDay: (date: Date | null) => void;
     disabledDates: Date[];
+    shouldShowHighlightsInMonthOverlay: boolean;
 };
 
 const DayWrapper: FC<DayWrapperProps> = ({
@@ -45,6 +46,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
     maxDate,
     type,
     hoveringDay,
+    shouldShowHighlightsInMonthOverlay,
     setHoveringDay,
     disabledDates,
 }) => {
@@ -85,7 +87,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
             let isIntervalStart = false;
             let isIntervalEnd = false;
             let isWithinIntervalSelection = false;
-            let showHoverEffect = false;
+            const showHoverEffect = false;
 
             let isDisabled =
                 // Disables dates, that are not between minDate and maxDate.
@@ -150,6 +152,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
                     isIntervalEnd={isIntervalEnd}
                     isWithinIntervalSelection={isWithinIntervalSelection}
                     isDisabled={isDisabled}
+                    shouldShowHighlightsInMonthOverlay={shouldShowHighlightsInMonthOverlay}
                     isSameMonth={isSameMonth(day, dayOfCurrentMonth)}
                     onClick={handleDayClick}
                     highlightedDates={highlightedDates}
@@ -160,17 +163,18 @@ const DayWrapper: FC<DayWrapperProps> = ({
 
         return items;
     }, [
-        categories,
-        dayOfCurrentMonth,
-        days,
-        handleDayClick,
-        highlightedDates,
         selectedDate,
+        disabledDates,
+        days,
         minDate,
         maxDate,
         type,
         hoveringDay,
-        disabledDates,
+        categories,
+        shouldShowHighlightsInMonthOverlay,
+        dayOfCurrentMonth,
+        handleDayClick,
+        highlightedDates,
         setHoveringDay,
     ]);
 

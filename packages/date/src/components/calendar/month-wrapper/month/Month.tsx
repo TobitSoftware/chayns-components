@@ -29,6 +29,7 @@ export type MonthProps = {
     disabledDates: Date[];
     setCurrentDate: (date: Date) => void;
     displayIndex?: number;
+    shouldShowHighlightsInMonthOverlay: boolean;
     showMonthYearPickers: boolean;
 };
 
@@ -43,6 +44,7 @@ const Month: FC<MonthProps> = ({
     height,
     minDate,
     maxDate,
+    shouldShowHighlightsInMonthOverlay,
     type,
     hoveringDay,
     setHoveringDay,
@@ -72,6 +74,7 @@ const Month: FC<MonthProps> = ({
             month={month}
             year={year}
             onSelect={onSelect}
+            shouldShowHighlightsInMonthOverlay={shouldShowHighlightsInMonthOverlay}
             highlightedDates={highlightedDates}
             minDate={minDate}
             maxDate={maxDate}
