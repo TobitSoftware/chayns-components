@@ -20,11 +20,12 @@ type StyledCheckboxLabelProps = WithTheme<{
     $isDisabled?: CheckboxProps['isDisabled'];
     $isChecked?: CheckboxProps['isChecked'];
     $lineHeight?: number;
+    $shouldChangeOnLabelClick: boolean;
 }>;
 
 export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
     color: ${({ theme }: StyledCheckboxLabelProps) => theme.text};
-    cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
+    cursor: ${({ $isDisabled, $shouldChangeOnLabelClick }) => ($shouldChangeOnLabelClick && !$isDisabled ? 'pointer' : 'default')};
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     padding-left: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '48px' : '20px')};
     transition: opacity 0.2s ease;
