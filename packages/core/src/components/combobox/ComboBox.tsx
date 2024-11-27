@@ -37,6 +37,7 @@ import {
 export interface IComboBoxItems {
     groupName?: string;
     list: Array<IComboBoxItem>;
+    shouldShowRoundImage?: boolean;
 }
 
 export interface ComboBoxTextStyles {
@@ -415,6 +416,16 @@ const ComboBox: FC<ComboBoxProps> = ({
         return text;
     }, [internalSelectedItem, placeholder, selectedItem]);
 
+    const shouldShowRoundPlaceholderImage = useMemo(() => {
+        const selectedItemList = lists.find((list) =>
+            list.list.some(
+                ({ value }) => value === (selectedItem?.value ?? internalSelectedItem?.value),
+            ),
+        );
+
+        return selectedItemList?.shouldShowRoundImage ?? shouldShowRoundImage;
+    }, [internalSelectedItem?.value, lists, selectedItem?.value, shouldShowRoundImage]);
+
     /**
      * This function opens the content of the combobox
      */
@@ -430,12 +441,12 @@ const ComboBox: FC<ComboBoxProps> = ({
 
     const comboBoxGroups = useMemo(
         () =>
-            lists.map(({ groupName, list }) => (
-                <div key={groupName ?? 'default-group'}>
-                    {groupName && lists.length > 1 && (
-                        <StyledComboBoxTopic>{groupName}</StyledComboBoxTopic>
+            lists.map((list) => (
+                <div key={list.groupName ?? 'default-group'}>
+                    {list.groupName && lists.length > 1 && (
+                        <StyledComboBoxTopic>{list.groupName}</StyledComboBoxTopic>
                     )}
-                    {list.map((item) => (
+                    {list.list.map((item) => (
                         // ToDo: Cleanup this - item should be given as a prop to avoid full spreading
                         <ComboBoxItem
                             icons={item.icons}
@@ -447,7 +458,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                             onSelect={handleSetSelectedItem}
                             rightElement={item.rightElement}
                             shouldShowBigImage={shouldShowBigImage}
-                            shouldShowRoundImage={shouldShowRoundImage}
+                            shouldShowRoundImage={list.shouldShowRoundImage ?? shouldShowRoundImage}
                             subtext={item.subtext}
                             suffixElement={item.suffixElement}
                             text={item.text}
@@ -517,8 +528,8 @@ const ComboBox: FC<ComboBoxProps> = ({
         () => (
             <StyledComboBox
                 ref={styledComboBoxElementRef}
-                $shouldUseFullWidth={shouldUseFullWidth}
                 $minWidth={minWidth}
+                $shouldUseFullWidth={shouldUseFullWidth}
             >
                 <StyledComboBoxHeader
                     $direction={direction}
@@ -527,6 +538,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                     $isTouch={isTouch}
                     $isDisabled={isDisabled}
                     $shouldChangeColor={shouldChangeColor}
+                    $shouldShowBigImage={shouldShowBigImage}
                 >
                     {typeof inputValue === 'string' ? (
                         <StyledComboBoxInput
@@ -544,7 +556,8 @@ const ComboBox: FC<ComboBoxProps> = ({
                             {placeholderImageUrl && (
                                 <StyledComboBoxPlaceholderImage
                                     src={placeholderImageUrl}
-                                    shouldShowRoundImage={shouldShowRoundImage}
+                                    $shouldShowBigImage={shouldShowBigImage}
+                                    $shouldShowRoundImage={shouldShowRoundPlaceholderImage}
                                 />
                             )}
                             {placeholderIcon && <Icon icons={placeholderIcon} />}
@@ -562,14 +575,15 @@ const ComboBox: FC<ComboBoxProps> = ({
             </StyledComboBox>
         ),
         [
-            shouldUseFullWidth,
             minWidth,
+            shouldUseFullWidth,
             direction,
             handleHeaderClick,
             isAnimating,
             isTouch,
             isDisabled,
             shouldChangeColor,
+            shouldShowBigImage,
             inputValue,
             onInputChange,
             onInputBlur,
@@ -578,7 +592,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             selectedItem,
             internalSelectedItem,
             placeholderImageUrl,
-            shouldShowRoundImage,
+            shouldShowRoundPlaceholderImage,
             placeholderIcon,
             portal,
         ],

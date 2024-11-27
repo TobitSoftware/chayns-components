@@ -4,11 +4,11 @@ import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import { ComboBoxDirection } from '../../types/comboBox';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import type { ComboBoxItemProps } from './combobox-item/ComboBoxItem';
+import type { ComboBoxProps } from './ComboBox';
 
 type StyledComboBoxProps = WithTheme<{
-    $shouldUseFullWidth: boolean;
     $minWidth: number;
+    $shouldUseFullWidth: ComboBoxProps['shouldUseFullWidth'];
 }>;
 
 export const StyledComboBox = styled.div<StyledComboBoxProps>`
@@ -33,6 +33,7 @@ type StyledComboBoxHeaderProps = WithTheme<{
     $direction: ComboBoxDirection;
     $isDisabled?: boolean;
     $shouldChangeColor: boolean;
+    $shouldShowBigImage: ComboBoxProps['shouldShowBigImage'];
 }>;
 
 export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
@@ -45,6 +46,12 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
         theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     transition: background-color 0.2s ease-in-out;
+
+    ${({ $shouldShowBigImage }) =>
+        $shouldShowBigImage &&
+        css`
+            height: 42px;
+        `}
 
     ${({ $isOpen, $direction }) => {
         if ($isOpen) {
@@ -90,24 +97,27 @@ export const StyledComboBoxInput = styled.input`
     width: 100%;
 `;
 
-type StyledComboBoxPlaceholderImageProps = WithTheme<
-    Pick<ComboBoxItemProps, 'shouldShowRoundImage'>
->;
+type StyledComboBoxPlaceholderImageProps = WithTheme<{
+    $shouldShowBigImage: ComboBoxProps['shouldShowBigImage'];
+    $shouldShowRoundImage: ComboBoxProps['shouldShowRoundImage'];
+}>;
 
 export const StyledComboBoxPlaceholderImage = styled.img<StyledComboBoxPlaceholderImageProps>`
     box-shadow: 0 0 0 1px
         rgba(${({ theme }: StyledComboBoxPlaceholderImageProps) => theme['009-rgb']}, 0.15);
-    height: 22px;
-    width: 22px;
+    height: ${({ $shouldShowBigImage }) => ($shouldShowBigImage ? '32px' : '22px')};
+    width: ${({ $shouldShowBigImage }) => ($shouldShowBigImage ? '32px' : '22px')};
 
-    ${({ shouldShowRoundImage }) =>
-        shouldShowRoundImage &&
+    ${({ $shouldShowRoundImage }) =>
+        $shouldShowRoundImage &&
         css`
             border-radius: 50%;
         `}
 `;
 
 export const StyledComboBoxIconWrapper = styled.div`
+    align-items: center;
+    display: flex;
     margin-left: 5px;
 `;
 
