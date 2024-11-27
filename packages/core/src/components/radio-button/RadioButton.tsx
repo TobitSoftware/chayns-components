@@ -37,7 +37,7 @@ export type RadioButtonProps = {
     /**
      * The label that should be displayed next to the radio button.
      */
-    label?: string;
+    label?: ReactNode;
     /**
      * An element that should be displayed on the right side of the label.
      */
