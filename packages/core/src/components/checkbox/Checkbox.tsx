@@ -33,10 +33,6 @@ export type CheckboxProps = {
      */
     onChange?: ChangeEventHandler<HTMLInputElement>;
     /**
-     * Whether the state should be changed on the label click
-     */
-    shouldChangeOnLabelClick?: boolean;
-    /**
      * Changes the design to use switch instead of checkbox
      */
     shouldShowAsSwitch?: boolean;
@@ -50,7 +46,6 @@ const Checkbox: FC<CheckboxProps> = ({
     children,
     isChecked,
     isDisabled,
-    shouldChangeOnLabelClick = false,
     labelClassName,
     onChange,
     shouldShowAsSwitch,
@@ -87,11 +82,10 @@ const Checkbox: FC<CheckboxProps> = ({
             />
             <StyledCheckboxLabel
                 className={labelClassName}
-                htmlFor={shouldChangeOnLabelClick ? uuid : 'nothing here'}
+                htmlFor={uuid}
                 $isChecked={isChecked ?? isActive}
                 $isDisabled={isDisabled}
                 $shouldShowAsSwitch={shouldShowAsSwitch}
-                $shouldChangeOnLabelClick={shouldChangeOnLabelClick}
                 $lineHeight={lineHeight}
             >
                 {children}
