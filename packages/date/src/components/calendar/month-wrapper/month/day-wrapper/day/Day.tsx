@@ -61,13 +61,6 @@ const Day: FC<DayProps> = ({
         );
     }, [categories, date, isSameMonth, shouldShowHighlightsInMonthOverlay]);
 
-    console.log(
-        date.getDate(),
-        shouldShowHighlightsInMonthOverlay,
-        isSelected,
-        shouldShowHighlightsInMonthOverlay ?? isSelected,
-    );
-
     return (
         <StyledDay
             ref={dayRef}
