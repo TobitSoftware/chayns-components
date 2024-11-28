@@ -91,6 +91,16 @@ export const StyledComboBoxPlaceholder = styled.div<StyledComboBoxPlaceholderPro
     opacity: ${({ $shouldReduceOpacity }) => ($shouldReduceOpacity ? 0.5 : 1)};
 `;
 
+export const StyledComboBoxPrefixAndPlaceholderWrapper = styled.div`
+    display: flex;
+`;
+
+export const StyledComboBoxPrefix = styled.div`
+    flex: 0 0 auto;
+    min-width: 32px;
+    padding-right: 5px;
+`;
+
 export const StyledComboBoxInput = styled.input`
     border: none;
     background-color: transparent;

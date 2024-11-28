@@ -30,6 +30,8 @@ import {
     StyledComboBoxInput,
     StyledComboBoxPlaceholder,
     StyledComboBoxPlaceholderImage,
+    StyledComboBoxPrefix,
+    StyledComboBoxPrefixAndPlaceholderWrapper,
     StyledComboBoxTopic,
     StyledMotionComboBoxBody,
 } from './ComboBox.styles';
@@ -102,6 +104,10 @@ export type ComboBoxProps = {
      */
     placeholder: string;
     /**
+     * A prefix that should be displayed before the placeholder.
+     */
+    prefix?: string;
+    /**
      * An item that should be preselected.
      */
     selectedItem?: IComboBoxItem;
@@ -130,6 +136,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     maxHeight = '280px',
     onSelect,
     placeholder,
+    prefix,
     container,
     selectedItem,
     shouldShowBigImage,
@@ -335,11 +342,20 @@ const ComboBox: FC<ComboBoxProps> = ({
         const imageWidth = hasImage ? 32 : 0; // image width + gap if images present
         const iconWidth = hasIcon ? 40 : 0; // icon width + gap if icons present
 
+        let prefixWidth = 0;
+
+        if (prefix) {
+            const prefixTextWidth = calculateContentWidth([{ text: prefix, value: 'prefix' }]) + 5;
+
+            prefixWidth = Math.max(prefixTextWidth, 32);
+        }
+
         const baseWidth = calculateContentWidth([
             ...allItems,
             { text: placeholder, value: 'placeholder' },
         ]);
-        const calculatedWidth = baseWidth + paddingWidth + imageWidth + iconWidth;
+
+        const calculatedWidth = baseWidth + paddingWidth + imageWidth + iconWidth + prefixWidth;
 
         let tmpMinWidth = calculatedWidth;
         let tmpBodyMinWidth = calculatedWidth;
@@ -358,7 +374,8 @@ const ComboBox: FC<ComboBoxProps> = ({
                 calculateContentWidth([internalSelectedItem]) +
                 paddingWidth +
                 imageWidth +
-                iconWidth;
+                iconWidth +
+                prefixWidth;
 
             tmpMinWidth = itemWidth;
 
@@ -367,7 +384,14 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         setMinWidth(tmpMinWidth);
         setBodyMinWidth(tmpBodyMinWidth);
-    }, [lists, placeholder, shouldUseFullWidth, shouldUseCurrentItemWidth, internalSelectedItem]);
+    }, [
+        lists,
+        placeholder,
+        shouldUseFullWidth,
+        shouldUseCurrentItemWidth,
+        internalSelectedItem,
+        prefix,
+    ]);
 
     /**
      * This function sets the external selected item
@@ -540,33 +564,36 @@ const ComboBox: FC<ComboBoxProps> = ({
                     $shouldChangeColor={shouldChangeColor}
                     $shouldShowBigImage={shouldShowBigImage}
                 >
-                    {typeof inputValue === 'string' ? (
-                        <StyledComboBoxInput
-                            disabled={isDisabled}
-                            value={inputValue}
-                            onChange={onInputChange}
-                            onBlur={onInputBlur}
-                            onFocus={onInputFocus}
-                            placeholder={placeholderText}
-                        />
-                    ) : (
-                        <StyledComboBoxPlaceholder
-                            $shouldReduceOpacity={!selectedItem && !internalSelectedItem}
-                        >
-                            {placeholderImageUrl && (
-                                <StyledComboBoxPlaceholderImage
-                                    src={placeholderImageUrl}
-                                    $shouldShowBigImage={shouldShowBigImage}
-                                    $shouldShowRoundImage={shouldShowRoundPlaceholderImage}
-                                />
-                            )}
-                            {placeholderIcon && <Icon icons={placeholderIcon} />}
-                            {placeholderText}
-                            {internalSelectedItem &&
-                                internalSelectedItem.suffixElement &&
-                                internalSelectedItem.suffixElement}
-                        </StyledComboBoxPlaceholder>
-                    )}
+                    <StyledComboBoxPrefixAndPlaceholderWrapper>
+                        {prefix && <StyledComboBoxPrefix>{prefix}</StyledComboBoxPrefix>}
+                        {typeof inputValue === 'string' ? (
+                            <StyledComboBoxInput
+                                disabled={isDisabled}
+                                value={inputValue}
+                                onChange={onInputChange}
+                                onBlur={onInputBlur}
+                                onFocus={onInputFocus}
+                                placeholder={placeholderText}
+                            />
+                        ) : (
+                            <StyledComboBoxPlaceholder
+                                $shouldReduceOpacity={!selectedItem && !internalSelectedItem}
+                            >
+                                {placeholderImageUrl && (
+                                    <StyledComboBoxPlaceholderImage
+                                        src={placeholderImageUrl}
+                                        $shouldShowBigImage={shouldShowBigImage}
+                                        $shouldShowRoundImage={shouldShowRoundPlaceholderImage}
+                                    />
+                                )}
+                                {placeholderIcon && <Icon icons={placeholderIcon} />}
+                                {placeholderText}
+                                {internalSelectedItem &&
+                                    internalSelectedItem.suffixElement &&
+                                    internalSelectedItem.suffixElement}
+                            </StyledComboBoxPlaceholder>
+                        )}
+                    </StyledComboBoxPrefixAndPlaceholderWrapper>
                     <StyledComboBoxIconWrapper>
                         <Icon icons={['fa fa-chevron-down']} />
                     </StyledComboBoxIconWrapper>
@@ -584,6 +611,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             isDisabled,
             shouldChangeColor,
             shouldShowBigImage,
+            prefix,
             inputValue,
             onInputChange,
             onInputBlur,

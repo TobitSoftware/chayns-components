@@ -1,9 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ComboBoxDirection } from '../src';
-import ComboBox from '../src/components/combobox/ComboBox';
-import Icon from '../src/components/icon/Icon';
-import { IComboBoxItem } from '../src/components/combobox/ComboBox';
 import { ChangeEvent, useState } from 'react';
+import { ComboBoxDirection } from '../src';
+import ComboBox, { IComboBoxItem } from '../src/components/combobox/ComboBox';
+import Icon from '../src/components/icon/Icon';
 
 export default {
     title: 'Core/ComboBox',
@@ -110,6 +109,8 @@ const WithInputTemplate: StoryFn<typeof ComboBox> = (args) => {
 
 export const General = Template.bind({});
 
+export const WithPrefix = Template.bind({});
+
 export const WithImages = Template.bind({});
 
 export const WithSuffixElements = Template.bind({});
@@ -123,6 +124,10 @@ export const WithSubtextAndRightElement = Template.bind({});
 export const WithInput = WithInputTemplate.bind({});
 
 export const WithTextStyle = Template.bind({});
+
+WithPrefix.args = {
+    prefix: 'Von',
+};
 
 WithGroups.args = {
     direction: ComboBoxDirection.TOP,
