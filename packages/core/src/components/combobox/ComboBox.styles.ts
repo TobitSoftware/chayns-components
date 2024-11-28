@@ -92,6 +92,7 @@ export const StyledComboBoxPlaceholder = styled.div<StyledComboBoxPlaceholderPro
 `;
 
 export const StyledComboBoxPrefixAndPlaceholderWrapper = styled.div`
+    align-items: center;
     display: flex;
 `;
 

@@ -309,6 +309,8 @@ WithSuffixElements.args = {
 };
 
 WithSubtextAndRightElement.args = {
+    prefix: 'Von',
+    shouldShowBigImage: true,
     lists: [
         {
             groupName: 'Häufig ausgewählt',
