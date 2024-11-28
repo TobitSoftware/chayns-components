@@ -61,6 +61,13 @@ const Day: FC<DayProps> = ({
         );
     }, [categories, date, isSameMonth, shouldShowHighlightsInMonthOverlay]);
 
+    console.log(
+        date.getDate(),
+        shouldShowHighlightsInMonthOverlay,
+        isSelected,
+        shouldShowHighlightsInMonthOverlay ?? isSelected,
+    );
+
     return (
         <StyledDay
             ref={dayRef}
@@ -73,11 +80,23 @@ const Day: FC<DayProps> = ({
             onMouseLeave={() => setHoveringDay(null)}
         >
             <StyledDayNumber
-                $isSelected={shouldShowHighlightsInMonthOverlay && isSelected}
-                $isIntervalStart={shouldShowHighlightsInMonthOverlay && isIntervalStart}
-                $isIntervalEnd={shouldShowHighlightsInMonthOverlay && isIntervalEnd}
+                $isSelected={
+                    shouldShowHighlightsInMonthOverlay ? isSelected : isSelected && isSameMonth
+                }
+                $isIntervalStart={
+                    shouldShowHighlightsInMonthOverlay
+                        ? isIntervalStart
+                        : isIntervalStart && isSameMonth
+                }
+                $isIntervalEnd={
+                    shouldShowHighlightsInMonthOverlay
+                        ? isIntervalEnd
+                        : isIntervalEnd && isSameMonth
+                }
                 $isWithinIntervalSelection={
-                    shouldShowHighlightsInMonthOverlay && isWithinIntervalSelection
+                    shouldShowHighlightsInMonthOverlay
+                        ? isWithinIntervalSelection
+                        : isWithinIntervalSelection && isSameMonth
                 }
             >
                 {date.getDate()}
