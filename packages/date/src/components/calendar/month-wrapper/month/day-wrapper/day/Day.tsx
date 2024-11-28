@@ -73,10 +73,12 @@ const Day: FC<DayProps> = ({
             onMouseLeave={() => setHoveringDay(null)}
         >
             <StyledDayNumber
-                $isSelected={isSelected}
-                $isIntervalStart={isIntervalStart}
-                $isIntervalEnd={isIntervalEnd}
-                $isWithinIntervalSelection={isWithinIntervalSelection}
+                $isSelected={shouldShowHighlightsInMonthOverlay && isSelected}
+                $isIntervalStart={shouldShowHighlightsInMonthOverlay && isIntervalStart}
+                $isIntervalEnd={shouldShowHighlightsInMonthOverlay && isIntervalEnd}
+                $isWithinIntervalSelection={
+                    shouldShowHighlightsInMonthOverlay && isWithinIntervalSelection
+                }
             >
                 {date.getDate()}
             </StyledDayNumber>
