@@ -171,11 +171,11 @@ const NumberInput: FC<NumberInputProps> = ({
     const onLocalFocus = () => {
         // formattedValue will be a number string with german number format (e.g. 1.000,00)
         // It will remove all dots, so that the user can type in the number
-        setPlainText(formattedValue.replaceAll('.', ''));
+        setPlainText(formattedValue.replaceAll('.', '').replace('€', '').replaceAll(' ', ''));
 
         // This will update the external state
         if (typeof onChange === 'function') {
-            onChange(formattedValue.replaceAll('.', ''));
+            onChange(formattedValue.replaceAll('.', '').replace('€', '').replaceAll(' ', ''));
         }
 
         setIsValueInvalid(false);
@@ -188,7 +188,11 @@ const NumberInput: FC<NumberInputProps> = ({
 
         if (!isTimeInput) {
             parsedNumber = parseFloatWithDecimals({
-                stringValue: plainText.replace(',', '.').replaceAll(':', ''),
+                stringValue: plainText
+                    .replace(',', '.')
+                    .replaceAll(':', '')
+                    .replace('€', '')
+                    .replaceAll(' ', ''),
                 decimals: isMoneyInput ? 2 : undefined,
             });
 
@@ -211,9 +215,10 @@ const NumberInput: FC<NumberInputProps> = ({
 
     useEffect(() => {
         if (typeof value === 'string') {
-            setPlainText(value);
+            setPlainText(value.replace('€', '').replaceAll(' ', ''));
         }
     }, [value]);
+
     return (
         <Input
             shouldRemainPlaceholder={shouldRemainPlaceholder}
