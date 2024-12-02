@@ -15,24 +15,23 @@ export const StyledCheckboxInput = styled.input`
     display: none;
 `;
 
-type StyledCheckboxLabelProps = WithTheme<{
+type StyledCheckboxBoxProps = WithTheme<{
     $shouldShowAsSwitch?: CheckboxProps['shouldShowAsSwitch'];
     $isDisabled?: CheckboxProps['isDisabled'];
     $isChecked?: CheckboxProps['isChecked'];
     $lineHeight?: number;
 }>;
 
-export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
-    color: ${({ theme }: StyledCheckboxLabelProps) => theme.text};
+export const StyledCheckboxBox = styled.label<StyledCheckboxBoxProps>`
+    color: ${({ theme }: StyledCheckboxBoxProps) => theme.text};
     cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     padding-left: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '48px' : '20px')};
     transition: opacity 0.2s ease;
     user-select: none;
-    width: 100%;
 
     &:after {
-        ${({ $isChecked, $shouldShowAsSwitch, $lineHeight, theme }: StyledCheckboxLabelProps) =>
+        ${({ $isChecked, $shouldShowAsSwitch, $lineHeight, theme }: StyledCheckboxBoxProps) =>
             $shouldShowAsSwitch
                 ? css`
                       background-color: white;
@@ -70,20 +69,20 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
             $isChecked,
             $shouldShowAsSwitch,
             theme,
-        }: StyledCheckboxLabelProps) => {
+        }: StyledCheckboxBoxProps) => {
             if ($shouldShowAsSwitch) {
                 return $isChecked ? theme.green : theme.red;
             }
 
             return $isChecked ? theme['408'] : theme['403'];
         }};
-        
+
         ${({ $shouldShowAsSwitch, theme }) =>
             !$shouldShowAsSwitch &&
             css`
                 border: 1px solid rgba(${theme['409-rgb']}, 0.5);
             `}
-        
+
         border-radius: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '100px' : 0)};
         content: ' ';
         height: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '13px' : '15px')};
@@ -91,7 +90,7 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
         position: absolute;
         transition: background-color 0.2s ease;
         width: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '28px' : '15px')};
-        ${({ $lineHeight, theme, $shouldShowAsSwitch }: StyledCheckboxLabelProps) =>
+        ${({ $lineHeight, theme, $shouldShowAsSwitch }: StyledCheckboxBoxProps) =>
             $lineHeight
                 ? css`
                       top: ${getCheckBoxPosition(Number(theme.fontSize)) ??
@@ -101,6 +100,19 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
                       top: 50%;
                       transform: translateY(-50%);
                   `}
-        }
     }
+}
+`;
+
+type StyledCheckboxLabelProps = WithTheme<{
+    $isDisabled?: CheckboxProps['isDisabled'];
+    $shouldChangeOnLabelClick?: CheckboxProps['shouldChangeOnLabelClick'];
+}>;
+
+export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
+    color: ${({ theme }: StyledCheckboxLabelProps) => theme.text};
+    cursor: ${({ $shouldChangeOnLabelClick }) =>
+        !$shouldChangeOnLabelClick ? 'default' : 'pointer'};
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
+    transition: opacity 0.2s ease;
 `;

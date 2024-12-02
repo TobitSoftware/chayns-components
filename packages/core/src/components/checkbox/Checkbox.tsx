@@ -9,7 +9,12 @@ import React, {
 } from 'react';
 import { useUuid } from '../../hooks/uuid';
 import { getHeightOfSingleTextLine } from '../../utils/calculate';
-import { StyledCheckbox, StyledCheckboxInput, StyledCheckboxLabel } from './Checkbox.styles';
+import {
+    StyledCheckbox,
+    StyledCheckboxBox,
+    StyledCheckboxInput,
+    StyledCheckboxLabel,
+} from './Checkbox.styles';
 
 export type CheckboxProps = {
     /**
@@ -33,6 +38,10 @@ export type CheckboxProps = {
      */
     onChange?: ChangeEventHandler<HTMLInputElement>;
     /**
+     * Whether the label should change the state
+     */
+    shouldChangeOnLabelClick?: boolean;
+    /**
      * Changes the design to use switch instead of checkbox
      */
     shouldShowAsSwitch?: boolean;
@@ -50,6 +59,7 @@ const Checkbox: FC<CheckboxProps> = ({
     onChange,
     shouldShowAsSwitch,
     shouldShowCentered = false,
+    shouldChangeOnLabelClick = false,
 }) => {
     const [isActive, setIsActive] = useState(isChecked ?? false);
 
@@ -80,13 +90,18 @@ const Checkbox: FC<CheckboxProps> = ({
                 onChange={handleChange}
                 type="checkbox"
             />
-            <StyledCheckboxLabel
-                className={labelClassName}
+            <StyledCheckboxBox
                 htmlFor={uuid}
                 $isChecked={isChecked ?? isActive}
                 $isDisabled={isDisabled}
                 $shouldShowAsSwitch={shouldShowAsSwitch}
                 $lineHeight={lineHeight}
+            />
+            <StyledCheckboxLabel
+                className={labelClassName}
+                $isDisabled={isDisabled}
+                $shouldChangeOnLabelClick={shouldChangeOnLabelClick}
+                htmlFor={shouldChangeOnLabelClick ? uuid : undefined}
             >
                 {children}
             </StyledCheckboxLabel>
