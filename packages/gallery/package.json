@@ -39,8 +39,7 @@
         "url": "git+https://github.com/TobitSoftware/chayns-components.git"
     },
     "scripts": {
-        "build": "npm run build:cjs && npm run build:esm && npm run build:types && npm run minify",
-        "minify": "terser lib/cjs/index.js --compress --mangle --toplevel --source-map --output lib/cjs/index.min.js && terser lib/esm/index.js --compress --mangle --toplevel --source-map --output lib/esm/index.min.js",
+        "build": "npm run build:cjs && npm run build:esm && npm run build:types",
         "build:types": "tsc",
         "build:cjs": "cross-env NODE_ENV=cjs babel src --out-dir lib/cjs --extensions=.ts,.tsx --source-maps --ignore=src/stories",
         "build:esm": "cross-env NODE_ENV=esm babel src --out-dir lib/esm --extensions=.ts,.tsx --source-maps --ignore=src/stories",
@@ -66,9 +65,7 @@
         "lerna": "^8.1.9",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "source-map-explorer": "^2.5.3",
         "styled-components": "^6.1.13",
-        "terser": "^5.36.0",
         "typescript": "^5.7.2"
     },
     "dependencies": {
