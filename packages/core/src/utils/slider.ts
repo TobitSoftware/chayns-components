@@ -55,7 +55,7 @@ export const calculateGradientOffset = ({
 
     const adjustedWidth = containerWidth - thumbWidth / 2;
 
-    return percentage * adjustedWidth + thumbWidth / 2;
+    return percentage * adjustedWidth + thumbWidth / 2 + 5;
 };
 
 interface GetThumbMaxWidthOptions {
