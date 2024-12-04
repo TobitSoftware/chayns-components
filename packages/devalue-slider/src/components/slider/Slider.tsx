@@ -10,6 +10,7 @@ import {
 } from 'framer-motion';
 import React, {
     forwardRef,
+    PointerEvent,
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -125,15 +126,25 @@ const Slider = forwardRef<SliderRef, SliderProps>(
             return `linear-gradient(to right, ${devalueColor} ${value}%, transparent ${value}%)`;
         });
 
-        const handlePointerDownCapture = useCallback(() => {
-            void invokeCall({
-                action: 19,
-                value: {
-                    pattern: [50],
-                    iOSFeedbackVibration: 7,
-                },
-            });
-        }, []);
+        const handlePointerDownCapture = useCallback(
+            (event: PointerEvent) => {
+                const currentValue = relativeValue.get();
+
+                if (currentValue > 5) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                void invokeCall({
+                    action: 19,
+                    value: {
+                        pattern: [50],
+                        iOSFeedbackVibration: 7,
+                    },
+                });
+            },
+            [relativeValue],
+        );
 
         const handleRedeem = useCallback(async () => {
             setShowWaitCursor(true);
