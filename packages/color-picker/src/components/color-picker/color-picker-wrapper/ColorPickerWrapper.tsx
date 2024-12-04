@@ -7,7 +7,6 @@ import {
     StyledColorPickerWrapper,
     StyledColorPickerWrapperInfo,
     StyledColorPickerWrapperInfoColor,
-    StyledColorPickerWrapperInfoColorBackground,
     StyledColorPickerWrapperInfoColorWrapper,
     StyledColorPickerWrapperInfoText,
 } from './ColorPickerWrapper.styles';
@@ -66,7 +65,6 @@ const ColorPickerWrapper = ({
                         <StyledColorPickerWrapperInfoColorWrapper
                             $shouldShowRoundPreviewColor={shouldShowRoundPreviewColor}
                         >
-                            <StyledColorPickerWrapperInfoColorBackground />
                             <StyledColorPickerWrapperInfoColor $color={selectedColor} />
                         </StyledColorPickerWrapperInfoColorWrapper>
 
