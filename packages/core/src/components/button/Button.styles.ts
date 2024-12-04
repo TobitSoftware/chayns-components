@@ -53,7 +53,7 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
     border-radius: 3px;
     cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
     display: inline-flex;
-    line-height: 1.15;
+    line-height: 22px;
     min-height: 32px;
     position: relative;
     user-select: none;
@@ -62,15 +62,15 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
         if ($hasIcon) {
             if ($hasChildren) {
                 return css`
-                    padding: 7px 12px 7px 42px;
+                    padding: 6px 12px 6px 42px;
                 `;
             }
             return css`
-                padding: 7px 12px 7px 18px;
+                padding: 6px 12px 6px 18px;
             `;
         }
         return css`
-            padding: 7px 12px 7px 12px;
+            padding: 6px 12px 6px 12px;
         `;
     }}
 `;

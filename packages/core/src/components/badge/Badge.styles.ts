@@ -19,6 +19,7 @@ export const StyledBadge = styled.div<StyledBadgeProps>`
     font-size: 0.8rem;
     min-width: ${({ $minWidth }) => $minWidth};
     padding: 2px 6px;
+    line-height: 20px;
     text-align: center;
     cursor: ${({ $cursor }) => $cursor};
 `;
