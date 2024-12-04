@@ -47,9 +47,9 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
 }) => {
     const handleItemClick = useCallback(() => {
         if (!isDisabled) {
-            onSelect({ text, value, suffixElement, imageUrl });
+            onSelect({ text, value, suffixElement, imageUrl, icons });
         }
-    }, [imageUrl, isDisabled, onSelect, suffixElement, text, value]);
+    }, [icons, imageUrl, isDisabled, onSelect, suffixElement, text, value]);
 
     const isTouch = getIsTouch();
 
