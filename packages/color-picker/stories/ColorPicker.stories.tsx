@@ -10,6 +10,7 @@ export default {
 } as Meta<typeof ColorPicker>;
 
 const Template: StoryFn<typeof ColorPicker> = ({ ...args }) => {
+    const [color, setColor] = useState('rgba(255, 0, 0, 1)');
     const [presetColors, setPresetColors] = useState<IPresetColor[]>([
         { id: 'sgedfhgwash', color: '#15d14d', isCustom: true },
         { id: 'shedfjndxhg', color: '#e3c949', isCustom: true },
@@ -30,6 +31,8 @@ const Template: StoryFn<typeof ColorPicker> = ({ ...args }) => {
             onPresetColorRemove={handlePresetRemove}
             onPresetColorAdd={handlePresetAdd}
             presetColors={presetColors}
+            selectedColor={color}
+            onSelect={(newColor) => setColor(newColor)}
         />
     );
 };

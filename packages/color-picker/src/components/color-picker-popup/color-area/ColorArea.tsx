@@ -33,6 +33,7 @@ const ColorArea = () => {
         updateIsPresetColor,
         isPresetColor,
         shouldGetCoordinates,
+        canGetColorFromArea,
         updateShouldGetCoordinates,
         updateShouldCallOnSelect,
         hueColor,
@@ -140,8 +141,10 @@ const ColorArea = () => {
             return;
         }
 
-        setColor();
-    }, [hueColor, setColor, updateIsPresetColor]);
+        if (canGetColorFromArea) {
+            setColor();
+        }
+    }, [canGetColorFromArea, hueColor, setColor, updateIsPresetColor]);
 
     const handleStartDrag = useCallback(() => {
         if (typeof updateShouldGetCoordinates === 'function') {

@@ -17,6 +17,7 @@ const Sliders = ({ shouldShowTransparencySlider }: SlidersProps) => {
         updateHueColor,
         updateShouldGetCoordinates,
         updateShouldCallOnSelect,
+        updateCanGetColorFromArea,
         hueColor,
     } = useContext(ColorPickerContext);
 
@@ -38,6 +39,14 @@ const Sliders = ({ shouldShowTransparencySlider }: SlidersProps) => {
         }
     };
 
+    const handleHueStart = () => {
+        handleStart();
+
+        if (typeof updateCanGetColorFromArea === 'function') {
+            updateCanGetColorFromArea(true);
+        }
+    };
+
     const handleEnd = () => {
         if (
             typeof updateShouldGetCoordinates === 'function' &&
@@ -45,6 +54,10 @@ const Sliders = ({ shouldShowTransparencySlider }: SlidersProps) => {
         ) {
             updateShouldGetCoordinates(true);
             updateShouldCallOnSelect(true);
+        }
+
+        if (typeof updateCanGetColorFromArea === 'function') {
+            updateCanGetColorFromArea(false);
         }
     };
 
@@ -57,7 +70,7 @@ const Sliders = ({ shouldShowTransparencySlider }: SlidersProps) => {
                     color={hueColor}
                     opacity={opacity}
                     onEnd={handleEnd}
-                    onStart={handleStart}
+                    onStart={handleHueStart}
                     onChange={handleHueColorChange}
                 />
                 {shouldShowTransparencySlider && (

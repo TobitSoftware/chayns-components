@@ -12,6 +12,8 @@ interface IColorPickerContext {
     updateShouldGetCoordinates?: (shouldGetCoordinates: boolean) => void;
     shouldCallOnSelect?: boolean;
     updateShouldCallOnSelect?: (shouldCallOnSelect: boolean) => void;
+    canGetColorFromArea?: boolean;
+    updateCanGetColorFromArea?: (canGetColorFromArea: boolean) => void;
 }
 
 export const ColorPickerContext = React.createContext<IColorPickerContext>({
@@ -25,6 +27,8 @@ export const ColorPickerContext = React.createContext<IColorPickerContext>({
     updateShouldGetCoordinates: undefined,
     shouldCallOnSelect: undefined,
     updateShouldCallOnSelect: undefined,
+    canGetColorFromArea: undefined,
+    updateCanGetColorFromArea: undefined,
 });
 
 ColorPickerContext.displayName = 'ColorPickerContext';
@@ -50,6 +54,7 @@ const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerP
     const [internalIsPresetColor, setInternalIsPresetColor] = useState<boolean>(false);
     const [internalShouldGetCoordinates, setInternalShouldGetCoordinates] = useState<boolean>(true);
     const [internalShouldCallOnSelect, setInternalShouldCallOnSelect] = useState<boolean>(false);
+    const [internalCanGetColorFromArea, setInternalCanGetColorFromArea] = useState<boolean>(false);
 
     const updateSelectedColor = useCallback((color: string | undefined) => {
         setInternalSelectedColor(color);
@@ -69,6 +74,10 @@ const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerP
 
     const updateShouldCallOnSelect = useCallback((shouldCallOnSelect: boolean) => {
         setInternalShouldCallOnSelect(shouldCallOnSelect);
+    }, []);
+
+    const updateCanGetColorFromArea = useCallback((canGetColorFromArea: boolean) => {
+        setInternalCanGetColorFromArea(canGetColorFromArea);
     }, []);
 
     useEffect(() => {
@@ -105,13 +114,17 @@ const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerP
             updateShouldGetCoordinates,
             shouldCallOnSelect: internalShouldCallOnSelect,
             updateShouldCallOnSelect,
+            canGetColorFromArea: internalCanGetColorFromArea,
+            updateCanGetColorFromArea,
         }),
         [
+            internalCanGetColorFromArea,
             internalHueColor,
             internalIsPresetColor,
             internalSelectedColor,
             internalShouldCallOnSelect,
             internalShouldGetCoordinates,
+            updateCanGetColorFromArea,
             updateHueColor,
             updateIsPresetColor,
             updateSelectedColor,
