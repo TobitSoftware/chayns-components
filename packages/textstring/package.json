@@ -17,14 +17,14 @@
     "author": "Tobit.Software",
     "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/textstring#readme",
     "license": "MIT",
+    "types": "lib/types/index.d.ts",
     "main": "lib/cjs/index.js",
     "module": "lib/esm/index.js",
-    "types": "lib/types/index.d.ts",
     "exports": {
         ".": {
+            "types": "./lib/types/index.d.ts",
             "require": "./lib/cjs/index.js",
-            "import": "./lib/esm/index.js",
-            "types": "./lib/types/index.d.ts"
+            "import": "./lib/esm/index.js"
         }
     },
     "directories": {
