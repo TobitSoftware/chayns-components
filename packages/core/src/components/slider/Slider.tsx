@@ -126,8 +126,6 @@ const Slider: FC<SliderProps> = ({
             return;
         }
 
-        void setRefreshScrollEnabled(true);
-
         const from = Number(fromSliderRef.current?.value);
         const to = Number(toSliderRef.current?.value);
 
@@ -184,8 +182,6 @@ const Slider: FC<SliderProps> = ({
             if (isDisabled) {
                 return;
             }
-
-            void setRefreshScrollEnabled(false);
 
             if (!fromSliderRef.current || !toSliderRef.current) {
                 return;
@@ -253,8 +249,6 @@ const Slider: FC<SliderProps> = ({
             if (isDisabled) {
                 return;
             }
-
-            void setRefreshScrollEnabled(false);
 
             let newValue = Number(event.target.value);
 
@@ -335,6 +329,8 @@ const Slider: FC<SliderProps> = ({
             return;
         }
 
+        void setRefreshScrollEnabled(false);
+
         if (shouldShowThumbLabel) {
             setIsBigSlider(true);
         }
@@ -344,6 +340,8 @@ const Slider: FC<SliderProps> = ({
         if (isDisabled) {
             return;
         }
+
+        void setRefreshScrollEnabled(true);
 
         const from = Number(fromSliderRef.current?.value);
         const to = Number(toSliderRef.current?.value);
