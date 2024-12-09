@@ -1,9 +1,9 @@
 import type { Locale } from 'date-fns';
 import type { MotionProps } from 'framer-motion';
 import React, { FC, useEffect, useMemo, useState, type ReactElement } from 'react';
-import type {
+import {
     CalendarType,
-    Categories,
+    Categories, CustomThumbColors,
     DateInterval,
     HighlightedDates,
 } from '../../../types/calendar';
@@ -30,6 +30,7 @@ export type MonthWrapperProps = {
     setCurrentDate: (date: Date) => void;
     shouldShowHighlightsInMonthOverlay: boolean;
     showMonthYearPickers: boolean;
+    customThumbColors?: CustomThumbColors;
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
@@ -42,7 +43,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     direction,
     onAnimationFinished,
     shouldRenderTwo,
-    width,
+    width,customThumbColors,
     isDisabled,
     minDate,
     maxDate,
@@ -83,6 +84,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         minDate={minDate}
                         maxDate={maxDate}
                         type={type}
+                        customThumbColors={customThumbColors}
                         hoveringDay={hoveringDay}
                         setHoveringDay={setHoveringDay}
                         disabledDates={disabledDates}
@@ -122,6 +124,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         maxDate,
                         minDate,
                         month,
+                        customThumbColors,
                         selectedDate,
                         setCurrentDate,
                         setHoveringDay,
@@ -133,6 +136,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
             }),
         );
     }, [
+        customThumbColors,
         categories,
         currentDate,
         direction,

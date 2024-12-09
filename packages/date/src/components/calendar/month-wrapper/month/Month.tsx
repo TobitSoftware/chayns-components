@@ -1,8 +1,8 @@
 import type { Locale } from 'date-fns';
 import React, { FC } from 'react';
-import type {
+import {
     CalendarType,
-    Categories,
+    Categories, CustomThumbColors,
     DateInterval,
     EMonth,
     HighlightedDates,
@@ -30,6 +30,7 @@ export type MonthProps = {
     setCurrentDate: (date: Date) => void;
     displayIndex?: number;
     shouldShowHighlightsInMonthOverlay: boolean;
+    customThumbColors?: CustomThumbColors;
     showMonthYearPickers: boolean;
 };
 
@@ -43,7 +44,7 @@ const Month: FC<MonthProps> = ({
     categories,
     height,
     minDate,
-    maxDate,
+    maxDate,customThumbColors,
     shouldShowHighlightsInMonthOverlay,
     type,
     hoveringDay,
@@ -71,6 +72,7 @@ const Month: FC<MonthProps> = ({
             key={`day-wrapper-${month}`}
             categories={categories}
             selectedDate={selectedDate}
+            customThumbColors={customThumbColors}
             month={month}
             year={year}
             onSelect={onSelect}

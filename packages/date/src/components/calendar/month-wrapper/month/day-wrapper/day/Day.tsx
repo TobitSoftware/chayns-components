@@ -1,7 +1,7 @@
 import { isSameDay } from 'date-fns';
 import React, { FC, useMemo, useRef } from 'react';
-import type {
-    Categories,
+import {
+    Categories, CustomThumbColors,
     HighlightedDates,
     HighlightedDateStyles,
 } from '../../../../../../types/calendar';
@@ -21,6 +21,7 @@ export type DayProps = {
     isWithinIntervalSelection: boolean;
     setHoveringDay: (date: Date | null) => void;
     shouldShowHighlightsInMonthOverlay: boolean;
+    customThumbColors?: CustomThumbColors;
 };
 
 const Day: FC<DayProps> = ({
@@ -32,7 +33,7 @@ const Day: FC<DayProps> = ({
     onClick,
     isDisabled,
     isIntervalStart,
-    isIntervalEnd,
+    isIntervalEnd,customThumbColors,
     isWithinIntervalSelection,
     shouldShowHighlightsInMonthOverlay,
     setHoveringDay,
@@ -73,6 +74,7 @@ const Day: FC<DayProps> = ({
             onMouseLeave={() => setHoveringDay(null)}
         >
             <StyledDayNumber
+                $customThumbColors={customThumbColors}
                 $isSelected={
                     shouldShowHighlightsInMonthOverlay ? isSelected : isSelected && isSameMonth
                 }

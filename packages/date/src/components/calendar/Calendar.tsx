@@ -10,7 +10,7 @@ import {
 } from 'date-fns';
 import { de } from 'date-fns/locale';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Categories, DateInterval, HighlightedDates } from '../../types/calendar';
+import {Categories, CustomThumbColors, DateInterval, HighlightedDates} from '../../types/calendar';
 import { CalendarType } from '../../types/calendar';
 import { getNewDate, getYearsBetween, isDateInRange } from '../../utils/calendar';
 import {
@@ -26,6 +26,10 @@ interface BaseProps {
      * An array to group dates into a category.
      */
     categories?: Categories[];
+    /**
+     * Custom colors for the thumb.
+     */
+    customThumbColors?: CustomThumbColors;
     /**
      * An array with dates and corresponding styles to highlight.
      */
@@ -120,7 +124,7 @@ const Calendar: FC<CalendarProps> = ({
     maxDate = DEFAULT_MAX_DATE,
     minDate = DEFAULT_MIN_DATE,
     highlightedDates,
-    onChange,
+    onChange,customThumbColors,
     selectedDate,
     selectedDates,
     selectedDateInterval,
@@ -443,6 +447,7 @@ const Calendar: FC<CalendarProps> = ({
                     width={width}
                     locale={locale}
                     direction={direction}
+                    customThumbColors={customThumbColors}
                     onSelect={handleSelect}
                     selectedDate={internalSelectedDate}
                     highlightedDates={highlightedDates}

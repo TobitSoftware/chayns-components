@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Calendar from '../src/components/calendar/Calendar';
-import { CalendarType } from '../src/types/calendar';
+import {CalendarType, CustomThumbColors} from '../src/types/calendar';
 
 const getDayOfCurrentMonth = (day: number) => {
     const today = new Date();
@@ -59,3 +59,12 @@ export default {
 const Template: StoryFn<typeof Calendar> = ({ ...args }) => <Calendar {...args} />;
 
 export const General = Template.bind({});
+export const WithCustomThumbColors = Template.bind({});
+
+WithCustomThumbColors.args = {
+    customThumbColors: {
+        mainBackgroundColor: 'purple',
+        mainTextColor: 'white',
+        secondaryBackgroundColor: 'pink'
+    }
+}

@@ -10,7 +10,7 @@ import {
 import React, { FC, useCallback, useMemo, type ReactElement } from 'react';
 import {
     CalendarType,
-    type Categories,
+    type Categories, CustomThumbColors,
     type DateInterval,
     type EMonth,
     type HighlightedDates,
@@ -32,6 +32,7 @@ export type DayWrapperProps = {
     hoveringDay: Date | null;
     setHoveringDay: (date: Date | null) => void;
     disabledDates: Date[];
+    customThumbColors?: CustomThumbColors;
     shouldShowHighlightsInMonthOverlay: boolean;
 };
 
@@ -43,7 +44,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
     selectedDate,
     categories,
     minDate,
-    maxDate,
+    maxDate,customThumbColors,
     type,
     hoveringDay,
     shouldShowHighlightsInMonthOverlay,
@@ -148,6 +149,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
                     categories={categories}
                     date={day}
                     isSelected={isSelected}
+                    customThumbColors={customThumbColors}
                     isIntervalStart={isIntervalStart}
                     isIntervalEnd={isIntervalEnd}
                     isWithinIntervalSelection={isWithinIntervalSelection}
@@ -162,21 +164,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
         });
 
         return items;
-    }, [
-        selectedDate,
-        disabledDates,
-        days,
-        minDate,
-        maxDate,
-        type,
-        hoveringDay,
-        categories,
-        shouldShowHighlightsInMonthOverlay,
-        dayOfCurrentMonth,
-        handleDayClick,
-        highlightedDates,
-        setHoveringDay,
-    ]);
+    }, [selectedDate, disabledDates, days, minDate, maxDate, type, hoveringDay, categories, customThumbColors, shouldShowHighlightsInMonthOverlay, dayOfCurrentMonth, handleDayClick, highlightedDates, setHoveringDay]);
 
     return <StyledDayWrapper>{dayElements}</StyledDayWrapper>;
 };
