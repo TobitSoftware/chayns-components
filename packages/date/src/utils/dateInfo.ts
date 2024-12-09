@@ -22,9 +22,7 @@ export const getDateInfo = ({
 
     const options: Intl.DateTimeFormatOptions = {};
 
-    if (shouldShowYear) {
-        options.year = isCurrentYear(date) ? undefined : 'numeric';
-    }
+
 
     // if (shouldShowTime) {
     //     options.hour = "2-digit";
@@ -35,7 +33,20 @@ export const getDateInfo = ({
         options.weekday = shouldUseShortText ? 'short' : 'long';
     }
 
-    return formattedString + date.toLocaleDateString(language, options);
+    // Relativer Tag (Freitag/Heute...)
+
+    // Tag
+    formattedString += 
+
+    // Monat
+
+    if (shouldShowYear && !isCurrentYear(date)) {
+        formattedString += date.getFullYear();
+    }
+
+    // Zeit
+
+    return formattedString;
 };
 
 type RelativeTimeUnit = 'year' | 'month' | 'day' | 'hour' | 'minute' | 'second';
