@@ -6,6 +6,7 @@ import { CodeHighlighterTheme } from '../../types/codeHighlighter';
 type StyledCodeHighlighterProps = WithTheme<{
     $codeTheme: CodeHighlighterTheme;
     $browser: Browser | 'bot' | null | undefined;
+    $shouldWrapLines?: boolean;
 }>;
 
 export const StyledCodeHighlighter = styled.div<StyledCodeHighlighterProps>`
@@ -47,6 +48,10 @@ export const StyledCodeHighlighter = styled.div<StyledCodeHighlighterProps>`
                           border-radius: 20px;
                       }
                   `}
+        
+        code{
+            white-space: ${({ $shouldWrapLines }) => $shouldWrapLines ? 'pre-wrap' : 'pre'} !important;
+        }
     }
 
     // Fixes display of tables in code highlighter for markdown.

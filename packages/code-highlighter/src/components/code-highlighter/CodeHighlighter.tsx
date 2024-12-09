@@ -36,18 +36,21 @@ export type CodeHighlighterProps = {
      */
     language: CodeHighlighterLanguage;
     /**
+     * Function to be executed when the formatting of the code fails.
+     */
+    onFormatError?: (error: unknown) => void;
+    /**
      * Whether the code should be formatted with prettier.
      */
     shouldFormatCode?: boolean;
     /**
-     * Callback-Funktion, die aufgerufen wird, wenn das Formatieren des Codes fehlschlägt.
-     */
-    onFormatError?: (error: unknown) => void;
-
-    /**
      * Whether the line numbers should be displayed.
      */
     shouldShowLineNumbers?: boolean;
+    /**
+     * Whether long lines should be wrapped.
+     */
+    shouldWrapLines?: boolean;
     /**
      * The theme of the code block. Decide between dark and light.
      */
@@ -63,6 +66,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     shouldFormatCode = false,
     onFormatError,
     shouldShowLineNumbers = false,
+    shouldWrapLines,
 }) => {
     const [width, setWidth] = useState(0);
 
@@ -141,7 +145,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
     return useMemo(
         () => (
-            <StyledCodeHighlighter $browser={browser?.name} $codeTheme={theme} ref={ref}>
+            <StyledCodeHighlighter $browser={browser?.name} $shouldWrapLines={shouldWrapLines} $codeTheme={theme} ref={ref}>
                 <StyledCodeHighlighterHeader $codeTheme={theme}>
                     <StyledCodeHighlighterFileName $codeTheme={theme}>
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
@@ -155,22 +159,14 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                     showLineNumbers={shouldShowLineNumbers}
                     style={theme === CodeHighlighterTheme.Dark ? oneDark : oneLight}
                     wrapLines
+                    wrapLongLines={shouldWrapLines}
                     lineProps={lineWrapper}
                 >
                     {formattedCode}
                 </SyntaxHighlighter>
             </StyledCodeHighlighter>
         ),
-        [
-            browser?.name,
-            theme,
-            language,
-            code,
-            copyButtonText,
-            shouldShowLineNumbers,
-            lineWrapper,
-            formattedCode,
-        ]
+        [browser?.name, theme, language, code, copyButtonText, shouldShowLineNumbers, shouldWrapLines, lineWrapper, formattedCode]
     );
 };
 

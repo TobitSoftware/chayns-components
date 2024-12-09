@@ -21,6 +21,7 @@ export const WithCss = Template.bind({});
 export const WithMarkdown = Template.bind({});
 export const WithGraphQL = Template.bind({});
 export const WithYaml = Template.bind({});
+export const WithLineBreak = Template.bind({});
 
 General.args = {
     code: `import React from 'react';
@@ -164,3 +165,9 @@ type Post {
 `,
     language: 'graphql',
 };
+
+WithLineBreak.args = {
+    code:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed rhoncus nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Donec semper ante quis molestie vulputate. Praesent facilisis auctor turpis. Duis sodales dictum sem, id aliquet nisi faucibus egestas. Morbi volutpat dapibus feugiat.',
+    language: '',
+    shouldWrapLines: true
+}
