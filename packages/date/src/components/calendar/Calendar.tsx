@@ -11,8 +11,14 @@ import {
 } from './Calendar.styles';
 import MonthWrapper from './month-wrapper/MonthWrapper';
 import {Language} from "chayns-api";
-import {addYears, differenceInCalendarMonths, subYears} from "../../utils/date";
-import {isSameDay, isSameMonth, isWithinInterval} from "date-fns";
+import {
+    addYears,
+    differenceInCalendarMonths,
+    isSameDay,
+    isSameMonth,
+    isWithinInterval,
+    subYears
+} from "../../utils/date";
 
 interface BaseProps {
     /**
@@ -160,7 +166,7 @@ const Calendar: FC<CalendarProps> = ({
                 });
             }
         }
-    }, [currentDate, shouldRenderTwoMonths]);
+    }, [currentDate, onShownDatesChange, shouldRenderTwoMonths]);
 
     useEffect(() => {
         const bounds = {

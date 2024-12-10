@@ -1,11 +1,11 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { addSeconds, subHours } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import DevalueSlider, {
     DevalueSliderOnDevalueHandler,
     DevalueSliderProps,
 } from '../src/components/DevalueSlider';
 import { sleep } from '../src/utils/common';
+import {addSeconds, subHours} from "../src/utils/date";
 
 export default {
     title: 'DevalueSlider/DevalueSlider',
