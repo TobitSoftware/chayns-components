@@ -22,8 +22,8 @@ type PaddingValues = {
     left: number;
 };
 
-const getPageProviderInformation = (customPadding?: string): PaddingValues => {
-    const padding = (customPadding ?? getPagePadding()).split(' ');
+const getPageProviderInformation = (): PaddingValues => {
+    const padding = getPagePadding().split(' ');
 
     const parseValue = (value: string): number => {
         const parsed = parseInt(value.replace('px', ''), 10);
@@ -63,12 +63,14 @@ const getPageProviderInformation = (customPadding?: string): PaddingValues => {
     return { top: 0, right: 0, bottom: 0, left: 0 };
 };
 
-export const getUsableHeight = async (customPadding?: string) => {
+export const getUsableHeight = async (shouldRemovePadding?: boolean) => {
     let usableHeight;
 
     const { bottomBarHeight, topBarHeight, windowHeight } = await getWindowMetrics();
 
-    const { top, bottom } = getPageProviderInformation(customPadding);
+    const { bottom, top } = shouldRemovePadding
+        ? { bottom: 0, top: 0 }
+        : getPageProviderInformation();
 
     usableHeight = windowHeight - bottom - top;
 
