@@ -1,5 +1,4 @@
 import { getLanguage } from 'chayns-api';
-import { format } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
 import { UseDateInfoOptions } from '../types/dateinfo';
 import { getDateInfo, getTimeTillNow } from '../utils/dateInfo';
@@ -18,55 +17,6 @@ export const useDateInfo = ({
 
     const [formattedDate, setFormattedDate] = useState(date.toLocaleDateString());
     const [currentDate, setCurrentDate] = useState(new Date());
-
-    // useEffect(() => {
-    //     // This useEffect is used for normal date formation
-    //     if (shouldShowDateToNowDifference) {
-    //         return;
-    //     }
-    //
-    //     let newFormattedDateString = getFormattedDayOfWeek({
-    //         shouldShowDayOfWeek,
-    //         shouldShowRelativeDayOfWeek,
-    //         shouldUseShortText,
-    //         date: formattedDate,
-    //         language,
-    //     });
-    //
-    //     if (!isDateNearToday || !shouldShowRelativeDayOfWeek || !shouldShowTime) {
-    //         let formatString = 'dd. ';
-    //
-    //         formatString += `${getMonthFormat({ shouldUseShortText })}`;
-    //
-    //         formatString += `${getYearFormat({
-    //             date: formattedDate,
-    //             shouldShowYear,
-    //         })}`;
-    //
-    //         newFormattedDateString += format(formattedDate, formatString, { locale: language });
-    //     } else {
-    //         newFormattedDateString = newFormattedDateString.replace(', ', '');
-    //     }
-    //
-    //     newFormattedDateString += getFormattedTime({
-    //         date: formattedDate,
-    //         shouldShowTime,
-    //         language,
-    //     });
-    //
-    //     setFormattedDateString(newFormattedDateString);
-    // }, [
-    //     date,
-    //     formattedDate,
-    //     language,
-    //     shouldShowDateToNowDifference,
-    //     shouldShowDayOfWeek,
-    //     shouldShowRelativeDayOfWeek,
-    //     shouldShowYear,
-    //     shouldShowTime,
-    //     shouldUseShortText,
-    //     isDateNearToday,
-    // ]);
 
     useEffect(() => {
         if (shouldShowDateToNowDifference) {
