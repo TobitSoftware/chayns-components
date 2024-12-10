@@ -98,6 +98,10 @@ export type InputProps = {
      */
     rightElement?: ReactElement;
     /**
+     * Whether the placeholder animation should be prevented.
+     */
+    shouldPreventPlaceholderAnimation?: boolean;
+    /**
      * Whether the placeholder should remain at its position if a value is typed.
      */
     shouldRemainPlaceholder?: boolean;
@@ -152,6 +156,7 @@ const Input = forwardRef<InputRef, InputProps>(
             value,
             shouldUseAutoFocus = false,
             isInvalid = false,
+            shouldPreventPlaceholderAnimation = false,
             id,
         },
         ref,
@@ -220,7 +225,7 @@ const Input = forwardRef<InputRef, InputProps>(
         }, [value]);
 
         const labelPosition = useMemo(() => {
-            if (hasValue && !shouldRemainPlaceholder) {
+            if (hasValue && !shouldRemainPlaceholder && !shouldPreventPlaceholderAnimation) {
                 return shouldShowOnlyBottomBorder
                     ? { right: 3, top: -1.5 }
                     : { bottom: size === InputSize.Small ? -4 : -10, right: -6 };
@@ -257,7 +262,9 @@ const Input = forwardRef<InputRef, InputProps>(
                             $shouldShowCenteredContent={shouldShowCenteredContent}
                         />
                         <StyledMotionInputLabelWrapper
-                            animate={{
+                            animate={shouldPreventPlaceholderAnimation ? {
+                                opacity: hasValue ? 0 : 1,
+                            }:{
                                 fontSize:
                                     hasValue &&
                                     !shouldShowOnlyBottomBorder &&
@@ -269,7 +276,7 @@ const Input = forwardRef<InputRef, InputProps>(
                             layout
                             ref={placeholderRef}
                             style={{ ...labelPosition }}
-                            transition={{ type: 'tween', duration: 0.1 }}
+                            transition={{ type: 'tween', duration: shouldPreventPlaceholderAnimation ? 0 : 0.1 }}
                         >
                             <StyledInputLabel $isInvalid={isInvalid}>
                                 {placeholder}
