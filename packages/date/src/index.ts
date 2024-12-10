@@ -1,6 +1,6 @@
 // Calendar
 export {default as Calendar} from './components/calendar/Calendar';
-export type {Categories, HighlightedDates, HighlightedDateStyles} from './types/calendar';
+export type {Categories, HighlightedDates, HighlightedDateStyles, DateInterval, CustomThumbColors} from './types/calendar';
 export {CalendarType} from './types/calendar';
 
 // OpeningTimes
