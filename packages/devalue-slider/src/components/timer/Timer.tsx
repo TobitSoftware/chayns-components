@@ -1,16 +1,15 @@
+
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import {getLanguage, vibrate} from 'chayns-api';
+
+import { Container, Time } from './Timer.styles';
 import {
     differenceInHours,
     differenceInMinutes,
-    format,
-    formatDistanceToNow,
-    intervalToDuration,
-} from 'date-fns';
-import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
-import { vibrate } from 'chayns-api';
-
-import { de } from 'date-fns/locale';
-import { Container, Time } from './Timer.styles';
+    getTimeTillNow,
+    intervalToDuration
+} from "../../utils/date";
 
 export type TimerProps = {
     color: string;
@@ -19,6 +18,8 @@ export type TimerProps = {
 };
 
 const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 'white' }) => {
+    const {active:language } = getLanguage()
+
     const refDate = useRef(new Date());
     const [distance, setDistance] = useState(
         intervalToDuration({
@@ -57,23 +58,27 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
         let text = 'Vor ##SECONDS## Sek. (##TIME## Uhr)';
         if (differenceInHours(refDate.current, devalueTime) > 0) {
             const distanceLabel =
-                formatDistanceToNow(devalueTime, {
-                    addSuffix: true,
-                    locale: de,
-                })
-                    .charAt(0)
-                    .toUpperCase() +
-                formatDistanceToNow(devalueTime, { addSuffix: true, locale: de }).slice(1);
+                getTimeTillNow({date: new Date(), currentDate: devalueTime, language});
             text = `${distanceLabel} (##TIME## Uhr)`;
         } else if (differenceInMinutes(refDate.current, devalueTime) > 0) {
             text = 'Vor ##MINUTES## Min. ##SECONDS## Sek. (##TIME## Uhr)';
         }
 
+        const formatTime = (date: Date, formatString: string): string => {
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+
+            if (formatString === 'HH:mm') {
+                return `${hours}:${minutes}`;
+            }
+            return '';
+        };
+
         return text
             .replace('##MINUTES##', minutesShowValue)
             .replace('##SECONDS##', secondsShowValue)
-            .replace('##TIME##', format(devalueTime, 'HH:mm'));
-    }, [minutesShowValue, secondsShowValue, devalueTime]);
+            .replace('##TIME##', formatTime(devalueTime, 'HH:mm'));
+    }, [devalueTime, minutesShowValue, secondsShowValue, language]);
 
     return (
         <Container

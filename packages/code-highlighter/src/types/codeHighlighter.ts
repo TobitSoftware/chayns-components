@@ -288,4 +288,5 @@ export type CodeHighlighterLanguage =
     | 'yaml'
     | 'yang'
     | 'zig'
+    | ''
     | undefined;

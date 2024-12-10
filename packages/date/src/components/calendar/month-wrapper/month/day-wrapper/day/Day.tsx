@@ -1,4 +1,3 @@
-import { isSameDay } from 'date-fns';
 import React, { FC, useMemo, useRef } from 'react';
 import {
     Categories, CustomThumbColors,
@@ -7,6 +6,7 @@ import {
 } from '../../../../../../types/calendar';
 import Category from './category/Category';
 import { StyledDay, StyledDayCategoryWrapper, StyledDayNumber } from './Day.styles';
+import {isSameDay} from "../../../../../../utils/date";
 
 export type DayProps = {
     date: Date;

@@ -1,5 +1,6 @@
 import React, { FC, useMemo } from 'react';
-import { useDateInfo, type UseDateInfoOptions } from '../../hooks/useDateInfo';
+import { useDateInfo } from '../../hooks/useDateInfo';
+import { UseDateInfoOptions } from '../../types/dateinfo';
 
 export type DateInfoProps = UseDateInfoOptions;
 

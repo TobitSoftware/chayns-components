@@ -1,9 +1,10 @@
 import { ComboBox } from '@chayns-components/core';
-import { differenceInCalendarMonths, Locale } from 'date-fns';
 import React, { FC, useMemo, useState } from 'react';
 import { EMonth } from '../../../types/calendar';
 import { formatMonth, getYearsBetween, isDateInRange } from '../../../utils/calendar';
 import { StyledMonthName } from '../month-wrapper/month/Month.styles';
+import {Language} from "chayns-api";
+import {differenceInCalendarMonths} from "../../../utils/date";
 
 export enum MonthYearPickerType {
     Month = 'month',
@@ -13,7 +14,7 @@ export enum MonthYearPickerType {
 type MonthYearPickerProps = {
     month: EMonth;
     year: number;
-    locale: Locale;
+    locale: Language;
     minDate: Date;
     maxDate: Date;
     setCurrentDate: (date: Date) => void;

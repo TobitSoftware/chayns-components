@@ -1,66 +1,41 @@
-// JavaScript/TypeScript
-import parserBabel from 'prettier/parser-babel';
-
-// HTML
-import parserHtml from 'prettier/parser-html';
-
-// CSS
-import parserPostcss from 'prettier/parser-postcss';
-
-// Markdown
-import parserMarkdown from 'prettier/parser-markdown';
-
-// GraphQL
-import parserGraphql from 'prettier/parser-graphql';
-
-// YAML
-import parserYaml from 'prettier/parser-yaml';
-
 import type { Options } from 'prettier';
-import {
-    BABEL_LANGUAGES,
-    CSS_LANGUAGES,
-    GRAPHQL_LANGUAGES,
-    HTML_LANGUAGES,
-    MARKDOWN_LANGUAGES,
-    YAML_LANGUAGES,
-} from '../constants/codeHighlighter';
-import type { CodeHighlighterLanguage } from '../types/codeHighlighter';
+import { CodeHighlighterLanguage } from '../types/codeHighlighter';
 
-export const getParserForLanguage = (language: CodeHighlighterLanguage): Options | undefined => {
-    let parser: Options['parser'];
-    let plugin;
+type ParserType = 'babel-ts' | 'html' | 'css' | 'markdown' | 'graphql' | 'yaml';
 
-    switch (true) {
-        case BABEL_LANGUAGES.includes(language):
-            parser = 'babel-ts';
-            plugin = parserBabel;
-            break;
-        case HTML_LANGUAGES.includes(language):
-            parser = 'html';
-            plugin = parserHtml;
-            break;
-        case CSS_LANGUAGES.includes(language):
-            parser = 'css';
-            plugin = parserPostcss;
-            break;
-        case MARKDOWN_LANGUAGES.includes(language):
-            parser = 'markdown';
-            plugin = parserMarkdown;
-            break;
-        case GRAPHQL_LANGUAGES.includes(language):
-            parser = 'graphql';
-            plugin = parserGraphql;
-            break;
-        case YAML_LANGUAGES.includes(language):
-            parser = 'yaml';
-            plugin = parserYaml;
-            break;
-        default:
-            break;
+type ParserMap = Record<ParserType, () => Promise<{ default: unknown }>>;
+
+const PARSER_MAP: ParserMap = {
+    'babel-ts': () => import('prettier/parser-babel'),
+    html: () => import('prettier/parser-html'),
+    css: () => import('prettier/parser-postcss'),
+    markdown: () => import('prettier/parser-markdown'),
+    graphql: () => import('prettier/parser-graphql'),
+    yaml: () => import('prettier/parser-yaml'),
+};
+
+export const getParserForLanguage = async (
+    language: CodeHighlighterLanguage = ''
+): Promise<Options | undefined> => {
+    let parser: ParserType | undefined;
+
+    if (['tsx', 'jsx', 'typescript', 'javascript'].includes(language)) {
+        parser = 'babel-ts';
+    } else if (['html'].includes(language)) {
+        parser = 'html';
+    } else if (['css', 'less', 'scss'].includes(language)) {
+        parser = 'css';
+    } else if (['markdown'].includes(language)) {
+        parser = 'markdown';
+    } else if (['graphql'].includes(language)) {
+        parser = 'graphql';
+    } else if (['yaml'].includes(language)) {
+        parser = 'yaml';
     }
 
-    if (parser && plugin) {
+    if (parser && PARSER_MAP[parser]) {
+        const plugin = (await PARSER_MAP[parser]()).default;
+
         return {
             trailingComma: 'all',
             bracketSpacing: true,
@@ -70,6 +45,8 @@ export const getParserForLanguage = (language: CodeHighlighterLanguage): Options
             arrowParens: 'always',
             proseWrap: 'always',
             parser,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             plugins: [plugin],
         };
     }

@@ -1,23 +1,25 @@
 import React, { FC, type ReactElement, useMemo } from 'react';
-import { startOfWeek, endOfWeek, eachDayOfInterval, format } from 'date-fns';
 import { StyledWeekdayWrapper } from './WeekdayWrapper.styles';
 import Weekday from './weekday/Weekday';
-import type { Locale } from 'date-fns';
+import {Language} from "chayns-api";
+import {eachDayOfInterval, endOfWeek, startOfWeek} from "../../../../../utils/date";
 
 export type WeekdayWrapperProps = {
-    locale?: Locale;
+    locale?: Language;
 };
 
 const WeekdayWrapper: FC<WeekdayWrapperProps> = ({ locale }) => {
-    const monday = startOfWeek(new Date(), { weekStartsOn: 1 });
-    const sunday = endOfWeek(new Date(), { weekStartsOn: 1 });
+    const monday = startOfWeek(new Date());
+    const sunday = endOfWeek(new Date());
     const weekdays = eachDayOfInterval({ start: monday, end: sunday });
 
     const weekdayElements = useMemo(() => {
         const items: ReactElement[] = [];
 
         weekdays.forEach((day) => {
-            const formattedDay = format(day, 'EE', { locale });
+            const options: Intl.DateTimeFormatOptions = { weekday: 'short' };
+            const formatter = new Intl.DateTimeFormat(locale, options);
+            const formattedDay = formatter.format(day);
 
             items.push(<Weekday key={`weekday-${formattedDay}`} name={formattedDay} />);
         });

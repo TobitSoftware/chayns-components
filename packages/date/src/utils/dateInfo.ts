@@ -1,379 +1,128 @@
-import { getLanguage as getChaynsLanguage } from 'chayns-api';
-import {
-    format,
-    isPast,
-    isThisYear,
-    isToday,
-    isTomorrow,
-    isYesterday,
-    type Locale,
-} from 'date-fns';
-import { de, enGB, es, fr, it, nl, pl, pt, tr, uk } from 'date-fns/locale';
-import { TIME_TYPE_STRINGS, type TimeTypeStringsRecord } from '../constants/dateInfo';
+import {getLanguage, Language} from 'chayns-api';
+import {UseDateInfoOptions} from '../types/dateinfo';
+import {isCurrentYear, isMorning, isToday, isTomorrow, isYesterday} from "./date";
 
-export const getLanguage = (): Locale => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    switch (getChaynsLanguage().translation || getChaynsLanguage().site) {
-        case 'en':
-            return enGB;
-        case 'nl':
-            return nl;
-        case 'fr':
-            return fr;
-        case 'it':
-            return it;
-        case 'pl':
-            return pl;
-        case 'pt':
-            return pt;
-        case 'es':
-            return es;
-        case 'tr':
-            return tr;
-        case 'uk':
-            return uk;
-        default:
-            return de;
-    }
-};
+export const getDateInfo = ({
+                                date,
+                                shouldShowYear,
+                                shouldShowTime,
+                                shouldShowDayOfWeek,
+                                shouldShowRelativeDayOfWeek,
+                                shouldUseShortText,
+                            }: Omit<UseDateInfoOptions, 'shouldShowDateToNowDifference' & 'preText'>) => {
+    const {active: language} = getLanguage();
 
-interface GetTimeStringProps {
-    language?: string;
-    isMorning?: boolean;
-}
-
-export const getTimeString = ({ language, isMorning }: GetTimeStringProps) => {
-    switch (language) {
-        case 'en-GB':
-        case 'pt':
-            return isMorning ? 'AM' : 'PM';
-        case 'nl':
-            return 'uur';
-        case 'fr':
-            return 'heures';
-        case 'de':
-            return 'Uhr';
-        case 'es':
-            return 'h';
-        default:
-            return '';
-    }
-};
-
-interface GetFormattedYearOptions {
-    date: Date;
-    shouldShowYear?: boolean;
-}
-
-export const getYearFormat = ({ date, shouldShowYear }: GetFormattedYearOptions) =>
-    (typeof shouldShowYear === 'boolean' && !shouldShowYear) || isThisYear(date) ? '' : ' yyyy';
-
-interface GetFormattedMonthOptions {
-    shouldUseShortText?: boolean;
-}
-
-export const getMonthFormat = ({ shouldUseShortText }: GetFormattedMonthOptions) => {
-    if (shouldUseShortText) {
-        return 'LLL.';
-    }
-
-    return 'LLLL';
-};
-
-interface GetFormattedDayOfWeekOptions {
-    shouldShowDayOfWeek?: boolean;
-    shouldShowRelativeDayOfWeek?: boolean;
-    shouldUseShortText?: boolean;
-    date: Date;
-    language?: Locale;
-}
-
-export const getFormattedDayOfWeek = ({
-    shouldShowRelativeDayOfWeek,
-    shouldShowDayOfWeek,
-    shouldUseShortText,
-    date,
-    language,
-}: GetFormattedDayOfWeekOptions) => {
-    if (!shouldShowDayOfWeek && !shouldShowRelativeDayOfWeek) {
-        return '';
-    }
+    let dayPart = '';
 
     if (shouldShowRelativeDayOfWeek) {
+        const rtf = new Intl.RelativeTimeFormat(language, {numeric: 'auto'});
+
         if (isToday(date)) {
-            switch (language?.code) {
-                case 'en-GB':
-                    return 'Today, ';
-                case 'nl':
-                    return 'Vandaag, ';
-                case 'fr':
-                    return "Aujourd'hui, ";
-                case 'it':
-                    return 'Oggi, ';
-                case 'pl':
-                    return 'Dzisiaj, ';
-                case 'pt':
-                    return 'Hoje, ';
-                case 'es':
-                    return 'Hoy, ';
-                case 'tr':
-                    return 'Bugün, ';
-                case 'uk':
-                    return 'Сьогодні, ';
-                default:
-                    return 'Heute, ';
-            }
+            dayPart = capitalizeFirstLetter(rtf.format(0, 'day'));
         }
 
         if (isTomorrow(date)) {
-            switch (language?.code) {
-                case 'en-GB':
-                    return 'Tomorrow, ';
-                case 'nl':
-                    return 'Morgen, ';
-                case 'fr':
-                    return 'Demain, ';
-                case 'it':
-                    return 'Domani, ';
-                case 'pl':
-                    return 'Jutro, ';
-                case 'pt':
-                    return 'Amanhã, ';
-                case 'es':
-                    return 'Mañana, ';
-                case 'tr':
-                    return 'Yarın, ';
-                case 'uk':
-                    return 'Завтра, ';
-                default:
-                    return 'Morgen, ';
-            }
+            dayPart = capitalizeFirstLetter(rtf.format(1, 'day'));
         }
 
         if (isYesterday(date)) {
-            switch (language?.code) {
-                case 'en-GB':
-                    return 'Yesterday, ';
-                case 'nl':
-                    return 'Gisteren, ';
-                case 'fr':
-                    return 'Hier, ';
-                case 'it':
-                    return 'Ieri, ';
-                case 'pl':
-                    return 'Wczoraj, ';
-                case 'pt':
-                    return 'Ontem, ';
-                case 'es':
-                    return 'Ayer, ';
-                case 'tr':
-                    return 'Dün, ';
-                case 'uk':
-                    return 'Вчора, ';
-                default:
-                    return 'Gestern, ';
-            }
+            dayPart = capitalizeFirstLetter(rtf.format(-1, 'day'));
         }
     }
 
-    if (shouldUseShortText) {
-        return format(date, 'E, ', { locale: language });
+    if (!dayPart && shouldShowDayOfWeek) {
+        dayPart = date.toLocaleDateString(language, {
+            weekday: shouldUseShortText ? 'short' : 'long',
+        });
     }
 
-    return format(date, 'EEEE, ', { locale: language });
-};
-
-interface GetFormattedTimeOptions {
-    shouldShowTime?: boolean;
-    date: Date;
-    language: Locale;
-}
-
-export const getFormattedTime = ({ shouldShowTime, date, language }: GetFormattedTimeOptions) => {
-    if (!shouldShowTime) {
-        return '';
-    }
-
-    let timeFormat = 'HH:mm';
-
-    if (language.code === 'en-GB' || language.code === 'pt') {
-        timeFormat = 'KK:mm';
-    }
-
-    return `, ${format(date, timeFormat)} ${getTimeString({
-        language: language.code,
-        isMorning: isMorning(date),
-    })}`;
-};
-
-export const isMorning = (date: Date) => {
-    const hours = date.getHours();
-
-    return hours >= 0 && hours < 12;
-};
-
-export interface Time {
-    value: number;
-    type: TimeType;
-    isPast: boolean;
-}
-
-export enum TimeType {
-    Seconds,
-    Minutes,
-    Hours,
-    Days,
-    Weeks,
-    Months,
-    Years,
-}
-
-export const getTimeTypeStrings = (language: string): TimeTypeStringsRecord | undefined =>
-    TIME_TYPE_STRINGS[language === 'en-GB' ? 'en' : language];
-
-interface GetTimeTillNowOptions {
-    date: Date;
-    currentDate: Date;
-    language: Locale;
-}
-
-export const getTimeTillNow = ({ date, currentDate, language }: GetTimeTillNowOptions): string => {
-    const time: Time = {
-        value: 0,
-        type: TimeType.Years,
-        isPast: false,
+    const dateParts: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: shouldUseShortText ? 'short' : 'long',
     };
 
-    if (isPast(date)) {
-        const elapsedMilliseconds = currentDate.getTime() - date.getTime();
-
-        switch (true) {
-            case elapsedMilliseconds < 60000:
-                time.value = Math.floor(elapsedMilliseconds / 1000);
-                time.type = TimeType.Seconds;
-                break;
-            case elapsedMilliseconds < 3600000:
-                time.value = Math.floor(elapsedMilliseconds / 60000);
-                time.type = TimeType.Minutes;
-                break;
-            case elapsedMilliseconds < 86400000:
-                const hours = Math.floor(elapsedMilliseconds / 3600000);
-                const minutes = Math.floor((elapsedMilliseconds % 3600000) / 60000);
-                return `${hours} ${getFormattedPastTimeString({ value: hours, type: TimeType.Hours, isPast: true }, language)} 
-                        ${minutes > 0 ? `${getTimeTypeStrings(language.code ?? 'de')?.and ?? ''} ${minutes} ${getFormattedPastTimeString({ value: minutes, type: TimeType.Minutes, isPast: true }, language)}` : ''}`;
-            case elapsedMilliseconds < 604800000:
-                time.value = Math.floor(elapsedMilliseconds / 86400000);
-                time.type = TimeType.Days;
-                break;
-            case elapsedMilliseconds < 2592000000:
-                time.value = Math.floor(elapsedMilliseconds / 604800000);
-                time.type = TimeType.Weeks;
-                break;
-            case elapsedMilliseconds < 31536000000:
-                time.value = Math.floor(elapsedMilliseconds / 2592000000);
-                time.type = TimeType.Months;
-                break;
-            default:
-                time.value = Math.floor(elapsedMilliseconds / 31536000000);
-                time.type = TimeType.Years;
-                break;
-        }
-
-        return `${time.value} ${getFormattedPastTimeString(time, language)}`;
+    if (shouldShowYear && !isCurrentYear(date)) {
+        dateParts.year = 'numeric';
     }
 
-    const remainingMilliseconds = date.getTime() - currentDate.getTime();
+    const timeParts: Intl.DateTimeFormatOptions = {};
 
-    switch (true) {
-        case remainingMilliseconds < 60000:
-            time.value = Math.floor(remainingMilliseconds / 1000);
-            time.type = TimeType.Seconds;
-            break;
-        case remainingMilliseconds < 3600000:
-            time.value = Math.floor(remainingMilliseconds / 60000);
-            time.type = TimeType.Minutes;
-            break;
-        case remainingMilliseconds < 86400000:
-            const hours = Math.floor(remainingMilliseconds / 3600000);
-            const minutes = Math.floor((remainingMilliseconds % 3600000) / 60000);
-            return `${hours} ${getFormattedFutureTimeString({ value: hours, type: TimeType.Hours, isPast: false }, language)} 
-                    ${minutes > 0 ? `${getTimeTypeStrings(language.code ?? 'de')?.and ?? ''} ${minutes} ${getFormattedFutureTimeString({ value: minutes, type: TimeType.Minutes, isPast: false }, language)}` : ''}`;
-        case remainingMilliseconds < 604800000:
-            time.value = Math.floor(remainingMilliseconds / 86400000);
-            time.type = TimeType.Days;
-            break;
-        case remainingMilliseconds < 2592000000:
-            time.value = Math.floor(remainingMilliseconds / 604800000);
-            time.type = TimeType.Weeks;
-            break;
-        case remainingMilliseconds < 31536000000:
-            time.value = Math.floor(remainingMilliseconds / 2592000000);
-            time.type = TimeType.Months;
-            break;
-        default:
-            time.value = Math.floor(remainingMilliseconds / 31536000000);
-            time.type = TimeType.Years;
-            break;
+    if (shouldShowTime) {
+        timeParts.hour = '2-digit';
+        timeParts.minute = '2-digit';
     }
 
-    return `${time.value} ${getFormattedFutureTimeString(time, language)}`;
+    let formattedTime = '';
+    if (Object.keys(timeParts).length > 0) {
+        formattedTime = `, ${date.toLocaleTimeString(language, {...timeParts})}`;
+    }
+
+    const hourWord = getTimeString({language, date});
+    formattedTime += shouldShowTime ? ` ${hourWord}` : '';
+
+    const formattedDate = `${date.toLocaleDateString(
+        language,
+        dateParts,
+    )}${formattedTime}`;
+    return `${dayPart}${dayPart ? ', ' : ''}${formattedDate}`;
 };
 
-export const getFormattedPastTimeString = (time: Time, language: Locale): string => {
-    const { value, type } = time;
+const capitalizeFirstLetter = (text: string): string => text.charAt(0).toUpperCase() + text.slice(1)
 
-    const timeTypeStrings = getTimeTypeStrings(language.code ?? 'de');
-    const isSingular = value === 1;
+type RelativeTimeUnit = 'year' | 'month' | 'day' | 'hour' | 'minute' | 'second';
 
-    if (!timeTypeStrings) {
-        return '';
-    }
+interface GetTimeTillNow {
+    date: Date;
+    currentDate: Date;
+    language: Language;
+}
 
-    const { seconds, days, weeks, months, years, minutes, hours } = timeTypeStrings.past;
+export const getTimeTillNow = ({
+                                   date,
+                                   currentDate,
+                                   language = Language.English,
+                               }: GetTimeTillNow): string => {
+    const diffInSeconds = Math.floor((currentDate.getTime() - date.getTime()) / 1000);
+    const isPast = diffInSeconds > 0;
 
-    switch (true) {
-        case type === TimeType.Seconds:
-            return isSingular ? seconds.singular : seconds.plural;
-        case type === TimeType.Minutes:
-            return isSingular ? minutes.singular : minutes.plural;
-        case type === TimeType.Hours:
-            return isSingular ? hours.singular : hours.plural;
-        case type === TimeType.Days:
-            return isSingular ? days.singular : days.plural;
-        case type === TimeType.Weeks:
-            return isSingular ? weeks.singular : weeks.plural;
-        case type === TimeType.Months:
-            return isSingular ? months.singular : months.plural;
-        default:
-            return isSingular ? years.singular : years.plural;
-    }
+    const units: { label: RelativeTimeUnit; seconds: number }[] = [
+        {label: 'year', seconds: 31536000},
+        {label: 'month', seconds: 2592000},
+        {label: 'day', seconds: 86400},
+        {label: 'hour', seconds: 3600},
+        {label: 'minute', seconds: 60},
+        {label: 'second', seconds: 1},
+    ];
+
+    const absDiff = Math.abs(diffInSeconds);
+    const {label, seconds} = units.find((u) => absDiff >= u.seconds) || {
+        label: 'second',
+        seconds: 1,
+    };
+    const count = Math.floor(absDiff / seconds);
+
+    const formatter = new Intl.RelativeTimeFormat(language, {numeric: 'auto'});
+
+    return formatter.format(isPast ? -count : count, label);
 };
 
-export const getFormattedFutureTimeString = (time: Time, language: Locale): string => {
-    const { value, type } = time;
-    const timeTypeStrings = getTimeTypeStrings(language.code ?? 'de');
-    const isSingular = value === 1;
+interface GetTimeStringProps {
+    language?: Language;
+    date: Date;
+}
 
-    if (!timeTypeStrings) {
-        return '';
+export const getTimeString = ({language, date}: GetTimeStringProps) => {
+    const map: { [key: string]: string } = {
+        'nl': 'uur',
+        'fr': 'heures',
+        'de': 'Uhr',
+        'es': 'horas',
+        'it': 'ore',
+        'pt': 'horas',
+        'pl': 'godzina',
+        'tr': 'saat',
+        'uk': 'година'
     }
 
-    const { seconds, days, weeks, months, years, minutes, hours } = timeTypeStrings.future;
-
-    switch (true) {
-        case type === TimeType.Seconds:
-            return isSingular ? seconds.singular : seconds.plural;
-        case type === TimeType.Minutes:
-            return isSingular ? minutes.singular : minutes.plural;
-        case type === TimeType.Hours:
-            return isSingular ? hours.singular : hours.plural;
-        case type === TimeType.Days:
-            return isSingular ? days.singular : days.plural;
-        case type === TimeType.Weeks:
-            return isSingular ? weeks.singular : weeks.plural;
-        case type === TimeType.Months:
-            return isSingular ? months.singular : months.plural;
-        default:
-            return isSingular ? years.singular : years.plural;
-    }
+    return map[language ?? ''] || (isMorning(date) ? 'AM' : 'PM');
 };
