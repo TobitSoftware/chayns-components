@@ -1,4 +1,3 @@
-import type { Locale } from 'date-fns';
 import React, { FC } from 'react';
 import type {
     CalendarType,
@@ -11,11 +10,12 @@ import MonthYearPickers from '../../month-year-pickers/MonthYearPickers';
 import DayWrapper from './day-wrapper/DayWrapper';
 import { StyledMonth, StyledMonthHead } from './Month.styles';
 import WeekdayWrapper from './weekday-wrapper/WeekdayWrapper';
+import {Language} from "chayns-api";
 
 export type MonthProps = {
     month: EMonth;
     year: number;
-    locale: Locale;
+    locale: Language;
     highlightedDates?: HighlightedDates[];
     onSelect: (date: Date) => void;
     selectedDate?: Date | Date[] | DateInterval;

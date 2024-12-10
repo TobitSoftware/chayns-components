@@ -1,5 +1,6 @@
-import { format, isAfter, isBefore, startOfMonth, type Locale } from 'date-fns';
 import type { EMonth, IMonth } from '../types/calendar';
+import {isAfter, isBefore, startOfMonth} from "./date";
+import {Language} from "chayns-api";
 
 export const getMonthAndYear = (date: Date): IMonth => {
     const month = date.getMonth() + 1;
@@ -14,7 +15,7 @@ export const getMonthAndYear = (date: Date): IMonth => {
 
 interface FormatMonthOptions {
     month: EMonth;
-    locale: Locale;
+    locale: Language;
 }
 
 interface IsDateInRange {
@@ -53,8 +54,10 @@ export const getNewDate = (index: number, currentDate: Date) => {
     return newDate;
 };
 
-export const formatMonth = ({ month, locale }: FormatMonthOptions) =>
-    format(new Date(2022, month - 1, 1), 'MMMM', { locale });
+export const formatMonth = ({ month, locale }: FormatMonthOptions) => {
+    const date = new Date(2022, month - 1, 1);
+    return date.toLocaleString(locale, { month: 'long' });
+}
 
 export const findNextDate = (date: Date, dateArray: Date[]): Date | undefined => {
     const futureDates = dateArray.filter((d) => d > date);

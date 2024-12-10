@@ -1,12 +1,3 @@
-import {
-    addDays,
-    isAfter,
-    isSameDay,
-    isSameMonth,
-    isWithinInterval,
-    startOfMonth,
-    startOfWeek,
-} from 'date-fns';
 import React, { FC, useCallback, useMemo, type ReactElement } from 'react';
 import {
     CalendarType,
@@ -18,6 +9,15 @@ import {
 import { findNextDate } from '../../../../../utils/calendar';
 import Day from './day/Day';
 import { StyledDayWrapper } from './DayWrapper.styles';
+import {
+    addDays,
+    isAfter,
+    isSameDay,
+    isSameMonth,
+    isWithinInterval,
+    startOfMonth,
+    startOfWeek
+} from "../../../../../utils/date";
 
 export type DayWrapperProps = {
     month: EMonth;
@@ -57,7 +57,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
 
         const currentDate = startOfMonth(dayOfCurrentMonth);
 
-        const startDay = startOfWeek(currentDate, { weekStartsOn: 1 });
+        const startDay = startOfWeek(currentDate);
 
         for (let i = 0; i < 42; i++) {
             const newDate = addDays(startDay, i);

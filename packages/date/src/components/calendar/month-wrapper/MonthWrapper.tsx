@@ -1,4 +1,3 @@
-import type { Locale } from 'date-fns';
 import type { MotionProps } from 'framer-motion';
 import React, { FC, useEffect, useMemo, useState, type ReactElement } from 'react';
 import type {
@@ -10,9 +9,10 @@ import type {
 import { getMonthAndYear, getNewDate } from '../../../utils/calendar';
 import Month from './month/Month';
 import { StyledMonthWrapper, StyledMotionWrapper } from './MonthWrapper.styles';
+import {Language} from "chayns-api";
 
 export type MonthWrapperProps = {
-    locale: Locale;
+    locale: Language;
     highlightedDates?: HighlightedDates[];
     onSelect: (date: Date) => void;
     selectedDate?: Date | Date[] | DateInterval;
@@ -95,6 +95,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
 
             return items;
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [monthHeight]);
 
     useEffect(() => {

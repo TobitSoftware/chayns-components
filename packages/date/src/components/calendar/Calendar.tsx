@@ -1,14 +1,4 @@
 import { ComboBox, Icon } from '@chayns-components/core';
-import {
-    addYears,
-    differenceInCalendarMonths,
-    isSameDay,
-    isSameMonth,
-    isWithinInterval,
-    subYears,
-    type Locale,
-} from 'date-fns';
-import { de } from 'date-fns/locale';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Categories, DateInterval, HighlightedDates } from '../../types/calendar';
 import { CalendarType } from '../../types/calendar';
@@ -20,6 +10,9 @@ import {
     StyledPseudoMonthYearPicker,
 } from './Calendar.styles';
 import MonthWrapper from './month-wrapper/MonthWrapper';
+import {Language} from "chayns-api";
+import {addYears, differenceInCalendarMonths, subYears} from "../../utils/date";
+import {isSameDay, isSameMonth, isWithinInterval} from "date-fns";
 
 interface BaseProps {
     /**
@@ -37,7 +30,7 @@ interface BaseProps {
     /**
      * The locale language to format the dates.
      */
-    locale?: Locale;
+    locale?: Language;
     /**
      * The maximum date that can be selected.
      */
@@ -116,7 +109,7 @@ const DEFAULT_MAX_DATE = addYears(new Date(), 1);
 const DEFAULT_MIN_DATE = subYears(new Date(), 1);
 
 const Calendar: FC<CalendarProps> = ({
-    locale = de,
+    locale = Language.German,
     maxDate = DEFAULT_MAX_DATE,
     minDate = DEFAULT_MIN_DATE,
     highlightedDates,
