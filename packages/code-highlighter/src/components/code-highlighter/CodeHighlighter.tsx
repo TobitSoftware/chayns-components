@@ -109,17 +109,17 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
     const formattedCode = useMemo(() => {
         if (language) {
-            const config = getParserForLanguage(language);
-
-            if (shouldFormatCode && config) {
-                try {
-                    return format(code, config) as unknown as string;
-                } catch (error) {
-                    if (typeof onFormatError !== 'undefined') onFormatError(error);
+            void getParserForLanguage(language).then((config)=>{
+                if (shouldFormatCode && config) {
+                    try {
+                        return format(code, config) as unknown as string;
+                    } catch (error) {
+                        if (typeof onFormatError !== 'undefined') onFormatError(error);
+                    }
                 }
-            }
 
-            return code;
+                return code;
+            })
         }
 
         return code;
