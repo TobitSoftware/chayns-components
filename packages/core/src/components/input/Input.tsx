@@ -232,7 +232,13 @@ const Input = forwardRef<InputRef, InputProps>(
             }
 
             return { left: -1 };
-        }, [hasValue, shouldRemainPlaceholder, shouldShowOnlyBottomBorder, size]);
+        }, [
+            hasValue,
+            shouldPreventPlaceholderAnimation,
+            shouldRemainPlaceholder,
+            shouldShowOnlyBottomBorder,
+            size,
+        ]);
 
         return (
             <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
@@ -262,21 +268,28 @@ const Input = forwardRef<InputRef, InputProps>(
                             $shouldShowCenteredContent={shouldShowCenteredContent}
                         />
                         <StyledMotionInputLabelWrapper
-                            animate={shouldPreventPlaceholderAnimation ? {
-                                opacity: hasValue ? 0 : 1,
-                            }:{
-                                fontSize:
-                                    hasValue &&
-                                    !shouldShowOnlyBottomBorder &&
-                                    !shouldRemainPlaceholder
-                                        ? '9px'
-                                        : '16px',
-                            }}
+                            animate={
+                                shouldPreventPlaceholderAnimation
+                                    ? {
+                                          opacity: hasValue ? 0 : 1,
+                                      }
+                                    : {
+                                          fontSize:
+                                              hasValue &&
+                                              !shouldShowOnlyBottomBorder &&
+                                              !shouldRemainPlaceholder
+                                                  ? '9px'
+                                                  : `${Number(theme.fontSize)}px`,
+                                      }
+                            }
                             initial={false}
                             layout
                             ref={placeholderRef}
                             style={{ ...labelPosition }}
-                            transition={{ type: 'tween', duration: shouldPreventPlaceholderAnimation ? 0 : 0.1 }}
+                            transition={{
+                                type: 'tween',
+                                duration: shouldPreventPlaceholderAnimation ? 0 : 0.1,
+                            }}
                         >
                             <StyledInputLabel $isInvalid={isInvalid}>
                                 {placeholder}
