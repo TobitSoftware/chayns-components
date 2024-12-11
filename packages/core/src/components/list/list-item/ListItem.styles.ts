@@ -21,14 +21,16 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
             padding-left: ${$shouldHideIndicator ? '16px' : '8px'};
         `}
 
-    ${({ $isOpen, theme }) =>
+    ${({ $isInAccordion, $isOpen, theme }) =>
+        !$isInAccordion &&
         $isOpen &&
         css`
             background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
         `}
 
-    ${({ $isClickable, theme }) =>
+    ${({ $isClickable, $isInAccordion, theme }) =>
         $isClickable &&
+        !$isInAccordion &&
         css`
             &&:hover {
                 background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
