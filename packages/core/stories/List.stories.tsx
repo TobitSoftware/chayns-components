@@ -1,5 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react';
-import { Badge, Icon } from '../src';
+import {Meta, StoryFn} from '@storybook/react';
+import {Badge, Icon} from '../src';
 import Button from '../src/components/button/Button';
 import List from '../src/components/list/List';
 import ListItemContent from '../src/components/list/list-item/list-item-content/ListItemContent';
@@ -11,7 +11,7 @@ export default {
     args: {},
 } as Meta<typeof List>;
 
-const Template: StoryFn<typeof List> = ({ children }) => <List>{children}</List>;
+const Template: StoryFn<typeof List> = ({children}) => <List>{children}</List>;
 
 export const General = Template.bind({});
 
@@ -34,6 +34,8 @@ export const ExpandableListItems = Template.bind({});
 export const MixedListItems = Template.bind({});
 
 export const ListItemWithTitleElement = Template.bind({});
+
+export const ListItemWithGreyedTitle = Template.bind({});
 
 const images = [
     'https://tsimg.cloud/77896-21884/8aee1a304297729a4542b97325940a656a3da8f2.png',
@@ -150,7 +152,7 @@ ListItemsWithRightElements.args = {
                     </Badge>
                 ),
                 bottom: 'Bottom',
-                center: <Icon icons={['fa fa-star']} />,
+                center: <Icon icons={['fa fa-star']}/>,
             }}
             subtitle="Dolor sit ipsum amet"
             title="gubergren, no sea takimata"
@@ -183,6 +185,98 @@ ListItemsWithRightElements.args = {
         />,
     ],
 };
+
+ListItemWithGreyedTitle.args = {
+    children: [
+        <ListItem
+            images={[locationImages[0]]}
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+            isTitleGreyed
+        ><ListItemContent>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+            eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+            takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+            dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+            ipsum dolor sit amet.
+        </ListItemContent></ListItem>,
+        <ListItem
+            images={[locationImages[1]]}
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+        ><ListItemContent>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+            eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+            takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+            dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+            ipsum dolor sit amet.
+        </ListItemContent></ListItem>,
+        <ListItem
+            images={[locationImages[2]]}
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+            isTitleGreyed
+        ><ListItemContent>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+            eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+            takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+            dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+            ipsum dolor sit amet.
+        </ListItemContent></ListItem>,
+        <ListItem
+            images={[locationImages[0]]}
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+        ><ListItemContent>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+            eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+            takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+            dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+            ipsum dolor sit amet.
+        </ListItemContent></ListItem>,
+        <ListItem
+            images={[locationImages[1]]}
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+            isTitleGreyed
+        ><ListItemContent>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+            eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+            takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+            dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+            ipsum dolor sit amet.
+        </ListItemContent></ListItem>,
+        <ListItem
+            images={[locationImages[2]]}
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+        ><ListItemContent>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+            eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+            takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+            dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+            ipsum dolor sit amet.
+        </ListItemContent></ListItem>,
+    ],
+}
 
 ListItemsWithSeparator.args = {
     children: [
@@ -230,7 +324,8 @@ ListItemsWithButtonAsRightElements.args = {
                     title="Oben Ohne"
                     rightElements={{
                         center: (
-                            <Button icon="fa fa-plus" onClick={() => {}}>
+                            <Button icon="fa fa-plus" onClick={() => {
+                            }}>
                                 Hinzufügen
                             </Button>
                         ),
@@ -242,7 +337,8 @@ ListItemsWithButtonAsRightElements.args = {
                     title="Morgen kickt der Kater"
                     rightElements={{
                         center: (
-                            <Button icon="fa fa-plus" onClick={() => {}}>
+                            <Button icon="fa fa-plus" onClick={() => {
+                            }}>
                                 Hinzufügen
                             </Button>
                         ),
@@ -252,24 +348,24 @@ ListItemsWithButtonAsRightElements.args = {
                     images={[locationImages[2]]}
                     subtitle="Bierkapitän x Eko Fresh"
                     title="Ihr könnt mich alle"
-                    rightElements={{ center: <Badge>Hinzugefügt</Badge> }}
+                    rightElements={{center: <Badge>Hinzugefügt</Badge>}}
                 />
             </List>
         </ListItem>,
-        <ListItem images={[otherImages[1]]} subtitle="Doris Musterfrau" title="Vevo Top Hits" />,
+        <ListItem images={[otherImages[1]]} subtitle="Doris Musterfrau" title="Vevo Top Hits"/>,
     ],
 };
 
 ListItemsWithHoverItem.args = {
     children: [
         <ListItem
-            hoverItem={<Icon icons={['far fa-arrows-v']} />}
+            hoverItem={<Icon icons={['far fa-arrows-v']}/>}
             images={[locationImages[0]]}
             subtitle="Sadipscing elitr dolor sit"
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,
         <ListItem
-            hoverItem={<Icon icons={['far fa-arrows-v']} />}
+            hoverItem={<Icon icons={['far fa-arrows-v']}/>}
             images={[locationImages[1]]}
             subtitle="Dolor sit ipsum amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
@@ -414,25 +510,25 @@ ListItemWithTitleElement.args = {
             icons={['ts-chayns']}
             subtitle="Stet clita kasd gubergren, no sea"
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
-            titleElement={<Icon icons={['fa fa-rocket']} />}
+            titleElement={<Icon icons={['fa fa-rocket']}/>}
         />,
         <ListItem
             icons={['fa fa-rocket']}
             subtitle="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
-            titleElement={<Icon icons={['ts-chayns']} />}
+            titleElement={<Icon icons={['ts-chayns']}/>}
         />,
         <ListItem
             icons={['ts-chayns']}
             subtitle="Consetetur sadipscing elitr, sed diam nonumy eirmod"
             title="At vero eos et accusam et justo duo dolores et ea rebum sit amet dolor"
-            titleElement={<Icon icons={['fa fa-rocket']} />}
+            titleElement={<Icon icons={['fa fa-rocket']}/>}
         />,
         <ListItem
             icons={['fa fa-rocket']}
             subtitle="Et justo duo dolores et ea rebum"
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
-            titleElement={<Icon icons={['ts-chayns']} />}
+            titleElement={<Icon icons={['ts-chayns']}/>}
         />,
     ],
 };

@@ -47,6 +47,10 @@ export type ListItemProps = {
      */
     isDefaultOpen?: boolean;
     /**
+     * Whether the ListItem locks disabled but has full functionality.
+     */
+    isTitleGreyed?: boolean;
+    /**
      * This overrides the internal opening state of the item and makes it controlled.
      */
     isOpen?: boolean;
@@ -112,6 +116,7 @@ const ListItem: FC<ListItemProps> = ({
     onClick,
     onLongPress,
     leftElements,
+                              isTitleGreyed :           isDisabledButNotReallyDisabled,
     rightElements,
     shouldHideImageOrIconBackground,
     shouldHideIndicator = false,
@@ -186,6 +191,7 @@ const ListItem: FC<ListItemProps> = ({
                 icons={icons}
                 images={images}
                 isAnyItemExpandable={isAnyItemExpandable}
+                isDisabledButNotReallyDisabled={isDisabledButNotReallyDisabled}
                 isExpandable={isExpandable}
                 isOpen={isItemOpen}
                 leftElements={leftElements}

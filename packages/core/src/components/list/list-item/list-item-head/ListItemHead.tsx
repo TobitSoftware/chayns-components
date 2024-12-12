@@ -53,6 +53,7 @@ type ListItemHeadProps = {
     shouldShowRoundImageOrIcon?: boolean;
     title: ReactNode;
     titleElement?: ReactNode;
+    isDisabledButNotReallyDisabled?: boolean;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -69,6 +70,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     shouldHideImageOrIconBackground,
     shouldHideIndicator,
     subtitle,
+    isDisabledButNotReallyDisabled,
     shouldShowRoundImageOrIcon,
     title,
     titleElement,
@@ -168,7 +170,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     return (
         <StyledListItemHead
-            animate={{ height: isOpen ? headHeight.open : headHeight.closed }}
+            animate={{ height: isOpen ? headHeight.open : headHeight.closed, opacity: isDisabledButNotReallyDisabled ? .5:1 }}
             initial={false}
             transition={{ duration: 0.2, type: 'tween' }}
             className="beta-chayns-list-item-head"
