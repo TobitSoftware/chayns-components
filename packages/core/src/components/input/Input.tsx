@@ -92,7 +92,7 @@ export type InputProps = {
     /**
      * Placeholder for the input field
      */
-    placeholder?: string;
+    placeholder?: ReactNode;
     /**
      * An element that should be displayed on the right side of the Input.
      */
