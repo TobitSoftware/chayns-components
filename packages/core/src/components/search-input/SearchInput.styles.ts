@@ -24,4 +24,6 @@ export const StyledMotionSearchInputIconWrapper = styled.div`
     width: 18px;
 `;
 
-export const StyledMotionSearchInputIconWrapperContent = styled(motion.div)<FramerMotionBugFix>``;
+export const StyledMotionSearchInputIconWrapperContent = styled(motion.div)<FramerMotionBugFix>`
+    display: flex;
+`;
