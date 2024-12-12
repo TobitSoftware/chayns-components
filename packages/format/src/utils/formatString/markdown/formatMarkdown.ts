@@ -61,6 +61,16 @@ const tokenizer = {
         }
         return undefined;
     },
+    // Disables escaping of characters via backslash. This is needed for LaTeX formulas, since multiline LaTeX formulas have 2 backslashes at the end of their lines.
+    // Without this function, the backslashes would be escaped and the LaTeX formula would be broken.
+    escape() {
+        return undefined;
+    },
+    // Disables the conversion of backslash at the end of a line to a line break. This is needed for LaTeX formulas, since multiline LaTeX formulas have 2 backslashes at the end of their lines.
+    // Without this '\\' would be converted to '\<br>' which breaks LaTeX formulas.
+    br() {
+        return undefined;
+    },
 };
 
 const renderer = {
