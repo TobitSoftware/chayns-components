@@ -96,7 +96,9 @@ export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
 export const StyledMotionTitleElementWrapper = styled(motion.div)<FramerMotionBugFix>`
     align-items: center;
     display: flex;
+    flex: 1 1 auto;
     margin-left: 8px;
+    min-width: 0;
 `;
 
 export const StyledRightWrapper = styled.div`
