@@ -128,7 +128,7 @@ export const StyledInputLabel = styled.label<StyledInputLabelProps>`
     overflow: hidden;
     text-overflow: ellipsis;
     color: ${({ theme, $isInvalid }: StyledInputLabelProps) =>
-        $isInvalid ? theme.wrong : undefined};
+        $isInvalid ? theme.wrong : `rgba(${theme['text-rgb'] ?? ''}, 0.45)`};
 `;
 
 type StyledMotionInputClearIconProps = WithTheme<{
