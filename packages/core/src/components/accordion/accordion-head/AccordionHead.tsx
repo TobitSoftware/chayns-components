@@ -156,8 +156,6 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         accordionHeadHeight = titleElementChildrenSize.height + 8;
     }
 
-    const [tmp, setTmp] = useState(true);
-
     return (
         <StyledMotionAccordionHead
             animate={{ height: accordionHeadHeight }}
@@ -176,7 +174,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             <StyledMotionContentWrapper
                 animate={{ opacity: isTitleGreyed ? 0.5 : 1 }}
                 initial={false}
-                onClick={!isFixed && tmp ? onClick : undefined}
+                onClick={!isFixed ? onClick : undefined}
                 ref={titleWrapperRef}
                 $isWrapped={isWrapped}
                 key={`accordionHeadContentWrapper--${uuid}`}
@@ -184,25 +182,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 {typeof onTitleInputChange === 'function' ? (
                     // eslint-disable-next-line react/jsx-no-constructed-context-values
                     <AreaContext.Provider value={{ shouldChangeColor: true }}>
-                        <Input
-                            {...titleInputProps}
-                            value={title}
-                            onFocus={(event) => {
-                                setTmp(false);
-
-                                if (titleInputProps?.onFocus) {
-                                    titleInputProps.onFocus(event);
-                                }
-                            }}
-                            onBlur={(event) => {
-                                setTmp(true);
-
-                                if (titleInputProps?.onBlur) {
-                                    titleInputProps.onBlur(event);
-                                }
-                            }}
-                            onChange={onTitleInputChange}
-                        />
+                        <Input {...titleInputProps} value={title} onChange={onTitleInputChange} />
                     </AreaContext.Provider>
                 ) : (
                     <LayoutGroup key={`accordionHeadLayoutGroup--${uuid}`}>

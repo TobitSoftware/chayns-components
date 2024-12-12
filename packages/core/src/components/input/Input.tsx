@@ -259,6 +259,10 @@ const Input = forwardRef<InputRef, InputProps>(
                             onChange={handleInputFieldChange}
                             onFocus={onFocus}
                             onKeyDown={onKeyDown}
+                            onClick={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }}
                             ref={inputRef}
                             type={type}
                             value={value}
