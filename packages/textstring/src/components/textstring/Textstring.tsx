@@ -53,9 +53,14 @@ const Textstring: FC<TextstringProps> = ({
 }) => {
     const text = useTextstringValue({ textstring, replacements });
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const childrenOnClickFunction = children?.props.onClick as
+        | ((event: MouseEvent<HTMLElement>) => void)
+        | undefined;
+
     const handleClick = useCallback(
-        ({ ctrlKey }: MouseEvent<HTMLElement>) => {
-            if (ctrlKey) {
+        (event: MouseEvent<HTMLElement>) => {
+            if (event.ctrlKey) {
                 void isTobitEmployee().then((inGroup) => {
                     if (inGroup) {
                         selectLanguageToChange({
@@ -63,9 +68,11 @@ const Textstring: FC<TextstringProps> = ({
                         });
                     }
                 });
+            } else if (typeof childrenOnClickFunction === 'function') {
+                childrenOnClickFunction(event);
             }
         },
-        [textstring.name],
+        [childrenOnClickFunction, textstring.name],
     );
 
     if (children) {
