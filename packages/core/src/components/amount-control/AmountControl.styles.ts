@@ -3,7 +3,9 @@ import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { DisplayState } from './AmountControl';
 
-type StyledAmountControlProps = WithTheme<unknown>;
+type StyledAmountControlProps = WithTheme<{
+    $isDisabled: boolean;
+}>;
 
 export const StyledAmountControl = styled.div<StyledAmountControlProps>`
     background-color: ${({ theme }: StyledAmountControlProps) => theme['202']};
@@ -11,6 +13,14 @@ export const StyledAmountControl = styled.div<StyledAmountControlProps>`
     width: fit-content;
     border-radius: 3px;
     overflow: hidden;
+    transition: opacity 0.2s ease;
+
+    ${({ $isDisabled }) =>
+        $isDisabled &&
+        css`
+            opacity: 0.5;
+            pointer-events: none;
+        `}
 `;
 
 type StyledAmountControlInputProps = WithTheme<{
@@ -53,9 +63,11 @@ export const StyledAmountControlPseudoInput = styled.div<StyledAmountControlPseu
     color: ${({ theme }: StyledAmountControlPseudoInputProps) => theme.text};
     border: none;
     height: 28px;
-    width: ${({ $shouldShowWideInput }) => ($shouldShowWideInput ? 90 : 55)}px;
+    min-width: ${({ $shouldShowWideInput }) => ($shouldShowWideInput ? 90 : 55)}px;
+    padding: 0 8px;
     text-align: center;
     cursor: pointer;
+    user-select: none;
 
     display: flex;
     justify-content: center;

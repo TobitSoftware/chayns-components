@@ -34,6 +34,10 @@ export type AmountControlProps = {
      */
     iconColor?: string;
     /**
+     * Whether the control should be disabled
+     */
+    isDisabled?: boolean;
+    /**
      * A Text that should be displayed, if no amount is selected;
      */
     label?: string;
@@ -70,13 +74,14 @@ export type AmountControlProps = {
 const AmountControl: FC<AmountControlProps> = ({
     amount,
     icon,
-    shouldShowAddIconOnMinAmount = false,
-    shouldShowIcon = true,
-    label,
     iconColor,
+    isDisabled = false,
+    label,
     maxAmount,
     minAmount = 0,
     onChange,
+    shouldShowAddIconOnMinAmount = false,
+    shouldShowIcon = true,
     shouldShowWideInput = false,
     step: stepProp = 1,
 }) => {
@@ -273,7 +278,7 @@ const AmountControl: FC<AmountControlProps> = ({
 
     return useMemo(
         () => (
-            <StyledAmountControl onClick={handleFirstAmount}>
+            <StyledAmountControl onClick={handleFirstAmount} $isDisabled={isDisabled}>
                 <AnimatePresence initial={false}>
                     {shouldShowLeftIcon && (
                         <StyledMotionAmountControlButton
@@ -352,6 +357,7 @@ const AmountControl: FC<AmountControlProps> = ({
             handleInputChange,
             hasFocus,
             inputValue,
+            isDisabled,
             label,
             leftIcon,
             maxAmount,
