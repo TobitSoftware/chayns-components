@@ -124,7 +124,7 @@ const AmountControl: FC<AmountControlProps> = ({
      * Function that sets the amountValue to the amount
      */
     useEffect(() => {
-        if (!amount) {
+        if (typeof amount !== "number") {
             return;
         }
 
