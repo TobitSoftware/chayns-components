@@ -7,11 +7,11 @@ interface SelectFilesOptions {
 }
 
 export const selectFiles = ({
-    type,
-    multiple,
-    maxFileSizeInMB,
-}: SelectFilesOptions): Promise<File[]> =>
-    new Promise((resolve) => {
+                                type,
+                                multiple,
+                                maxFileSizeInMB,
+                            }: SelectFilesOptions): Promise<File[]> =>
+    new Promise((resolve, reject) => {
         const input = document.createElement('input');
 
         input.type = 'file';
@@ -30,22 +30,23 @@ export const selectFiles = ({
 
         document.body.appendChild(input);
 
-        input.addEventListener('change', (event) => {
+        const abortController = new AbortController();
+        const { signal } = abortController;
+
+        const onChange = (event: Event) => {
             document.body.removeChild(input);
+            abortController.abort();
 
             if (!event.target) {
                 resolve([]);
-
                 return;
             }
 
             const target = event.target as HTMLInputElement;
-
             const { files } = target;
 
             if (!files) {
                 resolve([]);
-
                 return;
             }
 
@@ -73,7 +74,16 @@ export const selectFiles = ({
             }
 
             resolve(filteredFileArray);
-        });
+        };
+
+        const onCancel = () => {
+            document.body.removeChild(input);
+            abortController.abort();
+            reject(new Error('File selection was cancelled.'));
+        };
+
+        input.addEventListener('change', onChange, { signal });
+        input.addEventListener('focusout', onCancel, { signal });
 
         input.click();
     });
