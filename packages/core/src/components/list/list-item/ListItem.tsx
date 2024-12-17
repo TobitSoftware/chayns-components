@@ -74,6 +74,10 @@ export type ListItemProps = {
      */
     rightElements?: IListItemRightElements;
     /**
+     * This will force the background color of the ListItem to be used even if it is closed and not hovered.
+     */
+    shouldForceBackground?: boolean;
+    /**
      * Whether the background and border of the shape on which the image or icon of the element is displayed should be
      * hidden.
      */
@@ -117,6 +121,7 @@ const ListItem: FC<ListItemProps> = ({
                                          images,
                                          isDefaultOpen,
                                          isOpen,
+                                         shouldForceBackground = false,
                                          onClick,
                                          onLongPress,
                                          leftElements,
@@ -189,6 +194,7 @@ const ListItem: FC<ListItemProps> = ({
             $isInAccordion={typeof isParentAccordionWrapped === 'boolean'}
             $isWrapped={isWrapped}
             $shouldHideIndicator={shouldHideIndicator}
+            $shouldForceBackground={shouldForceBackground}
             $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
             $shouldHideBottomLine={shouldHideBottomLine}
         >

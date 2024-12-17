@@ -8,6 +8,7 @@ type StyledListItemProps = WithTheme<{
     $isInAccordion: boolean;
     $isWrapped: boolean;
     $shouldHideIndicator: boolean;
+    $shouldForceBackground?: boolean;
     $shouldShowSeparatorBelow: boolean;
     $shouldHideBottomLine: boolean;
 }>;
@@ -22,9 +23,9 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
             padding-left: ${$shouldHideIndicator ? '16px' : '8px'};
         `}
 
-    ${({ $isInAccordion, $isOpen, theme }) =>
-        !$isInAccordion &&
-        $isOpen &&
+    ${({ $isInAccordion, $isOpen,$shouldForceBackground, theme }) =>
+        ((!$isInAccordion &&
+        $isOpen) || $shouldForceBackground) &&
         css`
             background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
         `}
