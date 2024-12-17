@@ -79,6 +79,10 @@ export type ListItemProps = {
      */
     shouldHideImageOrIconBackground?: boolean;
     /**
+     * Whether the bottom line should be hidden.
+     */
+    shouldHideBottomLine?: boolean;
+    /**
      * If the `ListItem` is expandable, the indicator is displayed on the left
      * side of the header. If this property is set to true, the indicator is
      * hidden.
@@ -122,6 +126,7 @@ const ListItem: FC<ListItemProps> = ({
     shouldHideIndicator = false,
     subtitle,
     shouldShowRoundImageOrIcon,
+                                         shouldHideBottomLine = false,
     shouldShowSeparatorBelow = false,
     title,
     titleElement,
@@ -185,6 +190,7 @@ const ListItem: FC<ListItemProps> = ({
             $isWrapped={isWrapped}
             $shouldHideIndicator={shouldHideIndicator}
             $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
+            $shouldHideBottomLine={shouldHideBottomLine}
         >
             <ListItemHead
                 hoverItem={hoverItem}

@@ -9,6 +9,7 @@ type StyledListItemProps = WithTheme<{
     $isWrapped: boolean;
     $shouldHideIndicator: boolean;
     $shouldShowSeparatorBelow: boolean;
+    $shouldHideBottomLine: boolean;
 }>;
 
 export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
@@ -42,10 +43,11 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
         $isInAccordion,
         $isWrapped,
         $shouldShowSeparatorBelow,
+           $shouldHideBottomLine,
         theme,
     }: StyledListItemProps) =>
         ($shouldShowSeparatorBelow ||
-            ((!$isOpen || $isWrapped || $isInAccordion) && theme.accordionLines)) &&
+            ((!$isOpen || $isWrapped || $isInAccordion) && (theme.accordionLines && !$shouldHideBottomLine))) &&
         css`
             &&:not(:last-child) {
                 border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid

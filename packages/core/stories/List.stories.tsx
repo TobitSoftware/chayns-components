@@ -37,6 +37,8 @@ export const ListItemWithTitleElement = Template.bind({});
 
 export const ListItemWithGreyedTitle = Template.bind({});
 
+export const ListItemWithHiddenBottomLines = Template.bind({});
+
 const images = [
     'https://tsimg.cloud/77896-21884/8aee1a304297729a4542b97325940a656a3da8f2.png',
     'https://tsimg.cloud/77896-21884/54a117f35e5fb57520e64471461af5491c0eff06.png',
@@ -102,6 +104,35 @@ ListItemsWithImage.args = {
             images={[images[3]]}
             subtitle="Dolor sit ipsum amet"
             shouldShowRoundImageOrIcon
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+        />,
+    ],
+};
+
+ListItemWithHiddenBottomLines.args = {
+    children: [
+        <ListItem
+            images={[images[0]]}
+            subtitle="Sadipscing elitr dolor sit"
+            shouldHideBottomLine
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+        />,
+        <ListItem
+            images={[images[1]]}
+            subtitle="Stet clita kasd gubergren"
+            shouldHideBottomLine
+            title="Stet clita kasd gubergren, no sea takimata sanctus est"
+        />,
+        <ListItem
+            images={[images[2]]}
+            subtitle="At vero eos et accusam"
+            shouldHideBottomLine
+            title="At vero eos et accusam et justo duo dolores et ea rebum sit amet dolor"
+        />,
+        <ListItem
+            images={[images[3]]}
+            subtitle="Dolor sit ipsum amet"
+            shouldHideBottomLine
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,
     ],
