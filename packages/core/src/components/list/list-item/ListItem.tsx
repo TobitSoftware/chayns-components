@@ -1,4 +1,4 @@
-import { AnimatePresence } from 'framer-motion';
+import {AnimatePresence} from 'framer-motion';
 import React, {
     FC,
     MouseEventHandler,
@@ -8,14 +8,14 @@ import React, {
     useContext,
     useEffect,
 } from 'react';
-import { useUuid } from '../../../hooks/uuid';
-import type { IListItemRightElements } from '../../../types/list';
-import { AccordionContext } from '../../accordion/Accordion';
+import {useUuid} from '../../../hooks/uuid';
+import type {IListItemRightElements} from '../../../types/list';
+import {AccordionContext} from '../../accordion/Accordion';
 import AreaContextProvider from '../../area-provider/AreaContextProvider';
-import { ListContext } from '../List';
+import {ListContext} from '../List';
 import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
-import { StyledMotionListItem } from './ListItem.styles';
+import {StyledMotionListItem} from './ListItem.styles';
 
 export type ListItemElements = [ReactNode, ...ReactNode[]];
 
@@ -111,26 +111,26 @@ export type ListItemProps = {
 };
 
 const ListItem: FC<ListItemProps> = ({
-    children,
-    hoverItem,
-    icons,
-    images,
-    isDefaultOpen,
-    isOpen,
-    onClick,
-    onLongPress,
-    leftElements,
-                              isTitleGreyed :           isDisabledButNotReallyDisabled,
-    rightElements,
-    shouldHideImageOrIconBackground,
-    shouldHideIndicator = false,
-    subtitle,
-    shouldShowRoundImageOrIcon,
+                                         children,
+                                         hoverItem,
+                                         icons,
+                                         images,
+                                         isDefaultOpen,
+                                         isOpen,
+                                         onClick,
+                                         onLongPress,
+                                         leftElements,
+                                         isTitleGreyed: isDisabledButNotReallyDisabled,
+                                         rightElements,
+                                         shouldHideImageOrIconBackground,
+                                         shouldHideIndicator = false,
+                                         subtitle,
+                                         shouldShowRoundImageOrIcon,
                                          shouldHideBottomLine = false,
-    shouldShowSeparatorBelow = false,
-    title,
-    titleElement,
-}) => {
+                                         shouldShowSeparatorBelow = false,
+                                         title,
+                                         titleElement,
+                                     }) => {
     const {
         incrementExpandableItemCount,
         isAnyItemExpandable,
@@ -139,7 +139,7 @@ const ListItem: FC<ListItemProps> = ({
         updateOpenItemUuid,
     } = useContext(ListContext);
 
-    const { isWrapped: isParentAccordionWrapped } = useContext(AccordionContext);
+    const {isWrapped: isParentAccordionWrapped} = useContext(AccordionContext);
 
     const uuid = useUuid();
 
@@ -171,7 +171,7 @@ const ListItem: FC<ListItemProps> = ({
 
     useEffect(() => {
         if (isDefaultOpen) {
-            updateOpenItemUuid(uuid, { shouldOnlyOpen: true });
+            updateOpenItemUuid(uuid, {shouldOnlyOpen: true});
         }
     }, [isDefaultOpen, updateOpenItemUuid, uuid]);
 
@@ -179,10 +179,10 @@ const ListItem: FC<ListItemProps> = ({
 
     return (
         <StyledMotionListItem
-            animate={{ height: 'auto', opacity: 1 }}
+            animate={{height: 'auto', opacity: 1}}
             className="beta-chayns-list-item"
-            exit={{ height: 0, opacity: 0 }}
-            initial={{ height: 0, opacity: 0 }}
+            exit={{height: 0, opacity: 0}}
+            initial={{height: 0, opacity: 0}}
             key={`list-item-${uuid}`}
             $isClickable={isClickable}
             $isOpen={isItemOpen}

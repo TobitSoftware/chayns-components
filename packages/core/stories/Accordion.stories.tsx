@@ -116,6 +116,23 @@ const ControlledAccordionTemplate: StoryFn<typeof Accordion> = ({ children, ...a
     );
 };
 
+const HiddenBottomLinesTemplate: StoryFn<typeof Accordion> = ({ children, ...args }) => {
+
+
+    return (
+        <>
+            <AccordionGroup>
+                <Accordion key="first" {...args} title="1" shouldHideBottomLine onTitleInputChange={undefined}>
+                    {children}
+                </Accordion>
+                <Accordion key="second" {...args} title="2" shouldHideBottomLine onTitleInputChange={undefined}>
+                    {children}
+                </Accordion>
+            </AccordionGroup>
+        </>
+    );
+};
+
 export const DynamicLoadingTemplate: StoryFn<typeof Accordion> = () => {
     const [items, setItems] = useState<{ id: number; name: string }[]>([]);
 
@@ -185,6 +202,8 @@ export const WithAccordionItems = Template.bind({});
 export const InputAsTitle = InputAsTitleTemplate.bind({});
 
 export const WrappedAccordionWithListItems = Template.bind({});
+
+export const HiddenBottomLines = HiddenBottomLinesTemplate.bind({});
 
 General.args = {
     children: (
