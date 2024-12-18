@@ -185,6 +185,12 @@ const ComboBox: FC<ComboBoxProps> = ({
         }
     }, [container]);
 
+    useEffect(() => {
+        if(container instanceof Element){
+            setNewContainer(container)
+        }
+    }, [container]);
+
     const handleClick = useCallback(
         (event: MouseEvent) => {
             if (

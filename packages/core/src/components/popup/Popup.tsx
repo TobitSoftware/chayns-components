@@ -104,6 +104,12 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             }
         }, [container]);
 
+        useEffect(() => {
+            if(container instanceof Element){
+                setNewContainer(container)
+            }
+        }, [container]);
+
         const measureHeight = () => {
             if (popupPseudoContentRef.current) {
                 const height = popupPseudoContentRef.current.offsetHeight;

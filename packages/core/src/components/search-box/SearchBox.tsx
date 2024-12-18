@@ -142,6 +142,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         }, [container]);
 
         useEffect(() => {
+            if(container instanceof Element){
+                setNewContainer(container)
+            }
+        }, [container]);
+
+        useEffect(() => {
             if (boxRef.current) {
                 const { x, y } = boxRef.current.getBoundingClientRect();
 

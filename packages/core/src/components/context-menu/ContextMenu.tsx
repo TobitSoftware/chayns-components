@@ -132,6 +132,12 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             }
         }, [container]);
 
+        useEffect(() => {
+            if(container instanceof Element){
+                setNewContainer(container)
+            }
+        }, [container]);
+
         const handleHide = useCallback(() => {
             setIsContentShown(false);
         }, []);
