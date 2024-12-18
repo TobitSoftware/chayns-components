@@ -151,7 +151,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     const [internalSelectedItem, setInternalSelectedItem] = useState<IComboBoxItem>();
     const [isAnimating, setIsAnimating] = useState(false);
     const [minWidth, setMinWidth] = useState<number | undefined>(undefined);
-    const [bodyMinWidth, setBodyMinWidth] = useState<number | undefined>(undefined);
+    const [bodyMinWidth, setBodyMinWidth] = useState(0);
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
     const [overflowY, setOverflowY] = useState<CSSProperties['overflowY']>('hidden');
     const [portal, setPortal] = useState<ReactPortal>();
@@ -337,13 +337,6 @@ const ComboBox: FC<ComboBoxProps> = ({
      * This function calculates the greatest width
      */
     useEffect(() => {
-        if(shouldUseCurrentItemWidth){
-            setMinWidth(undefined);
-            setBodyMinWidth(undefined);
-
-            return;
-        }
-
         const allItems = lists.flatMap((list) => list.list);
         const hasImage = [selectedItem, ...allItems].some(
             item => item?.imageUrl
@@ -401,7 +394,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         }
 
         setMinWidth(tmpMinWidth);
-        setBodyMinWidth(tmpBodyMinWidth);
+        setBodyMinWidth(shouldUseCurrentItemWidth ? tmpMinWidth : tmpBodyMinWidth);
     }, [lists, placeholder, shouldUseFullWidth, shouldUseCurrentItemWidth, internalSelectedItem, prefix, selectedItem]);
 
     /**
@@ -535,6 +528,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                             $minWidth={bodyMinWidth}
                             style={bodyStyles}
                             $direction={direction}
+                            $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
                             transition={{ duration: 0.2 }}
                             tabIndex={0}
                             ref={contentRef}
@@ -546,18 +540,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                 newContainer,
             ),
         );
-    }, [
-        bodyMinWidth,
-        bodyStyles,
-        browser?.name,
-        comboBoxGroups,
-        newContainer,
-        direction,
-        isAnimating,
-        maxHeight,
-        minWidth,
-        overflowY,
-    ]);
+    }, [bodyMinWidth, bodyStyles, browser?.name, comboBoxGroups, newContainer, direction, isAnimating, maxHeight, minWidth, overflowY, shouldUseCurrentItemWidth]);
 
     return useMemo(
         () => (

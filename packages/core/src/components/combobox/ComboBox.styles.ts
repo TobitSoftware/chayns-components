@@ -144,7 +144,8 @@ type StyledComboBoxBodyProps = WithTheme<{
     $maxHeight: CSSProperties['maxHeight'];
     $direction: ComboBoxDirection;
     $browser: Browser | 'bot' | null | undefined;
-    $minWidth?: number;
+    $minWidth: number;
+    $shouldUseCurrentItemWidth: boolean;
 }>;
 
 export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyProps>`
@@ -158,10 +159,12 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     max-height: ${({ $maxHeight }) => $maxHeight};
     overflow-y: ${({ $overflowY }) => $overflowY};
     
-    ${({$minWidth})=> typeof $minWidth === 'number' && css`
-        min-width: ${$minWidth - 2}px;
-        max-width: ${$minWidth - 2}px;
-    `
+    min-width: ${({ $minWidth }) => $minWidth - 2}px;
+    
+    ${({$minWidth, $shouldUseCurrentItemWidth})=>
+            !$shouldUseCurrentItemWidth && css`
+                max-width: ${$minWidth - 2}px;
+            `
 }
 
     ${({ $direction }) => {
