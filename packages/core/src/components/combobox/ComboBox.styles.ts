@@ -7,7 +7,7 @@ import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ComboBoxProps } from './ComboBox';
 
 type StyledComboBoxProps = WithTheme<{
-    $minWidth: number;
+    $minWidth?: number;
     $shouldUseFullWidth: ComboBoxProps['shouldUseFullWidth'];
 }>;
 
@@ -15,16 +15,23 @@ export const StyledComboBox = styled.div<StyledComboBoxProps>`
     user-select: none;
     position: relative;
 
-    ${({ $shouldUseFullWidth, $minWidth }) =>
-        $shouldUseFullWidth
-            ? css`
+    ${({ $shouldUseFullWidth, $minWidth }) => {
+        if(typeof $minWidth !== 'number') {
+            return css`
+            width: fit-content`;
+        }
+        
+        
+        return $shouldUseFullWidth
+                ? css`
                   min-width: ${$minWidth}px;
                   width: 100%;
               `
-            : css`
+                : css`
                   min-width: ${$minWidth}px;
                   max-width: ${$minWidth}px;
-              `}
+              `
+    }}
 `;
 
 type StyledComboBoxHeaderProps = WithTheme<{
@@ -137,7 +144,7 @@ type StyledComboBoxBodyProps = WithTheme<{
     $maxHeight: CSSProperties['maxHeight'];
     $direction: ComboBoxDirection;
     $browser: Browser | 'bot' | null | undefined;
-    $minWidth: number;
+    $minWidth?: number;
 }>;
 
 export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyProps>`
@@ -150,9 +157,12 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     cursor: pointer;
     max-height: ${({ $maxHeight }) => $maxHeight};
     overflow-y: ${({ $overflowY }) => $overflowY};
-
-    min-width: ${({ $minWidth }) => $minWidth - 2}px;
-    max-width: ${({ $minWidth }) => $minWidth - 2}px;
+    
+    ${({$minWidth})=> typeof $minWidth === 'number' && css`
+        min-width: ${$minWidth - 2}px;
+        max-width: ${$minWidth - 2}px;
+    `
+}
 
     ${({ $direction }) => {
         if ($direction === ComboBoxDirection.BOTTOM) {

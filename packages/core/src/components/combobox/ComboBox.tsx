@@ -150,8 +150,8 @@ const ComboBox: FC<ComboBoxProps> = ({
 }) => {
     const [internalSelectedItem, setInternalSelectedItem] = useState<IComboBoxItem>();
     const [isAnimating, setIsAnimating] = useState(false);
-    const [minWidth, setMinWidth] = useState(0);
-    const [bodyMinWidth, setBodyMinWidth] = useState(0);
+    const [minWidth, setMinWidth] = useState<number | undefined>(undefined);
+    const [bodyMinWidth, setBodyMinWidth] = useState<number | undefined>(undefined);
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
     const [overflowY, setOverflowY] = useState<CSSProperties['overflowY']>('hidden');
     const [portal, setPortal] = useState<ReactPortal>();
@@ -337,6 +337,13 @@ const ComboBox: FC<ComboBoxProps> = ({
      * This function calculates the greatest width
      */
     useEffect(() => {
+        if(shouldUseCurrentItemWidth){
+            setMinWidth(undefined);
+            setBodyMinWidth(undefined);
+
+            return;
+        }
+
         const allItems = lists.flatMap((list) => list.list);
         const hasImage = [selectedItem, ...allItems].some(
             item => item?.imageUrl
@@ -395,14 +402,7 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         setMinWidth(tmpMinWidth);
         setBodyMinWidth(tmpBodyMinWidth);
-    }, [
-        lists,
-        placeholder,
-        shouldUseFullWidth,
-        shouldUseCurrentItemWidth,
-        internalSelectedItem,
-        prefix,
-    ]);
+    }, [lists, placeholder, shouldUseFullWidth, shouldUseCurrentItemWidth, internalSelectedItem, prefix, selectedItem]);
 
     /**
      * This function sets the external selected item
