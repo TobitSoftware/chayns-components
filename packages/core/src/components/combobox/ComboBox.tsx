@@ -338,8 +338,12 @@ const ComboBox: FC<ComboBoxProps> = ({
      */
     useEffect(() => {
         const allItems = lists.flatMap((list) => list.list);
-        const hasImage = allItems.some(({ imageUrl }) => imageUrl);
-        const hasIcon = allItems.some(({ icons }) => icons);
+        const hasImage = [selectedItem, ...allItems].some(
+            item => item?.imageUrl
+        );
+        const hasIcon = [selectedItem, ...allItems].some(
+            item => item?.icons
+        );
 
         const parentWidth =
             styledComboBoxElementRef.current?.parentElement?.getBoundingClientRect().width ?? 0;
@@ -359,6 +363,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         const baseWidth = calculateContentWidth([
             ...allItems,
             { text: placeholder, value: 'placeholder' },
+            ...(selectedItem ? [selectedItem] : [])
         ]);
 
         const calculatedWidth = baseWidth + paddingWidth + imageWidth + iconWidth + prefixWidth;
