@@ -3,6 +3,16 @@ const IMAGE_SERVICE_API_V3_URL =
 const IMAGE_RESIZER_API_URL =
     'https://cube.tobit.cloud/image-resizer-backend/api/v1.0/image';
 
+class ImageUploadError extends Error {
+    constructor(requestId, error) {
+        super(error instanceof Error ? error.message : error);
+        this.requestId = requestId;
+        if (error instanceof Error) {
+            this.originalError = error;
+        }
+    }
+}
+
 /**
  * Uploads an image to the tsimg cloud service.
  *
@@ -60,24 +70,28 @@ export default async function imageUpload(file, options, _personId, _siteId) {
 
     const response = await fetch(url, { method: 'POST', body, headers });
 
+    const requestId = response.headers.get('x-request-id');
+
     if (response.ok) {
-        const { image, baseDomain } = await response.json();
-        // Maps image-service-api-v3 result to v2 result.
-        return {
-            key: image.path,
-            // Removes trailing slash from baseDomain, since image-service-api-v2 doesn't have a trailing slash on base.
-            base: baseDomain.endsWith('/')
-                ? baseDomain.slice(0, -1)
-                : baseDomain,
-            meta: {
-                preview: image.preview,
-                width: image.width,
-                height: image.height,
-            },
-        };
+        try {
+            const { image, baseDomain } = await response.json();
+            // Maps image-service-api-v3 result to v2 result.
+            return {
+                key: image.path,
+                // Removes trailing slash from baseDomain, since image-service-api-v2 doesn't have a trailing slash on base.
+                base: baseDomain.endsWith('/')
+                    ? baseDomain.slice(0, -1)
+                    : baseDomain,
+                meta: {
+                    preview: image.preview,
+                    width: image.width,
+                    height: image.height,
+                },
+            };
+        } catch (ex) {
+            throw new ImageUploadError(requestId, ex);
+        }
     }
 
-    throw new Error(
-        `Uploading the image failed with status code ${response.status}.`
-    );
+    throw new ImageUploadError(requestId, `Uploading the image failed with status code ${response.status}.`);
 }
