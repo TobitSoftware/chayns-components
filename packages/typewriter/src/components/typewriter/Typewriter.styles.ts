@@ -7,12 +7,14 @@ type StyledTypewriterProps = WithTheme<{
     $cursorType: TypewriterProps['cursorType'];
     $isAnimatingText: boolean;
     $shouldHideCursor: TypewriterProps['shouldHideCursor'];
+    $shouldPreventBlinkAnimation: boolean;
 }>;
 
 const typewriterCursorElement = ({
     $cursorType,
     $isAnimatingText,
     $shouldHideCursor,
+    $shouldPreventBlinkAnimation,
 }: StyledTypewriterProps) => {
     if (!$isAnimatingText || $shouldHideCursor) {
         return '';
@@ -22,7 +24,7 @@ const typewriterCursorElement = ({
         return css`
             .typewriter-lastWithContent {
                 &:after {
-                    animation: ${blinkAnimation} 1s steps(2, start) infinite;
+                    animation: ${$shouldPreventBlinkAnimation ? 'none' : blinkAnimation} 1s steps(2, start) infinite;
                     color: inherit;
                     content: '|';
                     font-size: 25px;

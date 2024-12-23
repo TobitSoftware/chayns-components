@@ -160,6 +160,7 @@ const Typewriter: FC<TypewriterProps> = ({
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
     const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
+    const [shouldPreventBlinkingCursor, setShouldPreventBlinkingCursor] = useState(false);
 
     const functions = useFunctions();
     const values = useValues();
@@ -294,6 +295,10 @@ const Typewriter: FC<TypewriterProps> = ({
             }, resetSpeed);
         } else {
             const setInterval = () => {
+                if (cursorType === CursorType.Thin) {
+                    setShouldPreventBlinkingCursor(true);
+                }
+
                 if (typeof onTypingAnimationStart === 'function') {
                     onTypingAnimationStart();
                 }
@@ -304,6 +309,10 @@ const Typewriter: FC<TypewriterProps> = ({
 
                         if (nextState >= charactersCount && !shouldWaitForContent) {
                             window.clearInterval(interval);
+
+                            if (cursorType === CursorType.Thin) {
+                                setShouldPreventBlinkingCursor(false);
+                            }
 
                             if (typeof onTypingAnimationEnd === 'function') {
                                 onTypingAnimationEnd();
@@ -408,6 +417,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 onClick={isAnimatingText ? handleClick : undefined}
                 $isAnimatingText={isAnimatingText}
                 $shouldHideCursor={shouldHideCursor}
+                $shouldPreventBlinkAnimation={shouldPreventBlinkingCursor}
             >
                 {isAnimatingText ? (
                     <AnimatedTypewriterText
@@ -444,6 +454,7 @@ const Typewriter: FC<TypewriterProps> = ({
             isAnimatingText,
             pseudoTextHTML,
             shouldHideCursor,
+            shouldPreventBlinkingCursor,
             shownText,
             sortedChildren,
             textStyle,
