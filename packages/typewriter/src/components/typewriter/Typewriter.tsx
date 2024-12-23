@@ -435,6 +435,8 @@ const Typewriter: FC<TypewriterProps> = ({
                 )}
                 {isAnimatingText && (
                     <StyledTypewriterPseudoText
+                        $isAnimatingText={isAnimatingText}
+                        $shouldHideCursor={shouldHideCursor}
                         dangerouslySetInnerHTML={{ __html: pseudoTextHTML }}
                     />
                 )}

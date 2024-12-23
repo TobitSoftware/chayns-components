@@ -64,11 +64,31 @@ const blinkAnimation = keyframes`
   }
 `;
 
-export const StyledTypewriterPseudoText = styled.span`
+type StyledTypewriterPseudoTextProps = WithTheme<{
+    $isAnimatingText?: boolean;
+    $shouldHideCursor: TypewriterProps['shouldHideCursor'];
+}>;
+
+export const StyledTypewriterPseudoText = styled.span<StyledTypewriterPseudoTextProps>`
     opacity: 0;
     pointer-events: none;
     user-select: none;
-    width: 100%;
+    width: fit-content;
+
+    ${({ $isAnimatingText, $shouldHideCursor }) =>
+        $isAnimatingText &&
+        !$shouldHideCursor &&
+        css`
+            &:after {
+                animation: ${blinkAnimation} 1s steps(2, start) infinite;
+                color: inherit;
+                content: '|';
+                font-size: 25px;
+                position: relative;
+                line-height: 0;
+                vertical-align: baseline;
+            }
+        `}
 `;
 
 type StyledTypewriterTextProps = WithTheme<{
@@ -78,7 +98,7 @@ type StyledTypewriterTextProps = WithTheme<{
 export const StyledTypewriterText = styled.span<StyledTypewriterTextProps>`
     color: inherit;
     position: ${({ $isAnimatingText }) => ($isAnimatingText ? 'absolute' : 'relative')};
-    width: 100%;
+    width: fit-content;
 
     ${({ $isAnimatingText }) =>
         $isAnimatingText &&
