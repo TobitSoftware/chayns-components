@@ -61,6 +61,26 @@ export type TypewriterProps = {
      */
     onFinish?: VoidFunction;
     /**
+     * Function that is executed when the reset animation has finished. This function will not be
+     * executed if `shouldUseResetAnimation` is not set to `true`.
+     */
+    onResetAnimationEnd?: VoidFunction;
+    /**
+     * Function that is executed when the reset animation has started. This function will not be
+     * executed if `shouldUseResetAnimation` is not set to `true`.
+     */
+    onResetAnimationStart?: VoidFunction;
+    /**
+     * Function that is executed when the typing animation has finished. If multiple texts are given,
+     * this function will be executed for each text.
+     */
+    onTypingAnimationEnd?: VoidFunction;
+    /**
+     * Function that is executed when the typing animation has started. If multiple texts are given,
+     * this function will be executed for each text.
+     */
+    onTypingAnimationStart?: VoidFunction;
+    /**
      * Pseudo-element to be rendered invisible during animation to define the size of the element
      * for the typewriter effect. By default, the "children" is used for this purpose.
      */
@@ -121,6 +141,10 @@ const Typewriter: FC<TypewriterProps> = ({
     cursorType = CursorType.Default,
     nextTextDelay = TypewriterDelay.Medium,
     onFinish,
+    onResetAnimationEnd,
+    onResetAnimationStart,
+    onTypingAnimationEnd,
+    onTypingAnimationStart,
     pseudoChildren,
     resetDelay = TypewriterDelay.Medium,
     shouldForceCursorAnimation = false,
@@ -242,12 +266,20 @@ const Typewriter: FC<TypewriterProps> = ({
         if (shouldStopAnimation || charactersCount === 0) {
             setShownCharCount(textContent.length);
         } else if (isResetAnimationActive) {
+            if (typeof onResetAnimationStart === 'function') {
+                onResetAnimationStart();
+            }
+
             interval = window.setInterval(() => {
                 setShownCharCount((prevState) => {
                     const nextState = prevState - 1;
 
                     if (nextState === 0) {
                         window.clearInterval(interval);
+
+                        if (typeof onResetAnimationEnd === 'function') {
+                            onResetAnimationEnd();
+                        }
 
                         if (areMultipleChildrenGiven) {
                             setTimeout(() => {
@@ -262,12 +294,20 @@ const Typewriter: FC<TypewriterProps> = ({
             }, resetSpeed);
         } else {
             const setInterval = () => {
+                if (typeof onTypingAnimationStart === 'function') {
+                    onTypingAnimationStart();
+                }
+
                 interval = window.setInterval(() => {
                     setShownCharCount((prevState) => {
                         let nextState = Math.min(prevState + 1, charactersCount);
 
                         if (nextState >= charactersCount && !shouldWaitForContent) {
                             window.clearInterval(interval);
+
+                            if (typeof onTypingAnimationEnd === 'function') {
+                                onTypingAnimationEnd();
+                            }
 
                             /**
                              * At this point, the next value for "shownCharCount" is deliberately set to
