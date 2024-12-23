@@ -1,5 +1,5 @@
-import {ColorSchemeProvider} from '@chayns-components/core';
-import {ChaynsProvider, useFunctions, useValues} from 'chayns-api';
+import { ColorSchemeProvider } from '@chayns-components/core';
+import { ChaynsProvider, useFunctions, useValues } from 'chayns-api';
 import React, {
     FC,
     ReactElement,
@@ -7,18 +7,18 @@ import React, {
     useEffect,
     useLayoutEffect,
     useMemo,
-    useRef,
     useState,
 } from 'react';
-import {createPortal} from 'react-dom';
-import {renderToString} from 'react-dom/server';
+import { createPortal } from 'react-dom';
+import { renderToString } from 'react-dom/server';
+import { CursorType } from '../../types/cursor';
+import AnimatedTypewriterText from './AnimatedTypewriterText';
 import {
     StyledTypewriter,
     StyledTypewriterPseudoText,
     StyledTypewriterText,
 } from './Typewriter.styles';
-import {getCharactersCount, getSubTextFromHTML, shuffleArray} from './utils';
-import AnimatedTypewriterText from "./AnimatedTypewriterText";
+import { getCharactersCount, getSubTextFromHTML, shuffleArray } from './utils';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
@@ -46,6 +46,10 @@ export type TypewriterProps = {
      * The text to type
      */
     children: ReactElement | ReactElement[] | string | string[];
+    /**
+     * The type of the cursor. Use the CursorType enum for this prop.
+     */
+    cursorType?: CursorType;
     /**
      * The delay in milliseconds before the next text is shown.
      * This prop is only used if multiple texts are given.
@@ -113,22 +117,23 @@ export type TypewriterProps = {
 };
 
 const Typewriter: FC<TypewriterProps> = ({
-                                             children,
-                                             nextTextDelay = TypewriterDelay.Medium,
-                                             onFinish,
-                                             pseudoChildren,
-                                             resetDelay = TypewriterDelay.Medium,
-                                             shouldForceCursorAnimation = false,
-                                             shouldHideCursor = false,
-                                             shouldSortChildrenRandomly = false,
-                                             shouldUseAnimationHeight = false,
-                                             shouldUseResetAnimation = false,
-                                             shouldWaitForContent,
-                                             speed = TypewriterSpeed.Medium,
-                                             resetSpeed = speed,
-                                             startDelay = TypewriterDelay.None,
-                                             textStyle,
-                                         }) => {
+    children,
+    cursorType = CursorType.Default,
+    nextTextDelay = TypewriterDelay.Medium,
+    onFinish,
+    pseudoChildren,
+    resetDelay = TypewriterDelay.Medium,
+    shouldForceCursorAnimation = false,
+    shouldHideCursor = false,
+    shouldSortChildrenRandomly = false,
+    shouldUseAnimationHeight = false,
+    shouldUseResetAnimation = false,
+    shouldWaitForContent,
+    speed = TypewriterSpeed.Medium,
+    resetSpeed = speed,
+    startDelay = TypewriterDelay.None,
+    textStyle,
+}) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
     const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
 
@@ -165,16 +170,16 @@ const Typewriter: FC<TypewriterProps> = ({
             if (currentChildren) {
                 return React.isValidElement(currentChildren)
                     ? renderToString(
-                        <ChaynsProvider data={values} functions={functions} isModule>
-                            <ColorSchemeProvider
-                                color="#005EB8"
-                                colorMode={0}
-                                style={{display: 'inline'}}
-                            >
-                                {currentChildren}
-                            </ColorSchemeProvider>
-                        </ChaynsProvider>,
-                    )
+                          <ChaynsProvider data={values} functions={functions} isModule>
+                              <ColorSchemeProvider
+                                  color="#005EB8"
+                                  colorMode={0}
+                                  style={{ display: 'inline' }}
+                              >
+                                  {currentChildren}
+                              </ColorSchemeProvider>
+                          </ChaynsProvider>,
+                      )
                     : (currentChildren as string);
             }
 
@@ -183,16 +188,16 @@ const Typewriter: FC<TypewriterProps> = ({
 
         return React.isValidElement(sortedChildren)
             ? renderToString(
-                <ChaynsProvider data={values} functions={functions} isModule>
-                    <ColorSchemeProvider
-                        color="#005EB8"
-                        colorMode={0}
-                        style={{display: 'inline'}}
-                    >
-                        {sortedChildren}
-                    </ColorSchemeProvider>
-                </ChaynsProvider>,
-            )
+                  <ChaynsProvider data={values} functions={functions} isModule>
+                      <ColorSchemeProvider
+                          color="#005EB8"
+                          colorMode={0}
+                          style={{ display: 'inline' }}
+                      >
+                          {sortedChildren}
+                      </ColorSchemeProvider>
+                  </ChaynsProvider>,
+              )
             : (sortedChildren as string);
     }, [areMultipleChildrenGiven, currentChildrenIndex, functions, sortedChildren, values]);
 
@@ -298,7 +303,8 @@ const Typewriter: FC<TypewriterProps> = ({
         return () => {
             window.clearInterval(interval);
         };
-    }, [resetSpeed,
+    }, [
+        resetSpeed,
         speed,
         resetDelay,
         childrenCount,
@@ -329,16 +335,16 @@ const Typewriter: FC<TypewriterProps> = ({
         if (pseudoChildren) {
             const pseudoText = React.isValidElement(pseudoChildren)
                 ? renderToString(
-                    <ChaynsProvider data={values} functions={functions} isModule>
-                        <ColorSchemeProvider
-                            color="#005EB8"
-                            colorMode={0}
-                            style={{display: 'inline'}}
-                        >
-                            {pseudoChildren}
-                        </ColorSchemeProvider>
-                    </ChaynsProvider>,
-                )
+                      <ChaynsProvider data={values} functions={functions} isModule>
+                          <ColorSchemeProvider
+                              color="#005EB8"
+                              colorMode={0}
+                              style={{ display: 'inline' }}
+                          >
+                              {pseudoChildren}
+                          </ColorSchemeProvider>
+                      </ChaynsProvider>,
+                  )
                 : (pseudoChildren as string);
 
             if (shouldUseAnimationHeight) {
@@ -358,6 +364,7 @@ const Typewriter: FC<TypewriterProps> = ({
     return useMemo(
         () => (
             <StyledTypewriter
+                $cursorType={cursorType}
                 onClick={isAnimatingText ? handleClick : undefined}
                 $isAnimatingText={isAnimatingText}
                 $shouldHideCursor={shouldHideCursor}
@@ -373,7 +380,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 )}
                 {isAnimatingText && (
                     <StyledTypewriterPseudoText
-                        dangerouslySetInnerHTML={{__html: pseudoTextHTML}}
+                        dangerouslySetInnerHTML={{ __html: pseudoTextHTML }}
                     />
                 )}
                 {/*
@@ -382,7 +389,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 */}
                 {!hasRenderedChildrenOnce &&
                     createPortal(
-                        <div style={{position: 'absolute', visibility: 'hidden'}}>
+                        <div style={{ position: 'absolute', visibility: 'hidden' }}>
                             {children}
                         </div>,
                         document.body,
@@ -391,6 +398,7 @@ const Typewriter: FC<TypewriterProps> = ({
         ),
         [
             children,
+            cursorType,
             handleClick,
             hasRenderedChildrenOnce,
             isAnimatingText,

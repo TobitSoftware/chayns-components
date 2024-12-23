@@ -1,7 +1,8 @@
 import { CodeHighlighter } from '@chayns-components/code-highlighter';
-import { TextArea } from '@chayns-components/core';
+import { Input, TextArea } from '@chayns-components/core';
 import { Meta, StoryFn } from '@storybook/react';
-import Typewriter from '../src/components/typewriter/Typewriter';
+import { CursorType } from '../src';
+import Typewriter, { TypewriterSpeed } from '../src/components/typewriter/Typewriter';
 
 export default {
     title: 'Typewriter/Typewriter',
@@ -20,6 +21,10 @@ const TextAreaTemplate: StoryFn<typeof Typewriter> = ({ children, ...args }) => 
     <TextArea placeholder={<Typewriter {...args}>{children}</Typewriter>} />
 );
 
+const InputTemplate: StoryFn<typeof Typewriter> = ({ children, ...args }) => (
+    <Input placeholder={<Typewriter {...args}>{children}</Typewriter>} />
+);
+
 export const General = Template.bind({});
 
 export const CustomElements = Template.bind({});
@@ -36,10 +41,24 @@ export const WithCodeHighlighter = Template.bind({});
 
 export const InsideTextArea = TextAreaTemplate.bind({});
 
+export const InsideInput = InputTemplate.bind({});
+
 export const WithIgnoreTags = Template.bind({});
 
 InsideTextArea.args = {
     children: 'Nachricht eingeben',
+};
+
+InsideInput.args = {
+    children: [
+        'Habt ihr am Dienstag geöffnet?',
+        'Ich würde gerne einen Tisch reservieren.',
+        'Kann ich auch ohne Termin vorbeikommen?',
+    ],
+    cursorType: CursorType.Thin,
+    speed: TypewriterSpeed.Slow,
+    resetSpeed: TypewriterSpeed.Fast,
+    shouldUseResetAnimation: true,
 };
 
 CustomElements.args = {
@@ -113,11 +132,14 @@ HTMLText.args = {
 
 MultipleTexts.args = {
     children: [
-        'Hmm, ich würde sagen...',
-        'Ich bin mir nicht ganz sicher...',
-        'Lass mich kurz nachdenken...',
-        'Nochmal von vorne...',
+        'Habt ihr am Dienstag geöffnet?',
+        'Ich würde gerne einen Tisch reservieren.',
+        'Kann ich auch ohne Termin vorbeikommen?',
     ],
+    cursorType: CursorType.Thin,
+    speed: TypewriterSpeed.Slow,
+    resetSpeed: TypewriterSpeed.Fast,
+    shouldUseResetAnimation: true,
 };
 
 WithOwnStyles.args = {

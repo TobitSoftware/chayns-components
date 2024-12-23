@@ -1,33 +1,52 @@
 import type { WithTheme } from '@chayns-components/core';
 import styled, { css, keyframes } from 'styled-components';
-
-const typewriterCursorElement = ({
-    $isAnimatingText,
-    $shouldHideCursor,
-}: {
-    $isAnimatingText?: boolean;
-    $shouldHideCursor?: boolean;
-}) =>
-    $isAnimatingText &&
-    !$shouldHideCursor &&
-    css`
-      .typewriter-lastWithContent {
-        &:after {
-          animation: ${blinkAnimation} 1s steps(2, start) infinite;
-          color: ${({ theme }: StyledTypewriterTextProps) => theme.text};
-          content: '▋';
-          margin-left: 0.25rem;
-          opacity: 0.85;
-          position: relative;
-          vertical-align: baseline;
-        }
-      }
-    `;
+import { CursorType } from '../../types/cursor';
+import type { TypewriterProps } from './Typewriter';
 
 type StyledTypewriterProps = WithTheme<{
-    $isAnimatingText?: boolean;
-    $shouldHideCursor?: boolean;
+    $cursorType: TypewriterProps['cursorType'];
+    $isAnimatingText: boolean;
+    $shouldHideCursor: TypewriterProps['shouldHideCursor'];
 }>;
+
+const typewriterCursorElement = ({
+    $cursorType,
+    $isAnimatingText,
+    $shouldHideCursor,
+}: StyledTypewriterProps) => {
+    if (!$isAnimatingText || $shouldHideCursor) {
+        return '';
+    }
+
+    if ($cursorType === CursorType.Thin) {
+        return css`
+            .typewriter-lastWithContent {
+                &:after {
+                    animation: ${blinkAnimation} 1s steps(2, start) infinite;
+                    color: inherit;
+                    content: '|';
+                    font-size: 25px;
+                    position: relative;
+                    line-height: 0;
+                    vertical-align: baseline;
+                }
+        `;
+    }
+
+    return css`
+        .typewriter-lastWithContent {
+            &:after {
+                animation: ${blinkAnimation} 1s steps(2, start) infinite;
+                color: ${({ theme }: StyledTypewriterTextProps) => theme.text};
+                content: '▋';
+                margin-left: 0.25rem;
+                opacity: 0.85;
+                position: relative;
+                vertical-align: baseline;
+            }
+        }
+    `;
+};
 
 export const StyledTypewriter = styled.div<StyledTypewriterProps>`
     align-items: inherit;
