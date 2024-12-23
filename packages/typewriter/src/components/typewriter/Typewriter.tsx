@@ -367,6 +367,11 @@ const Typewriter: FC<TypewriterProps> = ({
         handleSetNextChildrenIndex,
         nextTextDelay,
         startDelay,
+        onResetAnimationStart,
+        onResetAnimationEnd,
+        onTypingAnimationStart,
+        onTypingAnimationEnd,
+        cursorType,
     ]);
 
     useEffect(() => {
