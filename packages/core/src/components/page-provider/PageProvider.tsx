@@ -51,6 +51,8 @@ const PageProvider: FC<PageProviderProps> = ({
             setPadding(shouldRemovePadding ? 0 : getPagePadding());
         };
 
+        handleResize();
+
         window.addEventListener('resize', handleResize);
 
         return () => {
