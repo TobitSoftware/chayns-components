@@ -4,6 +4,7 @@ import React, {
     CSSProperties,
     FocusEventHandler,
     forwardRef,
+    KeyboardEventHandler,
     ReactElement,
     useCallback,
     useContext,
@@ -50,6 +51,14 @@ export type TextAreaProps = {
      */
     onChange?: ChangeEventHandler<HTMLTextAreaElement>;
     /**
+     * Function that is executed when the input field is focused
+     */
+    onFocus?: FocusEventHandler<HTMLTextAreaElement>;
+    /**
+     * Function that is executed when a letter is pressed
+     */
+    onKeyDown?: KeyboardEventHandler<HTMLTextAreaElement>;
+    /**
      * Placeholder for the text area field.
      */
     placeholder?: string | ReactElement;
@@ -71,6 +80,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             placeholder,
             value,
             onChange,
+            onFocus,
+            onKeyDown,
             rightElement,
             onBlur,
             maxHeight = '120px',
@@ -133,6 +144,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                                 value={value}
                                 onBlur={onBlur}
                                 onChange={onChange}
+                                onFocus={onFocus}
+                                onKeyDown={onKeyDown}
                                 $maxHeight={maxHeight}
                                 $minHeight={minHeight}
                                 $isOverflowing={isOverflowing}
@@ -162,6 +175,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 minHeight,
                 onBlur,
                 onChange,
+                onFocus,
+                onKeyDown,
                 placeholder,
                 rightElement,
                 shouldChangeColor,
