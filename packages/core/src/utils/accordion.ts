@@ -1,5 +1,5 @@
-import type { AccordionHeadProps } from '../components/accordion/accordion-head/AccordionHead';
 import { Children, isValidElement, ReactNode } from 'react';
+import type { AccordionHeadProps } from '../components/accordion/accordion-head/AccordionHead';
 
 type GetAccordionHeadHeightOptions = Pick<AccordionHeadProps, 'isWrapped' | 'title'> & {
     width: number;
@@ -25,7 +25,7 @@ export const getAccordionHeadHeight = ({
     element.style.whiteSpace = 'nowrap';
     element.style.width = `${width}px`;
 
-    element.innerText = title;
+    element.innerHTML = title;
 
     document.body.appendChild(element);
 
