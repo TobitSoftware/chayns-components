@@ -25,14 +25,23 @@ export default class ColorArea extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
+        const { props, state } = this;
         return (
-            this.props !== nextProps || // update if props changed (equal by reference)
-            JSON.stringify(this.state) !== JSON.stringify(nextState)
-        ); // update if state changed (equal by value)
+            ['color', 'height', 'width', 'onChange', 'onChangeEnd'].some(
+                (k) => props[k] !== nextProps[k]
+            ) ||
+            state.top !== nextState.top ||
+            state.left !== nextState.left
+        );
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps !== this.props) {
+        const { props } = this;
+        if (
+            ['color', 'height', 'width', 'onChange', 'onChangeEnd'].some(
+                (k) => props[k] !== prevProps[k]
+            )
+        ) {
             // redraw canvas and reset selector when props changed
             this.drawCanvas();
             this.setSelectorPosition();
