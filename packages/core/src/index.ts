@@ -12,19 +12,28 @@ export {
 export { default as Badge } from './components/badge/Badge';
 export { default as Button } from './components/button/Button';
 export { default as Checkbox } from './components/checkbox/Checkbox';
-export { default as ColorSchemeProvider } from './components/color-scheme-provider/ColorSchemeProvider';
+export {
+    default as ColorSchemeProvider,
+    useColorScheme,
+} from './components/color-scheme-provider/ColorSchemeProvider';
 export type {
+    ColorSchemeContextProps,
     FramerMotionBugFix,
     WithTheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
 export {
     default as ComboBox,
-    type IComboBoxItem as ComboBoxItem,
     type ComboBoxTextStyles,
+    type IComboBoxItem as ComboBoxItem,
     type IComboBoxItems as ComboBoxItems,
 } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
-export { default as ContextMenu, type ContextMenuRef } from './components/context-menu/ContextMenu';
+export {
+    default as ContextMenu,
+    type ContextMenuCoordinates,
+    type ContextMenuItem,
+    type ContextMenuRef,
+} from './components/context-menu/ContextMenu';
 export { default as ExpandableContent } from './components/expandable-content/ExpandableContent';
 export { default as FileInput, type FileInputRef } from './components/file-input/FileInput';
 export { default as FilterButton } from './components/filter-buttons/filter-button/FilterButton';
@@ -96,5 +105,3 @@ export { getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
 export { isTobitEmployee } from './utils/isTobitEmployee';
 export { getUsableHeight } from './utils/pageProvider';
 export { uploadFile } from './utils/uploadFile';
-export { useColorScheme } from './components/color-scheme-provider/ColorSchemeProvider';
-export type { ColorSchemeContextProps } from './components/color-scheme-provider/ColorSchemeProvider';
