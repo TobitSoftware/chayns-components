@@ -170,7 +170,10 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     return (
         <StyledListItemHead
-            animate={{ height: isOpen ? headHeight.open : headHeight.closed, opacity: isDisabledButNotReallyDisabled ? .5:1 }}
+            animate={{
+                height: isOpen ? headHeight.open : headHeight.closed,
+                opacity: isDisabledButNotReallyDisabled ? 0.5 : 1,
+            }}
             initial={false}
             transition={{ duration: 0.2, type: 'tween' }}
             className="beta-chayns-list-item-head"
@@ -213,7 +216,10 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                         >
                             {title}
                         </StyledListItemHeadTitleTextPseudo>
-                        <StyledListItemHeadTitleText $isOpen={isOpen}>
+                        <StyledListItemHeadTitleText
+                            $isOpen={isOpen}
+                            $width={openedTitle?.width ?? 0}
+                        >
                             {title}
                         </StyledListItemHeadTitleText>
                         <StyledListItemHeadTitleElement>

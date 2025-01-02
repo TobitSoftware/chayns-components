@@ -85,11 +85,12 @@ export const StyledListItemHeadTitleElement = styled.div`
     margin-left: 8px;
 `;
 
-type StyledListItemHeadTitleTextProps = WithTheme<{ $isOpen: boolean }>;
+type StyledListItemHeadTitleTextProps = WithTheme<{ $isOpen: boolean; $width: number }>;
 
 export const StyledListItemHeadTitleText = styled(motion.span)<StyledListItemHeadTitleTextProps>`
     font-weight: ${({ $isOpen }) => ($isOpen ? 'bold' : 'normal')};
     white-space: ${({ $isOpen }) => ($isOpen ? 'normal' : 'nowrap')};
+    min-width: ${({ $isOpen, $width }) => ($isOpen ? `${$width}px` : undefined)};
     overflow: hidden;
     text-overflow: ellipsis;
 `;
