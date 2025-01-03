@@ -14,6 +14,7 @@ export default {
 const Template: StoryFn<typeof EmojiInput> = ({ ...args }) => {
     const [text, setText] = useState('');
     const [prefix, setPrefix] = useState<string | undefined>();
+    const [isDisabled, setIsDisabled] = useState(false);
 
     const handleInput = (event: ChangeEvent<HTMLDivElement>, originalText: string) => {
         setText(originalText);
@@ -51,7 +52,23 @@ const Template: StoryFn<typeof EmojiInput> = ({ ...args }) => {
             </p>
             <EmojiInput
                 {...args}
+                isDisabled={isDisabled}
                 onInput={handleInput}
+                onKeyDown={(event) => {
+                    if (event.key === 'Enter' && !event.shiftKey) {
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        console.log('Enter pressed');
+
+                        setIsDisabled(true);
+
+                        setTimeout(() => {
+                            setText('');
+                            setIsDisabled(false);
+                        }, 500);
+                    }
+                }}
                 value={text}
                 prefixElement={prefix}
                 onPrefixElementRemove={handlePrefixRemove}
