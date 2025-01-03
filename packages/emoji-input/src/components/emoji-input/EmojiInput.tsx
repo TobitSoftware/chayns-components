@@ -729,7 +729,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     <StyledMotionEmojiInputEditor
                         $browser={browser?.name}
                         animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
-                        contentEditable={!isDisabled}
+                        contentEditable
                         id={inputId}
                         onBeforeInput={handleBeforeInput}
                         onBlur={handleBlur}
