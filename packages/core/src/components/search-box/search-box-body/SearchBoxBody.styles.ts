@@ -43,7 +43,10 @@ export const StyledSearchBoxBodyHead = styled.div<StyledSearchBoxHeadProps>`
 
 type StyledSearchBoxHeadProps = WithTheme<{ $hasScrolled: boolean; $hasGroupName: boolean }>;
 
-export const StyledSearchBoxBodyHeadGroupName = styled.div`
+type StyledSearchBoxBodyHeadGroupNameNameProps = WithTheme<unknown>;
+
+export const StyledSearchBoxBodyHeadGroupName = styled.div<StyledSearchBoxBodyHeadGroupNameNameProps>`
+    color: ${({ theme }: StyledSearchBoxBodyHeadGroupNameNameProps) => theme.text};
     font-weight: bold;
 `;
 
