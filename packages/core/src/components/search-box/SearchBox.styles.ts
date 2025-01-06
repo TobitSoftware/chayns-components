@@ -60,3 +60,9 @@ export const StyledSearchBoxIcon = styled.div`
     cursor: pointer;
     padding: 0 10px;
 `;
+
+export const StyledSearchBoxLeftWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+`;

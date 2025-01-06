@@ -30,7 +30,11 @@ import GroupName from './group-name/GroupName';
 import SearchBoxBody from './search-box-body/SearchBoxBody';
 import SearchBoxItem from './search-box-item/SearchBoxItem';
 import { StyledSearchBoxItemImage } from './search-box-item/SearchBoxItem.styles';
-import { StyledSearchBox, StyledSearchBoxIcon } from './SearchBox.styles';
+import {
+    StyledSearchBox,
+    StyledSearchBoxIcon,
+    StyledSearchBoxLeftWrapper,
+} from './SearchBox.styles';
 
 export type SearchBoxRef = {
     clear: VoidFunction;
@@ -41,6 +45,10 @@ export type SearchBoxProps = {
      * The element where the content of the `ComboBox` should be rendered via React Portal.
      */
     container?: Element;
+    /**
+     * An optional icon that is displayed inside the left side of the input.
+     */
+    leftIcons?: string[];
     /**
      * List of groups with items that can be searched. It is possible to give only one list; if multiple lists are provided, the 'group name' parameter becomes mandatory.
      */
@@ -91,6 +99,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
     (
         {
             placeholder,
+            leftIcons,
             lists,
             onChange,
             onBlur,
@@ -142,8 +151,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         }, [container]);
 
         useEffect(() => {
-            if(container instanceof Element){
-                setNewContainer(container)
+            if (container instanceof Element) {
+                setNewContainer(container);
             }
         }, [container]);
 
@@ -462,6 +471,16 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             );
         }, [handleClick, shouldShowToggleIcon, theme]);
 
+        const leftElement = useMemo(
+            () => (
+                <StyledSearchBoxLeftWrapper>
+                    {leftIcons && <Icon icons={leftIcons} />}
+                    {selectedImage && selectedImage}
+                </StyledSearchBoxLeftWrapper>
+            ),
+            [leftIcons, selectedImage],
+        );
+
         /**
          * This function handles changes of the input
          */
@@ -763,7 +782,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             onFocus={handleFocus}
                             placeholder={placeholder}
                             onKeyDown={onKeyDown}
-                            leftElement={selectedImage}
+                            leftElement={leftElement}
                             rightElement={rightElement}
                             value={value}
                         />
@@ -775,11 +794,11 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 handleBlur,
                 handleChange,
                 handleFocus,
+                leftElement,
                 onKeyDown,
                 placeholder,
                 portal,
                 rightElement,
-                selectedImage,
                 value,
             ],
         );
