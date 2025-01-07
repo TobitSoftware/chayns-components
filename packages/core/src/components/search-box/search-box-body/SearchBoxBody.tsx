@@ -23,19 +23,20 @@ import {
 
 export type SearchBoxBodyProps = {
     children: ReactNode;
-    filterbuttons?: IFilterButtonItem[];
+    filterButtons?: IFilterButtonItem[];
     selectedGroups?: string[];
     height: number;
     width: number;
     browser: Browser | 'bot' | null | undefined;
     onGroupSelect?: (keys: string[]) => void;
     coordinates: { x: number; y: number };
+    shouldHideFilterButtons?: boolean;
 };
 
 const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
     (
         {
-            filterbuttons,
+            filterButtons,
             coordinates,
             selectedGroups,
             width,
@@ -43,6 +44,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
             height,
             children,
             onGroupSelect,
+            shouldHideFilterButtons,
         },
         ref,
     ) => {
@@ -104,18 +106,20 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                         type: 'tween',
                     }}
                 >
-                    {filterbuttons && filterbuttons?.length > 1 && (
+                    {filterButtons && filterButtons?.length > 1 && (
                         <StyledSearchBoxBodyHead
                             ref={headRef}
                             $hasScrolled={hasScrolled}
                             $hasGroupName={!!currentGroupName}
                         >
-                            <FilterButtons
-                                items={filterbuttons}
-                                size={0}
-                                onSelect={onGroupSelect}
-                                selectedItemIds={selectedGroups}
-                            />
+                            {!shouldHideFilterButtons && (
+                                <FilterButtons
+                                    items={filterButtons}
+                                    size={0}
+                                    onSelect={onGroupSelect}
+                                    selectedItemIds={selectedGroups}
+                                />
+                            )}
                             <StyledSearchBoxBodyHeadGroupName>
                                 {currentGroupName}
                             </StyledSearchBoxBodyHeadGroupName>
@@ -140,7 +144,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                 coordinates.x,
                 coordinates.y,
                 currentGroupName,
-                filterbuttons,
+                filterButtons,
                 handleScroll,
                 hasScrolled,
                 headHeight,
