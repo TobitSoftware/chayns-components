@@ -82,6 +82,10 @@ export type SearchBoxProps = {
      */
     shouldAddInputToList: boolean;
     /**
+     * If true, the filter buttons are hidden.
+     */
+    shouldHideFilterButtons?: boolean;
+    /**
      * Whether the full list of items should be displayed if the input is empty.
      */
     shouldShowContentOnEmptyInput?: boolean;
@@ -107,6 +111,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             onKeyDown,
             selectedId,
             container,
+            shouldHideFilterButtons = false,
             shouldShowRoundImage,
             shouldShowContentOnEmptyInput = true,
             shouldAddInputToList = true,
@@ -174,7 +179,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             setHasMultipleGroups(lists.length > 1);
         }, [lists]);
 
-        const filterbuttons = useMemo(() => {
+        const filterButtons = useMemo(() => {
             const items: IFilterButtonItem[] = [];
 
             if (lists.length <= 1) {
@@ -512,6 +517,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     setMatchingListsItems([]);
                 } else {
                     setMatchingListsItems(filteredLists);
+
                     if (filteredLists.length !== 0) {
                         handleOpen();
                     } else {
@@ -629,6 +635,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         ]);
 
         useEffect(() => {
+            if (content.length > 0) {
+                handleOpen();
+            }
+        }, [content.length, handleOpen]);
+
+        useEffect(() => {
             const handleKeyDown = (e: KeyboardEvent) => {
                 if (!isAnimating) {
                     return;
@@ -743,7 +755,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     <AnimatePresence initial={false}>
                         {isAnimating && (
                             <SearchBoxBody
-                                filterbuttons={filterbuttons}
+                                filterButtons={filterButtons}
                                 selectedGroups={groups}
                                 width={width}
                                 coordinates={internalCoordinates}
@@ -751,6 +763,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                                 height={height}
                                 ref={contentRef}
                                 onGroupSelect={handleFilterButtonsGroupSelect}
+                                shouldHideFilterButtons={shouldHideFilterButtons}
                             >
                                 {content}
                             </SearchBoxBody>
@@ -763,12 +776,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             browser?.name,
             newContainer,
             content,
-            filterbuttons,
+            filterButtons,
             groups,
             height,
             internalCoordinates,
             isAnimating,
             width,
+            shouldHideFilterButtons,
         ]);
 
         return useMemo(
