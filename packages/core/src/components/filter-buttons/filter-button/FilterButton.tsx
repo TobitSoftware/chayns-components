@@ -43,8 +43,10 @@ const FilterButton: FC<FilterButtonProps> = ({
                 <StyledFilterButtonItemLabel>
                     {icons && <Icon icons={icons} size={15} />}
                     <StyledFilterButtonItemLabelText>{text}</StyledFilterButtonItemLabelText>
-                    {count && (
-                        <StyledFilterButtonItemLabelCount>{count}</StyledFilterButtonItemLabelCount>
+                    {typeof count === 'number' && (
+                        <StyledFilterButtonItemLabelCount>
+                            {count.toLocaleString()}
+                        </StyledFilterButtonItemLabelCount>
                     )}
                 </StyledFilterButtonItemLabel>
                 <StyledFilterButtonItemBorder
