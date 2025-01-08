@@ -27,7 +27,7 @@ export type FilterButtonsProps = {
     /**
      * If true, the count of all items will be shown in the "all" button.
      */
-    shouldShowCountForAll?: boolean;
+    shouldCalcCountForAll?: boolean;
     /**
      * The size auf the filter buttons. Use the FilterButtonSize enum.
      */
@@ -39,7 +39,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
     selectedItemIds,
     onSelect,
     items,
-    shouldShowCountForAll = false,
+    shouldCalcCountForAll = false,
     size = FilterButtonSize.Normal,
 }) => {
     const [selectedIds, setSelectedIds] = useState<string[]>(['all']);
@@ -88,7 +88,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
 
         let allButtonCount = allCount;
 
-        if (typeof allButtonCount !== 'number' && shouldShowCountForAll) {
+        if (typeof allButtonCount !== 'number' && shouldCalcCountForAll) {
             allButtonCount = items.reduce((acc, item) => acc + (item.count || 0), 0);
         }
 
@@ -126,7 +126,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
         });
 
         return array;
-    }, [handleSelect, items, selectedIds, shouldShowCountForAll, size]);
+    }, [allCount, handleSelect, items, selectedIds, shouldCalcCountForAll, size]);
 
     return useMemo(() => <StyledFilterButton>{reactItems}</StyledFilterButton>, [reactItems]);
 };
