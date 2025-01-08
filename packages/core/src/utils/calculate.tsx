@@ -1,11 +1,15 @@
-import { ChaynsProvider } from 'chayns-api';
+import { ChaynsProvider, ChaynsReactFunctions, ChaynsReactValues } from 'chayns-api';
 import React, { type CSSProperties } from 'react';
 import { renderToString } from 'react-dom/server';
 import ColorSchemeProvider from '../components/color-scheme-provider/ColorSchemeProvider';
 import type { IComboBoxItem } from '../components/combobox/ComboBox';
 import type { SliderButtonItem } from '../types/slider-button';
 
-export const calculateContentWidth = (list: IComboBoxItem[]) => {
+export const calculateContentWidth = (
+    list: IComboBoxItem[],
+    functions: ChaynsReactFunctions,
+    values: ChaynsReactValues,
+) => {
     const length: number[] = [];
 
     list.forEach(({ suffixElement, text, textStyles }) => {
@@ -33,8 +37,7 @@ export const calculateContentWidth = (list: IComboBoxItem[]) => {
             // ColorSchemeProvider is used to prevent missing scheme context error.
             // Due to the fact that the element is never rendered visible, the values are irrelevant.
             div.innerHTML += renderToString(
-                // @ts-expect-error: It's a fake chayns provider because it's not necessary here to have the correct data
-                <ChaynsProvider data={{}} functions={{}} isModule>
+                <ChaynsProvider data={values} functions={functions} isModule>
                     <ColorSchemeProvider color="#005EB8" colorMode={0}>
                         {suffixElement}
                     </ColorSchemeProvider>

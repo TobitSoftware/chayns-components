@@ -1,4 +1,4 @@
-import { useDevice } from 'chayns-api';
+import { useDevice, useFunctions, useValues } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
     ChangeEventHandler,
@@ -164,6 +164,9 @@ const ComboBox: FC<ComboBoxProps> = ({
     const styledComboBoxElementRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
 
+    const functions = useFunctions();
+    const values = useValues();
+
     const { browser } = useDevice();
 
     const isTouch = getIsTouch();
@@ -186,8 +189,8 @@ const ComboBox: FC<ComboBoxProps> = ({
     }, [container]);
 
     useEffect(() => {
-        if(container instanceof Element){
-            setNewContainer(container)
+        if (container instanceof Element) {
+            setNewContainer(container);
         }
     }, [container]);
 
@@ -338,12 +341,8 @@ const ComboBox: FC<ComboBoxProps> = ({
      */
     useEffect(() => {
         const allItems = lists.flatMap((list) => list.list);
-        const hasImage = [selectedItem, ...allItems].some(
-            item => item?.imageUrl
-        );
-        const hasIcon = [selectedItem, ...allItems].some(
-            item => item?.icons
-        );
+        const hasImage = [selectedItem, ...allItems].some((item) => item?.imageUrl);
+        const hasIcon = [selectedItem, ...allItems].some((item) => item?.icons);
 
         const parentWidth =
             styledComboBoxElementRef.current?.parentElement?.getBoundingClientRect().width ?? 0;
@@ -355,16 +354,21 @@ const ComboBox: FC<ComboBoxProps> = ({
         let prefixWidth = 0;
 
         if (prefix) {
-            const prefixTextWidth = calculateContentWidth([{ text: prefix, value: 'prefix' }]) + 5;
+            const prefixTextWidth =
+                calculateContentWidth([{ text: prefix, value: 'prefix' }], functions, values) + 5;
 
             prefixWidth = Math.max(prefixTextWidth, 32);
         }
 
-        const baseWidth = calculateContentWidth([
-            ...allItems,
-            { text: placeholder, value: 'placeholder' },
-            ...(selectedItem ? [selectedItem] : [])
-        ]);
+        const baseWidth = calculateContentWidth(
+            [
+                ...allItems,
+                { text: placeholder, value: 'placeholder' },
+                ...(selectedItem ? [selectedItem] : []),
+            ],
+            functions,
+            values,
+        );
 
         const calculatedWidth = baseWidth + paddingWidth + imageWidth + iconWidth + prefixWidth;
 
@@ -382,7 +386,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         // Current item width settings
         else if (shouldUseCurrentItemWidth && internalSelectedItem) {
             const itemWidth =
-                calculateContentWidth([internalSelectedItem]) +
+                calculateContentWidth([internalSelectedItem], functions, values) +
                 paddingWidth +
                 imageWidth +
                 iconWidth +
@@ -395,7 +399,17 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         setMinWidth(tmpMinWidth);
         setBodyMinWidth(shouldUseCurrentItemWidth ? tmpMinWidth : tmpBodyMinWidth);
-    }, [lists, placeholder, shouldUseFullWidth, shouldUseCurrentItemWidth, internalSelectedItem, prefix, selectedItem]);
+    }, [
+        lists,
+        placeholder,
+        shouldUseFullWidth,
+        shouldUseCurrentItemWidth,
+        internalSelectedItem,
+        prefix,
+        selectedItem,
+        functions,
+        values,
+    ]);
 
     /**
      * This function sets the external selected item
@@ -540,7 +554,19 @@ const ComboBox: FC<ComboBoxProps> = ({
                 newContainer,
             ),
         );
-    }, [bodyMinWidth, bodyStyles, browser?.name, comboBoxGroups, newContainer, direction, isAnimating, maxHeight, minWidth, overflowY, shouldUseCurrentItemWidth]);
+    }, [
+        bodyMinWidth,
+        bodyStyles,
+        browser?.name,
+        comboBoxGroups,
+        newContainer,
+        direction,
+        isAnimating,
+        maxHeight,
+        minWidth,
+        overflowY,
+        shouldUseCurrentItemWidth,
+    ]);
 
     return useMemo(
         () => (
