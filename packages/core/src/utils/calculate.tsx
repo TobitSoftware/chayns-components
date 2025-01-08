@@ -1,3 +1,4 @@
+import { ChaynsProvider } from 'chayns-api';
 import React, { type CSSProperties } from 'react';
 import { renderToString } from 'react-dom/server';
 import ColorSchemeProvider from '../components/color-scheme-provider/ColorSchemeProvider';
@@ -32,9 +33,12 @@ export const calculateContentWidth = (list: IComboBoxItem[]) => {
             // ColorSchemeProvider is used to prevent missing scheme context error.
             // Due to the fact that the element is never rendered visible, the values are irrelevant.
             div.innerHTML += renderToString(
-                <ColorSchemeProvider color="#005EB8" colorMode={0}>
-                    {suffixElement}
-                </ColorSchemeProvider>,
+                // @ts-expect-error: It's a fake chayns provider because it's not necessary here to have the correct data
+                <ChaynsProvider data={{}} functions={{}} isModule>
+                    <ColorSchemeProvider color="#005EB8" colorMode={0}>
+                        {suffixElement}
+                    </ColorSchemeProvider>
+                </ChaynsProvider>,
             );
         }
 
