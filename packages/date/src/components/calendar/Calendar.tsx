@@ -1,8 +1,22 @@
 import { ComboBox, Icon } from '@chayns-components/core';
+import { Language } from 'chayns-api';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import {Categories, CustomThumbColors, DateInterval, HighlightedDates} from '../../types/calendar';
-import { CalendarType } from '../../types/calendar';
+import {
+    CalendarType,
+    Categories,
+    CustomThumbColors,
+    DateInterval,
+    HighlightedDates,
+} from '../../types/calendar';
 import { getNewDate, getYearsBetween, isDateInRange } from '../../utils/calendar';
+import {
+    addYears,
+    differenceInCalendarMonths,
+    isSameDay,
+    isSameMonth,
+    isWithinInterval,
+    subYears,
+} from '../../utils/date';
 import {
     StyledCalendar,
     StyledCalendarIconWrapper,
@@ -10,15 +24,6 @@ import {
     StyledPseudoMonthYearPicker,
 } from './Calendar.styles';
 import MonthWrapper from './month-wrapper/MonthWrapper';
-import {Language} from "chayns-api";
-import {
-    addYears,
-    differenceInCalendarMonths,
-    isSameDay,
-    isSameMonth,
-    isWithinInterval,
-    subYears
-} from "../../utils/date";
 
 interface BaseProps {
     /**
@@ -82,8 +87,6 @@ interface SingleSelectionProps {
      * A date that should be preselected.
      */
     selectedDate?: Date;
-    selectedDates: never;
-    selectedDateInterval: never;
 }
 
 interface MultipleSelectionProps {
@@ -95,8 +98,6 @@ interface MultipleSelectionProps {
      * An array of dates that should be preselected.
      */
     selectedDates?: Date[];
-    selectedDate: never;
-    selectedDateInterval: never;
 }
 
 interface IntervalSelectionProps {
@@ -108,8 +109,6 @@ interface IntervalSelectionProps {
      * An interval that should be preselected.
      */
     selectedDateInterval?: DateInterval;
-    selectedDates: never;
-    selectedDate: never;
 }
 
 export type CalendarProps = BaseProps &
@@ -123,7 +122,8 @@ const Calendar: FC<CalendarProps> = ({
     maxDate = DEFAULT_MAX_DATE,
     minDate = DEFAULT_MIN_DATE,
     highlightedDates,
-    onChange,customThumbColors,
+    onChange,
+    customThumbColors,
     selectedDate,
     selectedDates,
     selectedDateInterval,
@@ -139,8 +139,8 @@ const Calendar: FC<CalendarProps> = ({
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
     const [internalSelectedDate, setInternalSelectedDate] = useState<
         Date | Date[] | DateInterval | undefined
-    >(type === CalendarType.Multiple ? [] : undefined);
-    const [direction, setDirection] = useState<'left' | 'right'>();
+    >(() => (type === CalendarType.Multiple ? [] : undefined));
+    const [direction, setDirection] = useState<'left' | 'right' | undefined>();
     const [width, setWidth] = useState(0);
 
     const showMonthYearPickers = useMemo(() => {
@@ -170,7 +170,8 @@ const Calendar: FC<CalendarProps> = ({
                 });
             }
         }
-    }, [currentDate, onShownDatesChange, shouldRenderTwoMonths]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentDate, shouldRenderTwoMonths]);
 
     useEffect(() => {
         const bounds = {
@@ -178,14 +179,15 @@ const Calendar: FC<CalendarProps> = ({
             end: maxDate,
         };
         if (type === CalendarType.Single) {
-            if (selectedDate) {
+            const date = selectedDate as Date | undefined;
+            if (date) {
                 const isDisabledDate = disabledDates.some((disabledDate) =>
-                    isSameDay(selectedDate, disabledDate),
+                    isSameDay(date, disabledDate),
                 );
-                const isDateInBounds = isWithinInterval(selectedDate, bounds);
+                const isDateInBounds = isWithinInterval(date, bounds);
 
                 if (!isDisabledDate && isDateInBounds) {
-                    setInternalSelectedDate(selectedDate);
+                    setInternalSelectedDate(date);
                 } else {
                     console.warn(
                         '[@chayns-components/date] Warning: Failed to set selectedDate, because it is disabled or out of bounds.',
@@ -196,17 +198,18 @@ const Calendar: FC<CalendarProps> = ({
                             ? []
                             : ['\nselectedDate is outside of bounds:', { minDate, maxDate }]),
                     );
-                    setInternalSelectedDate(undefined);
+                    setInternalSelectedDate(() => undefined);
                 }
             } else {
-                setInternalSelectedDate(undefined);
+                setInternalSelectedDate(() => undefined);
             }
         } else if (type === CalendarType.Multiple) {
-            if (selectedDates) {
+            const dates = selectedDates as Date[] | undefined;
+            if (dates) {
                 const disabledSelectedDates: Date[] = [];
                 const datesOutsideOfBounds: Date[] = [];
 
-                const filteredDates = selectedDates.filter((date) => {
+                const filteredDates = dates.filter((date) => {
                     if (disabledDates.some((disabledDate) => isSameDay(date, disabledDate))) {
                         disabledSelectedDates.push(date);
                         return false;
@@ -242,23 +245,23 @@ const Calendar: FC<CalendarProps> = ({
                 setInternalSelectedDate([]);
             }
         } else if (type === CalendarType.Interval) {
-            if (selectedDateInterval) {
+            const dateInterval = selectedDateInterval as DateInterval | undefined;
+            if (dateInterval) {
                 const intervalIncludesDisabledDate =
-                    selectedDateInterval.end &&
+                    dateInterval.end &&
                     disabledDates.some((disabledDate) =>
                         isWithinInterval(disabledDate, {
-                            start: selectedDateInterval.start,
-                            end: selectedDateInterval.end as Date,
+                            start: dateInterval.start,
+                            end: dateInterval.end as Date,
                         }),
                     );
 
                 const intervalIsInBounds =
-                    isWithinInterval(selectedDateInterval.start, bounds) &&
-                    (!selectedDateInterval.end ||
-                        isWithinInterval(selectedDateInterval.end, bounds));
+                    isWithinInterval(dateInterval.start, bounds) &&
+                    (!dateInterval.end || isWithinInterval(dateInterval.end, bounds));
 
                 if (!intervalIncludesDisabledDate && intervalIsInBounds) {
-                    setInternalSelectedDate(selectedDateInterval);
+                    setInternalSelectedDate(dateInterval);
                 } else {
                     console.warn(
                         '[@chayns-components/date] Warning: Failed to set selectedDateInterval, because it includes disabled dates or dates that are out of bounds.',
@@ -269,7 +272,7 @@ const Calendar: FC<CalendarProps> = ({
                             : []),
                         ...(intervalIsInBounds ? [] : ['\nbounds:', { minDate, maxDate }]),
                     );
-                    setInternalSelectedDate(undefined);
+                    setInternalSelectedDate(() => undefined);
                 }
             }
         }
@@ -397,7 +400,7 @@ const Calendar: FC<CalendarProps> = ({
     );
 
     const handleAnimationFinished = () => {
-        setDirection(undefined);
+        setDirection(() => undefined);
     };
 
     const ShouldShowLeftArrow = useMemo(() => {
