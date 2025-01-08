@@ -87,6 +87,8 @@ interface SingleSelectionProps {
      * A date that should be preselected.
      */
     selectedDate?: Date;
+    selectedDates?: never;
+    selectedDateInterval?: never;
 }
 
 interface MultipleSelectionProps {
@@ -98,6 +100,8 @@ interface MultipleSelectionProps {
      * An array of dates that should be preselected.
      */
     selectedDates?: Date[];
+    selectedDate?: never;
+    selectedDateInterval?: never;
 }
 
 interface IntervalSelectionProps {
@@ -109,6 +113,8 @@ interface IntervalSelectionProps {
      * An interval that should be preselected.
      */
     selectedDateInterval?: DateInterval;
+    selectedDates?: never;
+    selectedDate?: never;
 }
 
 export type CalendarProps = BaseProps &
@@ -179,15 +185,14 @@ const Calendar: FC<CalendarProps> = ({
             end: maxDate,
         };
         if (type === CalendarType.Single) {
-            const date = selectedDate as Date | undefined;
-            if (date) {
+            if (selectedDate) {
                 const isDisabledDate = disabledDates.some((disabledDate) =>
-                    isSameDay(date, disabledDate),
+                    isSameDay(selectedDate, disabledDate),
                 );
-                const isDateInBounds = isWithinInterval(date, bounds);
+                const isDateInBounds = isWithinInterval(selectedDate, bounds);
 
                 if (!isDisabledDate && isDateInBounds) {
-                    setInternalSelectedDate(date);
+                    setInternalSelectedDate(selectedDate);
                 } else {
                     console.warn(
                         '[@chayns-components/date] Warning: Failed to set selectedDate, because it is disabled or out of bounds.',
@@ -204,12 +209,11 @@ const Calendar: FC<CalendarProps> = ({
                 setInternalSelectedDate(() => undefined);
             }
         } else if (type === CalendarType.Multiple) {
-            const dates = selectedDates as Date[] | undefined;
-            if (dates) {
+            if (selectedDates) {
                 const disabledSelectedDates: Date[] = [];
                 const datesOutsideOfBounds: Date[] = [];
 
-                const filteredDates = dates.filter((date) => {
+                const filteredDates = selectedDates.filter((date) => {
                     if (disabledDates.some((disabledDate) => isSameDay(date, disabledDate))) {
                         disabledSelectedDates.push(date);
                         return false;
@@ -245,23 +249,23 @@ const Calendar: FC<CalendarProps> = ({
                 setInternalSelectedDate([]);
             }
         } else if (type === CalendarType.Interval) {
-            const dateInterval = selectedDateInterval as DateInterval | undefined;
-            if (dateInterval) {
+            if (selectedDateInterval) {
                 const intervalIncludesDisabledDate =
-                    dateInterval.end &&
+                    selectedDateInterval.end &&
                     disabledDates.some((disabledDate) =>
                         isWithinInterval(disabledDate, {
-                            start: dateInterval.start,
-                            end: dateInterval.end as Date,
+                            start: selectedDateInterval.start,
+                            end: selectedDateInterval.end as Date,
                         }),
                     );
 
                 const intervalIsInBounds =
-                    isWithinInterval(dateInterval.start, bounds) &&
-                    (!dateInterval.end || isWithinInterval(dateInterval.end, bounds));
+                    isWithinInterval(selectedDateInterval.start, bounds) &&
+                    (!selectedDateInterval.end ||
+                        isWithinInterval(selectedDateInterval.end, bounds));
 
                 if (!intervalIncludesDisabledDate && intervalIsInBounds) {
-                    setInternalSelectedDate(dateInterval);
+                    setInternalSelectedDate(selectedDateInterval);
                 } else {
                     console.warn(
                         '[@chayns-components/date] Warning: Failed to set selectedDateInterval, because it includes disabled dates or dates that are out of bounds.',
