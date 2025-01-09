@@ -86,6 +86,10 @@ export type InputProps = {
      */
     onFocus?: FocusEventHandler<HTMLInputElement>;
     /**
+     * Function that is executed when content is pasted into the input field
+     */
+    onPaste?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
+    /**
      * Function that is executed when a letter is pressed
      */
     onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
@@ -145,6 +149,7 @@ const Input = forwardRef<InputRef, InputProps>(
             onChange,
             onFocus,
             onKeyDown,
+            onPaste,
             placeholder,
             rightElement,
             shouldShowOnlyBottomBorder,
@@ -263,6 +268,7 @@ const Input = forwardRef<InputRef, InputProps>(
                                 event.preventDefault();
                                 event.stopPropagation();
                             }}
+                            onPaste={onPaste}
                             ref={inputRef}
                             type={type}
                             value={value}
