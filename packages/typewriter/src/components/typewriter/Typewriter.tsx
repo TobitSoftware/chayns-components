@@ -26,7 +26,7 @@ const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffec
 
 export type TypewriterProps = {
     /**
-     * The amount of characters that will be animated per animation circle.
+     * The amount of characters that will be animated per animation cycle.
      */
     animationSteps?: number;
     /**
