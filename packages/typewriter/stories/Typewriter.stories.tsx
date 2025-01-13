@@ -126,6 +126,10 @@ InsideTextArea.args = {
     children: 'Nachricht eingeben',
 };
 
+AutoSpeed.args = {
+    shouldCalcAutoSpeed: true,
+};
+
 InsideInput.args = {
     children: [
         'Habt ihr am Dienstag geöffnet?',

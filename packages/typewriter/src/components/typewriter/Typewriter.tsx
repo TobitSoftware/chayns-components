@@ -149,9 +149,10 @@ const Typewriter: FC<TypewriterProps> = ({
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
     const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
     const [shouldPreventBlinkingCursor, setShouldPreventBlinkingCursor] = useState(false);
+    const [isResetAnimationActive, setIsResetAnimationActive] = useState(false);
+    const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
     const [autoSpeed, setAutoSpeed] = useState<number>();
-
-    const prevText = useRef<string>();
+    const [autoSteps, setAutoSteps] = useState(1);
 
     const functions = useFunctions();
     const values = useValues();
@@ -217,41 +218,30 @@ const Typewriter: FC<TypewriterProps> = ({
             : (sortedChildren as string);
     }, [areMultipleChildrenGiven, currentChildrenIndex, functions, sortedChildren, values]);
 
-    useEffect(() => {
-        if (!shouldCalcAutoSpeed) {
-            setAutoSpeed(undefined);
-
-            return;
-        }
-
-        if (!prevText.current) {
-            prevText.current = textContent;
-
-            return;
-        }
-
-        setAutoSpeed(
-            calculateAutoSpeed({
-                oldText: prevText.current,
-                newText: textContent,
-                baseSpeed: speed,
-            }),
-        );
-
-        prevText.current = textContent;
-    }, [shouldCalcAutoSpeed, speed, textContent]);
-
-    useEffect(() => {
-        console.debug('TEST - Typewriter', autoSpeed);
-    }, [autoSpeed]);
-
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 
-    const [isResetAnimationActive, setIsResetAnimationActive] = useState(false);
     const [shownCharCount, setShownCharCount] = useState(
         charactersCount > 0 ? 0 : textContent.length,
     );
-    const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
+
+    const currentPosition = useRef(0);
+
+    useEffect(() => {
+        if (!shouldCalcAutoSpeed) {
+            setAutoSpeed(undefined);
+            setAutoSteps(1);
+
+            return;
+        }
+
+        const { speed: calculatedAutoSpeed, steps } = calculateAutoSpeed({
+            fullTextLength: charactersCount,
+            currentPosition: currentPosition.current,
+        });
+
+        setAutoSpeed(calculatedAutoSpeed);
+        setAutoSteps(steps);
+    }, [charactersCount, shouldCalcAutoSpeed, speed, textContent]);
 
     const isAnimatingText =
         shownCharCount < textContent.length ||
@@ -285,6 +275,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
         if (shouldStopAnimation || charactersCount === 0) {
             setShownCharCount(textContent.length);
+            currentPosition.current = textContent.length;
         } else if (isResetAnimationActive) {
             if (typeof onResetAnimationStart === 'function') {
                 onResetAnimationStart();
@@ -293,6 +284,7 @@ const Typewriter: FC<TypewriterProps> = ({
             interval = window.setInterval(() => {
                 setShownCharCount((prevState) => {
                     const nextState = prevState - 1;
+                    currentPosition.current = nextState;
 
                     if (nextState === 0) {
                         window.clearInterval(interval);
@@ -313,7 +305,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 });
             }, resetSpeed);
         } else {
-            const setInterval = () => {
+            const startTypingAnimation = () => {
                 if (cursorType === CursorType.Thin) {
                     setShouldPreventBlinkingCursor(true);
                 }
@@ -322,9 +314,9 @@ const Typewriter: FC<TypewriterProps> = ({
                     onTypingAnimationStart();
                 }
 
-                interval = window.setInterval(() => {
+                const runTypingInterval = () => {
                     setShownCharCount((prevState) => {
-                        let nextState = Math.min(prevState + 1, charactersCount);
+                        let nextState = Math.min(prevState + autoSteps, charactersCount);
 
                         if (nextState >= charactersCount && !shouldWaitForContent) {
                             window.clearInterval(interval);
@@ -356,15 +348,19 @@ const Typewriter: FC<TypewriterProps> = ({
                             }
                         }
 
+                        currentPosition.current = nextState;
+
                         return nextState;
                     });
-                }, autoSpeed ?? speed);
+                };
+
+                interval = window.setInterval(runTypingInterval, autoSpeed ?? speed);
             };
 
             if (startDelay) {
-                setTimeout(setInterval, startDelay);
+                setTimeout(startTypingAnimation, startDelay);
             } else {
-                setInterval();
+                startTypingAnimation();
             }
         }
 
@@ -392,6 +388,7 @@ const Typewriter: FC<TypewriterProps> = ({
         onTypingAnimationEnd,
         cursorType,
         autoSpeed,
+        autoSteps,
     ]);
 
     useEffect(() => {

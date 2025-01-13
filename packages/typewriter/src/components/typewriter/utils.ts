@@ -1,5 +1,3 @@
-import { TypewriterSpeed } from '../../types/speed';
-
 /**
  * This function extracts a part of the text from an HTML text. The HTML elements themselves are
  * returned in the result. In addition, the function ensures that the closing tag of the Bold HTML
@@ -112,29 +110,25 @@ export const shuffleArray = <T>(array: T[]): T[] => {
 };
 
 interface CalculateAutoSpeedProps {
-    oldText: string;
-    newText: string;
-    baseSpeed?: number;
-    maxDuration?: number;
+    fullTextLength: number;
+    currentPosition: number;
 }
 
 export const calculateAutoSpeed = ({
-    oldText,
-    newText,
-    baseSpeed = TypewriterSpeed.Fast,
-    maxDuration = 50,
-}: CalculateAutoSpeedProps): number => {
-    const oldLength = oldText.length;
-    const newLength = newText.length;
-    const chunkLength = newLength - oldLength;
+    fullTextLength,
+    currentPosition,
+}: CalculateAutoSpeedProps): { speed: number; steps: number } => {
+    const MIN_SPEED = 1;
+    const MAX_SPEED = 10;
 
-    if (chunkLength <= 0) {
-        return baseSpeed;
+    const remainingLength = fullTextLength - currentPosition;
+
+    // Calculate the speed with the remaining text length
+    const speed = Math.min(2000 / remainingLength, MAX_SPEED);
+
+    if (speed < MIN_SPEED) {
+        return { speed: 1, steps: 2 };
     }
 
-    const minSpeed = 1;
-
-    const calculatedSpeed = Math.min(maxDuration / chunkLength, baseSpeed);
-
-    return Math.max(calculatedSpeed, minSpeed);
+    return { speed, steps: 1 };
 };
