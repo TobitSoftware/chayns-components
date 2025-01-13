@@ -99,7 +99,7 @@ export type TypewriterProps = {
     /**
      * Whether the animation speed should be calculated with the chunk interval.
      */
-    shouldUseAutoSpeed?: boolean;
+    shouldCalcAutoSpeed?: boolean;
     /**
      * Specifies whether the reset of the text should be animated with a backspace animation for
      * multiple texts.
@@ -144,7 +144,7 @@ const Typewriter: FC<TypewriterProps> = ({
     resetSpeed = speed,
     startDelay = TypewriterDelay.None,
     textStyle,
-    shouldUseAutoSpeed = false,
+    shouldCalcAutoSpeed = false,
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
     const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
@@ -218,7 +218,7 @@ const Typewriter: FC<TypewriterProps> = ({
     }, [areMultipleChildrenGiven, currentChildrenIndex, functions, sortedChildren, values]);
 
     useEffect(() => {
-        if (!shouldUseAutoSpeed) {
+        if (!shouldCalcAutoSpeed) {
             setAutoSpeed(undefined);
 
             return;
@@ -232,7 +232,7 @@ const Typewriter: FC<TypewriterProps> = ({
         );
 
         prevText.current = textContent;
-    }, [shouldUseAutoSpeed, textContent]);
+    }, [shouldCalcAutoSpeed, textContent]);
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 
