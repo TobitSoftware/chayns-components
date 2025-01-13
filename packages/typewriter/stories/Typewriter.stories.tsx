@@ -27,51 +27,49 @@ const InputTemplate: StoryFn<typeof Typewriter> = ({ children, ...args }) => (
 );
 
 const ChunkTemplate: StoryFn<typeof Typewriter> = ({ children, ...args }) => {
-    const fullText = `Gießt sich eine neue Tasse Kräutertee ein und legt ein Stück selbstgestricktes Deckchen zurecht
+    const fullText = `Natürlich, hier ist ein längerer Lorem Ipsum Text:
 
-"Die Briefeschreiberin vom Marktplatz"
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada. Nullam ac erat ante. Duis vel neque at velit consequat efficitur a ut sapien. Curabitur vitae turpis et arcu mollis ultrices. Mauris nec justo fermentum, lacinia eros non, accumsan turpis. Phasellus molestie dui vel augue scelerisque blandit.
 
-Nimmt einen wärmenden Schluck Tee
+Sed dapibus nisl bibendum metus tincidunt, ut volutpat ex facilisis. Integer nec magna nec nulla pharetra convallis in vel mauris. Quisque pellentesque libero ut lectus congue, sed auctor nunc aliquam. Nam tincidunt metus at lectus sagittis, vitae varius enim gravida. Suspendisse potenti. Praesent at erat faucibus, ullamcorper nisi ut, varius risus. Etiam tristique felis orci, id condimentum metus dictum sed.
 
-Diese Geschichte beginnt 2001, als ich Frau Lindner kennenlernte. Sie saß jeden Dienstag und Donnerstag auf ihrer Bank am Marktplatz, mit einer alten Schreibmaschine auf dem Schoß. Ein handgeschriebenes Schild neben ihr verkündete: "Schreibe Briefe für Menschen, die es selbst nicht können. Bezahlung: Ein Lächeln."
+Fusce euismod dapibus lacus, et finibus nunc elementum eget. Nunc nec massa libero. Aenean sodales eu mi quis feugiat. Sed porta vehicula purus a aliquam. Maecenas fringilla leo ac nisl tincidunt volutpat sit amet et est. Nulla facilisi. Nam tempor tellus sit amet quam fermentum laoreet.
 
-Streicht gedankenverloren über die Teetasse
+In fermentum ligula ac urna consectetur maximus. Quisque sollicitudin tortor non turpis placerat aliquet. Pellentesque malesuada purus ac lorem ultricies suscipit. In hac habitasse platea dictumst. Donec semper felis eget justo cursus viverra. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla facilisi.
 
-Die 78-jährige ehemalige Sekretärin hatte bemerkt, wie viele ältere Menschen Schwierigkeiten hatten, Briefe an Behörden oder ihre Familie zu schreiben. Manche konnten nicht mehr gut sehen, andere zitterten zu stark, und viele waren mit Computern überfordert.
+Curabitur in nisi leo. Mauris ultricies enim eget felis tristique, vel eleifend mauris mollis. Ut et nunc nec enim interdum cursus eget quis lorem. Fusce dignissim finibus bibendum. Morbi euismod neque tortor, vitae pulvinar ipsum hendrerit sed. Proin eget sem non justo egestas tincidunt at non sapien.
 
-Lehnt sich vor und spricht leiser
+Integer auctor turpis id cursus lacinia. Aliquam id porttitor libero, et iaculis erat. Vestibulum imperdiet fringilla nibh, ac vulputate arcu faucibus ut. Donec venenatis lectus sed massa tincidunt tincidunt eu in dui.
 
-Ich werde nie den Tag vergessen, als der alte Herr Schmidt zu ihr kam. Seine Tochter war vor 20 Jahren nach Kanada ausgewandert, und er hatte den Kontakt verloren. Frau Lindner schrieb nicht nur einen Brief - sie recherchierte im Internet, kontaktierte das Einwohnermeldeamt in Vancouver und fand die Tochter tatsächlich.
+Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur id libero ligula.
 
-Ihre Augen beginnen zu strahlen
+Quisque vehicula consequat odio a commodo.
+Morbi tempus orci a sapien facilisis fermentum.
+Vestibulum vehicula ligula id urna lobortis pharetra.
+Integer gravida velit non diam consequat dictum.
+Nunc luctus justo a urna sollicitudin, quis sodales libero viverra.
+Aliquam erat volutpat.
+Proin quis tortor non purus viverra eleifend ac at arcu.
+Vivamus sit amet quam ornare, iaculis quam nec, convallis velit.
+Phasellus imperdiet metus sit amet varius pretium.
+Suspendisse potenti.
+Nam id est in tellus tristique rutrum ac at nunc.
+Mauris suscipit dui a leo scelerisque commodo.
+Donec auctor libero non nisl elementum feugiat.
 
-Drei Monate später stand die Tochter plötzlich auf dem Marktplatz, Tränen in den Augen, und umarmte ihren Vater. Frau Lindner tippte diskret im Hintergrund weiter, aber ich sah, wie sie sich die Augen wischte.
-
-Nach und nach wurde ihre Bank zum Herzstück des Marktplatzes. Menschen kamen nicht nur für Briefe, sondern auch für Gespräche. Sie schrieb Liebesbriefe für schüchterne Jugendliche, Bewerbungen für Arbeitslose, Versöhnungsbriefe für zerstrittene Familien.
-
-Faltet die Hände im Schoß
-
-Als sie 2015 starb, hinterließ sie 14 Schreibmaschinen und einen Ordner voller Anleitungen. Heute sitzen dort abwechselnd verschiedene Freiwillige, die ihre Arbeit fortführen. Die Bank trägt jetzt ein kleines Messingschild: "Frau Lindners Briefbank - Hier werden Worte zu Brücken."
-
-Wischt sich sanft über die Augen
-
-Weißt du, manchmal braucht es nur eine alte Schreibmaschine und ein offenes Herz, um Menschen wieder zusammenzubringen. Und manchmal sind die wichtigsten Briefe diejenigen, die wir für andere schreiben.
-
-Richtet ihre Brille
-
-Möchtest du noch eine Geschichte hören? Ich habe noch so viele berührende Momente zu teilen...`;
+Dieser Text ist generiert und dient als Platzhaltertext ohne spezifische Bedeutung oder Inhaltserklärung in lateinischer Sprache mit angepassten Endungen und Wörtern für die Strukturierung von Layouts und Designprojekten!`;
 
     const [text, setText] = useState('');
 
     const iteration = useRef(0);
 
     useEffect(() => {
-        const maxIterations = 10;
+        const maxIterations = 33;
         const textChunks = splitTextIntoChunks(fullText, maxIterations);
 
         const addTextWithRandomInterval = () => {
             if (iteration.current < maxIterations) {
-                const delay = Math.random() * (500 - 200) + 200;
+                const delay = Math.random() * (700 - 400) + 400;
                 setTimeout(() => {
                     setText((prevText) => prevText + textChunks[iteration.current]);
                     iteration.current = iteration.current + 1;
@@ -97,7 +95,16 @@ Möchtest du noch eine Geschichte hören? Ich habe noch so viele berührende Mom
         return result;
     };
 
-    return <Typewriter {...args}>{text}</Typewriter>;
+    return (
+        <div
+            style={{
+                backgroundColor: '#87b6bf',
+                padding: 12,
+            }}
+        >
+            <Typewriter {...args}>{text}</Typewriter>
+        </div>
+    );
 };
 
 export const General = Template.bind({});
@@ -128,6 +135,7 @@ InsideTextArea.args = {
 
 AutoSpeed.args = {
     shouldCalcAutoSpeed: true,
+    shouldUseAnimationHeight: true,
 };
 
 InsideInput.args = {

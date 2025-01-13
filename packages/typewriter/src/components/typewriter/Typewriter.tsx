@@ -26,6 +26,10 @@ const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffec
 
 export type TypewriterProps = {
     /**
+     * The base speed factor to calculate the animation speed.
+     */
+    autoSpeedBaseFactor?: number;
+    /**
      * The text to type
      */
     children: ReactElement | ReactElement[] | string | string[];
@@ -145,6 +149,7 @@ const Typewriter: FC<TypewriterProps> = ({
     startDelay = TypewriterDelay.None,
     textStyle,
     shouldCalcAutoSpeed = false,
+    autoSpeedBaseFactor = 2000,
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
     const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
@@ -237,11 +242,12 @@ const Typewriter: FC<TypewriterProps> = ({
         const { speed: calculatedAutoSpeed, steps } = calculateAutoSpeed({
             fullTextLength: charactersCount,
             currentPosition: currentPosition.current,
+            baseSpeedFactor: autoSpeedBaseFactor,
         });
 
         setAutoSpeed(calculatedAutoSpeed);
         setAutoSteps(steps);
-    }, [charactersCount, shouldCalcAutoSpeed, speed, textContent]);
+    }, [autoSpeedBaseFactor, charactersCount, shouldCalcAutoSpeed]);
 
     const isAnimatingText =
         shownCharCount < textContent.length ||
@@ -363,6 +369,8 @@ const Typewriter: FC<TypewriterProps> = ({
                 startTypingAnimation();
             }
         }
+
+        console.debug('TEST - Typewriter', { autoSpeed, autoSteps });
 
         return () => {
             window.clearInterval(interval);

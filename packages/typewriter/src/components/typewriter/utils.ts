@@ -112,19 +112,21 @@ export const shuffleArray = <T>(array: T[]): T[] => {
 interface CalculateAutoSpeedProps {
     fullTextLength: number;
     currentPosition: number;
+    baseSpeedFactor: number;
 }
 
 export const calculateAutoSpeed = ({
     fullTextLength,
     currentPosition,
+    baseSpeedFactor,
 }: CalculateAutoSpeedProps): { speed: number; steps: number } => {
     const MIN_SPEED = 1;
     const MAX_SPEED = 10;
 
     const remainingLength = fullTextLength - currentPosition;
 
-    // Calculate the speed with the remaining text length
-    const speed = Math.min(2000 / remainingLength, MAX_SPEED);
+    // Calculate the speed with the remaining text length and the baseSpeedFactor
+    const speed = Math.min(baseSpeedFactor / remainingLength, MAX_SPEED);
 
     if (speed < MIN_SPEED) {
         return { speed: 1, steps: 2 };
