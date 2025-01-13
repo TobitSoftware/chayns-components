@@ -224,17 +224,26 @@ const Typewriter: FC<TypewriterProps> = ({
             return;
         }
 
+        if (!prevText.current) {
+            prevText.current = textContent;
+
+            return;
+        }
+
         setAutoSpeed(
             calculateAutoSpeed({
-                oldText: prevText.current ?? textContent,
+                oldText: prevText.current,
                 newText: textContent,
+                baseSpeed: speed,
             }),
         );
 
         prevText.current = textContent;
-    }, [shouldCalcAutoSpeed, textContent]);
+    }, [shouldCalcAutoSpeed, speed, textContent]);
 
-    console.debug('TEST - Typewriter', autoSpeed);
+    useEffect(() => {
+        console.debug('TEST - Typewriter', autoSpeed);
+    }, [autoSpeed]);
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 

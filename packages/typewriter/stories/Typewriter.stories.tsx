@@ -27,17 +27,39 @@ const InputTemplate: StoryFn<typeof Typewriter> = ({ children, ...args }) => (
 );
 
 const ChunkTemplate: StoryFn<typeof Typewriter> = ({ children, ...args }) => {
-    const fullText = `
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus leo nec arcu posuere, ut blandit arcu tincidunt. Quisque ac libero odio. In congue fermentum nulla, a eleifend mi aliquam sit amet. In hac habitasse platea dictumst. Sed ultricies ultricies felis at lacinia. Sed vel nisi bibendum nisl mollis placerat eget quis tortor. In pellentesque est nibh, at varius odio elementum eu. Proin consequat malesuada quam, sed lacinia sem. Pellentesque volutpat tellus id accumsan varius.
+    const fullText = `Gießt sich eine neue Tasse Kräutertee ein und legt ein Stück selbstgestricktes Deckchen zurecht
 
-    Sed aliquam finibus sem. Nullam eros eros, facilisis eu mi eu, laoreet eleifend arcu. Mauris sit amet varius urna, sed vulputate orci. Vestibulum lobortis tortor tellus, sit amet auctor tellus pulvinar vitae. Sed magna massa, imperdiet ut semper at, blandit iaculis enim. Phasellus varius neque volutpat hendrerit laoreet. Ut in risus ac erat sodales mattis. Nulla id elit sapien. Aliquam vestibulum cursus sapien eu pharetra.
+"Die Briefeschreiberin vom Marktplatz"
 
-    Curabitur nec malesuada sapien, tincidunt tempor nisl. Vivamus ac nisi ornare, bibendum lorem a, molestie dolor. Aenean semper tellus velit, in semper eros molestie quis. Duis a efficitur nulla. Donec eget tincidunt erat. Maecenas congue, nisl quis semper vehicula, quam elit tincidunt erat, tristique ullamcorper libero mi id velit. Suspendisse ipsum sapien, vehicula id consectetur eget, tincidunt eu justo. Vivamus commodo, est eget fermentum faucibus, neque nisi molestie sem, eget sagittis elit urna sit amet enim. Ut eu mollis sem. Duis egestas nisl quis tempor eleifend. Pellentesque faucibus feugiat nulla, nec consectetur libero placerat aliquam. Maecenas blandit libero mi, ut porta lectus finibus eu. Donec convallis mi eu mi consectetur, non congue eros iaculis. Pellentesque fringilla nibh pretium diam dapibus, eget molestie arcu suscipit.
+Nimmt einen wärmenden Schluck Tee
 
-    Nam dapibus tristique sem eget sodales. Ut mauris neque, blandit non fermentum vitae, cursus vitae est. Donec eu purus nulla. Vestibulum dui dolor, consequat at mauris accumsan, malesuada pretium tellus. Praesent vel purus euismod, mollis ipsum a, tristique justo. Aliquam pharetra massa neque, quis sagittis diam tempus eu. Etiam congue, nulla in vulputate placerat, metus neque sollicitudin tellus, a sollicitudin est massa sit amet velit. Curabitur dictum quam non magna egestas, sit amet varius velit dignissim. Sed eget pretium felis. Quisque efficitur, ligula nec pharetra vehicula, mauris urna convallis sapien, vitae dictum orci eros maximus lacus. Sed eget cursus ipsum. Duis varius mi ac enim viverra consectetur. Praesent ullamcorper lacus vitae sem porta, non faucibus ante facilisis. Maecenas dui felis, sollicitudin et mi sed, condimentum pharetra ex. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
+Diese Geschichte beginnt 2001, als ich Frau Lindner kennenlernte. Sie saß jeden Dienstag und Donnerstag auf ihrer Bank am Marktplatz, mit einer alten Schreibmaschine auf dem Schoß. Ein handgeschriebenes Schild neben ihr verkündete: "Schreibe Briefe für Menschen, die es selbst nicht können. Bezahlung: Ein Lächeln."
 
-    Nam ultrices non eros et rutrum. Sed pharetra lacus non magna tincidunt ultrices. Suspendisse nec ligula lacinia, consequat nibh non, ultrices lorem. Etiam nec sollicitudin metus. Maecenas in ornare leo. Quisque tristique, risus vitae sollicitudin mollis, mi purus ultrices tortor, ac molestie diam lorem eget purus. Aliquam lacinia lorem ut fermentum hendrerit. Integer urna enim, porttitor et convallis sit amet, hendrerit et libero. Vestibulum dapibus congue odio, eget venenatis nibh efficitur euismod.
-  `;
+Streicht gedankenverloren über die Teetasse
+
+Die 78-jährige ehemalige Sekretärin hatte bemerkt, wie viele ältere Menschen Schwierigkeiten hatten, Briefe an Behörden oder ihre Familie zu schreiben. Manche konnten nicht mehr gut sehen, andere zitterten zu stark, und viele waren mit Computern überfordert.
+
+Lehnt sich vor und spricht leiser
+
+Ich werde nie den Tag vergessen, als der alte Herr Schmidt zu ihr kam. Seine Tochter war vor 20 Jahren nach Kanada ausgewandert, und er hatte den Kontakt verloren. Frau Lindner schrieb nicht nur einen Brief - sie recherchierte im Internet, kontaktierte das Einwohnermeldeamt in Vancouver und fand die Tochter tatsächlich.
+
+Ihre Augen beginnen zu strahlen
+
+Drei Monate später stand die Tochter plötzlich auf dem Marktplatz, Tränen in den Augen, und umarmte ihren Vater. Frau Lindner tippte diskret im Hintergrund weiter, aber ich sah, wie sie sich die Augen wischte.
+
+Nach und nach wurde ihre Bank zum Herzstück des Marktplatzes. Menschen kamen nicht nur für Briefe, sondern auch für Gespräche. Sie schrieb Liebesbriefe für schüchterne Jugendliche, Bewerbungen für Arbeitslose, Versöhnungsbriefe für zerstrittene Familien.
+
+Faltet die Hände im Schoß
+
+Als sie 2015 starb, hinterließ sie 14 Schreibmaschinen und einen Ordner voller Anleitungen. Heute sitzen dort abwechselnd verschiedene Freiwillige, die ihre Arbeit fortführen. Die Bank trägt jetzt ein kleines Messingschild: "Frau Lindners Briefbank - Hier werden Worte zu Brücken."
+
+Wischt sich sanft über die Augen
+
+Weißt du, manchmal braucht es nur eine alte Schreibmaschine und ein offenes Herz, um Menschen wieder zusammenzubringen. Und manchmal sind die wichtigsten Briefe diejenigen, die wir für andere schreiben.
+
+Richtet ihre Brille
+
+Möchtest du noch eine Geschichte hören? Ich habe noch so viele berührende Momente zu teilen...`;
 
     const [text, setText] = useState('');
 
@@ -49,7 +71,7 @@ const ChunkTemplate: StoryFn<typeof Typewriter> = ({ children, ...args }) => {
 
         const addTextWithRandomInterval = () => {
             if (iteration.current < maxIterations) {
-                const delay = Math.random() * (1000 - 500) + 500;
+                const delay = Math.random() * (500 - 200) + 200;
                 setTimeout(() => {
                     setText((prevText) => prevText + textChunks[iteration.current]);
                     iteration.current = iteration.current + 1;

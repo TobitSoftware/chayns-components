@@ -122,7 +122,7 @@ export const calculateAutoSpeed = ({
     oldText,
     newText,
     baseSpeed = TypewriterSpeed.Fast,
-    maxDuration = 1000,
+    maxDuration = 50,
 }: CalculateAutoSpeedProps): number => {
     const oldLength = oldText.length;
     const newLength = newText.length;
