@@ -7,39 +7,22 @@ import React, {
     useEffect,
     useLayoutEffect,
     useMemo,
+    useRef,
     useState,
 } from 'react';
 import { createPortal } from 'react-dom';
 import { renderToString } from 'react-dom/server';
 import { CursorType } from '../../types/cursor';
+import { TypewriterDelay, TypewriterSpeed } from '../../types/speed';
 import AnimatedTypewriterText from './AnimatedTypewriterText';
 import {
     StyledTypewriter,
     StyledTypewriterPseudoText,
     StyledTypewriterText,
 } from './Typewriter.styles';
-import { getCharactersCount, getSubTextFromHTML, shuffleArray } from './utils';
+import { calculateAutoSpeed, getCharactersCount, getSubTextFromHTML, shuffleArray } from './utils';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
-
-// noinspection JSUnusedGlobalSymbols
-export enum TypewriterDelay {
-    ExtraSlow = 4000,
-    Slow = 2000,
-    Medium = 1000,
-    Fast = 500,
-    ExtraFast = 250,
-    None = 0,
-}
-
-// noinspection JSUnusedGlobalSymbols
-export enum TypewriterSpeed {
-    ExtraSlow = 40,
-    Slow = 20,
-    Medium = 10,
-    Fast = 5,
-    ExtraFast = 2.5,
-}
 
 export type TypewriterProps = {
     /**
@@ -114,6 +97,10 @@ export type TypewriterProps = {
      */
     shouldUseAnimationHeight?: boolean;
     /**
+     * Whether the animation speed should be calculated with the chunk interval.
+     */
+    shouldUseAutoSpeed?: boolean;
+    /**
      * Specifies whether the reset of the text should be animated with a backspace animation for
      * multiple texts.
      */
@@ -157,10 +144,14 @@ const Typewriter: FC<TypewriterProps> = ({
     resetSpeed = speed,
     startDelay = TypewriterDelay.None,
     textStyle,
+    shouldUseAutoSpeed = false,
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
     const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
     const [shouldPreventBlinkingCursor, setShouldPreventBlinkingCursor] = useState(false);
+    const [autoSpeed, setAutoSpeed] = useState<number>();
+
+    const prevText = useRef<string>();
 
     const functions = useFunctions();
     const values = useValues();
@@ -225,6 +216,23 @@ const Typewriter: FC<TypewriterProps> = ({
               )
             : (sortedChildren as string);
     }, [areMultipleChildrenGiven, currentChildrenIndex, functions, sortedChildren, values]);
+
+    useEffect(() => {
+        if (!shouldUseAutoSpeed) {
+            setAutoSpeed(undefined);
+
+            return;
+        }
+
+        setAutoSpeed(
+            calculateAutoSpeed({
+                oldText: prevText.current ?? textContent,
+                newText: textContent,
+            }),
+        );
+
+        prevText.current = textContent;
+    }, [shouldUseAutoSpeed, textContent]);
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 
@@ -339,7 +347,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
                         return nextState;
                     });
-                }, speed);
+                }, autoSpeed ?? speed);
             };
 
             if (startDelay) {
@@ -372,6 +380,7 @@ const Typewriter: FC<TypewriterProps> = ({
         onTypingAnimationStart,
         onTypingAnimationEnd,
         cursorType,
+        autoSpeed,
     ]);
 
     useEffect(() => {
