@@ -26,6 +26,10 @@ const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffec
 
 export type TypewriterProps = {
     /**
+     * The amount of characters that will be animated per animation circle.
+     */
+    animationSteps?: number;
+    /**
      * The base speed factor to calculate the animation speed.
      */
     autoSpeedBaseFactor?: number;
@@ -133,6 +137,7 @@ const Typewriter: FC<TypewriterProps> = ({
     nextTextDelay = TypewriterDelay.Medium,
     onFinish,
     onResetAnimationEnd,
+    animationSteps = 1,
     onResetAnimationStart,
     onTypingAnimationEnd,
     onTypingAnimationStart,
@@ -157,7 +162,7 @@ const Typewriter: FC<TypewriterProps> = ({
     const [isResetAnimationActive, setIsResetAnimationActive] = useState(false);
     const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
     const [autoSpeed, setAutoSpeed] = useState<number>();
-    const [autoSteps, setAutoSteps] = useState(1);
+    const [autoSteps, setAutoSteps] = useState(animationSteps);
 
     const functions = useFunctions();
     const values = useValues();
@@ -173,6 +178,12 @@ const Typewriter: FC<TypewriterProps> = ({
             setHasRenderedChildrenOnce(true);
         }
     }, [hasRenderedChildrenOnce]);
+
+    useEffect(() => {
+        if (animationSteps > 0 && !shouldCalcAutoSpeed) {
+            setAutoSteps(animationSteps);
+        }
+    }, [animationSteps, shouldCalcAutoSpeed]);
 
     const sortedChildren = useMemo(
         () =>
@@ -234,7 +245,7 @@ const Typewriter: FC<TypewriterProps> = ({
     useEffect(() => {
         if (!shouldCalcAutoSpeed) {
             setAutoSpeed(undefined);
-            setAutoSteps(1);
+            setAutoSteps(animationSteps);
 
             return;
         }
@@ -247,7 +258,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
         setAutoSpeed(calculatedAutoSpeed);
         setAutoSteps(steps);
-    }, [autoSpeedBaseFactor, charactersCount, shouldCalcAutoSpeed]);
+    }, [animationSteps, autoSpeedBaseFactor, charactersCount, shouldCalcAutoSpeed]);
 
     const isAnimatingText =
         shownCharCount < textContent.length ||
@@ -289,7 +300,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
             interval = window.setInterval(() => {
                 setShownCharCount((prevState) => {
-                    const nextState = prevState - 1;
+                    const nextState = prevState - autoSteps;
                     currentPosition.current = nextState;
 
                     if (nextState === 0) {
@@ -369,8 +380,6 @@ const Typewriter: FC<TypewriterProps> = ({
                 startTypingAnimation();
             }
         }
-
-        console.debug('TEST - Typewriter', { autoSpeed, autoSteps });
 
         return () => {
             window.clearInterval(interval);
