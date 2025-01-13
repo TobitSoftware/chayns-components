@@ -234,6 +234,8 @@ const Typewriter: FC<TypewriterProps> = ({
         prevText.current = textContent;
     }, [shouldCalcAutoSpeed, textContent]);
 
+    console.debug('TEST - Typewriter', autoSpeed);
+
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 
     const [isResetAnimationActive, setIsResetAnimationActive] = useState(false);
