@@ -1,4 +1,4 @@
-import {AnimatePresence} from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import React, {
     FC,
     MouseEventHandler,
@@ -7,15 +7,16 @@ import React, {
     useCallback,
     useContext,
     useEffect,
+    useRef,
 } from 'react';
-import {useUuid} from '../../../hooks/uuid';
-import type {IListItemRightElements} from '../../../types/list';
-import {AccordionContext} from '../../accordion/Accordion';
+import { useUuid } from '../../../hooks/uuid';
+import type { IListItemRightElements } from '../../../types/list';
+import { AccordionContext } from '../../accordion/Accordion';
 import AreaContextProvider from '../../area-provider/AreaContextProvider';
-import {ListContext} from '../List';
+import { ListContext } from '../List';
 import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
-import {StyledMotionListItem} from './ListItem.styles';
+import { StyledMotionListItem } from './ListItem.styles';
 
 export type ListItemElements = [ReactNode, ...ReactNode[]];
 
@@ -59,10 +60,18 @@ export type ListItemProps = {
      */
     onClick?: MouseEventHandler<HTMLDivElement>;
     /**
+     * Function to be executed when the ListItem is closed.
+     */
+    onClose?: VoidFunction;
+    /**
      * Function to be executed when the header of the `ListItem` is pressed for
      * 400 milliseconds.
      */
     onLongPress?: TouchEventHandler<HTMLDivElement>;
+    /**
+     * Function to be executed when the ListItem is opened.
+     */
+    onOpen?: VoidFunction;
     /**
      * Elements that are displayed on the left side of the header. If multiple
      * elements are specified, they are displayed one aside the other.
@@ -119,27 +128,30 @@ export type ListItemProps = {
 };
 
 const ListItem: FC<ListItemProps> = ({
-                                         children,
-                                         hoverItem,
-                                         icons,
-                                         images,
-                                         isDefaultOpen,
-                                         isOpen,
-                                         shouldForceBackground = false,
-                                         onClick,
-                                         onLongPress,
-                                         leftElements,
-                                         isTitleGreyed: isDisabledButNotReallyDisabled,
-                                         rightElements,
-                                         shouldHideImageOrIconBackground,
-                                         shouldHideIndicator = false,
-                                         subtitle,
-                                         shouldShowRoundImageOrIcon,
-                                         shouldHideBottomLine = false,
-                                         shouldShowSeparatorBelow = false,
-                                         title,
-                                         titleElement,
-                                     }) => {
+    children,
+    hoverItem,
+    icons,
+    images,
+    isDefaultOpen,
+    isOpen,
+    shouldForceBackground = false,
+    onClick,
+    onLongPress,
+    shouldOpenImageOnClick = false,
+    onOpen,
+    onClose,
+    leftElements,
+    isTitleGreyed: isDisabledButNotReallyDisabled,
+    rightElements,
+    shouldHideImageOrIconBackground,
+    shouldHideIndicator = false,
+    subtitle,
+    shouldShowRoundImageOrIcon,
+    shouldHideBottomLine = false,
+    shouldShowSeparatorBelow = false,
+    title,
+    titleElement,
+}) => {
     const {
         incrementExpandableItemCount,
         isAnyItemExpandable,
@@ -148,12 +160,36 @@ const ListItem: FC<ListItemProps> = ({
         updateOpenItemUuid,
     } = useContext(ListContext);
 
-    const {isWrapped: isParentAccordionWrapped} = useContext(AccordionContext);
+    const { isWrapped: isParentAccordionWrapped } = useContext(AccordionContext);
+
+    const isInitialRenderRef = useRef(true);
 
     const uuid = useUuid();
 
     const isExpandable = children !== undefined;
     const isItemOpen = isOpen ?? openItemUuid === uuid;
+
+    const isOpenRef = useRef(isItemOpen);
+    const onCloseRef = useRef(onClose);
+    const onOpenRef = useRef(onOpen);
+
+    useEffect(() => {
+        isOpenRef.current = isOpen;
+        onCloseRef.current = onClose;
+        onOpenRef.current = onOpen;
+    }, [isOpen, onClose, onOpen]);
+
+    useEffect(() => {
+        if (isInitialRenderRef.current) {
+            isInitialRenderRef.current = false;
+        } else if (isItemOpen) {
+            if (typeof onOpenRef.current === 'function') {
+                onOpenRef.current();
+            }
+        } else if (typeof onCloseRef.current === 'function') {
+            onCloseRef.current();
+        }
+    }, [isItemOpen]);
 
     const handleHeadClick = useCallback<MouseEventHandler<HTMLDivElement>>(
         (event) => {
@@ -180,7 +216,7 @@ const ListItem: FC<ListItemProps> = ({
 
     useEffect(() => {
         if (isDefaultOpen) {
-            updateOpenItemUuid(uuid, {shouldOnlyOpen: true});
+            updateOpenItemUuid(uuid, { shouldOnlyOpen: true });
         }
     }, [isDefaultOpen, updateOpenItemUuid, uuid]);
 
@@ -188,10 +224,10 @@ const ListItem: FC<ListItemProps> = ({
 
     return (
         <StyledMotionListItem
-            animate={{height: 'auto', opacity: 1}}
+            animate={{ height: 'auto', opacity: 1 }}
             className="beta-chayns-list-item"
-            exit={{height: 0, opacity: 0}}
-            initial={{height: 0, opacity: 0}}
+            exit={{ height: 0, opacity: 0 }}
+            initial={{ height: 0, opacity: 0 }}
             key={`list-item-${uuid}`}
             $isClickable={isClickable}
             $isOpen={isItemOpen}
