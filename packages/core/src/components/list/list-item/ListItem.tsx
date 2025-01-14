@@ -93,6 +93,10 @@ export type ListItemProps = {
      */
     shouldHideIndicator?: boolean;
     /**
+     * Whether the image should be opened on click.
+     */
+    shouldOpenImageOnClick?: boolean;
+    /**
      * Whether the image or icon should be displayed in a round shape. This should be always used for images of persons.
      */
     shouldShowRoundImageOrIcon?: boolean;
@@ -204,6 +208,7 @@ const ListItem: FC<ListItemProps> = ({
                 images={images}
                 isAnyItemExpandable={isAnyItemExpandable}
                 isDisabledButNotReallyDisabled={isDisabledButNotReallyDisabled}
+                shouldOpenImageOnClick={shouldOpenImageOnClick}
                 isExpandable={isExpandable}
                 isOpen={isItemOpen}
                 leftElements={leftElements}

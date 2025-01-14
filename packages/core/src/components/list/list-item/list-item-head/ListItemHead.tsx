@@ -54,6 +54,7 @@ type ListItemHeadProps = {
     title: ReactNode;
     titleElement?: ReactNode;
     isDisabledButNotReallyDisabled?: boolean;
+    shouldOpenImageOnClick: boolean;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -66,6 +67,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     leftElements,
     onClick,
     onLongPress,
+    shouldOpenImageOnClick,
     rightElements,
     shouldHideImageOrIconBackground,
     shouldHideIndicator,
@@ -159,6 +161,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             return (
                 <ListItemImage
                     images={images}
+                    shouldOpenImageOnClick={shouldOpenImageOnClick}
                     shouldHideBackground={!!shouldHideImageOrIconBackground}
                     shouldShowRoundImage={!!shouldShowRoundImageOrIcon}
                 />

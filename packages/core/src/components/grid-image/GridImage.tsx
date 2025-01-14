@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, MouseEventHandler, useCallback, useState } from 'react';
 import {
     StyledGridBottomRightImage,
     StyledGridImage,
@@ -13,6 +13,10 @@ type GridImageProps = {
      */
     images: string[];
     /**
+     * Function to be executed when the images are clicked.
+     */
+    onClick?: MouseEventHandler<HTMLDivElement>;
+    /**
      * Images of users should always be displayed in a round shape. Therefore
      * this property can be set to true.
      */
@@ -23,7 +27,7 @@ type GridImageProps = {
     size: number;
 };
 
-const GridImage: FC<GridImageProps> = ({ images, shouldShowRoundImage, size }) => {
+const GridImage: FC<GridImageProps> = ({ images, shouldShowRoundImage, size, onClick }) => {
     const [hasLoadedLeftImage, setHasLoadedLeftImage] = useState(false);
     const [hasLoadedTopRightImage, setHasLoadedTopRightImage] = useState(false);
     const [hasLoadedBottomRightImage, setHasLoadedBottomRightImage] = useState(false);
@@ -38,7 +42,11 @@ const GridImage: FC<GridImageProps> = ({ images, shouldShowRoundImage, size }) =
         !hasLoadedLeftImage || !hasLoadedTopRightImage || !hasLoadedBottomRightImage;
 
     return (
-        <StyledGridImage $shouldShowRoundImage={shouldShowRoundImage} $size={size}>
+        <StyledGridImage
+            $shouldShowRoundImage={shouldShowRoundImage}
+            $size={size}
+            onClick={typeof onClick === 'function' ? onClick : undefined}
+        >
             <StyledGridLeftImage
                 $isHidden={isGridImageHidden}
                 onLoad={handleLeftImageLoaded}

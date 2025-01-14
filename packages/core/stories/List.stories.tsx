@@ -144,6 +144,7 @@ ListItemsWithGridImage.args = {
             images={images}
             subtitle="Sadipscing elitr dolor sit"
             shouldShowRoundImageOrIcon
+            shouldOpenImageOnClick
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,
         <ListItem
@@ -435,6 +436,7 @@ ExpandableListItems.args = {
             images={[images[0]]}
             shouldShowRoundImageOrIcon
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+            shouldOpenImageOnClick
         >
             <ListItemContent>
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
