@@ -169,12 +169,10 @@ const ListItem: FC<ListItemProps> = ({
     const isExpandable = children !== undefined;
     const isItemOpen = isOpen ?? openItemUuid === uuid;
 
-    const isOpenRef = useRef(isItemOpen);
     const onCloseRef = useRef(onClose);
     const onOpenRef = useRef(onOpen);
 
     useEffect(() => {
-        isOpenRef.current = isOpen;
         onCloseRef.current = onClose;
         onOpenRef.current = onOpen;
     }, [isOpen, onClose, onOpen]);

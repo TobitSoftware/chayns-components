@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
+import React, { MouseEventHandler, useCallback, useState } from 'react';
 import GridImage from '../../../../grid-image/GridImage';
 import { StyledListItemHeadImage, StyledListItemHeadImageWrapper } from './ListItemImage.styles';
-import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
 
 type ListItemImageProps = {
     images: string[];
@@ -21,23 +21,26 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
         setHasLoadedImage(true);
     }, []);
 
-    const handleImageClick = (event: MouseEvent) => {
-        if (!shouldOpenImageOnClick) {
-            return;
-        }
+    const handleImageClick = useCallback<MouseEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (!shouldOpenImageOnClick) {
+                return;
+            }
 
-        event.preventDefault();
-        event.stopPropagation();
+            event.preventDefault();
+            event.stopPropagation();
 
-        const items: OpenMediaItem[] = images.map((image) => ({
-            url: image,
-            mediaType: MediaType.IMAGE,
-        }));
+            const items: OpenMediaItem[] = images.map((image) => ({
+                url: image,
+                mediaType: MediaType.IMAGE,
+            }));
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        void openMedia({ items, startIndex: 0 });
-    };
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            void openMedia({ items, startIndex: 0 });
+        },
+        [images, shouldOpenImageOnClick],
+    );
 
     if (images && images[0] && images[1] && images[2]) {
         const gridImages = [images[0], images[1], images[2]];
