@@ -7,10 +7,10 @@ interface SelectFilesOptions {
 }
 
 export const selectFiles = ({
-                                type,
-                                multiple,
-                                maxFileSizeInMB,
-                            }: SelectFilesOptions): Promise<File[]> =>
+    type,
+    multiple,
+    maxFileSizeInMB,
+}: SelectFilesOptions): Promise<File[]> =>
     new Promise((resolve, reject) => {
         const input = document.createElement('input');
 
@@ -52,7 +52,7 @@ export const selectFiles = ({
 
             const fileArray = Object.values(files);
 
-            const filteredFileArray = fileArray.filter((file) => {
+            let filteredFileArray = fileArray.filter((file) => {
                 const sizeInMB = file.size / 1024 / 1024;
 
                 if (maxFileSizeInMB && maxFileSizeInMB < sizeInMB) {
@@ -73,6 +73,10 @@ export const selectFiles = ({
                 }).open();
             }
 
+            if (typeof type === 'string') {
+                filteredFileArray = filterFilesByMimeType(filteredFileArray, type);
+            }
+
             resolve(filteredFileArray);
         };
 
@@ -87,6 +91,27 @@ export const selectFiles = ({
 
         input.click();
     });
+
+export const filterFilesByMimeType = (files: FileList | File[], mimeTypes: string): File[] => {
+    const allowedTypes = mimeTypes.split(',').map((type) => type.trim());
+
+    const isAllowedType = (fileType: string) =>
+        allowedTypes.some((allowedType) => {
+            if (allowedType.endsWith('/*')) {
+                const convertedAllowedType = allowedType.split('/*')[0];
+
+                if (!convertedAllowedType) {
+                    return false;
+                }
+
+                return fileType.startsWith(convertedAllowedType);
+            }
+
+            return fileType === allowedType;
+        });
+
+    return Array.from(files).filter((file) => isAllowedType(file.type));
+};
 
 export const getFileAsArrayBuffer = (file: File): Promise<string | ArrayBuffer> =>
     new Promise((resolve, reject) => {
