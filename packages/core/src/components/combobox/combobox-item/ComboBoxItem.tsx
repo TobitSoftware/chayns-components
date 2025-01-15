@@ -74,7 +74,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
                 )}
                 {icons && <Icon icons={icons} />}
                 <StyledComboBoxItemContent>
-                    <StyledComboBoxItemContentHeader>
+                    <StyledComboBoxItemContentHeader $text={text} $subtext={subtext}>
                         <StyledComboBoxItemContentHeaderText
                             as={textStyles?.tagName}
                             style={textStyles?.styles}

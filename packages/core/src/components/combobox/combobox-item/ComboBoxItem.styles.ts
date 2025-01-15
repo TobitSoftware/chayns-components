@@ -64,10 +64,16 @@ export const StyledComboBoxItemContent = styled.div`
     line-height: normal;
 `;
 
-export const StyledComboBoxItemContentHeader = styled.div`
+type StyledComboBoxItemContentHeaderProps = {
+    $text?: string;
+    $subtext?: string;
+};
+export const StyledComboBoxItemContentHeader = styled.div<StyledComboBoxItemContentHeaderProps>`
     align-items: center;
     display: flex;
     justify-content: space-between;
+    font-weight: ${({ $text, $subtext }) => ($text && $subtext ? 'bold' : 'normal')};
+    font-size: ${({ $text, $subtext }) => $text && $subtext && '17px'};
 `;
 
 export const StyledComboBoxItemContentHeaderText = styled.div`
