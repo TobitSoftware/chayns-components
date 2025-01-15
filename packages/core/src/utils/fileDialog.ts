@@ -74,7 +74,7 @@ export const selectFiles = ({
             }
 
             if (typeof type === 'string') {
-                filteredFileArray = filterFilesByMimeType(filteredFileArray, type);
+                filteredFileArray = filterFilesByMimeType(filteredFileArray, type) as File[];
             }
 
             resolve(filteredFileArray);
@@ -92,7 +92,10 @@ export const selectFiles = ({
         input.click();
     });
 
-export const filterFilesByMimeType = (files: FileList | File[], mimeTypes: string): File[] => {
+export const filterFilesByMimeType = (
+    files: FileList | File[],
+    mimeTypes: string,
+): FileList | File[] => {
     const allowedTypes = mimeTypes.split(',').map((type) => type.trim());
 
     const isAllowedType = (fileType: string) =>
