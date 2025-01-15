@@ -71,7 +71,7 @@
     },
     "dependencies": {
         "@chayns/colors": "^2.0.0",
-        "@chayns/uac-service": "^0.0.51",
+        "@chayns/uac-service": "~0.0.53",
         "@react-hook/resize-observer": "^2.0.2",
         "clsx": "^2.1.1",
         "react-helmet": "^6.1.0",
