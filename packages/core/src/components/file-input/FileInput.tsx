@@ -50,6 +50,10 @@ export type FileInputProps = {
      */
     imageSelectPlaceholder?: string;
     /**
+     * Whether the FileInput is disabled.
+     */
+    isDisabled?: boolean;
+    /**
      * The maximum amount of Files that can be uploaded.
      */
     maxFiles?: number;
@@ -94,6 +98,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             maxFiles,
             onRemove,
             files,
+            isDisabled,
             maxFileSizeInMB,
             onAdd,
             fileSelectionPlaceholder = 'Dateien hochladen',
@@ -224,7 +229,11 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             [files, internalFiles, internalImages, onRemove],
         );
 
-        const isDisabled = useMemo(() => {
+        const internalIsDisabled = useMemo(() => {
+            if (isDisabled) {
+                return true;
+            }
+
             if (maxFiles) {
                 if (internalFiles.length + internalImages.length >= maxFiles) {
                     if (typeof onMaxFilesReached === 'function') {
@@ -236,10 +245,10 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             }
 
             return false;
-        }, [internalFiles.length, internalImages.length, maxFiles, onMaxFilesReached]);
+        }, [internalFiles.length, internalImages.length, isDisabled, maxFiles, onMaxFilesReached]);
 
         const handleImageSelectionClick = useCallback(async () => {
-            if (isDisabled) {
+            if (internalIsDisabled) {
                 return;
             }
 
@@ -264,10 +273,10 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             if (buttonType === 1 && result?.url) {
                 handleAddImages([result.url]);
             }
-        }, [handleAddImages, isDisabled]);
+        }, [handleAddImages, internalIsDisabled]);
 
         const handleFileSelectionClick = useCallback(async () => {
-            if (isDisabled) {
+            if (internalIsDisabled) {
                 return;
             }
 
@@ -278,7 +287,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             });
 
             handleAddFiles(newFiles);
-        }, [fileTypes, handleAddFiles, isDisabled, maxFileSizeInMB]);
+        }, [fileTypes, handleAddFiles, internalIsDisabled, maxFileSizeInMB]);
 
         const handleDrop = useCallback(
             (e: DragEvent<HTMLDivElement>) => {
@@ -337,7 +346,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
         return useMemo(
             () => (
                 <StyledFileInput>
-                    <StyledFileInputWrapper $isDisabled={isDisabled}>
+                    <StyledFileInputWrapper $isDisabled={internalIsDisabled}>
                         <StyledFileInputContainer
                             onClick={() => void handleFileSelectionClick()}
                             onDragOver={(e: DragEvent<HTMLDivElement>) => e.preventDefault()}
@@ -369,7 +378,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
                 </StyledFileInput>
             ),
             [
-                isDisabled,
+                internalIsDisabled,
                 fileSelectionIcons,
                 fileSelectionPlaceholder,
                 imageSelectPlaceholder,
