@@ -313,77 +313,37 @@ WithSubtextAndRightElement.args = {
     shouldShowBigImage: true,
     lists: [
         {
-            groupName: 'Häufig ausgewählt',
             list: [
-                {
-                    imageUrl: 'https://tsimg.cloud/HUK-F4KJD/profile_w128.png',
-                    value: 'HUK-F4KJD',
-                    text: 'Linda Schuster',
-                    subtext: 'Journalistin, Analytisch',
-                    rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>OpenAI GPT-4o</span>
-                    ),
-                },
                 {
                     imageUrl: 'https://tsimg.cloud/Q8V-45A2G/profile_w128.png',
                     value: 'Q8V-45A2G',
-                    text: 'Jonas Fischer',
-                    subtext: 'IT-Sicherheitsexperte, Aggressiv',
-                    rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>
-                            Google Gemini 1.0 Pro
-                        </span>
-                    ),
+                    text: 'Herr Funktiona (Mathematik, 9. - 10. Klasse) mit zusätzlicher Information',
+                    subtext: 'Mathelehrer, 27 Jahre',
+                    suffixElement: <Icon icons={['fal fa-image']} />,
                 },
-            ],
-        },
-        {
-            groupName: 'Weitere Avatare',
-            list: [
+                {
+                    imageUrl: 'https://tsimg.cloud/HUK-F4KJD/profile_w128.png',
+                    value: 'HUK-F4KJD',
+                    text: 'Frau Grammatika (Deutsch, 9. - 10. Klasse)',
+                    subtext: 'Deutschlehrerin, 29 Jahre',
+                },
                 {
                     imageUrl: 'https://tsimg.cloud/3X1-8KA3H/profile_w128.png',
                     value: '3X1-8KA3H',
-                    text: 'Prof. Dr. Hans Köhler',
-                    subtext: 'Ökonom, Pragmatisch',
-                    rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>Claude 3</span>
-                    ),
+                    text: 'Herr Historia (Geschichte, 9. - 10. Klasse) mit zusätzlicher Information',
+                    subtext: 'Geschichtslehrer, 31 Jahre',
                 },
                 {
                     imageUrl: 'https://tsimg.cloud/U28-2F8C3/profile_w128.png',
                     value: 'U28-2F8C3',
-                    text: 'Elena Novak',
-                    subtext: 'Menschenrechtsaktivistin, Radikal',
-                    rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>OpenAI GPT-4o</span>
-                    ),
+                    text: 'Frau Biologica (Biologie, 9. - 10. Klasse) mit zusätzlicher Information',
+                    subtext: 'Biologielehrerin, 33 Jahre',
                 },
                 {
                     imageUrl: 'https://tsimg.cloud/TTC-ANK55/profile_w128.png',
                     value: 'TTC-ANK55',
-                    text: 'Thomas Becker',
-                    subtext: 'Polizist, Moderat',
-                    rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>Mistral Large 1</span>
-                    ),
-                },
-                {
-                    imageUrl: 'https://tsimg.cloud/LBN-WHS1A/profile_w128.png',
-                    value: 'LBN-WHS1A',
-                    text: 'Dr. Clara Baumann',
-                    subtext: 'Klimaforscherin, Idealistisch',
-                    rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>Claude 3</span>
-                    ),
-                },
-                {
-                    imageUrl: 'https://tsimg.cloud/DQM-BINQP/profile_w128.png',
-                    value: 'DQM-BINQP',
-                    text: 'Maximilian Weber',
-                    subtext: 'Unternehmer, Pragmatisch',
-                    rightElement: (
-                        <span style={{ fontStyle: 'italic', opacity: 0.65 }}>Mistral Large 1</span>
-                    ),
+                    text: 'Herr Chemica (Chemie, 9. - 10. Klasse)',
+                    subtext: 'Chemielehrer, 35 Jahre',
                 },
             ],
         },

@@ -62,6 +62,8 @@ export const StyledComboBoxItemContent = styled.div`
     flex: 1 1 auto;
     flex-direction: column;
     line-height: normal;
+    min-width: 0;
+    width: 100%;
 `;
 
 type StyledComboBoxItemContentHeaderProps = {
@@ -76,9 +78,17 @@ export const StyledComboBoxItemContentHeader = styled.div<StyledComboBoxItemCont
     font-size: ${({ $text, $subtext }) => $text && $subtext && '17px'};
 `;
 
-export const StyledComboBoxItemContentHeaderText = styled.div`
+export const StyledComboBoxItemContentHeaderWrapper = styled.div`
     display: flex;
+    flex: 1 1 auto;
     gap: 4px;
+    min-width: 0;
+`;
+
+export const StyledComboBoxItemContentHeaderWrapperText = styled.div`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 export const StyledComboBoxItemContentHeaderRightElement = styled.div`

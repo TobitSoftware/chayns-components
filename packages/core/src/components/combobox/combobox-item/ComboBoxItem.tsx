@@ -7,7 +7,8 @@ import {
     StyledComboBoxItemContent,
     StyledComboBoxItemContentHeader,
     StyledComboBoxItemContentHeaderRightElement,
-    StyledComboBoxItemContentHeaderText,
+    StyledComboBoxItemContentHeaderWrapper,
+    StyledComboBoxItemContentHeaderWrapperText,
     StyledComboBoxItemContentSubtext,
     StyledComboBoxItemImage,
 } from './ComboBoxItem.styles';
@@ -75,13 +76,15 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
                 {icons && <Icon icons={icons} />}
                 <StyledComboBoxItemContent>
                     <StyledComboBoxItemContentHeader $text={text} $subtext={subtext}>
-                        <StyledComboBoxItemContentHeaderText
+                        <StyledComboBoxItemContentHeaderWrapper
                             as={textStyles?.tagName}
                             style={textStyles?.styles}
                         >
-                            {text}
+                            <StyledComboBoxItemContentHeaderWrapperText>
+                                {text}
+                            </StyledComboBoxItemContentHeaderWrapperText>
                             {suffixElement}
-                        </StyledComboBoxItemContentHeaderText>
+                        </StyledComboBoxItemContentHeaderWrapper>
                         {rightElement && (
                             <StyledComboBoxItemContentHeaderRightElement>
                                 {rightElement}
@@ -110,6 +113,8 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
             subtext,
             suffixElement,
             text,
+            textStyles?.styles,
+            textStyles?.tagName,
         ],
     );
 };

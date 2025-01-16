@@ -16,21 +16,21 @@ export const StyledComboBox = styled.div<StyledComboBoxProps>`
     position: relative;
 
     ${({ $shouldUseFullWidth, $minWidth }) => {
-        if(typeof $minWidth !== 'number') {
+        if (typeof $minWidth !== 'number') {
             return css`
-            width: fit-content`;
+                width: fit-content;
+            `;
         }
-        
-        
+
         return $shouldUseFullWidth
-                ? css`
+            ? css`
                   min-width: ${$minWidth}px;
                   width: 100%;
               `
-                : css`
+            : css`
                   min-width: ${$minWidth}px;
                   max-width: ${$minWidth}px;
-              `
+              `;
     }}
 `;
 
@@ -94,13 +94,23 @@ export const StyledComboBoxPlaceholder = styled.div<StyledComboBoxPlaceholderPro
     align-items: center;
     color: ${({ theme }: StyledComboBoxPlaceholderProps) => theme.text};
     display: flex;
+    flex: 1 1 auto;
     gap: 10px;
+    min-width: 0;
     opacity: ${({ $shouldReduceOpacity }) => ($shouldReduceOpacity ? 0.5 : 1)};
+`;
+
+export const StyledComboBoxPlaceholderText = styled.div`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 export const StyledComboBoxPrefixAndPlaceholderWrapper = styled.div`
     align-items: center;
     display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
 `;
 
 export const StyledComboBoxPrefix = styled.div`
@@ -158,14 +168,14 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     cursor: pointer;
     max-height: ${({ $maxHeight }) => $maxHeight};
     overflow-y: ${({ $overflowY }) => $overflowY};
-    
-    min-width: ${({ $minWidth }) => $minWidth - 2}px;
-    
-    ${({$minWidth, $shouldUseCurrentItemWidth})=>
-            !$shouldUseCurrentItemWidth && css`
-                max-width: ${$minWidth - 2}px;
-            `
-}
+    overflow-x: hidden;
+    min-width: ${({ $minWidth, $overflowY }) => $minWidth - ($overflowY === 'scroll' ? 5 : 0)}px;
+
+    ${({ $minWidth, $overflowY, $shouldUseCurrentItemWidth }) =>
+        !$shouldUseCurrentItemWidth &&
+        css`
+            max-width: ${$minWidth - ($overflowY === 'scroll' ? 5 : 0)}px;
+        `}
 
     ${({ $direction }) => {
         if ($direction === ComboBoxDirection.BOTTOM) {

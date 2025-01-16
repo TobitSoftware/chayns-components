@@ -30,6 +30,7 @@ import {
     StyledComboBoxInput,
     StyledComboBoxPlaceholder,
     StyledComboBoxPlaceholderImage,
+    StyledComboBoxPlaceholderText,
     StyledComboBoxPrefix,
     StyledComboBoxPrefixAndPlaceholderWrapper,
     StyledComboBoxTopic,
@@ -397,6 +398,14 @@ const ComboBox: FC<ComboBoxProps> = ({
             tmpBodyMinWidth = itemWidth < calculatedWidth - 20 ? calculatedWidth - 20 : itemWidth;
         }
 
+        if (tmpMinWidth > parentWidth) {
+            tmpMinWidth = parentWidth;
+        }
+
+        if (tmpBodyMinWidth > parentWidth) {
+            tmpBodyMinWidth = parentWidth;
+        }
+
         setMinWidth(tmpMinWidth);
         setBodyMinWidth(shouldUseCurrentItemWidth ? tmpMinWidth : tmpBodyMinWidth);
     }, [
@@ -607,7 +616,9 @@ const ComboBox: FC<ComboBoxProps> = ({
                                     />
                                 )}
                                 {placeholderIcon && <Icon icons={placeholderIcon} />}
-                                {placeholderText}
+                                <StyledComboBoxPlaceholderText>
+                                    {placeholderText}
+                                </StyledComboBoxPlaceholderText>
                                 {internalSelectedItem &&
                                     internalSelectedItem.suffixElement &&
                                     internalSelectedItem.suffixElement}
