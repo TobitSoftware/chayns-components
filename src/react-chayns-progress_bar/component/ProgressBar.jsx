@@ -18,7 +18,7 @@ const ProgressBar = ({ children = null, value, ready = false }) => {
         () =>
             classnames('cc__progress-bar', {
                 'cc__progress-bar--determinate': isNumber(value),
-                'cc__progress-bar--indeterminate': isNumber(value),
+                'cc__progress-bar--indeterminate': !isNumber(value),
             }),
         [value]
     );
