@@ -13,6 +13,7 @@ interface ColorPickerPopupProps {
     onPresetColorRemove?: (presetColorId: IPresetColor['id']) => void;
     shouldShowTransparencySlider: boolean;
     shouldShowMoreOptions: boolean;
+    shouldUseSiteColors: boolean;
 }
 
 const ColorPickerPopup = ({
@@ -21,6 +22,7 @@ const ColorPickerPopup = ({
     onPresetColorAdd,
     shouldShowPresetColors,
     shouldShowTransparencySlider,
+    shouldUseSiteColors,
     shouldShowMoreOptions,
 }: ColorPickerPopupProps) => (
     <StyledColorPickerPopup>
@@ -29,6 +31,7 @@ const ColorPickerPopup = ({
         {shouldShowPresetColors && (
             <PresetColors
                 presetColors={presetColors}
+                shouldUseSiteColors={shouldUseSiteColors}
                 onPresetColorAdd={onPresetColorAdd}
                 onPresetColorRemove={onPresetColorRemove}
             />

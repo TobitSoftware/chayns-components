@@ -26,6 +26,10 @@ interface ColorPickerProps {
      */
     selectedColor?: string;
     /**
+     * Whether presetColors should be get and uploaded to the site storage.
+     */
+    shouldUseSiteColors?: boolean;
+    /**
      * Whether the ColorPicker should be displayed inside a popup.
      */
     shouldShowAsPopup?: boolean;
@@ -58,6 +62,7 @@ const ColorPicker = ({
     onPresetColorAdd,
     shouldShowPresetColors = false,
     shouldShowAsPopup = true,
+    shouldUseSiteColors = false,
     shouldShowTransparencySlider = false,
     shouldShowMoreOptions = false,
     shouldShowRoundPreviewColor = true,
@@ -70,6 +75,7 @@ const ColorPicker = ({
                 shouldShowPreviewColorString={shouldShowPreviewColorString}
                 shouldShowRoundPreviewColor={shouldShowRoundPreviewColor}
                 shouldShowTransparencySlider={shouldShowTransparencySlider}
+                shouldUseSiteColors={shouldUseSiteColors}
                 presetColors={presetColors}
                 onPresetColorAdd={onPresetColorAdd}
                 onPresetColorRemove={onPresetColorRemove}

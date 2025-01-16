@@ -23,3 +23,10 @@ export interface IPresetColor {
     id: string;
     color: string;
 }
+
+export interface ItemStorageResult {
+    schemeId?: string;
+    siteId?: string;
+    key?: string;
+    value: string[];
+}
