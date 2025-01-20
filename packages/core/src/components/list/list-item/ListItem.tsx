@@ -106,6 +106,12 @@ export type ListItemProps = {
      */
     shouldOpenImageOnClick?: boolean;
     /**
+     * Whether the layout animation should be prevented. This is useful when the
+     * `ListItem` is used in a list with a lot of items and the layout animation
+     * is not desired.
+     */
+    shouldPreventLayoutAnimation?: boolean;
+    /**
      * Whether the image or icon should be displayed in a round shape. This should be always used for images of persons.
      */
     shouldShowRoundImageOrIcon?: boolean;
@@ -146,6 +152,7 @@ const ListItem: FC<ListItemProps> = ({
     shouldHideImageOrIconBackground,
     shouldHideIndicator = false,
     subtitle,
+    shouldPreventLayoutAnimation = false,
     shouldShowRoundImageOrIcon,
     shouldHideBottomLine = false,
     shouldShowSeparatorBelow = false,
@@ -227,6 +234,7 @@ const ListItem: FC<ListItemProps> = ({
             exit={{ height: 0, opacity: 0 }}
             initial={{ height: 0, opacity: 0 }}
             key={`list-item-${uuid}`}
+            layout={shouldPreventLayoutAnimation ? undefined : 'position'}
             $isClickable={isClickable}
             $isOpen={isItemOpen}
             $isInAccordion={typeof isParentAccordionWrapped === 'boolean'}
