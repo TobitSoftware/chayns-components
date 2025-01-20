@@ -38,7 +38,7 @@ export type CheckboxProps = {
      */
     onChange?: ChangeEventHandler<HTMLInputElement>;
     /**
-     * Whether the label should change the state
+     * Whether the label should change the state of the checkbox
      */
     shouldChangeOnLabelClick?: boolean;
     /**
