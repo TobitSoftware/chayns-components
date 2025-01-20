@@ -43,18 +43,18 @@ type ListItemHeadProps = {
     isAnyItemExpandable: boolean;
     isExpandable: boolean;
     isOpen: boolean;
+    isTitleGreyed?: boolean;
     leftElements?: ReactNode;
     onClick?: MouseEventHandler<HTMLDivElement>;
     onLongPress?: TouchEventHandler<HTMLDivElement>;
     rightElements?: IListItemRightElements;
     shouldHideImageOrIconBackground?: boolean;
     shouldHideIndicator?: boolean;
-    subtitle?: ReactNode;
+    shouldOpenImageOnClick: boolean;
     shouldShowRoundImageOrIcon?: boolean;
+    subtitle?: ReactNode;
     title: ReactNode;
     titleElement?: ReactNode;
-    isDisabledButNotReallyDisabled?: boolean;
-    shouldOpenImageOnClick: boolean;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -64,16 +64,16 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     isAnyItemExpandable,
     isExpandable,
     isOpen,
+    isTitleGreyed,
     leftElements,
     onClick,
     onLongPress,
-    shouldOpenImageOnClick,
     rightElements,
     shouldHideImageOrIconBackground,
     shouldHideIndicator,
-    subtitle,
-    isDisabledButNotReallyDisabled,
+    shouldOpenImageOnClick,
     shouldShowRoundImageOrIcon,
+    subtitle,
     title,
     titleElement,
 }) => {
@@ -82,7 +82,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         closed: 40,
         open: 40,
     });
-    const [isFirstRender, setIsFirstRender] = useState(false);
+    const [, setIsFirstRender] = useState(false);
 
     const longPressTimeoutRef = useRef<number>();
     const pseudoTitleOpenRef = useRef<HTMLDivElement>(null);
@@ -169,13 +169,19 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         }
 
         return undefined;
-    }, [icons, images, shouldHideImageOrIconBackground, shouldShowRoundImageOrIcon]);
+    }, [
+        icons,
+        images,
+        shouldHideImageOrIconBackground,
+        shouldOpenImageOnClick,
+        shouldShowRoundImageOrIcon,
+    ]);
 
     return (
         <StyledListItemHead
             animate={{
                 height: isOpen ? headHeight.open : headHeight.closed,
-                opacity: isDisabledButNotReallyDisabled ? 0.5 : 1,
+                opacity: isTitleGreyed ? 0.5 : 1,
             }}
             initial={false}
             transition={{ duration: 0.2, type: 'tween' }}

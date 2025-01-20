@@ -140,22 +140,22 @@ const ListItem: FC<ListItemProps> = ({
     images,
     isDefaultOpen,
     isOpen,
-    shouldForceBackground = false,
-    onClick,
-    onLongPress,
-    shouldOpenImageOnClick = false,
-    onOpen,
-    onClose,
+    isTitleGreyed,
     leftElements,
-    isTitleGreyed: isDisabledButNotReallyDisabled,
+    onClick,
+    onClose,
+    onLongPress,
+    onOpen,
     rightElements,
+    shouldForceBackground = false,
+    shouldHideBottomLine = false,
     shouldHideImageOrIconBackground,
     shouldHideIndicator = false,
-    subtitle,
+    shouldOpenImageOnClick = false,
     shouldPreventLayoutAnimation = false,
     shouldShowRoundImageOrIcon,
-    shouldHideBottomLine = false,
     shouldShowSeparatorBelow = false,
+    subtitle,
     title,
     titleElement,
 }) => {
@@ -236,31 +236,31 @@ const ListItem: FC<ListItemProps> = ({
             key={`list-item-${uuid}`}
             layout={shouldPreventLayoutAnimation ? undefined : 'position'}
             $isClickable={isClickable}
-            $isOpen={isItemOpen}
             $isInAccordion={typeof isParentAccordionWrapped === 'boolean'}
+            $isOpen={isItemOpen}
             $isWrapped={isWrapped}
-            $shouldHideIndicator={shouldHideIndicator}
             $shouldForceBackground={shouldForceBackground}
-            $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
             $shouldHideBottomLine={shouldHideBottomLine}
+            $shouldHideIndicator={shouldHideIndicator}
+            $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
         >
             <ListItemHead
                 hoverItem={hoverItem}
                 icons={icons}
                 images={images}
                 isAnyItemExpandable={isAnyItemExpandable}
-                isDisabledButNotReallyDisabled={isDisabledButNotReallyDisabled}
-                shouldOpenImageOnClick={shouldOpenImageOnClick}
                 isExpandable={isExpandable}
                 isOpen={isItemOpen}
+                isTitleGreyed={isTitleGreyed}
                 leftElements={leftElements}
                 onClick={isClickable ? handleHeadClick : undefined}
                 onLongPress={onLongPress}
                 rightElements={rightElements}
                 shouldHideImageOrIconBackground={shouldHideImageOrIconBackground}
                 shouldHideIndicator={shouldHideIndicator}
-                subtitle={subtitle}
+                shouldOpenImageOnClick={shouldOpenImageOnClick}
                 shouldShowRoundImageOrIcon={shouldShowRoundImageOrIcon}
+                subtitle={subtitle}
                 title={title}
                 titleElement={titleElement}
             />
