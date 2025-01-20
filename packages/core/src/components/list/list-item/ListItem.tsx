@@ -48,13 +48,18 @@ export type ListItemProps = {
      */
     isDefaultOpen?: boolean;
     /**
+     * This overrides the internal opening state of the item and makes it controlled.
+     */
+    isOpen?: boolean;
+    /**
      * Whether the ListItem locks disabled but has full functionality.
      */
     isTitleGreyed?: boolean;
     /**
-     * This overrides the internal opening state of the item and makes it controlled.
+     * Elements that are displayed on the left side of the header. If multiple
+     * elements are specified, they are displayed one aside the other.
      */
-    isOpen?: boolean;
+    leftElements?: ListItemElements;
     /**
      * Function to be executed when the header of the `ListItem` was clicked
      */
@@ -73,11 +78,6 @@ export type ListItemProps = {
      */
     onOpen?: VoidFunction;
     /**
-     * Elements that are displayed on the left side of the header. If multiple
-     * elements are specified, they are displayed one aside the other.
-     */
-    leftElements?: ListItemElements;
-    /**
      * Elements that are displayed on the right side of the header. If multiple
      * elements are specified, they are displayed one below the other.
      */
@@ -87,14 +87,14 @@ export type ListItemProps = {
      */
     shouldForceBackground?: boolean;
     /**
+     * Whether the bottom line should be hidden.
+     */
+    shouldHideBottomLine?: boolean;
+    /**
      * Whether the background and border of the shape on which the image or icon of the element is displayed should be
      * hidden.
      */
     shouldHideImageOrIconBackground?: boolean;
-    /**
-     * Whether the bottom line should be hidden.
-     */
-    shouldHideBottomLine?: boolean;
     /**
      * If the `ListItem` is expandable, the indicator is displayed on the left
      * side of the header. If this property is set to true, the indicator is
