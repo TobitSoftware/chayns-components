@@ -59,7 +59,7 @@ const Checkbox: FC<CheckboxProps> = ({
     onChange,
     shouldShowAsSwitch,
     shouldShowCentered = false,
-    shouldChangeOnLabelClick = false,
+    shouldChangeOnLabelClick = true,
 }) => {
     const [isActive, setIsActive] = useState(isChecked ?? false);
 
