@@ -398,21 +398,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 }));
 
                 setMatchingListsItems(filteredMatchingListItems);
-
-                if (filteredMatchingListItems.length !== 0) {
-                    handleOpen();
-                } else {
-                    handleClose();
-                }
             }
-        }, [
-            activeList,
-            handleClose,
-            handleOpen,
-            shouldAddInputToList,
-            shouldShowContentOnEmptyInput,
-            value,
-        ]);
+        }, [activeList, shouldAddInputToList, shouldShowContentOnEmptyInput, value]);
 
         /**
          * This function filters the lists by input
@@ -517,12 +504,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     setMatchingListsItems([]);
                 } else {
                     setMatchingListsItems(filteredLists);
-
-                    if (filteredLists.length !== 0) {
-                        handleOpen();
-                    } else {
-                        handleClose();
-                    }
                 }
 
                 setValue(event.target.value);
@@ -532,14 +513,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     onChange(event);
                 }
             },
-            [
-                activeList,
-                handleClose,
-                handleOpen,
-                onChange,
-                shouldAddInputToList,
-                shouldShowContentOnEmptyInput,
-            ],
+            [activeList, onChange, shouldAddInputToList, shouldShowContentOnEmptyInput],
         );
 
         /**
@@ -635,14 +609,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         ]);
 
         useEffect(() => {
-            if (content.length > 0) {
-                handleOpen();
-            }
-        }, [content.length, handleOpen]);
-
-        useEffect(() => {
             const handleKeyDown = (e: KeyboardEvent) => {
-                if (!isAnimating) {
+                if (!isAnimating || matchingListsItems.length === 0) {
                     return;
                 }
 
@@ -721,7 +689,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             return () => {
                 document.removeEventListener('keydown', handleKeyDown);
             };
-        }, [filteredChildrenArray, focusedIndex, handleSelect, isAnimating]);
+        }, [
+            filteredChildrenArray,
+            focusedIndex,
+            handleSelect,
+            isAnimating,
+            matchingListsItems.length,
+        ]);
 
         const handleKeyPress = useCallback((event: KeyboardEvent) => {
             if (event.keyCode === 27) {
@@ -753,7 +727,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             setPortal(() =>
                 createPortal(
                     <AnimatePresence initial={false}>
-                        {isAnimating && (
+                        {isAnimating && matchingListsItems.length !== 0 && (
                             <SearchBoxBody
                                 filterButtons={filterButtons}
                                 selectedGroups={groups}
@@ -783,6 +757,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             isAnimating,
             width,
             shouldHideFilterButtons,
+            matchingListsItems.length,
         ]);
 
         return useMemo(
