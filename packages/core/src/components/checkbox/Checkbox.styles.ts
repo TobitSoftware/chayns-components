@@ -115,4 +115,5 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
         !$shouldChangeOnLabelClick ? 'default' : 'pointer'};
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     transition: opacity 0.2s ease;
+    user-select: none;
 `;
