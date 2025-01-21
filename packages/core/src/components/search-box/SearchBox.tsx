@@ -398,8 +398,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 }));
 
                 setMatchingListsItems(filteredMatchingListItems);
+
+                if (filteredMatchingListItems.length !== 0) {
+                    handleOpen();
+                }
             }
-        }, [activeList, shouldAddInputToList, shouldShowContentOnEmptyInput, value]);
+        }, [activeList, handleOpen, shouldAddInputToList, shouldShowContentOnEmptyInput, value]);
 
         /**
          * This function filters the lists by input
@@ -506,6 +510,10 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     setMatchingListsItems(filteredLists);
                 }
 
+                if (filteredLists.length !== 0) {
+                    handleOpen();
+                }
+
                 setValue(event.target.value);
                 setInputToListValue(event.target.value);
 
@@ -513,7 +521,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     onChange(event);
                 }
             },
-            [activeList, onChange, shouldAddInputToList, shouldShowContentOnEmptyInput],
+            [activeList, handleOpen, onChange, shouldAddInputToList, shouldShowContentOnEmptyInput],
         );
 
         /**
