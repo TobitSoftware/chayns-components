@@ -12,6 +12,7 @@ import React, {
 } from 'react';
 import { ClampPosition } from '../../types/truncation';
 import { debounce } from '../../utils/debounce';
+import { sleep } from '../../utils/sleep';
 import { truncateElement } from '../../utils/truncation';
 import {
     StyledMotionTruncationContent,
@@ -50,6 +51,8 @@ export type TruncationProps = {
      * Function to be executed when the component is expanding or collapsing.
      */
     onChange?: (event: MouseEvent<HTMLAnchorElement>, isOpen: boolean) => void;
+
+    initialTruncateTimeout?: number;
 };
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
@@ -62,6 +65,7 @@ const Truncation: FC<TruncationProps> = ({
     lessLabel = 'Weniger',
     onChange,
     children,
+    initialTruncateTimeout = 0,
 }) => {
     const [internalIsOpen, setInternalIsOpen] = useState(false);
     const [showClamp, setShowClamp] = useState(true);
@@ -75,8 +79,10 @@ const Truncation: FC<TruncationProps> = ({
     const [originalBigHeight, setOriginalBigHeight] = useState(0);
 
     useEffect(() => {
-        setInitialRender(false);
-    }, []);
+        setTimeout(() => {
+            setInitialRender(false);
+        }, initialTruncateTimeout);
+    }, [initialTruncateTimeout]);
 
     const parentRef = useRef<HTMLDivElement>(null);
     const pseudoChildrenRef = useRef<HTMLDivElement>(null);
@@ -129,18 +135,20 @@ const Truncation: FC<TruncationProps> = ({
     }, [internalIsOpen]);
 
     useEffect(() => {
-        if (!pseudoChildrenRef.current) {
-            return;
-        }
+        void (async () => {
+            if (!pseudoChildrenRef.current) {
+                return;
+            }
+            await sleep(initialTruncateTimeout);
+            setOriginalHeight(pseudoChildrenRef.current.offsetHeight);
+            setOriginalBigHeight(pseudoChildrenRef.current.offsetHeight);
 
-        setOriginalHeight(pseudoChildrenRef.current.offsetHeight);
-        setOriginalBigHeight(pseudoChildrenRef.current.offsetHeight);
+            truncateElement(pseudoChildrenRef.current, collapsedHeight);
 
-        truncateElement(pseudoChildrenRef.current, collapsedHeight);
-
-        setNewCollapsedHeight(pseudoChildrenRef.current.offsetHeight);
-        setOriginalSmallHeight(pseudoChildrenRef.current.offsetHeight);
-    }, [collapsedHeight, pseudoChildrenRef]);
+            setNewCollapsedHeight(pseudoChildrenRef.current.offsetHeight);
+            setOriginalSmallHeight(pseudoChildrenRef.current.offsetHeight);
+        })();
+    }, [collapsedHeight, initialTruncateTimeout, pseudoChildrenRef]);
 
     // Checks if the clamp should be shown
     useEffect(() => {

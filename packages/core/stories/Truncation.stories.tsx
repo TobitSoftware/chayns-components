@@ -1,4 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { ChaynsHost, useFunctions, useValues } from 'chayns-api';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
 import Button from '../src/components/button/Button';
@@ -116,48 +117,68 @@ JustText.args = {
     ),
 };
 
-const FloatingImageTemplate: StoryFn<typeof Truncation> = ({ children, ...args }) => (
-    <Truncation {...args}>{children}</Truncation>
-);
+const FloatingImageTemplate: StoryFn<typeof Truncation> = ({ children, ...args }) => {
+    const functions = useFunctions();
+    const values = useValues();
+
+    return (
+        <div>
+            <Truncation {...args}>
+                <div>
+                    <img style={{ float: 'right' }} alt="" src="https://picsum.photos/200" />
+                    <ChaynsHost
+                        type="client-module"
+                        system={{
+                            url: 'https://tapp.chayns-static.space/chayns-text-editor/v2/remoteEntry.js',
+                            scope: 'chayns_text_editor_2',
+                            module: './TextComponent',
+                        }}
+                        functions={functions}
+                        {...values}
+                        customData={{
+                            content: `  <div>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi lacinia diam ut nisi
+                lacinia vestibulum. Donec sit amet euismod nisl. Morbi orci ipsum, lacinia in eros
+                sit amet, pulvinar vestibulum tellus. Orci varius natoque penatibus et magnis dis
+                parturient montes, nascetur ridiculus mus. Praesent non blandit ipsum. Aliquam
+                libero quam, fermentum sit amet massa id, gravida hendrerit ex. Donec lectus felis,
+                feugiat eget finibus eu, luctus id nunc. Nam at nibh magna. Integer congue aliquam
+                turpis quis iaculis. Quisque vestibulum sodales placerat. Cras semper ex quis
+                feugiat pharetra.
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi lacinia diam ut nisi
+                lacinia vestibulum. Donec sit amet euismod nisl. Morbi orci ipsum, lacinia in eros
+                sit amet, pulvinar vestibulum tellus. Orci varius natoque penatibus et magnis dis
+                parturient montes, nascetur ridiculus mus. Praesent non blandit ipsum. Aliquam
+                libero quam, fermentum sit amet massa id, gravida hendrerit ex. Donec lectus felis,
+                feugiat eget finibus eu, luctus id nunc. Nam at nibh magna. Integer congue aliquam
+                turpis quis iaculis. Quisque vestibulum sodales placerat. Cras semper ex quis
+                feugiat pharetra.
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi lacinia diam ut nisi
+                lacinia vestibulum. Donec sit amet euismod nisl. Morbi orci ipsum, lacinia in eros
+                sit amet, pulvinar vestibulum tellus. Orci varius natoque penatibus et magnis dis
+                parturient montes, nascetur ridiculus mus. Praesent non blandit ipsum. Aliquam
+                libero quam, fermentum sit amet massa id, gravida hendrerit ex. Donec lectus felis,
+                feugiat eget finibus eu, luctus id nunc. Nam at nibh magna. Integer congue aliquam
+                turpis quis iaculis. Quisque vestibulum sodales placerat. Cras semper ex quis
+                feugiat pharetra.
+            </p>
+        </div>`,
+                        }}
+                    />
+                </div>
+            </Truncation>
+        </div>
+    );
+};
 
 export const FloatingImage = FloatingImageTemplate.bind({});
 FloatingImage.args = {
-    children: (
-        <div>
-            <img style={{ float: 'right' }} alt="" src="https://picsum.photos/200" />
-            <div>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi lacinia diam ut
-                    nisi lacinia vestibulum. Donec sit amet euismod nisl. Morbi orci ipsum, lacinia
-                    in eros sit amet, pulvinar vestibulum tellus. Orci varius natoque penatibus et
-                    magnis dis parturient montes, nascetur ridiculus mus. Praesent non blandit
-                    ipsum. Aliquam libero quam, fermentum sit amet massa id, gravida hendrerit ex.
-                    Donec lectus felis, feugiat eget finibus eu, luctus id nunc. Nam at nibh magna.
-                    Integer congue aliquam turpis quis iaculis. Quisque vestibulum sodales placerat.
-                    Cras semper ex quis feugiat pharetra.
-                </p>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi lacinia diam ut
-                    nisi lacinia vestibulum. Donec sit amet euismod nisl. Morbi orci ipsum, lacinia
-                    in eros sit amet, pulvinar vestibulum tellus. Orci varius natoque penatibus et
-                    magnis dis parturient montes, nascetur ridiculus mus. Praesent non blandit
-                    ipsum. Aliquam libero quam, fermentum sit amet massa id, gravida hendrerit ex.
-                    Donec lectus felis, feugiat eget finibus eu, luctus id nunc. Nam at nibh magna.
-                    Integer congue aliquam turpis quis iaculis. Quisque vestibulum sodales placerat.
-                    Cras semper ex quis feugiat pharetra.
-                </p>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi lacinia diam ut
-                    nisi lacinia vestibulum. Donec sit amet euismod nisl. Morbi orci ipsum, lacinia
-                    in eros sit amet, pulvinar vestibulum tellus. Orci varius natoque penatibus et
-                    magnis dis parturient montes, nascetur ridiculus mus. Praesent non blandit
-                    ipsum. Aliquam libero quam, fermentum sit amet massa id, gravida hendrerit ex.
-                    Donec lectus felis, feugiat eget finibus eu, luctus id nunc. Nam at nibh magna.
-                    Integer congue aliquam turpis quis iaculis. Quisque vestibulum sodales placerat.
-                    Cras semper ex quis feugiat pharetra.
-                </p>
-            </div>
-        </div>
-    ),
-    collapsedHeight: 350,
+    collapsedHeight: 250,
+    initialTruncateTimeout: 100,
+    isOpen: false,
 };
