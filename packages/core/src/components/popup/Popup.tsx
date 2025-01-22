@@ -39,6 +39,10 @@ export type PopupProps = {
      */
     onShow?: VoidFunction;
     /**
+     * Whether the tooltip should be hidden after the children is not hovered.
+     */
+    shouldHideOnChildrenLeave?: boolean;
+    /**
      * Whether the popup should be opened on hover. If not, the popup will be opened on click.
      */
     shouldShowOnHover?: boolean;
@@ -60,6 +64,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             container,
             onHide,
             children,
+            shouldHideOnChildrenLeave,
             shouldShowOnHover = false,
             shouldUseChildrenWidth = true,
             yOffset = 0,
@@ -105,8 +110,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, [container]);
 
         useEffect(() => {
-            if(container instanceof Element){
-                setNewContainer(container)
+            if (container instanceof Element) {
+                setNewContainer(container);
             }
         }, [container]);
 
@@ -259,10 +264,16 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 return;
             }
 
+            if (shouldHideOnChildrenLeave) {
+                handleHide();
+
+                return;
+            }
+
             timeout.current = window.setTimeout(() => {
                 handleHide();
             }, 500);
-        }, [handleHide, shouldShowOnHover]);
+        }, [handleHide, shouldHideOnChildrenLeave, shouldShowOnHover]);
 
         const handleDocumentClick = useCallback<EventListener>(
             (event) => {

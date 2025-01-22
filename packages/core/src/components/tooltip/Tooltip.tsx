@@ -28,9 +28,17 @@ export type TooltipProps = {
      */
     isDisabled?: boolean;
     /**
+     * Whether the tooltip should be hidden after the children is not hovered.
+     */
+    shouldHideOnChildrenLeave?: boolean;
+    /**
      * Whether the width of the children should be used.
      */
     shouldUseChildrenWidth?: boolean;
+    /**
+     * The Y offset of the tooltip to the children.
+     */
+    yOffset?: number;
 };
 
 const Tooltip: FC<TooltipProps> = ({
@@ -38,6 +46,8 @@ const Tooltip: FC<TooltipProps> = ({
     children,
     container,
     isDisabled,
+    shouldHideOnChildrenLeave,
+    yOffset,
     itemWidth,
     shouldUseChildrenWidth = true,
 }) => {
@@ -72,9 +82,11 @@ const Tooltip: FC<TooltipProps> = ({
                 ) : (
                     <Popup
                         shouldShowOnHover
+                        shouldHideOnChildrenLeave={shouldHideOnChildrenLeave}
                         content={content}
                         ref={tooltipRef}
                         container={container}
+                        yOffset={yOffset}
                         shouldUseChildrenWidth={shouldUseChildrenWidth}
                     >
                         <StyledTooltipChildren
@@ -87,7 +99,15 @@ const Tooltip: FC<TooltipProps> = ({
                 )}
             </StyledTooltip>
         ),
-        [isDisabled, children, shouldUseChildrenWidth, content, container],
+        [
+            isDisabled,
+            children,
+            shouldUseChildrenWidth,
+            shouldHideOnChildrenLeave,
+            content,
+            container,
+            yOffset,
+        ],
     );
 };
 
