@@ -158,6 +158,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     width: childrenWidth,
                 } = popupRef.current.getBoundingClientRect();
 
+                const containerRect = newContainer?.getBoundingClientRect();
+
                 if (pseudoHeight > childrenTop - 25) {
                     let isRight = false;
 
@@ -169,8 +171,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                         setAlignment(PopupAlignment.BottomLeft);
                     }
 
-                    const x = childrenLeft + childrenWidth / 2;
-                    const y = childrenTop + childrenHeight + yOffset;
+                    const x = childrenLeft - (containerRect?.left ?? 0) + childrenWidth / 2;
+                    const y = childrenTop - (containerRect?.top ?? 0) + childrenHeight + yOffset;
 
                     let newOffset;
 
@@ -209,8 +211,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                         setAlignment(PopupAlignment.TopLeft);
                     }
 
-                    const x = childrenLeft + childrenWidth / 2;
-                    const y = childrenTop - yOffset;
+                    const x = childrenLeft - (containerRect?.left ?? 0) + childrenWidth / 2;
+                    const y = childrenTop - (containerRect?.top ?? 0) - yOffset;
 
                     let newOffset;
 
