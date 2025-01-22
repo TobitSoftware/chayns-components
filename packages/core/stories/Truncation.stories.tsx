@@ -115,3 +115,49 @@ JustText.args = {
         </p>
     ),
 };
+
+const FloatingImageTemplate: StoryFn<typeof Truncation> = ({ children, ...args }) => (
+    <div>
+        <img style={{ float: 'right' }} alt="" src="https://picsum.photos/200" />
+        <Truncation {...args}>{children}</Truncation>
+    </div>
+);
+
+export const FloatingImage = FloatingImageTemplate.bind({});
+FloatingImage.args = {
+    children: (
+        <div>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi lacinia diam ut nisi
+                lacinia vestibulum. Donec sit amet euismod nisl. Morbi orci ipsum, lacinia in eros
+                sit amet, pulvinar vestibulum tellus. Orci varius natoque penatibus et magnis dis
+                parturient montes, nascetur ridiculus mus. Praesent non blandit ipsum. Aliquam
+                libero quam, fermentum sit amet massa id, gravida hendrerit ex. Donec lectus felis,
+                feugiat eget finibus eu, luctus id nunc. Nam at nibh magna. Integer congue aliquam
+                turpis quis iaculis. Quisque vestibulum sodales placerat. Cras semper ex quis
+                feugiat pharetra.
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi lacinia diam ut nisi
+                lacinia vestibulum. Donec sit amet euismod nisl. Morbi orci ipsum, lacinia in eros
+                sit amet, pulvinar vestibulum tellus. Orci varius natoque penatibus et magnis dis
+                parturient montes, nascetur ridiculus mus. Praesent non blandit ipsum. Aliquam
+                libero quam, fermentum sit amet massa id, gravida hendrerit ex. Donec lectus felis,
+                feugiat eget finibus eu, luctus id nunc. Nam at nibh magna. Integer congue aliquam
+                turpis quis iaculis. Quisque vestibulum sodales placerat. Cras semper ex quis
+                feugiat pharetra.
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi lacinia diam ut nisi
+                lacinia vestibulum. Donec sit amet euismod nisl. Morbi orci ipsum, lacinia in eros
+                sit amet, pulvinar vestibulum tellus. Orci varius natoque penatibus et magnis dis
+                parturient montes, nascetur ridiculus mus. Praesent non blandit ipsum. Aliquam
+                libero quam, fermentum sit amet massa id, gravida hendrerit ex. Donec lectus felis,
+                feugiat eget finibus eu, luctus id nunc. Nam at nibh magna. Integer congue aliquam
+                turpis quis iaculis. Quisque vestibulum sodales placerat. Cras semper ex quis
+                feugiat pharetra.
+            </p>
+        </div>
+    ),
+    collapsedHeight: 350,
+};
