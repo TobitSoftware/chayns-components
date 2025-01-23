@@ -62,11 +62,11 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
         return (
             <StyledListItemHeadImageWrapper
                 onClick={handleImageClick}
+                $background={imageBackground}
                 $shouldHideBackground={shouldHideBackground}
                 $shouldShowRoundImage={shouldShowRoundImage}
             >
                 <StyledListItemHeadImage
-                    $background={imageBackground}
                     $isHidden={!hasLoadedImage}
                     onLoad={handleImageLoaded}
                     src={images[0]}
