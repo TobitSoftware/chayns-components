@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledListItemHeadImageWrapperProps = WithTheme<{
+    $background?: CSSProperties['background'];
     $shouldHideBackground?: boolean;
     $shouldShowRoundImage?: boolean;
 }>;
@@ -22,10 +23,8 @@ export const StyledListItemHeadImageWrapper = styled.div<StyledListItemHeadImage
     ${({ $shouldHideBackground }) =>
         !$shouldHideBackground &&
         css`
-            background-color: rgba(
-                ${({ theme }: StyledListItemHeadImageWrapperProps) => theme['text-rgb']},
-                0.1
-            );
+            background: ${({ $background, theme }: StyledListItemHeadImageWrapperProps) =>
+                $background || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
             box-shadow: 0 0 0 1px
                 rgba(${({ theme }: StyledListItemHeadImageWrapperProps) => theme['009-rgb']}, 0.08)
                 inset;
@@ -33,13 +32,10 @@ export const StyledListItemHeadImageWrapper = styled.div<StyledListItemHeadImage
 `;
 
 type StyledListItemHeadImageProps = WithTheme<{
-    $background?: CSSProperties['background'];
     $isHidden: boolean;
 }>;
 
 export const StyledListItemHeadImage = styled.img<StyledListItemHeadImageProps>`
-    background: ${({ $background, theme }: StyledListItemHeadImageProps) =>
-        $background || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
     height: 100%;
     object-fit: cover;
     opacity: ${({ $isHidden }) => ($isHidden ? 0 : 1)};
