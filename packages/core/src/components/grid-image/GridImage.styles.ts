@@ -1,13 +1,16 @@
+import { CSSProperties } from 'react';
 import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledGridImageProps = WithTheme<{
+    $backgroundColor?: CSSProperties['backgroundColor'];
     $shouldShowRoundImage?: boolean;
     $size: number;
 }>;
 
 export const StyledGridImage = styled.div<StyledGridImageProps>`
-    background-color: rgba(${({ theme }: StyledGridImageProps) => theme['text-rgb']}, 0.1);
+    background-color: ${({ $backgroundColor, theme }: StyledGridImageProps) =>
+        $backgroundColor || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
     border-radius: ${({ $shouldShowRoundImage }) => ($shouldShowRoundImage ? '50%' : undefined)};
     box-shadow: 0 0 0 1px rgba(${({ theme }: StyledGridImageProps) => theme['009-rgb']}, 0.08) inset;
     height: ${({ $size }) => $size}px;

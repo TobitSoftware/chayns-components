@@ -1,9 +1,10 @@
 import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
-import React, { MouseEventHandler, useCallback, useState } from 'react';
+import React, { CSSProperties, MouseEventHandler, useCallback, useState } from 'react';
 import GridImage from '../../../../grid-image/GridImage';
 import { StyledListItemHeadImage, StyledListItemHeadImageWrapper } from './ListItemImage.styles';
 
 type ListItemImageProps = {
+    imageBackgroundColor?: CSSProperties['backgroundColor'];
     images: string[];
     shouldHideBackground: boolean;
     shouldShowRoundImage: boolean;
@@ -11,6 +12,7 @@ type ListItemImageProps = {
 };
 
 const ListItemImage: React.FC<ListItemImageProps> = ({
+    imageBackgroundColor,
     images,
     shouldHideBackground,
     shouldShowRoundImage,
@@ -47,6 +49,7 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
 
         return (
             <GridImage
+                backgroundColor={imageBackgroundColor}
                 images={gridImages}
                 shouldShowRoundImage={shouldShowRoundImage}
                 size={40}
@@ -63,6 +66,7 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
                 $shouldShowRoundImage={shouldShowRoundImage}
             >
                 <StyledListItemHeadImage
+                    $backgroundColor={imageBackgroundColor}
                     $isHidden={!hasLoadedImage}
                     onLoad={handleImageLoaded}
                     src={images[0]}

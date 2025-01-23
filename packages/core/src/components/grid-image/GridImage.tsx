@@ -1,4 +1,4 @@
-import React, { FC, MouseEventHandler, useCallback, useState } from 'react';
+import React, { CSSProperties, FC, MouseEventHandler, useCallback, useState } from 'react';
 import {
     StyledGridBottomRightImage,
     StyledGridImage,
@@ -8,8 +8,11 @@ import {
 
 type GridImageProps = {
     /**
-     * The images to be displayed in the `GridImage`. Only the first three
-     * images are displayed.
+     * The background color of the image.
+     */
+    backgroundColor?: CSSProperties['backgroundColor'];
+    /**
+     * The images to be displayed in the `GridImage`. Only the first three images are displayed.
      */
     images: string[];
     /**
@@ -17,8 +20,7 @@ type GridImageProps = {
      */
     onClick?: MouseEventHandler<HTMLDivElement>;
     /**
-     * Images of users should always be displayed in a round shape. Therefore
-     * this property can be set to true.
+     * Images of users should always be displayed in a round shape. Therefore, this property can be set to true.
      */
     shouldShowRoundImage?: boolean;
     /**
@@ -27,7 +29,13 @@ type GridImageProps = {
     size: number;
 };
 
-const GridImage: FC<GridImageProps> = ({ images, shouldShowRoundImage, size, onClick }) => {
+const GridImage: FC<GridImageProps> = ({
+    backgroundColor,
+    images,
+    shouldShowRoundImage,
+    size,
+    onClick,
+}) => {
     const [hasLoadedLeftImage, setHasLoadedLeftImage] = useState(false);
     const [hasLoadedTopRightImage, setHasLoadedTopRightImage] = useState(false);
     const [hasLoadedBottomRightImage, setHasLoadedBottomRightImage] = useState(false);
@@ -43,6 +51,7 @@ const GridImage: FC<GridImageProps> = ({ images, shouldShowRoundImage, size, onC
 
     return (
         <StyledGridImage
+            $backgroundColor={backgroundColor}
             $shouldShowRoundImage={shouldShowRoundImage}
             $size={size}
             onClick={typeof onClick === 'function' ? onClick : undefined}

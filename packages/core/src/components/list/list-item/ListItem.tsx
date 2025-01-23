@@ -1,5 +1,6 @@
 import { AnimatePresence } from 'framer-motion';
 import React, {
+    CSSProperties,
     FC,
     MouseEventHandler,
     ReactNode,
@@ -37,6 +38,10 @@ export type ListItemProps = {
      * documentation for more information.
      */
     icons?: string[];
+    /**
+     * The background color of the image. This is only used if images are passed.
+     */
+    imageBackgroundColor?: CSSProperties['backgroundColor'];
     /**
      * A list of image URLs that are displayed on the left side of the header.
      * If multiple URLs are passed, the image is assembled from the first three
@@ -137,6 +142,7 @@ const ListItem: FC<ListItemProps> = ({
     children,
     hoverItem,
     icons,
+    imageBackgroundColor,
     images,
     isDefaultOpen,
     isOpen,
@@ -247,6 +253,7 @@ const ListItem: FC<ListItemProps> = ({
             <ListItemHead
                 hoverItem={hoverItem}
                 icons={icons}
+                imageBackgroundColor={imageBackgroundColor}
                 images={images}
                 isAnyItemExpandable={isAnyItemExpandable}
                 isExpandable={isExpandable}

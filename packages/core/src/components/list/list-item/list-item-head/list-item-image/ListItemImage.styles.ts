@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../../../color-scheme-provider/ColorSchemeProvider';
 
@@ -31,11 +32,14 @@ export const StyledListItemHeadImageWrapper = styled.div<StyledListItemHeadImage
         `}
 `;
 
-type StyledListItemHeadImageProps = {
+type StyledListItemHeadImageProps = WithTheme<{
+    $backgroundColor?: CSSProperties['backgroundColor'];
     $isHidden: boolean;
-};
+}>;
 
 export const StyledListItemHeadImage = styled.img<StyledListItemHeadImageProps>`
+    background-color: ${({ $backgroundColor, theme }: StyledListItemHeadImageProps) =>
+        $backgroundColor || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
     height: 100%;
     object-fit: cover;
     opacity: ${({ $isHidden }) => ($isHidden ? 0 : 1)};

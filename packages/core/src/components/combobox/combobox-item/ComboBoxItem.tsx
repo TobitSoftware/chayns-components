@@ -16,6 +16,7 @@ import {
 export type ComboBoxItemProps = {
     icons?: IComboBoxItem['icons'];
     id: IComboBoxItem['value'];
+    imageBackgroundColor?: IComboBoxItem['imageBackgroundColor'];
     imageUrl: IComboBoxItem['imageUrl'];
     isDisabled?: IComboBoxItem['isDisabled'];
     isSelected: boolean;
@@ -33,6 +34,7 @@ export type ComboBoxItemProps = {
 const ComboBoxItem: FC<ComboBoxItemProps> = ({
     icons,
     id,
+    imageBackgroundColor,
     imageUrl,
     isDisabled,
     isSelected,
@@ -66,6 +68,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
                 {imageUrl && (
                     <StyledComboBoxItemImage
                         src={imageUrl}
+                        $backgroundColor={imageBackgroundColor}
                         $shouldShowBigImage={
                             shouldShowBigImage ||
                             (typeof subtext === 'string' && subtext.trim() !== '')
@@ -103,6 +106,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
             handleItemClick,
             icons,
             id,
+            imageBackgroundColor,
             imageUrl,
             isDisabled,
             isSelected,
