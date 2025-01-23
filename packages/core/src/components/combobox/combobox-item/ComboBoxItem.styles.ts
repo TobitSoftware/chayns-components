@@ -40,7 +40,7 @@ export const StyledComboBoxItem = styled.div<StyledComboBoxItemProps>`
 `;
 
 type StyledComboBoxItemImageProps = WithTheme<{
-    $backgroundColor?: CSSProperties['backgroundColor'];
+    $background?: CSSProperties['background'];
     $shouldShowBigImage?: boolean;
     $shouldShowRoundImage?: boolean;
 }>;
@@ -52,8 +52,8 @@ export const StyledComboBoxItemImage = styled.img<StyledComboBoxItemImageProps>`
             border-radius: 50%;
         `}
 
-    background-color: ${({ $backgroundColor, theme }: StyledComboBoxItemImageProps) =>
-        $backgroundColor || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
+    background: ${({ $background, theme }: StyledComboBoxItemImageProps) =>
+        $background || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
     box-shadow: 0 0 0 1px
         rgba(${({ theme }: StyledComboBoxItemImageProps) => theme['009-rgb']}, 0.15);
     flex: 0 0 auto;

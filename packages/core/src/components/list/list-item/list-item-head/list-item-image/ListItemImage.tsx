@@ -4,7 +4,7 @@ import GridImage from '../../../../grid-image/GridImage';
 import { StyledListItemHeadImage, StyledListItemHeadImageWrapper } from './ListItemImage.styles';
 
 type ListItemImageProps = {
-    imageBackgroundColor?: CSSProperties['backgroundColor'];
+    imageBackground?: CSSProperties['background'];
     images: string[];
     shouldHideBackground: boolean;
     shouldShowRoundImage: boolean;
@@ -12,7 +12,7 @@ type ListItemImageProps = {
 };
 
 const ListItemImage: React.FC<ListItemImageProps> = ({
-    imageBackgroundColor,
+    imageBackground,
     images,
     shouldHideBackground,
     shouldShowRoundImage,
@@ -49,7 +49,7 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
 
         return (
             <GridImage
-                backgroundColor={imageBackgroundColor}
+                background={imageBackground}
                 images={gridImages}
                 shouldShowRoundImage={shouldShowRoundImage}
                 size={40}
@@ -66,7 +66,7 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
                 $shouldShowRoundImage={shouldShowRoundImage}
             >
                 <StyledListItemHeadImage
-                    $backgroundColor={imageBackgroundColor}
+                    $background={imageBackground}
                     $isHidden={!hasLoadedImage}
                     onLoad={handleImageLoaded}
                     src={images[0]}

@@ -40,7 +40,7 @@ interface HeadHeight {
 type ListItemHeadProps = {
     hoverItem?: ReactNode;
     icons?: string[];
-    imageBackgroundColor?: CSSProperties['backgroundColor'];
+    imageBackground?: CSSProperties['background'];
     images?: string[];
     isAnyItemExpandable: boolean;
     isExpandable: boolean;
@@ -62,7 +62,7 @@ type ListItemHeadProps = {
 const ListItemHead: FC<ListItemHeadProps> = ({
     hoverItem,
     icons,
-    imageBackgroundColor,
+    imageBackground,
     images,
     isAnyItemExpandable,
     isExpandable,
@@ -163,7 +163,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         if (images) {
             return (
                 <ListItemImage
-                    imageBackgroundColor={imageBackgroundColor}
+                    imageBackground={imageBackground}
                     images={images}
                     shouldOpenImageOnClick={shouldOpenImageOnClick}
                     shouldHideBackground={!!shouldHideImageOrIconBackground}
@@ -175,7 +175,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         return undefined;
     }, [
         icons,
-        imageBackgroundColor,
+        imageBackground,
         images,
         shouldHideImageOrIconBackground,
         shouldOpenImageOnClick,

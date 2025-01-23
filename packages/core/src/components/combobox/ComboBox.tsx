@@ -50,7 +50,7 @@ export interface ComboBoxTextStyles {
 
 export interface IComboBoxItem {
     icons?: string[];
-    imageBackgroundColor?: CSSProperties['backgroundColor'];
+    imageBackground?: CSSProperties['background'];
     imageUrl?: string;
     isDisabled?: boolean;
     rightElement?: ReactNode;
@@ -503,7 +503,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                         <ComboBoxItem
                             icons={item.icons}
                             id={item.value}
-                            imageBackgroundColor={item.imageBackgroundColor}
+                            imageBackground={item.imageBackground}
                             imageUrl={item.imageUrl}
                             isDisabled={item.isDisabled}
                             isSelected={selectedItem ? item.value === selectedItem.value : false}

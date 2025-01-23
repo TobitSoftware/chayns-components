@@ -33,13 +33,13 @@ export const StyledListItemHeadImageWrapper = styled.div<StyledListItemHeadImage
 `;
 
 type StyledListItemHeadImageProps = WithTheme<{
-    $backgroundColor?: CSSProperties['backgroundColor'];
+    $background?: CSSProperties['background'];
     $isHidden: boolean;
 }>;
 
 export const StyledListItemHeadImage = styled.img<StyledListItemHeadImageProps>`
-    background-color: ${({ $backgroundColor, theme }: StyledListItemHeadImageProps) =>
-        $backgroundColor || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
+    background: ${({ $background, theme }: StyledListItemHeadImageProps) =>
+        $background || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
     height: 100%;
     object-fit: cover;
     opacity: ${({ $isHidden }) => ($isHidden ? 0 : 1)};

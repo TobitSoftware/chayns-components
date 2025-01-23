@@ -10,7 +10,7 @@ type GridImageProps = {
     /**
      * The background color of the image.
      */
-    backgroundColor?: CSSProperties['backgroundColor'];
+    background?: CSSProperties['background'];
     /**
      * The images to be displayed in the `GridImage`. Only the first three images are displayed.
      */
@@ -30,7 +30,7 @@ type GridImageProps = {
 };
 
 const GridImage: FC<GridImageProps> = ({
-    backgroundColor,
+    background,
     images,
     shouldShowRoundImage,
     size,
@@ -51,7 +51,7 @@ const GridImage: FC<GridImageProps> = ({
 
     return (
         <StyledGridImage
-            $backgroundColor={backgroundColor}
+            $background={background}
             $shouldShowRoundImage={shouldShowRoundImage}
             $size={size}
             onClick={typeof onClick === 'function' ? onClick : undefined}
