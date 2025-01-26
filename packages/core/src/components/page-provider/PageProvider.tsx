@@ -1,6 +1,7 @@
-import React, { FC, useEffect, useState, type CSSProperties } from 'react';
+import { getEnvironment } from 'chayns-api';
+import React, { FC, useEffect, useState } from 'react';
 import { createGlobalStyle } from 'styled-components';
-import { getPagePadding, getUsableHeight } from '../../utils/pageProvider';
+import { getUsableHeight } from '../../utils/pageProvider';
 import ColorSchemeProvider, {
     type ColorSchemeProviderProps,
 } from '../color-scheme-provider/ColorSchemeProvider';
@@ -35,10 +36,10 @@ const PageProvider: FC<PageProviderProps> = ({
     shouldRemovePadding,
     shouldUseUsableHeight,
 }) => {
+    const { runtimeEnvironment } = getEnvironment();
+    const shouldUsePadding =
+        !shouldRemovePadding && ![4, 5, 6].includes(runtimeEnvironment as number);
     const [usableHeight, setUsableHeight] = useState(0);
-    const [padding, setPadding] = useState<CSSProperties['padding']>(
-        shouldRemovePadding ? 0 : getPagePadding(),
-    );
 
     useEffect(() => {
         void getUsableHeight(shouldRemovePadding).then((height) => {
@@ -46,24 +47,10 @@ const PageProvider: FC<PageProviderProps> = ({
         });
     }, [shouldRemovePadding]);
 
-    useEffect(() => {
-        const handleResize = () => {
-            setPadding(shouldRemovePadding ? 0 : getPagePadding());
-        };
-
-        handleResize();
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, [shouldRemovePadding]);
-
     return (
         <StyledPageProvider
             className="page-provider"
-            $padding={padding}
+            $shouldUsePadding={shouldUsePadding}
             $usableHeight={shouldUseUsableHeight ? usableHeight : undefined}
         >
             <ColorSchemeProvider
