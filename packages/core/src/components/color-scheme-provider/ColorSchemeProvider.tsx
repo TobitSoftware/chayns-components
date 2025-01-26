@@ -14,6 +14,7 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { getDesignSettings, getParagraphFormat } from '../../api/theme/get';
 import type { DesignSettings, ParagraphFormat } from '../../types/colorSchemeProvider';
 import { convertIconStyle, getFontSize, getHeadlineColorSelector } from '../../utils/font';
+import { StyledColorSchemeProvider } from './ColorSchemeProvider.styles';
 
 enum ColorMode {
     Classic,
@@ -90,7 +91,6 @@ const GlobalStyle = createGlobalStyle`
 export interface ColorSchemeContextProps {
     designSettings: DesignSettings;
     paragraphFormat: ParagraphFormat[];
-    colors: Theme;
     theme: Theme;
 }
 
@@ -111,7 +111,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     theme,
     colors,
 }) => {
-    const [internalColors, setInternalColors] = useState<Theme>(colors ?? {});
     const [internalTheme, setInternalTheme] = useState<Theme>(theme ?? {});
     const [internalDesignSettings, setInternalDesignSettings] = useState<DesignSettings>();
     const [internalParagraphFormat, setInternalParagraphFormat] = useState<ParagraphFormat[]>();
@@ -140,7 +139,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     }, [internalParagraphFormat, paragraphFormat, siteId]);
 
     useEffect(() => {
-        let newColors: Theme = {};
         let newTheme: Theme = {};
 
         const availableColors = getAvailableColorList();
@@ -160,27 +158,14 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                         newTheme[colorName] = hexColor;
                     }
 
-                    if (!colors) {
-                        newColors[`--chayns-color--${colorName}`] = hexColor;
-                    }
-
                     if (rgbColor) {
                         if (!theme) {
                             newTheme[`${colorName}-rgb`] =
                                 `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
                         }
-
-                        if (!colors) {
-                            newColors[`--chayns-color-rgb--${colorName}`] =
-                                `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
-                        }
                     }
                 }
             });
-        }
-
-        if (colors) {
-            newColors = colors;
         }
 
         if (!theme) {
@@ -213,17 +198,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
             }
 
             if (internalParagraphFormat) {
-                const { colorResult, themeResult } =
-                    getHeadlineColorSelector(internalParagraphFormat);
-
-                // Update chayns-colors
-                Object.keys(colorResult).forEach((key) => {
-                    // ToDo: Find better solution
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    newColors[key] = colorResult[key];
-                });
+                const { themeResult } = getHeadlineColorSelector(internalParagraphFormat);
 
                 // Update Theme
                 Object.keys(themeResult).forEach((key) => {
@@ -241,7 +216,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         }
 
         setInternalTheme(newTheme);
-        setInternalColors(newColors);
     }, [
         color,
         colorMode,
@@ -259,13 +233,12 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
             return {
                 paragraphFormat: internalParagraphFormat,
                 designSettings: internalDesignSettings,
-                colors: internalColors,
                 theme: internalTheme,
             };
         }
 
         return undefined;
-    }, [internalColors, internalDesignSettings, internalParagraphFormat, internalTheme]);
+    }, [internalDesignSettings, internalParagraphFormat, internalTheme]);
 
     return (
         <ThemeProvider theme={internalTheme}>
@@ -276,17 +249,15 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                         href="https://api.chayns-static.space/font/NotoColorEmoji/v1/font.css"
                     />
                 </Helmet>
-                <div
+                <StyledColorSchemeProvider
                     className="color-scheme-provider"
                     style={{
-                        ...internalColors,
                         ...cssVariables,
                         ...style,
-                        color: 'var(--chayns-color--text)',
                     }}
                 >
                     {children}
-                </div>
+                </StyledColorSchemeProvider>
                 <GlobalStyle />
             </ColorSchemeContext.Provider>
         </ThemeProvider>
