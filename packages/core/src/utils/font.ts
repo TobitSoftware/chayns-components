@@ -54,7 +54,6 @@ const hexToRgb = (hex: string) => {
 
 export const getHeadlineColorSelector = (data: ParagraphFormat[]) => {
     const themeResult: { [key: string]: string } = {};
-    const colorResult: { [key: string]: string } = {};
     const headlineMap: { [key: string]: string } = {
         h1: 'headline-1',
         h2: 'headline-2',
@@ -96,10 +95,6 @@ export const getHeadlineColorSelector = (data: ParagraphFormat[]) => {
             return;
         }
 
-        const hexPath = `--chayns-color--${path}`;
-        const rgbPath = `--chayns-color-rgb--${path}`;
-
-        colorResult[hexPath] = color;
         themeResult[path] = color;
 
         const rgb = hexToRgb(color);
@@ -110,9 +105,8 @@ export const getHeadlineColorSelector = (data: ParagraphFormat[]) => {
 
         const { r, g, b } = rgb;
 
-        colorResult[rgbPath] = `${r}, ${g}, ${b}`;
         themeResult[`${path}-rgb`] = `${r}, ${g}, ${b}`;
     });
 
-    return { colorResult, themeResult };
+    return { themeResult };
 };
