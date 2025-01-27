@@ -1,4 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { ReactNode, useEffect, useState } from 'react';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
 import Button from '../src/components/button/Button';
@@ -116,9 +117,17 @@ JustText.args = {
     ),
 };
 
-const FloatingImageTemplate: StoryFn<typeof Truncation> = ({ children, ...args }) => (
-    <Truncation {...args}>{children}</Truncation>
-);
+const FloatingImageTemplate: StoryFn<typeof Truncation> = ({ children, ...args }) => {
+    const [content, setContent] = useState<ReactNode>('');
+
+    useEffect(() => {
+        window.setTimeout(() => {
+            setContent(children);
+        }, 2000);
+    }, []);
+
+    return <Truncation {...args}>{content}</Truncation>;
+};
 
 export const FloatingImage = FloatingImageTemplate.bind({});
 FloatingImage.args = {

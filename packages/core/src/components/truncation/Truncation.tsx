@@ -140,14 +140,21 @@ const Truncation: FC<TruncationProps> = ({
 
         setNewCollapsedHeight(pseudoChildrenRef.current.offsetHeight);
         setOriginalSmallHeight(pseudoChildrenRef.current.offsetHeight);
-    }, [collapsedHeight, pseudoChildrenRef]);
+    }, [collapsedHeight, pseudoChildrenRef, children]);
 
     // Checks if the clamp should be shown
     useEffect(() => {
         if (pseudoChildrenRef.current && !hasSizeChanged && !initialRender) {
             setShowClamp(originalHeight > newCollapsedHeight);
         }
-    }, [collapsedHeight, hasSizeChanged, initialRender, newCollapsedHeight, originalHeight]);
+    }, [
+        collapsedHeight,
+        hasSizeChanged,
+        initialRender,
+        newCollapsedHeight,
+        originalHeight,
+        children,
+    ]);
 
     useEffect(() => {
         if (childrenRef.current && pseudoChildrenRef.current && originalChildrenRef.current) {
@@ -204,7 +211,7 @@ const Truncation: FC<TruncationProps> = ({
         }
 
         return () => {};
-    }, [originalBigHeight]);
+    }, [originalBigHeight, children]);
 
     useIsomorphicLayoutEffect(() => {
         if (pseudoChildrenRef.current) {
@@ -239,7 +246,7 @@ const Truncation: FC<TruncationProps> = ({
         }
 
         return () => {};
-    }, [originalSmallHeight]);
+    }, [originalSmallHeight, children]);
 
     return useMemo(
         () => (
