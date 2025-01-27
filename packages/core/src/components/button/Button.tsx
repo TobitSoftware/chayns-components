@@ -136,6 +136,7 @@ const Button: FC<ButtonProps> = ({
         <StyledMotionButton
             $shouldShowTextAsRobotoMedium={shouldShowTextAsRobotoMedium}
             $shouldShowAsSelectButton={shouldShowAsSelectButton}
+            $shouldShowWaitCursor={shouldShowWaitCursor}
             className={buttonClasses}
             disabled={isDisabled}
             $isDisabled={isDisabled}

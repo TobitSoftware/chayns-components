@@ -9,6 +9,7 @@ type StyledButtonProps = WithTheme<{
     $isSecondary?: boolean;
     $shouldShowTextAsRobotoMedium: boolean;
     $shouldShowAsSelectButton: boolean;
+    $shouldShowWaitCursor?: boolean;
 }>;
 
 export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
@@ -58,7 +59,13 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
     position: relative;
     user-select: none;
 
-    ${({ $hasIcon, $hasChildren }) => {
+    ${({ $hasIcon, $hasChildren, $shouldShowWaitCursor }) => {
+        if ($shouldShowWaitCursor) {
+            return css`
+                padding: 4px 12px;
+            `;
+        }
+
         if ($hasIcon) {
             if ($hasChildren) {
                 return css`
