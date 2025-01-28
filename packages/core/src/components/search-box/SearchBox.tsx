@@ -241,6 +241,15 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 ),
             }));
 
+            console.debug('SearchBox activeList', {
+                lists,
+                groups,
+                value,
+                newLists,
+                newMatchingItems,
+                filteredMatchingListItems,
+            });
+
             setMatchingListsItems(filteredMatchingListItems);
 
             return newLists;
@@ -728,6 +737,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         }, [handleKeyPress]);
 
         useEffect(() => {
+            console.debug('SearchBox useEffect', {
+                newContainer,
+                isAnimating,
+                matchingListsItemsLength: matchingListsItems.length,
+                content,
+            });
+
             if (!newContainer) {
                 return;
             }
