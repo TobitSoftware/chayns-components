@@ -27,12 +27,15 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
         onSelect({ id, text, imageUrl }, groupName);
     }, [onSelect, id, text, imageUrl, groupName]);
 
+    let idString = `search-box-item__${id}`;
+
+    if (groupName) {
+        idString = `_${groupName}`;
+    }
+
     return useMemo(
         () => (
-            <StyledSearchBoxItem
-                id={`search-box-item__${id}_${groupName ?? ''}`}
-                onClick={handleClick}
-            >
+            <StyledSearchBoxItem id={idString} onClick={handleClick}>
                 {imageUrl && (
                     <StyledSearchBoxItemImage
                         src={imageUrl}
@@ -42,7 +45,7 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
                 <StyledSearchBoxItemText dangerouslySetInnerHTML={{ __html: text }} />
             </StyledSearchBoxItem>
         ),
-        [groupName, handleClick, id, imageUrl, shouldShowRoundImage, text],
+        [handleClick, idString, imageUrl, shouldShowRoundImage, text],
     );
 };
 
