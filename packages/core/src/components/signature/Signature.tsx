@@ -29,7 +29,7 @@ export type SignatureProps = {
     /**
      * Function to be executed when the signature is edited.
      */
-    onEdit?: (signature: string) => void;
+    onEdit?: (signatureUrl: string) => void;
     /**
      * Function to be executed when the user deletes the signature.
      */
@@ -37,7 +37,7 @@ export type SignatureProps = {
     /**
      * Function to be executed when the user subscribes.
      */
-    onSubscribe?: () => void;
+    onSubscribe?: (signatureUrl: string) => void;
     /**
      * Function to be executed when the user unsubscribes.
      */
@@ -79,7 +79,7 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
                                 setHasSubscribed(true);
 
                                 if (typeof onSubscribe === 'function') {
-                                    onSubscribe();
+                                    onSubscribe(result);
                                 }
                             } else if (typeof onEdit === 'function') {
                                 onEdit(result);
@@ -113,7 +113,7 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
                 setHasSubscribed(true);
 
                 if (typeof onSubscribe === 'function') {
-                    onSubscribe();
+                    onSubscribe(signatureUrl);
                 }
             } else {
                 void handleCallDialog(true);
