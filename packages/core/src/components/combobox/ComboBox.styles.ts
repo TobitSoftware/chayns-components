@@ -9,28 +9,35 @@ import type { ComboBoxProps } from './ComboBox';
 type StyledComboBoxProps = WithTheme<{
     $minWidth?: number;
     $shouldUseFullWidth: ComboBoxProps['shouldUseFullWidth'];
+    $shouldUseCurrentItemWidth: ComboBoxProps['shouldUseCurrentItemWidth'];
 }>;
 
 export const StyledComboBox = styled.div<StyledComboBoxProps>`
     user-select: none;
     position: relative;
 
-    ${({ $shouldUseFullWidth, $minWidth }) => {
+    ${({ $shouldUseFullWidth, $minWidth, $shouldUseCurrentItemWidth }) => {
         if (typeof $minWidth !== 'number') {
             return css`
                 width: fit-content;
             `;
         }
 
-        return $shouldUseFullWidth
-            ? css`
-                  min-width: ${$minWidth}px;
-                  width: 100%;
-              `
-            : css`
-                  min-width: ${$minWidth}px;
-                  max-width: ${$minWidth}px;
-              `;
+        if ($shouldUseFullWidth) {
+            return css`
+                min-width: ${$minWidth}px;
+                width: 100%;
+            `;
+        }
+
+        if ($shouldUseCurrentItemWidth) {
+            return '';
+        }
+
+        return css`
+            min-width: ${$minWidth}px;
+            max-width: ${$minWidth}px;
+        `;
     }}
 `;
 

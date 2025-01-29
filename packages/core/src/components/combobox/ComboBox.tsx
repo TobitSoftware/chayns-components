@@ -585,6 +585,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                 ref={styledComboBoxElementRef}
                 $minWidth={minWidth}
                 $shouldUseFullWidth={shouldUseFullWidth}
+                $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
             >
                 <StyledComboBoxHeader
                     $direction={direction}
