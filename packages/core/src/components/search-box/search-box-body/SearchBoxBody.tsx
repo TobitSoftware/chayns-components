@@ -152,6 +152,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                 onGroupSelect,
                 ref,
                 selectedGroups,
+                shouldHideFilterButtons,
                 uuid,
                 width,
             ],

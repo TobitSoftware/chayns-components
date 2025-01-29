@@ -241,15 +241,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 ),
             }));
 
-            console.debug('SearchBox activeList', {
-                lists,
-                groups,
-                value,
-                newLists,
-                newMatchingItems,
-                filteredMatchingListItems,
-            });
-
             setMatchingListsItems(filteredMatchingListItems);
 
             return newLists;
@@ -737,13 +728,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         }, [handleKeyPress]);
 
         useEffect(() => {
-            console.debug('SearchBox useEffect', {
-                newContainer,
-                isAnimating,
-                matchingListsItemsLength: matchingListsItems.length,
-                content,
-            });
-
             if (!newContainer) {
                 return;
             }
@@ -751,21 +735,23 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             setPortal(() =>
                 createPortal(
                     <AnimatePresence initial={false}>
-                        {isAnimating && matchingListsItems.length !== 0 && (
-                            <SearchBoxBody
-                                filterButtons={filterButtons}
-                                selectedGroups={groups}
-                                width={width}
-                                coordinates={internalCoordinates}
-                                browser={browser?.name}
-                                height={height}
-                                ref={contentRef}
-                                onGroupSelect={handleFilterButtonsGroupSelect}
-                                shouldHideFilterButtons={shouldHideFilterButtons}
-                            >
-                                {content}
-                            </SearchBoxBody>
-                        )}
+                        {isAnimating &&
+                            matchingListsItems.length !== 0 &&
+                            (value.trim() !== '' || shouldShowContentOnEmptyInput) && (
+                                <SearchBoxBody
+                                    filterButtons={filterButtons}
+                                    selectedGroups={groups}
+                                    width={width}
+                                    coordinates={internalCoordinates}
+                                    browser={browser?.name}
+                                    height={height}
+                                    ref={contentRef}
+                                    onGroupSelect={handleFilterButtonsGroupSelect}
+                                    shouldHideFilterButtons={shouldHideFilterButtons}
+                                >
+                                    {content}
+                                </SearchBoxBody>
+                            )}
                     </AnimatePresence>,
                     newContainer,
                 ),
@@ -782,6 +768,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             width,
             shouldHideFilterButtons,
             matchingListsItems.length,
+            value,
+            shouldShowContentOnEmptyInput,
         ]);
 
         return useMemo(
