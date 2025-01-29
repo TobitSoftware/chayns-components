@@ -1,5 +1,5 @@
 import { Popup } from '@chayns-components/core';
-import React, { useContext, useMemo } from 'react';
+import React, { ReactNode, useContext, useMemo } from 'react';
 import type { IPresetColor } from '../../../types/colorPicker';
 import ColorPickerPopup from '../../color-picker-popup/ColorPickerPopup';
 import { ColorPickerContext } from '../../ColorPickerProvider';
@@ -12,29 +12,31 @@ import {
 } from './ColorPickerWrapper.styles';
 
 interface ColorPickerWrapperProps {
-    presetColors?: IPresetColor[];
-    shouldShowPresetColors: boolean;
+    children?: ReactNode;
     onPresetColorAdd?: (presetColor: IPresetColor) => void;
     onPresetColorRemove?: (presetColorId: IPresetColor['id']) => void;
-    shouldShowTransparencySlider: boolean;
-    shouldShowMoreOptions: boolean;
+    presetColors?: IPresetColor[];
     shouldShowAsPopup: boolean;
+    shouldShowMoreOptions: boolean;
+    shouldShowPresetColors: boolean;
     shouldShowPreviewColorString: boolean;
     shouldShowRoundPreviewColor: boolean;
+    shouldShowTransparencySlider: boolean;
     shouldUseSiteColors: boolean;
 }
 
 const ColorPickerWrapper = ({
-    presetColors,
-    onPresetColorRemove,
+    children,
     onPresetColorAdd,
-    shouldShowPresetColors,
+    onPresetColorRemove,
+    presetColors,
     shouldShowAsPopup,
-    shouldUseSiteColors,
-    shouldShowTransparencySlider,
     shouldShowMoreOptions,
-    shouldShowRoundPreviewColor,
+    shouldShowPresetColors,
     shouldShowPreviewColorString,
+    shouldShowRoundPreviewColor,
+    shouldShowTransparencySlider,
+    shouldUseSiteColors,
 }: ColorPickerWrapperProps) => {
     const { selectedColor } = useContext(ColorPickerContext);
 
@@ -57,6 +59,7 @@ const ColorPickerWrapper = ({
             shouldShowMoreOptions,
             shouldShowPresetColors,
             shouldShowTransparencySlider,
+            shouldUseSiteColors,
         ],
     );
 
@@ -64,19 +67,21 @@ const ColorPickerWrapper = ({
         <StyledColorPickerWrapper>
             {shouldShowAsPopup ? (
                 <Popup content={content}>
-                    <StyledColorPickerWrapperInfo>
-                        <StyledColorPickerWrapperInfoColorWrapper
-                            $shouldShowRoundPreviewColor={shouldShowRoundPreviewColor}
-                        >
-                            <StyledColorPickerWrapperInfoColor $color={selectedColor} />
-                        </StyledColorPickerWrapperInfoColorWrapper>
+                    {children ?? (
+                        <StyledColorPickerWrapperInfo>
+                            <StyledColorPickerWrapperInfoColorWrapper
+                                $shouldShowRoundPreviewColor={shouldShowRoundPreviewColor}
+                            >
+                                <StyledColorPickerWrapperInfoColor $color={selectedColor} />
+                            </StyledColorPickerWrapperInfoColorWrapper>
 
-                        {shouldShowPreviewColorString && (
-                            <StyledColorPickerWrapperInfoText>
-                                {selectedColor}
-                            </StyledColorPickerWrapperInfoText>
-                        )}
-                    </StyledColorPickerWrapperInfo>
+                            {shouldShowPreviewColorString && (
+                                <StyledColorPickerWrapperInfoText>
+                                    {selectedColor}
+                                </StyledColorPickerWrapperInfoText>
+                            )}
+                        </StyledColorPickerWrapperInfo>
+                    )}
                 </Popup>
             ) : (
                 content
