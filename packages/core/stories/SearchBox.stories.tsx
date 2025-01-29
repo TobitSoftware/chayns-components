@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import SearchBox from '../src/components/search-box/SearchBox';
 
 const ITEMS = [
@@ -94,12 +94,14 @@ const Template: StoryFn<typeof SearchBox> = (args) => (
 );
 
 const DelayedItemsTemplate: StoryFn<typeof SearchBox> = (args) => {
-    const [items, setItems] = useState(args.lists[0].list);
+    const [items, setItems] = useState([]);
 
-    const handleChange = () => {
-        setTimeout(() => {
-            setItems([...ITEMS, ...MORE_ITEMS]);
-        }, 2000);
+    const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+        if (target.value === 'Bau') {
+            setTimeout(() => {
+                setItems(MORE_ITEMS);
+            }, 125);
+        }
     };
 
     return (

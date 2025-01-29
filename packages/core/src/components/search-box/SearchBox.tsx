@@ -141,6 +141,9 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const contentRef = useRef<HTMLDivElement>(null);
         const inputRef = useRef<HTMLInputElement | null>(null);
 
+        const hasFocusRef = useRef<boolean>(false);
+        const isAnimatingRef = useRef<boolean>(false);
+
         const theme = useTheme();
 
         const { browser } = getDevice();
@@ -365,10 +368,22 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             }
         }, [selectedId]);
 
+        useEffect(() => {
+            isAnimatingRef.current = isAnimating;
+        }, [isAnimating]);
+
+        useEffect(() => {
+            if (matchingListsItems.length !== 0 && !isAnimatingRef.current && hasFocusRef.current) {
+                handleOpen();
+            }
+        }, [handleOpen, matchingListsItems.length]);
+
         /**
          * This function sets the items on focus if shouldShowContentOnEmptyInput
          */
         const handleFocus = useCallback(() => {
+            hasFocusRef.current = true;
+
             if (shouldShowContentOnEmptyInput) {
                 const newMatchingItems: ISearchBoxItems[] = [];
 
@@ -529,6 +544,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          */
         const handleBlur = useCallback(
             (event: FocusEvent<HTMLInputElement>) => {
+                hasFocusRef.current = false;
+
                 if (typeof onBlur === 'function') {
                     onBlur(event);
                 }
