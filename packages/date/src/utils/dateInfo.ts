@@ -1,21 +1,21 @@
-import {getLanguage, Language} from 'chayns-api';
-import {UseDateInfoOptions} from '../types/dateinfo';
-import {isCurrentYear, isMorning, isToday, isTomorrow, isYesterday} from "./date";
+import { getLanguage, Language } from 'chayns-api';
+import { UseDateInfoOptions } from '../types/dateinfo';
+import { isCurrentYear, isToday, isTomorrow, isYesterday } from './date';
 
 export const getDateInfo = ({
-                                date,
-                                shouldShowYear,
-                                shouldShowTime,
-                                shouldShowDayOfWeek,
-                                shouldShowRelativeDayOfWeek,
-                                shouldUseShortText,
-                            }: Omit<UseDateInfoOptions, 'shouldShowDateToNowDifference' & 'preText'>) => {
-    const {active: language} = getLanguage();
+    date,
+    shouldShowYear,
+    shouldShowTime,
+    shouldShowDayOfWeek,
+    shouldShowRelativeDayOfWeek,
+    shouldUseShortText,
+}: Omit<UseDateInfoOptions, 'shouldShowDateToNowDifference' & 'preText'>) => {
+    const { active: language } = getLanguage();
 
     let dayPart = '';
 
     if (shouldShowRelativeDayOfWeek) {
-        const rtf = new Intl.RelativeTimeFormat(language, {numeric: 'auto'});
+        const rtf = new Intl.RelativeTimeFormat(language, { numeric: 'auto' });
 
         if (isToday(date)) {
             dayPart = capitalizeFirstLetter(rtf.format(0, 'day'));
@@ -54,20 +54,20 @@ export const getDateInfo = ({
 
     let formattedTime = '';
     if (Object.keys(timeParts).length > 0) {
-        formattedTime = `, ${date.toLocaleTimeString(language, {...timeParts})}`;
+        formattedTime = `, ${date.toLocaleTimeString(language, { ...timeParts })}`;
     }
 
-    const hourWord = getTimeString({language, date});
+    const hourWord = getTimeString({ language });
+
     formattedTime += shouldShowTime ? ` ${hourWord}` : '';
 
-    const formattedDate = `${date.toLocaleDateString(
-        language,
-        dateParts,
-    )}${formattedTime}`;
+    const formattedDate = `${date.toLocaleDateString(language, dateParts)}${formattedTime}`;
+
     return `${dayPart}${dayPart ? ', ' : ''}${formattedDate}`;
 };
 
-const capitalizeFirstLetter = (text: string): string => text.charAt(0).toUpperCase() + text.slice(1)
+const capitalizeFirstLetter = (text: string): string =>
+    text.charAt(0).toUpperCase() + text.slice(1);
 
 type RelativeTimeUnit = 'year' | 'month' | 'day' | 'hour' | 'minute' | 'second';
 
@@ -78,51 +78,51 @@ interface GetTimeTillNow {
 }
 
 export const getTimeTillNow = ({
-                                   date,
-                                   currentDate,
-                                   language = Language.English,
-                               }: GetTimeTillNow): string => {
+    date,
+    currentDate,
+    language = Language.English,
+}: GetTimeTillNow): string => {
     const diffInSeconds = Math.floor((currentDate.getTime() - date.getTime()) / 1000);
     const isPast = diffInSeconds > 0;
 
     const units: { label: RelativeTimeUnit; seconds: number }[] = [
-        {label: 'year', seconds: 31536000},
-        {label: 'month', seconds: 2592000},
-        {label: 'day', seconds: 86400},
-        {label: 'hour', seconds: 3600},
-        {label: 'minute', seconds: 60},
-        {label: 'second', seconds: 1},
+        { label: 'year', seconds: 31536000 },
+        { label: 'month', seconds: 2592000 },
+        { label: 'day', seconds: 86400 },
+        { label: 'hour', seconds: 3600 },
+        { label: 'minute', seconds: 60 },
+        { label: 'second', seconds: 1 },
     ];
 
     const absDiff = Math.abs(diffInSeconds);
-    const {label, seconds} = units.find((u) => absDiff >= u.seconds) || {
+    const { label, seconds } = units.find((u) => absDiff >= u.seconds) || {
         label: 'second',
         seconds: 1,
     };
     const count = Math.floor(absDiff / seconds);
 
-    const formatter = new Intl.RelativeTimeFormat(language, {numeric: 'auto'});
+    const formatter = new Intl.RelativeTimeFormat(language, { numeric: 'auto' });
 
     return formatter.format(isPast ? -count : count, label);
 };
 
 interface GetTimeStringProps {
     language?: Language;
-    date: Date;
 }
 
-export const getTimeString = ({language, date}: GetTimeStringProps) => {
+export const getTimeString = ({ language }: GetTimeStringProps) => {
     const map: { [key: string]: string } = {
-        'nl': 'uur',
-        'fr': 'heures',
-        'de': 'Uhr',
-        'es': 'horas',
-        'it': 'ore',
-        'pt': 'horas',
-        'pl': 'godzina',
-        'tr': 'saat',
-        'uk': 'година'
-    }
+        nl: 'uur',
+        fr: 'heures',
+        de: 'Uhr',
+        es: 'horas',
+        it: 'ore',
+        pt: 'horas',
+        pl: 'godzina',
+        tr: 'saat',
+        uk: 'година',
+        en: '',
+    };
 
-    return map[language ?? ''] || (isMorning(date) ? 'AM' : 'PM');
+    return map[language ?? ''] ?? '';
 };
