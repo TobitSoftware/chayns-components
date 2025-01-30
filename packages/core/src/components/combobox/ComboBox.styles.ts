@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import { ComboBoxDirection } from '../../types/comboBox';
-import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ComboBoxProps } from './ComboBox';
 
 type StyledComboBoxProps = WithTheme<{
@@ -127,7 +127,7 @@ export const StyledComboBoxPrefix = styled.div`
 `;
 
 export const StyledComboBoxInput = styled.input`
-    color: ${({ theme }: StyledComboBoxPlaceholderProps) => theme.text};
+    color: ${({ theme }: { theme: Theme }) => theme.text};
     border: none;
     background-color: transparent;
     width: 100%;
