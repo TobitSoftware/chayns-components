@@ -127,6 +127,7 @@ export const StyledComboBoxPrefix = styled.div`
 `;
 
 export const StyledComboBoxInput = styled.input`
+    color: ${({ theme }: StyledComboBoxPlaceholderProps) => theme.text};
     border: none;
     background-color: transparent;
     width: 100%;
