@@ -1,7 +1,7 @@
-import { getEnvironment } from 'chayns-api';
-import React, { FC, useEffect, useState } from 'react';
+import { getEnvironment, RuntimeEnviroment } from 'chayns-api';
+import React, { FC } from 'react';
 import { createGlobalStyle } from 'styled-components';
-import { getUsableHeight } from '../../utils/pageProvider';
+import { useUsableHeight } from '../../utils/pageProvider';
 import ColorSchemeProvider, {
     type ColorSchemeProviderProps,
 } from '../color-scheme-provider/ColorSchemeProvider';
@@ -38,14 +38,12 @@ const PageProvider: FC<PageProviderProps> = ({
 }) => {
     const { runtimeEnvironment } = getEnvironment();
     const shouldUsePadding =
-        !shouldRemovePadding && ![4, 5, 6].includes(runtimeEnvironment as number);
-    const [usableHeight, setUsableHeight] = useState(0);
+        !shouldRemovePadding &&
+        ![RuntimeEnviroment.IntercomPlugin, RuntimeEnviroment.PagemakerPlugin, 6].includes(
+            runtimeEnvironment as number,
+        );
 
-    useEffect(() => {
-        void getUsableHeight(shouldRemovePadding).then((height) => {
-            setUsableHeight(height);
-        });
-    }, [shouldRemovePadding]);
+    const usableHeight = useUsableHeight(shouldUsePadding);
 
     return (
         <StyledPageProvider

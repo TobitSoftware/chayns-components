@@ -1,4 +1,4 @@
-import { getEnvironment, getWindowMetrics } from 'chayns-api';
+import { getEnvironment, getWindowMetrics, useWindowMetrics } from 'chayns-api';
 import { PAGE_BREAKPOINTS } from '../constants/pageProvider';
 
 export const getPagePadding = () => {
@@ -67,6 +67,28 @@ export const getUsableHeight = async (shouldRemovePadding?: boolean) => {
     let usableHeight;
 
     const { bottomBarHeight, offsetTop, windowHeight } = await getWindowMetrics();
+
+    const { bottom, top } = shouldRemovePadding
+        ? { bottom: 0, top: 0 }
+        : getPageProviderInformation();
+
+    usableHeight = windowHeight - bottom - top;
+
+    if (bottomBarHeight) {
+        usableHeight -= bottomBarHeight;
+    }
+
+    if (offsetTop) {
+        usableHeight -= offsetTop;
+    }
+
+    return usableHeight;
+};
+
+export const useUsableHeight = (shouldRemovePadding?: boolean) => {
+    let usableHeight;
+
+    const { bottomBarHeight, offsetTop, windowHeight } = useWindowMetrics();
 
     const { bottom, top } = shouldRemovePadding
         ? { bottom: 0, top: 0 }
