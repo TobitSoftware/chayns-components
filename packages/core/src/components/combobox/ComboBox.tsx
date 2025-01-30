@@ -163,6 +163,8 @@ const ComboBox: FC<ComboBoxProps> = ({
     });
     const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
 
+    const isInputFocused = useRef(false);
+
     const styledComboBoxElementRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
 
@@ -195,6 +197,22 @@ const ComboBox: FC<ComboBoxProps> = ({
             setNewContainer(container);
         }
     }, [container]);
+
+    const handleInputFocus: FocusEventHandler<HTMLInputElement> = useCallback(
+        (event) => {
+            isInputFocused.current = true;
+            onInputFocus?.(event);
+        },
+        [onInputFocus],
+    );
+
+    const handleInputBlur: FocusEventHandler<HTMLInputElement> = useCallback(
+        (event) => {
+            isInputFocused.current = false;
+            onInputBlur?.(event);
+        },
+        [onInputBlur],
+    );
 
     const handleClick = useCallback(
         (event: MouseEvent) => {
@@ -482,7 +500,7 @@ const ComboBox: FC<ComboBoxProps> = ({
      * This function opens the content of the combobox
      */
     const handleHeaderClick = useCallback(() => {
-        if (!isDisabled) {
+        if (!isDisabled && !isInputFocused.current) {
             if (isAnimating) {
                 handleClose();
             } else {
@@ -598,35 +616,35 @@ const ComboBox: FC<ComboBoxProps> = ({
                 >
                     <StyledComboBoxPrefixAndPlaceholderWrapper>
                         {prefix && <StyledComboBoxPrefix>{prefix}</StyledComboBoxPrefix>}
-                        {typeof inputValue === 'string' ? (
-                            <StyledComboBoxInput
-                                disabled={isDisabled}
-                                value={inputValue}
-                                onChange={onInputChange}
-                                onBlur={onInputBlur}
-                                onFocus={onInputFocus}
-                                placeholder={placeholderText}
-                            />
-                        ) : (
-                            <StyledComboBoxPlaceholder
-                                $shouldReduceOpacity={!selectedItem && !internalSelectedItem}
-                            >
-                                {placeholderImageUrl && (
-                                    <StyledComboBoxPlaceholderImage
-                                        src={placeholderImageUrl}
-                                        $shouldShowBigImage={shouldShowBigImage}
-                                        $shouldShowRoundImage={shouldShowRoundPlaceholderImage}
-                                    />
-                                )}
-                                {placeholderIcon && <Icon icons={placeholderIcon} />}
+                        <StyledComboBoxPlaceholder
+                            $shouldReduceOpacity={!selectedItem && !internalSelectedItem}
+                        >
+                            {placeholderImageUrl && (
+                                <StyledComboBoxPlaceholderImage
+                                    src={placeholderImageUrl}
+                                    $shouldShowBigImage={shouldShowBigImage}
+                                    $shouldShowRoundImage={shouldShowRoundPlaceholderImage}
+                                />
+                            )}
+                            {placeholderIcon && <Icon icons={placeholderIcon} />}
+                            {typeof inputValue === 'string' ? (
+                                <StyledComboBoxInput
+                                    disabled={isDisabled}
+                                    value={inputValue}
+                                    onChange={onInputChange}
+                                    onBlur={handleInputBlur}
+                                    onFocus={handleInputFocus}
+                                    placeholder={placeholderText}
+                                />
+                            ) : (
                                 <StyledComboBoxPlaceholderText>
                                     {placeholderText}
                                 </StyledComboBoxPlaceholderText>
-                                {internalSelectedItem &&
-                                    internalSelectedItem.suffixElement &&
-                                    internalSelectedItem.suffixElement}
-                            </StyledComboBoxPlaceholder>
-                        )}
+                            )}
+                            {internalSelectedItem &&
+                                internalSelectedItem.suffixElement &&
+                                internalSelectedItem.suffixElement}
+                        </StyledComboBoxPlaceholder>
                     </StyledComboBoxPrefixAndPlaceholderWrapper>
                     <StyledComboBoxIconWrapper>
                         <Icon icons={['fa fa-chevron-down']} />
@@ -648,8 +666,6 @@ const ComboBox: FC<ComboBoxProps> = ({
             prefix,
             inputValue,
             onInputChange,
-            onInputBlur,
-            onInputFocus,
             placeholderText,
             selectedItem,
             internalSelectedItem,
@@ -657,6 +673,9 @@ const ComboBox: FC<ComboBoxProps> = ({
             shouldShowRoundPlaceholderImage,
             placeholderIcon,
             portal,
+            handleInputFocus,
+            handleInputBlur,
+            shouldUseCurrentItemWidth,
         ],
     );
 };
