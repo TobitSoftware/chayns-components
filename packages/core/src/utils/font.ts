@@ -66,7 +66,7 @@ export const getHeadlineColorSelector = (data: ParagraphFormat[]) => {
         '.button': 'button',
     };
 
-    data.forEach(({ selector, color, backgroundColor, design }) => {
+    data.forEach(({ selector, color, backgroundColor }) => {
         const selectors = selector.split(',');
 
         const tag = selectors[selectors.length - 1]?.trim();
@@ -82,10 +82,6 @@ export const getHeadlineColorSelector = (data: ParagraphFormat[]) => {
 
             if (color) {
                 themeResult[`${path}Color`] = color;
-            }
-
-            if (design) {
-                themeResult[`${path}Design`] = String(design);
             }
 
             return;

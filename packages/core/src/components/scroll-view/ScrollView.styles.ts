@@ -1,6 +1,6 @@
-import type { Browser } from 'detect-browser';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
+import { BrowserName } from '../../types/chayns';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledScrollViewProps = WithTheme<{
@@ -10,7 +10,7 @@ type StyledScrollViewProps = WithTheme<{
     $width?: CSSProperties['width'];
     $overflowX: 'scroll' | 'auto';
     $overflowY: 'scroll' | 'auto';
-    $browser: Browser | 'bot' | null | undefined;
+    $browser: BrowserName;
 }>;
 
 export const StyledScrollView = styled.div<StyledScrollViewProps>`

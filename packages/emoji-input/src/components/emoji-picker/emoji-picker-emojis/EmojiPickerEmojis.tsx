@@ -1,3 +1,4 @@
+import { BrowserName } from '@chayns-components/core';
 import { getDevice } from 'chayns-api';
 import emojiLib from 'emojilib';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -273,7 +274,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
 
     return (
         <StyledEmojiPickerEmojis
-            $browser={browser?.name}
+            $browser={browser?.name as BrowserName}
             $shouldPreventScroll={shouldPreventScroll}
             $shouldShowNoContentInfo={shouldShowNoContentInfo}
             ref={emojiRef}

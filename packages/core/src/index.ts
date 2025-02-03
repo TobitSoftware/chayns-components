@@ -1,4 +1,5 @@
 // noinspection JSUnusedGlobalSymbols
+
 export { default as Accordion } from './components/accordion/Accordion';
 export { default as AccordionContent } from './components/accordion/accordion-content/AccordionContent';
 export { default as AccordionGroup } from './components/accordion/accordion-group/AccordionGroup';
@@ -83,6 +84,7 @@ export { default as Tooltip } from './components/tooltip/Tooltip';
 export { default as Truncation } from './components/truncation/Truncation';
 export { MentionFinderPopupAlignment } from './constants/mentionFinder';
 export { useElementSize } from './hooks/useElementSize';
+export type { BrowserName } from './types/chayns';
 export { ComboBoxDirection } from './types/comboBox';
 export { ContentCardType } from './types/contentCard';
 export { ContextMenuAlignment } from './types/contextMenu';

@@ -14,6 +14,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { BrowserName } from '../../types/chayns';
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import { StyledInputRightElement } from '../input/Input.styles';
 import {
@@ -137,7 +138,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                     >
                         <StyledTextAreaContent>
                             <StyledTextAreaInput
-                                $browser={browser?.name}
+                                $browser={browser?.name as BrowserName}
                                 disabled={isDisabled}
                                 $isInvalid={isInvalid}
                                 ref={textareaRef}

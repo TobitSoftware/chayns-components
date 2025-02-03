@@ -16,6 +16,7 @@ import React, {
     type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { BrowserName } from '../../types/chayns';
 import { ComboBoxDirection } from '../../types/comboBox';
 import { calculateContentWidth, getMaxHeightInPixels } from '../../utils/calculate';
 import { getIsTouch } from '../../utils/environment';
@@ -562,7 +563,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                 <AnimatePresence initial={false}>
                     {isAnimating && (
                         <StyledMotionComboBoxBody
-                            $browser={browser?.name}
+                            $browser={browser?.name as BrowserName}
                             animate={{ height: 'fit-content', opacity: 1 }}
                             $overflowY={overflowY}
                             initial={{ height: 0, opacity: 0 }}

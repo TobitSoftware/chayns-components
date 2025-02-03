@@ -1,6 +1,6 @@
-import type { Browser } from 'detect-browser';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
+import { BrowserName } from '../../types/chayns';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { TextAreaProps } from './TextArea';
 
@@ -36,7 +36,7 @@ export const StyledTextAreaContent = styled.div`
 `;
 
 type StyledTextAreaInputProps = WithTheme<{
-    $browser: Browser | 'bot' | null | undefined;
+    $browser: BrowserName;
     $isInvalid: TextAreaProps['isInvalid'];
     $isOverflowing: boolean;
     $maxHeight: CSSProperties['maxHeight'];

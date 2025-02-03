@@ -19,6 +19,7 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useTheme } from 'styled-components';
+import { BrowserName } from '../../types/chayns';
 import type { IFilterButtonItem } from '../../types/filterButtons';
 import type { ISearchBoxItem, ISearchBoxItems } from '../../types/searchBox';
 import { calculateContentHeight } from '../../utils/calculate';
@@ -760,7 +761,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                                     selectedGroups={groups}
                                     width={width}
                                     coordinates={internalCoordinates}
-                                    browser={browser?.name}
+                                    browser={browser?.name as BrowserName}
                                     height={height}
                                     ref={contentRef}
                                     onGroupSelect={handleFilterButtonsGroupSelect}

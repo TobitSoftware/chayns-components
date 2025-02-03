@@ -1,7 +1,7 @@
-import type { Browser } from 'detect-browser';
 import { motion } from 'framer-motion';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
+import { BrowserName } from '../../types/chayns';
 import { ComboBoxDirection } from '../../types/comboBox';
 import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ComboBoxProps } from './ComboBox';
@@ -161,7 +161,7 @@ type StyledComboBoxBodyProps = WithTheme<{
     $overflowY: CSSProperties['overflowY'];
     $maxHeight: CSSProperties['maxHeight'];
     $direction: ComboBoxDirection;
-    $browser: Browser | 'bot' | null | undefined;
+    $browser: BrowserName;
     $minWidth: number;
     $shouldUseCurrentItemWidth: boolean;
 }>;
