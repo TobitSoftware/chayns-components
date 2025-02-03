@@ -43,7 +43,7 @@ const PageProvider: FC<PageProviderProps> = ({
             runtimeEnvironment as number,
         );
 
-    const usableHeight = useUsableHeight(shouldUsePadding);
+    const usableHeight = useUsableHeight();
 
     return (
         <StyledPageProvider

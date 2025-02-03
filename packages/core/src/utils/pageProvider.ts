@@ -1,78 +1,11 @@
-import { getEnvironment, getWindowMetrics, useWindowMetrics } from 'chayns-api';
-import { PAGE_BREAKPOINTS } from '../constants/pageProvider';
+import { getWindowMetrics, useWindowMetrics } from 'chayns-api';
 
-export const getPagePadding = () => {
-    const { runtimeEnvironment } = getEnvironment();
-
-    if (typeof runtimeEnvironment === 'number' && [4, 5].includes(runtimeEnvironment)) {
-        return '0';
-    }
-
-    if (matchMedia(PAGE_BREAKPOINTS.desktop).matches) {
-        return '35px 43px 30px';
-    }
-
-    return '15px 10px 20px';
-};
-
-type PaddingValues = {
-    top: number;
-    right: number;
-    bottom: number;
-    left: number;
-};
-
-const getPageProviderInformation = (): PaddingValues => {
-    const padding = getPagePadding().split(' ');
-
-    const parseValue = (value: string): number => {
-        const parsed = parseInt(value.replace('px', ''), 10);
-        return Number.isNaN(parsed) ? 0 : parsed;
-    };
-
-    if (padding.length === 1) {
-        const value = parseValue(padding[0] ?? '');
-        return { top: value, right: value, bottom: value, left: value };
-    }
-
-    if (padding.length === 2) {
-        const [vertical, horizontal] = padding.map(parseValue);
-        return {
-            top: vertical ?? 0,
-            right: horizontal ?? 0,
-            bottom: vertical ?? 0,
-            left: horizontal ?? 0,
-        };
-    }
-
-    if (padding.length === 3) {
-        const [top, horizontal, bottom] = padding.map(parseValue);
-        return {
-            top: top ?? 0,
-            right: horizontal ?? 0,
-            bottom: bottom ?? 0,
-            left: horizontal ?? 0,
-        };
-    }
-
-    if (padding.length === 4) {
-        const [top, right, bottom, left] = padding.map(parseValue);
-        return { top: top ?? 0, right: right ?? 0, bottom: bottom ?? 0, left: left ?? 0 };
-    }
-
-    return { top: 0, right: 0, bottom: 0, left: 0 };
-};
-
-export const getUsableHeight = async (shouldRemovePadding?: boolean) => {
+export const getUsableHeight = async () => {
     let usableHeight;
 
     const { bottomBarHeight, offsetTop, windowHeight } = await getWindowMetrics();
 
-    const { bottom, top } = shouldRemovePadding
-        ? { bottom: 0, top: 0 }
-        : getPageProviderInformation();
-
-    usableHeight = windowHeight - bottom - top;
+    usableHeight = windowHeight;
 
     if (bottomBarHeight) {
         usableHeight -= bottomBarHeight;
@@ -85,16 +18,11 @@ export const getUsableHeight = async (shouldRemovePadding?: boolean) => {
     return usableHeight;
 };
 
-export const useUsableHeight = (shouldRemovePadding?: boolean) => {
+export const useUsableHeight = () => {
     let usableHeight;
 
     const { bottomBarHeight, offsetTop, windowHeight } = useWindowMetrics();
-
-    const { bottom, top } = shouldRemovePadding
-        ? { bottom: 0, top: 0 }
-        : getPageProviderInformation();
-
-    usableHeight = windowHeight - bottom - top;
+    usableHeight = windowHeight;
 
     if (bottomBarHeight) {
         usableHeight -= bottomBarHeight;
