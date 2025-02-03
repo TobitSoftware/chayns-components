@@ -1,14 +1,18 @@
 import { getAvailableColorList } from '@chayns/colors';
 import { styled } from 'styled-components';
+import { WithTheme } from './ColorSchemeProvider';
 
-export const StyledColorSchemeProvider = styled.div`
+type ColorSchemeProviderProps = WithTheme<unknown>;
+
+export const StyledColorSchemeProvider = styled.div<ColorSchemeProviderProps>`
     color: var(--chayns-color--text);
-    ${(props) =>
+
+    ${({ theme }: ColorSchemeProviderProps) =>
         getAvailableColorList().map((colorName: string) => {
             const colorNameRgb = `${colorName}-rgb`;
             return [
-                `--chayns-color--${colorName}: ${props.theme[colorName]};`,
-                `--chayns-color-rgb--${colorName}: ${props.theme[colorNameRgb]};`,
+                `--chayns-color--${colorName}: ${theme[colorName]};`,
+                `--chayns-color-rgb--${colorName}: ${theme[colorNameRgb]};`,
             ];
         })}
 `;

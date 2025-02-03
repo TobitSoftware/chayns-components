@@ -30,7 +30,6 @@ const PageProvider: FC<PageProviderProps> = ({
     colorMode,
     cssVariables = {},
     secondaryColor,
-    siteId,
     style = {},
     designSettings,
     shouldRemovePadding,
@@ -56,7 +55,6 @@ const PageProvider: FC<PageProviderProps> = ({
                 secondaryColor={secondaryColor}
                 colorMode={colorMode}
                 style={shouldUseUsableHeight ? { ...style, height: '100%' } : style}
-                siteId={siteId}
                 designSettings={designSettings}
                 cssVariables={cssVariables}
             >

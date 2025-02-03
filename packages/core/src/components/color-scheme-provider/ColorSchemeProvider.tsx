@@ -1,5 +1,5 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
-import { useSite } from 'chayns-api';
+import { ColorMode, useSite, useStyleSettings } from 'chayns-api';
 import React, {
     createContext,
     FC,
@@ -11,16 +11,9 @@ import React, {
 } from 'react';
 import { Helmet } from 'react-helmet';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { getDesignSettings, getParagraphFormat } from '../../api/theme/get';
 import type { DesignSettings, ParagraphFormat } from '../../types/colorSchemeProvider';
 import { convertIconStyle, getFontSize, getHeadlineColorSelector } from '../../utils/font';
 import { StyledColorSchemeProvider } from './ColorSchemeProvider.styles';
-
-enum ColorMode {
-    Classic,
-    Dark,
-    Light,
-}
 
 export type ColorSchemeProviderProps = {
     /**
@@ -55,10 +48,6 @@ export type ColorSchemeProviderProps = {
      * The secondary hex color to be used for the children
      */
     secondaryColor?: string;
-    /**
-     * The site id of the page for which the design settings should be fetched
-     */
-    siteId?: string;
     /**
      * Additional styles set on the root element
      */
@@ -104,7 +93,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     colorMode,
     cssVariables = {},
     secondaryColor,
-    siteId,
     style = {},
     paragraphFormat,
     designSettings,
@@ -117,26 +105,24 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
     // Empty object is used to prevent error if ColorSchemeProvider is rendered on server
     const { color: internalColor, colorMode: internalColorMode } = useSite() ?? {};
+    const { designSettings: designSettingsValue, paragraphFormats: paragraphFormatValue } =
+        useStyleSettings() ?? {};
 
     useEffect(() => {
         if (designSettings) {
             setInternalDesignSettings(designSettings);
-        } else if (!internalDesignSettings) {
-            void getDesignSettings(siteId).then((result) => {
-                setInternalDesignSettings(result);
-            });
+        } else if (designSettingsValue) {
+            setInternalDesignSettings(designSettingsValue);
         }
-    }, [designSettings, internalDesignSettings, siteId]);
+    }, [designSettings, designSettingsValue]);
 
     useEffect(() => {
         if (paragraphFormat) {
             setInternalParagraphFormat(paragraphFormat);
-        } else if (!internalParagraphFormat) {
-            void getParagraphFormat(siteId).then((result) => {
-                setInternalParagraphFormat(result);
-            });
+        } else if (paragraphFormatValue) {
+            setInternalParagraphFormat(paragraphFormatValue);
         }
-    }, [internalParagraphFormat, paragraphFormat, siteId]);
+    }, [paragraphFormat, paragraphFormatValue]);
 
     useEffect(() => {
         let newTheme: Theme = {};
