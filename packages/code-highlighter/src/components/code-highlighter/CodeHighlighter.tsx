@@ -1,3 +1,4 @@
+import { BrowserName } from '@chayns-components/core';
 import { useDevice } from 'chayns-api';
 import { format } from 'prettier/standalone';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -79,7 +80,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
             const { children } = ref.current;
 
             const preElement = Array.from(children).find(
-                ({ tagName }) => tagName.toLowerCase() === 'pre'
+                ({ tagName }) => tagName.toLowerCase() === 'pre',
             );
 
             if (preElement) {
@@ -108,12 +109,12 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
             return { style };
         },
-        [highlightedLines, width]
+        [highlightedLines, width],
     );
 
     const formattedCode = useMemo(() => {
         if (language) {
-            void getParserForLanguage(language).then((config)=>{
+            void getParserForLanguage(language).then((config) => {
                 if (shouldFormatCode && config) {
                     try {
                         return format(code, config) as unknown as string;
@@ -123,7 +124,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                 }
 
                 return code;
-            })
+            });
         }
 
         return code;
@@ -145,7 +146,12 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
     return useMemo(
         () => (
-            <StyledCodeHighlighter $browser={browser?.name} $shouldWrapLines={shouldWrapLines} $codeTheme={theme} ref={ref}>
+            <StyledCodeHighlighter
+                $browser={browser?.name as BrowserName}
+                $shouldWrapLines={shouldWrapLines}
+                $codeTheme={theme}
+                ref={ref}
+            >
                 <StyledCodeHighlighterHeader $codeTheme={theme}>
                     <StyledCodeHighlighterFileName $codeTheme={theme}>
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
@@ -166,7 +172,17 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                 </SyntaxHighlighter>
             </StyledCodeHighlighter>
         ),
-        [browser?.name, theme, language, code, copyButtonText, shouldShowLineNumbers, shouldWrapLines, lineWrapper, formattedCode]
+        [
+            browser?.name,
+            theme,
+            language,
+            code,
+            copyButtonText,
+            shouldShowLineNumbers,
+            shouldWrapLines,
+            lineWrapper,
+            formattedCode,
+        ],
     );
 };
 

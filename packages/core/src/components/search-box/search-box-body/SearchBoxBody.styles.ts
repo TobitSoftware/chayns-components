@@ -1,6 +1,6 @@
-import type { Browser } from 'detect-browser';
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
+import { BrowserName } from '../../../types/chayns';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledMotionSearchBoxBodyProps = WithTheme<{
@@ -53,7 +53,7 @@ export const StyledSearchBoxBodyHeadGroupName = styled.div<StyledSearchBoxBodyHe
 type StyledSearchBoxBodyContentProps = WithTheme<{
     $height: number;
     $headHeight: number;
-    $browser: Browser | 'bot' | null | undefined;
+    $browser: BrowserName;
 }>;
 
 export const StyledSearchBoxBodyContent = styled.div<StyledSearchBoxBodyContentProps>`

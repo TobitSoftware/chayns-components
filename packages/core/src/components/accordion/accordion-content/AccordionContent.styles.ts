@@ -1,11 +1,11 @@
-import type { Browser } from 'detect-browser';
 import styled, { css } from 'styled-components';
+import { BrowserName } from '../../../types/chayns';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledAccordionContentProps = WithTheme<{
     $isWrapped?: boolean;
     $maxHeight?: number;
-    $browser: Browser | 'bot' | null | undefined;
+    $browser: BrowserName;
     $shouldPreventBottomSpace: boolean;
 }>;
 

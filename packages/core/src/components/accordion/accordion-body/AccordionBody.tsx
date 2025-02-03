@@ -1,5 +1,6 @@
 import { getDevice } from 'chayns-api';
 import React, { FC, ReactNode, UIEvent, useMemo } from 'react';
+import { BrowserName } from '../../../types/chayns';
 import type { AccordionProps } from '../Accordion';
 import { AccordionGroupContext } from '../accordion-group/AccordionGroup';
 import { StyledMotionAccordionBody } from './AccordionBody.styles';
@@ -46,7 +47,7 @@ const AccordionBody: FC<AccordionBodyProps> = ({
             exit={{ height: 0, opacity: 0 }}
             initial={{ height: 0, opacity: 0 }}
             $maxHeight={maxHeight}
-            $browser={browser?.name}
+            $browser={browser?.name as BrowserName}
             onAnimationComplete={onAnimationComplete}
             onScroll={onScroll}
             transition={{ opacity: { duration: 0.1 } }}

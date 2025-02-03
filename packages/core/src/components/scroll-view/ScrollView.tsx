@@ -1,5 +1,6 @@
 import { getDevice } from 'chayns-api';
 import React, { CSSProperties, forwardRef, ReactNode, useMemo } from 'react';
+import { BrowserName } from '../../types/chayns';
 import { StyledScrollView } from './ScrollView.styles';
 
 export type ScrollViewProps = {
@@ -51,7 +52,7 @@ const ScrollView = forwardRef<HTMLDivElement, ScrollViewProps>(
         return useMemo(
             () => (
                 <StyledScrollView
-                    $browser={browser?.name}
+                    $browser={browser?.name as BrowserName}
                     $maxHeight={maxHeight}
                     $height={height}
                     $maxWidth={maxWidth}

@@ -1,5 +1,4 @@
-import type { WithTheme } from '@chayns-components/core';
-import type { Browser } from 'detect-browser';
+import type { BrowserName, WithTheme } from '@chayns-components/core';
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import { getFontFamily } from '../../utils/font';
@@ -44,7 +43,7 @@ export const StyledEmojiInputContent = styled.div`
 
 type StyledEmojiInputEditorProps = WithTheme<{
     $shouldShowContent: boolean;
-    $browser: Browser | 'bot' | null | undefined;
+    $browser: BrowserName;
 }>;
 
 export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputEditorProps>`

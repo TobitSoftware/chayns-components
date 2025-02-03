@@ -1,11 +1,10 @@
-import type { WithTheme } from '@chayns-components/core';
-import type { Browser } from 'detect-browser';
+import type { BrowserName, WithTheme } from '@chayns-components/core';
 import styled, { css } from 'styled-components';
 import { CodeHighlighterTheme } from '../../types/codeHighlighter';
 
 type StyledCodeHighlighterProps = WithTheme<{
     $codeTheme: CodeHighlighterTheme;
-    $browser: Browser | 'bot' | null | undefined;
+    $browser: BrowserName;
     $shouldWrapLines?: boolean;
 }>;
 
@@ -48,9 +47,10 @@ export const StyledCodeHighlighter = styled.div<StyledCodeHighlighterProps>`
                           border-radius: 20px;
                       }
                   `}
-        
-        code{
-            white-space: ${({ $shouldWrapLines }) => $shouldWrapLines ? 'pre-wrap' : 'pre'} !important;
+
+        code {
+            white-space: ${({ $shouldWrapLines }) =>
+                $shouldWrapLines ? 'pre-wrap' : 'pre'} !important;
         }
     }
 

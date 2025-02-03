@@ -1,4 +1,3 @@
-import type { Browser } from 'detect-browser';
 import React, {
     forwardRef,
     UIEvent,
@@ -11,6 +10,7 @@ import React, {
 } from 'react';
 import { useElementSize } from '../../../hooks/useElementSize';
 import { useUuid } from '../../../hooks/uuid';
+import { BrowserName } from '../../../types/chayns';
 import type { IFilterButtonItem } from '../../../types/filterButtons';
 import { getCurrentGroupName } from '../../../utils/searchBox';
 import FilterButtons from '../../filter-buttons/FilterButtons';
@@ -27,7 +27,7 @@ export type SearchBoxBodyProps = {
     selectedGroups?: string[];
     height: number;
     width: number;
-    browser: Browser | 'bot' | null | undefined;
+    browser: BrowserName;
     onGroupSelect?: (keys: string[]) => void;
     coordinates: { x: number; y: number };
     shouldHideFilterButtons?: boolean;

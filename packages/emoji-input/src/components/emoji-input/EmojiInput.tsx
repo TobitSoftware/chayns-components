@@ -1,4 +1,4 @@
-import { AreaContext, getIsTouch } from '@chayns-components/core';
+import { AreaContext, BrowserName, getIsTouch } from '@chayns-components/core';
 import { getDevice } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
@@ -727,7 +727,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         />
                     )}
                     <StyledMotionEmojiInputEditor
-                        $browser={browser?.name}
+                        $browser={browser?.name as BrowserName}
                         animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
                         contentEditable
                         id={inputId}

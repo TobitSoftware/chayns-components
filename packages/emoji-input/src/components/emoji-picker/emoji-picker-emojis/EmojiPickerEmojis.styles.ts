@@ -1,11 +1,10 @@
-import type { WithTheme } from '@chayns-components/core';
-import type { Browser } from 'detect-browser';
+import type { BrowserName, WithTheme } from '@chayns-components/core';
 import styled, { css } from 'styled-components';
 
 type StyledEmojiPickerEmojisProps = WithTheme<{
     $shouldPreventScroll: boolean;
     $shouldShowNoContentInfo: boolean;
-    $browser: Browser | 'bot' | null | undefined;
+    $browser: BrowserName;
 }>;
 
 export const StyledEmojiPickerEmojis = styled.div<StyledEmojiPickerEmojisProps>`
@@ -28,9 +27,7 @@ export const StyledEmojiPickerEmojis = styled.div<StyledEmojiPickerEmojisProps>`
         $shouldPreventScroll &&
         css`
             padding-right: 5px;
-        `}
-
-        // Styles for custom scrollbar
+        `} // Styles for custom scrollbar
     ${({ $browser, theme }: StyledEmojiPickerEmojisProps) =>
         $browser === 'firefox'
             ? css`
