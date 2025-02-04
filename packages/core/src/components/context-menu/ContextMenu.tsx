@@ -122,19 +122,15 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             if (contextMenuRef.current && !container) {
                 const el = contextMenuRef.current as HTMLElement;
 
-                const element =
-                    el.closest('.dialog-inner') ||
-                    el.closest('.page-provider') ||
-                    el.closest('.tapp') ||
-                    el.closest('body');
+                const element = el.closest('.dialog-inner, .page-provider, .tapp, body');
 
                 setNewContainer(element);
             }
         }, [container]);
 
         useEffect(() => {
-            if(container instanceof Element){
-                setNewContainer(container)
+            if (container instanceof Element) {
+                setNewContainer(container);
             }
         }, [container]);
 
@@ -173,10 +169,12 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 const { height, width, top, left } = newContainer.getBoundingClientRect();
 
+                const zoomX = width / (newContainer as HTMLElement).offsetWidth;
+                const zoomY = height / (newContainer as HTMLElement).offsetHeight;
+
                 const x =
-                    childrenLeft + (isInDialog ? 0 : window.scrollX) + childrenWidth / 2 - left;
-                const y =
-                    childrenTop + (isInDialog ? 0 : window.scrollY) + childrenHeight / 2 - top;
+                    (childrenLeft + childrenWidth / 2 - left) / zoomX + newContainer.scrollLeft;
+                const y = (childrenTop + childrenHeight / 2 - top) / zoomY + newContainer.scrollTop;
 
                 setInternalCoordinates({ x, y });
 
