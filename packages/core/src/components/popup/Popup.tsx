@@ -99,11 +99,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             if (popupRef.current && !container) {
                 const el = popupRef.current as HTMLElement;
 
-                const element =
-                    el.closest('.dialog-inner') ||
-                    el.closest('.page-provider') ||
-                    el.closest('.tapp') ||
-                    el.closest('body');
+                const element = el.closest('.dialog-inner, .page-provider, .tapp, body');
 
                 setNewContainer(element);
             }
