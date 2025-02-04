@@ -23,7 +23,7 @@ import React, {
     type FormEvent,
 } from 'react';
 import type { PopupAlignment } from '../../constants/alignment';
-import { convertEmojisToUnicode } from '../../utils/emoji';
+import { convertEmojisToUnicode, escapeHTML } from '../../utils/emoji';
 import { insertTextAtCursorPosition, replaceText } from '../../utils/insert';
 import {
     getCharCodeThatWillBeDeleted,
@@ -364,7 +364,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         /**
          * This function prevents formatting from being adopted when texts are inserted. To do this, the
          * plain text is read from the event after the default behavior has been prevented. The plain
-         * text is then inserted at the correct position in the input field using document.execCommand('insertText')
+         * text is then inserted at the correct position in the input field using document.execCommand('insertHTML')
          */
         const handlePaste = useCallback(
             (event: ClipboardEvent<HTMLDivElement>) => {
@@ -377,14 +377,20 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         return;
                     }
 
+                    // This ensures, that only the copied text is inserted and not its HTML formatting.
                     let text = event.clipboardData.getData('text/plain');
 
                     text = convertEmojisToUnicode(text);
 
+                    /* This ensures, that valid HTML in the inserted text is not interpreted as such. e.g. if the user
+                       pasted the text '<b>test</b>' (not as formatted html), the <b> tags need to be escaped, to
+                       prevent it from being interpreted as html. */
+                    text = escapeHTML(text);
+
                     // This deprecated function is used, because it causes the inserted content to be added to the undo stack.
                     // If the text were to be inserted directly into the 'innerHTML' of the editor element, the undo stack would not be updated.
                     // In that case on CTRL+Z the inserted text would not be removed.
-                    document.execCommand('insertText', false, text);
+                    document.execCommand('insertHTML', false, text);
 
                     const newEvent = new Event('input', { bubbles: true });
 
@@ -397,7 +403,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         /**
          * This function prevents formatting from being adopted when texts are dropped. To do this, the
          * plain text is read from the event after the default behavior has been prevented. The plain
-         * text is then inserted at the correct position in the input field using document.execCommand('insertText')
+         * text is then inserted at the correct position in the input field using document.execCommand('insertHTML')
          */
         const handleDrop = useCallback(
             (event: React.DragEvent<HTMLDivElement>) => {
@@ -410,6 +416,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         return;
                     }
 
+                    // This ensures, that only the dropped text is inserted and not its HTML formatting.
                     let text = event.dataTransfer?.getData('text');
 
                     if (!text) {
@@ -418,10 +425,15 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
                     text = convertEmojisToUnicode(text);
 
+                    /* This ensures, that valid HTML in the inserted text is not interpreted as such. e.g. if the user
+                       drops the text '<b>test</b>' (not as formatted html), the <b> tags need to be escaped, to
+                       prevent it from being interpreted as html. */
+                    text = escapeHTML(text);
+
                     // This deprecated function is used, because it causes the inserted content to be added to the undo stack.
                     // If the text were to be inserted directly into the 'innerHTML' of the editor element, the undo stack would not be updated.
                     // In that case on CTRL+Z the inserted text would not be removed.
-                    document.execCommand('insertText', false, text);
+                    document.execCommand('insertHTML', false, text);
 
                     const newEvent = new Event('input', { bubbles: true });
 
