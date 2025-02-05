@@ -1,5 +1,5 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
-import { ColorMode, useSite, useStyleSettings } from 'chayns-api';
+import { ColorMode, useSite } from 'chayns-api';
 import React, {
     createContext,
     FC,
@@ -92,6 +92,24 @@ export const ColorSchemeContext = createContext<ColorSchemeContextProps | undefi
 
 export const useColorScheme = () => useContext(ColorSchemeContext);
 
+let useStyleSettings: () =>
+    | {
+          paragraphFormats: ParagraphFormat[];
+          designSettings: DesignSettings;
+      }
+    | undefined = () => undefined;
+
+try {
+    useStyleSettings =
+        // eslint-disable-next-line global-require,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-var-requires
+        (require('chayns-api').useStyleSettings as () => {
+            paragraphFormats: ParagraphFormat[];
+            designSettings: DesignSettings;
+        }) ?? useStyleSettings;
+} catch {
+    // Do nothing
+}
+
 const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     children,
     color,
@@ -113,14 +131,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     const { color: internalColor, colorMode: internalColorMode } = useSite() ?? {};
 
     // ToDo remove if this hook is no beta anymore
-    const styleSettings = (
-        typeof useStyleSettings === 'function' ? (useStyleSettings() ?? {}) : undefined
-    ) as
-        | {
-              paragraphFormats: ParagraphFormat[];
-              designSettings: DesignSettings;
-          }
-        | undefined;
+    const styleSettings = useStyleSettings();
 
     useEffect(() => {
         if (designSettings) {
