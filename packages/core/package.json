@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/core",
-    "version": "5.0.0-beta.995",
+    "version": "5.0.0-beta.996",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -61,8 +61,8 @@
         "@types/react-helmet": "^6.1.11",
         "@types/styled-components": "^5.1.34",
         "@types/uuid": "^10.0.0",
-        "chayns-api": "^2.2.0-beta.2",
         "babel-loader": "^9.2.1",
+        "chayns-api": "^2.2.0-beta.2",
         "cross-env": "^7.0.3",
         "lerna": "^8.1.9",
         "react": "^18.3.1",
