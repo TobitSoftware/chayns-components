@@ -99,16 +99,9 @@ let useStyleSettings: () =>
       }
     | undefined = () => undefined;
 
-try {
-    useStyleSettings =
-        // eslint-disable-next-line global-require,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-var-requires
-        (require('chayns-api').useStyleSettings as () => {
-            paragraphFormats: ParagraphFormat[];
-            designSettings: DesignSettings;
-        }) ?? useStyleSettings;
-} catch {
-    // Do nothing
-}
+void import('chayns-api').then((module) => {
+    useStyleSettings = module.useStyleSettings ?? useStyleSettings;
+});
 
 const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     children,
