@@ -39,6 +39,8 @@ export type TagInputProps = {
     tags?: Tag[];
 };
 
+// ToDo: Add reference with "save" function to return unsaved tags
+
 const TagInput: FC<TagInputProps> = ({ placeholder, tags, onRemove, onAdd }) => {
     const [internalTags, setInternalTags] = useState<Tag[]>();
     const [currentValue, setCurrentValue] = useState('');
@@ -148,7 +150,7 @@ const TagInput: FC<TagInputProps> = ({ placeholder, tags, onRemove, onAdd }) => 
                 <Badge
                     key={`tag-input-${id}`}
                     backgroundColor={
-                        id === selectedId ? (theme['206'] as string) ?? undefined : undefined
+                        id === selectedId ? ((theme['206'] as string) ?? undefined) : undefined
                     }
                 >
                     <StyledTagInputTagWrapper>
