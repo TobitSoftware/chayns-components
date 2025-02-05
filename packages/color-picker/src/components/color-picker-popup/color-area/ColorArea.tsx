@@ -1,12 +1,4 @@
-import React, {
-    MouseEvent,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
     StyledColorArea,
     StyledColorAreaCanvas,
@@ -146,14 +138,6 @@ const ColorArea = () => {
         }
     }, [canGetColorFromArea, hueColor, setColor, updateIsPresetColor]);
 
-    const handleStartDrag = useCallback(() => {
-        if (typeof updateShouldGetCoordinates === 'function') {
-            updateShouldGetCoordinates(false);
-        }
-
-        canDrag.current = true;
-    }, [updateShouldGetCoordinates]);
-
     useEffect(() => {
         if (selectedColor && shouldGetCoordinatesRef.current) {
             const cords = getCoordinatesFromColor({
@@ -174,7 +158,7 @@ const ColorArea = () => {
     }, [setColor]);
 
     const handleClick = useCallback(
-        (event: MouseEvent<HTMLDivElement>) => {
+        (event: React.MouseEvent<HTMLDivElement>) => {
             if (typeof updateShouldGetCoordinates === 'function') {
                 updateShouldGetCoordinates(false);
             }
@@ -274,23 +258,28 @@ const ColorArea = () => {
         [move],
     );
 
-    useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('pointerup', handlePointerUp);
-        window.addEventListener('touchmove', handleTouchMove);
-        window.addEventListener('touchend', handlePointerUp);
+    const handleStartDrag = useCallback(() => {
+        if (typeof updateShouldGetCoordinates === 'function') {
+            updateShouldGetCoordinates(false);
+        }
 
-        return () => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
+        canDrag.current = true;
+
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('touchmove', handleTouchMove);
+
+        const endTouching = () => {
+            handlePointerUp();
+
             window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('pointerup', handlePointerUp);
             window.removeEventListener('touchmove', handleTouchMove);
-            window.removeEventListener('touchend', handlePointerUp);
+            window.removeEventListener('pointerup', endTouching);
+            window.removeEventListener('touchend', endTouching);
         };
-    }, [handleMouseMove, handlePointerUp, handleTouchMove]);
+
+        window.addEventListener('pointerup', endTouching);
+        window.addEventListener('touchend', endTouching);
+    }, [handleMouseMove, handlePointerUp, handleTouchMove, updateShouldGetCoordinates]);
 
     return useMemo(
         () => (
