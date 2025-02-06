@@ -10,7 +10,7 @@ export default {
 } as Meta<typeof SearchInput>;
 
 const Template: StoryFn<typeof SearchInput> = (args) => (
-    <div style={{ width: '100%', display: 'flex', justifyContent: 'end', position: 'relative' }}>
+    <div style={{ textAlign: 'right' }}>
         <SearchInput {...args} />
     </div>
 );

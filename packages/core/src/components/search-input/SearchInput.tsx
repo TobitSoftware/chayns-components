@@ -8,10 +8,13 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { useTheme } from 'styled-components';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import Input, { InputRef, InputSize } from '../input/Input';
 import {
     StyledMotionSearchInputContentWrapper,
+    StyledMotionSearchInputIconWrapper,
     StyledMotionSearchInputIconWrapperContent,
     StyledSearchInput,
 } from './SearchInput.styles';
@@ -67,6 +70,8 @@ const SearchInput: FC<SearchInputProps> = ({
 
     const inputRef = useRef<InputRef>(null);
 
+    const theme = useTheme() as Theme;
+
     const handleBackIconClick = useCallback(() => setIsSearchInputActive(false), []);
 
     const handleSearchIconClick = useCallback(() => setIsSearchInputActive(true), []);
@@ -89,6 +94,31 @@ const SearchInput: FC<SearchInputProps> = ({
 
     return (
         <StyledSearchInput className="beta-chayns-search-input" $size={size}>
+            <StyledMotionSearchInputIconWrapper>
+                <AnimatePresence initial={false}>
+                    <StyledMotionSearchInputIconWrapperContent
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0, position: 'absolute' }}
+                        initial={{ opacity: 0 }}
+                        key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
+                        transition={{ duration: 0.3 }}
+                        id={
+                            isSearchInputActive
+                                ? 'search-input-backIcon'
+                                : 'search-input-searchIcon'
+                        }
+                    >
+                        <Icon
+                            color={iconColor}
+                            icons={isSearchInputActive ? ['fa fa-arrow-left'] : ['fa fa-search']}
+                            onClick={
+                                isSearchInputActive ? handleBackIconClick : handleSearchIconClick
+                            }
+                            size={18}
+                        />
+                    </StyledMotionSearchInputIconWrapperContent>
+                </AnimatePresence>
+            </StyledMotionSearchInputIconWrapper>
             <AnimatePresence initial={false}>
                 {isSearchInputActive && (
                     <StyledMotionSearchInputContentWrapper
@@ -99,6 +129,7 @@ const SearchInput: FC<SearchInputProps> = ({
                         transition={{ duration: 0.3 }}
                     >
                         <Input
+                            leftElement={<Icon color={theme.text} icons={['far fa-search']} />}
                             onChange={onChange}
                             onKeyDown={onKeyDown}
                             placeholder={placeholder}
@@ -109,21 +140,6 @@ const SearchInput: FC<SearchInputProps> = ({
                         />
                     </StyledMotionSearchInputContentWrapper>
                 )}
-                <StyledMotionSearchInputIconWrapperContent
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0, position: 'absolute' }}
-                    initial={{ opacity: 0 }}
-                    key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
-                    transition={{ duration: 0.3 }}
-                    id={isSearchInputActive ? 'search-input-backIcon' : 'search-input-searchIcon'}
-                >
-                    <Icon
-                        color={iconColor}
-                        icons={isSearchInputActive ? ['fa fa-xmark'] : ['fa fa-search']}
-                        onClick={isSearchInputActive ? handleBackIconClick : handleSearchIconClick}
-                        size={18}
-                    />
-                </StyledMotionSearchInputIconWrapperContent>
             </AnimatePresence>
         </StyledSearchInput>
     );
