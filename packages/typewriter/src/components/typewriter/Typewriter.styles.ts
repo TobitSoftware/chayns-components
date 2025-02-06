@@ -39,7 +39,7 @@ const typewriterCursorElement = ({
         .typewriter-lastWithContent {
             &:after {
                 animation: ${blinkAnimation} 1s steps(2, start) infinite;
-                color: ${({ theme }: StyledTypewriterTextProps) => theme.text};
+                color: ${({ theme }) => (theme as { text: string }).text};
                 content: '▋';
                 margin-left: 0.25rem;
                 opacity: 0.85;
