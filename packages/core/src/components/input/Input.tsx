@@ -34,6 +34,7 @@ import {
 
 export type InputRef = {
     focus: VoidFunction;
+    blur: VoidFunction;
 };
 
 type InputMode =
@@ -219,6 +220,7 @@ const Input = forwardRef<InputRef, InputProps>(
             ref,
             () => ({
                 focus: () => inputRef.current?.focus(),
+                blur: () => inputRef.current?.blur(),
             }),
             [],
         );
