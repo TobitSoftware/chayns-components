@@ -59,9 +59,9 @@ export const StyledTypewriter = styled.div<StyledTypewriterProps>`
 `;
 
 const blinkAnimation = keyframes`
-  100% {
-    visibility: hidden;
-  }
+    100% {
+        visibility: hidden;
+    }
 `;
 
 type StyledTypewriterPseudoTextProps = WithTheme<{
@@ -93,6 +93,7 @@ export const StyledTypewriterPseudoText = styled.span<StyledTypewriterPseudoText
 
 type StyledTypewriterTextProps = WithTheme<{
     $isAnimatingText?: boolean;
+    $shouldRemainSingleLine: boolean;
 }>;
 
 export const StyledTypewriterText = styled.span<StyledTypewriterTextProps>`
@@ -104,5 +105,14 @@ export const StyledTypewriterText = styled.span<StyledTypewriterTextProps>`
         $isAnimatingText &&
         css`
             pointer-events: none;
+        `}
+
+    ${({ $shouldRemainSingleLine }) =>
+        $shouldRemainSingleLine &&
+        css`
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
         `}
 `;

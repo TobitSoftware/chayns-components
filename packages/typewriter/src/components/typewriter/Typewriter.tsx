@@ -94,6 +94,10 @@ export type TypewriterProps = {
      */
     shouldHideCursor?: boolean;
     /**
+     * Whether the content should remain single line.
+     */
+    shouldRemainSingleLine?: boolean;
+    /**
      * Specifies whether the children should be sorted randomly if there are multiple texts.
      * This makes the typewriter start with a different text each time and also changes them
      * in a random order.
@@ -145,6 +149,7 @@ const Typewriter: FC<TypewriterProps> = ({
     resetDelay = TypewriterDelay.Medium,
     shouldForceCursorAnimation = false,
     shouldHideCursor = false,
+    shouldRemainSingleLine = false,
     shouldSortChildrenRandomly = false,
     shouldUseAnimationHeight = false,
     shouldUseResetAnimation = false,
@@ -461,11 +466,17 @@ const Typewriter: FC<TypewriterProps> = ({
                 {isAnimatingText ? (
                     <AnimatedTypewriterText
                         shouldHideCursor={shouldHideCursor}
+                        shouldRemainSingleLine={shouldRemainSingleLine}
                         shownText={shownText}
                         textStyle={textStyle}
                     />
                 ) : (
-                    <StyledTypewriterText style={textStyle}>{sortedChildren}</StyledTypewriterText>
+                    <StyledTypewriterText
+                        $shouldRemainSingleLine={shouldRemainSingleLine}
+                        style={textStyle}
+                    >
+                        {sortedChildren}
+                    </StyledTypewriterText>
                 )}
                 {isAnimatingText && (
                     <StyledTypewriterPseudoText
@@ -496,6 +507,7 @@ const Typewriter: FC<TypewriterProps> = ({
             pseudoTextHTML,
             shouldHideCursor,
             shouldPreventBlinkingCursor,
+            shouldRemainSingleLine,
             shownText,
             sortedChildren,
             textStyle,

@@ -31,6 +31,7 @@ export const StyledTextAreaContentWrapper = styled.div<StyledTextAreaContentWrap
 `;
 
 export const StyledTextAreaContent = styled.div`
+    position: relative;
     display: flex;
     width: 100%;
 `;
