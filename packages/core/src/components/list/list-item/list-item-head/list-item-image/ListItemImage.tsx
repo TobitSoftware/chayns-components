@@ -65,7 +65,7 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
 
     if (images && images[0] && images[1]) {
         return (
-            <StyledListImageWrapper>
+            <StyledListImageWrapper onClick={handleImageClick}>
                 <StyledListImageWrapperImage src={images[0]} />
                 <StyledListImageWrapperImage src={images[1]} $isSecondImage />
             </StyledListImageWrapper>
