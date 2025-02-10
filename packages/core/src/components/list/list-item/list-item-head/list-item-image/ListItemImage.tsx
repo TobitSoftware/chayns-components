@@ -1,7 +1,12 @@
 import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
 import React, { CSSProperties, MouseEventHandler, useCallback, useState } from 'react';
 import GridImage from '../../../../grid-image/GridImage';
-import { StyledListItemHeadImage, StyledListItemHeadImageWrapper } from './ListItemImage.styles';
+import {
+    StyledListImageWrapper,
+    StyledListImageWrapperImage,
+    StyledListItemHeadImage,
+    StyledListItemHeadImageWrapper,
+} from './ListItemImage.styles';
 
 type ListItemImageProps = {
     imageBackground?: CSSProperties['background'];
@@ -55,6 +60,15 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
                 size={40}
                 onClick={handleImageClick}
             />
+        );
+    }
+
+    if (images && images[0] && images[1]) {
+        return (
+            <StyledListImageWrapper>
+                <StyledListImageWrapperImage src={images[0]} />
+                <StyledListImageWrapperImage src={images[1]} $isSecondImage />
+            </StyledListImageWrapper>
         );
     }
 

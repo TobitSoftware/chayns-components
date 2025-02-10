@@ -42,3 +42,33 @@ export const StyledListItemHeadImage = styled.img<StyledListItemHeadImageProps>`
     transition: opacity 0.4s ease;
     width: 100%;
 `;
+
+export const StyledListImageWrapper = styled.div`
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+`;
+
+export type StyledListImageWrapperImageProps = {
+    $isSecondImage?: boolean;
+};
+
+export const StyledListImageWrapperImage = styled.img<StyledListImageWrapperImageProps>`
+    border-radius: 100px;
+    height: calc(80%);
+    aspect-ratio: 1;
+    position: absolute;
+
+    ${({ $isSecondImage }) =>
+        $isSecondImage
+            ? css`
+                  bottom: 0;
+                  right: 0;
+              `
+            : css`
+                  top: 0;
+                  left: 0;
+              `}
+`;
