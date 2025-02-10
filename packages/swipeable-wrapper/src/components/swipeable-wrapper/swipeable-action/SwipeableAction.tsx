@@ -1,4 +1,4 @@
-import { MotionValue, useMotionValueEvent, useSpring, useTransform } from 'framer-motion';
+import { MotionValue, useMotionValueEvent, useSpring, useTransform } from 'motion/react';
 import React, { FC, useEffect } from 'react';
 import type { SwipeableActionItem } from '../SwipeableWrapper';
 import { StyledMotionSwipeableAction, StyledSwipeableActionButton } from './SwipeableAction.styles';

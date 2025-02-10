@@ -1,6 +1,6 @@
 import { AreaContext, BrowserName, getIsTouch } from '@chayns-components/core';
 import { getDevice } from 'chayns-api';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import React, {
     ChangeEvent,
     ClipboardEvent,

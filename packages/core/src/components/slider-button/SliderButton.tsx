@@ -1,5 +1,5 @@
 import { setRefreshScrollEnabled } from 'chayns-api';
-import { AnimatePresence, useAnimate } from 'framer-motion';
+import { AnimatePresence, useAnimate } from 'motion/react';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useElementSize } from '../../hooks/useElementSize';
 import { PopupRef } from '../../types/popup';

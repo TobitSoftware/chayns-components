@@ -1,13 +1,14 @@
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import React, {
     FC,
     useCallback,
     useContext,
+    useEffect,
     useMemo,
     useState,
     type ReactNode,
-    useEffect,
 } from 'react';
+import { RadioButtonRightElementMargin } from '../../types/radioButton';
 import { RadioButtonGroupContext } from './radio-button-group/RadioButtonGroup';
 import {
     StyledLabelWrapper,
@@ -19,7 +20,6 @@ import {
     StyledRadioButtonPseudoCheckBox,
     StyledRadioButtonWrapper,
 } from './RadioButton.styles';
-import { RadioButtonRightElementMargin } from '../../types/radioButton';
 
 export type RadioButtonProps = {
     /**

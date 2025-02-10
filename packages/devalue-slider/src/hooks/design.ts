@@ -1,4 +1,4 @@
-import { MotionStyle, MotionValue, useTransform } from 'framer-motion';
+import { MotionStyle, MotionValue, useTransform } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
 
 export type UseThumbIconRes = {

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type {
     FramerMotionBugFix,

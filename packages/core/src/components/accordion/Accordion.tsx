@@ -1,4 +1,4 @@
-import {AnimatePresence, MotionConfig} from 'framer-motion';
+import { AnimatePresence, MotionConfig } from 'motion/react';
 import React, {
     ChangeEventHandler,
     FC,
@@ -13,14 +13,14 @@ import React, {
     type CSSProperties,
     type MouseEventHandler,
 } from 'react';
-import {useUuid} from '../../hooks/uuid';
-import {AreaContext} from '../area-provider/AreaContextProvider';
-import type {InputProps} from '../input/Input';
+import { useUuid } from '../../hooks/uuid';
+import { AreaContext } from '../area-provider/AreaContextProvider';
+import type { InputProps } from '../input/Input';
 import AccordionBody from './accordion-body/AccordionBody';
-import {AccordionGroupContext} from './accordion-group/AccordionGroup';
+import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';
-import {AccordionWrappedContext} from './accordion-provider/AccordionContextProvider';
-import {StyledMotionAccordion} from './Accordion.styles';
+import { AccordionWrappedContext } from './accordion-provider/AccordionContextProvider';
+import { StyledMotionAccordion } from './Accordion.styles';
 
 export const AccordionContext = React.createContext<{ isWrapped?: boolean }>({
     isWrapped: undefined,
@@ -148,35 +148,35 @@ export type AccordionProps = {
 };
 
 const Accordion: FC<AccordionProps> = ({
-                                           bodyMaxHeight,
-                                           children,
-                                           icon,
-                                           isDefaultOpen = false,
-                                           isDisabled = false,
-                                           isFixed = false,
-                                           isOpened,
-                                           isTitleGreyed = false,
-                                           onBodyScroll,
-                                           onClose,
-                                           onHoverEnd,
-                                           onHoverStart,
-                                           onOpen,
-                                           onSearchChange,
-                                           rightElement,
-                                           searchPlaceholder,
-                                           searchValue,
-                                           shouldForceBackground = false,
-                                           shouldHideBackground = false,
-                                           shouldRenderClosed = false,
-                                           shouldRotateIcon = true,
-                                           shouldHideBottomLine = false,
-                                           title,
-                                           titleElement,
-                                           onTitleInputChange,
-                                           titleInputProps,
-                                           titleColor,
-                                           onBodyAnimationComplete,
-                                       }) => {
+    bodyMaxHeight,
+    children,
+    icon,
+    isDefaultOpen = false,
+    isDisabled = false,
+    isFixed = false,
+    isOpened,
+    isTitleGreyed = false,
+    onBodyScroll,
+    onClose,
+    onHoverEnd,
+    onHoverStart,
+    onOpen,
+    onSearchChange,
+    rightElement,
+    searchPlaceholder,
+    searchValue,
+    shouldForceBackground = false,
+    shouldHideBackground = false,
+    shouldRenderClosed = false,
+    shouldRotateIcon = true,
+    shouldHideBottomLine = false,
+    title,
+    titleElement,
+    onTitleInputChange,
+    titleInputProps,
+    titleColor,
+    onBodyAnimationComplete,
+}) => {
     const {
         isWrapped: groupIsWrapped,
         openAccordionUuid,
@@ -184,9 +184,9 @@ const Accordion: FC<AccordionProps> = ({
         accordionUuids,
         updateOpenAccordionUuid,
     } = useContext(AccordionGroupContext);
-    const {isWrapped: isParentWrapped} = useContext(AccordionContext);
+    const { isWrapped: isParentWrapped } = useContext(AccordionContext);
 
-    const {isWrapped: contextIsWrapped} = useContext(AccordionWrappedContext);
+    const { isWrapped: contextIsWrapped } = useContext(AccordionWrappedContext);
     const isWrapped = useMemo(
         () => groupIsWrapped ?? contextIsWrapped,
         [contextIsWrapped, groupIsWrapped],
@@ -254,7 +254,7 @@ const Accordion: FC<AccordionProps> = ({
     useEffect(() => {
         if (isDefaultOpen) {
             if (typeof updateOpenAccordionUuid === 'function') {
-                updateOpenAccordionUuid(uuid, {shouldOnlyOpen: true});
+                updateOpenAccordionUuid(uuid, { shouldOnlyOpen: true });
             } else {
                 setIsAccordionOpen(true);
             }
@@ -272,20 +272,20 @@ const Accordion: FC<AccordionProps> = ({
     }, [isOpened, updateOpenAccordionUuid, uuid]);
 
     const accordionContextProviderValue = useMemo(
-        () => ({isWrapped: isWrapped === true}),
+        () => ({ isWrapped: isWrapped === true }),
         [isWrapped],
     );
 
-    const areaContextProviderValue = useMemo(() => ({shouldChangeColor: true}), []);
+    const areaContextProviderValue = useMemo(() => ({ shouldChangeColor: true }), []);
 
-    const accordionWrappedContextProviderValue = useMemo(() => ({isWrapped: true}), []);
+    const accordionWrappedContextProviderValue = useMemo(() => ({ isWrapped: true }), []);
     return (
         <StyledMotionAccordion
-            animate={{height: 'auto', opacity: 1}}
+            animate={{ height: 'auto', opacity: 1 }}
             data-uuid={`${accordionGroupUuid ?? ''}---${uuid}`}
             className="beta-chayns-accordion"
-            exit={{height: 0, opacity: 0}}
-            initial={{height: 0, opacity: 0}}
+            exit={{ height: 0, opacity: 0 }}
+            initial={{ height: 0, opacity: 0 }}
             $isOpen={isOpen}
             $shouldShowLines={!isLastAccordion || !isWrapped}
             $isParentWrapped={isParentWrapped}
@@ -297,7 +297,7 @@ const Accordion: FC<AccordionProps> = ({
             onMouseLeave={onHoverEnd}
         >
             <AccordionContext.Provider value={accordionContextProviderValue}>
-                <MotionConfig transition={{type: 'tween'}}>
+                <MotionConfig transition={{ type: 'tween' }}>
                     <AccordionHead
                         uuid={uuid}
                         icon={icon}

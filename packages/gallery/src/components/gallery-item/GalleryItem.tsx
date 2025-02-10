@@ -1,5 +1,5 @@
 import { Icon, type InternalFileItem } from '@chayns-components/core';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import React, { FC, useMemo } from 'react';
 import {
     StyledGalleryItem,

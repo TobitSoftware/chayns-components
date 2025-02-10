@@ -1,4 +1,4 @@
-import { motion, Variant, Variants } from 'framer-motion';
+import { motion, Variant, Variants } from 'motion/react';
 import styled from 'styled-components';
 
 interface IBaseVariant extends Variants {

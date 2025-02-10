@@ -1,5 +1,5 @@
 import type { WithTheme } from '@chayns-components/core';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 
 type StyledOpeningInputsProps = WithTheme<{ $editMode: boolean }>;

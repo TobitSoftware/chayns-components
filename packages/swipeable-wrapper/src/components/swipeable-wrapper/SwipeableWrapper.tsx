@@ -1,5 +1,5 @@
 import { vibrate } from 'chayns-api';
-import { animate, PanInfo, useMotionValue } from 'framer-motion';
+import { animate, PanInfo, useMotionValue } from 'motion/react';
 import React, {
     CSSProperties,
     FC,

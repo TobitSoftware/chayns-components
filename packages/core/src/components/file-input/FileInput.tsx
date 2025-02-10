@@ -1,5 +1,5 @@
 import { createDialog, DialogType } from 'chayns-api';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import React, {
     DragEvent,
     forwardRef,

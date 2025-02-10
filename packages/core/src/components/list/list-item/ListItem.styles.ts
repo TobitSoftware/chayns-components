@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
@@ -23,9 +23,8 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
             padding-left: ${$shouldHideIndicator ? '16px' : '8px'};
         `}
 
-    ${({ $isInAccordion, $isOpen,$shouldForceBackground, theme }) =>
-        ((!$isInAccordion &&
-        $isOpen) || $shouldForceBackground) &&
+    ${({ $isInAccordion, $isOpen, $shouldForceBackground, theme }) =>
+        ((!$isInAccordion && $isOpen) || $shouldForceBackground) &&
         css`
             background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
         `}
@@ -44,11 +43,13 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
         $isInAccordion,
         $isWrapped,
         $shouldShowSeparatorBelow,
-           $shouldHideBottomLine,
+        $shouldHideBottomLine,
         theme,
     }: StyledListItemProps) =>
         ($shouldShowSeparatorBelow ||
-            ((!$isOpen || $isWrapped || $isInAccordion) && (theme.accordionLines && !$shouldHideBottomLine))) &&
+            ((!$isOpen || $isWrapped || $isInAccordion) &&
+                theme.accordionLines &&
+                !$shouldHideBottomLine)) &&
         css`
             &&:not(:last-child) {
                 border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid

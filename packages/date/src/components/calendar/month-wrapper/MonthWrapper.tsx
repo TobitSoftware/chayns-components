@@ -1,15 +1,16 @@
-import type { MotionProps } from 'framer-motion';
+import { Language } from 'chayns-api';
+import type { MotionProps } from 'motion/react';
 import React, { FC, useEffect, useMemo, useState, type ReactElement } from 'react';
 import {
     CalendarType,
-    Categories, CustomThumbColors,
+    Categories,
+    CustomThumbColors,
     DateInterval,
     HighlightedDates,
 } from '../../../types/calendar';
 import { getMonthAndYear, getNewDate } from '../../../utils/calendar';
 import Month from './month/Month';
 import { StyledMonthWrapper, StyledMotionWrapper } from './MonthWrapper.styles';
-import {Language} from "chayns-api";
 
 export type MonthWrapperProps = {
     locale: Language;
@@ -43,7 +44,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     direction,
     onAnimationFinished,
     shouldRenderTwo,
-    width,customThumbColors,
+    width,
+    customThumbColors,
     isDisabled,
     minDate,
     maxDate,

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import React, { FC, MouseEventHandler, ReactNode, useMemo } from 'react';
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';

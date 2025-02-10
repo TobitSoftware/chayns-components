@@ -8,7 +8,7 @@ import {
 
 import { hsvToHex } from '@chayns/colors';
 import { setRefreshScrollEnabled } from 'chayns-api';
-import { useDragControls, useMotionValue } from 'framer-motion';
+import { useDragControls, useMotionValue } from 'motion/react';
 import type { Scale } from '../../../types/colorPicker';
 import {
     extractRgbValues,

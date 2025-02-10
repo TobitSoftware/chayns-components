@@ -1,4 +1,4 @@
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { AnchorAlignment } from '../../../../constants/alignment';
 import { StyledEmoji } from './Emoji.styles';

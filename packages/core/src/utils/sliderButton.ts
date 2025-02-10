@@ -1,4 +1,4 @@
-import type { AnimationScope } from 'framer-motion';
+import type { AnimationScope } from 'motion/react';
 
 interface GetNearestPointProps {
     position: number;

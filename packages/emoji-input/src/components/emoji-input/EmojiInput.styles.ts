@@ -1,5 +1,5 @@
 import type { BrowserName, WithTheme } from '@chayns-components/core';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import { getFontFamily } from '../../utils/font';
 

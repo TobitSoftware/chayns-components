@@ -1,4 +1,4 @@
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { MentionFinderPopupAlignment } from '../../constants/mentionFinder';
 import MentionFinderItem from './mention-finder-item/MentionFinderItem';

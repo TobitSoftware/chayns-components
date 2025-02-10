@@ -1,4 +1,4 @@
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import React, { FC, ReactNode, useMemo } from 'react';
 import { StyledMotionExpandableContent } from './ExpandableContent.styles';
 

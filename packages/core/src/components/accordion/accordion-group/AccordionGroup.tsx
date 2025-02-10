@@ -1,4 +1,4 @@
-import { AnimatePresence, MotionConfig } from 'framer-motion';
+import { AnimatePresence, MotionConfig } from 'motion/react';
 import React, {
     Dispatch,
     FC,

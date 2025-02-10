@@ -1,5 +1,5 @@
 import type { WithTheme } from '@chayns-components/core';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import styled from 'styled-components';
 
 export const StyledOpeningInput = styled(motion.div)`

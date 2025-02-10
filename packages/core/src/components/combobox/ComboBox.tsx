@@ -1,5 +1,5 @@
 import { useDevice, useFunctions, useValues } from 'chayns-api';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import React, {
     ChangeEventHandler,
     FC,

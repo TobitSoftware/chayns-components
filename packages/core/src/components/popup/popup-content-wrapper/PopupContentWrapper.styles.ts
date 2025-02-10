@@ -1,5 +1,5 @@
 import { ColorMode } from 'chayns-api';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import { PopupAlignment } from '../../../types/popup';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';

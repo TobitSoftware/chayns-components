@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';

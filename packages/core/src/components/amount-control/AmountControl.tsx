@@ -1,4 +1,4 @@
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import React, {
     ChangeEvent,
     FC,
@@ -124,7 +124,7 @@ const AmountControl: FC<AmountControlProps> = ({
      * Function that sets the amountValue to the amount
      */
     useEffect(() => {
-        if (typeof amount !== "number") {
+        if (typeof amount !== 'number') {
             return;
         }
 

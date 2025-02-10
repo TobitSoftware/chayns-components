@@ -7,7 +7,7 @@ import {
     useMotionValue,
     useTransform,
     type DragHandlers,
-} from 'framer-motion';
+} from 'motion/react';
 import React, {
     forwardRef,
     PointerEvent,
