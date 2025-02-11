@@ -1,4 +1,4 @@
-import { getEnvironment, RuntimeEnviroment } from 'chayns-api';
+import { RuntimeEnviroment, useEnvironment } from 'chayns-api';
 import React, { FC } from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { useUsableHeight } from '../../utils/pageProvider';
@@ -36,7 +36,7 @@ const PageProvider: FC<PageProviderProps> = ({
     shouldRemovePadding,
     shouldUseUsableHeight,
 }) => {
-    const { runtimeEnvironment } = getEnvironment();
+    const { runtimeEnvironment } = useEnvironment();
     const shouldUsePadding =
         !shouldRemovePadding &&
         ![RuntimeEnviroment.IntercomPlugin, RuntimeEnviroment.PagemakerPlugin, 6].includes(
