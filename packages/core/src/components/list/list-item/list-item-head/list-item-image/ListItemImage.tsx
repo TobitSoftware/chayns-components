@@ -1,7 +1,7 @@
 import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
 import React, { CSSProperties, MouseEventHandler, useCallback, useState } from 'react';
-import GridImage from '../../../../grid-image/GridImage';
 import {
+    StyledCareOfImage,
     StyledListImageWrapper,
     StyledListImageWrapperImage,
     StyledListItemHeadImage,
@@ -9,6 +9,7 @@ import {
 } from './ListItemImage.styles';
 
 type ListItemImageProps = {
+    careOfLocationId?: number;
     imageBackground?: CSSProperties['background'];
     images: string[];
     shouldHideBackground: boolean;
@@ -17,6 +18,7 @@ type ListItemImageProps = {
 };
 
 const ListItemImage: React.FC<ListItemImageProps> = ({
+    careOfLocationId,
     imageBackground,
     images,
     shouldHideBackground,
@@ -49,42 +51,43 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
         [images, shouldOpenImageOnClick],
     );
 
-    if (images && images[0] && images[1] && images[2]) {
-        const gridImages = [images[0], images[1], images[2]];
-
-        return (
-            <GridImage
-                background={imageBackground}
-                images={gridImages}
-                shouldShowRoundImage={shouldShowRoundImage}
-                size={40}
-                onClick={handleImageClick}
-            />
-        );
-    }
-
     if (images && images[0] && images[1]) {
         return (
             <StyledListImageWrapper onClick={handleImageClick}>
-                <StyledListImageWrapperImage src={images[0]} />
-                <StyledListImageWrapperImage src={images[1]} $isSecondImage />
+                <StyledListImageWrapperImage src={images[0]} $isSmall={!!careOfLocationId} />
+                <StyledListImageWrapperImage
+                    src={images[1]}
+                    $isSecondImage
+                    $isSmall={!!careOfLocationId}
+                />
+                {careOfLocationId && (
+                    <StyledCareOfImage
+                        src={`https://sub60.tobit.com/l/${careOfLocationId}?size=128`}
+                        alt="care-of"
+                    />
+                )}
             </StyledListImageWrapper>
         );
     }
 
     if (images && images[0]) {
         return (
-            <StyledListItemHeadImageWrapper
-                onClick={handleImageClick}
-                $background={imageBackground}
-                $shouldHideBackground={shouldHideBackground}
-                $shouldShowRoundImage={shouldShowRoundImage}
-            >
+            <StyledListItemHeadImageWrapper onClick={handleImageClick}>
                 <StyledListItemHeadImage
                     $isHidden={!hasLoadedImage}
                     onLoad={handleImageLoaded}
+                    $shouldShowRoundImage={shouldShowRoundImage}
+                    $background={imageBackground}
+                    $shouldHideBackground={shouldHideBackground}
+                    $isSmall={!!careOfLocationId}
                     src={images[0]}
                 />
+                {careOfLocationId && (
+                    <StyledCareOfImage
+                        src={`https://sub60.tobit.com/l/${careOfLocationId}?size=128`}
+                        alt="care-of"
+                    />
+                )}
             </StyledListItemHeadImageWrapper>
         );
     }

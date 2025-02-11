@@ -1,4 +1,4 @@
-import React, {
+import {
     CSSProperties,
     FC,
     MouseEventHandler,
@@ -38,6 +38,7 @@ interface HeadHeight {
 }
 
 type ListItemHeadProps = {
+    careOfLocationId?: number;
     hoverItem?: ReactNode;
     icons?: string[];
     imageBackground?: CSSProperties['background'];
@@ -60,6 +61,7 @@ type ListItemHeadProps = {
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
+    careOfLocationId,
     hoverItem,
     icons,
     imageBackground,
@@ -164,6 +166,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             return (
                 <ListItemImage
                     imageBackground={imageBackground}
+                    careOfLocationId={careOfLocationId}
                     images={images}
                     shouldOpenImageOnClick={shouldOpenImageOnClick}
                     shouldHideBackground={!!shouldHideImageOrIconBackground}
@@ -174,6 +177,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
         return undefined;
     }, [
+        careOfLocationId,
         icons,
         imageBackground,
         images,

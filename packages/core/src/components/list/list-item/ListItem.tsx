@@ -1,5 +1,5 @@
 import { AnimatePresence } from 'motion/react';
-import React, {
+import {
     CSSProperties,
     FC,
     MouseEventHandler,
@@ -22,6 +22,10 @@ import { StyledMotionListItem } from './ListItem.styles';
 export type ListItemElements = [ReactNode, ...ReactNode[]];
 
 export type ListItemProps = {
+    /**
+     * The locationId of the careOf site.
+     */
+    careOfLocationId?: number;
     /**
      * The content of the `ListItem` body. When the `ListItem` has children,
      * it can be opened and also gets an icon as an indicator automatically.
@@ -139,6 +143,7 @@ export type ListItemProps = {
 };
 
 const ListItem: FC<ListItemProps> = ({
+    careOfLocationId,
     children,
     hoverItem,
     icons,
@@ -252,6 +257,7 @@ const ListItem: FC<ListItemProps> = ({
         >
             <ListItemHead
                 hoverItem={hoverItem}
+                careOfLocationId={careOfLocationId}
                 icons={icons}
                 imageBackground={imageBackground}
                 images={images}

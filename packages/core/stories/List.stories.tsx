@@ -92,18 +92,20 @@ IntercomListItems.args = {
         <ListItem
             subtitle="Lorem ipsum dolor sit amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est"
-            images={[images[2]]}
+            images={[images[0]]}
             shouldShowRoundImageOrIcon
         />,
         <ListItem
             subtitle="Consetetur sadipscing elitr"
             title="At vero eos et accusam et justo duo dolores et ea rebum sit amet dolor sea takimata sanctus est"
             images={[images[3], images[2]]}
+            careOfLocationId={185043}
         />,
         <ListItem
             subtitle="No sea takimata sanctus est"
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
             images={[images[3]]}
+            careOfLocationId={185043}
             shouldShowRoundImageOrIcon
         />,
     ],

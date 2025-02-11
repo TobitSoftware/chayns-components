@@ -2,45 +2,42 @@ import { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../../../color-scheme-provider/ColorSchemeProvider';
 
-type StyledListItemHeadImageWrapperProps = WithTheme<{
-    $background?: CSSProperties['background'];
-    $shouldHideBackground?: boolean;
-    $shouldShowRoundImage?: boolean;
-}>;
-
-export const StyledListItemHeadImageWrapper = styled.div<StyledListItemHeadImageWrapperProps>`
+export const StyledListItemHeadImageWrapper = styled.div`
     flex: 0 0 auto;
     height: 40px;
     overflow: hidden;
-    transition:
-        background-color 0.3s ease,
-        border-radius 0.3s ease,
-        box-shadow 0.3s ease;
+    position: relative;
     width: 40px;
-
-    border-radius: ${({ $shouldShowRoundImage }) => ($shouldShowRoundImage ? '50%' : undefined)};
-
-    ${({ $shouldHideBackground }) =>
-        !$shouldHideBackground &&
-        css`
-            background: ${({ $background, theme }: StyledListItemHeadImageWrapperProps) =>
-                $background || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
-            box-shadow: 0 0 0 1px
-                rgba(${({ theme }: StyledListItemHeadImageWrapperProps) => theme['009-rgb']}, 0.08)
-                inset;
-        `}
 `;
 
 type StyledListItemHeadImageProps = WithTheme<{
     $isHidden: boolean;
+    $shouldShowRoundImage?: boolean;
+    $background?: CSSProperties['background'];
+    $shouldHideBackground?: boolean;
+    $isSmall: boolean;
 }>;
 
 export const StyledListItemHeadImage = styled.img<StyledListItemHeadImageProps>`
-    height: 100%;
+    height: ${({ $isSmall }) => ($isSmall ? '34px' : '40px')};
     object-fit: cover;
     opacity: ${({ $isHidden }) => ($isHidden ? 0 : 1)};
-    transition: opacity 0.4s ease;
-    width: 100%;
+    aspect-ratio: 1;
+
+    border-radius: ${({ $shouldShowRoundImage }) => ($shouldShowRoundImage ? '50%' : undefined)};
+
+    transition:
+        opacity 0.4s ease,
+        background-color 0.3s ease,
+        border-radius 0.3s ease,
+        box-shadow 0.3s ease;
+
+    ${({ $shouldHideBackground, $background, theme }: StyledListItemHeadImageProps) =>
+        !$shouldHideBackground &&
+        css`
+            background: ${$background || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
+            box-shadow: 0 0 0 1px rgba(${theme['009-rgb']}, 0.08) inset;
+        `}
 `;
 
 export const StyledListImageWrapper = styled.div`
@@ -53,22 +50,31 @@ export const StyledListImageWrapper = styled.div`
 
 export type StyledListImageWrapperImageProps = {
     $isSecondImage?: boolean;
+    $isSmall: boolean;
 };
 
 export const StyledListImageWrapperImage = styled.img<StyledListImageWrapperImageProps>`
     border-radius: 100px;
-    height: calc(80%);
+    height: ${({ $isSmall }) => ($isSmall ? '65%' : '80%')};
     aspect-ratio: 1;
     position: absolute;
 
-    ${({ $isSecondImage }) =>
+    ${({ $isSecondImage, $isSmall }) =>
         $isSecondImage
             ? css`
-                  bottom: 0;
-                  right: 0;
+                  bottom: ${$isSmall ? '6px' : 0};
+                  right: ${$isSmall ? '6px' : 0};
               `
             : css`
                   top: 0;
                   left: 0;
               `}
+`;
+
+export const StyledCareOfImage = styled.img`
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    aspect-ratio: 1;
+    height: 20px;
 `;
