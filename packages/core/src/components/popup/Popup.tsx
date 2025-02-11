@@ -240,7 +240,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
                 setIsOpen(true);
             }
-        }, [pseudoSize, yOffset]);
+        }, [newContainer, pseudoSize, yOffset]);
 
         const handleChildrenClick = () => {
             handleShow();

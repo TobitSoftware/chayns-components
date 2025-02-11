@@ -58,10 +58,6 @@ type ContextMenuProps = {
      */
     coordinates?: ContextMenuCoordinates;
     /**
-     * Whether the ContextMenu is inside a dialog.
-     */
-    isInDialog?: boolean;
-    /**
      * The items that will be displayed in the content of the `ContextMenu`.
      */
     items: ContextMenuItem[];
@@ -91,7 +87,6 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             children = <Icon icons={['ts-ellipsis_v']} size={18} />,
             container,
             coordinates,
-            isInDialog = false,
             items,
             onHide,
             onShow,
