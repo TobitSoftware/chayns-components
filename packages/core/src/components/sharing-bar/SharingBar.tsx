@@ -18,10 +18,6 @@ export type SharingBarProps = {
      */
     container?: Element;
     /**
-     * Whether the ContextMenu is inside a dialog.
-     */
-    isInDialog?: boolean;
-    /**
      * The label that should be displayed.
      */
     label: string;
@@ -35,13 +31,7 @@ export type SharingBarProps = {
     popupAlignment: ContextMenuAlignment;
 };
 
-const SharingBar: FC<SharingBarProps> = ({
-    label,
-    link,
-    popupAlignment,
-    container,
-    isInDialog,
-}) => {
+const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment, container }) => {
     const contextMenuRef = useRef<{ hide: VoidFunction; show: VoidFunction }>(null);
 
     const handleImageDownload = () => {
@@ -153,7 +143,6 @@ const SharingBar: FC<SharingBarProps> = ({
                 <Icon icons={['fa-solid fa-share-nodes']} />
             </StyledSharingBarIconWrapper>
             <ContextMenu
-                isInDialog={isInDialog}
                 items={contextMenuItems}
                 ref={contextMenuRef}
                 alignment={popupAlignment}
