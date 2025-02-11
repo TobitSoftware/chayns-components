@@ -1,4 +1,6 @@
 {
     "extends": "../../tsconfig.json",
-    "types": ["marked"]
+    "compilerOptions": {
+        "types": ["marked"]
+    }
 }
