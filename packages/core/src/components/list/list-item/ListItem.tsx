@@ -23,7 +23,7 @@ export type ListItemElements = [ReactNode, ...ReactNode[]];
 
 export type ListItemProps = {
     /**
-     * The locationId of the careOf site.
+     * The locationId of the care-of site.
      */
     careOfLocationId?: number;
     /**
