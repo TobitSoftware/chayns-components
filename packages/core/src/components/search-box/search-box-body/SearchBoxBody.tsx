@@ -1,4 +1,4 @@
-import React, {
+import {
     forwardRef,
     UIEvent,
     useCallback,
@@ -121,7 +121,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                                 />
                             )}
                             <StyledSearchBoxBodyHeadGroupName>
-                                {currentGroupName}
+                                {currentGroupName.replace('_', '')}
                             </StyledSearchBoxBodyHeadGroupName>
                         </StyledSearchBoxBodyHead>
                     )}
