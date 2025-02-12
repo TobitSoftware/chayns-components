@@ -98,6 +98,10 @@ export type SearchBoxProps = {
      * Whether the icon to open and close the list should be displayed.
      */
     shouldShowToggleIcon?: boolean;
+    /**
+     * An optional callback function to filter the elements to be displayed
+     */
+    customFilter?: (item: ISearchBoxItem) => boolean;
 };
 
 const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
@@ -117,6 +121,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             shouldShowContentOnEmptyInput = true,
             shouldAddInputToList = true,
             shouldShowToggleIcon = false,
+            customFilter,
         },
         ref,
     ) => {
@@ -240,15 +245,18 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
             const filteredMatchingListItems = newMatchingItems.map(({ list, groupName }) => ({
                 groupName,
-                list: list.filter(
-                    (item) => !(newMatchingItems.length === 1 && item.text === value),
-                ),
+                list: list.filter((item) => {
+                    if (typeof customFilter === 'function') {
+                        return customFilter(item);
+                    }
+                    return !(newMatchingItems.length === 1 && item.text === value);
+                }),
             }));
 
             setMatchingListsItems(filteredMatchingListItems);
 
             return newLists;
-        }, [groups, lists, shouldAddInputToList, value]);
+        }, [groups, lists, customFilter, shouldAddInputToList, value]);
 
         const handleOpen = useCallback(() => {
             if (boxRef.current) {
@@ -408,9 +416,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
                 const filteredMatchingListItems = newMatchingItems.map(({ list, groupName }) => ({
                     groupName,
-                    list: list.filter(
-                        (item) => !(newMatchingItems.length === 1 && item.text === value),
-                    ),
+                    list: list.filter((item) => {
+                        if (typeof customFilter === 'function') {
+                            return customFilter(item);
+                        }
+                        return !(newMatchingItems.length === 1 && item.text === value);
+                    }),
                 }));
 
                 setMatchingListsItems(filteredMatchingListItems);
@@ -419,7 +430,14 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     handleOpen();
                 }
             }
-        }, [activeList, handleOpen, shouldAddInputToList, shouldShowContentOnEmptyInput, value]);
+        }, [
+            activeList,
+            handleOpen,
+            customFilter,
+            shouldAddInputToList,
+            shouldShowContentOnEmptyInput,
+            value,
+        ]);
 
         /**
          * This function filters the lists by input
