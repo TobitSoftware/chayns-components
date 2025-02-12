@@ -1,5 +1,5 @@
 import { AnimatePresence, LayoutGroup } from 'motion/react';
-import React, {
+import {
     ChangeEvent,
     ChangeEventHandler,
     FC,
@@ -79,6 +79,8 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         closed: isWrapped ? 40 : 33,
         open: isWrapped ? 40 : 33,
     });
+
+    const [isSearchActive, setIsSearchActive] = useState(false);
 
     const theme = useTheme();
 
@@ -227,7 +229,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 )}
             </StyledMotionContentWrapper>
             {(typeof onSearchChange === 'function' || rightElement) && (
-                <StyledRightWrapper>
+                <StyledRightWrapper $isSearchActive={isSearchActive}>
                     <AnimatePresence initial={false} key={`accordionRightWrapper--${uuid}`}>
                         {typeof onSearchChange === 'function' && isOpen && (
                             <StyledMotionSearchWrapper
@@ -238,6 +240,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                             >
                                 <SearchInput
                                     onChange={handleOnSearchChance}
+                                    onActiveChange={(isActive) => setIsSearchActive(isActive)}
                                     placeholder={searchPlaceholder}
                                     size={InputSize.Small}
                                     value={internalSearchValue}

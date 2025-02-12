@@ -101,18 +101,27 @@ export const StyledMotionTitleElementWrapper = styled(motion.div)<FramerMotionBu
     min-width: 0;
 `;
 
-export const StyledRightWrapper = styled.div`
+type StyledRightWrapperProps = {
+    $isSearchActive: boolean;
+};
+
+export const StyledRightWrapper = styled.div<StyledRightWrapperProps>`
     display: flex;
     flex: 0 0 auto;
     gap: 8px;
     margin-right: 5px;
     overflow: hidden;
     position: relative;
+
+    width: ${({ $isSearchActive }) => ($isSearchActive ? '40%' : undefined)};
 `;
 
 export const StyledMotionSearchWrapper = styled(motion.div)<FramerMotionBugFix>`
     align-items: center;
+    justify-content: end;
+    position: relative;
     display: flex;
+    width: 100%;
 `;
 
 export const StyledMotionRightElementWrapper = styled(motion.div)<FramerMotionBugFix>`
