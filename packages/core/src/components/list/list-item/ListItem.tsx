@@ -1,5 +1,5 @@
 import { AnimatePresence } from 'motion/react';
-import {
+import React, {
     CSSProperties,
     FC,
     MouseEventHandler,
