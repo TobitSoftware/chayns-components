@@ -156,7 +156,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             popupAlignment,
             prefixElement,
             rightElement,
-            shouldHidePlaceholderOnFocus = true,
+            shouldHidePlaceholderOnFocus = false,
             shouldPreventEmojiPicker,
             value,
         },
