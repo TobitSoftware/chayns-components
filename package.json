@@ -19,7 +19,6 @@
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
-            "organize-imports-cli",
             "prettier --write"
         ],
         "*.{css,html,json,md,scss}": "prettier --write"
