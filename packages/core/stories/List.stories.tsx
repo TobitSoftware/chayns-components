@@ -105,7 +105,7 @@ IntercomListItems.args = {
             subtitle="No sea takimata sanctus est"
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
             images={[images[3]]}
-            careOfLocationId={185043}
+            careOfLocationId={1214}
             shouldShowRoundImageOrIcon
         />,
     ],
