@@ -14,10 +14,6 @@ export const StyledMentionFinderItem = styled.div<StyledMentionFinderItemProps>`
             rgba(${({ theme }: StyledMentionFinderItemProps) => theme['text-rgb']}, 0.15);
     }
 
-    &:nth-child(even) {
-        background-color: ${({ theme }: StyledMentionFinderItemProps) => theme['101']};
-    }
-
     ${({ $isActive, theme }) =>
         $isActive &&
         css`
