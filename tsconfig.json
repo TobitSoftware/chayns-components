@@ -6,7 +6,7 @@
         "emitDeclarationOnly": true,
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": true,
-        "jsx": "react-jsx",
+        "jsx": "react",
         "lib": ["DOM", "ESNext", "DOM.Iterable"],
         "module": "ESNext",
         "moduleResolution": "node",
