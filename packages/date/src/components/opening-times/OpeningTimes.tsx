@@ -50,11 +50,11 @@ export type OpeningTimesProps = {
      * Function to be executed when a time is changed or a day is enabled/disabled.
      * @param openingTimes
      */
-    onChange?: ({ time, enabledDays, dayId }: OnChange) => void;
+    onChange?: ({ time, enabledDays, dayId, isValid }: OnChange) => void;
     /**
      * Function to be executed when a time is added.
      */
-    onTimeAdd?: ({ time, dayId }: OnTimeAdd) => void;
+    onTimeAdd?: ({ time, dayId, isValid }: OnTimeAdd) => void;
     /**
      * Function to be executed when a time is removed.
      */
@@ -67,10 +67,6 @@ export type OpeningTimesProps = {
      * The weekdays that should be displayed.
      */
     weekdays: Weekday[];
-    /**
-     * When set to true, events are triggered without validation.
-     */
-    shouldNotValidate?: boolean;
 };
 
 const OpeningTimes: FC<OpeningTimesProps> = ({
@@ -84,7 +80,6 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     onChange,
     onTimeAdd,
     onTimeRemove,
-    shouldNotValidate = false,
 }) => {
     const [newOpeningTimes, setNewOpeningTimes] = useState<OpeningTime[]>();
     const [invalidOpeningTimes, setInvalidOpeningTimes] = useState<
@@ -101,7 +96,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
 
     const validateTime = useCallback(
         (newTime: Time, dayId: string): boolean => {
-            if (newTime.start === newTime.end) {
+            if (newTime.start === newTime.end || newTime.start >= newTime.end) {
                 return false;
             }
             const dayTimes = newOpeningTimes?.find((day) => day.id === dayId)?.times || [];
@@ -142,10 +137,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
 
     const handleChange = useCallback(
         (newTime: Time, id: string) => {
-            const isValid = shouldNotValidate || validateTime(newTime, id);
-            if (!isValid) {
-                return;
-            }
+            const isValid = validateTime(newTime, id);
 
             setNewOpeningTimes((prevOpeningTimes) => {
                 const updatedOpeningTimes = (prevOpeningTimes ?? []).map((openingTime) => {
@@ -165,8 +157,9 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                     (updatedOpeningTime) => updatedOpeningTime.id === id,
                 );
 
-                if (isValid && typeof onChange === 'function') {
+                if (typeof onChange === 'function') {
                     onChange({
+                        isValid,
                         dayId: changedOpeningTime?.id,
                         time: newTime,
                     });
@@ -175,15 +168,15 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                 return updatedOpeningTimes;
             });
         },
-        [onChange, shouldNotValidate, validateTime],
+        [onChange, validateTime],
     );
 
     const handleAdd = useCallback(
         (time: Time, id: string) => {
-            const isValid = shouldNotValidate || validateTime(time, id);
+            const isValid = validateTime(time, id);
 
-            if (isValid && typeof onTimeAdd === 'function') {
-                onTimeAdd({ time, dayId: id });
+            if (typeof onTimeAdd === 'function') {
+                onTimeAdd({ time, dayId: id, isValid });
             }
 
             setNewOpeningTimes((prevOpeningTimes) =>
@@ -195,7 +188,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                 }),
             );
         },
-        [onTimeAdd, shouldNotValidate, validateTime],
+        [onTimeAdd, validateTime],
     );
 
     const handleUpdateInvalidIds = useCallback(

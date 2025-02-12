@@ -19,12 +19,14 @@ export interface OpeningTime {
 export interface OnTimeAdd {
     dayId: OpeningTime['id'];
     time: Time;
+    isValid: boolean;
 }
 
 export interface OnChange {
     enabledDays?: OpeningTime['id'][];
     dayId?: OpeningTime['id'];
     time?: Time;
+    isValid?: boolean;
 }
 
 export enum OpeningTimesButtonType {
