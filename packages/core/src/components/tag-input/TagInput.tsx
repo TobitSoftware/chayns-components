@@ -1,5 +1,5 @@
 import React, {
-    FC,
+    forwardRef,
     useCallback,
     useEffect,
     useMemo,
@@ -7,6 +7,7 @@ import React, {
     type ChangeEvent,
     type KeyboardEvent,
     type ReactElement,
+    useImperativeHandle,
 } from 'react';
 import { useTheme } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
@@ -39,145 +40,157 @@ export type TagInputProps = {
     tags?: Tag[];
 };
 
-// ToDo: Add reference with "save" function to return unsaved tags
+export type TagInputRef = {
+    getUnsavedTagText: Tag['text'] | undefined;
+};
 
-const TagInput: FC<TagInputProps> = ({ placeholder, tags, onRemove, onAdd }) => {
-    const [internalTags, setInternalTags] = useState<Tag[]>();
-    const [currentValue, setCurrentValue] = useState('');
-    const [selectedId, setSelectedId] = useState<Tag['id']>();
+const TagInput = forwardRef<TagInputRef, TagInputProps>(
+    ({ placeholder, tags, onRemove, onAdd }, ref) => {
+        const [internalTags, setInternalTags] = useState<Tag[]>();
+        const [currentValue, setCurrentValue] = useState('');
+        const [selectedId, setSelectedId] = useState<Tag['id']>();
 
-    const theme = useTheme();
+        const theme = useTheme();
 
-    useEffect(() => {
-        if (tags) {
-            setInternalTags(tags);
-        }
-    }, [tags]);
+        useEffect(() => {
+            if (tags) {
+                setInternalTags(tags);
+            }
+        }, [tags]);
 
-    const handleKeyDown = useCallback(
-        (event: KeyboardEvent) => {
-            if (event.key === 'Enter') {
-                setCurrentValue((prevValue) => {
-                    if (!prevValue) {
-                        return '';
-                    }
+        useImperativeHandle(
+            ref,
+            () => ({
+                getUnsavedTagText: currentValue !== '' ? currentValue : undefined,
+            }),
+            [currentValue],
+        );
 
-                    setInternalTags((prevTags) => {
-                        const newTag = { id: uuidv4(), text: prevValue };
-
-                        if (typeof onAdd === 'function') {
-                            onAdd(newTag);
+        const handleKeyDown = useCallback(
+            (event: KeyboardEvent) => {
+                if (event.key === 'Enter') {
+                    setCurrentValue((prevValue) => {
+                        if (!prevValue) {
+                            return '';
                         }
 
-                        return prevTags ? [...prevTags, newTag] : [newTag];
+                        setInternalTags((prevTags) => {
+                            const newTag = { id: uuidv4(), text: prevValue };
+
+                            if (typeof onAdd === 'function') {
+                                onAdd(newTag);
+                            }
+
+                            return prevTags ? [...prevTags, newTag] : [newTag];
+                        });
+
+                        return '';
                     });
+                }
 
-                    return '';
-                });
-            }
+                if (event.key === 'Backspace' && currentValue === '') {
+                    if (!selectedId) {
+                        if (!internalTags) {
+                            return;
+                        }
 
-            if (event.key === 'Backspace' && currentValue === '') {
-                if (!selectedId) {
-                    if (!internalTags) {
+                        const newSelectedId = internalTags[internalTags.length - 1]?.id;
+
+                        setSelectedId(newSelectedId);
+
                         return;
                     }
 
-                    const newSelectedId = internalTags[internalTags.length - 1]?.id;
+                    setInternalTags((prevState) => {
+                        if (!prevState) {
+                            return prevState;
+                        }
 
-                    setSelectedId(newSelectedId);
+                        const removedId = prevState[prevState.length - 1]?.id;
 
-                    return;
+                        if (!removedId) {
+                            return prevState;
+                        }
+
+                        const updatedTags = (prevState ?? []).filter((tag) => tag.id !== removedId);
+
+                        if (typeof onRemove === 'function') {
+                            onRemove(removedId);
+                        }
+
+                        setSelectedId(undefined);
+
+                        return updatedTags;
+                    });
                 }
+            },
+            [currentValue, internalTags, onAdd, onRemove, selectedId],
+        );
 
+        const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+            setCurrentValue(event.target.value);
+
+            if (event.target.value !== '') {
+                setSelectedId(undefined);
+            }
+        };
+
+        const handleIconClick = useCallback(
+            (id: string) => {
                 setInternalTags((prevState) => {
-                    if (!prevState) {
-                        return prevState;
-                    }
-
-                    const removedId = prevState[prevState.length - 1]?.id;
-
-                    if (!removedId) {
-                        return prevState;
-                    }
-
-                    const updatedTags = (prevState ?? []).filter((tag) => tag.id !== removedId);
+                    const updatedTags = (prevState ?? []).filter((tag) => tag.id !== id);
 
                     if (typeof onRemove === 'function') {
-                        onRemove(removedId);
+                        onRemove(id);
                     }
-
-                    setSelectedId(undefined);
 
                     return updatedTags;
                 });
+            },
+            [onRemove],
+        );
+
+        const content = useMemo(() => {
+            const items: ReactElement[] = [];
+
+            if (!internalTags) {
+                return items;
             }
-        },
-        [currentValue, internalTags, onAdd, onRemove, selectedId],
-    );
 
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setCurrentValue(event.target.value);
-
-        if (event.target.value !== '') {
-            setSelectedId(undefined);
-        }
-    };
-
-    const handleIconClick = useCallback(
-        (id: string) => {
-            setInternalTags((prevState) => {
-                const updatedTags = (prevState ?? []).filter((tag) => tag.id !== id);
-
-                if (typeof onRemove === 'function') {
-                    onRemove(id);
-                }
-
-                return updatedTags;
+            internalTags.forEach(({ text, id }) => {
+                items.push(
+                    <Badge
+                        key={`tag-input-${id}`}
+                        backgroundColor={
+                            id === selectedId ? ((theme['206'] as string) ?? undefined) : undefined
+                        }
+                    >
+                        <StyledTagInputTagWrapper>
+                            <StyledTagInputTagWrapperText>{text}</StyledTagInputTagWrapperText>
+                            <Icon icons={['ts-wrong']} onClick={() => handleIconClick(id)} />
+                        </StyledTagInputTagWrapper>
+                    </Badge>,
+                );
             });
-        },
-        [onRemove],
-    );
 
-    const content = useMemo(() => {
-        const items: ReactElement[] = [];
-
-        if (!internalTags) {
             return items;
-        }
+        }, [handleIconClick, internalTags, selectedId, theme]);
 
-        internalTags.forEach(({ text, id }) => {
-            items.push(
-                <Badge
-                    key={`tag-input-${id}`}
-                    backgroundColor={
-                        id === selectedId ? ((theme['206'] as string) ?? undefined) : undefined
-                    }
-                >
-                    <StyledTagInputTagWrapper>
-                        <StyledTagInputTagWrapperText>{text}</StyledTagInputTagWrapperText>
-                        <Icon icons={['ts-wrong']} onClick={() => handleIconClick(id)} />
-                    </StyledTagInputTagWrapper>
-                </Badge>,
-            );
-        });
-
-        return items;
-    }, [handleIconClick, internalTags, selectedId, theme]);
-
-    return useMemo(
-        () => (
-            <StyledTagInput>
-                {content}
-                <StyledTagInputTagInput
-                    placeholder={tags && tags.length > 0 ? undefined : placeholder}
-                    onKeyDown={handleKeyDown}
-                    onChange={handleChange}
-                    value={currentValue}
-                />
-            </StyledTagInput>
-        ),
-        [content, currentValue, handleKeyDown, placeholder, tags],
-    );
-};
+        return useMemo(
+            () => (
+                <StyledTagInput>
+                    {content}
+                    <StyledTagInputTagInput
+                        placeholder={tags && tags.length > 0 ? undefined : placeholder}
+                        onKeyDown={handleKeyDown}
+                        onChange={handleChange}
+                        value={currentValue}
+                    />
+                </StyledTagInput>
+            ),
+            [content, currentValue, handleKeyDown, placeholder, tags],
+        );
+    },
+);
 
 export default TagInput;
