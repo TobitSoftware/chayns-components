@@ -54,14 +54,23 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
     if (images && images[0] && images[1]) {
         return (
             <StyledListImageWrapper onClick={handleImageClick}>
-                <StyledListImageWrapperImage src={images[0]} $isSmall={!!careOfLocationId} />
+                <StyledListImageWrapperImage
+                    src={images[0]}
+                    $shouldHideBackground={shouldHideBackground}
+                    $background={imageBackground}
+                    $isSmall={!!careOfLocationId}
+                />
                 <StyledListImageWrapperImage
                     src={images[1]}
                     $isSecondImage
+                    $shouldHideBackground={shouldHideBackground}
+                    $background={imageBackground}
                     $isSmall={!!careOfLocationId}
                 />
                 {careOfLocationId && (
                     <StyledCareOfImage
+                        $shouldHideBackground={shouldHideBackground}
+                        $background={imageBackground}
                         src={`https://sub60.tobit.com/l/${careOfLocationId}?size=128`}
                         alt="care-of"
                     />
@@ -84,6 +93,8 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
                 />
                 {careOfLocationId && (
                     <StyledCareOfImage
+                        $shouldHideBackground={shouldHideBackground}
+                        $background={imageBackground}
                         src={`https://sub60.tobit.com/l/${careOfLocationId}?size=128`}
                         alt="care-of"
                     />
