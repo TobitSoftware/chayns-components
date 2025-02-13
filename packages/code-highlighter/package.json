@@ -52,8 +52,8 @@
     },
     "devDependencies": {
         "@babel/cli": "^7.26.4",
-        "@babel/core": "^7.26.0",
-        "@babel/preset-env": "^7.26.0",
+        "@babel/core": "^7.26.8",
+        "@babel/preset-env": "^7.26.8",
         "@babel/preset-react": "^7.26.3",
         "@babel/preset-typescript": "^7.26.0",
         "@types/react": "^18.3.18",
@@ -65,7 +65,7 @@
         "lerna": "^8.1.9",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "styled-components": "^6.1.14",
+        "styled-components": "^6.1.15",
         "typescript": "^5.7.3"
     },
     "dependencies": {
