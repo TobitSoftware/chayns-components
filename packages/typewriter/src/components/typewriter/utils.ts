@@ -17,12 +17,6 @@ export const getSubTextFromHTML = (html: string, length: number): string => {
     let currLength = 0;
 
     const traverse = (element: Element): boolean => {
-        console.debug('TEST', {
-            nodeName: element.nodeName,
-            nodeType: element.nodeType,
-            textContent: element.textContent,
-        });
-
         if (element.nodeName === 'TWIGNORE') {
             text += element.innerHTML;
         } else if (element.nodeType === 3 && typeof element.textContent === 'string') {
