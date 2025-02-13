@@ -23,7 +23,7 @@ export const StyledSearchInput = styled.div<StyledSearchInputProps>`
                   position: relative;
 
                   &:hover {
-                      background-color: ${theme[103]};
+                      background-color: ${theme[201]};
                   }
               `
             : css`
