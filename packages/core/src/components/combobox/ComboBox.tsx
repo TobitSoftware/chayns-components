@@ -101,7 +101,7 @@ export type ComboBoxProps = {
     /**
      * Function that should be executed when an item is selected. If the function returns false, the item will not be selected.
      */
-    onSelect?: (comboboxItem: IComboBoxItem) => boolean | void;
+    onSelect?: (comboboxItem: IComboBoxItem) => Promise<boolean> | boolean | void;
     /**
      * A text that should be displayed when no item is selected.
      */
@@ -271,9 +271,22 @@ const ComboBox: FC<ComboBoxProps> = ({
     const handleSetSelectedItem = useCallback(
         (itemToSelect: IComboBoxItem) => {
             if (typeof onSelect === 'function') {
-                const shouldPreventSelection = onSelect(itemToSelect) === false;
+                const onSelectResult = onSelect(itemToSelect);
 
-                if (shouldPreventSelection) return;
+                if (onSelectResult === false) {
+                    return;
+                }
+
+                if (onSelectResult instanceof Promise) {
+                    void onSelectResult.then((shouldPreventSelection) => {
+                        if (shouldPreventSelection) return;
+
+                        setInternalSelectedItem(itemToSelect);
+                        setIsAnimating(false);
+                    });
+
+                    return;
+                }
             }
 
             setInternalSelectedItem(itemToSelect);
