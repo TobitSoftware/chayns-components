@@ -47,6 +47,10 @@ export type SearchBoxProps = {
      */
     container?: Element;
     /**
+     * If true, the input field is marked as invalid
+     */
+    isInvalid?: boolean;
+    /**
      * An optional icon that is displayed inside the left side of the input.
      */
     leftIcons?: string[];
@@ -107,6 +111,7 @@ export type SearchBoxProps = {
 const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
     (
         {
+            isInvalid = false,
             placeholder,
             leftIcons,
             lists,
@@ -813,6 +818,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 <StyledSearchBox ref={boxRef}>
                     <div id="search_box_input">
                         <Input
+                            isInvalid={isInvalid}
                             ref={inputRef}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -831,6 +837,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 handleBlur,
                 handleChange,
                 handleFocus,
+                isInvalid,
                 leftElement,
                 onKeyDown,
                 placeholder,
