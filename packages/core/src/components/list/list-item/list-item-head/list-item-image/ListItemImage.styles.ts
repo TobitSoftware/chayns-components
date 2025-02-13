@@ -48,12 +48,12 @@ export const StyledListImageWrapper = styled.div`
     height: 40px;
 `;
 
-export type StyledListImageWrapperImageProps = {
+export type StyledListImageWrapperImageProps = WithTheme<{
     $isSecondImage?: boolean;
     $isSmall: boolean;
     $shouldHideBackground?: boolean;
     $background?: CSSProperties['background'];
-};
+}>;
 
 export const StyledListImageWrapperImage = styled.img<StyledListImageWrapperImageProps>`
     border-radius: 100px;
