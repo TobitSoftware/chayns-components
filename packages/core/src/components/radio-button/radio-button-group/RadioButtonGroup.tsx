@@ -67,6 +67,8 @@ const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
 
         const isInitialRenderRef = useRef(true);
 
+        const isControlled = typeof selectedId === 'string';
+
         useEffect(() => {
             setSelectedRadioButtonId(selectedId);
         }, [selectedId]);
@@ -77,9 +79,11 @@ const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
                     onSelect(id);
                 }
 
-                setSelectedRadioButtonId(id);
+                if (!isControlled) {
+                    setSelectedRadioButtonId(id);
+                }
             },
-            [onSelect],
+            [isControlled, onSelect],
         );
 
         const updateHasRightElement = useCallback<IUpdateHasRightElement>((id, hasRightElement) => {
