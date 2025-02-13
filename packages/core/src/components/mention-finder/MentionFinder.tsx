@@ -6,7 +6,7 @@ import { StyledMentionFinder, StyledMotionMentionFinderPopup } from './MentionFi
 
 export type MentionMember = {
     id: string;
-    info: string;
+    info?: string;
     imageUrl: string;
     name: string;
     shouldShowRoundImage?: boolean;
@@ -55,7 +55,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 ? members.filter(
                       ({ id, info, name }) =>
                           id.toLowerCase().includes(searchString) ||
-                          info.replace('chayns', '').toLowerCase().includes(searchString) ||
+                          info?.replace('chayns', '').toLowerCase().includes(searchString) ||
                           name.toLowerCase().includes(searchString),
                   )
                 : members,

@@ -35,9 +35,11 @@ const MentionFinderItem: FC<MentionFinderItemProps> = ({ isActive, member, onCli
                 <StyledMentionFinderItemContentName>
                     {member.name}
                 </StyledMentionFinderItemContentName>
-                <StyledMentionFinderItemContentInfo>
-                    {member.info}
-                </StyledMentionFinderItemContentInfo>
+                {member.info && (
+                    <StyledMentionFinderItemContentInfo>
+                        {member.info}
+                    </StyledMentionFinderItemContentInfo>
+                )}
             </StyledMentionFinderItemContent>
         </StyledMentionFinderItem>
     );
