@@ -1,4 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
+import React from 'react';
 import { MentionFinderPopupAlignment } from '../src';
 import MentionFinder from '../src/components/mention-finder/MentionFinder';
 
