@@ -15,7 +15,7 @@ export const StyledComboBoxItem = styled.div<StyledComboBoxItemProps>`
     color: ${({ theme }: StyledComboBoxItemProps) => theme.text};
     display: flex;
     gap: 10px;
-    padding: 4px 10px;
+    padding: 8px 10px;
     transition: background-color 0.2s ease-in-out;
 
     ${({ $isDisabled }) =>
@@ -74,12 +74,12 @@ type StyledComboBoxItemContentHeaderProps = {
     $text?: string;
     $subtext?: string;
 };
+
 export const StyledComboBoxItemContentHeader = styled.div<StyledComboBoxItemContentHeaderProps>`
     align-items: center;
     display: flex;
     justify-content: space-between;
     font-weight: ${({ $text, $subtext }) => ($text && $subtext ? 'bold' : 'normal')};
-    font-size: ${({ $text, $subtext }) => $text && $subtext && '17px'};
 `;
 
 export const StyledComboBoxItemContentHeaderWrapper = styled.div`
@@ -101,6 +101,6 @@ export const StyledComboBoxItemContentHeaderRightElement = styled.div`
 `;
 
 export const StyledComboBoxItemContentSubtext = styled.div`
-    font-size: 90%;
+    font-size: 85%;
     margin-top: 2px;
 `;
