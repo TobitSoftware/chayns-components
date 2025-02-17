@@ -1,5 +1,5 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
-import { ColorMode, useSite } from 'chayns-api';
+import { ColorMode, useSite, useStyleSettings } from 'chayns-api';
 import React, {
     createContext,
     FC,
@@ -11,7 +11,6 @@ import React, {
 } from 'react';
 import { Helmet } from 'react-helmet';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { getDesignSettings, getParagraphFormat } from '../../api/theme/get';
 import type { DesignSettings, ParagraphFormat } from '../../types/colorSchemeProvider';
 import { convertIconStyle, getFontSize, getHeadlineColorSelector } from '../../utils/font';
 import { StyledColorSchemeProvider } from './ColorSchemeProvider.styles';
@@ -92,17 +91,6 @@ export const ColorSchemeContext = createContext<ColorSchemeContextProps | undefi
 
 export const useColorScheme = () => useContext(ColorSchemeContext);
 
-let useStyleSettings: () =>
-    | {
-          paragraphFormats: ParagraphFormat[];
-          designSettings: DesignSettings;
-      }
-    | undefined = () => undefined;
-
-void import('chayns-api').then((module) => {
-    useStyleSettings = module.useStyleSettings ?? useStyleSettings;
-});
-
 const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     children,
     color,
@@ -123,7 +111,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     // Empty object is used to prevent error if ColorSchemeProvider is rendered on server
     const { color: internalColor, colorMode: internalColorMode } = useSite() ?? {};
 
-    // ToDo remove if this hook is no beta anymore
     const styleSettings = useStyleSettings();
 
     useEffect(() => {
@@ -131,10 +118,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
             setInternalDesignSettings(designSettings);
         } else if (styleSettings?.designSettings) {
             setInternalDesignSettings(styleSettings.designSettings);
-        } else if (!internalDesignSettings) {
-            void getDesignSettings(siteId).then((result) => {
-                setInternalDesignSettings(result);
-            });
         }
     }, [designSettings, internalDesignSettings, siteId, styleSettings?.designSettings]);
 
@@ -143,10 +126,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
             setInternalParagraphFormat(paragraphFormat);
         } else if (styleSettings?.paragraphFormats) {
             setInternalParagraphFormat(styleSettings.paragraphFormats);
-        } else if (!internalParagraphFormat) {
-            void getParagraphFormat(siteId).then((result) => {
-                setInternalParagraphFormat(result);
-            });
         }
     }, [internalParagraphFormat, paragraphFormat, siteId, styleSettings?.paragraphFormats]);
 
