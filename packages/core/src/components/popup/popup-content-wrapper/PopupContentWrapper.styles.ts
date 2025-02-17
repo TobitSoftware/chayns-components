@@ -8,6 +8,7 @@ type StyledMotionPopupContentWrapperProps = WithTheme<{
     $position: PopupAlignment;
     $colorMode: ColorMode;
     $offset: number;
+    $shouldScrollWithContent: boolean;
 }>;
 
 export const StyledMotionPopupContentWrapper = styled(
@@ -19,7 +20,8 @@ export const StyledMotionPopupContentWrapper = styled(
     box-shadow: 1px 3px 8px rgb(0 0 0 / 30%);
     color: ${({ theme }: StyledMotionPopupContentWrapperProps) => theme.text};
     z-index: 100;
-    position: fixed;
+    position: ${({ $shouldScrollWithContent }) =>
+        $shouldScrollWithContent ? 'absolute' : 'fixed'};
     pointer-events: all;
 
     &::after {

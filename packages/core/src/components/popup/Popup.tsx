@@ -43,6 +43,10 @@ export type PopupProps = {
      */
     shouldHideOnChildrenLeave?: boolean;
     /**
+     * Whether the popup should scroll with the content.
+     */
+    shouldScrollWithContent?: boolean;
+    /**
      * Whether the popup should be opened on hover. If not, the popup will be opened on click.
      */
     shouldShowOnHover?: boolean;
@@ -67,6 +71,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             shouldHideOnChildrenLeave,
             shouldShowOnHover = false,
             shouldUseChildrenWidth = true,
+            shouldScrollWithContent = false,
             yOffset = 0,
         },
         ref,
@@ -145,6 +150,10 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         const handleShow = useCallback(() => {
             if (popupRef.current && pseudoSize) {
+                if (!newContainer) {
+                    return;
+                }
+
                 const { height: pseudoHeight, width: pseudoWidth } = pseudoSize;
 
                 const {
@@ -154,7 +163,10 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     width: childrenWidth,
                 } = popupRef.current.getBoundingClientRect();
 
-                const containerRect = newContainer?.getBoundingClientRect();
+                const { height, width, top, left } = newContainer.getBoundingClientRect();
+
+                const zoomX = width / (newContainer as HTMLElement).offsetWidth;
+                const zoomY = height / (newContainer as HTMLElement).offsetHeight;
 
                 if (pseudoHeight > childrenTop - 25) {
                     let isRight = false;
@@ -167,8 +179,12 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                         setAlignment(PopupAlignment.BottomLeft);
                     }
 
-                    const x = childrenLeft - (containerRect?.left ?? 0) + childrenWidth / 2;
-                    const y = childrenTop - (containerRect?.top ?? 0) + childrenHeight + yOffset;
+                    const x =
+                        (childrenLeft + childrenWidth / 2 - left) / zoomX + newContainer.scrollLeft;
+                    const y =
+                        (childrenTop + childrenHeight / 2 - top) / zoomY +
+                        newContainer.scrollTop -
+                        yOffset;
 
                     let newOffset;
 
@@ -194,7 +210,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
                     setCoordinates({
                         x: newX < 23 ? 23 : newX,
-                        y: y - yOffset,
+                        y,
                     });
                 } else {
                     let isRight = false;
@@ -207,8 +223,12 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                         setAlignment(PopupAlignment.TopLeft);
                     }
 
-                    const x = childrenLeft - (containerRect?.left ?? 0) + childrenWidth / 2;
-                    const y = childrenTop - (containerRect?.top ?? 0) - yOffset;
+                    const x =
+                        (childrenLeft + childrenWidth / 2 - left) / zoomX + newContainer.scrollLeft;
+                    const y =
+                        (childrenTop + childrenHeight / 2 - top) / zoomY +
+                        newContainer.scrollTop -
+                        yOffset;
 
                     let newOffset;
 
@@ -234,7 +254,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
                     setCoordinates({
                         x: newX < 23 ? 23 : newX,
-                        y: y - yOffset,
+                        y,
                     });
                 }
 
@@ -329,6 +349,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                             <PopupContentWrapper
                                 width={pseudoSize?.width ?? 0}
                                 offset={offset}
+                                shouldScrollWithContent={shouldScrollWithContent}
                                 coordinates={coordinates}
                                 key={`tooltip_${uuid}`}
                                 alignment={alignment}
@@ -356,6 +377,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             offset,
             pseudoSize?.width,
             uuid,
+            shouldScrollWithContent,
         ]);
 
         return (

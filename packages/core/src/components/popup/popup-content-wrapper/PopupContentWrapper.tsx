@@ -10,11 +10,24 @@ type PopupContentProps = {
     coordinates: PopupCoordinates;
     onMouseLeave: MouseEventHandler<HTMLSpanElement>;
     onMouseEnter: MouseEventHandler<HTMLSpanElement>;
+    shouldScrollWithContent: boolean;
     width: number;
 };
 
 const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
-    ({ alignment, children, coordinates, offset, width, onMouseLeave, onMouseEnter }, ref) => {
+    (
+        {
+            alignment,
+            children,
+            coordinates,
+            offset,
+            width,
+            onMouseLeave,
+            shouldScrollWithContent,
+            onMouseEnter,
+        },
+        ref,
+    ) => {
         const { colorMode } = useSite();
 
         const isBottomLeftAlignment = alignment === PopupAlignment.BottomLeft;
@@ -37,6 +50,7 @@ const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
                 exit={{ opacity: 0, y: exitAndInitialY }}
                 initial={{ opacity: 0, y: exitAndInitialY }}
                 $position={alignment}
+                $shouldScrollWithContent={shouldScrollWithContent}
                 ref={ref}
                 data-ispopup="true"
                 onMouseEnter={onMouseEnter}
