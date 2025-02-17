@@ -22,8 +22,10 @@ export const StyledSearchInput = styled.div<StyledSearchInputProps>`
                   border-radius: 3px;
                   position: relative;
 
-                  &:hover {
-                      background-color: ${theme[201]};
+                  @media (pointer: fine) {
+                      &:hover {
+                          background-color: ${theme[201]};
+                      }
                   }
               `
             : css`
