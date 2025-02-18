@@ -13,10 +13,11 @@ type ContextMenuContentProps = {
     alignment: ContextMenuAlignment;
     coordinates: ContextMenuCoordinates;
     items: ContextMenuItem[];
+    zIndex: number;
 };
 
 const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentProps>(
-    ({ alignment, coordinates, items }, ref) => {
+    ({ alignment, coordinates, items, zIndex }, ref) => {
         const isBottomLeftAlignment = alignment === ContextMenuAlignment.BottomLeft;
         const isTopLeftAlignment = alignment === ContextMenuAlignment.TopLeft;
         const isTopRightAlignment = alignment === ContextMenuAlignment.TopRight;
@@ -71,6 +72,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                 exit={{ opacity: 0, y: exitAndInitialY }}
                 initial={{ opacity: 0, y: exitAndInitialY }}
                 $position={alignment}
+                $zIndex={zIndex}
                 ref={ref}
                 style={{ left: coordinates.x, top: coordinates.y }}
                 transition={{ ease: 'anticipate' }}

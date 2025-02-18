@@ -5,6 +5,7 @@ import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider'
 
 type StyledMotionContextMenuContentProps = WithTheme<{
     $position: ContextMenuAlignment;
+    $zIndex: number;
 }>;
 
 export const StyledMotionContextMenuContent = styled(
@@ -17,7 +18,7 @@ export const StyledMotionContextMenuContent = styled(
     color: ${({ theme }: StyledMotionContextMenuContentProps) => theme.text};
     pointer-events: all;
     position: absolute;
-    z-index: 10;
+    z-index: ${({ $zIndex }) => $zIndex};
 
     &::after {
         background-color: inherit;

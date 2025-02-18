@@ -73,6 +73,10 @@ type ContextMenuProps = {
      * Whether the popup should be closed if its clicked.
      */
     shouldCloseOnPopupClick?: boolean;
+    /**
+     * The z-index of the popup.
+     */
+    zIndex?: number;
 };
 
 interface SelectDialogResult {
@@ -91,6 +95,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             onHide,
             onShow,
             shouldCloseOnPopupClick = true,
+            zIndex = 20,
         },
         ref,
     ) => {
@@ -252,6 +257,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                             <ContextMenuContent
                                 coordinates={coordinates ?? internalCoordinates}
                                 items={items}
+                                zIndex={zIndex}
                                 key={`contextMenu_${uuid}`}
                                 alignment={alignment ?? internalAlignment}
                                 ref={contextMenuContentRef}
@@ -270,6 +276,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             isContentShown,
             items,
             uuid,
+            zIndex,
         ]);
 
         return (
