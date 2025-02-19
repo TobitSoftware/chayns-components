@@ -59,6 +59,7 @@ type ListItemHeadProps = {
     subtitle?: ReactNode;
     title: ReactNode;
     titleElement?: ReactNode;
+    shouldForceHover?: boolean;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -80,6 +81,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     shouldOpenImageOnClick,
     shouldShowRoundImageOrIcon,
     subtitle,
+    shouldForceHover,
     title,
     titleElement,
 }) => {
@@ -267,9 +269,9 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             {hoverItem && (
                 <StyledMotionListItemHeadHoverItemWrapper
                     animate={{
-                        marginLeft: shouldShowHoverItem ? 8 : 0,
-                        opacity: shouldShowHoverItem ? 1 : 0,
-                        width: shouldShowHoverItem ? 'auto' : 0,
+                        marginLeft: shouldForceHover || shouldShowHoverItem ? 8 : 0,
+                        opacity: shouldForceHover || shouldShowHoverItem ? 1 : 0,
+                        width: shouldForceHover || shouldShowHoverItem ? 'auto' : 0,
                     }}
                     initial={false}
                     transition={{ duration: 0.15, type: 'tween' }}

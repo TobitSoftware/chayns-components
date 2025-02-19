@@ -96,6 +96,10 @@ export type ListItemProps = {
      */
     shouldForceBackground?: boolean;
     /**
+     * Whether the hover item should be forced.
+     */
+    shouldForceHover?: boolean;
+    /**
      * Whether the bottom line should be hidden.
      */
     shouldHideBottomLine?: boolean;
@@ -166,6 +170,7 @@ const ListItem: FC<ListItemProps> = ({
     shouldPreventLayoutAnimation = false,
     shouldShowRoundImageOrIcon,
     shouldShowSeparatorBelow = false,
+    shouldForceHover = false,
     subtitle,
     title,
     titleElement,
@@ -268,6 +273,7 @@ const ListItem: FC<ListItemProps> = ({
                 leftElements={leftElements}
                 onClick={isClickable ? handleHeadClick : undefined}
                 onLongPress={onLongPress}
+                shouldForceHover={shouldForceHover}
                 rightElements={rightElements}
                 shouldHideImageOrIconBackground={shouldHideImageOrIconBackground}
                 shouldHideIndicator={shouldHideIndicator}
