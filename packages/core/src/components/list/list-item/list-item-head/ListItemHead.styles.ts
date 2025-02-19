@@ -17,6 +17,7 @@ export const StyledListItemHead = styled(motion.div)<StyledListItemHeadProps>`
     display: flex;
     min-height: 64px;
     padding: 12px 9px;
+    position: relative;
 
     ${({ $isAnyItemExpandable }) =>
         !$isAnyItemExpandable &&
@@ -149,8 +150,21 @@ export const StyledListItemHeadSubtitleTextPseudo = styled.span<StyledListItemHe
     position: absolute;
 `;
 
-export const StyledMotionListItemHeadHoverItem = styled(motion.div)<FramerMotionBugFix>`
+type StyledMotionListItemHeadHoverItemWrapperProps = WithTheme<unknown>;
+
+export const StyledMotionListItemHeadHoverItemWrapper = styled(
+    motion.div,
+)<StyledMotionListItemHeadHoverItemWrapperProps>`
     overflow: hidden;
     flex-shrink: 0;
     margin: auto 0;
+    position: absolute;
+    right: 0;
+
+    background: ${({ theme }: StyledMotionListItemHeadHoverItemWrapperProps) =>
+        `linear-gradient(to right, transparent 0px, rgb(${theme['000-rgb'] ?? ''}) 40px)`};
+`;
+
+export const StyledMotionListItemHeadHoverItem = styled.div`
+    padding-left: 40px;
 `;

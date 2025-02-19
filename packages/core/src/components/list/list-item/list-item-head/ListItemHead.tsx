@@ -29,6 +29,7 @@ import {
     StyledListItemHeadTitleText,
     StyledListItemHeadTitleTextPseudo,
     StyledMotionListItemHeadHoverItem,
+    StyledMotionListItemHeadHoverItemWrapper,
     StyledMotionListItemHeadIndicator,
 } from './ListItemHead.styles';
 
@@ -264,7 +265,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             </StyledListItemHeadContent>
             {rightElements && <ListItemRightElements rightElements={rightElements} />}
             {hoverItem && (
-                <StyledMotionListItemHeadHoverItem
+                <StyledMotionListItemHeadHoverItemWrapper
                     animate={{
                         marginLeft: shouldShowHoverItem ? 8 : 0,
                         opacity: shouldShowHoverItem ? 1 : 0,
@@ -273,8 +274,10 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     initial={false}
                     transition={{ duration: 0.15, type: 'tween' }}
                 >
-                    {hoverItem}
-                </StyledMotionListItemHeadHoverItem>
+                    <StyledMotionListItemHeadHoverItem>
+                        {hoverItem}
+                    </StyledMotionListItemHeadHoverItem>
+                </StyledMotionListItemHeadHoverItemWrapper>
             )}
         </StyledListItemHead>
     );
