@@ -119,17 +119,17 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         }
         return undefined;
     });
-    const [internalParagraphFormat, setInternalParagraphFormat] = useState<ParagraphFormat[]>(
-        () => {
-            if (paragraphFormat) {
-                return paragraphFormat;
-            }
-            if (styleSettings?.paragraphFormats) {
-                return styleSettings.paragraphFormats;
-            }
-            return [];
-        },
-    );
+    const [internalParagraphFormat, setInternalParagraphFormat] = useState<
+        ParagraphFormat[] | undefined
+    >(() => {
+        if (paragraphFormat) {
+            return paragraphFormat;
+        }
+        if (styleSettings?.paragraphFormats) {
+            return styleSettings.paragraphFormats;
+        }
+        return undefined;
+    });
 
     useEffect(() => {
         if (designSettings) {
