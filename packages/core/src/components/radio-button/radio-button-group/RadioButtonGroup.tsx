@@ -5,7 +5,6 @@ import React, {
     useEffect,
     useImperativeHandle,
     useMemo,
-    useRef,
     useState,
 } from 'react';
 import { getRadioButtonOrder } from '../../../utils/radioButton';
@@ -65,8 +64,6 @@ const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
         const [radioButtonRightElements, setRadioButtonRightElements] =
             useState<IRadioButtonRightElements>([]);
 
-        const isInitialRenderRef = useRef(true);
-
         const isControlled = typeof selectedId === 'string';
 
         useEffect(() => {
@@ -107,12 +104,6 @@ const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
             }),
             [updateSelectedRadioButtonId],
         );
-
-        useEffect(() => {
-            if (isInitialRenderRef.current) {
-                isInitialRenderRef.current = false;
-            }
-        }, [selectedRadioButtonId]);
 
         const providerValue = useMemo<IRadioButtonGroupContext>(
             () => ({
