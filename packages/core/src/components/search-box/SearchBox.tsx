@@ -106,6 +106,10 @@ export type SearchBoxProps = {
      * An optional callback function to filter the elements to be displayed
      */
     customFilter?: (item: ISearchBoxItem) => boolean;
+    /**
+     * Set an input for the search box - it is not an item of a list, just a string.
+     */
+    presetValue?: string;
 };
 
 const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
@@ -127,12 +131,15 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             shouldAddInputToList = true,
             shouldShowToggleIcon = false,
             customFilter,
+            presetValue,
         },
         ref,
     ) => {
         const [matchingListsItems, setMatchingListsItems] = useState<ISearchBoxItems[]>(lists);
         const [selectedImage, setSelectedImage] = useState<ReactElement>();
-        const [value, setValue] = useState('');
+        const [value, setValue] = useState(
+            typeof presetValue === 'string' && presetValue !== '' ? presetValue : '',
+        );
         const [isAnimating, setIsAnimating] = useState(false);
         const [height, setHeight] = useState<number>(0);
         const [width, setWidth] = useState(0);
@@ -154,6 +161,9 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         const hasFocusRef = useRef<boolean>(false);
         const isAnimatingRef = useRef<boolean>(false);
+        const shouldShowPresetValue = useRef<boolean>(
+            typeof presetValue === 'string' && presetValue !== '',
+        );
 
         const theme = useTheme();
 
@@ -377,7 +387,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          * should not be reset if the list changes and the selectedId is still undefined.
          */
         useEffect(() => {
-            if (!selectedId) {
+            if (!selectedId && !shouldShowPresetValue.current) {
                 setValue('');
             }
         }, [selectedId]);
@@ -522,6 +532,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const handleChange = useCallback(
             (event: ChangeEvent<HTMLInputElement>) => {
                 const filteredLists: ISearchBoxItems[] = [];
+                shouldShowPresetValue.current = false;
 
                 activeList.forEach(({ list, groupName }) => {
                     const newList = searchList({ items: list, searchString: event.target.value });
@@ -767,6 +778,15 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 document.addEventListener('keydown', handleKeyPress);
             };
         }, [handleKeyPress]);
+
+        /**
+         * Update the value if preset value changes
+         */
+        useEffect(() => {
+            if (presetValue) {
+                setValue(presetValue);
+            }
+        }, [presetValue]);
 
         useEffect(() => {
             if (!newContainer) {
