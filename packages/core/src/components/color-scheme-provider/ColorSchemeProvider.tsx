@@ -11,6 +11,7 @@ import React, {
 } from 'react';
 import { Helmet } from 'react-helmet';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { getDesignSettings, getParagraphFormat } from '../../api/theme/get';
 import type { DesignSettings, ParagraphFormat } from '../../types/colorSchemeProvider';
 import { convertIconStyle, getFontSize, getHeadlineColorSelector } from '../../utils/font';
 import { StyledColorSchemeProvider } from './ColorSchemeProvider.styles';
@@ -104,28 +105,68 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     theme,
     colors,
 }) => {
-    const [internalTheme, setInternalTheme] = useState<Theme>(theme ?? {});
-    const [internalDesignSettings, setInternalDesignSettings] = useState<DesignSettings>();
-    const [internalParagraphFormat, setInternalParagraphFormat] = useState<ParagraphFormat[]>();
-
-    // Empty object is used to prevent error if ColorSchemeProvider is rendered on server
-    const { color: internalColor, colorMode: internalColorMode } = useSite() ?? {};
-
+    const { color: internalColor, colorMode: internalColorMode } = useSite();
     const styleSettings = useStyleSettings();
+    const [internalTheme, setInternalTheme] = useState<Theme>(theme ?? {});
+    const [internalDesignSettings, setInternalDesignSettings] = useState<
+        DesignSettings | undefined
+    >(() => {
+        if (designSettings) {
+            return designSettings;
+        }
+        if (styleSettings?.designSettings) {
+            return styleSettings.designSettings;
+        }
+        return undefined;
+    });
+    const [internalParagraphFormat, setInternalParagraphFormat] = useState<ParagraphFormat[]>(
+        () => {
+            if (paragraphFormat) {
+                return paragraphFormat;
+            }
+            if (styleSettings?.paragraphFormats) {
+                return styleSettings.paragraphFormats;
+            }
+            return [];
+        },
+    );
 
     useEffect(() => {
         if (designSettings) {
-            setInternalDesignSettings(designSettings);
-        } else if (styleSettings?.designSettings) {
-            setInternalDesignSettings(styleSettings.designSettings);
+            if (designSettings !== internalDesignSettings) {
+                setInternalDesignSettings(designSettings);
+            }
+            return;
+        }
+        if (styleSettings?.designSettings) {
+            if (styleSettings.designSettings !== internalDesignSettings) {
+                setInternalDesignSettings(styleSettings.designSettings);
+            }
+            return;
+        }
+        if (!internalDesignSettings) {
+            void getDesignSettings(siteId).then((result) => {
+                setInternalDesignSettings(result);
+            });
         }
     }, [designSettings, internalDesignSettings, siteId, styleSettings?.designSettings]);
 
     useEffect(() => {
         if (paragraphFormat) {
-            setInternalParagraphFormat(paragraphFormat);
-        } else if (styleSettings?.paragraphFormats) {
-            setInternalParagraphFormat(styleSettings.paragraphFormats);
+            if (paragraphFormat !== internalParagraphFormat) {
+                setInternalParagraphFormat(paragraphFormat);
+            }
+            return;
+        }
+        if (styleSettings?.paragraphFormats) {
+            if (styleSettings.paragraphFormats !== internalParagraphFormat) {
+                setInternalParagraphFormat(styleSettings.paragraphFormats);
+            }
+        }
+        if (!internalParagraphFormat) {
+            void getParagraphFormat(siteId).then((result) => {
+                setInternalParagraphFormat(result ?? []);
+            });
         }
     }, [internalParagraphFormat, paragraphFormat, siteId, styleSettings?.paragraphFormats]);
 
