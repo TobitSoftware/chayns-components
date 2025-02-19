@@ -59,6 +59,10 @@ export type SearchInputProps = {
      * Value if the input field should be controlled
      */
     value?: string;
+    /**
+     * The width of the parent.
+     */
+    width?: number;
 };
 
 const SearchInput: FC<SearchInputProps> = ({
@@ -71,6 +75,7 @@ const SearchInput: FC<SearchInputProps> = ({
     shouldUseAbsolutePositioning = false,
     size = InputSize.Medium,
     value,
+    width: widthValue,
 }) => {
     const [isSearchInputActive, setIsSearchInputActive] = useState(
         isActive ?? (typeof value === 'string' && value.trim() !== ''),
@@ -103,7 +108,7 @@ const SearchInput: FC<SearchInputProps> = ({
         }
     }, [isActive]);
 
-    const width = useMemo(() => parentWidth?.width, [parentWidth?.width]);
+    const width = useMemo(() => parentWidth?.width ?? widthValue, [parentWidth?.width, widthValue]);
 
     return (
         <>
