@@ -14,8 +14,7 @@ type StyledMotionPopupContentWrapperProps = WithTheme<{
 export const StyledMotionPopupContentWrapper = styled(
     motion.div,
 )<StyledMotionPopupContentWrapperProps>`
-    background-color: ${({ theme, $colorMode }: StyledMotionPopupContentWrapperProps) =>
-        $colorMode === ColorMode.Dark ? theme['003'] : theme['001']};
+    background-color: ${({ theme }: StyledMotionPopupContentWrapperProps) => theme['000']};
     border-radius: 3px;
     box-shadow: 1px 3px 8px rgb(0 0 0 / 30%);
     color: ${({ theme }: StyledMotionPopupContentWrapperProps) => theme.text};

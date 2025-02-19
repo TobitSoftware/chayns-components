@@ -8,7 +8,7 @@ type StyledMotionSearchBoxBodyProps = WithTheme<{
 }>;
 
 export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBoxBodyProps>`
-    background: ${({ theme }: StyledMotionSearchBoxBodyProps) => theme['100']};
+    background: ${({ theme }: StyledMotionSearchBoxBodyProps) => theme['000']};
     position: absolute;
     z-index: 4;
     display: flex;

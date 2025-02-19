@@ -10,7 +10,7 @@ export const StyledMentionFinder = styled.div`
 type StyledMentionFinderPopupProps = WithTheme<{ $popupAlignment: MentionFinderPopupAlignment }>;
 
 export const StyledMotionMentionFinderPopup = styled(motion.div)<StyledMentionFinderPopupProps>`
-    background-color: ${({ theme }: StyledMentionFinderPopupProps) => theme['100']};
+    background-color: ${({ theme }: StyledMentionFinderPopupProps) => theme['000']};
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 3px;
     box-shadow: 1px 3px 8px rgba(0, 0, 0, 0.1);
