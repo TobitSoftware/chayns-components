@@ -268,6 +268,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             {rightElements && <ListItemRightElements rightElements={rightElements} />}
             {hoverItem && (
                 <StyledMotionListItemHeadHoverItemWrapper
+                    className="beta-chayns-list-item-hover-item"
                     animate={{
                         marginLeft: shouldForceHover || shouldShowHoverItem ? 8 : 0,
                         opacity: shouldForceHover || shouldShowHoverItem ? 1 : 0,
