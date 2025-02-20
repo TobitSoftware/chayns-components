@@ -21,6 +21,7 @@ export const StyledSearchInput = styled.div<StyledSearchInputProps>`
                   aspect-ratio: 1;
                   border-radius: 3px;
                   position: relative;
+                  cursor: pointer;
 
                   @media (pointer: fine) {
                       &:hover {
