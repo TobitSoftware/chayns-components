@@ -69,7 +69,11 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
 
     ${({ $isOpen, $direction }) => {
         if ($isOpen) {
-            return $direction === ComboBoxDirection.BOTTOM
+            return [
+                ComboBoxDirection.BOTTOM,
+                ComboBoxDirection.BOTTOM_LEFT,
+                ComboBoxDirection.BOTTOM_RIGHT,
+            ].includes($direction)
                 ? css`
                       border-top-left-radius: 3px;
                       border-top-right-radius: 3px;
@@ -160,6 +164,8 @@ export const StyledComboBoxIconWrapper = styled.div`
 type StyledComboBoxBodyProps = WithTheme<{
     $overflowY: CSSProperties['overflowY'];
     $maxHeight: CSSProperties['maxHeight'];
+    $translateX: string;
+    $translateY: string;
     $direction: ComboBoxDirection;
     $browser: BrowserName;
     $minWidth: number;
@@ -177,7 +183,8 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     max-height: ${({ $maxHeight }) => $maxHeight};
     overflow-y: ${({ $overflowY }) => $overflowY};
     overflow-x: hidden;
-    min-width: ${({ $minWidth, $overflowY }) => $minWidth - ($overflowY === 'scroll' ? 5 : 0)}px;
+    transform: ${({ $translateX, $translateY }) => `translate(${$translateX}, ${$translateY})`};
+    min-width: ${({ $minWidth }) => $minWidth}px;
 
     ${({ $minWidth, $overflowY, $shouldUseCurrentItemWidth }) =>
         !$shouldUseCurrentItemWidth &&
@@ -186,7 +193,13 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
         `}
 
     ${({ $direction }) => {
-        if ($direction === ComboBoxDirection.BOTTOM) {
+        if (
+            [
+                ComboBoxDirection.BOTTOM,
+                ComboBoxDirection.BOTTOM_LEFT,
+                ComboBoxDirection.BOTTOM_RIGHT,
+            ].includes($direction)
+        ) {
             return css`
                 border-bottom-left-radius: 3px;
                 border-bottom-right-radius: 3px;

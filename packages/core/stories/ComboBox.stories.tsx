@@ -74,7 +74,12 @@ const Template: StoryFn<typeof ComboBox> = (args) => (
             voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
             gubergren, no sea takimata sanctus est.
         </p>
-        <ComboBox {...args} />
+        <div style={{ display: 'flex', gap: '10px' }}>
+            <div style={{ flex: '0 0 auto' }}>unterstützt von</div>
+            <div style={{ flex: '1 1 auto' }}>
+                <ComboBox {...args} />
+            </div>
+        </div>
     </>
 );
 
@@ -109,6 +114,8 @@ const WithInputTemplate: StoryFn<typeof ComboBox> = (args) => {
 
 export const General = Template.bind({});
 
+export const OwnWidth = Template.bind({});
+
 export const WithPrefix = Template.bind({});
 
 export const WithImages = Template.bind({});
@@ -124,6 +131,12 @@ export const WithSubtextAndRightElement = Template.bind({});
 export const WithInput = WithInputTemplate.bind({});
 
 export const WithTextStyle = Template.bind({});
+
+OwnWidth.args = {
+    bodyWidth: 300,
+    direction: ComboBoxDirection.BOTTOM_LEFT,
+    shouldUseFullWidth: true,
+};
 
 WithPrefix.args = {
     prefix: 'Von',

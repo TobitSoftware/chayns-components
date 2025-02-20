@@ -2,9 +2,11 @@ import { useDevice, useFunctions, useValues } from 'chayns-api';
 import { AnimatePresence } from 'motion/react';
 import React, {
     ChangeEventHandler,
+    type CSSProperties,
     FC,
     FocusEventHandler,
     ReactHTML,
+    type ReactNode,
     ReactPortal,
     useCallback,
     useContext,
@@ -12,8 +14,6 @@ import React, {
     useMemo,
     useRef,
     useState,
-    type CSSProperties,
-    type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
 import { BrowserName } from '../../types/chayns';
@@ -63,6 +63,7 @@ export interface IComboBoxItem {
 }
 
 export type ComboBoxProps = {
+    bodyWidth?: number;
     /**
      * The element where the content of the `ComboBox` should be rendered via React Portal.
      */
@@ -133,6 +134,7 @@ export type ComboBoxProps = {
 };
 
 const ComboBox: FC<ComboBoxProps> = ({
+    bodyWidth,
     direction = ComboBoxDirection.BOTTOM,
     isDisabled = false,
     lists,
@@ -157,6 +159,8 @@ const ComboBox: FC<ComboBoxProps> = ({
     const [bodyMinWidth, setBodyMinWidth] = useState(0);
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
     const [overflowY, setOverflowY] = useState<CSSProperties['overflowY']>('hidden');
+    const [translateX, setTranslateX] = useState<string>('0px');
+    const [translateY, setTranslateY] = useState<string>('0px');
     const [portal, setPortal] = useState<ReactPortal>();
     const [internalCoordinates, setInternalCoordinates] = useState<ContextMenuCoordinates>({
         x: 0,
@@ -243,7 +247,13 @@ const ComboBox: FC<ComboBoxProps> = ({
 
             setInternalCoordinates({
                 x,
-                y: direction === ComboBoxDirection.TOP ? y : y + height,
+                y: [
+                    ComboBoxDirection.TOP,
+                    ComboBoxDirection.TOP_LEFT,
+                    ComboBoxDirection.TOP_RIGHT,
+                ].includes(direction)
+                    ? y
+                    : y + height,
             });
 
             setIsAnimating(true);
@@ -461,6 +471,20 @@ const ComboBox: FC<ComboBoxProps> = ({
         setInternalSelectedItem(selectedItem);
     }, [selectedItem]);
 
+    useEffect(() => {
+        if (
+            [ComboBoxDirection.BOTTOM_LEFT, ComboBoxDirection.TOP_LEFT].includes(direction) &&
+            typeof bodyWidth === 'number' &&
+            typeof minWidth === 'number'
+        ) {
+            const difference = minWidth - bodyWidth;
+
+            setTranslateX(`${difference}px`);
+        } else {
+            setTranslateX('0px');
+        }
+    }, [bodyWidth, direction, minWidth]);
+
     const placeholderImageUrl = useMemo(() => {
         if (selectedItem) {
             return selectedItem.imageUrl;
@@ -556,15 +580,24 @@ const ComboBox: FC<ComboBoxProps> = ({
         [handleSetSelectedItem, lists, selectedItem, shouldShowBigImage, shouldShowRoundImage],
     );
 
-    const bodyStyles = useMemo(() => {
-        let styles: CSSProperties = { left: internalCoordinates.x, top: internalCoordinates.y };
+    const bodyStyles = useMemo(
+        () => ({ left: internalCoordinates.x, top: internalCoordinates.y }),
+        [internalCoordinates.x, internalCoordinates.y],
+    );
 
-        if (direction === ComboBoxDirection.TOP) {
-            styles = { ...styles, transform: 'translateY(-100%)' };
+    useEffect(() => {
+        if (
+            [
+                ComboBoxDirection.TOP,
+                ComboBoxDirection.TOP_LEFT,
+                ComboBoxDirection.TOP_RIGHT,
+            ].includes(direction)
+        ) {
+            setTranslateY('-100%');
+        } else {
+            setTranslateY('0px');
         }
-
-        return styles;
-    }, [direction, internalCoordinates.x, internalCoordinates.y]);
+    }, [direction]);
 
     useEffect(() => {
         if (!newContainer) {
@@ -579,10 +612,12 @@ const ComboBox: FC<ComboBoxProps> = ({
                             $browser={browser?.name as BrowserName}
                             animate={{ height: 'fit-content', opacity: 1 }}
                             $overflowY={overflowY}
+                            $translateX={translateX}
+                            $translateY={translateY}
                             initial={{ height: 0, opacity: 0 }}
                             exit={{ height: 0, opacity: 0 }}
                             $maxHeight={maxHeight}
-                            $minWidth={bodyMinWidth}
+                            $minWidth={bodyWidth ?? bodyMinWidth}
                             style={bodyStyles}
                             $direction={direction}
                             $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
@@ -598,6 +633,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             ),
         );
     }, [
+        bodyWidth,
         bodyMinWidth,
         bodyStyles,
         browser?.name,
@@ -609,6 +645,8 @@ const ComboBox: FC<ComboBoxProps> = ({
         minWidth,
         overflowY,
         shouldUseCurrentItemWidth,
+        translateX,
+        translateY,
     ]);
 
     return useMemo(
