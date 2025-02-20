@@ -61,6 +61,7 @@ export const StyledMotionSearchInputContentWrapper = styled(
 
 export const StyledMotionSearchInputIconWrapperContent = styled(motion.div)<FramerMotionBugFix>`
     display: flex;
+    cursor: pointer;
 `;
 
 export const StyledMotionSearchInputIconWrapper = styled.div`

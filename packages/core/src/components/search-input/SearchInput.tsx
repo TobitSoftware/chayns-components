@@ -145,6 +145,9 @@ const SearchInput: FC<SearchInputProps> = ({
                             initial={{ opacity: 0 }}
                             key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
                             transition={{ duration: 0.3 }}
+                            onClick={
+                                isSearchInputActive ? handleBackIconClick : handleSearchIconClick
+                            }
                             id={
                                 isSearchInputActive
                                     ? 'search-input-backIcon'
