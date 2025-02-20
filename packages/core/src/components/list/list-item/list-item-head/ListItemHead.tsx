@@ -10,7 +10,6 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { useElementSize } from '../../../../hooks/useElementSize';
 import type { IListItemRightElements } from '../../../../types/list';
 import Icon from '../../../icon/Icon';
 import ListItemIcon from './list-item-icon/ListItemIcon';
@@ -85,40 +84,54 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     title,
     titleElement,
 }) => {
+    const [shouldRenderPseudoElements, setShouldRenderPseudoElements] = useState(true);
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
-    const [headHeight, setHeadHeight] = useState<HeadHeight>({
-        closed: 40,
-        open: 40,
-    });
+    const [openTitleWidth, setOpenTitleWidth] = useState(0);
+    const [headHeight, setHeadHeight] = useState<HeadHeight>({ closed: 40, open: 40 });
     const [, setIsFirstRender] = useState(false);
 
     const longPressTimeoutRef = useRef<number>();
+
     const pseudoTitleOpenRef = useRef<HTMLDivElement>(null);
     const pseudoTitleClosedRef = useRef<HTMLDivElement>(null);
     const pseudoSubtitleOpenRef = useRef<HTMLDivElement>(null);
     const pseudoSubtitleClosedRef = useRef<HTMLDivElement>(null);
 
-    const closedTitle = useElementSize(pseudoTitleClosedRef);
-    const openedTitle = useElementSize(pseudoTitleOpenRef);
-    const closedSubtitle = useElementSize(pseudoSubtitleClosedRef);
-    const openedSubtitle = useElementSize(pseudoSubtitleOpenRef);
-
     const shouldShowSubtitleRow = subtitle || typeof subtitle === 'string';
 
     useEffect(() => {
-        if (closedTitle && openedTitle) {
-            setHeadHeight({
-                closed:
-                    shouldShowSubtitleRow && closedSubtitle
-                        ? closedSubtitle.height + 4 + closedTitle.height + 24
-                        : closedTitle.height + 24,
-                open:
-                    shouldShowSubtitleRow && openedSubtitle
-                        ? openedSubtitle.height + 4 + openedTitle.height + 24
-                        : openedTitle.height + 24,
-            });
+        if (pseudoTitleOpenRef.current && pseudoTitleClosedRef.current) {
+            const { height: closedTitleHeight } =
+                pseudoTitleClosedRef.current.getBoundingClientRect();
+            const { height: openTitleHeight, width: openWidth } =
+                pseudoTitleOpenRef.current.getBoundingClientRect();
+
+            setOpenTitleWidth(openWidth);
+
+            let closedHeight = closedTitleHeight + 24;
+            let openHeight = openTitleHeight + 24;
+
+            if (shouldShowSubtitleRow) {
+                if (pseudoSubtitleOpenRef.current && pseudoSubtitleClosedRef.current) {
+                    const { height: closedSubtitleHeight } =
+                        pseudoSubtitleClosedRef.current.getBoundingClientRect();
+                    const { height: openSubtitleHeight } =
+                        pseudoSubtitleOpenRef.current.getBoundingClientRect();
+
+                    closedHeight += closedSubtitleHeight + 4;
+                    openHeight += openSubtitleHeight + 4;
+                }
+            }
+
+            setHeadHeight({ closed: closedHeight, open: openHeight });
+
+            setShouldRenderPseudoElements(false);
         }
-    }, [closedSubtitle, closedTitle, openedSubtitle, openedTitle, shouldShowSubtitleRow]);
+    }, [shouldShowSubtitleRow]);
+
+    useEffect(() => {
+        if (subtitle || title) setShouldRenderPseudoElements(true);
+    }, [subtitle, title]);
 
     // This is used to trigger a rerender, so the head height can be calculated
     useEffect(() => {
@@ -228,19 +241,20 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             >
                 <StyledListItemHeadTitle>
                     <StyledListItemHeadTitleContent>
-                        <StyledListItemHeadTitleTextPseudo ref={pseudoTitleOpenRef} $isOpen>
-                            {title}
-                        </StyledListItemHeadTitleTextPseudo>
-                        <StyledListItemHeadTitleTextPseudo
-                            ref={pseudoTitleClosedRef}
-                            $isOpen={false}
-                        >
-                            {title}
-                        </StyledListItemHeadTitleTextPseudo>
-                        <StyledListItemHeadTitleText
-                            $isOpen={isOpen}
-                            $width={openedTitle?.width ?? 0}
-                        >
+                        {shouldRenderPseudoElements && (
+                            <>
+                                <StyledListItemHeadTitleTextPseudo ref={pseudoTitleOpenRef} $isOpen>
+                                    {title}
+                                </StyledListItemHeadTitleTextPseudo>
+                                <StyledListItemHeadTitleTextPseudo
+                                    ref={pseudoTitleClosedRef}
+                                    $isOpen={false}
+                                >
+                                    {title}
+                                </StyledListItemHeadTitleTextPseudo>
+                            </>
+                        )}
+                        <StyledListItemHeadTitleText $isOpen={isOpen} $width={openTitleWidth}>
                             {title}
                         </StyledListItemHeadTitleText>
                         <StyledListItemHeadTitleElement>
@@ -250,15 +264,22 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 </StyledListItemHeadTitle>
                 {shouldShowSubtitleRow && (
                     <StyledListItemHeadSubtitle>
-                        <StyledListItemHeadSubtitleTextPseudo ref={pseudoSubtitleOpenRef} $isOpen>
-                            {subtitle}
-                        </StyledListItemHeadSubtitleTextPseudo>
-                        <StyledListItemHeadSubtitleTextPseudo
-                            ref={pseudoSubtitleClosedRef}
-                            $isOpen={false}
-                        >
-                            {subtitle}
-                        </StyledListItemHeadSubtitleTextPseudo>
+                        {shouldRenderPseudoElements && (
+                            <>
+                                <StyledListItemHeadSubtitleTextPseudo
+                                    ref={pseudoSubtitleOpenRef}
+                                    $isOpen
+                                >
+                                    {subtitle}
+                                </StyledListItemHeadSubtitleTextPseudo>
+                                <StyledListItemHeadSubtitleTextPseudo
+                                    ref={pseudoSubtitleClosedRef}
+                                    $isOpen={false}
+                                >
+                                    {subtitle}
+                                </StyledListItemHeadSubtitleTextPseudo>
+                            </>
+                        )}
                         <StyledListItemHeadSubtitleText $isOpen={isOpen}>
                             {subtitle}
                         </StyledListItemHeadSubtitleText>

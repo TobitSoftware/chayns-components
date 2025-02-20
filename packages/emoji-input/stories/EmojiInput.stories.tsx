@@ -59,8 +59,6 @@ const Template: StoryFn<typeof EmojiInput> = ({ ...args }) => {
                         event.preventDefault();
                         event.stopPropagation();
 
-                        console.log('Enter pressed');
-
                         setIsDisabled(true);
 
                         setTimeout(() => {

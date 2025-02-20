@@ -285,7 +285,7 @@ const ListItem: FC<ListItemProps> = ({
             />
             <AnimatePresence initial={false}>
                 {isExpandable && isItemOpen && (
-                    <ListItemBody id={uuid}>
+                    <ListItemBody id={uuid} key={`listItemBody-${uuid}`}>
                         <AreaContextProvider>{children}</AreaContextProvider>
                     </ListItemBody>
                 )}

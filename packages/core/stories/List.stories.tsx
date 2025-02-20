@@ -1,4 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
+import React from 'react';
 import { Badge, Icon } from '../src';
 import Button from '../src/components/button/Button';
 import List from '../src/components/list/List';
