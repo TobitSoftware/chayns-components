@@ -5,14 +5,14 @@ export enum PersonFinderFilterTypes {
 
 export type PersonFinderEntry = PersonEntry | SiteEntry;
 
-interface PersonEntry {
+export interface PersonEntry {
     id: string;
     firstName: string;
     lastName: string;
     commonSites: number;
 }
 
-interface SiteEntry {
+export interface SiteEntry {
     url: string;
     name: string;
 }

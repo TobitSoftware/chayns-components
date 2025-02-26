@@ -4,9 +4,10 @@ import {
     StyledPersonFinderBodyHeader,
 } from './PersonFinderBody.styles';
 import { PersonFinderFilterTypes } from '../../../../types/personFinder';
-import { FilterButtons, FilterButtonSize } from '@chayns-components/core';
+import { FilterButtons, FilterButtonSize, List } from '@chayns-components/core';
 import { usePersonFinder } from '../../../PersonFinderProvider';
 import { IFilterButtonItem } from '@chayns-components/core/lib/types/types/filterButtons';
+import PersonFinderItem from './person-finder-item/PersonFinderItem';
 
 export type PersonFinderBodyProps = {
     onBlur?: () => void;
@@ -30,7 +31,11 @@ const PersonFinderBody: FC<PersonFinderBodyProps> = ({ onBlur, filterTypes, widt
 
     const content = useMemo(() => {
         const test = 'TEST';
-        return <div>{test}</div>;
+        return (
+            <List>
+                <PersonFinderItem />
+            </List>
+        );
     }, []);
 
     return (
