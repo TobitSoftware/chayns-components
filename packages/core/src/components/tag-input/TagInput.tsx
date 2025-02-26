@@ -23,6 +23,10 @@ import {
 
 export type TagInputProps = {
     /**
+     * An element that should be displayed on the left side of the input.
+     */
+    leftElement?: ReactElement;
+    /**
      * Function to be executed when a tag is added.
      */
     onAdd?: (tag: Tag) => void;
@@ -45,7 +49,7 @@ export type TagInputRef = {
 };
 
 const TagInput = forwardRef<TagInputRef, TagInputProps>(
-    ({ placeholder, tags, onRemove, onAdd }, ref) => {
+    ({ placeholder, tags, onRemove, onAdd, leftElement }, ref) => {
         const [internalTags, setInternalTags] = useState<Tag[]>();
         const [currentValue, setCurrentValue] = useState('');
         const [selectedId, setSelectedId] = useState<Tag['id']>();
@@ -179,6 +183,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
         return useMemo(
             () => (
                 <StyledTagInput>
+                    {leftElement && leftElement}
                     {content}
                     <StyledTagInputTagInput
                         placeholder={tags && tags.length > 0 ? undefined : placeholder}
@@ -188,7 +193,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                     />
                 </StyledTagInput>
             ),
-            [content, currentValue, handleKeyDown, placeholder, tags],
+            [content, currentValue, handleKeyDown, leftElement, placeholder, tags],
         );
     },
 );

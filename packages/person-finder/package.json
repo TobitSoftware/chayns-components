@@ -1,5 +1,5 @@
 {
-    "name": "@chayns-components/typewriter",
+    "name": "@chayns-components/person-finder",
     "version": "5.0.0-beta.1041",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
@@ -15,7 +15,7 @@
         "components"
     ],
     "author": "Tobit.Software",
-    "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/typewriter#readme",
+    "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/person-finder#readme",
     "license": "MIT",
     "types": "lib/types/index.d.ts",
     "main": "lib/cjs/index.js",
