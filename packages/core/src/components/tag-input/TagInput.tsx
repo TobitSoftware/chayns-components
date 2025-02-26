@@ -42,6 +42,10 @@ export type TagInputProps = {
      * The tags that should be displayed.
      */
     tags?: Tag[];
+    /**
+     * Whether multiple tags should be allowed.
+     */
+    shouldAllowMultiple?: boolean;
 };
 
 export type TagInputRef = {
@@ -49,7 +53,7 @@ export type TagInputRef = {
 };
 
 const TagInput = forwardRef<TagInputRef, TagInputProps>(
-    ({ placeholder, tags, onRemove, onAdd, leftElement }, ref) => {
+    ({ placeholder, tags, onRemove, onAdd, leftElement, shouldAllowMultiple = true }, ref) => {
         const [internalTags, setInternalTags] = useState<Tag[]>();
         const [currentValue, setCurrentValue] = useState('');
         const [selectedId, setSelectedId] = useState<Tag['id']>();
@@ -58,9 +62,9 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
 
         useEffect(() => {
             if (tags) {
-                setInternalTags(tags);
+                setInternalTags(shouldAllowMultiple ? tags : tags.slice(0, 1));
             }
-        }, [tags]);
+        }, [shouldAllowMultiple, tags]);
 
         useImperativeHandle(
             ref,
@@ -79,6 +83,9 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                         }
 
                         setInternalTags((prevTags) => {
+                            if (!shouldAllowMultiple && (prevTags?.length ?? 0) > 0)
+                                return prevTags;
+
                             const newTag = { id: uuidv4(), text: prevValue };
 
                             if (typeof onAdd === 'function') {
@@ -128,7 +135,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                     });
                 }
             },
-            [currentValue, internalTags, onAdd, onRemove, selectedId],
+            [currentValue, internalTags, onAdd, onRemove, selectedId, shouldAllowMultiple],
         );
 
         const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -180,20 +187,27 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             return items;
         }, [handleIconClick, internalTags, selectedId, theme]);
 
+        const shouldShowInput = useMemo(
+            () => shouldAllowMultiple || (internalTags?.length ?? 0) < 1,
+            [internalTags?.length, shouldAllowMultiple],
+        );
+
         return useMemo(
             () => (
                 <StyledTagInput>
                     {leftElement && leftElement}
                     {content}
-                    <StyledTagInputTagInput
-                        placeholder={tags && tags.length > 0 ? undefined : placeholder}
-                        onKeyDown={handleKeyDown}
-                        onChange={handleChange}
-                        value={currentValue}
-                    />
+                    {shouldShowInput && (
+                        <StyledTagInputTagInput
+                            placeholder={tags && tags.length > 0 ? undefined : placeholder}
+                            onKeyDown={handleKeyDown}
+                            onChange={handleChange}
+                            value={currentValue}
+                        />
+                    )}
                 </StyledTagInput>
             ),
-            [content, currentValue, handleKeyDown, leftElement, placeholder, tags],
+            [content, currentValue, handleKeyDown, leftElement, placeholder, shouldShowInput, tags],
         );
     },
 );
