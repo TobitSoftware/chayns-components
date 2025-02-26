@@ -17,7 +17,7 @@ export const getSubTextFromHTML = (html: string, length: number): string => {
     let currLength = 0;
 
     const traverse = (element: Element): boolean => {
-        if (element.nodeName === 'TW-IGNORE') {
+        if (['TW-IGNORE', 'TWIGNORE'].includes(element.nodeName)) {
             text += element.innerHTML;
         } else if (element.nodeType === 3 && typeof element.textContent === 'string') {
             const nodeText = element.textContent;
