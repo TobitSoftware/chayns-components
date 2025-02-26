@@ -1,8 +1,16 @@
-import React, { createContext, FC, ReactNode, useCallback, useMemo, useState } from 'react';
+import React, {
+    createContext,
+    FC,
+    ReactNode,
+    useCallback,
+    useContext,
+    useMemo,
+    useState,
+} from 'react';
 import { PersonFinderEntry, PersonFinderFilterTypes } from '../types/personFinder';
 
 interface IPersonFinderContext {
-    data?: { [key: number]: PersonFinderEntry };
+    data?: { [key: string]: PersonFinderEntry };
     activeFilter?: PersonFinderFilterTypes[];
     updateActiveFilter?: (filter: PersonFinderFilterTypes[]) => void;
 }
@@ -14,6 +22,8 @@ export const PersonFinderContext = createContext<IPersonFinderContext>({
 });
 
 PersonFinderContext.displayName = 'PersonFinderContext';
+
+export const usePersonFinder = () => useContext(PersonFinderContext);
 
 interface PersonFinderProviderProps {
     children: ReactNode;

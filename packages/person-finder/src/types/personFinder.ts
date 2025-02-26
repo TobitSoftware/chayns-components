@@ -1,7 +1,6 @@
 export enum PersonFinderFilterTypes {
-    PERSON,
-    SITES,
-    KNOWN_PERSONS,
+    PERSON = 'Person',
+    SITES = 'Sites',
 }
 
 export type PersonFinderEntry = PersonEntry | SiteEntry;
