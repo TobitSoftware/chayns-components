@@ -70,6 +70,7 @@ const Truncation: FC<TruncationProps> = ({
     const [shouldShowCollapsedElement, setShouldShowCollapsedElement] = useState(true);
     const [hasSizeChanged, setHasSizeChanged] = useState(false);
     const [initialRender, setInitialRender] = useState(true);
+    const [shouldSkipChangeCheck, setShouldSkipChangeCheck] = useState(false);
 
     const [originalSmallHeight, setOriginalSmallHeight] = useState(0);
     const [originalBigHeight, setOriginalBigHeight] = useState(0);
@@ -108,6 +109,16 @@ const Truncation: FC<TruncationProps> = ({
         [onChange],
     );
 
+    useEffect(() => {
+        if (children) {
+            setShouldSkipChangeCheck(true);
+
+            window.setTimeout(() => {
+                setShouldSkipChangeCheck(false);
+            }, 200);
+        }
+    }, [children]);
+
     const handleAnimationEnd = useCallback(() => {
         hasCollapsed.current = true;
         isAnimating.current = false;
@@ -144,10 +155,15 @@ const Truncation: FC<TruncationProps> = ({
 
     // Checks if the clamp should be shown
     useEffect(() => {
-        if (pseudoChildrenRef.current && !hasSizeChanged && !initialRender) {
+        if (
+            pseudoChildrenRef.current &&
+            (!hasSizeChanged || shouldSkipChangeCheck) &&
+            !initialRender
+        ) {
             setShowClamp(originalHeight > newCollapsedHeight);
         }
     }, [
+        shouldSkipChangeCheck,
         collapsedHeight,
         hasSizeChanged,
         initialRender,
