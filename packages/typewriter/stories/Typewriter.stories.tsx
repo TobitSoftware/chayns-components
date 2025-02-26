@@ -181,7 +181,7 @@ WithIgnoreTags.args = {
             libero. In eu diam nec eros egestas iaculis.
             {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
             {/* @ts-ignore */}
-            <twIgnore>
+            <tw-ignore>
                 Donec dignissim urna eget luctus sagittis. Class aptent taciti sociosqu ad litora
                 torquent per conubia nostra, per inceptos himenaeos. Donec ut ex a mi accumsan
                 pretium at sit amet nulla. Integer non mi sollicitudin, luctus elit eget, commodo
@@ -189,7 +189,7 @@ WithIgnoreTags.args = {
                 blandit turpis. Morbi eget ipsum sit amet erat bibendum porttitor.
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
-            </twIgnore>
+            </tw-ignore>
             Pellentesque sit amet odio orci. Donec nibh elit, pellentesque ut ultrices quis, dictum
             in erat. Pellentesque a nibh placerat, eleifend augue at, iaculis urna. In et mi
             viverra, faucibus erat mattis, dapibus mi. Nam euismod ornare facilisis. Cras

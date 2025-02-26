@@ -134,7 +134,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
         const elements = document.getElementsByClassName('linenumber');
 
         Array.from(elements).forEach((element) => {
-            const wrapper = document.createElement('twIgnore');
+            const wrapper = document.createElement('tw-ignore');
 
             while (element.firstChild) {
                 wrapper.appendChild(element.firstChild);
@@ -156,7 +156,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                     <StyledCodeHighlighterFileName $codeTheme={theme}>
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                         {/* @ts-ignore */}
-                        <twIgnore>{formatLanguage(language)}</twIgnore>
+                        <tw-ignore>{formatLanguage(language)}</tw-ignore>
                     </StyledCodeHighlighterFileName>
                     <CopyToClipboard text={code} theme={theme} copyButtonText={copyButtonText} />
                 </StyledCodeHighlighterHeader>
