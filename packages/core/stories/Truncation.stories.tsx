@@ -1,9 +1,11 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ReactNode, useEffect, useState } from 'react';
+import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
 import Button from '../src/components/button/Button';
 import Truncation from '../src/components/truncation/Truncation';
+import { ChaynsHost, initModuleFederationSharing, useFunctions, useValues } from 'chayns-api';
+import { TruncationProps } from '../lib/types/components/truncation/Truncation';
 
 const BASE_HTML_TEXT = (
     <div>
@@ -118,7 +120,7 @@ JustText.args = {
 };
 
 const FloatingImageTemplate: StoryFn<typeof Truncation> = ({ children, ...args }) => {
-    const [content, setContent] = useState<ReactNode>('');
+    const [content, setContent] = useState<ReactElement>(<></>);
 
     useEffect(() => {
         window.setTimeout(() => {
@@ -169,4 +171,56 @@ FloatingImage.args = {
         </div>
     ),
     collapsedHeight: 350,
+};
+
+const TextEditorTemplate: StoryFn<TruncationProps & { content: string }> = ({
+    content,
+    ...truncationProps
+}) => {
+    initModuleFederationSharing({ name: 'chayns_components' });
+    const [chaynsLoaded, setChaynsLoaded] = useState(false);
+
+    const functions = useFunctions();
+    const values = useValues();
+
+    useEffect(() => {
+        if (chaynsLoaded) return;
+        const script = document.createElement('script');
+
+        script.src = 'https://api.chayns-static.space/js/v4.0/chayns.min.js';
+        script.async = true;
+        script.onload = () => {
+            setChaynsLoaded(true);
+        };
+
+        document.body.appendChild(script);
+    }, [chaynsLoaded]);
+
+    if (!chaynsLoaded) {
+        return <div />;
+    }
+
+    return (
+        <Truncation {...truncationProps}>
+            <ChaynsHost
+                type="client-module"
+                system={{
+                    url: 'https://tapp.chayns-static.space/chayns-text-editor/v2/remoteEntry.js',
+                    scope: 'chayns_text_editor_2',
+                    module: './TextComponent',
+                }}
+                functions={functions}
+                {...values}
+                customData={{ content }}
+            />
+        </Truncation>
+    );
+};
+
+export const TextEditor = TextEditorTemplate.bind({});
+
+TextEditor.args = {
+    collapsedHeight: 100,
+    content:
+        '<p id="isPasted">Ungewohnte Hörerfahrungen machten die Besucher des Konzertes „Geordnetes Chaos“ im vollbesetzten Saal des LernWerkes. Mit höchster Könnerschaft und Präsenz trugen die vier Musiker des Chaos String Quartet Werke vor, die nach einem strengen Bauplan komponiert wurden, im Höreindruck jedoch etwas Ratlosigkeit hervorrufen, vor allem bei Beethovens Großer Fuge op. 133 und Ligetis 2. Streichquartett. Tröstlich erschienen u.a. die Stücke von Bach und spätestens nach der Zugabe eines Satzes von Dvorak war dann die Hörwelt wieder „in Ordnung“. Viel Beifall für die vier sympathischen Musiker und ihr ungewöhnliches Konzert.</p>',
 };
