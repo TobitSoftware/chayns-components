@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/emoji-input",
-    "version": "5.0.0-beta.1044",
+    "version": "5.0.0-beta.1045",
     "description": "Input field that supports HTML elements and emojis",
     "sideEffects": false,
     "browserslist": [
@@ -72,7 +72,7 @@
         "typescript": "^5.7.3"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.1044",
+        "@chayns-components/core": "^5.0.0-beta.1045",
         "emojilib": "^3.0.12",
         "unicode-emoji-json": "^0.8.0"
     },
