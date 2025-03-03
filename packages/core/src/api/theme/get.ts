@@ -1,7 +1,8 @@
-import { getSite } from 'chayns-api';
-import type { DesignSettings, ParagraphFormat } from '../../types/colorSchemeProvider';
+import { ChaynsDesignSettings, ChaynsParagraphFormat, getSite } from 'chayns-api';
 
-export const getDesignSettings = async (siteId?: string): Promise<DesignSettings | undefined> => {
+export const getDesignSettings = async (
+    siteId?: string,
+): Promise<ChaynsDesignSettings | undefined> => {
     let id = siteId;
 
     if (!id) id = getSite().id;
@@ -11,7 +12,7 @@ export const getDesignSettings = async (siteId?: string): Promise<DesignSettings
     });
 
     if (response.status === 200) {
-        return (await response.json()) as DesignSettings;
+        return (await response.json()) as ChaynsDesignSettings;
     }
 
     return undefined;
@@ -19,7 +20,7 @@ export const getDesignSettings = async (siteId?: string): Promise<DesignSettings
 
 export const getParagraphFormat = async (
     siteId?: string,
-): Promise<ParagraphFormat[] | undefined> => {
+): Promise<ChaynsParagraphFormat[] | undefined> => {
     let id = siteId;
 
     if (!id) id = getSite().id;
@@ -29,7 +30,7 @@ export const getParagraphFormat = async (
     });
 
     if (response.status === 200) {
-        return (await response.json()) as ParagraphFormat[];
+        return (await response.json()) as ChaynsParagraphFormat[];
     }
 
     return undefined;
