@@ -1,7 +1,7 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
 import { ChaynsDesignSettings, ChaynsParagraphFormat, ColorMode } from 'chayns-api';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { convertIconStyle, getFontSize, getHeadlineColorSelector } from '../../../utils/font';
+import { convertIconStyle, getHeadlineColorSelector } from '../../../utils/font';
 import type { Theme } from '../ColorSchemeProvider';
 import { useDesignSettings } from './useDesignSettings';
 import { useParagraphFormat } from './useParagraphFormat';
@@ -83,7 +83,7 @@ const createTheme = ({
             result[key] = themeResult[key] as string;
         });
     }
-    result.fontSize = getFontSize();
+    result.fontSize = (designSettings?.fontSizePx ?? 15) as unknown as string;
 
     return result;
 };
