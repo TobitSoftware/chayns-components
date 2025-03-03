@@ -7,12 +7,13 @@ import React, {
     useContext,
     useEffect,
     useMemo,
+    useRef,
     useState,
 } from 'react';
 import { Helmet } from 'react-helmet';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { getDesignSettings, getParagraphFormat } from '../../api/theme/get';
-import type { DesignSettings, ParagraphFormat } from '../../types/colorSchemeProvider';
+import { DesignSettings, ParagraphFormat } from '../../types/colorSchemeProvider';
 import { convertIconStyle, getFontSize, getHeadlineColorSelector } from '../../utils/font';
 import { StyledColorSchemeProvider } from './ColorSchemeProvider.styles';
 
@@ -64,7 +65,7 @@ export type ColorSchemeProviderProps = {
 };
 
 export interface Theme {
-    [key: string]: string;
+    [key: string]: string | number | boolean;
 }
 
 export type WithTheme<T> = T & {
@@ -92,38 +93,117 @@ export const ColorSchemeContext = createContext<ColorSchemeContextProps | undefi
 
 export const useColorScheme = () => useContext(ColorSchemeContext);
 
+const createTheme = ({
+    colors,
+    colorMode,
+    color,
+    secondaryColor,
+    designSettings,
+    paragraphFormat,
+    theme,
+}: Pick<
+    ColorSchemeProviderProps,
+    | 'colors'
+    | 'colorMode'
+    | 'color'
+    | 'secondaryColor'
+    | 'designSettings'
+    | 'paragraphFormat'
+    | 'theme'
+>) => {
+    if (theme) {
+        return theme;
+    }
+
+    const result: Theme = {};
+
+    const availableColors = getAvailableColorList();
+
+    if (!colors) {
+        availableColors.forEach((colorName: string) => {
+            const hexColor = getColorFromPalette(colorName, {
+                color,
+                colorMode,
+                secondaryColor,
+            });
+
+            if (hexColor) {
+                const rgbColor = hexToRgb255(hexColor);
+
+                result[colorName] = hexColor;
+
+                if (rgbColor) {
+                    result[`${colorName}-rgb`] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+                }
+            }
+        });
+    }
+
+    switch (colorMode) {
+        case ColorMode.Light:
+            result.colorMode = 'light';
+            break;
+        case ColorMode.Dark:
+            result.colorMode = 'dark';
+            break;
+        default:
+            result.colorMode = 'classic';
+            break;
+    }
+    if (designSettings) {
+        Object.keys(designSettings).forEach((key) => {
+            if (key === 'iconStyle') {
+                result[key] = convertIconStyle(designSettings.iconStyle);
+
+                return;
+            }
+            result[key] = designSettings[key as keyof DesignSettings] as string | number | boolean;
+        });
+    }
+    if (paragraphFormat) {
+        const { themeResult } = getHeadlineColorSelector(paragraphFormat);
+
+        // Update Theme
+        Object.keys(themeResult).forEach((key) => {
+            result[key] = themeResult[key] as string;
+        });
+    }
+    result.fontSize = getFontSize();
+
+    return result;
+};
+
 const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     children,
-    color,
-    colorMode,
+    color: colorProp,
+    colorMode: colorModeProp,
     cssVariables = {},
     secondaryColor,
     siteId,
     style = {},
-    paragraphFormat,
-    designSettings,
+    paragraphFormat: paragraphFormatProp,
+    designSettings: designSettingsProp,
     theme,
     colors,
 }) => {
     const { color: internalColor, colorMode: internalColorMode } = useSite();
+    const color = colorProp ?? internalColor;
+    const colorMode = colorModeProp ?? internalColorMode;
+    const isMountedRef = useRef<boolean>(false);
+
     const styleSettings = useStyleSettings();
-    const [internalTheme, setInternalTheme] = useState<Theme>(theme ?? {});
-    const [internalDesignSettings, setInternalDesignSettings] = useState<
-        DesignSettings | undefined
-    >(() => {
-        if (designSettings) {
-            return designSettings;
+    const [designSettings, setDesignSettings] = useState<DesignSettings | undefined>(() => {
+        if (designSettingsProp) {
+            return designSettingsProp;
         }
         if (styleSettings?.designSettings) {
             return styleSettings.designSettings;
         }
         return undefined;
     });
-    const [internalParagraphFormat, setInternalParagraphFormat] = useState<
-        ParagraphFormat[] | undefined
-    >(() => {
-        if (paragraphFormat) {
-            return paragraphFormat;
+    const [paragraphFormat, setParagraphFormat] = useState<ParagraphFormat[] | undefined>(() => {
+        if (paragraphFormatProp) {
+            return paragraphFormatProp;
         }
         if (styleSettings?.paragraphFormats) {
             return styleSettings.paragraphFormats;
@@ -131,146 +211,87 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         return undefined;
     });
 
+    const [internalTheme, setInternalTheme] = useState<Theme>(() =>
+        createTheme({
+            colors,
+            colorMode,
+            color,
+            secondaryColor,
+            designSettings,
+            paragraphFormat,
+            theme,
+        }),
+    );
+
     useEffect(() => {
-        if (designSettings) {
-            if (designSettings !== internalDesignSettings) {
-                setInternalDesignSettings(designSettings);
+        if (designSettingsProp) {
+            if (designSettingsProp !== designSettings) {
+                setDesignSettings(designSettings);
             }
             return;
         }
         if (styleSettings?.designSettings) {
-            if (styleSettings.designSettings !== internalDesignSettings) {
-                setInternalDesignSettings(styleSettings.designSettings);
+            if (styleSettings.designSettings !== designSettings) {
+                setDesignSettings(styleSettings.designSettings);
             }
             return;
         }
-        if (!internalDesignSettings) {
+        if (!designSettings) {
             void getDesignSettings(siteId).then((result) => {
-                setInternalDesignSettings(result);
+                setDesignSettings(result);
             });
         }
-    }, [designSettings, internalDesignSettings, siteId, styleSettings?.designSettings]);
+    }, [designSettingsProp, designSettings, siteId, styleSettings?.designSettings]);
 
     useEffect(() => {
-        if (paragraphFormat) {
-            if (paragraphFormat !== internalParagraphFormat) {
-                setInternalParagraphFormat(paragraphFormat);
+        if (paragraphFormatProp) {
+            if (paragraphFormatProp !== paragraphFormat) {
+                setParagraphFormat(paragraphFormat);
             }
             return;
         }
         if (styleSettings?.paragraphFormats) {
-            if (styleSettings.paragraphFormats !== internalParagraphFormat) {
-                setInternalParagraphFormat(styleSettings.paragraphFormats);
+            if (styleSettings.paragraphFormats !== paragraphFormat) {
+                setParagraphFormat(styleSettings.paragraphFormats);
             }
+            return;
         }
-        if (!internalParagraphFormat) {
+        if (!paragraphFormat) {
             void getParagraphFormat(siteId).then((result) => {
-                setInternalParagraphFormat(result ?? []);
+                setParagraphFormat(result ?? []);
             });
         }
-    }, [internalParagraphFormat, paragraphFormat, siteId, styleSettings?.paragraphFormats]);
+    }, [paragraphFormatProp, paragraphFormat, siteId, styleSettings?.paragraphFormats]);
 
     useEffect(() => {
-        let newTheme: Theme = {};
-
-        const availableColors = getAvailableColorList();
-
-        if (!colors || !theme) {
-            availableColors.forEach((colorName: string) => {
-                const hexColor = getColorFromPalette(colorName, {
-                    color: color ?? internalColor,
-                    colorMode: colorMode ?? internalColorMode,
-                    secondaryColor,
-                });
-
-                if (hexColor) {
-                    const rgbColor = hexToRgb255(hexColor);
-
-                    if (!theme) {
-                        newTheme[colorName] = hexColor;
-                    }
-
-                    if (rgbColor) {
-                        if (!theme) {
-                            newTheme[`${colorName}-rgb`] =
-                                `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
-                        }
-                    }
-                }
-            });
+        if (!isMountedRef.current) {
+            isMountedRef.current = true;
+            return;
         }
-
-        if (!theme) {
-            switch (colorMode ?? internalColorMode) {
-                case ColorMode.Light:
-                    newTheme.colorMode = 'light';
-                    break;
-                case ColorMode.Dark:
-                    newTheme.colorMode = 'dark';
-                    break;
-                default:
-                    newTheme.colorMode = 'classic';
-                    break;
-            }
-
-            if (internalDesignSettings) {
-                Object.keys(internalDesignSettings).forEach((key) => {
-                    if (key === 'iconStyle') {
-                        newTheme[key] = convertIconStyle(internalDesignSettings.iconStyle);
-
-                        return;
-                    }
-
-                    // ToDo: Find better solution
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    newTheme[key] = internalDesignSettings[key];
-                });
-            }
-
-            if (internalParagraphFormat) {
-                const { themeResult } = getHeadlineColorSelector(internalParagraphFormat);
-
-                // Update Theme
-                Object.keys(themeResult).forEach((key) => {
-                    // ToDo: Find better solution
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    newTheme[key] = themeResult[key];
-                });
-            }
-
-            newTheme.fontSize = getFontSize();
-        } else {
-            newTheme = theme;
-        }
-
-        setInternalTheme(newTheme);
-    }, [
-        color,
-        colorMode,
-        colors,
-        internalColor,
-        internalColorMode,
-        internalDesignSettings,
-        internalParagraphFormat,
-        secondaryColor,
-        theme,
-    ]);
+        setInternalTheme(
+            createTheme({
+                colors,
+                colorMode,
+                color,
+                secondaryColor,
+                designSettings,
+                paragraphFormat,
+                theme,
+            }),
+        );
+    }, [color, colorMode, colors, designSettings, paragraphFormat, secondaryColor, theme]);
 
     const contextValue: ColorSchemeContextProps | undefined = useMemo(() => {
-        if (internalDesignSettings && internalParagraphFormat) {
+        if (designSettings && paragraphFormat) {
             return {
-                paragraphFormat: internalParagraphFormat,
-                designSettings: internalDesignSettings,
+                paragraphFormat,
+                designSettings,
                 theme: internalTheme,
             };
         }
 
         return undefined;
-    }, [internalDesignSettings, internalParagraphFormat, internalTheme]);
+    }, [designSettings, paragraphFormat, internalTheme]);
 
     return (
         <ThemeProvider theme={internalTheme}>
