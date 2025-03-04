@@ -3,7 +3,15 @@ import { MutableRefObject, useEffect, useLayoutEffect, useState } from 'react';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
-const options = typeof window === 'undefined' ? { polyfill: () => {} } : undefined;
+class ResizeObserverPolyFill {
+    // eslint-disable-next-line class-methods-use-this
+    observe = () => {};
+
+    // eslint-disable-next-line class-methods-use-this
+    unobserve = () => {};
+}
+
+const options = typeof window === 'undefined' ? { polyfill: ResizeObserverPolyFill } : undefined;
 
 interface UseElementSizeOptions {
     shouldUseChildElement?: boolean;
