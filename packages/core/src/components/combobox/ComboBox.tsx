@@ -720,7 +720,9 @@ const ComboBox: FC<ComboBoxProps> = ({
                         </StyledComboBoxClearIconWrapper>
                     )}
                     <StyledComboBoxIconWrapper
-                        $shouldShowBorderLeft={shouldShowClearIcon && internalSelectedItem}
+                        $shouldShowBorderLeft={
+                            shouldShowClearIcon === true && internalSelectedItem !== undefined
+                        }
                     >
                         <Icon icons={['fa fa-chevron-down']} />
                     </StyledComboBoxIconWrapper>
