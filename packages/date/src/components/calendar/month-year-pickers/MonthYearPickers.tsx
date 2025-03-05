@@ -1,10 +1,10 @@
 import { ComboBox } from '@chayns-components/core';
+import { Language } from 'chayns-api';
 import React, { FC, useMemo, useState } from 'react';
 import { EMonth } from '../../../types/calendar';
 import { formatMonth, getYearsBetween, isDateInRange } from '../../../utils/calendar';
+import { differenceInCalendarMonths } from '../../../utils/date';
 import { StyledMonthName } from '../month-wrapper/month/Month.styles';
-import {Language} from "chayns-api";
-import {differenceInCalendarMonths} from "../../../utils/date";
 
 export enum MonthYearPickerType {
     Month = 'month',
@@ -64,6 +64,8 @@ const MonthYearPickers: FC<MonthYearPickerProps> = ({
             {showMonthYearPickers && hasMultipleMonths ? (
                 <ComboBox
                     onSelect={(selectedItem) => {
+                        if (!selectedItem) return;
+
                         const tempSelectedDate = isDateInRange({
                             minDate,
                             maxDate,
@@ -93,6 +95,8 @@ const MonthYearPickers: FC<MonthYearPickerProps> = ({
             {showMonthYearPickers && hasMultipleYears ? (
                 <ComboBox
                     onSelect={(selectedItem) => {
+                        if (!selectedItem) return;
+
                         const tempSelectedDate = isDateInRange({
                             minDate,
                             maxDate,
