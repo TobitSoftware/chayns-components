@@ -15,6 +15,7 @@ export type ThemeOptions = {
     paragraphFormat?: ChaynsParagraphFormat[];
     siteId?: string;
     theme?: Theme;
+    customVariables?: Record<string, string>;
 };
 
 const createTheme = ({
@@ -25,12 +26,19 @@ const createTheme = ({
     designSettings,
     paragraphFormat,
     theme,
+    customVariables,
 }: Omit<ThemeOptions, 'siteId'>) => {
     if (theme) {
         return theme;
     }
 
     const result: Theme = {};
+
+    if (customVariables) {
+        Object.keys(customVariables).forEach((key) => {
+            result[key] = customVariables[key] as string;
+        });
+    }
 
     const availableColors = getAvailableColorList();
 
@@ -97,6 +105,7 @@ export const useChaynsTheme = ({
     paragraphFormat: paragraphFormatProp,
     siteId,
     theme,
+    customVariables,
 }: ThemeOptions) => {
     const designSettings = useDesignSettings(siteId, designSettingsProp);
     const paragraphFormat = useParagraphFormat(siteId, paragraphFormatProp);
@@ -111,6 +120,7 @@ export const useChaynsTheme = ({
             designSettings,
             paragraphFormat,
             theme,
+            customVariables,
         }),
     );
 
@@ -128,9 +138,19 @@ export const useChaynsTheme = ({
                 designSettings,
                 paragraphFormat,
                 theme,
+                customVariables,
             }),
         );
-    }, [color, colorMode, colors, designSettings, paragraphFormat, secondaryColor, theme]);
+    }, [
+        color,
+        colorMode,
+        colors,
+        designSettings,
+        paragraphFormat,
+        secondaryColor,
+        theme,
+        customVariables,
+    ]);
 
     return useMemo(
         () => ({

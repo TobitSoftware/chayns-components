@@ -30,6 +30,10 @@ export type ColorSchemeProviderProps = {
      * Additional styles set on the root element
      */
     style?: { [key: string]: string | number };
+    /**
+     * Additional variables to extend the theme
+     */
+    customVariables?: Record<string, string>;
 };
 
 export interface Theme {
@@ -68,6 +72,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     secondaryColor,
     siteId,
     style = {},
+    customVariables,
 }) => {
     const { color: internalColor, colorMode: internalColorMode } = useSite();
     const color = colorProp ?? internalColor;
@@ -78,6 +83,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         colorMode,
         secondaryColor,
         siteId,
+        customVariables,
     });
 
     return (
