@@ -21,22 +21,22 @@ import { Meta } from '@storybook/addon-docs';
 ---
 
 <p style={{ fontSize: '1.1rem' }}>
-    This is the Storybook for the new version<sup>1</sup> of the chayns-components.
-    You can navigate through the components using the left-hand side navigation to get an overview.
-    The basic components are categorized under the Core section,
-    while additional components can be found in a separate area.
+    This is the Storybook for the new version<sup>1</sup> of the chayns-components. You can navigate
+    through the components using the left-hand side navigation to get an overview. The basic
+    components are categorized under the Core section, while additional components can be found in a
+    separate area.
 </p>
 
-> <sup>1</sup> In the latest version, the components have undergone a complete refactor.
-> They have been transformed into functional components with hooks. Additionally,
-> some optimizations have been applied to the animations, which have been converted to FramerMotion animations.
-> Furthermore, the properties have been updated to enhance their clarity and ease of use.
+> <sup>1</sup> In the latest version, the components have undergone a complete refactor. They have
+> been transformed into functional components with hooks. Additionally, some optimizations have been
+> applied to the animations, which have been converted to FramerMotion animations. Furthermore, the
+> properties have been updated to enhance their clarity and ease of use.
 
 <h2 style={{ marginTop: '32px' }}>Installation</h2>
 
 <p style={{ fontSize: '1.1rem' }}>
-    We differentiate between the core components and sub-components,
-    which need to be installed separately. The installation of packages can be done using npm or yarn.
+    We differentiate between the core components and sub-components, which need to be installed
+    separately. The installation of packages can be done using npm or yarn.
 </p>
 
 <details>
@@ -57,6 +57,7 @@ import { Meta } from '@storybook/addon-docs';
     npm install @chayns-components/typewriter
     npm install @chayns-components/person-finder # coming soon
     ```
+
 </details>
 
 <details>
@@ -77,6 +78,7 @@ import { Meta } from '@storybook/addon-docs';
     yarn add @chayns-components/typewriter
     yarn add @chayns-components/person-finder # coming soon
     ```
+
 </details>
 
 > **Information:** The styles for the components are supplied directly by the package in the new
@@ -85,10 +87,10 @@ import { Meta } from '@storybook/addon-docs';
 <h2 style={{ marginTop: '32px' }}>How to use</h2>
 
 <p style={{ fontSize: '1.1rem' }}>
-    Initially, ensure the installation of the core package along with any additional packages you wish to incorporate.
-    Follow the commands outlined in the <b>Installation</b> guide for this purpose.
-    Once all the packages are successfully installed, enclose your top-level
-    elements with the ColorSchemeProvider as demonstrated below:
+    Initially, ensure the installation of the core package along with any additional packages you
+    wish to incorporate. Follow the commands outlined in the <b>Installation</b> guide for this
+    purpose. Once all the packages are successfully installed, enclose your top-level elements with
+    the ColorSchemeProvider as demonstrated below:
 </p>
 
 ```tsx
@@ -98,10 +100,10 @@ import { ChaynsProvider } from 'chayns-api';
 const AppWrapper = () => {
     return (
         <ChaynsProvider>
-            <App/>
+            <App />
         </ChaynsProvider>
-    )
-}
+    );
+};
 
 export default AppWrapper;
 ```
@@ -115,11 +117,11 @@ const App = () => {
     const { color, colorMode } = getSite();
 
     return (
-            <ColorSchemeProvider color={color} colorMode={colorMode}>
-                <YourComponent/>
-            </ColorSchemeProvider>
-    )
-}
+        <ColorSchemeProvider color={color} colorMode={colorMode}>
+            <YourComponent />
+        </ColorSchemeProvider>
+    );
+};
 
 export default App;
 ```
@@ -127,9 +129,8 @@ export default App;
 <h2 style={{ marginTop: '32px' }}>Contribution</h2>
 
 <p style={{ fontSize: '1.1rem' }}>
-    Make sure that your node version is 16 or above.
-    To begin, install all the dependencies for the main project and its sub-projects,
-    and then link them. Simply use the provided commands:
+    Make sure that your node version is 16 or above. To begin, install all the dependencies for the
+    main project and its sub-projects, and then link them. Simply use the provided commands:
 </p>
 
 ```bash
@@ -141,7 +142,8 @@ yarn install
 ```
 
 <p style={{ fontSize: '1.1rem' }}>
-    Next, run one of the given commands to initiate the local version of Storybook and start developing within it:
+    Next, run one of the given commands to initiate the local version of Storybook and start
+    developing within it:
 </p>
 
 ```bash
@@ -152,5 +154,5 @@ npm run storybook
 yarn run storybook
 ```
 
-> **Information:** The local Storybook can be accessed through port 6006 on your localhost.
-> You can visit it using the following URL: `http://localhost:6006/`
+> **Information:** The local Storybook can be accessed through port 6006 on your localhost. You can
+> visit it using the following URL: `http://localhost:6006/`

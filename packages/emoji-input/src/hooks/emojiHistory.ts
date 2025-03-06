@@ -82,7 +82,7 @@ export const useEmojiHistory = ({
                 }
             }
         },
-        [accessToken, historyEmojis, personId, selectedCategory]
+        [accessToken, historyEmojis, personId, selectedCategory],
     );
 
     const loadHistoryEmojis = useCallback(async () => {

@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import {
     CalendarType,
-    Categories, CustomThumbColors,
+    Categories,
+    CustomThumbColors,
     DateInterval,
     EMonth,
     HighlightedDates,
@@ -10,7 +11,7 @@ import MonthYearPickers from '../../month-year-pickers/MonthYearPickers';
 import DayWrapper from './day-wrapper/DayWrapper';
 import { StyledMonth, StyledMonthHead } from './Month.styles';
 import WeekdayWrapper from './weekday-wrapper/WeekdayWrapper';
-import {Language} from "chayns-api";
+import { Language } from 'chayns-api';
 
 export type MonthProps = {
     month: EMonth;
@@ -44,7 +45,8 @@ const Month: FC<MonthProps> = ({
     categories,
     height,
     minDate,
-    maxDate,customThumbColors,
+    maxDate,
+    customThumbColors,
     shouldShowHighlightsInMonthOverlay,
     type,
     hoveringDay,

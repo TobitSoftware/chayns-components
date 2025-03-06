@@ -1,6 +1,6 @@
 import type { EMonth, IMonth } from '../types/calendar';
-import {isAfter, isBefore, startOfMonth} from "./date";
-import {Language} from "chayns-api";
+import { isAfter, isBefore, startOfMonth } from './date';
+import { Language } from 'chayns-api';
 
 export const getMonthAndYear = (date: Date): IMonth => {
     const month = date.getMonth() + 1;
@@ -57,7 +57,7 @@ export const getNewDate = (index: number, currentDate: Date) => {
 export const formatMonth = ({ month, locale }: FormatMonthOptions) => {
     const date = new Date(2022, month - 1, 1);
     return date.toLocaleString(locale, { month: 'long' });
-}
+};
 
 export const findNextDate = (date: Date, dateArray: Date[]): Date | undefined => {
     const futureDates = dateArray.filter((d) => d > date);

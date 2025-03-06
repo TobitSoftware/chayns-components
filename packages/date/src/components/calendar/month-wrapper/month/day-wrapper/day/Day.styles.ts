@@ -1,7 +1,7 @@
 import type { WithTheme } from '@chayns-components/core';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
-import {CustomThumbColors} from "../../../../../../types/calendar";
+import { CustomThumbColors } from '../../../../../../types/calendar';
 
 type StyledDayProps = WithTheme<{
     $isSameMonth: boolean;
@@ -58,14 +58,27 @@ export const StyledDayNumber = styled.div<StyledDayNumberProps>`
     height: 80%;
     font-size: 90%;
 
-    ${({ $isSelected, $isIntervalEnd, $isIntervalStart, $isWithinIntervalSelection, $customThumbColors, theme }) =>
+    ${({
+        $isSelected,
+        $isIntervalEnd,
+        $isIntervalStart,
+        $isWithinIntervalSelection,
+        $customThumbColors,
+        theme,
+    }) =>
         !!($isSelected || $isIntervalStart || $isIntervalEnd || $isWithinIntervalSelection) &&
         css`
             background-color: ${$customThumbColors?.mainBackgroundColor ?? theme['404']};
             color: ${$customThumbColors?.mainTextColor ?? theme['409']};
         `}
 
-    ${({ $isIntervalStart, $isIntervalEnd, $isWithinIntervalSelection, $customThumbColors, theme }) => {
+    ${({
+        $isIntervalStart,
+        $isIntervalEnd,
+        $isWithinIntervalSelection,
+        $customThumbColors,
+        theme,
+    }) => {
         if ($isIntervalStart && $isIntervalEnd) {
             return css`
                 border-radius: 5px;

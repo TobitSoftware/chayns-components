@@ -1,15 +1,14 @@
-
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import {getLanguage, vibrate} from 'chayns-api';
+import { getLanguage, vibrate } from 'chayns-api';
 
 import { Container, Time } from './Timer.styles';
 import {
     differenceInHours,
     differenceInMinutes,
     getTimeTillNow,
-    intervalToDuration
-} from "../../utils/date";
+    intervalToDuration,
+} from '../../utils/date';
 
 export type TimerProps = {
     color: string;
@@ -18,7 +17,7 @@ export type TimerProps = {
 };
 
 const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 'white' }) => {
-    const {active:language } = getLanguage()
+    const { active: language } = getLanguage();
 
     const refDate = useRef(new Date());
     const [distance, setDistance] = useState(
@@ -57,8 +56,11 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
     const label = useMemo(() => {
         let text = 'Vor ##SECONDS## Sek. (##TIME## Uhr)';
         if (differenceInHours(refDate.current, devalueTime) > 0) {
-            const distanceLabel =
-                getTimeTillNow({date: new Date(), currentDate: devalueTime, language});
+            const distanceLabel = getTimeTillNow({
+                date: new Date(),
+                currentDate: devalueTime,
+                language,
+            });
             text = `${distanceLabel} (##TIME## Uhr)`;
         } else if (differenceInMinutes(refDate.current, devalueTime) > 0) {
             text = 'Vor ##MINUTES## Min. ##SECONDS## Sek. (##TIME## Uhr)';

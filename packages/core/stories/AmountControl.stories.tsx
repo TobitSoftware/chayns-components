@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import AmountControl from '../src/components/amount-control/AmountControl';
 import Button from '../src/components/button/Button';
-import {useState} from "react";
+import { useState } from 'react';
 
 export default {
     title: 'Core/AmountControl',
@@ -14,8 +14,16 @@ const Template: StoryFn<typeof AmountControl> = (args) => <AmountControl {...arg
 const ResetTemplate: StoryFn<typeof AmountControl> = (args) => {
     const [amount, setAmount] = useState(0);
 
-
-    return <><Button onClick={()=> setAmount(0)}>Zurücksetzen</Button><AmountControl {...args} amount={amount} onChange={(newAmount)=> setAmount(newAmount)} /></>
+    return (
+        <>
+            <Button onClick={() => setAmount(0)}>Zurücksetzen</Button>
+            <AmountControl
+                {...args}
+                amount={amount}
+                onChange={(newAmount) => setAmount(newAmount)}
+            />
+        </>
+    );
 };
 
 export const General = Template.bind({});

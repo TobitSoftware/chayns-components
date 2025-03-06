@@ -1,12 +1,13 @@
 import React, { FC, useMemo, useRef } from 'react';
 import {
-    Categories, CustomThumbColors,
+    Categories,
+    CustomThumbColors,
     HighlightedDates,
     HighlightedDateStyles,
 } from '../../../../../../types/calendar';
 import Category from './category/Category';
 import { StyledDay, StyledDayCategoryWrapper, StyledDayNumber } from './Day.styles';
-import {isSameDay} from "../../../../../../utils/date";
+import { isSameDay } from '../../../../../../utils/date';
 
 export type DayProps = {
     date: Date;
@@ -33,7 +34,8 @@ const Day: FC<DayProps> = ({
     onClick,
     isDisabled,
     isIntervalStart,
-    isIntervalEnd,customThumbColors,
+    isIntervalEnd,
+    customThumbColors,
     isWithinIntervalSelection,
     shouldShowHighlightsInMonthOverlay,
     setHoveringDay,
