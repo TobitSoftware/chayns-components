@@ -58,7 +58,6 @@
         "@babel/preset-typescript": "^7.26.0",
         "@types/react": "^18.3.18",
         "@types/react-dom": "^18.3.5",
-        "@types/react-helmet": "^6.1.11",
         "@types/styled-components": "^5.1.34",
         "@types/uuid": "^10.0.0",
         "babel-loader": "^9.2.1",
@@ -75,7 +74,6 @@
         "@chayns/uac-service": "~0.0.56",
         "@react-hook/resize-observer": "^2.0.2",
         "clsx": "^2.1.1",
-        "react-helmet": "^6.1.0",
         "uuid": "^10.0.0"
     },
     "peerDependencies": {

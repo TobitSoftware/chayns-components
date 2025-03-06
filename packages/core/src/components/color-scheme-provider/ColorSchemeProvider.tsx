@@ -1,6 +1,5 @@
 import { ChaynsDesignSettings, ChaynsParagraphFormat, ColorMode, useSite } from 'chayns-api';
 import React, { createContext, FC, ReactNode, useContext } from 'react';
-import { Helmet } from 'react-helmet';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { StyledColorSchemeProvider } from './ColorSchemeProvider.styles';
 import { useChaynsTheme } from './hooks/useChaynsTheme';
@@ -89,12 +88,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     return (
         <ThemeProvider theme={contextValue.theme}>
             <ColorSchemeContext.Provider value={contextValue}>
-                <Helmet>
-                    <link
-                        rel="stylesheet"
-                        href="https://api.chayns-static.space/font/NotoColorEmoji/v1/font.css"
-                    />
-                </Helmet>
                 <StyledColorSchemeProvider className="color-scheme-provider" style={style}>
                     {children}
                 </StyledColorSchemeProvider>
