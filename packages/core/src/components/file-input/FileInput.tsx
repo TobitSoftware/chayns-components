@@ -77,11 +77,6 @@ export type FileInputProps = {
 
 type DialogInput = {
     upload: boolean;
-    buttons: {
-        text: string;
-        buttonType: number;
-    }[];
-    initialView: string;
 };
 
 export type FileInputRef = {
@@ -255,11 +250,6 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             const { buttonType, result } = (await createDialog<DialogInput>({
                 dialogInput: {
                     upload: true,
-                    buttons: [
-                        { text: 'hello', buttonType: 1 },
-                        { text: 'can', buttonType: -1 },
-                    ],
-                    initialView: 'pixabay',
                 },
                 type: DialogType.MODULE,
                 system: {
