@@ -3,11 +3,18 @@ import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledPopupProps = WithTheme<{
     $shouldUseChildrenWidth: boolean;
+    $shouldUseFullWidth: boolean;
 }>;
 
 export const StyledPopup = styled.span<StyledPopupProps>`
     cursor: pointer;
     position: relative;
+
+    ${({ $shouldUseFullWidth }) =>
+        $shouldUseFullWidth &&
+        css`
+            width: 100%;
+        `};
 
     ${({ $shouldUseChildrenWidth }) =>
         $shouldUseChildrenWidth &&

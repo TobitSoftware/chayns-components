@@ -55,6 +55,10 @@ export type PopupProps = {
      */
     shouldUseChildrenWidth?: boolean;
     /**
+     * Whether the popup children should use the full width.
+     */
+    shouldUseFullWidth?: boolean;
+    /**
      * The Y offset of the popup to the children.
      */
     yOffset?: number;
@@ -72,6 +76,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             shouldShowOnHover = false,
             shouldUseChildrenWidth = true,
             shouldScrollWithContent = false,
+            shouldUseFullWidth = false,
             yOffset = 0,
         },
         ref,
@@ -388,11 +393,13 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     </StyledPopupPseudo>
                 )}
                 <StyledPopup
+                    className="beta-chayns-popup"
                     ref={popupRef}
                     onClick={handleChildrenClick}
                     onMouseLeave={handleMouseLeave}
                     onMouseEnter={handleMouseEnter}
                     $shouldUseChildrenWidth={shouldUseChildrenWidth}
+                    $shouldUseFullWidth={shouldUseFullWidth}
                 >
                     {children}
                 </StyledPopup>
