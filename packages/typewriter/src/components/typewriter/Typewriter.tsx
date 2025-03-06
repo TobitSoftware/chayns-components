@@ -209,11 +209,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 return React.isValidElement(currentChildren)
                     ? renderToString(
                           <ChaynsProvider data={values} functions={functions} isModule>
-                              <ColorSchemeProvider
-                                  color="#005EB8"
-                                  colorMode={0}
-                                  style={{ display: 'inline' }}
-                              >
+                              <ColorSchemeProvider style={{ display: 'inline' }}>
                                   {currentChildren}
                               </ColorSchemeProvider>
                           </ChaynsProvider>,
@@ -227,11 +223,7 @@ const Typewriter: FC<TypewriterProps> = ({
         return React.isValidElement(sortedChildren)
             ? renderToString(
                   <ChaynsProvider data={values} functions={functions} isModule>
-                      <ColorSchemeProvider
-                          color="#005EB8"
-                          colorMode={0}
-                          style={{ display: 'inline' }}
-                      >
+                      <ColorSchemeProvider style={{ display: 'inline' }}>
                           {sortedChildren}
                       </ColorSchemeProvider>
                   </ChaynsProvider>,
@@ -429,11 +421,7 @@ const Typewriter: FC<TypewriterProps> = ({
             const pseudoText = React.isValidElement(pseudoChildren)
                 ? renderToString(
                       <ChaynsProvider data={values} functions={functions} isModule>
-                          <ColorSchemeProvider
-                              color="#005EB8"
-                              colorMode={0}
-                              style={{ display: 'inline' }}
-                          >
+                          <ColorSchemeProvider style={{ display: 'inline' }}>
                               {pseudoChildren}
                           </ColorSchemeProvider>
                       </ChaynsProvider>,
