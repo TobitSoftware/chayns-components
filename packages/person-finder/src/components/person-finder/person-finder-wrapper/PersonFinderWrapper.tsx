@@ -11,21 +11,26 @@ import { TagInputRef } from '@chayns-components/core/lib/types/components/tag-in
 
 export type PersonFinderWrapperProps = {
     /**
-     *
+     * The element where the content of the `PersonFinder` should be rendered via React Portal.
      */
-    shouldAllowMultiple?: boolean;
+    container?: Element | null;
     /**
-     *
+     * The filter options of the component.
      */
     filterTypes?: PersonFinderFilterTypes[];
     /**
-     *
+     * The placeholder that should be displayed.
      */
-    container?: Element | null;
+    placeholder?: string;
+    /**
+     * Whether multiple persons and sites should be selected.
+     */
+    shouldAllowMultiple?: boolean;
 };
 
 const PersonFinderWrapper: FC<PersonFinderWrapperProps> = ({
     shouldAllowMultiple,
+    placeholder,
     filterTypes,
     container,
 }) => {
@@ -34,9 +39,11 @@ const PersonFinderWrapper: FC<PersonFinderWrapperProps> = ({
     const [portal, setPortal] = useState<ReactPortal>();
     const [width, setWidth] = useState(0);
     const [tags, setTags] = useState<Tag[]>([]);
-    const [shouldShowBody, setShouldShowBody] = useState(true);
+    const [shouldShowBody, setShouldShowBody] = useState(false);
 
     const tagInputRef = useRef<TagInputRef>(null);
+    const boxRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
 
     const leftElement = (
         <StyledPersonFinderLeftElement>
@@ -47,6 +54,14 @@ const PersonFinderWrapper: FC<PersonFinderWrapperProps> = ({
     const handleRemove = (id: string) => {
         setTags((prevState) => prevState.filter((entry) => entry.id !== id));
     };
+
+    const handleClose = useCallback(() => {
+        setShouldShowBody(false);
+    }, []);
+
+    const handleOpen = useCallback(() => {
+        setShouldShowBody(true);
+    }, []);
 
     /**
      * This hook calculates the width
@@ -64,6 +79,36 @@ const PersonFinderWrapper: FC<PersonFinderWrapperProps> = ({
             new ResizeObserver(getInputWidth).observe(input);
         }
     }, []);
+
+    /**
+     * This function closes the body
+     */
+    const handleOutsideClick = useCallback(
+        (event: MouseEvent) => {
+            if (
+                boxRef.current &&
+                !boxRef.current.contains(event.target as Node) &&
+                contentRef.current &&
+                !contentRef.current.contains(event.target as Node)
+            ) {
+                handleClose();
+            }
+        },
+        [handleClose],
+    );
+
+    /**
+     * This hook listens for clicks
+     */
+    useEffect(() => {
+        document.addEventListener('click', handleOutsideClick);
+        window.addEventListener('blur', () => handleClose());
+
+        return () => {
+            document.removeEventListener('click', handleOutsideClick);
+            window.addEventListener('blur', () => handleClose());
+        };
+    }, [handleOutsideClick, handleClose]);
 
     const handleAdd = useCallback(
         (id: string) => {
@@ -106,7 +151,7 @@ const PersonFinderWrapper: FC<PersonFinderWrapperProps> = ({
                     {shouldShowBody && (
                         <PersonFinderBody
                             width={width}
-                            onBlur={() => setShouldShowBody(false)}
+                            ref={contentRef}
                             onAdd={handleAdd}
                             filterTypes={filterTypes}
                         />
@@ -118,11 +163,11 @@ const PersonFinderWrapper: FC<PersonFinderWrapperProps> = ({
     }, [container, filterTypes, handleAdd, shouldShowBody, width]);
 
     return (
-        <StyledPersonFinder onFocus={() => setShouldShowBody(true)}>
+        <StyledPersonFinder ref={boxRef} onFocus={handleOpen}>
             <div id="person_finder_input">
                 <TagInput
                     ref={tagInputRef}
-                    placeholder="Person oder Site finden"
+                    placeholder={placeholder}
                     leftElement={leftElement}
                     shouldAllowMultiple={shouldAllowMultiple}
                     shouldPreventEnter

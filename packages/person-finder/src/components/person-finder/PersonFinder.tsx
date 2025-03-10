@@ -10,9 +10,10 @@ const DEFAULT_FILTER_TYPES = [PersonFinderFilterTypes.PERSON, PersonFinderFilter
 export type PersonFinderProps = PersonFinderWrapperProps;
 
 const PersonFinder: FC<PersonFinderProps> = ({
-    shouldAllowMultiple = true,
-    filterTypes = DEFAULT_FILTER_TYPES,
     container,
+    filterTypes = DEFAULT_FILTER_TYPES,
+    placeholder = 'Person oder Site finden',
+    shouldAllowMultiple = true,
 }) => {
     const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
 
@@ -39,9 +40,10 @@ const PersonFinder: FC<PersonFinderProps> = ({
         <PersonFinderProvider>
             <div className="beta-chayns-person-finder" ref={personFinderRef}>
                 <PersonFinderWrapper
-                    filterTypes={filterTypes}
-                    shouldAllowMultiple={shouldAllowMultiple}
                     container={newContainer}
+                    filterTypes={filterTypes}
+                    placeholder={placeholder}
+                    shouldAllowMultiple={shouldAllowMultiple}
                 />
             </div>
         </PersonFinderProvider>
