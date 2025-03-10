@@ -1,8 +1,8 @@
-import React, { FC, MouseEvent, useState } from 'react';
+import React, { FC, MouseEvent } from 'react';
 import { StyledPersonFinderItem } from './PersonFinderItem.styles';
 import { Icon, ListItem } from '@chayns-components/core';
 import { PersonEntry, SiteEntry } from '../../../../../types/personFinder';
-import { usePersonFinderItem } from '../../../../../hooks/personFinder';
+import { useFriends, usePersonFinderItem } from '../../../../../hooks/personFinder';
 
 export interface PersonFinderItemProps {
     entry: PersonEntry | SiteEntry;
@@ -10,17 +10,22 @@ export interface PersonFinderItemProps {
 }
 
 const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd }) => {
-    const { isSite, imageUrl, title, subtitle } = usePersonFinderItem(entry);
-
     const { id } = entry;
 
-    const [isFriend, setIsFriend] = useState(false);
+    const { isSite, imageUrl, title, subtitle, titleElement } = usePersonFinderItem(entry);
+    const { isFriend, addFriend, removeFriend } = useFriends(id);
 
     const handleIconClick = (event: MouseEvent) => {
         event.stopPropagation();
         event.preventDefault();
 
-        setIsFriend((prev) => !prev);
+        if (isFriend) {
+            if (typeof removeFriend === 'function') {
+                removeFriend(id);
+            }
+        } else if (typeof addFriend === 'function') {
+            addFriend(id);
+        }
     };
 
     const rightElements = (
@@ -37,16 +42,7 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd }) => {
                 title={title}
                 subtitle={subtitle}
                 images={[imageUrl]}
-                titleElement={
-                    <span
-                        // style={{ marginLeft: '5px', display: index < 2 ? '' : 'none'}}
-                        className="vcid-check--blue"
-                    >
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
-                }
+                titleElement={titleElement}
                 shouldShowRoundImageOrIcon={!isSite}
                 rightElements={!isSite ? rightElements : undefined}
                 shouldForceHover

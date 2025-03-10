@@ -1,6 +1,8 @@
-import { RefObject, useEffect, useState } from 'react';
+import React, { RefObject, useEffect, useState } from 'react';
 import { PersonEntry, SiteEntry } from '../types/personFinder';
 import { isSiteEntry } from '../utils/personFinder';
+import { VerificationBadge } from '@chayns-components/core';
+import { usePersonFinder } from '../components/PersonFinderProvider';
 
 export const useClosestElementAbove = (containerRef: RefObject<HTMLElement>, itemClass: string) => {
     const [closestElement, setClosestElement] = useState<HTMLElement | null>(null);
@@ -45,10 +47,12 @@ export const useClosestElementAbove = (containerRef: RefObject<HTMLElement>, ite
 
 export const usePersonFinderItem = (entry: PersonEntry | SiteEntry) => {
     const isSite = isSiteEntry(entry);
+    const isVerified = true;
 
     const { url, commonSites, name, firstName, lastName, id } = entry as PersonEntry & SiteEntry;
 
     const imageUrl = `https://sub60.tobit.com/${isSite ? 'l' : 'u'}/${id}?size=120`;
+    const titleElement = isVerified && <VerificationBadge />;
     const title = isSite ? name : `${firstName ?? ''} ${lastName ?? ''}`;
     const subtitle = isSite
         ? url
@@ -59,5 +63,18 @@ export const usePersonFinderItem = (entry: PersonEntry | SiteEntry) => {
         title,
         subtitle,
         imageUrl,
+        titleElement,
+    };
+};
+
+export const useFriends = (personId: string) => {
+    const { friends, removeFriend, addFriend } = usePersonFinder();
+
+    const isFriend = friends?.includes(personId);
+
+    return {
+        isFriend,
+        addFriend,
+        removeFriend,
     };
 };

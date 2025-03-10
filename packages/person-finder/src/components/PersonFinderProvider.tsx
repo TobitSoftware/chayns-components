@@ -9,15 +9,22 @@ import React, {
     useState,
 } from 'react';
 import { PersonFinderEntry, PersonFinderFilterTypes } from '../types/personFinder';
+import { getFriends } from '../api/friends/get';
+import { postFriends } from '../api/friends/post';
+import { deleteFriends } from '../api/friends/delete';
 
 interface IPersonFinderContext {
     data?: { [key: string]: PersonFinderEntry[] };
+    friends?: string[];
+    addFriend?: (personId: string) => void;
+    removeFriend?: (personId: string) => void;
     activeFilter?: PersonFinderFilterTypes[];
     updateActiveFilter?: (filter: PersonFinderFilterTypes[]) => void;
 }
 
 export const PersonFinderContext = createContext<IPersonFinderContext>({
     data: undefined,
+    friends: undefined,
     activeFilter: undefined,
     updateActiveFilter: undefined,
 });
@@ -32,10 +39,35 @@ interface PersonFinderProviderProps {
 
 const PersonFinderProvider: FC<PersonFinderProviderProps> = ({ children }) => {
     const [data, setData] = useState<IPersonFinderContext['data']>();
+    const [friends, setFriends] = useState<string[]>();
     const [activeFilter, setActiveFilter] = useState<IPersonFinderContext['activeFilter']>();
 
     const updateActiveFilter = useCallback((filter: IPersonFinderContext['activeFilter']) => {
         setActiveFilter(filter);
+    }, []);
+
+    const addFriend = useCallback((personId: string) => {
+        void postFriends(personId).then((wasSuccessful) => {
+            if (wasSuccessful) {
+                setFriends((prev) => [...(prev ?? []), personId]);
+            }
+        });
+    }, []);
+
+    const removeFriend = useCallback((personId: string) => {
+        void deleteFriends(personId).then((wasSuccessful) => {
+            if (wasSuccessful) {
+                setFriends((prev) => prev?.filter((id) => id !== personId));
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        void getFriends().then((result) => {
+            if (result) {
+                setFriends(result.map(({ personId }) => personId));
+            }
+        });
     }, []);
 
     useEffect(() => {
@@ -83,8 +115,11 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({ children }) => {
             data,
             activeFilter,
             updateActiveFilter,
+            friends,
+            addFriend,
+            removeFriend,
         }),
-        [activeFilter, data, updateActiveFilter],
+        [activeFilter, addFriend, data, friends, removeFriend, updateActiveFilter],
     );
 
     return (
