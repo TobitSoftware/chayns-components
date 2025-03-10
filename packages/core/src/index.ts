@@ -6,6 +6,7 @@ export { default as AccordionGroup } from './components/accordion/accordion-grou
 export { default as AccordionIntro } from './components/accordion/accordion-intro/AccordionIntro';
 export { default as AccordionItem } from './components/accordion/accordion-item/AccordionItem';
 export { default as AmountControl } from './components/amount-control/AmountControl';
+export { default as VerificationBadge } from './components/verification-badge/VerificationBadge';
 export {
     AreaContext,
     default as AreaProvider,

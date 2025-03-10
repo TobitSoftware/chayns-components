@@ -37,6 +37,16 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd }) => {
                 title={title}
                 subtitle={subtitle}
                 images={[imageUrl]}
+                titleElement={
+                    <span
+                        // style={{ marginLeft: '5px', display: index < 2 ? '' : 'none'}}
+                        className="vcid-check--blue"
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                }
                 shouldShowRoundImageOrIcon={!isSite}
                 rightElements={!isSite ? rightElements : undefined}
                 shouldForceHover
