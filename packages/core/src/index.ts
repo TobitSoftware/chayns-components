@@ -23,6 +23,7 @@ export type {
     FramerMotionBugFix,
     WithTheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
+export { useContainer, ContainerAnchor } from './hooks/container';
 export {
     default as ComboBox,
     type ComboBoxTextStyles,
