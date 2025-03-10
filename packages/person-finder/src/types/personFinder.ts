@@ -1,6 +1,6 @@
 export enum PersonFinderFilterTypes {
-    PERSON = 'Person',
-    SITE = 'Site',
+    PERSON = 'person',
+    SITE = 'site',
 }
 
 export enum Priority {
