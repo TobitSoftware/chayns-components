@@ -2,13 +2,20 @@ import React, { FC, UIEvent, useMemo, useRef, useState } from 'react';
 import {
     StyledMotionPersonFinderBody,
     StyledPersonFinderBodyContent,
+    StyledPersonFinderBodyContentButtonWrapper,
     StyledPersonFinderBodyContentGroupName,
     StyledPersonFinderBodyHeader,
     StyledPersonFinderBodyHeaderFilter,
     StyledPersonFinderBodyHeaderGroupName,
 } from './PersonFinderBody.styles';
 import { PersonFinderFilterTypes } from '../../../../types/personFinder';
-import { BrowserName, FilterButtons, FilterButtonSize, List } from '@chayns-components/core';
+import {
+    BrowserName,
+    Button,
+    FilterButtons,
+    FilterButtonSize,
+    List,
+} from '@chayns-components/core';
 import { usePersonFinder } from '../../../PersonFinderProvider';
 import { IFilterButtonItem } from '@chayns-components/core/lib/types/types/filterButtons';
 import PersonFinderItem from './person-finder-item/PersonFinderItem';
@@ -47,6 +54,8 @@ const PersonFinderBody: FC<PersonFinderBodyProps> = ({ onBlur, onAdd, filterType
         setIsScrollTop((event.target as HTMLElement).scrollTop === 0);
     };
 
+    const handleLoadMore = (key: string) => {};
+
     const filter: IFilterButtonItem[] = Object.values(filterTypes ?? {}).map((type) => ({
         id: type,
         text: type.replace(/_/g, ' '),
@@ -70,6 +79,11 @@ const PersonFinderBody: FC<PersonFinderBodyProps> = ({ onBlur, onAdd, filterType
                             />
                         ))}
                     </List>
+                    <StyledPersonFinderBodyContentButtonWrapper>
+                        <Button onClick={() => handleLoadMore(key)}>
+                            Mehr {getGroupName(key)}
+                        </Button>
+                    </StyledPersonFinderBodyContentButtonWrapper>
                 </div>
             )),
         [data, onAdd, shouldShowGroupNames],

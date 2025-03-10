@@ -49,6 +49,7 @@ type StyledPersonFinderBodyContentProps = WithTheme<{ $browser: BrowserName }>;
 export const StyledPersonFinderBodyContent = styled.div<StyledPersonFinderBodyContentProps>`
     height: 100%;
     overflow-y: auto;
+    padding-bottom: 10px;
 
     // Styles for custom scrollbar
     ${({ $browser, theme }: StyledPersonFinderBodyContentProps) =>
@@ -89,4 +90,10 @@ export const StyledPersonFinderBodyContent = styled.div<StyledPersonFinderBodyCo
 export const StyledPersonFinderBodyContentGroupName = styled.div`
     padding: 5px 10px;
     font-weight: bold;
+`;
+
+export const StyledPersonFinderBodyContentButtonWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 `;
