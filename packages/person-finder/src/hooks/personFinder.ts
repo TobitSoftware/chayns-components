@@ -1,4 +1,6 @@
 import { RefObject, useEffect, useState } from 'react';
+import { PersonEntry, SiteEntry } from '../types/personFinder';
+import { isSiteEntry } from '../utils/personFinder';
 
 export const useClosestElementAbove = (containerRef: RefObject<HTMLElement>, itemClass: string) => {
     const [closestElement, setClosestElement] = useState<HTMLElement | null>(null);
@@ -39,4 +41,23 @@ export const useClosestElementAbove = (containerRef: RefObject<HTMLElement>, ite
     }, [containerRef, itemClass]);
 
     return closestElement?.textContent;
+};
+
+export const usePersonFinderItem = (entry: PersonEntry | SiteEntry) => {
+    const isSite = isSiteEntry(entry);
+
+    const { url, commonSites, name, firstName, lastName, id } = entry as PersonEntry & SiteEntry;
+
+    const imageUrl = `https://sub60.tobit.com/${isSite ? 'l' : 'u'}/${id}?size=120`;
+    const title = isSite ? name : `${firstName ?? ''} ${lastName ?? ''}`;
+    const subtitle = isSite
+        ? url
+        : `chaynsID: ${id}${commonSites ? ` - ${commonSites} gemeinsame Sites` : ''}`;
+
+    return {
+        isSite,
+        title,
+        subtitle,
+        imageUrl,
+    };
 };

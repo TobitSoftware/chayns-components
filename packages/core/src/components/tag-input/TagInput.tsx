@@ -46,14 +46,30 @@ export type TagInputProps = {
      * Whether multiple tags should be allowed.
      */
     shouldAllowMultiple?: boolean;
+    /**
+     * Whether the enter key should be prevented.
+     */
+    shouldPreventEnter?: boolean;
 };
 
 export type TagInputRef = {
     getUnsavedTagText: Tag['text'] | undefined;
+    resetValue: () => void;
 };
 
 const TagInput = forwardRef<TagInputRef, TagInputProps>(
-    ({ placeholder, tags, onRemove, onAdd, leftElement, shouldAllowMultiple = true }, ref) => {
+    (
+        {
+            placeholder,
+            tags,
+            onRemove,
+            onAdd,
+            leftElement,
+            shouldAllowMultiple = true,
+            shouldPreventEnter,
+        },
+        ref,
+    ) => {
         const [internalTags, setInternalTags] = useState<Tag[]>();
         const [currentValue, setCurrentValue] = useState('');
         const [selectedId, setSelectedId] = useState<Tag['id']>();
@@ -66,17 +82,22 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             }
         }, [shouldAllowMultiple, tags]);
 
+        const handleResetValue = () => {
+            setCurrentValue('');
+        };
+
         useImperativeHandle(
             ref,
             () => ({
                 getUnsavedTagText: currentValue !== '' ? currentValue : undefined,
+                resetValue: handleResetValue,
             }),
             [currentValue],
         );
 
         const handleKeyDown = useCallback(
             (event: KeyboardEvent) => {
-                if (event.key === 'Enter') {
+                if (event.key === 'Enter' && !shouldPreventEnter) {
                     setCurrentValue((prevValue) => {
                         if (!prevValue) {
                             return '';
@@ -135,7 +156,15 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                     });
                 }
             },
-            [currentValue, internalTags, onAdd, onRemove, selectedId, shouldAllowMultiple],
+            [
+                currentValue,
+                internalTags,
+                onAdd,
+                onRemove,
+                selectedId,
+                shouldAllowMultiple,
+                shouldPreventEnter,
+            ],
         );
 
         const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -168,7 +197,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                 return items;
             }
 
-            internalTags.forEach(({ text, id }) => {
+            internalTags.forEach(({ text, id, rightElement }) => {
                 items.push(
                     <Badge
                         key={`tag-input-${id}`}
@@ -178,6 +207,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                     >
                         <StyledTagInputTagWrapper>
                             <StyledTagInputTagWrapperText>{text}</StyledTagInputTagWrapperText>
+                            {rightElement}
                             <Icon icons={['ts-wrong']} onClick={() => handleIconClick(id)} />
                         </StyledTagInputTagWrapper>
                     </Badge>,

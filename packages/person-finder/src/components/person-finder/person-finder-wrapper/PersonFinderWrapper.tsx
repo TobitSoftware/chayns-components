@@ -1,10 +1,13 @@
-import React, { FC, ReactPortal, useEffect, useState } from 'react';
+import React, { FC, ReactPortal, useCallback, useEffect, useRef, useState } from 'react';
 import { Icon, TagInput } from '@chayns-components/core';
-import { PersonFinderFilterTypes } from '../../../types/personFinder';
+import { PersonEntry, PersonFinderFilterTypes, SiteEntry } from '../../../types/personFinder';
 import { StyledPersonFinder, StyledPersonFinderLeftElement } from './PersonFinderWrapper.styles';
 import { createPortal } from 'react-dom';
 import { AnimatePresence } from 'motion/react';
 import PersonFinderBody from './person-finder-body/PersonFinderBody';
+import { usePersonFinder } from '../../PersonFinderProvider';
+import { Tag } from '@chayns-components/core/lib/types/types/tagInput';
+import { TagInputRef } from '@chayns-components/core/lib/types/components/tag-input/TagInput';
 
 export type PersonFinderWrapperProps = {
     /**
@@ -26,9 +29,14 @@ const PersonFinderWrapper: FC<PersonFinderWrapperProps> = ({
     filterTypes,
     container,
 }) => {
+    const { data } = usePersonFinder();
+
     const [portal, setPortal] = useState<ReactPortal>();
     const [width, setWidth] = useState(0);
+    const [tags, setTags] = useState<Tag[]>([]);
     const [shouldShowBody, setShouldShowBody] = useState(true);
+
+    const tagInputRef = useRef<TagInputRef>(null);
 
     const leftElement = (
         <StyledPersonFinderLeftElement>
@@ -37,7 +45,7 @@ const PersonFinderWrapper: FC<PersonFinderWrapperProps> = ({
     );
 
     const handleRemove = (id: string) => {
-        // ToDo remove with personId
+        setTags((prevState) => prevState.filter((entry) => entry.id !== id));
     };
 
     /**
@@ -57,6 +65,36 @@ const PersonFinderWrapper: FC<PersonFinderWrapperProps> = ({
         }
     }, []);
 
+    const handleAdd = useCallback(
+        (id: string) => {
+            const selectedEntry = Object.values(data ?? {})
+                .flat()
+                .find((entry) => entry.id === id);
+
+            if (!selectedEntry) {
+                return;
+            }
+
+            const { name, firstName, lastName } = selectedEntry as PersonEntry & SiteEntry;
+
+            const tag: Tag = {
+                id,
+                text: name ?? `${firstName ?? ''} ${lastName ?? ''}`,
+            };
+
+            tagInputRef.current?.resetValue();
+
+            setTags((prevState) => {
+                if (prevState.some((t) => t.id === id)) {
+                    return prevState;
+                }
+
+                return [...prevState, tag];
+            });
+        },
+        [data],
+    );
+
     useEffect(() => {
         if (!container) {
             return;
@@ -69,6 +107,7 @@ const PersonFinderWrapper: FC<PersonFinderWrapperProps> = ({
                         <PersonFinderBody
                             width={width}
                             onBlur={() => setShouldShowBody(false)}
+                            onAdd={handleAdd}
                             filterTypes={filterTypes}
                         />
                     )}
@@ -76,16 +115,19 @@ const PersonFinderWrapper: FC<PersonFinderWrapperProps> = ({
                 container,
             ),
         );
-    }, [container, filterTypes, shouldShowBody, width]);
+    }, [container, filterTypes, handleAdd, shouldShowBody, width]);
 
     return (
         <StyledPersonFinder onFocus={() => setShouldShowBody(true)}>
             <div id="person_finder_input">
                 <TagInput
+                    ref={tagInputRef}
                     placeholder="Person oder Site finden"
                     leftElement={leftElement}
                     shouldAllowMultiple={shouldAllowMultiple}
+                    shouldPreventEnter
                     onRemove={handleRemove}
+                    tags={tags}
                 />
             </div>
             {portal}

@@ -5,7 +5,7 @@ import PersonFinderWrapper, {
     PersonFinderWrapperProps,
 } from './person-finder-wrapper/PersonFinderWrapper';
 
-const DEFAULT_FILTER_TYPES = [PersonFinderFilterTypes.PERSON, PersonFinderFilterTypes.SITES];
+const DEFAULT_FILTER_TYPES = [PersonFinderFilterTypes.PERSON, PersonFinderFilterTypes.SITE];
 
 export type PersonFinderProps = PersonFinderWrapperProps;
 

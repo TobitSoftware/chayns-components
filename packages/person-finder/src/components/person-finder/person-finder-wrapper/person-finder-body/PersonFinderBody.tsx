@@ -18,11 +18,12 @@ import { useClosestElementAbove } from '../../../../hooks/personFinder';
 
 export type PersonFinderBodyProps = {
     onBlur?: () => void;
+    onAdd: (id: string) => void;
     width: number;
     filterTypes?: PersonFinderFilterTypes[];
 };
 
-const PersonFinderBody: FC<PersonFinderBodyProps> = ({ onBlur, filterTypes, width }) => {
+const PersonFinderBody: FC<PersonFinderBodyProps> = ({ onBlur, onAdd, filterTypes, width }) => {
     const { activeFilter, updateActiveFilter, data } = usePersonFinder();
     const { browser } = getDevice();
 
@@ -46,10 +47,6 @@ const PersonFinderBody: FC<PersonFinderBodyProps> = ({ onBlur, filterTypes, widt
         setIsScrollTop((event.target as HTMLElement).scrollTop === 0);
     };
 
-    const handleAdd = (id: string) => {
-        console.log('TEST', id);
-    };
-
     const filter: IFilterButtonItem[] = Object.values(filterTypes ?? {}).map((type) => ({
         id: type,
         text: type.replace(/_/g, ' '),
@@ -69,13 +66,13 @@ const PersonFinderBody: FC<PersonFinderBodyProps> = ({ onBlur, filterTypes, widt
                             <PersonFinderItem
                                 key={`person-finder-entry--${entry.id}`}
                                 entry={entry}
-                                onAdd={handleAdd}
+                                onAdd={onAdd}
                             />
                         ))}
                     </List>
                 </div>
             )),
-        [data, shouldShowGroupNames],
+        [data, onAdd, shouldShowGroupNames],
     );
 
     return (

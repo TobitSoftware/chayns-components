@@ -1,35 +1,35 @@
-import React, { FC, MouseEvent } from 'react';
+import React, { FC, MouseEvent, useState } from 'react';
 import { StyledPersonFinderItem } from './PersonFinderItem.styles';
 import { Icon, ListItem } from '@chayns-components/core';
 import { PersonEntry, SiteEntry } from '../../../../../types/personFinder';
+import { usePersonFinderItem } from '../../../../../hooks/personFinder';
 
 export interface PersonFinderItemProps {
     entry: PersonEntry | SiteEntry;
     onAdd: (id: string) => void;
 }
 
-const isSiteEntry = (entry: PersonEntry | SiteEntry): entry is SiteEntry =>
-    'name' in entry && !('firstName' in entry);
-
 const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd }) => {
-    const isSite = isSiteEntry(entry);
+    const { isSite, imageUrl, title, subtitle } = usePersonFinderItem(entry);
 
-    const { url, commonSites, name, firstName, lastName, id } = entry as PersonEntry & SiteEntry;
+    const { id } = entry;
 
-    const title = isSite ? name : `${firstName ?? ''} ${lastName ?? ''}`;
-    const subtitle = isSite
-        ? url
-        : `chaynsID: ${id}${commonSites ? ` - ${commonSites} gemeinsame Sites` : ''}`;
-    const imageUrl = `https://sub60.tobit.com/${isSite ? 'l' : 'u'}/${id}?size=120`;
+    const [isFriend, setIsFriend] = useState(false);
 
     const handleIconClick = (event: MouseEvent) => {
         event.stopPropagation();
         event.preventDefault();
+
+        setIsFriend((prev) => !prev);
     };
 
-    const rightElements = !isSite ? (
-        <Icon icons={['fa fa-star']} onClick={handleIconClick} />
-    ) : null;
+    const rightElements = (
+        <Icon
+            icons={[`${isFriend ? 'fas' : 'far'} fa-star`]}
+            color={isFriend ? 'var(--chayns-color--yellow-3)' : undefined}
+            onClick={handleIconClick}
+        />
+    );
 
     return (
         <StyledPersonFinderItem onClick={() => onAdd(id)}>
@@ -38,7 +38,7 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd }) => {
                 subtitle={subtitle}
                 images={[imageUrl]}
                 shouldShowRoundImageOrIcon={!isSite}
-                rightElements={rightElements}
+                rightElements={!isSite ? rightElements : undefined}
                 shouldForceHover
             />
         </StyledPersonFinderItem>
