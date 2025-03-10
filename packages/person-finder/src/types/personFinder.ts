@@ -3,6 +3,11 @@ export enum PersonFinderFilterTypes {
     SITE = 'Site',
 }
 
+export enum Priority {
+    HIGH,
+    NORMAL,
+}
+
 export type PersonFinderEntry = PersonEntry | SiteEntry;
 
 export interface PersonEntry {

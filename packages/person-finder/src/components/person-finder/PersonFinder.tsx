@@ -1,54 +1,71 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import { PersonFinderFilterTypes } from '../../types/personFinder';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import { PersonFinderFilterTypes, Priority } from '../../types/personFinder';
 import PersonFinderProvider from '../PersonFinderProvider';
 import PersonFinderWrapper, {
     PersonFinderWrapperProps,
+    PersonFinderWrapperRef,
 } from './person-finder-wrapper/PersonFinderWrapper';
 
 const DEFAULT_FILTER_TYPES = [PersonFinderFilterTypes.PERSON, PersonFinderFilterTypes.SITE];
 
 export type PersonFinderProps = PersonFinderWrapperProps;
 
-const PersonFinder: FC<PersonFinderProps> = ({
-    container,
-    filterTypes = DEFAULT_FILTER_TYPES,
-    placeholder = 'Person oder Site finden',
-    shouldAllowMultiple = true,
-}) => {
-    const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
+export type PersonFinderRef = PersonFinderWrapperRef;
 
-    const personFinderRef = useRef<HTMLDivElement>(null);
+const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
+    (
+        {
+            container,
+            filterTypes = DEFAULT_FILTER_TYPES,
+            friendsPriority = Priority.HIGH,
+            placeholder = 'Person oder Site finden',
+            shouldAllowMultiple = true,
+            maxEntries,
+            onRemove,
+            onAdd,
+        },
+        ref,
+    ) => {
+        const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
 
-    // Get the closest container if none is set
-    useEffect(() => {
-        if (personFinderRef.current && !container) {
-            const el = personFinderRef.current as HTMLElement;
+        const personFinderRef = useRef<HTMLDivElement>(null);
 
-            const element = el.closest('.dialog-inner, .page-provider, .tapp, body');
+        // Get the closest container if none is set
+        useEffect(() => {
+            if (personFinderRef.current && !container) {
+                const el = personFinderRef.current as HTMLElement;
 
-            setNewContainer(element);
-        }
-    }, [container]);
+                const element = el.closest('.dialog-inner, .page-provider, .tapp, body');
 
-    useEffect(() => {
-        if (container instanceof Element) {
-            setNewContainer(container);
-        }
-    }, [container]);
+                setNewContainer(element);
+            }
+        }, [container]);
 
-    return (
-        <PersonFinderProvider>
-            <div className="beta-chayns-person-finder" ref={personFinderRef}>
-                <PersonFinderWrapper
-                    container={newContainer}
-                    filterTypes={filterTypes}
-                    placeholder={placeholder}
-                    shouldAllowMultiple={shouldAllowMultiple}
-                />
-            </div>
-        </PersonFinderProvider>
-    );
-};
+        useEffect(() => {
+            if (container instanceof Element) {
+                setNewContainer(container);
+            }
+        }, [container]);
+
+        return (
+            <PersonFinderProvider>
+                <div className="beta-chayns-person-finder" ref={personFinderRef}>
+                    <PersonFinderWrapper
+                        ref={ref}
+                        container={newContainer}
+                        filterTypes={filterTypes}
+                        friendsPriority={friendsPriority}
+                        maxEntries={maxEntries}
+                        onAdd={onAdd}
+                        onRemove={onRemove}
+                        placeholder={placeholder}
+                        shouldAllowMultiple={shouldAllowMultiple}
+                    />
+                </div>
+            </PersonFinderProvider>
+        );
+    },
+);
 
 PersonFinder.displayName = 'PersonFinder';
 
