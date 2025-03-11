@@ -106,6 +106,30 @@ export const getTimeTillNow = ({
     return formatter.format(isPast ? -count : count, label);
 };
 
+interface GetFormattedTimeOptions {
+    date: Date;
+    shouldShowSeconds?: boolean;
+}
+
+export const getFormattedTime = ({
+    date,
+    shouldShowSeconds = false,
+}: GetFormattedTimeOptions): string => {
+    const { active: language } = getLanguage();
+
+    const timeOptions: Intl.DateTimeFormatOptions = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: shouldShowSeconds ? '2-digit' : undefined,
+    };
+
+    const formattedTime = date.toLocaleTimeString(language, timeOptions).replace(/^0/, '');
+
+    const hourWord = getTimeString({ language });
+
+    return `${formattedTime} ${hourWord}`.trim();
+};
+
 interface GetTimeStringProps {
     language?: Language;
 }

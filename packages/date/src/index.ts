@@ -17,7 +17,7 @@ export type { HintTextPosition, OpeningTime, Time, Weekday } from './types/openi
 // DateInfo
 export { default as DateInfo } from './components/date-info/DateInfo';
 export { useDateInfo } from './hooks/useDateInfo';
-export { getDateInfo, getTimeTillNow } from './utils/dateInfo';
+export { getDateInfo, getTimeTillNow, getFormattedTime } from './utils/dateInfo';
 
 // Utils
 export {
