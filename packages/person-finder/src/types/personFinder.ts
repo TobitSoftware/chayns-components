@@ -8,6 +8,13 @@ export enum Priority {
     NORMAL,
 }
 
+export interface PersonFinderData {
+    searchString: string;
+    count: number;
+    skip: number;
+    entries: PersonFinderEntry[];
+}
+
 export type PersonFinderEntry = PersonEntry | SiteEntry;
 
 export interface PersonEntry {

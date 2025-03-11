@@ -1,4 +1,4 @@
-import React, { forwardRef, UIEvent, useMemo, useRef, useState } from 'react';
+import React, { forwardRef, UIEvent, useCallback, useMemo, useRef, useState } from 'react';
 import {
     StyledMotionPersonFinderBody,
     StyledPersonFinderBodyContent,
@@ -20,8 +20,8 @@ import { usePersonFinder } from '../../../PersonFinderProvider';
 import { IFilterButtonItem } from '@chayns-components/core/lib/types/types/filterButtons';
 import PersonFinderItem from './person-finder-item/PersonFinderItem';
 import { getDevice } from 'chayns-api';
-import { getGroupName } from '../../../../utils/personFinder';
-import { useClosestElementAbove } from '../../../../hooks/personFinder';
+import { capitalizeFirstLetter, getGroupName } from '../../../../utils/personFinder';
+import { useClosestElementAbove, useLoadData } from '../../../../hooks/personFinder';
 
 export type PersonFinderBodyProps = {
     onAdd: (id: string) => void;
@@ -32,6 +32,7 @@ export type PersonFinderBodyProps = {
 const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
     ({ onAdd, width, filterTypes }, ref) => {
         const { activeFilter, updateActiveFilter, data } = usePersonFinder();
+        const { handleLoadData } = useLoadData();
 
         const { browser } = getDevice();
 
@@ -55,16 +56,21 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
             setIsScrollTop((event.target as HTMLElement).scrollTop === 0);
         };
 
-        const handleLoadMore = (key: string) => {};
+        const handleLoadMore = useCallback(
+            (key: PersonFinderFilterTypes) => {
+                handleLoadData(key);
+            },
+            [handleLoadData],
+        );
 
         const filter: IFilterButtonItem[] = Object.values(filterTypes ?? {}).map((type) => ({
             id: type,
-            text: type.replace(/_/g, ' '),
+            text: capitalizeFirstLetter(type.replace(/_/g, ' ')),
         }));
 
         const content = useMemo(
             () =>
-                Object.entries(data ?? {}).map(([key, entries], index) => (
+                Object.entries(data ?? {}).map(([key, singleData], index) => (
                     <div key={`person-finder-group--${key}`}>
                         {shouldShowGroupNames && index !== 0 && (
                             <StyledPersonFinderBodyContentGroupName className="person-finder-group-name">
@@ -72,7 +78,7 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
                             </StyledPersonFinderBodyContentGroupName>
                         )}
                         <List>
-                            {entries.map((entry) => (
+                            {singleData?.entries.map((entry) => (
                                 <PersonFinderItem
                                     key={`person-finder-entry--${entry.id}`}
                                     entry={entry}
@@ -81,13 +87,13 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
                             ))}
                         </List>
                         <StyledPersonFinderBodyContentButtonWrapper>
-                            <Button onClick={() => handleLoadMore(key)}>
+                            <Button onClick={() => handleLoadMore(key as PersonFinderFilterTypes)}>
                                 Mehr {getGroupName(key)}
                             </Button>
                         </StyledPersonFinderBodyContentButtonWrapper>
                     </div>
                 )),
-            [data, onAdd, shouldShowGroupNames],
+            [data, handleLoadMore, onAdd, shouldShowGroupNames],
         );
 
         return (

@@ -1,6 +1,6 @@
 import {
     PersonEntry,
-    PersonFinderEntry,
+    PersonFinderData,
     PersonFinderFilterTypes,
     SiteEntry,
 } from '../types/personFinder';
@@ -18,9 +18,9 @@ export const isSiteEntry = (entry: PersonEntry | SiteEntry): entry is SiteEntry 
     'name' in entry && !('firstName' in entry);
 
 export const filterDataByKeys = (
-    data: { [key: string]: PersonFinderEntry[] } = {},
+    data: { [key: string]: PersonFinderData } = {},
     keys: PersonFinderFilterTypes[] = [],
-): { [key: string]: PersonFinderEntry[] } => {
+): { [key: string]: PersonFinderData } => {
     if (keys.length === 0) {
         return data;
     }
@@ -32,6 +32,28 @@ export const filterDataByKeys = (
             }
             return acc;
         },
-        {} as { [key: string]: PersonFinderEntry[] },
+        {} as { [key: string]: PersonFinderData },
     );
+};
+
+export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+
+export const destructureData = (
+    data: Record<string, PersonFinderData> | undefined,
+    filterType: string,
+) => {
+    return {
+        count: data?.[filterType]?.count ?? 0,
+        skip: data?.[filterType]?.skip ?? 0,
+        searchString: data?.[filterType]?.searchString ?? '',
+        entries: data?.[filterType]?.entries ?? [],
+    };
+};
+
+interface LoadDataOptions {
+    skip: number;
+}
+
+export const loadData = async ({ skip }: LoadDataOptions): Promise<PersonFinderData> => {
+    // ToDo load data
 };

@@ -119,6 +119,8 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
             (id: string) => {
                 const selectedEntry = Object.values(data ?? {})
                     .flat()
+                    .map(({ entries }) => entries)
+                    .flat()
                     .find((entry) => entry.id === id);
 
                 if (!selectedEntry) {
