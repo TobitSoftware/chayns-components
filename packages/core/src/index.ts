@@ -23,6 +23,11 @@ export type {
     WithTheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
 export {
+    default as FileList,
+    type IFileItem as FileListItem,
+} from './components/file-list/FileList';
+export { default as FileSelect } from './components/file-select/FileSelect';
+export {
     default as ComboBox,
     type ComboBoxTextStyles,
     type IComboBoxItem as ComboBoxItem,
