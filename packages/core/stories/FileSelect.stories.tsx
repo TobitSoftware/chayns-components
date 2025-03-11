@@ -9,7 +9,7 @@ export default {
 } as Meta<typeof FileSelect>;
 
 const Template: StoryFn<typeof FileSelect> = ({ ...args }) => {
-    return <FileSelect />;
+    return <FileSelect {...args} />;
 };
 
 export const General = Template.bind({});

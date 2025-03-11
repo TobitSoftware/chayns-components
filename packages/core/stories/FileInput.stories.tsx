@@ -1,6 +1,7 @@
+import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { useState } from 'react';
-import { FileInputFileItem } from '../src';
+import { FileListItem } from '../src';
 import FileInput from '../src/components/file-input/FileInput';
 
 export default {
@@ -12,9 +13,9 @@ export default {
 const Template: StoryFn<typeof FileInput> = ({ ...args }) => {
     const [internalFiles, setInternalFiles] = useState(args.files);
 
-    const handleRemove = (file: File | FileInputFileItem | string) => {
-        if (typeof file !== 'string' && 'url' in file) {
-            setInternalFiles((prevState) => prevState.filter(({ url }) => url !== file.url));
+    const handleRemove = (file: string | FileListItem | File) => {
+        if (typeof file !== 'string' && 'id' in file) {
+            setInternalFiles((prevState) => prevState?.filter(({ id }) => id !== file.id));
         }
     };
 
@@ -33,11 +34,15 @@ WithFiles.args = {
     files: [
         {
             id: '2733zgetfvedjh4wetrf23w',
-            url: 'https://tsimg.cloud/77896-21884/54a117f35e5fb57520e64471461af5491c0eff06.png',
+            name: 'Eine Datei',
+            size: 34,
+            mimeType: 'image/png',
         },
         {
             id: '34zh34rdchg26zth5erfdzjzg',
-            url: 'https://tsimg.cloud/77896-21884/8aee1a304297729a4542b97325940a656a3da8f2.png',
+            name: 'Test Datei',
+            size: 23,
+            mimeType: 'image/png',
         },
     ],
 };

@@ -104,7 +104,7 @@ const FileSelect: FC<FileSelectProps> = ({
             <StyledFileSelect>
                 <StyledFileSelectWrapper $isDisabled={isDisabled}>
                     <StyledFileSelectContainer
-                        onClick={() => void handleFileSelectionClick}
+                        onClick={() => void handleFileSelectionClick()}
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={handleDrop}
                     >
@@ -114,7 +114,7 @@ const FileSelect: FC<FileSelectProps> = ({
                     {imageSelectPlaceholder && (
                         <StyledFileSelectContainer
                             $isImageSelection
-                            onClick={() => void handleImageSelectionClick}
+                            onClick={() => void handleImageSelectionClick()}
                         >
                             <Icon icons={imageSelectIcons} />
                             <StyledFileSelectText>{imageSelectPlaceholder}</StyledFileSelectText>
