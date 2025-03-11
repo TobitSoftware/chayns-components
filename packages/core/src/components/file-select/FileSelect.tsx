@@ -16,13 +16,41 @@ type DialogInput = {
 };
 
 export type FileSelectProps = {
+    /**
+     * An array of icons that should be displayed inside the FileInput
+     */
     fileSelectionIcons?: string[];
+    /**
+     * The text that should be displayed inside the FileInput.
+     */
     fileSelectionPlaceholder?: string;
+    /**
+     * The filetypes that could be selected. Example for multiple types: 'image/*, video/*'.
+     */
     fileTypes?: string;
+    /**
+     * The icon of the image selection.
+     */
     imageSelectIcons?: string[];
+    /**
+     * If set, pictures can be select via Pixabay.
+     */
     imageSelectPlaceholder?: string;
+    /**
+     * Whether the FileInput is disabled.
+     */
     isDisabled?: boolean;
+    /**
+     * The maximum amount of Files that can be uploaded.
+     */
+    maxFiles?: number;
+    /**
+     * The maximum size of a file in MB.
+     */
     maxFileSizeInMB?: number;
+    /**
+     * A function to be executed when files are added.
+     */
     onAdd?: (files: File[] | string[]) => void;
 };
 
