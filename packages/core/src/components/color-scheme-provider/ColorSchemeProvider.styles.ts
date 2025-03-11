@@ -1,6 +1,6 @@
 import { getAvailableColorList } from '@chayns/colors';
 import { styled } from 'styled-components';
-import { WithTheme } from './ColorSchemeProvider';
+import type { WithTheme } from './ColorSchemeProvider';
 
 type ColorSchemeProviderProps = WithTheme<unknown>;
 

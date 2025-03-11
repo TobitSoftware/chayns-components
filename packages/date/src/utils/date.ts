@@ -41,22 +41,25 @@ export const isMorning = (date: Date) => {
 
 export const isAfter = (firstDate: Date, secondDate: Date): boolean => {
     return firstDate.getTime() > secondDate.getTime();
-}
+};
 
 export const isBefore = (firstDate: Date, secondDate: Date): boolean => {
     return firstDate.getTime() < secondDate.getTime();
-}
+};
 
 export const startOfMonth = (date: Date): Date => {
     return new Date(date.getFullYear(), date.getMonth(), 1);
-}
+};
 
 export const addYears = (date: Date, years: number): Date => {
     return new Date(date.getFullYear() + years, date.getMonth(), date.getDate());
 };
 
 export const differenceInCalendarMonths = (firstDate: Date, secondDate: Date): number => {
-    return (firstDate.getFullYear() - secondDate.getFullYear()) * 12 + (firstDate.getMonth() - secondDate.getMonth());
+    return (
+        (firstDate.getFullYear() - secondDate.getFullYear()) * 12 +
+        (firstDate.getMonth() - secondDate.getMonth())
+    );
 };
 
 export const isSameDay = (firstDate: Date, secondDate: Date): boolean => {
@@ -105,7 +108,7 @@ export const endOfWeek = (date: Date): Date => {
     return end;
 };
 
-export const eachDayOfInterval = (interval: { start: Date, end: Date }): Date[] => {
+export const eachDayOfInterval = (interval: { start: Date; end: Date }): Date[] => {
     const days: Date[] = [];
     const currentDate = new Date(interval.start);
 

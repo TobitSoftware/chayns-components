@@ -14,9 +14,9 @@ export const StyledColorPreview = styled.div`
 export const StyledColorPreviewBackground = styled.div`
     position: absolute;
     background-color: #fff;
-    background-image: linear-gradient(45deg, #a0a0a0 25%, #0000 0),
-        linear-gradient(-45deg, #a0a0a0 25%, #0000 0), linear-gradient(45deg, #0000 75%, #a0a0a0 0),
-        linear-gradient(-45deg, #0000 75%, #a0a0a0 0);
+    background-image:
+        linear-gradient(45deg, #a0a0a0 25%, #0000 0), linear-gradient(-45deg, #a0a0a0 25%, #0000 0),
+        linear-gradient(45deg, #0000 75%, #a0a0a0 0), linear-gradient(-45deg, #0000 75%, #a0a0a0 0);
     background-position:
         0 0,
         0 4px,

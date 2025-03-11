@@ -28,13 +28,12 @@ const PageProvider: FC<PageProviderProps> = ({
     children,
     color,
     colorMode,
-    cssVariables = {},
     secondaryColor,
     siteId,
     style = {},
-    designSettings,
     shouldRemovePadding,
     shouldUseUsableHeight,
+    customVariables,
 }) => {
     const { runtimeEnvironment } = useEnvironment();
     const shouldUsePadding =
@@ -57,8 +56,7 @@ const PageProvider: FC<PageProviderProps> = ({
                 colorMode={colorMode}
                 siteId={siteId}
                 style={shouldUseUsableHeight ? { ...style, height: '100%' } : style}
-                designSettings={designSettings}
-                cssVariables={cssVariables}
+                customVariables={customVariables}
             >
                 {children}
             </ColorSchemeProvider>

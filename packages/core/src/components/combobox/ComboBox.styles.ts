@@ -52,12 +52,11 @@ type StyledComboBoxHeaderProps = WithTheme<{
 
 export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     display: flex;
-    justify-content: space-between;
-    border: 1px solid rgba(160, 160, 160, 0.3);
-    padding: 4px 10px;
-    cursor: ${({ $isDisabled }) => (!$isDisabled ? 'pointer' : 'default')};
     background-color: ${({ theme, $shouldChangeColor }: StyledComboBoxHeaderProps) =>
         theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
+    border: 1px solid rgba(160, 160, 160, 0.3);
+    cursor: ${({ $isDisabled }) => (!$isDisabled ? 'pointer' : 'default')};
+    justify-content: space-between;
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     transition: background-color 0.2s ease-in-out;
 
@@ -122,6 +121,7 @@ export const StyledComboBoxPrefixAndPlaceholderWrapper = styled.div`
     display: flex;
     flex: 1 1 auto;
     min-width: 0;
+    padding: 4px 10px;
 `;
 
 export const StyledComboBoxPrefix = styled.div`
@@ -155,10 +155,28 @@ export const StyledComboBoxPlaceholderImage = styled.img<StyledComboBoxPlacehold
         `}
 `;
 
-export const StyledComboBoxIconWrapper = styled.div`
+export const StyledComboBoxClearIconWrapper = styled.div`
     align-items: center;
+    cursor: pointer;
     display: flex;
-    margin-left: 5px;
+    flex: 0 0 auto;
+    height: 40px;
+    justify-content: center;
+    width: 40px;
+`;
+
+type StyledComboBoxIconWrapperProps = { $shouldShowBorderLeft: boolean };
+
+export const StyledComboBoxIconWrapper = styled.div<StyledComboBoxIconWrapperProps>`
+    align-items: center;
+    border-left: ${({ $shouldShowBorderLeft }) =>
+        $shouldShowBorderLeft ? '1px solid rgba(160, 160, 160, 0.3)' : 'none'};
+    cursor: pointer;
+    display: flex;
+    flex: 0 0 auto;
+    height: 40px;
+    justify-content: center;
+    width: 40px;
 `;
 
 type StyledComboBoxBodyProps = WithTheme<{

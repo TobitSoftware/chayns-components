@@ -26,6 +26,7 @@ import Icon from '../icon/Icon';
 import ComboBoxItem from './combobox-item/ComboBoxItem';
 import {
     StyledComboBox,
+    StyledComboBoxClearIconWrapper,
     StyledComboBoxHeader,
     StyledComboBoxIconWrapper,
     StyledComboBoxInput,
@@ -102,7 +103,7 @@ export type ComboBoxProps = {
     /**
      * Function that should be executed when an item is selected. If the function returns false, the item will not be selected.
      */
-    onSelect?: (comboboxItem: IComboBoxItem) => Promise<boolean> | boolean | void;
+    onSelect?: (comboboxItem?: IComboBoxItem) => Promise<boolean> | boolean | void;
     /**
      * A text that should be displayed when no item is selected.
      */
@@ -119,6 +120,10 @@ export type ComboBoxProps = {
      * If true, the images of the items are displayed in a bigger shape. This prop will automatically be set to true if the subtext of an item is given.
      */
     shouldShowBigImage?: boolean;
+    /**
+     * If true, a clear icon is displayed at the end of the combo box if an item is selected.
+     */
+    shouldShowClearIcon?: boolean;
     /**
      * If true, the images of the items are displayed in a round shape.
      */
@@ -145,6 +150,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     container,
     selectedItem,
     shouldShowBigImage,
+    shouldShowClearIcon,
     shouldShowRoundImage,
     onInputFocus,
     shouldUseFullWidth = false,
@@ -240,10 +246,9 @@ const ComboBox: FC<ComboBoxProps> = ({
                 top: comboBoxTop,
                 height,
             } = styledComboBoxElementRef.current.getBoundingClientRect();
-            const { left: containerLeft, top: containerTop } = newContainer.getBoundingClientRect();
 
-            const x = comboBoxLeft - containerLeft + newContainer.scrollLeft;
-            const y = comboBoxTop - containerTop + newContainer.scrollTop;
+            const x = comboBoxLeft + newContainer.scrollLeft;
+            const y = comboBoxTop + newContainer.scrollTop;
 
             setInternalCoordinates({
                 x,
@@ -279,7 +284,7 @@ const ComboBox: FC<ComboBoxProps> = ({
      * This function sets the selected item
      */
     const handleSetSelectedItem = useCallback(
-        (itemToSelect: IComboBoxItem) => {
+        (itemToSelect?: IComboBoxItem) => {
             if (typeof onSelect === 'function') {
                 const onSelectResult = onSelect(itemToSelect);
 
@@ -303,6 +308,16 @@ const ComboBox: FC<ComboBoxProps> = ({
             setIsAnimating(false);
         },
         [onSelect],
+    );
+
+    const handleClear = useCallback(
+        (event: React.MouseEvent<HTMLDivElement>) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            handleSetSelectedItem(undefined);
+        },
+        [handleSetSelectedItem],
     );
 
     useEffect(() => {
@@ -391,7 +406,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         const parentWidth =
             styledComboBoxElementRef.current?.parentElement?.getBoundingClientRect().width ?? 0;
 
-        const paddingWidth = 45; // padding + border + arrow icon
+        const paddingWidth = 20 + 2 + 40 + 40; // padding + border + arrow icon + optional clear icon
         const imageWidth = hasImage ? 32 : 0; // image width + gap if images present
         const iconWidth = hasIcon ? 40 : 0; // icon width + gap if icons present
 
@@ -698,7 +713,16 @@ const ComboBox: FC<ComboBoxProps> = ({
                                 internalSelectedItem.suffixElement}
                         </StyledComboBoxPlaceholder>
                     </StyledComboBoxPrefixAndPlaceholderWrapper>
-                    <StyledComboBoxIconWrapper>
+                    {shouldShowClearIcon && internalSelectedItem && (
+                        <StyledComboBoxClearIconWrapper onClick={handleClear}>
+                            <Icon icons={['fa fa-times']} />
+                        </StyledComboBoxClearIconWrapper>
+                    )}
+                    <StyledComboBoxIconWrapper
+                        $shouldShowBorderLeft={
+                            shouldShowClearIcon === true && internalSelectedItem !== undefined
+                        }
+                    >
                         <Icon icons={['fa fa-chevron-down']} />
                     </StyledComboBoxIconWrapper>
                 </StyledComboBoxHeader>
@@ -708,6 +732,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         [
             minWidth,
             shouldUseFullWidth,
+            shouldUseCurrentItemWidth,
             direction,
             handleHeaderClick,
             isAnimating,
@@ -716,18 +741,19 @@ const ComboBox: FC<ComboBoxProps> = ({
             shouldChangeColor,
             shouldShowBigImage,
             prefix,
-            inputValue,
-            onInputChange,
-            placeholderText,
             selectedItem,
             internalSelectedItem,
             placeholderImageUrl,
             shouldShowRoundPlaceholderImage,
             placeholderIcon,
-            portal,
-            handleInputFocus,
+            inputValue,
+            onInputChange,
             handleInputBlur,
-            shouldUseCurrentItemWidth,
+            handleInputFocus,
+            placeholderText,
+            shouldShowClearIcon,
+            handleClear,
+            portal,
         ],
     );
 };

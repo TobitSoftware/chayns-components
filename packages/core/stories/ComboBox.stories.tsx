@@ -74,12 +74,7 @@ const Template: StoryFn<typeof ComboBox> = (args) => (
             voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
             gubergren, no sea takimata sanctus est.
         </p>
-        <div style={{ display: 'flex', gap: '10px' }}>
-            <div style={{ flex: '0 0 auto' }}>unterstützt von</div>
-            <div style={{ flex: '1 1 auto' }}>
-                <ComboBox {...args} />
-            </div>
-        </div>
+        <ComboBox {...args} />
     </>
 );
 
@@ -126,7 +121,9 @@ export const WithIcons = Template.bind({});
 
 export const WithGroups = Template.bind({});
 
-export const WithSubtextAndRightElement = Template.bind({});
+export const WithSubtext = Template.bind({});
+
+export const WithBigImage = Template.bind({});
 
 export const WithInput = WithInputTemplate.bind({});
 
@@ -321,47 +318,103 @@ WithSuffixElements.args = {
     },
 };
 
-WithSubtextAndRightElement.args = {
-    prefix: 'Von',
+WithSubtext.args = {
     shouldShowBigImage: true,
     lists: [
         {
             list: [
                 {
-                    imageUrl: 'https://tsimg.cloud/Q8V-45A2G/profile_w128.png',
-                    value: 'Q8V-45A2G',
-                    text: 'Herr Funktiona (Mathematik, 9. - 10. Klasse) mit zusätzlicher Information',
-                    subtext: 'Mathelehrer, 27 Jahre',
-                    suffixElement: <Icon icons={['fal fa-image']} />,
+                    imageUrl: 'https://tsimg.cloud/PM4-7NBYY/profile_w128.png',
+                    value: 'PM4-7NBYY',
+                    text: 'David Rechenberg, 39 Jahre',
+                    subtext: 'Mathelehrer',
                 },
                 {
-                    imageUrl: 'https://tsimg.cloud/HUK-F4KJD/profile_w128.png',
-                    value: 'HUK-F4KJD',
-                    text: 'Frau Grammatika (Deutsch, 9. - 10. Klasse)',
-                    subtext: 'Deutschlehrerin, 29 Jahre',
+                    imageUrl: 'https://tsimg.cloud/9JC-14TQZ/profile_w128.png',
+                    value: '9JC-14TQZ',
+                    text: 'Gerhard Kaiser, 55 Jahre',
+                    subtext: 'Geschichtslehrer',
                 },
                 {
-                    imageUrl: 'https://tsimg.cloud/3X1-8KA3H/profile_w128.png',
-                    value: '3X1-8KA3H',
-                    text: 'Herr Historia (Geschichte, 9. - 10. Klasse) mit zusätzlicher Information',
-                    subtext: 'Geschichtslehrer, 31 Jahre',
+                    imageUrl: 'https://tsimg.cloud/AFQ-2VL54/profile_w128.png',
+                    value: 'AFQ-2VL54',
+                    text: 'Claudia Schreiber, 57 Jahre',
+                    subtext: 'Deutschlehrerin',
                 },
                 {
-                    imageUrl: 'https://tsimg.cloud/U28-2F8C3/profile_w128.png',
-                    value: 'U28-2F8C3',
-                    text: 'Frau Biologica (Biologie, 9. - 10. Klasse) mit zusätzlicher Information',
-                    subtext: 'Biologielehrerin, 33 Jahre',
+                    imageUrl: 'https://tsimg.cloud/FCB-GEU25/profile_w128.png',
+                    value: 'FCB-GEU25',
+                    text: 'Lukas Waldmann, 24 Jahre',
+                    subtext: 'Biologielehrer',
                 },
                 {
-                    imageUrl: 'https://tsimg.cloud/TTC-ANK55/profile_w128.png',
-                    value: 'TTC-ANK55',
-                    text: 'Herr Chemica (Chemie, 9. - 10. Klasse)',
-                    subtext: 'Chemielehrer, 35 Jahre',
+                    imageUrl: 'https://tsimg.cloud/R3U-8B6ZJ/profile_w128.png',
+                    value: 'R3U-8B6ZJ',
+                    text: 'Emily Taylor, 29 Jahre',
+                    subtext: 'Englischlehrerin',
+                },
+                {
+                    imageUrl: 'https://tsimg.cloud/TER-1VS4Q/profile_w128.png',
+                    value: 'TER-1VS4Q',
+                    text: 'Paul Bitner, 28 Jahre',
+                    subtext: 'Informatiklehrer',
+                },
+                {
+                    imageUrl: 'https://tsimg.cloud/IFZ-HFCC6/profile_w128.png',
+                    value: 'IFZ-HFCC6',
+                    text: 'Rudi Ratlos, 20 Jahre',
+                    subtext: 'Informatik-Referent',
                 },
             ],
         },
     ],
-    placeholder: 'Avatar auswählen',
+    placeholder: 'Agent wählen',
+    shouldShowClearIcon: true,
+    shouldShowRoundImage: true,
+    shouldUseFullWidth: true,
+};
+
+WithBigImage.args = {
+    shouldShowBigImage: true,
+    lists: [
+        {
+            list: [
+                {
+                    imageUrl: 'https://tsimg.cloud/6C8-5QJDF/profile_w128.png',
+                    value: '6C8-5QJDF',
+                    text: 'Albert, 55 Jahre',
+                },
+                {
+                    imageUrl: 'https://tsimg.cloud/DFU-I2R6I/profile_w128.png',
+                    value: 'DFU-I2R6I',
+                    text: 'Anna, 30 Jahre',
+                },
+                {
+                    imageUrl: 'https://tsimg.cloud/SY9-LT5TA/profile_w128.png',
+                    value: 'SY9-LT5TA',
+                    text: 'Elisabeth, 80 Jahre',
+                },
+                {
+                    imageUrl: 'https://tsimg.cloud/BGJ-DTZBH/profile_w128.png',
+                    value: 'BGJ-DTZBH',
+                    text: 'Jonas, 20 Jahre',
+                },
+                {
+                    imageUrl: 'https://tsimg.cloud/672-9GQ3J/profile_w128.png',
+                    value: '672-9GQ3J',
+                    text: 'Lisa, 10 Jahre',
+                },
+                {
+                    imageUrl: 'https://tsimg.cloud/CVW-MDH7R/profile_w128.png',
+                    value: 'CVW-MDH7R',
+                    text: 'Stefan, 35 Jahre',
+                    subtext: 'Informatiklehrer',
+                },
+            ],
+        },
+    ],
+    placeholder: 'Agent wählen',
+    shouldShowClearIcon: true,
     shouldShowRoundImage: true,
     shouldUseFullWidth: true,
 };

@@ -25,6 +25,11 @@ export type {
 } from './components/color-scheme-provider/ColorSchemeProvider';
 export { useContainer, ContainerAnchor } from './hooks/container';
 export {
+    default as FileList,
+    type IFileItem as FileListItem,
+} from './components/file-list/FileList';
+export { default as FileSelect } from './components/file-select/FileSelect';
+export {
     default as ComboBox,
     type ComboBoxTextStyles,
     type IComboBoxItem as ComboBoxItem,

@@ -5,7 +5,7 @@ import DevalueSlider, {
     DevalueSliderProps,
 } from '../src/components/DevalueSlider';
 import { sleep } from '../src/utils/common';
-import {addSeconds, subHours} from "../src/utils/date";
+import { addSeconds, subHours } from '../src/utils/date';
 
 export default {
     title: 'DevalueSlider/DevalueSlider',

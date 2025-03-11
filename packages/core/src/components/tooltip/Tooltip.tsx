@@ -36,6 +36,10 @@ export type TooltipProps = {
      */
     shouldUseChildrenWidth?: boolean;
     /**
+     * Whether the tooltip children should use the full width.
+     */
+    shouldUseFullWidth?: boolean;
+    /**
      * The Y offset of the tooltip to the children.
      */
     yOffset?: number;
@@ -49,7 +53,8 @@ const Tooltip: FC<TooltipProps> = ({
     shouldHideOnChildrenLeave,
     yOffset,
     itemWidth,
-    shouldUseChildrenWidth = true,
+    shouldUseFullWidth = false,
+    shouldUseChildrenWidth = !shouldUseFullWidth,
 }) => {
     const tooltipRef = useRef<PopupRef>(null);
 
@@ -71,11 +76,12 @@ const Tooltip: FC<TooltipProps> = ({
 
     return useMemo(
         () => (
-            <StyledTooltip>
+            <StyledTooltip className="beta-chayns-tooltip">
                 {isDisabled ? (
                     <StyledTooltipChildren
                         $isOnlyText={isTextOnlyElement(children)}
                         $shouldUseChildrenWidth={shouldUseChildrenWidth}
+                        $shouldUseFullWidth={shouldUseFullWidth}
                     >
                         {children}
                     </StyledTooltipChildren>
@@ -88,10 +94,12 @@ const Tooltip: FC<TooltipProps> = ({
                         container={container}
                         yOffset={yOffset}
                         shouldUseChildrenWidth={shouldUseChildrenWidth}
+                        shouldUseFullWidth={shouldUseFullWidth}
                     >
                         <StyledTooltipChildren
                             $isOnlyText={isTextOnlyElement(children)}
                             $shouldUseChildrenWidth={shouldUseChildrenWidth}
+                            $shouldUseFullWidth={shouldUseFullWidth}
                         >
                             {children}
                         </StyledTooltipChildren>
@@ -103,6 +111,7 @@ const Tooltip: FC<TooltipProps> = ({
             isDisabled,
             children,
             shouldUseChildrenWidth,
+            shouldUseFullWidth,
             shouldHideOnChildrenLeave,
             content,
             container,

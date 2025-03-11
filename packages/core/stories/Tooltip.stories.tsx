@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Checkbox } from '../src';
+import { Checkbox, Input } from '../src';
 import Tooltip from '../src/components/tooltip/Tooltip';
 
 export default {
@@ -25,10 +25,24 @@ export const General = Template.bind({});
 
 export const OnCheckbox = Template.bind({});
 
+export const OnDeactivatedInput = Template.bind({});
+
 General.args = {
     children: 'Hover me!',
 };
 
 OnCheckbox.args = {
     children: <Checkbox>Checkbox mit Tooltip</Checkbox>,
+};
+
+OnDeactivatedInput.args = {
+    children: <Input isDisabled placeholder="Deaktiviert"></Input>,
+    shouldUseChildrenWidth: true,
+    item: {
+        headline: undefined,
+        text: 'Aktiviere den Agenten, um das Briefing zu testen.',
+        imageUrl: undefined,
+        button: undefined,
+    },
+    itemWidth: undefined,
 };

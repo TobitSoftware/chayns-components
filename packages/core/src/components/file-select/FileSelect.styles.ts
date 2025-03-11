@@ -2,20 +2,20 @@ import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { FramerMotionBugFix, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
-export const StyledFileInput = styled.div``;
+export const StyledFileSelect = styled.div``;
 
-type StyledFileInputWrapperProps = WithTheme<{
+type StyledFileSelectWrapperProps = WithTheme<{
     $isDisabled?: boolean;
 }>;
 
-export const StyledFileInputWrapper = styled.div<StyledFileInputWrapperProps>`
+export const StyledFileSelectWrapper = styled.div<StyledFileSelectWrapperProps>`
     display: flex;
 
     cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
 `;
 
-type StyledFileInputContainerProps = WithTheme<{
+type StyledFileSelectContainerProps = WithTheme<{
     $isImageSelection?: boolean;
 }>;
 
@@ -29,8 +29,8 @@ export const StyledUploadedFilesList = styled.div<StyledUploadedFilesListProps>`
         `}
 `;
 
-export const StyledFileInputContainer = styled.div<StyledFileInputContainerProps>`
-    border: ${({ theme }: StyledFileInputContainerProps) => theme.text} 1px dotted;
+export const StyledFileSelectContainer = styled.div<StyledFileSelectContainerProps>`
+    border: ${({ theme }: StyledFileSelectContainerProps) => theme.text} 1px dotted;
     display: flex;
     gap: 10px;
     align-items: center;
@@ -45,10 +45,10 @@ export const StyledFileInputContainer = styled.div<StyledFileInputContainerProps
         `}
 `;
 
-type StyledFileInputTextProps = WithTheme<unknown>;
+type StyledFileSelectTextProps = WithTheme<unknown>;
 
-export const StyledFileInputText = styled.p<StyledFileInputTextProps>`
-    color: ${({ theme }: StyledFileInputTextProps) => theme.text};
+export const StyledFileSelectText = styled.p<StyledFileSelectTextProps>`
+    color: ${({ theme }: StyledFileSelectTextProps) => theme.text};
 `;
 
-export const StyledMotionFileInputList = styled(motion.div)<FramerMotionBugFix>``;
+export const StyledMotionFileSelectList = styled(motion.div)<FramerMotionBugFix>``;

@@ -72,6 +72,7 @@ export const StyledListItemHeadTitle = styled.div`
 `;
 
 export const StyledListItemHeadTitleContent = styled.div`
+    align-items: center;
     display: flex;
     flex: 1 1 auto;
     max-width: 100%;

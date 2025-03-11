@@ -1,7 +1,8 @@
 import React, { FC, useCallback, useMemo, type ReactElement } from 'react';
 import {
     CalendarType,
-    type Categories, CustomThumbColors,
+    type Categories,
+    CustomThumbColors,
     type DateInterval,
     type EMonth,
     type HighlightedDates,
@@ -16,8 +17,8 @@ import {
     isSameMonth,
     isWithinInterval,
     startOfMonth,
-    startOfWeek
-} from "../../../../../utils/date";
+    startOfWeek,
+} from '../../../../../utils/date';
 
 export type DayWrapperProps = {
     month: EMonth;
@@ -44,7 +45,8 @@ const DayWrapper: FC<DayWrapperProps> = ({
     selectedDate,
     categories,
     minDate,
-    maxDate,customThumbColors,
+    maxDate,
+    customThumbColors,
     type,
     hoveringDay,
     shouldShowHighlightsInMonthOverlay,
@@ -164,7 +166,22 @@ const DayWrapper: FC<DayWrapperProps> = ({
         });
 
         return items;
-    }, [selectedDate, disabledDates, days, minDate, maxDate, type, hoveringDay, categories, customThumbColors, shouldShowHighlightsInMonthOverlay, dayOfCurrentMonth, handleDayClick, highlightedDates, setHoveringDay]);
+    }, [
+        selectedDate,
+        disabledDates,
+        days,
+        minDate,
+        maxDate,
+        type,
+        hoveringDay,
+        categories,
+        customThumbColors,
+        shouldShowHighlightsInMonthOverlay,
+        dayOfCurrentMonth,
+        handleDayClick,
+        highlightedDates,
+        setHoveringDay,
+    ]);
 
     return <StyledDayWrapper>{dayElements}</StyledDayWrapper>;
 };

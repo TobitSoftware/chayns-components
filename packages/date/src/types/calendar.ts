@@ -34,7 +34,6 @@ export interface CustomThumbColors {
      * The background color of the middle part of the interval thumb
      */
     secondaryBackgroundColor?: CSSProperties['color'];
-
 }
 
 export enum EMonth {

@@ -121,7 +121,7 @@ const asciiRegexp =
 
 export const regAscii = new RegExp(
     `<object[^>]*>.*?</object>|<span[^>]*>.*?</span>|<(?:object|embed|svg|img|div|span|p|a)[^>]*>|((\\s|^)${asciiRegexp}(?=\\s|$|[!,.?]))`,
-    'gi'
+    'gi',
 );
 
 export const shortNameList: { [key: string]: string } = {
@@ -3806,5 +3806,5 @@ Object.keys(shortNameList).forEach((shortname, index) => {
 
 export const regShortnames = new RegExp(
     `<object[^>]*>.*?</object>|<span[^>]*>.*?</span>|<(?:object|embed|svg|img|div|span|p|a)[^>]*>|(${shortnameRegexp})`,
-    'gi'
+    'gi',
 );

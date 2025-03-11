@@ -15,7 +15,7 @@ const PARSER_MAP: ParserMap = {
 };
 
 export const getParserForLanguage = async (
-    language: CodeHighlighterLanguage = ''
+    language: CodeHighlighterLanguage = '',
 ): Promise<Options | undefined> => {
     let parser: ParserType | undefined;
 
