@@ -232,9 +232,8 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
 
         return useMemo(
             () => (
-                <StyledTagInput>
-                    {leftElement && leftElement}
                 <StyledTagInput $shouldChangeColor={shouldChangeColor}>
+                    {leftElement && leftElement}
                     {content}
                     {shouldShowInput && (
                         <StyledTagInputTagInput
@@ -246,7 +245,16 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                     )}
                 </StyledTagInput>
             ),
-            [content, currentValue, handleKeyDown, placeholder, tags],
+            [
+                content,
+                currentValue,
+                handleKeyDown,
+                leftElement,
+                placeholder,
+                shouldChangeColor,
+                shouldShowInput,
+                tags,
+            ],
         );
     },
 );
