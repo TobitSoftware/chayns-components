@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
-type StyledTagInputProps = WithTheme<unknown>;
+type StyledTagInputProps = WithTheme<{ $shouldChangeColor: boolean }>;
 
 export const StyledTagInput = styled.div<StyledTagInputProps>`
     display: flex;
@@ -10,7 +10,8 @@ export const StyledTagInput = styled.div<StyledTagInputProps>`
     padding: 5px;
     align-items: center;
     gap: 6px;
-    background-color: ${({ theme }: StyledTagInputProps) => theme['100']};
+    background-color: ${({ theme, $shouldChangeColor }: StyledTagInputProps) =>
+        theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
     border: 1px solid rgba(160, 160, 160, 0.3);
 `;
 

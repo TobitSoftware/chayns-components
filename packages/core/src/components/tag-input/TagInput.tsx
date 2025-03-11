@@ -8,6 +8,7 @@ import React, {
     type KeyboardEvent,
     type ReactElement,
     useImperativeHandle,
+    useContext,
 } from 'react';
 import { useTheme } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
@@ -20,6 +21,7 @@ import {
     StyledTagInputTagWrapper,
     StyledTagInputTagWrapperText,
 } from './TagInput.styles';
+import { AreaContext } from '../area-provider/AreaContextProvider';
 
 export type TagInputProps = {
     /**
@@ -51,12 +53,18 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
         const [selectedId, setSelectedId] = useState<Tag['id']>();
 
         const theme = useTheme();
+        const areaProvider = useContext(AreaContext);
 
         useEffect(() => {
             if (tags) {
                 setInternalTags(tags);
             }
         }, [tags]);
+
+        const shouldChangeColor = useMemo(
+            () => areaProvider.shouldChangeColor ?? false,
+            [areaProvider.shouldChangeColor],
+        );
 
         useImperativeHandle(
             ref,
@@ -178,7 +186,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
 
         return useMemo(
             () => (
-                <StyledTagInput>
+                <StyledTagInput $shouldChangeColor={shouldChangeColor}>
                     {content}
                     <StyledTagInputTagInput
                         placeholder={tags && tags.length > 0 ? undefined : placeholder}
@@ -188,7 +196,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                     />
                 </StyledTagInput>
             ),
-            [content, currentValue, handleKeyDown, placeholder, tags],
+            [content, currentValue, handleKeyDown, placeholder, shouldChangeColor, tags],
         );
     },
 );
