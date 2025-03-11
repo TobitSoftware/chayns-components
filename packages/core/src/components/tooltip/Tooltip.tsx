@@ -1,5 +1,5 @@
 import React, { FC, isValidElement, ReactNode, useMemo, useRef, type CSSProperties } from 'react';
-import type { PopupRef } from '../../types/popup';
+import type { PopupAlignment, PopupRef } from '../../types/popup';
 import type { ITooltipItem } from '../../types/tooltip';
 import { isTextOnlyElement } from '../../utils/tooltip';
 import Popup from '../popup/Popup';
@@ -7,6 +7,10 @@ import TooltipItem from './tooltip-item/TooltipItem';
 import { StyledTooltip, StyledTooltipChildren } from './Tooltip.styles';
 
 export type TooltipProps = {
+    /**
+     * The alignment of the tooltip. By default, the tooltip will calculate the best alignment.
+     */
+    alignment?: PopupAlignment;
     /**
      * The elements that the tooltip should surround.
      */
@@ -46,6 +50,7 @@ export type TooltipProps = {
 };
 
 const Tooltip: FC<TooltipProps> = ({
+    alignment,
     item,
     children,
     container,
@@ -87,6 +92,7 @@ const Tooltip: FC<TooltipProps> = ({
                     </StyledTooltipChildren>
                 ) : (
                     <Popup
+                        alignment={alignment}
                         shouldShowOnHover
                         shouldHideOnChildrenLeave={shouldHideOnChildrenLeave}
                         content={content}
@@ -112,6 +118,7 @@ const Tooltip: FC<TooltipProps> = ({
             children,
             shouldUseChildrenWidth,
             shouldUseFullWidth,
+            alignment,
             shouldHideOnChildrenLeave,
             content,
             container,

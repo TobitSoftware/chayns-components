@@ -19,6 +19,10 @@ import { StyledPopup, StyledPopupPseudo } from './Popup.styles';
 
 export type PopupProps = {
     /**
+     * The alignment of the popup. By default, the popup will calculate the best alignment.
+     */
+    alignment?: PopupAlignment;
+    /**
      * The element over which the content of the `ContextMenu` should be displayed.
      */
     children?: ReactNode;
@@ -67,6 +71,7 @@ export type PopupProps = {
 const Popup = forwardRef<PopupRef, PopupProps>(
     (
         {
+            alignment,
             content,
             onShow,
             container,
@@ -86,7 +91,9 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             y: 0,
         });
 
-        const [alignment, setAlignment] = useState<PopupAlignment>(PopupAlignment.TopLeft);
+        const [internalAlignment, setInternalAlignment] = useState<PopupAlignment>(
+            PopupAlignment.TopLeft,
+        );
         const [offset, setOffset] = useState<number>(0);
         const [isOpen, setIsOpen] = useState(false);
         const [portal, setPortal] = useState<ReactPortal>();
@@ -173,15 +180,22 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 const zoomX = width / (newContainer as HTMLElement).offsetWidth;
                 const zoomY = height / (newContainer as HTMLElement).offsetHeight;
 
-                if (pseudoHeight > childrenTop - 25) {
+                if (
+                    pseudoHeight > childrenTop - 25 ||
+                    alignment === PopupAlignment.BottomLeft ||
+                    alignment === PopupAlignment.BottomRight
+                ) {
                     let isRight = false;
 
-                    if (pseudoWidth > childrenLeft + childrenWidth / 2 - 25) {
-                        setAlignment(PopupAlignment.BottomRight);
+                    if (
+                        pseudoWidth > childrenLeft + childrenWidth / 2 - 25 ||
+                        alignment === PopupAlignment.BottomRight
+                    ) {
+                        setInternalAlignment(PopupAlignment.BottomRight);
 
                         isRight = true;
                     } else {
-                        setAlignment(PopupAlignment.BottomLeft);
+                        setInternalAlignment(PopupAlignment.BottomLeft);
                     }
 
                     const x =
@@ -220,12 +234,15 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 } else {
                     let isRight = false;
 
-                    if (pseudoWidth > childrenLeft + childrenWidth / 2 - 25) {
-                        setAlignment(PopupAlignment.TopRight);
+                    if (
+                        pseudoWidth > childrenLeft + childrenWidth / 2 - 25 ||
+                        alignment === PopupAlignment.TopRight
+                    ) {
+                        setInternalAlignment(PopupAlignment.TopRight);
 
                         isRight = true;
                     } else {
-                        setAlignment(PopupAlignment.TopLeft);
+                        setInternalAlignment(PopupAlignment.TopLeft);
                     }
 
                     const x =
@@ -265,7 +282,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
                 setIsOpen(true);
             }
-        }, [newContainer, pseudoSize, yOffset]);
+        }, [alignment, newContainer, pseudoSize, yOffset]);
 
         const handleChildrenClick = () => {
             handleShow();
@@ -357,7 +374,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                                 shouldScrollWithContent={shouldScrollWithContent}
                                 coordinates={coordinates}
                                 key={`tooltip_${uuid}`}
-                                alignment={alignment}
+                                alignment={internalAlignment}
                                 ref={popupContentRef}
                                 onMouseLeave={handleMouseLeave}
                                 onMouseEnter={handleMouseEnter}
@@ -372,7 +389,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 ),
             );
         }, [
-            alignment,
+            internalAlignment,
             newContainer,
             content,
             coordinates,
