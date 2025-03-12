@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/swipeable-wrapper",
-    "version": "5.0.0-beta.1063",
+    "version": "5.0.0-beta.1064",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -69,7 +69,7 @@
         "typescript": "^5.8.2"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.1063"
+        "@chayns-components/core": "^5.0.0-beta.1064"
     },
     "peerDependencies": {
         "chayns-api": ">=2.2.0",
