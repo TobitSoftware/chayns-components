@@ -4,6 +4,7 @@ import type { WithTheme } from './ColorSchemeProvider';
 
 type ColorSchemeProviderProps = WithTheme<unknown>;
 
+// noinspection CssUnresolvedCustomProperty
 export const StyledColorSchemeProvider = styled.div<ColorSchemeProviderProps>`
     color: var(--chayns-color--text);
 
