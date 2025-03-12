@@ -91,7 +91,7 @@ const createTheme = ({
             result[key] = themeResult[key] as string;
         });
     }
-    result.fontSize = (designSettings?.fontSizePx ?? 15) as unknown as string;
+    result.fontSize = (designSettings?.fontSizePx || 15) as unknown as string;
 
     return result;
 };
