@@ -29,6 +29,7 @@ export const StyledCheckboxBox = styled.label<StyledCheckboxBoxProps>`
     padding-left: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '48px' : '20px')};
     transition: opacity 0.2s ease;
     user-select: none;
+    height: 16px;
 
     &:after {
         ${({ $isChecked, $shouldShowAsSwitch, $lineHeight, theme }: StyledCheckboxBoxProps) =>
