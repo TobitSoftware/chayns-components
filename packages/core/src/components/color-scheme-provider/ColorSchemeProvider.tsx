@@ -52,6 +52,17 @@ const GlobalStyle = createGlobalStyle`
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+
+    footer {
+        font-size: 0.85rem;
+        color: #888;
+        margin: 10px 0 0;
+
+        & a {
+            color: #888;
+            letter-spacing: -0.3px;
+        }
+    }
 `;
 
 export interface ColorSchemeContextProps {
