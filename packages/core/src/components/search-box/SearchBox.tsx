@@ -274,8 +274,17 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         }, [groups, lists, customFilter, shouldAddInputToList, value]);
 
         const handleOpen = useCallback(() => {
-            if (boxRef.current) {
-                const { x, y, height: bodyHeight } = boxRef.current.getBoundingClientRect();
+            if (boxRef.current && newContainer) {
+                const {
+                    left: comboBoxLeft,
+                    top: comboBoxTop,
+                    height: bodyHeight,
+                } = boxRef.current.getBoundingClientRect();
+
+                const { left, top } = newContainer.getBoundingClientRect();
+
+                const x = comboBoxLeft - left + newContainer.scrollLeft;
+                const y = comboBoxTop - top + newContainer.scrollTop;
 
                 setInternalCoordinates({
                     x,
@@ -284,7 +293,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
                 setIsAnimating(true);
             }
-        }, []);
+        }, [newContainer]);
 
         const handleClose = useCallback(() => {
             setIsAnimating(false);
