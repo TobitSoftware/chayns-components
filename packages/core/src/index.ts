@@ -34,6 +34,8 @@ export {
     type IComboBoxItems as ComboBoxItems,
 } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
+export { default as HighlightSLider } from './components/highlight-slider/HighlightSlider';
+export type { HighlightSliderItemColors as HighlightSliderColors } from './components/highlight-slider/highlight-slider-item/HighlightSliderItem';
 export {
     default as ContextMenu,
     type ContextMenuCoordinates,
