@@ -76,17 +76,27 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     const { browser } = useDevice();
 
     useEffect(() => {
-        if (ref.current) {
-            const { children } = ref.current;
+        const handleResize = () => {
+            if (ref.current) {
+                const { children } = ref.current;
 
-            const preElement = Array.from(children).find(
-                ({ tagName }) => tagName.toLowerCase() === 'pre',
-            );
+                const preElement = Array.from(children).find(
+                    ({ tagName }) => tagName.toLowerCase() === 'pre',
+                );
 
-            if (preElement) {
-                setWidth(preElement.scrollWidth);
+                if (preElement) {
+                    setWidth(preElement.scrollWidth);
+                }
             }
-        }
+        };
+
+        handleResize();
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     // function to style highlighted code
