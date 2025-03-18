@@ -4,6 +4,7 @@ export enum FilterButtonItemShape {
     Round,
     Rectangular,
 }
+
 export enum FilterButtonSize {
     Small,
     Normal,
@@ -15,4 +16,5 @@ export interface IFilterButtonItem {
     color?: CSSProperties['color'];
     icons?: string[];
     count?: number;
+    isDisabled?: boolean;
 }
