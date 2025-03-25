@@ -4,16 +4,16 @@ import { StyledMotionListItemBody } from './ListItemBody.styles';
 interface ListItemBodyProps {
     children?: ReactNode;
     id: string;
+    shouldHideBody: boolean;
 }
 
-const ListItemBody: FC<ListItemBodyProps> = ({ children, id }) => {
+const ListItemBody: FC<ListItemBodyProps> = ({ children, id, shouldHideBody }) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const [height] = useState<number | 'auto'>('auto');
 
     return (
         <StyledMotionListItemBody
             key={id}
-            animate={{ height, opacity: 1 }}
+            animate={{ height: shouldHideBody ? '0' : 'auto', opacity: shouldHideBody ? 0 : 1 }}
             className="beta-chayns-list-item-body"
             exit={{ height: 0, opacity: 0 }}
             initial={{ height: 0, opacity: 0 }}

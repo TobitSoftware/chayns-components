@@ -257,6 +257,7 @@ ListItemWithGreyedTitle.args = {
             subtitle="Sadipscing elitr dolor sit"
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
             isTitleGreyed
+            shouldRenderClosed
         >
             <ListItemContent>
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod

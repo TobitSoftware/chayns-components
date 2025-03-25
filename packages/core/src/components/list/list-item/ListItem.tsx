@@ -125,6 +125,10 @@ export type ListItemProps = {
      */
     shouldPreventLayoutAnimation?: boolean;
     /**
+     * This will render the ListItem closed on the first render.
+     */
+    shouldRenderClosed?: boolean;
+    /**
      * Whether the image or icon should be displayed in a round shape. This should be always used for images of persons.
      */
     shouldShowRoundImageOrIcon?: boolean;
@@ -171,6 +175,7 @@ const ListItem: FC<ListItemProps> = ({
     shouldShowRoundImageOrIcon,
     shouldShowSeparatorBelow = false,
     shouldForceHover = false,
+    shouldRenderClosed = false,
     subtitle,
     title,
     titleElement,
@@ -284,8 +289,12 @@ const ListItem: FC<ListItemProps> = ({
                 titleElement={titleElement}
             />
             <AnimatePresence initial={false}>
-                {isExpandable && isItemOpen && (
-                    <ListItemBody id={uuid} key={`listItemBody-${uuid}`}>
+                {isExpandable && (isItemOpen || shouldRenderClosed) && (
+                    <ListItemBody
+                        id={uuid}
+                        key={`listItemBody-${uuid}`}
+                        shouldHideBody={shouldRenderClosed && !isItemOpen}
+                    >
                         <AreaContextProvider>{children}</AreaContextProvider>
                     </ListItemBody>
                 )}
