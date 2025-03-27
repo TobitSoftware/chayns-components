@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/color-picker",
-    "version": "5.0.0-beta.1071",
+    "version": "5.0.0-beta.1072",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -69,7 +69,7 @@
         "typescript": "^5.8.2"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.1071",
+        "@chayns-components/core": "^5.0.0-beta.1072",
         "@chayns/colors": "^2.0.0"
     },
     "peerDependencies": {
