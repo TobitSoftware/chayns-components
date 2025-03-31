@@ -85,6 +85,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     customVariables,
 }) => {
     const { color: internalColor, colorMode: internalColorMode } = useSite();
+
     const color = colorProp ?? internalColor;
     const colorMode = colorModeProp ?? internalColorMode;
 
