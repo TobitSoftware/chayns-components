@@ -79,7 +79,6 @@ export const StyledComboBoxItemContentHeader = styled.div<StyledComboBoxItemCont
     align-items: center;
     display: flex;
     justify-content: space-between;
-    font-weight: ${({ $text, $subtext }) => ($text && $subtext ? 'bold' : 'normal')};
 `;
 
 export const StyledComboBoxItemContentHeaderWrapper = styled.div`
