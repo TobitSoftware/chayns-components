@@ -70,7 +70,7 @@ export default class RadioButton extends Component {
                         if (stopPropagation) {
                             event.stopPropagation();
                         }
-                        props.onClick?.();
+                        props.onClick?.(event);
                     }}
                 />
                 <label
