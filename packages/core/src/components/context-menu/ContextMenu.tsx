@@ -58,6 +58,10 @@ type ContextMenuProps = {
      */
     coordinates?: ContextMenuCoordinates;
     /**
+     * The headline of the contextmenu.
+     */
+    headline?: string;
+    /**
      * The items that will be displayed in the content of the `ContextMenu`.
      */
     items: ContextMenuItem[];
@@ -73,6 +77,10 @@ type ContextMenuProps = {
      * Whether the popup should be closed if its clicked.
      */
     shouldCloseOnPopupClick?: boolean;
+    /**
+     * Whether the arrow of the popup should be hidden.
+     */
+    shouldHidePopupArrow?: boolean;
     /**
      * The z-index of the popup.
      */
@@ -91,7 +99,9 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             children = <Icon icons={['ts-ellipsis_v']} size={18} />,
             container,
             coordinates,
+            shouldHidePopupArrow = false,
             items,
+            headline,
             onHide,
             onShow,
             shouldCloseOnPopupClick = true,
@@ -135,7 +145,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         }, [container]);
 
         const handleHide = useCallback(() => {
-            setIsContentShown(false);
+            // setIsContentShown(false);
         }, []);
 
         const handleShow = useCallback(async () => {
@@ -258,6 +268,8 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                                 coordinates={coordinates ?? internalCoordinates}
                                 items={items}
                                 zIndex={zIndex}
+                                headline={headline}
+                                shouldHidePopupArrow={shouldHidePopupArrow}
                                 key={`contextMenu_${uuid}`}
                                 alignment={alignment ?? internalAlignment}
                                 ref={contextMenuContentRef}
@@ -277,6 +289,8 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             items,
             uuid,
             zIndex,
+            shouldHidePopupArrow,
+            headline,
         ]);
 
         return (
