@@ -145,7 +145,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         }, [container]);
 
         const handleHide = useCallback(() => {
-            // setIsContentShown(false);
+            setIsContentShown(false);
         }, []);
 
         const handleShow = useCallback(async () => {
