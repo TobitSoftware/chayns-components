@@ -53,7 +53,10 @@ export default class RadioButton extends Component {
         } = this.props;
 
         return (
-            <div className={classNames('cc__radio-button', className)} style={style}>
+            <div
+                className={classNames('cc__radio-button', className)}
+                style={style}
+            >
                 <input
                     {...props}
                     id={id || this.id}
@@ -63,11 +66,12 @@ export default class RadioButton extends Component {
                     onChange={this.handleChange}
                     name={name}
                     disabled={disabled}
-                    onClick={
-                        stopPropagation
-                            ? (event) => event.stopPropagation()
-                            : null
-                    }
+                    onClick={(event) => {
+                        if (stopPropagation) {
+                            event.stopPropagation();
+                        }
+                        props.onClick?.();
+                    }}
                 />
                 <label
                     htmlFor={id || this.id}
