@@ -36,6 +36,7 @@ import {
     StyledSearchBoxIcon,
     StyledSearchBoxLeftWrapper,
 } from './SearchBox.styles';
+import { useUuid } from '../../hooks/uuid';
 
 export type SearchBoxRef = {
     clear: VoidFunction;
@@ -154,6 +155,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             y: 0,
         });
         const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
+
+        const uuid = useUuid();
 
         const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement>(null);
@@ -358,7 +361,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          * This hook calculates the width
          */
         useEffect(() => {
-            const input = document.getElementById('search_box_input');
+            const input = document.getElementById(`search_box_input${uuid}`);
 
             const getInputWidth = () => {
                 if (input) {
@@ -369,7 +372,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             if (input) {
                 new ResizeObserver(getInputWidth).observe(input);
             }
-        }, []);
+        }, [uuid]);
 
         useEffect(() => {
             if (selectedId) {
@@ -845,7 +848,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         return useMemo(
             () => (
                 <StyledSearchBox ref={boxRef}>
-                    <div id="search_box_input">
+                    <div id={`search_box_input${uuid}`}>
                         <Input
                             isInvalid={isInvalid}
                             ref={inputRef}
@@ -872,6 +875,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 placeholder,
                 portal,
                 rightElement,
+                uuid,
                 value,
             ],
         );
