@@ -807,11 +807,15 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
             setPortal(() =>
                 createPortal(
-                    <AnimatePresence initial={false}>
+                    <AnimatePresence
+                        initial={false}
+                        key={`search-box-body-animation-wrapper-${uuid}`}
+                    >
                         {isAnimating &&
                             matchingListsItems.length !== 0 &&
                             (value.trim() !== '' || shouldShowContentOnEmptyInput) && (
                                 <SearchBoxBody
+                                    key={`search-box-body-${uuid}`}
                                     filterButtons={filterButtons}
                                     selectedGroups={groups}
                                     width={width}
@@ -843,11 +847,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             matchingListsItems.length,
             value,
             shouldShowContentOnEmptyInput,
+            uuid,
         ]);
 
         return useMemo(
             () => (
-                <StyledSearchBox ref={boxRef}>
+                <StyledSearchBox ref={boxRef} key={`search-box-${uuid}`}>
                     <div id={`search_box_input${uuid}`}>
                         <Input
                             isInvalid={isInvalid}
