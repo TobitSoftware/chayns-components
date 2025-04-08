@@ -18,10 +18,22 @@ type ContextMenuContentProps = {
     shouldHidePopupArrow: boolean;
     headline?: string;
     zIndex: number;
+    shouldSeparateLastItem: boolean;
 };
 
 const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentProps>(
-    ({ alignment, coordinates, items, zIndex, shouldHidePopupArrow, headline }, ref) => {
+    (
+        {
+            alignment,
+            coordinates,
+            items,
+            zIndex,
+            shouldHidePopupArrow,
+            headline,
+            shouldSeparateLastItem,
+        },
+        ref,
+    ) => {
         const isBottomLeftAlignment = alignment === ContextMenuAlignment.BottomLeft;
         const isTopLeftAlignment = alignment === ContextMenuAlignment.TopLeft;
         const isTopRightAlignment = alignment === ContextMenuAlignment.TopRight;
@@ -93,7 +105,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                         </StyledContextMenuContentItem>
                     );
 
-                    if (shouldHidePopupArrow && index + 1 === items.length) {
+                    if (shouldSeparateLastItem && index + 1 === items.length) {
                         return (
                             <>
                                 <StyledContextMenuContentItemBorder />
@@ -104,7 +116,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
 
                     return item;
                 }),
-            [items, shouldHidePopupArrow],
+            [items, shouldHidePopupArrow, shouldSeparateLastItem],
         );
 
         return (

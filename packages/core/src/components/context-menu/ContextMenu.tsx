@@ -82,6 +82,10 @@ type ContextMenuProps = {
      */
     shouldHidePopupArrow?: boolean;
     /**
+     * Whether the last item should be separated.
+     */
+    shouldSeparateLastItem?: boolean;
+    /**
      * The z-index of the popup.
      */
     zIndex?: number;
@@ -105,6 +109,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             onHide,
             onShow,
             shouldCloseOnPopupClick = true,
+            shouldSeparateLastItem = false,
             zIndex = 20,
         },
         ref,
@@ -267,6 +272,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                             <ContextMenuContent
                                 coordinates={coordinates ?? internalCoordinates}
                                 items={items}
+                                shouldSeparateLastItem={shouldSeparateLastItem}
                                 zIndex={zIndex}
                                 headline={headline}
                                 shouldHidePopupArrow={shouldHidePopupArrow}
@@ -291,6 +297,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             zIndex,
             shouldHidePopupArrow,
             headline,
+            shouldSeparateLastItem,
         ]);
 
         return (
