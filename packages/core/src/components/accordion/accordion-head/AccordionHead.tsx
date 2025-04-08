@@ -117,7 +117,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 getAccordionHeadHeight({
                     isWrapped,
                     title,
-                    width: (titleWrapperRef.current?.clientWidth ?? 0) - 10,
+                    width: (titleWrapperRef.current?.clientWidth ?? 0) + 10,
                     hasSearch: typeof onSearchChange === 'function',
                 }),
             );
