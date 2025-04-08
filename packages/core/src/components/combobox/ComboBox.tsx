@@ -193,6 +193,19 @@ const ComboBox: FC<ComboBoxProps> = ({
         [areaProvider.shouldChangeColor],
     );
 
+    const shouldDisableActions = useMemo(() => {
+        if (!selectedItem) {
+            return false;
+        }
+
+        const combinedLists = lists.flatMap((list) => list.list);
+
+        return (
+            combinedLists.length === 1 &&
+            combinedLists.some((item) => item.value === selectedItem.value)
+        );
+    }, [lists, selectedItem]);
+
     useEffect(() => {
         if (styledComboBoxElementRef.current && !container) {
             const el = styledComboBoxElementRef.current as HTMLElement;
@@ -240,6 +253,10 @@ const ComboBox: FC<ComboBoxProps> = ({
     );
 
     const handleOpen = useCallback(() => {
+        if (shouldDisableActions) {
+            return;
+        }
+
         if (styledComboBoxElementRef.current && newContainer) {
             const {
                 left: comboBoxLeft,
@@ -265,7 +282,7 @@ const ComboBox: FC<ComboBoxProps> = ({
 
             setIsAnimating(true);
         }
-    }, [newContainer, direction]);
+    }, [shouldDisableActions, newContainer, direction]);
 
     const handleClose = useCallback(() => {
         setIsAnimating(false);
@@ -720,13 +737,15 @@ const ComboBox: FC<ComboBoxProps> = ({
                             <Icon icons={['fa fa-times']} />
                         </StyledComboBoxClearIconWrapper>
                     )}
-                    <StyledComboBoxIconWrapper
-                        $shouldShowBorderLeft={
-                            shouldShowClearIcon === true && internalSelectedItem !== undefined
-                        }
-                    >
-                        <Icon icons={['fa fa-chevron-down']} />
-                    </StyledComboBoxIconWrapper>
+                    {!shouldDisableActions && (
+                        <StyledComboBoxIconWrapper
+                            $shouldShowBorderLeft={
+                                shouldShowClearIcon === true && internalSelectedItem !== undefined
+                            }
+                        >
+                            <Icon icons={['fa fa-chevron-down']} />
+                        </StyledComboBoxIconWrapper>
+                    )}
                 </StyledComboBoxHeader>
                 {portal}
             </StyledComboBox>
@@ -755,6 +774,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             placeholderText,
             shouldShowClearIcon,
             handleClear,
+            shouldDisableActions,
             portal,
         ],
     );
