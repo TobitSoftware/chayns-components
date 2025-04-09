@@ -29,6 +29,7 @@ export type ContextMenuItem = {
     icons: string[];
     key: string;
     onClick: (event?: MouseEvent<HTMLDivElement>) => Promise<void> | void;
+    isSelected?: boolean;
     text: string;
 };
 
@@ -160,9 +161,10 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                 const { result } = (await createDialog({
                     type: DialogType.SELECT,
                     buttons: [],
-                    list: items.map(({ icons, text }, index) => ({
+                    list: items.map(({ icons, text, isSelected }, index) => ({
                         name: text,
                         id: index,
+                        isSelected,
                         icon: icons[0],
                     })),
                 }).open()) as SelectDialogResult;
