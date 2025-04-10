@@ -19,7 +19,7 @@ import {
     StyledSearchInputPseudoElement,
 } from './SearchInput.styles';
 import { useTheme } from 'styled-components';
-import { Theme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import { useElementSize } from '../../hooks/useElementSize';
 
 export type SearchInputProps = {

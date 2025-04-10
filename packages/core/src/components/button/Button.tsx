@@ -77,7 +77,7 @@ const Button: FC<ButtonProps> = ({
 
     const buttonClasses = clsx('beta-chayns-button ellipsis', className);
 
-    const theme: Theme = useTheme();
+    const theme = useTheme() as Theme;
 
     const iconColor = useMemo(() => {
         if (isSecondary) {

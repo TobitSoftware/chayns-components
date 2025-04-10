@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import React, { FC, MouseEventHandler } from 'react';
-import { useTheme } from 'styled-components';
 import { getStackSizeFactor } from '../../utils/icon';
 import { StyledIcon, StyledIconWrapper } from './Icon.styles';
 
@@ -73,8 +72,6 @@ const Icon: FC<IconProps> = ({
             onDoubleClick(event);
         }
     };
-
-    const theme = useTheme();
 
     let maxStackSizeFactor = 1;
 

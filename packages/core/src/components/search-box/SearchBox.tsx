@@ -24,6 +24,7 @@ import type { IFilterButtonItem } from '../../types/filterButtons';
 import type { ISearchBoxItem, ISearchBoxItems } from '../../types/searchBox';
 import { calculateContentHeight } from '../../utils/calculate';
 import { searchList } from '../../utils/searchBox';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ContextMenuCoordinates } from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
 import Input from '../input/Input';
@@ -168,7 +169,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             typeof presetValue === 'string' && presetValue !== '',
         );
 
-        const theme = useTheme();
+        const theme = useTheme() as Theme;
 
         const { browser } = getDevice();
 

@@ -22,6 +22,7 @@ import {
     StyledTagInputTagWrapperText,
 } from './TagInput.styles';
 import { AreaContext } from '../area-provider/AreaContextProvider';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export type TagInputProps = {
     /**
@@ -52,8 +53,9 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
         const [currentValue, setCurrentValue] = useState('');
         const [selectedId, setSelectedId] = useState<Tag['id']>();
 
-        const theme = useTheme();
         const areaProvider = useContext(AreaContext);
+
+        const theme = useTheme() as Theme;
 
         useEffect(() => {
             if (tags) {

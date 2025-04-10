@@ -15,6 +15,7 @@ import { useTheme } from 'styled-components';
 import { useElementSize } from '../../../hooks/useElementSize';
 import { getAccordionHeadHeight, getElementClickEvent } from '../../../utils/accordion';
 import { AreaContext } from '../../area-provider/AreaContextProvider';
+import type { Theme } from '../../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../../icon/Icon';
 import Input, { InputSize, type InputProps } from '../../input/Input';
 import SearchInput from '../../search-input/SearchInput';
@@ -82,7 +83,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
 
     const [isSearchActive, setIsSearchActive] = useState(false);
 
-    const theme = useTheme();
+    const theme = useTheme() as Theme;
 
     const titleElementWrapperRef = useRef<HTMLDivElement>(null);
     const titleWrapperRef = useRef<HTMLDivElement>(null);
@@ -139,13 +140,13 @@ const AccordionHead: FC<AccordionHeadProps> = ({
 
         if (
             theme?.accordionIcon &&
-            theme.accordionIcon !== 110 &&
-            theme.accordionIcon !== 1110100
+            (theme.accordionIcon as unknown as number) !== 110 &&
+            (theme.accordionIcon as unknown as number) !== 1110100
         ) {
-            internalIcon = (theme.accordionIcon as number).toString(16);
+            internalIcon = (theme.accordionIcon as unknown as number).toString(16);
         }
 
-        const internalIconStyle = theme?.iconStyle ? (theme.iconStyle as string) : 'fa-regular';
+        const internalIconStyle = theme?.iconStyle ? theme.iconStyle : 'fa-regular';
 
         return <StyledAccordionIcon className={internalIconStyle} $icon={internalIcon} />;
     }, [icon, theme, isFixed]);
@@ -184,6 +185,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 {typeof onTitleInputChange === 'function' ? (
                     // eslint-disable-next-line react/jsx-no-constructed-context-values
                     <AreaContext.Provider value={{ shouldChangeColor: true }}>
+                        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                         <Input {...titleInputProps} value={title} onChange={onTitleInputChange} />
                     </AreaContext.Provider>
                 ) : (
