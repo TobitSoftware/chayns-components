@@ -87,6 +87,10 @@ type ContextMenuProps = {
      */
     shouldSeparateLastItem?: boolean;
     /**
+     * Whether the hover effect should be shown.
+     */
+    shouldShowHoverEffect?: boolean;
+    /**
      * The z-index of the popup.
      */
     zIndex?: number;
@@ -111,6 +115,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             onShow,
             shouldCloseOnPopupClick = true,
             shouldSeparateLastItem = false,
+            shouldShowHoverEffect = false,
             zIndex = 20,
         },
         ref,
@@ -134,6 +139,8 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         const contextMenuContentRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<HTMLSpanElement>(null);
 
+        const isTouch = getIsTouch();
+
         useEffect(() => {
             if (contextMenuRef.current && !container) {
                 const el = contextMenuRef.current as HTMLElement;
@@ -155,8 +162,6 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         }, []);
 
         const handleShow = useCallback(async () => {
-            const isTouch = getIsTouch();
-
             if (isTouch) {
                 const { result } = (await createDialog({
                     type: DialogType.SELECT,
@@ -209,7 +214,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 setIsContentShown(true);
             }
-        }, [items, newContainer]);
+        }, [isTouch, items, newContainer]);
 
         const handleClick = useCallback<MouseEventHandler<HTMLDivElement>>(
             (event) => {
@@ -306,6 +311,8 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             <>
                 <StyledContextMenu
                     className="beta-chayns-context-menu"
+                    $isActive={isContentShown && shouldShowHoverEffect}
+                    $shouldAddHoverEffect={!isTouch && shouldShowHoverEffect}
                     onClick={handleClick}
                     ref={contextMenuRef}
                 >
