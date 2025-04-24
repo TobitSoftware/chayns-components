@@ -39,13 +39,6 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
             }
         `}
     
-    ${({ $shouldForceBottomLine, $shouldShowSeparatorBelow, theme }: StyledListItemProps) =>
-        $shouldForceBottomLine &&
-        css`
-            border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
-                rgba(${theme['headline-rgb']}, 0.5);
-        `}
-    
     ${({
         $isInAccordion,
         $isOpen,
@@ -54,18 +47,30 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
         $shouldForceBottomLine,
         $shouldShowSeparatorBelow,
         theme,
-    }: StyledListItemProps) =>
-        ($shouldShowSeparatorBelow ||
+    }: StyledListItemProps) => {
+        if (
+            $shouldShowSeparatorBelow ||
             ((!$isOpen || $isWrapped || $isInAccordion) &&
                 theme.accordionLines &&
-                !$shouldHideBottomLine &&
-                !$shouldForceBottomLine)) &&
-        css`
-            &&:not(:last-child) {
-                border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
-                    rgba(${theme['headline-rgb']}, 0.5);
+                !$shouldHideBottomLine)
+        ) {
+            if ($shouldForceBottomLine) {
+                return css`
+                    border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
+                        rgba(${theme['headline-rgb']}, 0.5);
+                `;
             }
-        `}
+
+            return css`
+                &&:not(:last-child) {
+                    border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
+                        rgba(${theme['headline-rgb']}, 0.5);
+                }
+            `;
+        }
+
+        return undefined;
+    }}
 
     ${({ $isWrapped }) =>
         $isWrapped &&
