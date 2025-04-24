@@ -4,13 +4,14 @@ import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider'
 
 type StyledListItemProps = WithTheme<{
     $isClickable: boolean;
-    $isOpen: boolean;
     $isInAccordion: boolean;
+    $isOpen: boolean;
     $isWrapped: boolean;
-    $shouldHideIndicator: boolean;
     $shouldForceBackground?: boolean;
-    $shouldShowSeparatorBelow: boolean;
+    $shouldForceBottomLine?: boolean;
     $shouldHideBottomLine: boolean;
+    $shouldHideIndicator: boolean;
+    $shouldShowSeparatorBelow: boolean;
 }>;
 
 export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
@@ -38,18 +39,27 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
             }
         `}
     
+    ${({ $shouldForceBottomLine, $shouldShowSeparatorBelow, theme }: StyledListItemProps) =>
+        $shouldForceBottomLine &&
+        css`
+            border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
+                rgba(${theme['headline-rgb']}, 0.5);
+        `}
+    
     ${({
-        $isOpen,
         $isInAccordion,
+        $isOpen,
         $isWrapped,
-        $shouldShowSeparatorBelow,
         $shouldHideBottomLine,
+        $shouldForceBottomLine,
+        $shouldShowSeparatorBelow,
         theme,
     }: StyledListItemProps) =>
         ($shouldShowSeparatorBelow ||
             ((!$isOpen || $isWrapped || $isInAccordion) &&
                 theme.accordionLines &&
-                !$shouldHideBottomLine)) &&
+                !$shouldHideBottomLine &&
+                !$shouldForceBottomLine)) &&
         css`
             &&:not(:last-child) {
                 border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid

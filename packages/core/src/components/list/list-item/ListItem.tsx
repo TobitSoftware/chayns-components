@@ -96,6 +96,10 @@ export type ListItemProps = {
      */
     shouldForceBackground?: boolean;
     /**
+     * Whether the line should be forced, e.g., so that it is also displayed if the item is the last element in the list.
+     */
+    shouldForceBottomLine?: boolean;
+    /**
      * Whether the hover item should be forced.
      */
     shouldForceHover?: boolean;
@@ -129,7 +133,7 @@ export type ListItemProps = {
      */
     shouldRenderClosed?: boolean;
     /**
-     * Whether the image or icon should be displayed in a round shape. This should be always used for images of persons.
+     * Whether the image or icon should be displayed in a round shape. This should always be used for images of persons.
      */
     shouldShowRoundImageOrIcon?: boolean;
     /**
@@ -167,15 +171,16 @@ const ListItem: FC<ListItemProps> = ({
     onOpen,
     rightElements,
     shouldForceBackground = false,
+    shouldForceBottomLine = false,
+    shouldForceHover = false,
     shouldHideBottomLine = false,
+    shouldOpenImageOnClick = false,
     shouldHideImageOrIconBackground,
     shouldHideIndicator = false,
-    shouldOpenImageOnClick = false,
     shouldPreventLayoutAnimation = false,
+    shouldRenderClosed = false,
     shouldShowRoundImageOrIcon,
     shouldShowSeparatorBelow = false,
-    shouldForceHover = false,
-    shouldRenderClosed = false,
     subtitle,
     title,
     titleElement,
@@ -261,6 +266,7 @@ const ListItem: FC<ListItemProps> = ({
             $isOpen={isItemOpen}
             $isWrapped={isWrapped}
             $shouldForceBackground={shouldForceBackground}
+            $shouldForceBottomLine={shouldForceBottomLine}
             $shouldHideBottomLine={shouldHideBottomLine}
             $shouldHideIndicator={shouldHideIndicator}
             $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
