@@ -52,13 +52,23 @@ export const getElementClickEvent = (element: ReactNode) => {
     const checkForClickHandler = (el: ReactNode) => {
         if (!isValidElement(el)) return;
 
+        // @ts-expect-error: Difficult to type
+        if ('displayName' in el.type && el.type.displayName === 'Checkbox') {
+            hasClickHandler = true;
+
+            return;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (el.props.onClick) {
             hasClickHandler = true;
 
             return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (el.props.children) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
             Children.forEach(el.props.children, checkForClickHandler);
         }
     };
