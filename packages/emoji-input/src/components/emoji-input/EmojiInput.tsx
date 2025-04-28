@@ -135,6 +135,8 @@ export type EmojiInputRef = {
     replaceText: (searchText: string, replaceText: string) => void;
     startProgress: (durationInSeconds: number) => void;
     stopProgress: () => void;
+    focus: () => void;
+    blur: () => void;
 };
 
 const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
@@ -555,6 +557,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 replaceText: handleReplaceText,
                 startProgress: handleStartProgress,
                 stopProgress: handleStopProgress,
+                focus: () => editorRef.current?.focus(),
+                blur: () => editorRef.current?.blur(),
             }),
             [
                 handleInsertTextAtCursorPosition,
