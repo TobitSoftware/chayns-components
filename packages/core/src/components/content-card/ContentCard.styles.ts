@@ -40,6 +40,10 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
 
                     --chayns-color--text: #222;
                     --chayns-color-rgb--text: rgb(34, 34, 34);
+
+                    label {
+                        color: #222 !important;
+                    }
                 `;
             case ContentCardType.Success:
                 return css`
@@ -49,6 +53,10 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
 
                     --chayns-color--text: #222;
                     --chayns-color-rgb--text: rgb(34, 34, 34);
+
+                    label {
+                        color: #222 !important;
+                    }
                 `;
             case ContentCardType.Warning:
                 return css`
@@ -58,6 +66,10 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
 
                     --chayns-color--text: #222;
                     --chayns-color-rgb--text: rgb(34, 34, 34);
+
+                    label {
+                        color: #222 !important;
+                    }
                 `;
             default:
                 return css`
