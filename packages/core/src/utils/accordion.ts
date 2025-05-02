@@ -52,8 +52,13 @@ export const getElementClickEvent = (element: ReactNode) => {
     const checkForClickHandler = (el: ReactNode) => {
         if (!isValidElement(el)) return;
 
-        // @ts-expect-error: Difficult to type
-        if ('displayName' in el.type && el.type.displayName === 'Checkbox') {
+        console.debug('el', el);
+
+        if (
+            typeof el.type !== 'string' &&
+            'displayName' in el.type &&
+            el.type.displayName === 'Checkbox'
+        ) {
             hasClickHandler = true;
 
             return;
