@@ -171,7 +171,6 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const shouldPreventRightElementClick = useMemo(() => {
         if (!rightElements) return false;
 
-        // Check if right elements is an object or of type ReactNode
         if (
             typeof rightElements === 'object' &&
             ('bottom' in rightElements || 'center' in rightElements || 'top' in rightElements)
@@ -190,6 +189,8 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         } else {
             return getElementClickEvent(rightElements as ReactNode);
         }
+
+        return false;
     }, [rightElements]);
 
     const iconOrImageElement = useMemo(() => {
