@@ -11,6 +11,7 @@ import React, {
     useState,
 } from 'react';
 import type { IListItemRightElements } from '../../../../types/list';
+import { getElementClickEvent } from '../../../../utils/accordion';
 import Icon from '../../../icon/Icon';
 import ListItemIcon from './list-item-icon/ListItemIcon';
 import ListItemImage from './list-item-image/ListItemImage';
@@ -167,6 +168,30 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         clearTimeout(longPressTimeoutRef.current);
     }, []);
 
+    const shouldPreventRightElementClick = useMemo(() => {
+        if (!rightElements) return false;
+
+        // Check if right elements is an object or of type ReactNode
+        if (
+            typeof rightElements === 'object' &&
+            ('bottom' in rightElements || 'center' in rightElements || 'top' in rightElements)
+        ) {
+            if (rightElements.bottom && getElementClickEvent(rightElements.bottom)) {
+                return true;
+            }
+
+            if (rightElements.center && getElementClickEvent(rightElements.center)) {
+                return true;
+            }
+
+            if (rightElements.top && getElementClickEvent(rightElements.top)) {
+                return true;
+            }
+        } else {
+            return getElementClickEvent(rightElements as ReactNode);
+        }
+    }, [rightElements]);
+
     const iconOrImageElement = useMemo(() => {
         if (icons) {
             return (
@@ -286,7 +311,12 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     </StyledListItemHeadSubtitle>
                 )}
             </StyledListItemHeadContent>
-            {rightElements && <ListItemRightElements rightElements={rightElements} />}
+            {rightElements && (
+                <ListItemRightElements
+                    rightElements={rightElements}
+                    shouldPreventRightElementClick={shouldPreventRightElementClick}
+                />
+            )}
             {hoverItem && (
                 <StyledMotionListItemHeadHoverItemWrapper
                     className="beta-chayns-list-item-hover-item"
