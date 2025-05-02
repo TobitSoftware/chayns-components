@@ -59,8 +59,16 @@ export const getElementClickEvent = (element: ReactNode) => {
             return;
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        if (el.props.onClick) {
+        if (
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            el.props.onClick ||
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            el.props.onPointerDown ||
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            el.props.onMouseDown ||
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            el.props.onTouchStart
+        ) {
             hasClickHandler = true;
 
             return;
