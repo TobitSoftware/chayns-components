@@ -88,6 +88,8 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
     const color = colorProp ?? internalColor;
     const colorMode = colorModeProp ?? internalColorMode;
+    const overrideParagraphFormat =
+        (color && color !== internalColor) || (colorMode && colorMode !== internalColorMode);
 
     const contextValue = useChaynsTheme({
         color,
@@ -95,6 +97,8 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         secondaryColor,
         siteId,
         customVariables,
+        // Overrides the paragraphFormat on changed color or colorMode
+        paragraphFormat: overrideParagraphFormat ? [] : undefined,
     });
 
     return (
