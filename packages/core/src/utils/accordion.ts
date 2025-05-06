@@ -52,8 +52,6 @@ export const getElementClickEvent = (element: ReactNode) => {
     const checkForClickHandler = (el: ReactNode) => {
         if (!isValidElement(el)) return;
 
-        console.debug('el', el);
-
         if (
             typeof el.type !== 'string' &&
             'displayName' in el.type &&
