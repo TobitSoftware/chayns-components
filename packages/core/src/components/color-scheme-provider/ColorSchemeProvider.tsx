@@ -1,5 +1,5 @@
 import { ChaynsDesignSettings, ChaynsParagraphFormat, ColorMode, useSite } from 'chayns-api';
-import React, { createContext, FC, ReactNode, useContext } from 'react';
+import React, { createContext, FC, ReactNode, useContext, useMemo } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { StyledColorSchemeProvider } from './ColorSchemeProvider.styles';
 import { useChaynsTheme } from './hooks/useChaynsTheme';
@@ -90,6 +90,10 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     const colorMode = colorModeProp ?? internalColorMode;
     const overrideParagraphFormat =
         (color && color !== internalColor) || (colorMode && colorMode !== internalColorMode);
+    const paragraphFormat = useMemo(
+        () => (overrideParagraphFormat ? [] : undefined),
+        [overrideParagraphFormat],
+    );
 
     const contextValue = useChaynsTheme({
         color,
@@ -98,7 +102,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         siteId,
         customVariables,
         // Overrides the paragraphFormat on changed color or colorMode
-        paragraphFormat: overrideParagraphFormat ? [] : undefined,
+        paragraphFormat,
     });
 
     return (
