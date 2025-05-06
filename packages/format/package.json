@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/format",
-    "version": "5.0.0-beta.1086",
+    "version": "5.0.0-beta.1098",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
