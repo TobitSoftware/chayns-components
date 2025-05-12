@@ -3,4 +3,5 @@ export enum ContentCardType {
     Error = 'error',
     Success = 'success',
     Warning = 'warning',
+    SiteColor = 'siteColor',
 }

@@ -71,6 +71,12 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
                         color: #222 !important;
                     }
                 `;
+            case ContentCardType.SiteColor:
+                return css`
+                    background-color: var(--chayns-color--103);
+                    border: 1px solid var(--chayns-color--104);
+                    border-radius: 3px;
+                `;
             default:
                 return css`
                     background-color: rgba(
