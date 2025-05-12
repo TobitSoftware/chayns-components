@@ -55,7 +55,9 @@ export const getElementClickEvent = (element: ReactNode) => {
         if (
             typeof el.type !== 'string' &&
             'displayName' in el.type &&
-            el.type.displayName === 'Checkbox'
+            (el.type.displayName === 'Checkbox' ||
+                el.type.displayName === 'ComboBox' ||
+                el.type.displayName === 'SelectButton')
         ) {
             hasClickHandler = true;
 
