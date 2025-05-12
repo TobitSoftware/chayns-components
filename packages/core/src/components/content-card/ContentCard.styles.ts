@@ -73,9 +73,16 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
                 `;
             case ContentCardType.SiteColor:
                 return css`
-                    background-color: var(--chayns-color--103);
-                    border: 1px solid var(--chayns-color--104);
-                    border-radius: 3px;
+                    background-color: ${theme['103']};
+                    border: 1px solid ${theme['104']};
+                    color: ${theme['text-rgb']};
+
+                    --chayns-color--text: ${theme['text-rgb']};
+                    --chayns-color-rgb--text: ${theme['text-rgb']};
+
+                    label {
+                        color: ${theme['text-rgb']} !important;
+                    }
                 `;
             default:
                 return css`
