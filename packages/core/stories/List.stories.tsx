@@ -65,18 +65,22 @@ const otherImages = [
 General.args = {
     children: [
         <ListItem
+            shouldShowTooltipOnTitleOverflow
             subtitle="Stet clita kasd gubergren"
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,
         <ListItem
+            shouldShowTooltipOnTitleOverflow
             subtitle="Lorem ipsum dolor sit amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est"
         />,
         <ListItem
+            shouldShowTooltipOnTitleOverflow
             subtitle="Consetetur sadipscing elitr"
             title="At vero eos et accusam et justo duo dolores et ea rebum sit amet dolor sea takimata sanctus est"
         />,
         <ListItem
+            shouldShowTooltipOnTitleOverflow
             subtitle="No sea takimata sanctus est"
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,

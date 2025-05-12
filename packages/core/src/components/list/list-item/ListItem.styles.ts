@@ -78,3 +78,7 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
             padding-left: 26px;
         `}
 `;
+
+export const StyledListItemTooltip = styled.div`
+    padding: 6px;
+`;

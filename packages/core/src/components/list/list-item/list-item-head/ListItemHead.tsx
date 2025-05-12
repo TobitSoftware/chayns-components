@@ -58,6 +58,7 @@ type ListItemHeadProps = {
     shouldShowRoundImageOrIcon?: boolean;
     subtitle?: ReactNode;
     title: ReactNode;
+    onTitleWidthChange: (width: number) => void;
     titleElement?: ReactNode;
     shouldForceHover?: boolean;
 };
@@ -79,6 +80,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     shouldHideImageOrIconBackground,
     shouldHideIndicator,
     shouldOpenImageOnClick,
+    onTitleWidthChange,
     shouldShowRoundImageOrIcon,
     subtitle,
     shouldForceHover,
@@ -99,6 +101,14 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const pseudoSubtitleClosedRef = useRef<HTMLDivElement>(null);
 
     const shouldShowSubtitleRow = subtitle || typeof subtitle === 'string';
+
+    useEffect(() => {
+        if (pseudoTitleClosedRef.current) {
+            const { width } = pseudoTitleClosedRef.current.getBoundingClientRect();
+
+            onTitleWidthChange(width);
+        }
+    }, [onTitleWidthChange]);
 
     useEffect(() => {
         if (pseudoTitleOpenRef.current && pseudoTitleClosedRef.current) {

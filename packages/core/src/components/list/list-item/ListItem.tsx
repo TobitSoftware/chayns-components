@@ -8,7 +8,9 @@ import React, {
     useCallback,
     useContext,
     useEffect,
+    useMemo,
     useRef,
+    useState,
 } from 'react';
 import { useUuid } from '../../../hooks/uuid';
 import type { IListItemRightElements } from '../../../types/list';
@@ -17,7 +19,8 @@ import AreaContextProvider from '../../area-provider/AreaContextProvider';
 import { ListContext } from '../List';
 import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
-import { StyledMotionListItem } from './ListItem.styles';
+import { StyledListItemTooltip, StyledMotionListItem } from './ListItem.styles';
+import Tooltip from '../../tooltip/Tooltip';
 
 export type ListItemElements = [ReactNode, ...ReactNode[]];
 
@@ -141,6 +144,10 @@ export type ListItemProps = {
      */
     shouldShowSeparatorBelow?: boolean;
     /**
+     * Whether a Tooltip should be displayed on hover, if the title is cut.
+     */
+    shouldShowTooltipOnTitleOverflow?: boolean;
+    /**
      * Subtitle of the `ListItem` displayed in the head below the title
      */
     subtitle?: ReactNode;
@@ -170,6 +177,7 @@ const ListItem: FC<ListItemProps> = ({
     onLongPress,
     onOpen,
     rightElements,
+    shouldShowTooltipOnTitleOverflow = false,
     shouldForceBackground = false,
     shouldForceBottomLine = false,
     shouldForceHover = false,
@@ -196,6 +204,7 @@ const ListItem: FC<ListItemProps> = ({
     const { isWrapped: isParentAccordionWrapped } = useContext(AccordionContext);
 
     const isInitialRenderRef = useRef(true);
+    const listItemRef = useRef<HTMLDivElement>(null);
 
     const uuid = useUuid();
 
@@ -204,6 +213,8 @@ const ListItem: FC<ListItemProps> = ({
 
     const onCloseRef = useRef(onClose);
     const onOpenRef = useRef(onOpen);
+
+    const [shouldEnableTooltip, setShouldEnableTooltip] = useState(false);
 
     useEffect(() => {
         onCloseRef.current = onClose;
@@ -253,24 +264,20 @@ const ListItem: FC<ListItemProps> = ({
 
     const isClickable = typeof onClick === 'function' || isExpandable;
 
-    return (
-        <StyledMotionListItem
-            animate={{ height: 'auto', opacity: 1 }}
-            className="beta-chayns-list-item"
-            exit={{ height: 0, opacity: 0 }}
-            initial={{ height: 0, opacity: 0 }}
-            key={`list-item-${uuid}`}
-            layout={shouldPreventLayoutAnimation ? undefined : 'position'}
-            $isClickable={isClickable}
-            $isInAccordion={typeof isParentAccordionWrapped === 'boolean'}
-            $isOpen={isItemOpen}
-            $isWrapped={isWrapped}
-            $shouldForceBackground={shouldForceBackground}
-            $shouldForceBottomLine={shouldForceBottomLine}
-            $shouldHideBottomLine={shouldHideBottomLine}
-            $shouldHideIndicator={shouldHideIndicator}
-            $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
-        >
+    const handleTitleWidthChange = (titleWidth: number) => {
+        if (listItemRef.current) {
+            const { offsetWidth } = listItemRef.current;
+
+            if (offsetWidth - 18 < titleWidth) {
+                setShouldEnableTooltip(true);
+            } else {
+                setShouldEnableTooltip(false);
+            }
+        }
+    };
+
+    const headContent = useMemo(
+        () => (
             <ListItemHead
                 hoverItem={hoverItem}
                 careOfLocationId={careOfLocationId}
@@ -279,6 +286,7 @@ const ListItem: FC<ListItemProps> = ({
                 images={images}
                 isAnyItemExpandable={isAnyItemExpandable}
                 isExpandable={isExpandable}
+                onTitleWidthChange={handleTitleWidthChange}
                 isOpen={isItemOpen}
                 isTitleGreyed={isTitleGreyed}
                 leftElements={leftElements}
@@ -294,6 +302,66 @@ const ListItem: FC<ListItemProps> = ({
                 title={title}
                 titleElement={titleElement}
             />
+        ),
+        [
+            careOfLocationId,
+            handleHeadClick,
+            hoverItem,
+            icons,
+            imageBackground,
+            images,
+            isAnyItemExpandable,
+            isClickable,
+            isExpandable,
+            isItemOpen,
+            isTitleGreyed,
+            leftElements,
+            onLongPress,
+            rightElements,
+            shouldForceHover,
+            shouldHideImageOrIconBackground,
+            shouldHideIndicator,
+            shouldOpenImageOnClick,
+            shouldShowRoundImageOrIcon,
+            subtitle,
+            title,
+            titleElement,
+        ],
+    );
+
+    return (
+        <StyledMotionListItem
+            animate={{ height: 'auto', opacity: 1 }}
+            className="beta-chayns-list-item"
+            exit={{ height: 0, opacity: 0 }}
+            initial={{ height: 0, opacity: 0 }}
+            key={`list-item-${uuid}`}
+            ref={listItemRef}
+            layout={shouldPreventLayoutAnimation ? undefined : 'position'}
+            $isClickable={isClickable}
+            $isInAccordion={typeof isParentAccordionWrapped === 'boolean'}
+            $isOpen={isItemOpen}
+            $isWrapped={isWrapped}
+            $shouldForceBackground={shouldForceBackground}
+            $shouldForceBottomLine={shouldForceBottomLine}
+            $shouldHideBottomLine={shouldHideBottomLine}
+            $shouldHideIndicator={shouldHideIndicator}
+            $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
+        >
+            {shouldShowTooltipOnTitleOverflow && shouldEnableTooltip ? (
+                <Tooltip
+                    shouldUseFullWidth
+                    item={
+                        <StyledListItemTooltip key={`list-item-tooltip-${uuid}`}>
+                            {title}
+                        </StyledListItemTooltip>
+                    }
+                >
+                    {headContent}
+                </Tooltip>
+            ) : (
+                headContent
+            )}
             <AnimatePresence initial={false}>
                 {isExpandable && (isItemOpen || shouldRenderClosed) && (
                     <ListItemBody
