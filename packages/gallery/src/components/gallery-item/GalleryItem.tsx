@@ -74,7 +74,7 @@ const GalleryItem: FC<GalleryItemProps> = ({
                     </AnimatePresence>
                 )}
                 {remainingItemsLength && (
-                    <StyledGalleryItemMoreItemsIndicator>
+                    <StyledGalleryItemMoreItemsIndicator onClick={() => onClick(fileItem)}>
                         <p>{`+ ${remainingItemsLength - 3}`}</p>
                     </StyledGalleryItemMoreItemsIndicator>
                 )}
