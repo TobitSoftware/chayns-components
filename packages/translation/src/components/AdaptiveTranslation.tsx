@@ -1,12 +1,6 @@
 ﻿import React from 'react';
-import { Language } from 'chayns-api';
 import { useAdaptiveTranslation } from '../hooks/useAdaptiveTranslation';
-
-interface TranslationProps {
-    children: string;
-    to?: Exclude<Language, Language.Unknown>;
-    from?: Exclude<Language, Language.Unknown>;
-}
+import { TranslationProps } from '../types/translation';
 
 const Translation = ({ children, to, from }: TranslationProps) => {
     const { text, isLoading, isFetching } = useAdaptiveTranslation(children, { from, to });

@@ -1,23 +1,7 @@
 ﻿import throttle from 'lodash.throttle';
 import { BATCH_SIZE_LIMIT, MAX_ITEMS_PER_BATCH, TRANSLATION_API_URL } from '../constants/constants';
 import { Deferred } from '../utils/deferred';
-
-
-interface QueuedItem {
-    text: string;
-    to: string;
-    from: string;
-    deferred: Deferred<string>;
-    ready: boolean;
-}
-
-interface TranslationRequest {
-    text: string;
-    to: string;
-    from: string;
-    id: number;
-    deferred: Deferred<string>;
-}
+import { QueuedItem, TranslationRequest } from '../types/translation';
 
 let translationQueue: QueuedItem[] = [];
 const translatedTexts: { translated: string; original: string; to: string; from: string }[] = [];
