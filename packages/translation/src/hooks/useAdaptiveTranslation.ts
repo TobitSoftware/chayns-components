@@ -1,6 +1,6 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
 import { Language, useLanguage } from 'chayns-api';
-import { translateText } from '../api/translation';
+import translationHandler from '../utils/translationHandler';
 
 export const useAdaptiveTranslation = (
     originalText: string,
@@ -24,13 +24,12 @@ export const useAdaptiveTranslation = (
         const timeoutRef = setTimeout(() => {
             if (shouldTranslate) {
                 setIsFetching(true);
-                void translateText(originalText, toLanguage, fromLanguage)
+                void translationHandler.translateText(originalText, fromLanguage, toLanguage)
                     .then((text) => {
                         setTranslatedText(text);
-                        setIsLoading(false);
-                        setIsFetching(false);
                     })
-                    .catch(() => {
+                    .finally(() => {
+                        setIsLoading(false);
                         setIsFetching(false);
                     });
             }

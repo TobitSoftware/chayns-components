@@ -7,18 +7,20 @@ export interface TranslationProps {
     from?: Exclude<Language, Language.Unknown>;
 }
 
-export interface QueuedItem {
+interface BaseTranslation {
     text: string;
     to: string;
     from: string;
-    deferred: Deferred<string>;
-    ready: boolean;
 }
 
-export interface TranslationRequest {
-    text: string;
-    to: string;
-    from: string;
-    id: number;
+export interface QueuedItem extends BaseTranslation {
     deferred: Deferred<string>;
+}
+
+export interface TranslationBatchItem extends TranslationRequest {
+    deferred: Deferred<string>;
+}
+
+export interface TranslationRequest extends BaseTranslation {
+    id: number;
 }

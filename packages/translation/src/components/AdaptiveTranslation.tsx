@@ -9,6 +9,7 @@ const Translation = ({ children, to, from }: TranslationProps) => {
         <span
             className="notranslate"
             style={{
+                // eslint-disable-next-line no-nested-ternary
                 opacity: isLoading ? 0 : isFetching ? 0.5 : 1,
                 transition: 'opacity 0.5s ease',
             }}
