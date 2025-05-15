@@ -301,6 +301,8 @@ const ComboBox: FC<ComboBoxProps> = ({
                 useTopAlignment = true;
 
                 setShouldUseTopAlignment(true);
+            } else {
+                setShouldUseTopAlignment(false);
             }
 
             setInternalCoordinates({ x, y: useTopAlignment ? y : y + height });
