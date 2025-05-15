@@ -140,7 +140,7 @@ export type ComboBoxProps = {
 
 const ComboBox: FC<ComboBoxProps> = ({
     bodyWidth,
-    direction = ComboBoxDirection.BOTTOM,
+    direction = ComboBoxDirection.RIGHT,
     isDisabled = false,
     lists,
     maxHeight = '280px',
@@ -173,6 +173,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         y: 0,
     });
     const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
+    const [shouldUseTopAlignment, setShouldUseTopAlignment] = useState(false);
 
     const isInputFocused = useRef(false);
 
@@ -205,6 +206,27 @@ const ComboBox: FC<ComboBoxProps> = ({
             combinedLists.some((item) => item.value === selectedItem.value)
         );
     }, [lists, selectedItem]);
+
+    const contentHeight = useMemo(() => {
+        const flatItems = lists.flatMap((list) => list.list);
+
+        let result = flatItems.length * 36;
+
+        if (lists.length > 1) {
+            result += lists.length * 36;
+        }
+
+        // ToDo: Implement a better solution to also work with percentage values or other units
+        if (maxHeight.toString().includes('px')) {
+            const maxHeightValue = parseInt(maxHeight.toString().replace('px', ''), 10);
+
+            if (maxHeightValue < result) {
+                result = maxHeightValue;
+            }
+        }
+
+        return result;
+    }, [lists, maxHeight]);
 
     useEffect(() => {
         if (styledComboBoxElementRef.current && !container) {
@@ -264,25 +286,27 @@ const ComboBox: FC<ComboBoxProps> = ({
                 height,
             } = styledComboBoxElementRef.current.getBoundingClientRect();
 
-            const { left, top } = newContainer.getBoundingClientRect();
+            const { left, top, height: containerHeight } = newContainer.getBoundingClientRect();
 
             const x = comboBoxLeft - left + newContainer.scrollLeft;
             const y = comboBoxTop - top + newContainer.scrollTop;
 
-            setInternalCoordinates({
-                x,
-                y: [
-                    ComboBoxDirection.TOP,
-                    ComboBoxDirection.TOP_LEFT,
-                    ComboBoxDirection.TOP_RIGHT,
-                ].includes(direction)
-                    ? y
-                    : y + height,
-            });
+            let useTopAlignment = [
+                ComboBoxDirection.TOP,
+                ComboBoxDirection.TOP_LEFT,
+                ComboBoxDirection.TOP_RIGHT,
+            ].includes(direction);
 
+            if (y + height + contentHeight > containerHeight) {
+                useTopAlignment = true;
+
+                setShouldUseTopAlignment(true);
+            }
+
+            setInternalCoordinates({ x, y: useTopAlignment ? y : y + height });
             setIsAnimating(true);
         }
-    }, [shouldDisableActions, newContainer, direction]);
+    }, [shouldDisableActions, newContainer, contentHeight, direction]);
 
     const handleClose = useCallback(() => {
         setIsAnimating(false);
@@ -362,7 +386,9 @@ const ComboBox: FC<ComboBoxProps> = ({
 
             if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 e.preventDefault();
+
                 const children = contentRef.current?.children;
+
                 if (children && children.length > 0) {
                     const newIndex =
                         focusedIndex !== null
@@ -372,13 +398,16 @@ const ComboBox: FC<ComboBoxProps> = ({
 
                     if (focusedIndex !== null) {
                         const prevElement = children[focusedIndex] as HTMLDivElement;
+
                         prevElement.tabIndex = -1;
                     }
 
                     setFocusedIndex(newIndex);
 
                     const newElement = children[newIndex] as HTMLDivElement;
+
                     newElement.tabIndex = 0;
+
                     newElement.focus();
                 }
             } else if (e.key === 'Enter' && focusedIndex !== null) {
@@ -507,7 +536,11 @@ const ComboBox: FC<ComboBoxProps> = ({
 
     useEffect(() => {
         if (
-            [ComboBoxDirection.BOTTOM_LEFT, ComboBoxDirection.TOP_LEFT].includes(direction) &&
+            [
+                ComboBoxDirection.BOTTOM_LEFT,
+                ComboBoxDirection.TOP_LEFT,
+                ComboBoxDirection.LEFT,
+            ].includes(direction) &&
             typeof bodyWidth === 'number' &&
             typeof minWidth === 'number'
         ) {
@@ -620,18 +653,20 @@ const ComboBox: FC<ComboBoxProps> = ({
     );
 
     useEffect(() => {
-        if (
+        const useTopAlignment =
+            shouldUseTopAlignment ||
             [
                 ComboBoxDirection.TOP,
                 ComboBoxDirection.TOP_LEFT,
                 ComboBoxDirection.TOP_RIGHT,
-            ].includes(direction)
-        ) {
+            ].includes(direction);
+
+        if (useTopAlignment) {
             setTranslateY('-100%');
         } else {
             setTranslateY('0px');
         }
-    }, [direction]);
+    }, [direction, shouldUseTopAlignment]);
 
     useEffect(() => {
         if (!newContainer) {

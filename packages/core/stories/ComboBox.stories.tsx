@@ -84,8 +84,7 @@ const Template: StoryFn<typeof ComboBox> = (args) => (
             voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
             gubergren, no sea takimata sanctus est.Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
             amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-            dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.
+            dolore magna aliquyam erat, sed diam voluptua.
         </p>
         <p>
             Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
@@ -93,8 +92,7 @@ const Template: StoryFn<typeof ComboBox> = (args) => (
             voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
             gubergren, no sea takimata sanctus est.Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
             amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-            dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.
+            dolore magna aliquyam erat, sed diam voluptua.
         </p>
     </>
 );
@@ -152,7 +150,7 @@ export const WithTextStyle = Template.bind({});
 
 OwnWidth.args = {
     bodyWidth: 300,
-    direction: ComboBoxDirection.BOTTOM_LEFT,
+    direction: ComboBoxDirection.LEFT,
     shouldUseFullWidth: true,
 };
 
@@ -161,7 +159,6 @@ WithPrefix.args = {
 };
 
 WithGroups.args = {
-    direction: ComboBoxDirection.TOP,
     lists: [
         {
             groupName: 'Autos',
@@ -217,7 +214,6 @@ WithGroups.args = {
 };
 
 WithImages.args = {
-    direction: ComboBoxDirection.TOP,
     lists: [
         {
             list: [
@@ -257,7 +253,6 @@ WithImages.args = {
 };
 
 WithIcons.args = {
-    direction: ComboBoxDirection.TOP,
     lists: [
         {
             list: [
@@ -297,7 +292,6 @@ WithIcons.args = {
 };
 
 WithSuffixElements.args = {
-    direction: ComboBoxDirection.TOP,
     lists: [
         {
             list: [
