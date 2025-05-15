@@ -2,11 +2,16 @@
 import { useAdaptiveTranslation } from '../hooks/useAdaptiveTranslation';
 import { TranslationProps } from '../types/translation';
 
-const Translation = ({ children, to, from }: TranslationProps) => {
+const AdaptiveTranslation = ({
+    children,
+    to,
+    from,
+    tagName: TagName = 'span',
+}: TranslationProps) => {
     const { text, isLoading, isFetching } = useAdaptiveTranslation(children, { from, to });
 
     return (
-        <span
+        <TagName
             className="notranslate"
             style={{
                 // eslint-disable-next-line no-nested-ternary
@@ -15,7 +20,7 @@ const Translation = ({ children, to, from }: TranslationProps) => {
             }}
         >
             {text}
-        </span>
+        </TagName>
     );
 };
-export default Translation;
+export default AdaptiveTranslation;

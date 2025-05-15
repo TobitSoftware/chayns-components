@@ -5,6 +5,7 @@ export interface TranslationProps {
     children: string;
     to?: Exclude<Language, Language.Unknown>;
     from?: Exclude<Language, Language.Unknown>;
+    tagName?: keyof HTMLElementTagNameMap;
 }
 
 interface BaseTranslation {
