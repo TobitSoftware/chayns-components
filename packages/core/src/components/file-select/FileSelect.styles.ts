@@ -30,7 +30,7 @@ export const StyledUploadedFilesList = styled.div<StyledUploadedFilesListProps>`
 `;
 
 export const StyledFileSelectContainer = styled.div<StyledFileSelectContainerProps>`
-    border: ${({ theme }: StyledFileSelectContainerProps) => theme.text} 1px dotted;
+    border: ${({ theme }: StyledFileSelectContainerProps) => theme.text} 1px dashed;
     display: flex;
     gap: 10px;
     align-items: center;
