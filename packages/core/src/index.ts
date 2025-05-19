@@ -98,6 +98,7 @@ export { ComboBoxDirection } from './types/comboBox';
 export { ContentCardType } from './types/contentCard';
 export { ContextMenuAlignment } from './types/contextMenu';
 export type { FileItem, Image, InternalFileItem, Meta, Video } from './types/file';
+export { isValidFileType } from './utils/file';
 export type { FileInputFileItem } from './types/fileInput';
 export { FilterButtonItemShape, FilterButtonSize } from './types/filterButtons';
 export type { IFilterButtonItem as FilterButtonItem } from './types/filterButtons';
