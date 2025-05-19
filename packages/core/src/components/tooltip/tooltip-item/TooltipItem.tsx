@@ -14,12 +14,13 @@ export type TooltipProps = {
     imageUrl?: string;
     button?: { text: string; onClick: () => void };
     width?: CSSProperties['width'];
+    maxWidth?: number;
 };
 
-const TooltipItem: FC<TooltipProps> = ({ headline, text, button, imageUrl, width }) =>
+const TooltipItem: FC<TooltipProps> = ({ headline, text, button, imageUrl, width, maxWidth }) =>
     useMemo(
         () => (
-            <StyledTooltipItem $width={width}>
+            <StyledTooltipItem $width={width} $maxWidth={maxWidth}>
                 {headline && <StyledTooltipItemHeadline>{headline}</StyledTooltipItemHeadline>}
                 {imageUrl && <StyledTooltipItemImage src={imageUrl} />}
                 <StyledTooltipItemText>{text}</StyledTooltipItemText>
@@ -30,7 +31,7 @@ const TooltipItem: FC<TooltipProps> = ({ headline, text, button, imageUrl, width
                 )}
             </StyledTooltipItem>
         ),
-        [button, headline, imageUrl, text, width],
+        [button, headline, imageUrl, text, width, maxWidth],
     );
 
 TooltipItem.displayName = 'TooltipItem';

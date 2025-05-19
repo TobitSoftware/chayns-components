@@ -2,12 +2,18 @@ import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
-type StyledTooltipItemProps = WithTheme<{ $width?: CSSProperties['width'] }>;
+type StyledTooltipItemProps = WithTheme<{ $width?: CSSProperties['width']; $maxWidth?: number }>;
 
 export const StyledTooltipItem = styled.div<StyledTooltipItemProps>`
     padding: 5px;
 
     width: ${({ $width }) => ($width ? `${$width}px` : '100%')};
+
+    ${({ $maxWidth }) =>
+        $maxWidth &&
+        css`
+            max-width: ${$maxWidth}px;
+        `}
 
     ${({ $width }) =>
         $width &&
