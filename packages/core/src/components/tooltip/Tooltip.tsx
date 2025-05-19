@@ -34,7 +34,7 @@ export type TooltipProps = {
     /**
      * The max width of the Tooltip.
      */
-    maxWidth?: number;
+    maxItemWidth?: number;
     /**
      * Whether the tooltip should be hidden after the children is not hovered.
      */
@@ -60,7 +60,7 @@ const Tooltip: FC<TooltipProps> = ({
     container,
     isDisabled,
     shouldHideOnChildrenLeave,
-    maxWidth,
+    maxItemWidth,
     yOffset,
     itemWidth,
     shouldUseFullWidth = false,
@@ -76,14 +76,14 @@ const Tooltip: FC<TooltipProps> = ({
         return (
             <TooltipItem
                 width={itemWidth}
-                maxWidth={maxWidth}
+                maxWidth={maxItemWidth}
                 text={(item as ITooltipItem).text}
                 headline={(item as ITooltipItem).headline}
                 imageUrl={(item as ITooltipItem).imageUrl}
                 button={(item as ITooltipItem).button}
             />
         );
-    }, [item, itemWidth, maxWidth]);
+    }, [item, itemWidth, maxItemWidth]);
 
     return useMemo(
         () => (

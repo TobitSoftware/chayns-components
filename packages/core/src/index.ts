@@ -64,6 +64,7 @@ export { default as PageProvider } from './components/page-provider/PageProvider
 export { default as Popup } from './components/popup/Popup';
 export { default as PopupContent } from './components/popup/popup-content/PopupContent';
 export { default as ProgressBar } from './components/progress-bar/ProgressBar';
+export { PopupAlignment } from './types/popup';
 export {
     default as RadioButtonGroup,
     type RadioButtonGroupRef,
