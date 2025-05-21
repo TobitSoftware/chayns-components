@@ -12,7 +12,12 @@ import { PersonEntry, PersonFinderData, PersonFinderFilterTypes } from '../types
 import { getFriends } from '../api/friends/get';
 import { postFriends } from '../api/friends/post';
 import { deleteFriends } from '../api/friends/delete';
-import { filterDataByKeys } from '../utils/personFinder';
+import { filterDataByKeys, loadData } from '../utils/personFinder';
+
+const ALL_FILTERS: PersonFinderFilterTypes[] = [
+    PersonFinderFilterTypes.PERSON,
+    PersonFinderFilterTypes.SITE,
+];
 
 interface IPersonFinderContext {
     // Data
@@ -93,53 +98,15 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        setData({
-            person: {
-                count: 60,
-                skip: 5,
-                searchString: '',
-                entries: [
-                    {
-                        id: 'MIC-HAEL1',
-                        firstName: 'Michael',
-                        lastName: 'Gesenhues',
-                        commonSites: 35,
-                    },
-                    { id: 'JAN-NIK96', firstName: 'Jannik', lastName: 'Weise', commonSites: 35 },
-                    {
-                        id: '131-31077',
-                        firstName: 'Jegor',
-                        lastName: 'Schweizer',
-                        commonSites: 35,
-                    },
-                    { id: '134-19756', firstName: 'Gizem', lastName: 'Türkmen', commonSites: 35 },
-                ],
-            },
-            site: {
-                count: 60,
-                skip: 5,
-                searchString: '',
-                entries: [
-                    { id: '70261-16480', url: 'https://artwork.chayns.site/', name: 'Artwork' },
-                    { id: '70261-16480', url: 'https://artwork.chayns.site/', name: 'Artwork' },
-                    { id: '70261-16480', url: 'https://artwork.chayns.site/', name: 'Artwork' },
-                    { id: '70261-16480', url: 'https://artwork.chayns.site/', name: 'Artwork' },
-                    { id: '70261-16480', url: 'https://artwork.chayns.site/', name: 'Artwork' },
-                    { id: '70261-16480', url: 'https://artwork.chayns.site/', name: 'Artwork' },
-                    { id: '70261-16480', url: 'https://artwork.chayns.site/', name: 'Artwork' },
-                    { id: '70261-16480', url: 'https://artwork.chayns.site/', name: 'Artwork' },
-                    { id: '70261-16480', url: 'https://artwork.chayns.site/', name: 'Artwork' },
-                    { id: '70261-16480', url: 'https://artwork.chayns.site/', name: 'Artwork' },
-                    { id: '70261-16480', url: 'https://artwork.chayns.site/', name: 'Artwork' },
-                    { id: '70261-16480', url: 'https://artwork.chayns.site/', name: 'Artwork' },
-                    {
-                        id: '70261-16480',
-                        url: 'https://artwork.chayns.site/',
-                        name: 'Artwork',
-                    },
-                ],
-            },
-        });
+        void (async () => {
+            const result = await loadData({
+                searchString: 'Michael',
+                filter: ALL_FILTERS,
+                skipMap: {},
+            });
+
+            setData(result);
+        })();
     }, []);
 
     const providerValue = useMemo<IPersonFinderContext>(

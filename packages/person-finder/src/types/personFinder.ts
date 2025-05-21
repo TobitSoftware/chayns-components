@@ -15,6 +15,10 @@ export interface PersonFinderData {
     entries: PersonFinderEntry[];
 }
 
+export type PersonFinderDataMap = {
+    [K in PersonFinderFilterTypes]?: PersonFinderData;
+};
+
 export type PersonFinderEntry = PersonEntry | SiteEntry;
 
 export interface PersonEntry {
@@ -28,4 +32,23 @@ export interface SiteEntry {
     id: string;
     url: string;
     name: string;
+}
+
+export interface SiteEntryResult {
+    name: string;
+    siteId: string;
+    locationId: number;
+    lastLogin: number | null;
+    score: number;
+}
+
+export interface PersonEntryResult {
+    personId: string;
+    userId: number;
+    firstName: string;
+    lastName: string;
+    relationCount: number;
+    score: number;
+    signOfLife: Date;
+    verified: boolean;
 }
