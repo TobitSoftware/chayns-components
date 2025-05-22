@@ -4,7 +4,7 @@ export const convertSiteEntry = (entries: SiteEntryResult[]): SiteEntry[] =>
     entries.map((entry) => ({
         id: entry.siteId,
         name: entry.name,
-        url: 'URL hinzufügen',
+        url: `https://${entry.domain}`,
     }));
 
 export const convertPersonEntry = (entries: PersonEntryResult[]): PersonEntry[] =>
@@ -13,4 +13,5 @@ export const convertPersonEntry = (entries: PersonEntryResult[]): PersonEntry[] 
         firstName: entry.firstName,
         lastName: entry.lastName,
         commonSites: entry.relationCount,
+        isVerified: entry.verified,
     }));

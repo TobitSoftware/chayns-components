@@ -26,6 +26,7 @@ export interface PersonEntry {
     firstName: string;
     lastName: string;
     commonSites: number;
+    isVerified: boolean;
 }
 
 export interface SiteEntry {
@@ -40,6 +41,7 @@ export interface SiteEntryResult {
     locationId: number;
     lastLogin: number | null;
     score: number;
+    domain: string;
 }
 
 export interface PersonEntryResult {

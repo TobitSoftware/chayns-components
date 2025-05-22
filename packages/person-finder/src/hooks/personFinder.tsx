@@ -47,9 +47,9 @@ export const useClosestElementAbove = (containerRef: RefObject<HTMLElement>, ite
 
 export const usePersonFinderItem = (entry: PersonEntry | SiteEntry) => {
     const isSite = isSiteEntry(entry);
-    const isVerified = true;
 
-    const { url, commonSites, name, firstName, lastName, id } = entry as PersonEntry & SiteEntry;
+    const { url, commonSites, name, firstName, lastName, id, isVerified } = entry as PersonEntry &
+        SiteEntry;
 
     const imageUrl = `https://sub60.tobit.com/${isSite ? 'l' : 'u'}/${id}?size=120`;
     const titleElement = isVerified && <VerificationBadge />;

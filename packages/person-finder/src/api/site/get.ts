@@ -2,7 +2,7 @@ import { getAccessToken } from 'chayns-api';
 import { SiteEntryResult } from '../../types/personFinder';
 
 const URL =
-    'https://relations.chayns.net/relations/location/?query=##search##&skip=##skip##&take=##take##';
+    'https://relations.chayns.net/relations/location/?query=##search##&skip=##skip##&take=##take##&includeDomains=true';
 
 interface GetSiteResult {
     count: number;
