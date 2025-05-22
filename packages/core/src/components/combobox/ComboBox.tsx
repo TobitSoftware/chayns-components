@@ -297,7 +297,13 @@ const ComboBox: FC<ComboBoxProps> = ({
                 ComboBoxDirection.TOP_RIGHT,
             ].includes(direction);
 
-            if (y + height + contentHeight > containerHeight) {
+            const hasBottomAlignment = [
+                ComboBoxDirection.BOTTOM,
+                ComboBoxDirection.BOTTOM_LEFT,
+                ComboBoxDirection.BOTTOM_RIGHT,
+            ].includes(direction);
+
+            if (!hasBottomAlignment && y + height + contentHeight > containerHeight) {
                 useTopAlignment = true;
 
                 setShouldUseTopAlignment(true);
