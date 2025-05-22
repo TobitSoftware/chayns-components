@@ -232,7 +232,8 @@ const ComboBox: FC<ComboBoxProps> = ({
         if (styledComboBoxElementRef.current && !container) {
             const el = styledComboBoxElementRef.current as HTMLElement;
 
-            const element = el.closest('.dialog-inner') || el.closest('body');
+            const element =
+                el.closest('.dialog-inner') || el.closest('.page-provider') || el.closest('body');
 
             setNewContainer(element);
         }
