@@ -44,6 +44,41 @@ export const saveSelection = (
 };
 
 export const restoreSelection = (element: HTMLDivElement) => {
+    // Search for \u200C in child nodes. If found, set the childIndex, startOffset, and endOffset to the
+    // position of the \u200C character. Also remove the \u200C character from the child node. If not found,
+    // the childIndex, startOffset, and endOffset will be like before.
+    const childNodesArray = Array.from(element.childNodes);
+
+    let hasFoundNoJoiner = false;
+
+    childNodesArray.forEach((node) => {
+        if (
+            !hasFoundNoJoiner &&
+            node.nodeType === Node.TEXT_NODE &&
+            typeof node.nodeValue === 'string'
+        ) {
+            const noJoinerIndex = node.nodeValue.indexOf('\u200C');
+
+            if (noJoinerIndex !== -1) {
+                hasFoundNoJoiner = true;
+
+                childIndex = childNodesArray.indexOf(node);
+                startOffset = noJoinerIndex;
+                endOffset = noJoinerIndex;
+            }
+        }
+    });
+
+    // Remove all no joiner characters from the child nodes if no joiner was found
+    if (hasFoundNoJoiner) {
+        childNodesArray.forEach((node) => {
+            if (node.nodeType === Node.TEXT_NODE && typeof node.nodeValue === 'string') {
+                // eslint-disable-next-line no-param-reassign
+                node.nodeValue = node.nodeValue.replace(/\u200C/g, '');
+            }
+        });
+    }
+
     let childNode = element.childNodes[childIndex];
 
     const selection = window.getSelection();

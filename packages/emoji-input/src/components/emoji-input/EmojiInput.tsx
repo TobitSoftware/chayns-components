@@ -389,6 +389,11 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                        prevent it from being interpreted as html. */
                     text = escapeHTML(text);
 
+                    // Insert an invisible control character at the end of the text to place the cursor in the correct position after insertion.
+                    if (text.includes('\n')) {
+                        text += '\u200C';
+                    }
+
                     // This deprecated function is used, because it causes the inserted content to be added to the undo stack.
                     // If the text were to be inserted directly into the 'innerHTML' of the editor element, the undo stack would not be updated.
                     // In that case on CTRL+Z the inserted text would not be removed.
