@@ -3,6 +3,7 @@ import { StyledPersonFinderItem } from './PersonFinderItem.styles';
 import { Icon, ListItem } from '@chayns-components/core';
 import { PersonEntry, SiteEntry } from '../../../../../types/personFinder';
 import { useFriends, usePersonFinderItem } from '../../../../../hooks/personFinder';
+import { usePersonFinder } from '../../../../PersonFinderProvider';
 
 export interface PersonFinderItemProps {
     entry: PersonEntry | SiteEntry;
@@ -14,6 +15,7 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd }) => {
 
     const { isSite, imageUrl, title, subtitle, titleElement } = usePersonFinderItem(entry);
     const { isFriend, addFriend, removeFriend } = useFriends(id);
+    const { tags } = usePersonFinder();
 
     const handleIconClick = (event: MouseEvent) => {
         event.stopPropagation();
@@ -37,7 +39,10 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd }) => {
     );
 
     return (
-        <StyledPersonFinderItem onClick={() => onAdd(id)}>
+        <StyledPersonFinderItem
+            onClick={() => onAdd(id)}
+            $isSelected={tags && tags.map((tag) => tag.id).includes(id)}
+        >
             <ListItem
                 title={title}
                 subtitle={subtitle}

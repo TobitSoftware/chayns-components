@@ -8,7 +8,7 @@ import {
     StyledPersonFinderBodyHeaderFilter,
     StyledPersonFinderBodyHeaderGroupName,
 } from './PersonFinderBody.styles';
-import { PersonFinderFilterTypes } from '../../../../types/personFinder';
+import { LoadingState, PersonFinderFilterTypes } from '../../../../types/personFinder';
 import {
     BrowserName,
     Button,
@@ -31,7 +31,8 @@ export type PersonFinderBodyProps = {
 
 const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
     ({ onAdd, width, filterTypes }, ref) => {
-        const { activeFilter, updateActiveFilter, data, loadMore } = usePersonFinder();
+        const { activeFilter, updateActiveFilter, data, loadMore, loadingState } =
+            usePersonFinder();
 
         const { browser } = getDevice();
 
@@ -90,6 +91,12 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
                         {singleData.entries.length < singleData.count && (
                             <StyledPersonFinderBodyContentButtonWrapper>
                                 <Button
+                                    shouldShowWaitCursor={
+                                        loadingState
+                                            ? loadingState[key as PersonFinderFilterTypes] ===
+                                              LoadingState.Pending
+                                            : false
+                                    }
                                     onClick={() => handleLoadMore(key as PersonFinderFilterTypes)}
                                 >
                                     Mehr {getGroupName(key)}
@@ -98,7 +105,7 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
                         )}
                     </div>
                 )),
-            [data, handleLoadMore, onAdd, shouldShowGroupNames],
+            [data, handleLoadMore, loadingState, onAdd, shouldShowGroupNames],
         );
 
         return (

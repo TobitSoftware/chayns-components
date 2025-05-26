@@ -19,6 +19,15 @@ export type PersonFinderDataMap = {
     [K in PersonFinderFilterTypes]?: PersonFinderData;
 };
 
+export enum LoadingState {
+    None = 'none',
+    Pending = 'pending',
+    Success = 'success',
+    Error = 'error',
+}
+
+export type LoadingStateMap = { [K in PersonFinderFilterTypes]?: LoadingState };
+
 export type PersonFinderEntry = PersonEntry | SiteEntry;
 
 export interface PersonEntry {

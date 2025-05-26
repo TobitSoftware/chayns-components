@@ -231,7 +231,15 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                         <StyledTagInputTagWrapper>
                             <StyledTagInputTagWrapperText>{text}</StyledTagInputTagWrapperText>
                             {rightElement}
-                            <Icon icons={['ts-wrong']} onClick={() => handleIconClick(id)} />
+                            <Icon
+                                icons={['ts-wrong']}
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+
+                                    handleIconClick(id);
+                                }}
+                            />
                         </StyledTagInputTagWrapper>
                     </Badge>,
                 );

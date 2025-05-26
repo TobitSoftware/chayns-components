@@ -71,11 +71,10 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
         },
         ref,
     ) => {
-        const { data, updateSearch } = usePersonFinder();
+        const { data, updateSearch, setTags, tags } = usePersonFinder();
 
         const [portal, setPortal] = useState<ReactPortal>();
         const [width, setWidth] = useState(0);
-        const [tags, setTags] = useState<Tag[]>([]);
         const [shouldShowBody, setShouldShowBody] = useState(false);
 
         const tagInputRef = useRef<TagInputRef>(null);
@@ -89,6 +88,10 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
         );
 
         const handleRemove = (id: string) => {
+            if (typeof setTags !== 'function') {
+                return;
+            }
+
             setTags((prevState) => prevState.filter((entry) => entry.id !== id));
 
             if (typeof onRemove === 'function') {
@@ -105,13 +108,21 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
         }, []);
 
         const handleClear = useCallback(() => {
+            if (typeof setTags !== 'function') {
+                return;
+            }
+
             tagInputRef.current?.resetValue();
 
             setTags([]);
-        }, []);
+        }, [setTags]);
 
         const handleAdd = useCallback(
             (id: string) => {
+                if (typeof setTags !== 'function') {
+                    return;
+                }
+
                 const selectedEntry = Object.values(data ?? {})
                     .flat()
                     .map(({ entries }) => entries)
@@ -143,7 +154,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
                     return [...prevState, tag];
                 });
             },
-            [data, maxEntries, onAdd],
+            [data, maxEntries, onAdd, setTags],
         );
 
         /**
