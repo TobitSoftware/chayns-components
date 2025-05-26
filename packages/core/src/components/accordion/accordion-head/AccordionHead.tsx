@@ -77,8 +77,8 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     titleColor,
 }) => {
     const [headHeight, setHeadHeight] = useState<HeadHeight>({
-        closed: isWrapped ? 40 : 33,
-        open: isWrapped ? 40 : 33,
+        closed: isWrapped ? 40 : 32,
+        open: isWrapped ? 40 : 32,
     });
 
     const [isSearchActive, setIsSearchActive] = useState(false);

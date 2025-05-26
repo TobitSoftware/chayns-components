@@ -45,6 +45,8 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
         margin-bottom 0.3s ease;
     will-change: unset !important;
 
+    margin-top: 10px;
+
     ${({
         $isOpen,
         $isWrapped,
@@ -77,10 +79,13 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
             padding-left: 17px;
         `}
     ${({ $isWrapped }: StyledMotionAccordionProps) =>
-        !$isWrapped &&
-        css`
-            margin-top: 10px;
-        `}
+        !$isWrapped
+            ? css`
+                  margin-top: 5px;
+              `
+            : css`
+                  margin: 0;
+              `}
     ${({ $isWrapped, $shouldHideBackground, theme }: StyledMotionAccordionProps) =>
         !$isWrapped &&
         !$shouldHideBackground &&
