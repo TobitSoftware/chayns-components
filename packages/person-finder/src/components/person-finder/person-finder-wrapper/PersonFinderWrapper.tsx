@@ -1,4 +1,5 @@
 import React, {
+    type ChangeEvent,
     forwardRef,
     ReactPortal,
     useCallback,
@@ -12,7 +13,6 @@ import {
     PersonEntry,
     PersonFinderEntry,
     PersonFinderFilterTypes,
-    Priority,
     SiteEntry,
 } from '../../../types/personFinder';
 import { StyledPersonFinder, StyledPersonFinderLeftElement } from './PersonFinderWrapper.styles';
@@ -36,10 +36,6 @@ export type PersonFinderWrapperProps = {
      * The filter options of the component.
      */
     filterTypes?: PersonFinderFilterTypes[];
-    /**
-     * Determines the priority level for displaying friends in search results.
-     */
-    friendsPriority?: Priority;
     /**
      * The maximum amount of entries that can be selected.
      */
@@ -71,12 +67,11 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
             container,
             onAdd,
             onRemove,
-            friendsPriority,
             maxEntries = Infinity,
         },
         ref,
     ) => {
-        const { data } = usePersonFinder();
+        const { data, updateSearch } = usePersonFinder();
 
         const [portal, setPortal] = useState<ReactPortal>();
         const [width, setWidth] = useState(0);
@@ -168,6 +163,15 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
             [handleClose],
         );
 
+        const handleChange = useCallback(
+            (event: ChangeEvent<HTMLInputElement>) => {
+                if (typeof updateSearch === 'function') {
+                    updateSearch(event.target.value);
+                }
+            },
+            [updateSearch],
+        );
+
         /**
          * This hook calculates the width
          */
@@ -238,6 +242,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
                         shouldAllowMultiple={shouldAllowMultiple}
                         shouldPreventEnter
                         onRemove={handleRemove}
+                        onChange={handleChange}
                         tags={tags}
                     />
                 </div>

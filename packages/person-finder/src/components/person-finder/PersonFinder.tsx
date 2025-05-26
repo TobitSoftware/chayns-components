@@ -9,7 +9,12 @@ import { useContainer } from '@chayns-components/core';
 
 const DEFAULT_FILTER_TYPES = [PersonFinderFilterTypes.PERSON, PersonFinderFilterTypes.SITE];
 
-export type PersonFinderProps = PersonFinderWrapperProps;
+export type PersonFinderProps = PersonFinderWrapperProps & {
+    /**
+     * Determines the priority level for displaying friends in search results.
+     */
+    friendsPriority?: Priority;
+};
 
 export type PersonFinderRef = PersonFinderWrapperRef;
 
@@ -32,13 +37,12 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
         const newContainer = useContainer({ ref: personFinderRef, container });
 
         return (
-            <PersonFinderProvider>
+            <PersonFinderProvider friendsPriority={friendsPriority}>
                 <div className="beta-chayns-person-finder" ref={personFinderRef}>
                     <PersonFinderWrapper
                         ref={ref}
                         container={newContainer}
                         filterTypes={filterTypes}
-                        friendsPriority={friendsPriority}
                         maxEntries={maxEntries}
                         onAdd={onAdd}
                         onRemove={onRemove}

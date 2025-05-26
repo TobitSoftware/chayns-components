@@ -21,7 +21,7 @@ import { IFilterButtonItem } from '@chayns-components/core/lib/types/types/filte
 import PersonFinderItem from './person-finder-item/PersonFinderItem';
 import { getDevice } from 'chayns-api';
 import { capitalizeFirstLetter, getGroupName } from '../../../../utils/personFinder';
-import { useClosestElementAbove, useLoadData } from '../../../../hooks/personFinder';
+import { useClosestElementAbove } from '../../../../hooks/personFinder';
 
 export type PersonFinderBodyProps = {
     onAdd: (id: string) => void;
@@ -31,8 +31,7 @@ export type PersonFinderBodyProps = {
 
 const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
     ({ onAdd, width, filterTypes }, ref) => {
-        const { activeFilter, updateActiveFilter, data } = usePersonFinder();
-        const { handleLoadData } = useLoadData();
+        const { activeFilter, updateActiveFilter, data, loadMore } = usePersonFinder();
 
         const { browser } = getDevice();
 
@@ -58,9 +57,11 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
 
         const handleLoadMore = useCallback(
             (key: PersonFinderFilterTypes) => {
-                handleLoadData(key);
+                if (typeof loadMore === 'function') {
+                    loadMore(key);
+                }
             },
-            [handleLoadData],
+            [loadMore],
         );
 
         const filter: IFilterButtonItem[] = Object.values(filterTypes ?? {}).map((type) => ({
@@ -86,11 +87,15 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
                                 />
                             ))}
                         </List>
-                        <StyledPersonFinderBodyContentButtonWrapper>
-                            <Button onClick={() => handleLoadMore(key as PersonFinderFilterTypes)}>
-                                Mehr {getGroupName(key)}
-                            </Button>
-                        </StyledPersonFinderBodyContentButtonWrapper>
+                        {singleData.entries.length < singleData.count && (
+                            <StyledPersonFinderBodyContentButtonWrapper>
+                                <Button
+                                    onClick={() => handleLoadMore(key as PersonFinderFilterTypes)}
+                                >
+                                    Mehr {getGroupName(key)}
+                                </Button>
+                            </StyledPersonFinderBodyContentButtonWrapper>
+                        )}
                     </div>
                 )),
             [data, handleLoadMore, onAdd, shouldShowGroupNames],
