@@ -5,4 +5,6 @@ export enum ComboBoxDirection {
     BOTTOM_RIGHT,
     TOP_LEFT,
     TOP_RIGHT,
+    LEFT,
+    RIGHT,
 }

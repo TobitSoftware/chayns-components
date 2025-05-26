@@ -19,6 +19,7 @@ export type FilterButtonProps = {
     count?: number;
     text: string;
     id: string;
+    isDisabled?: boolean;
     onSelect: (key: string) => void;
 };
 
@@ -31,15 +32,25 @@ const FilterButton: FC<FilterButtonProps> = ({
     count,
     isSelected,
     id,
+    isDisabled,
     onSelect,
 }) => {
     const handleClick = useCallback(() => {
+        if (isDisabled) {
+            return;
+        }
+
         onSelect(id);
-    }, [id, onSelect]);
+    }, [id, isDisabled, onSelect]);
 
     return useMemo(
         () => (
-            <StyledFilterButtonItem $isSelected={isSelected} $size={size} onClick={handleClick}>
+            <StyledFilterButtonItem
+                $isSelected={isSelected}
+                $isDisabled={isDisabled}
+                $size={size}
+                onClick={handleClick}
+            >
                 <StyledFilterButtonItemLabel>
                     {icons && <Icon icons={icons} size={15} />}
                     <StyledFilterButtonItemLabelText>{text}</StyledFilterButtonItemLabelText>
@@ -61,7 +72,7 @@ const FilterButton: FC<FilterButtonProps> = ({
                 />
             </StyledFilterButtonItem>
         ),
-        [color, count, handleClick, icons, isSelected, shape, size, text],
+        [color, count, handleClick, icons, isDisabled, isSelected, shape, size, text],
     );
 };
 

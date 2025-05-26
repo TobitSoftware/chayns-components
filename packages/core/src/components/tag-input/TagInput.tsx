@@ -9,6 +9,7 @@ import React, {
     type ReactElement,
     useImperativeHandle,
     useContext,
+    ChangeEventHandler,
 } from 'react';
 import { useTheme } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
@@ -22,6 +23,7 @@ import {
     StyledTagInputTagWrapperText,
 } from './TagInput.styles';
 import { AreaContext } from '../area-provider/AreaContextProvider';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export type TagInputProps = {
     /**
@@ -32,6 +34,10 @@ export type TagInputProps = {
      * Function to be executed when a tag is added.
      */
     onAdd?: (tag: Tag) => void;
+    /**
+     * Function to be executed when the value of the input is changed.
+     */
+    onChange?: ChangeEventHandler<HTMLInputElement>;
     /**
      * Function to be executed when a tag is removed.
      */
@@ -65,6 +71,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             placeholder,
             tags,
             onRemove,
+            onChange,
             onAdd,
             leftElement,
             shouldAllowMultiple = true,
@@ -76,8 +83,9 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
         const [currentValue, setCurrentValue] = useState('');
         const [selectedId, setSelectedId] = useState<Tag['id']>();
 
-        const theme = useTheme();
         const areaProvider = useContext(AreaContext);
+
+        const theme = useTheme() as Theme;
 
         useEffect(() => {
             if (tags) {
@@ -175,13 +183,20 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             ],
         );
 
-        const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-            setCurrentValue(event.target.value);
+        const handleChange = useCallback(
+            (event: ChangeEvent<HTMLInputElement>) => {
+                setCurrentValue(event.target.value);
 
-            if (event.target.value !== '') {
-                setSelectedId(undefined);
-            }
-        };
+                if (typeof onChange === 'function') {
+                    onChange(event);
+                }
+
+                if (event.target.value !== '') {
+                    setSelectedId(undefined);
+                }
+            },
+            [onChange],
+        );
 
         const handleIconClick = useCallback(
             (id: string) => {
@@ -248,6 +263,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             [
                 content,
                 currentValue,
+                handleChange,
                 handleKeyDown,
                 leftElement,
                 placeholder,

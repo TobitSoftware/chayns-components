@@ -108,7 +108,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
             />,
         ];
 
-        items.forEach(({ icons, text, color, count, id }) => {
+        items.forEach(({ icons, text, color, count, id, isDisabled }) => {
             array.push(
                 <FilterButton
                     color={color}
@@ -121,6 +121,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
                     shape={FilterButtonItemShape.Round}
                     size={size}
                     text={text}
+                    isDisabled={isDisabled}
                 />,
             );
         });

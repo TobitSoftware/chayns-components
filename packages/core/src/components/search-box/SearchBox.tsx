@@ -24,6 +24,7 @@ import type { IFilterButtonItem } from '../../types/filterButtons';
 import type { ISearchBoxItem, ISearchBoxItems } from '../../types/searchBox';
 import { calculateContentHeight } from '../../utils/calculate';
 import { searchList } from '../../utils/searchBox';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ContextMenuCoordinates } from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
 import Input from '../input/Input';
@@ -36,6 +37,7 @@ import {
     StyledSearchBoxIcon,
     StyledSearchBoxLeftWrapper,
 } from './SearchBox.styles';
+import { useUuid } from '../../hooks/uuid';
 
 export type SearchBoxRef = {
     clear: VoidFunction;
@@ -155,6 +157,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         });
         const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
 
+        const uuid = useUuid();
+
         const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement>(null);
         const inputRef = useRef<HTMLInputElement | null>(null);
@@ -165,7 +169,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             typeof presetValue === 'string' && presetValue !== '',
         );
 
-        const theme = useTheme();
+        const theme = useTheme() as Theme;
 
         const { browser } = getDevice();
 
@@ -274,8 +278,17 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         }, [groups, lists, customFilter, shouldAddInputToList, value]);
 
         const handleOpen = useCallback(() => {
-            if (boxRef.current) {
-                const { x, y, height: bodyHeight } = boxRef.current.getBoundingClientRect();
+            if (boxRef.current && newContainer) {
+                const {
+                    left: comboBoxLeft,
+                    top: comboBoxTop,
+                    height: bodyHeight,
+                } = boxRef.current.getBoundingClientRect();
+
+                const { left, top } = newContainer.getBoundingClientRect();
+
+                const x = comboBoxLeft - left + newContainer.scrollLeft;
+                const y = comboBoxTop - top + newContainer.scrollTop;
 
                 setInternalCoordinates({
                     x,
@@ -284,7 +297,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
                 setIsAnimating(true);
             }
-        }, []);
+        }, [newContainer]);
 
         const handleClose = useCallback(() => {
             setIsAnimating(false);
@@ -349,7 +362,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          * This hook calculates the width
          */
         useEffect(() => {
-            const input = document.getElementById('search_box_input');
+            const input = document.getElementById(`search_box_input${uuid}`);
 
             const getInputWidth = () => {
                 if (input) {
@@ -360,7 +373,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             if (input) {
                 new ResizeObserver(getInputWidth).observe(input);
             }
-        }, []);
+        }, [uuid]);
 
         useEffect(() => {
             if (selectedId) {
@@ -795,11 +808,15 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
             setPortal(() =>
                 createPortal(
-                    <AnimatePresence initial={false}>
+                    <AnimatePresence
+                        initial={false}
+                        key={`search-box-body-animation-wrapper-${uuid}`}
+                    >
                         {isAnimating &&
                             matchingListsItems.length !== 0 &&
                             (value.trim() !== '' || shouldShowContentOnEmptyInput) && (
                                 <SearchBoxBody
+                                    key={`search-box-body-${uuid}`}
                                     filterButtons={filterButtons}
                                     selectedGroups={groups}
                                     width={width}
@@ -831,12 +848,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             matchingListsItems.length,
             value,
             shouldShowContentOnEmptyInput,
+            uuid,
         ]);
 
         return useMemo(
             () => (
-                <StyledSearchBox ref={boxRef}>
-                    <div id="search_box_input">
+                <StyledSearchBox ref={boxRef} key={`search-box-${uuid}`}>
+                    <div id={`search_box_input${uuid}`}>
                         <Input
                             isInvalid={isInvalid}
                             ref={inputRef}
@@ -863,6 +881,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 placeholder,
                 portal,
                 rightElement,
+                uuid,
                 value,
             ],
         );

@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Badge from '../src/components/badge/Badge';
+import { BadgeDesign } from '../src/types/badge';
 
 export default {
     title: 'Core/Badge',
@@ -19,6 +20,8 @@ export const SingleNumber = Template.bind({});
 
 export const Empty = Template.bind({});
 
+export const Border = Template.bind({});
+
 SingleNumber.args = {
     backgroundColor: '#ff0000',
     children: '4',
@@ -27,4 +30,9 @@ SingleNumber.args = {
 
 Empty.args = {
     children: undefined,
+};
+
+Border.args = {
+    children: 'SYSTEM',
+    design: BadgeDesign.BORDER,
 };

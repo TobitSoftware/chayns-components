@@ -11,6 +11,7 @@ import React, {
     useState,
 } from 'react';
 import type { IListItemRightElements } from '../../../../types/list';
+import { getElementClickEvent } from '../../../../utils/accordion';
 import Icon from '../../../icon/Icon';
 import ListItemIcon from './list-item-icon/ListItemIcon';
 import ListItemImage from './list-item-image/ListItemImage';
@@ -57,6 +58,7 @@ type ListItemHeadProps = {
     shouldShowRoundImageOrIcon?: boolean;
     subtitle?: ReactNode;
     title: ReactNode;
+    onTitleWidthChange: (width: number) => void;
     titleElement?: ReactNode;
     shouldForceHover?: boolean;
 };
@@ -78,6 +80,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     shouldHideImageOrIconBackground,
     shouldHideIndicator,
     shouldOpenImageOnClick,
+    onTitleWidthChange,
     shouldShowRoundImageOrIcon,
     subtitle,
     shouldForceHover,
@@ -98,6 +101,14 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const pseudoSubtitleClosedRef = useRef<HTMLDivElement>(null);
 
     const shouldShowSubtitleRow = subtitle || typeof subtitle === 'string';
+
+    useEffect(() => {
+        if (pseudoTitleClosedRef.current) {
+            const { width } = pseudoTitleClosedRef.current.getBoundingClientRect();
+
+            onTitleWidthChange(width);
+        }
+    }, [onTitleWidthChange]);
 
     useEffect(() => {
         if (pseudoTitleOpenRef.current && pseudoTitleClosedRef.current) {
@@ -166,6 +177,31 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const handleTouchEnd = useCallback(() => {
         clearTimeout(longPressTimeoutRef.current);
     }, []);
+
+    const shouldPreventRightElementClick = useMemo(() => {
+        if (!rightElements) return false;
+
+        if (
+            typeof rightElements === 'object' &&
+            ('bottom' in rightElements || 'center' in rightElements || 'top' in rightElements)
+        ) {
+            if (rightElements.bottom && getElementClickEvent(rightElements.bottom)) {
+                return true;
+            }
+
+            if (rightElements.center && getElementClickEvent(rightElements.center)) {
+                return true;
+            }
+
+            if (rightElements.top && getElementClickEvent(rightElements.top)) {
+                return true;
+            }
+        } else {
+            return getElementClickEvent(rightElements as ReactNode);
+        }
+
+        return false;
+    }, [rightElements]);
 
     const iconOrImageElement = useMemo(() => {
         if (icons) {
@@ -286,7 +322,12 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     </StyledListItemHeadSubtitle>
                 )}
             </StyledListItemHeadContent>
-            {rightElements && <ListItemRightElements rightElements={rightElements} />}
+            {rightElements && (
+                <ListItemRightElements
+                    rightElements={rightElements}
+                    shouldPreventRightElementClick={shouldPreventRightElementClick}
+                />
+            )}
             {hoverItem && (
                 <StyledMotionListItemHeadHoverItemWrapper
                     className="beta-chayns-list-item-hover-item"

@@ -8,6 +8,7 @@ import {
     fillSlider,
     getThumbMaxWidth,
 } from '../../utils/slider';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import {
     StyledSlider,
     StyledSliderInput,
@@ -90,7 +91,7 @@ const Slider: FC<SliderProps> = ({
 
     const sliderWrapperSize = useElementSize(sliderWrapperRef);
 
-    const theme = useTheme();
+    const theme = useTheme() as Theme;
 
     useEffect(() => {
         if (shouldShowThumbLabel) {

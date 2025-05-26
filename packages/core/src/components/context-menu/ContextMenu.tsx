@@ -29,6 +29,7 @@ export type ContextMenuItem = {
     icons: string[];
     key: string;
     onClick: (event?: MouseEvent<HTMLDivElement>) => Promise<void> | void;
+    isSelected?: boolean;
     text: string;
 };
 
@@ -58,6 +59,10 @@ type ContextMenuProps = {
      */
     coordinates?: ContextMenuCoordinates;
     /**
+     * The headline of the contextmenu.
+     */
+    headline?: string;
+    /**
      * The items that will be displayed in the content of the `ContextMenu`.
      */
     items: ContextMenuItem[];
@@ -73,6 +78,18 @@ type ContextMenuProps = {
      * Whether the popup should be closed if its clicked.
      */
     shouldCloseOnPopupClick?: boolean;
+    /**
+     * Whether the arrow of the popup should be hidden.
+     */
+    shouldHidePopupArrow?: boolean;
+    /**
+     * Whether the last item should be separated.
+     */
+    shouldSeparateLastItem?: boolean;
+    /**
+     * Whether the hover effect should be shown.
+     */
+    shouldShowHoverEffect?: boolean;
     /**
      * The z-index of the popup.
      */
@@ -91,10 +108,14 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             children = <Icon icons={['ts-ellipsis_v']} size={18} />,
             container,
             coordinates,
+            shouldHidePopupArrow = false,
             items,
+            headline,
             onHide,
             onShow,
             shouldCloseOnPopupClick = true,
+            shouldSeparateLastItem = false,
+            shouldShowHoverEffect = false,
             zIndex = 20,
         },
         ref,
@@ -118,6 +139,8 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         const contextMenuContentRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<HTMLSpanElement>(null);
 
+        const isTouch = getIsTouch();
+
         useEffect(() => {
             if (contextMenuRef.current && !container) {
                 const el = contextMenuRef.current as HTMLElement;
@@ -139,15 +162,14 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         }, []);
 
         const handleShow = useCallback(async () => {
-            const isTouch = getIsTouch();
-
             if (isTouch) {
                 const { result } = (await createDialog({
                     type: DialogType.SELECT,
                     buttons: [],
-                    list: items.map(({ icons, text }, index) => ({
+                    list: items.map(({ icons, text, isSelected }, index) => ({
                         name: text,
                         id: index,
+                        isSelected,
                         icon: icons[0],
                     })),
                 }).open()) as SelectDialogResult;
@@ -192,7 +214,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 setIsContentShown(true);
             }
-        }, [items, newContainer]);
+        }, [isTouch, items, newContainer]);
 
         const handleClick = useCallback<MouseEventHandler<HTMLDivElement>>(
             (event) => {
@@ -257,7 +279,10 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                             <ContextMenuContent
                                 coordinates={coordinates ?? internalCoordinates}
                                 items={items}
+                                shouldSeparateLastItem={shouldSeparateLastItem}
                                 zIndex={zIndex}
+                                headline={headline}
+                                shouldHidePopupArrow={shouldHidePopupArrow}
                                 key={`contextMenu_${uuid}`}
                                 alignment={alignment ?? internalAlignment}
                                 ref={contextMenuContentRef}
@@ -277,12 +302,17 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             items,
             uuid,
             zIndex,
+            shouldHidePopupArrow,
+            headline,
+            shouldSeparateLastItem,
         ]);
 
         return (
             <>
                 <StyledContextMenu
                     className="beta-chayns-context-menu"
+                    $isActive={isContentShown && shouldShowHoverEffect}
+                    $shouldAddHoverEffect={!isTouch && shouldShowHoverEffect}
                     onClick={handleClick}
                     ref={contextMenuRef}
                 >

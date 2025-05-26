@@ -19,7 +19,7 @@ import {
     StyledSearchInputPseudoElement,
 } from './SearchInput.styles';
 import { useTheme } from 'styled-components';
-import { Theme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import { useElementSize } from '../../hooks/useElementSize';
 
 export type SearchInputProps = {
@@ -161,6 +161,7 @@ const SearchInput: FC<SearchInputProps> = ({
                             }
                         >
                             <Icon
+                                key="icon"
                                 color={iconColor}
                                 icons={isSearchInputActive ? ['fa fa-xmark'] : ['fa fa-search']}
                                 onClick={
@@ -189,6 +190,7 @@ const SearchInput: FC<SearchInputProps> = ({
                                     }
                                 >
                                     <Icon
+                                        key="icon"
                                         color={iconColor}
                                         icons={
                                             isSearchInputActive
@@ -216,6 +218,7 @@ const SearchInput: FC<SearchInputProps> = ({
                                     transition={{ duration: 0.3 }}
                                 >
                                     <Input
+                                        key="input"
                                         leftElement={
                                             <Icon color={theme.text} icons={['far fa-search']} />
                                         }

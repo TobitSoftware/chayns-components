@@ -11,7 +11,7 @@ export type ThemeOptions = {
     colorMode: ColorMode;
     color: string;
     secondaryColor?: string;
-    designSettings?: ChaynsDesignSettings;
+    designSettings?: ChaynsDesignSettings & { fontSizePx?: number };
     paragraphFormat?: ChaynsParagraphFormat[];
     siteId?: string;
     theme?: Theme;
@@ -91,7 +91,7 @@ const createTheme = ({
             result[key] = themeResult[key] as string;
         });
     }
-    result.fontSize = (designSettings?.fontSizePx ?? 15) as unknown as string;
+    result.fontSize = (designSettings?.fontSizePx || 15) as unknown as string;
 
     return result;
 };

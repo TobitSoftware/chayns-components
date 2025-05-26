@@ -36,13 +36,14 @@ const PageProvider: FC<PageProviderProps> = ({
     customVariables,
 }) => {
     const { runtimeEnvironment } = useEnvironment();
+
+    const usableHeight = useUsableHeight();
+
     const shouldUsePadding =
         !shouldRemovePadding &&
         ![RuntimeEnviroment.IntercomPlugin, RuntimeEnviroment.PagemakerPlugin, 6].includes(
             runtimeEnvironment as number,
         );
-
-    const usableHeight = useUsableHeight();
 
     return (
         <StyledPageProvider

@@ -11,9 +11,18 @@ import {
 
 type ListItemRightElementsProps = {
     rightElements?: IListItemRightElements;
+    shouldPreventRightElementClick?: boolean;
 };
 
-const ListItemRightElements: FC<ListItemRightElementsProps> = ({ rightElements }) => {
+const ListItemRightElements: FC<ListItemRightElementsProps> = ({
+    rightElements,
+    shouldPreventRightElementClick,
+}) => {
+    const handlePreventClick = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        event.preventDefault();
+    };
+
     const topElement = useMemo(() => {
         if (typeof rightElements === 'object' && rightElements && 'top' in rightElements) {
             return (rightElements as unknown as IListItemRightElement).top;
@@ -58,7 +67,9 @@ const ListItemRightElements: FC<ListItemRightElementsProps> = ({ rightElements }
     }, [rightElements]);
 
     return (
-        <StyledListItemRightElements>
+        <StyledListItemRightElements
+            onClick={shouldPreventRightElementClick ? handlePreventClick : undefined}
+        >
             {(topElement || bottomElement) && (
                 <StyledListItemRightElementsLeft>
                     {topElement ? (

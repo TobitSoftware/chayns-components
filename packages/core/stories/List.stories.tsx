@@ -65,18 +65,22 @@ const otherImages = [
 General.args = {
     children: [
         <ListItem
+            shouldShowTooltipOnTitleOverflow
             subtitle="Stet clita kasd gubergren"
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,
         <ListItem
+            shouldShowTooltipOnTitleOverflow
             subtitle="Lorem ipsum dolor sit amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est"
         />,
         <ListItem
+            shouldShowTooltipOnTitleOverflow
             subtitle="Consetetur sadipscing elitr"
             title="At vero eos et accusam et justo duo dolores et ea rebum sit amet dolor sea takimata sanctus est"
         />,
         <ListItem
+            shouldShowTooltipOnTitleOverflow
             subtitle="No sea takimata sanctus est"
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
         />,
@@ -211,6 +215,52 @@ ListItemsWithRightElements.args = {
             images={[locationImages[1]]}
             rightElements={{
                 top: (
+                    <Badge backgroundColor="lightgreen" fontColor="white" onClick={console.log}>
+                        - 13,54%
+                    </Badge>
+                ),
+                bottom: 'Bottom',
+                center: <Icon icons={['fa fa-star']} />,
+            }}
+            subtitle="Dolor sit ipsum amet"
+            title="gubergren, no sea takimata"
+        >
+            <ListItemContent>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+                eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+                takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+                consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+                dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+                ipsum dolor sit amet.
+            </ListItemContent>
+        </ListItem>,
+        <ListItem
+            images={[locationImages[1]]}
+            rightElements={
+                <Badge backgroundColor="red" fontColor="white" onClick={console.log}>
+                    + 38,74%
+                </Badge>
+            }
+            subtitle="Dolor sit ipsum amet"
+            title="gubergren, no sea takimata"
+        >
+            <ListItemContent>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+                eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+                takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+                consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+                dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+                ipsum dolor sit amet.
+            </ListItemContent>
+        </ListItem>,
+        <ListItem
+            images={[locationImages[1]]}
+            rightElements={{
+                top: (
                     <Badge backgroundColor="lightgreen" fontColor="white">
                         - 13,54%
                     </Badge>
@@ -220,7 +270,18 @@ ListItemsWithRightElements.args = {
             }}
             subtitle="Dolor sit ipsum amet"
             title="gubergren, no sea takimata"
-        />,
+        >
+            <ListItemContent>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+                eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+                takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+                consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+                dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+                ipsum dolor sit amet.
+            </ListItemContent>
+        </ListItem>,
         <ListItem
             images={[locationImages[2]]}
             rightElements={{
@@ -257,6 +318,7 @@ ListItemWithGreyedTitle.args = {
             subtitle="Sadipscing elitr dolor sit"
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
             isTitleGreyed
+            shouldRenderClosed
         >
             <ListItemContent>
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod

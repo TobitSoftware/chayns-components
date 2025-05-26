@@ -1,5 +1,5 @@
 import { ChaynsDesignSettings, ChaynsParagraphFormat, ColorMode, useSite } from 'chayns-api';
-import React, { createContext, FC, ReactNode, useContext } from 'react';
+import React, { createContext, FC, ReactNode, useContext, useMemo } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { StyledColorSchemeProvider } from './ColorSchemeProvider.styles';
 import { useChaynsTheme } from './hooks/useChaynsTheme';
@@ -52,6 +52,17 @@ const GlobalStyle = createGlobalStyle`
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+
+    footer {
+        font-size: 0.85rem;
+        color: #888;
+        margin: 10px 0 0;
+
+        & a {
+            color: #888;
+            letter-spacing: -0.3px;
+        }
+    }
 `;
 
 export interface ColorSchemeContextProps {
@@ -74,8 +85,15 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     customVariables,
 }) => {
     const { color: internalColor, colorMode: internalColorMode } = useSite();
+
     const color = colorProp ?? internalColor;
     const colorMode = colorModeProp ?? internalColorMode;
+    const overrideParagraphFormat =
+        (color && color !== internalColor) || (colorMode && colorMode !== internalColorMode);
+    const paragraphFormat = useMemo(
+        () => (overrideParagraphFormat ? [] : undefined),
+        [overrideParagraphFormat],
+    );
 
     const contextValue = useChaynsTheme({
         color,
@@ -83,6 +101,8 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         secondaryColor,
         siteId,
         customVariables,
+        // Overrides the paragraphFormat on changed color or colorMode
+        paragraphFormat,
     });
 
     return (

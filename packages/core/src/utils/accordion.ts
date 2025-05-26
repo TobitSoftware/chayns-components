@@ -52,13 +52,36 @@ export const getElementClickEvent = (element: ReactNode) => {
     const checkForClickHandler = (el: ReactNode) => {
         if (!isValidElement(el)) return;
 
-        if (el.props.onClick) {
+        if (
+            typeof el.type !== 'string' &&
+            'displayName' in el.type &&
+            (el.type.displayName === 'Checkbox' ||
+                el.type.displayName === 'ComboBox' ||
+                el.type.displayName === 'SelectButton')
+        ) {
             hasClickHandler = true;
 
             return;
         }
 
+        if (
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            el.props.onClick ||
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            el.props.onPointerDown ||
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            el.props.onMouseDown ||
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            el.props.onTouchStart
+        ) {
+            hasClickHandler = true;
+
+            return;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (el.props.children) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
             Children.forEach(el.props.children, checkForClickHandler);
         }
     };

@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import React, { FC, MouseEventHandler } from 'react';
-import { useTheme } from 'styled-components';
 import { getStackSizeFactor } from '../../utils/icon';
 import { StyledIcon, StyledIconWrapper } from './Icon.styles';
 
@@ -74,8 +73,6 @@ const Icon: FC<IconProps> = ({
         }
     };
 
-    const theme = useTheme();
-
     let maxStackSizeFactor = 1;
 
     icons.forEach((icon) => {
@@ -98,10 +95,12 @@ const Icon: FC<IconProps> = ({
         <StyledIconWrapper
             className={wrapperClasses}
             $isDisabled={isDisabled}
-            onClick={typeof onClick === 'function' ? handleClick : undefined}
-            $isOnClick={typeof onClick === 'function'}
-            onDoubleClick={typeof onDoubleClick === 'function' ? handleDoubleClick : undefined}
-            onMouseDown={onMouseDown}
+            onClick={typeof onClick === 'function' && !isDisabled ? handleClick : undefined}
+            $isOnClick={typeof onClick === 'function' && !isDisabled}
+            onDoubleClick={
+                typeof onDoubleClick === 'function' && !isDisabled ? handleDoubleClick : undefined
+            }
+            onMouseDown={typeof onMouseDown === 'function' && !isDisabled ? onMouseDown : undefined}
             $size={size}
         >
             {icons.map((icon) => {

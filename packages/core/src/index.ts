@@ -18,6 +18,7 @@ export {
     default as ColorSchemeProvider,
     useColorScheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
+export { BadgeSize, BadgeDesign } from './types/badge';
 export type {
     ColorSchemeContextProps,
     FramerMotionBugFix,
@@ -36,6 +37,8 @@ export {
     type IComboBoxItems as ComboBoxItems,
 } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
+export { default as HighlightSLider } from './components/highlight-slider/HighlightSlider';
+export type { HighlightSliderItemColors as HighlightSliderColors } from './components/highlight-slider/highlight-slider-item/HighlightSliderItem';
 export {
     default as ContextMenu,
     type ContextMenuCoordinates,
@@ -63,6 +66,7 @@ export { default as PageProvider } from './components/page-provider/PageProvider
 export { default as Popup } from './components/popup/Popup';
 export { default as PopupContent } from './components/popup/popup-content/PopupContent';
 export { default as ProgressBar } from './components/progress-bar/ProgressBar';
+export { PopupAlignment } from './types/popup';
 export {
     default as RadioButtonGroup,
     type RadioButtonGroupRef,
@@ -96,6 +100,7 @@ export { ComboBoxDirection } from './types/comboBox';
 export { ContentCardType } from './types/contentCard';
 export { ContextMenuAlignment } from './types/contextMenu';
 export type { FileItem, Image, InternalFileItem, Meta, Video } from './types/file';
+export { isValidFileType } from './utils/file';
 export type { FileInputFileItem } from './types/fileInput';
 export { FilterButtonItemShape, FilterButtonSize } from './types/filterButtons';
 export type { IFilterButtonItem as FilterButtonItem } from './types/filterButtons';

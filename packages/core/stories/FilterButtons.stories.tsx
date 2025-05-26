@@ -26,6 +26,7 @@ export default {
                 text: 'Nachtisch',
                 color: 'blue',
                 icons: ['fa fa-pie'],
+                isDisabled: true,
                 count: 32,
             },
             {

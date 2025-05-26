@@ -4,21 +4,28 @@ import styled, { css } from 'styled-components';
 import { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
-type StyledFilterButtonItemProps = WithTheme<{ $size: FilterButtonSize; $isSelected: boolean }>;
+type StyledFilterButtonItemProps = WithTheme<{
+    $size: FilterButtonSize;
+    $isSelected: boolean;
+    $isDisabled?: boolean;
+}>;
 
 export const StyledFilterButtonItem = styled.div<StyledFilterButtonItemProps>`
     position: relative;
     line-height: 1;
-    cursor: pointer;
+    cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
     user-select: none;
     padding: ${({ $size }) => ($size === FilterButtonSize.Normal ? '8px 14px' : '4px 8px')};
 
     display: flex;
     align-items: center;
 
+    opacity: ${({ $isDisabled }) => ($isDisabled ? '.6' : '1')};
+
     &:hover > div:last-child {
-        ${({ $isSelected }) =>
+        ${({ $isSelected, $isDisabled }) =>
             !$isSelected &&
+            !$isDisabled &&
             css`
                 opacity: 0.2;
             `}

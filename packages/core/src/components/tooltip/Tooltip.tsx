@@ -1,5 +1,5 @@
 import React, { FC, isValidElement, ReactNode, useMemo, useRef, type CSSProperties } from 'react';
-import type { PopupRef } from '../../types/popup';
+import type { PopupAlignment, PopupRef } from '../../types/popup';
 import type { ITooltipItem } from '../../types/tooltip';
 import { isTextOnlyElement } from '../../utils/tooltip';
 import Popup from '../popup/Popup';
@@ -7,6 +7,10 @@ import TooltipItem from './tooltip-item/TooltipItem';
 import { StyledTooltip, StyledTooltipChildren } from './Tooltip.styles';
 
 export type TooltipProps = {
+    /**
+     * The alignment of the tooltip. By default, the tooltip will calculate the best alignment.
+     */
+    alignment?: PopupAlignment;
     /**
      * The elements that the tooltip should surround.
      */
@@ -28,6 +32,10 @@ export type TooltipProps = {
      */
     isDisabled?: boolean;
     /**
+     * The max width of the Tooltip.
+     */
+    maxItemWidth?: number;
+    /**
      * Whether the tooltip should be hidden after the children is not hovered.
      */
     shouldHideOnChildrenLeave?: boolean;
@@ -46,11 +54,13 @@ export type TooltipProps = {
 };
 
 const Tooltip: FC<TooltipProps> = ({
+    alignment,
     item,
     children,
     container,
     isDisabled,
     shouldHideOnChildrenLeave,
+    maxItemWidth,
     yOffset,
     itemWidth,
     shouldUseFullWidth = false,
@@ -66,13 +76,14 @@ const Tooltip: FC<TooltipProps> = ({
         return (
             <TooltipItem
                 width={itemWidth}
+                maxWidth={maxItemWidth}
                 text={(item as ITooltipItem).text}
                 headline={(item as ITooltipItem).headline}
                 imageUrl={(item as ITooltipItem).imageUrl}
                 button={(item as ITooltipItem).button}
             />
         );
-    }, [item, itemWidth]);
+    }, [item, itemWidth, maxItemWidth]);
 
     return useMemo(
         () => (
@@ -87,6 +98,7 @@ const Tooltip: FC<TooltipProps> = ({
                     </StyledTooltipChildren>
                 ) : (
                     <Popup
+                        alignment={alignment}
                         shouldShowOnHover
                         shouldHideOnChildrenLeave={shouldHideOnChildrenLeave}
                         content={content}
@@ -112,6 +124,7 @@ const Tooltip: FC<TooltipProps> = ({
             children,
             shouldUseChildrenWidth,
             shouldUseFullWidth,
+            alignment,
             shouldHideOnChildrenLeave,
             content,
             container,

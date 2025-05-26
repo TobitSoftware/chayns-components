@@ -8,7 +8,9 @@ import React, {
     useCallback,
     useContext,
     useEffect,
+    useMemo,
     useRef,
+    useState,
 } from 'react';
 import { useUuid } from '../../../hooks/uuid';
 import type { IListItemRightElements } from '../../../types/list';
@@ -17,7 +19,8 @@ import AreaContextProvider from '../../area-provider/AreaContextProvider';
 import { ListContext } from '../List';
 import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
-import { StyledMotionListItem } from './ListItem.styles';
+import { StyledListItemTooltip, StyledMotionListItem } from './ListItem.styles';
+import Tooltip from '../../tooltip/Tooltip';
 
 export type ListItemElements = [ReactNode, ...ReactNode[]];
 
@@ -96,6 +99,10 @@ export type ListItemProps = {
      */
     shouldForceBackground?: boolean;
     /**
+     * Whether the line should be forced, e.g., so that it is also displayed if the item is the last element in the list.
+     */
+    shouldForceBottomLine?: boolean;
+    /**
      * Whether the hover item should be forced.
      */
     shouldForceHover?: boolean;
@@ -125,13 +132,21 @@ export type ListItemProps = {
      */
     shouldPreventLayoutAnimation?: boolean;
     /**
-     * Whether the image or icon should be displayed in a round shape. This should be always used for images of persons.
+     * This will render the ListItem closed on the first render.
+     */
+    shouldRenderClosed?: boolean;
+    /**
+     * Whether the image or icon should be displayed in a round shape. This should always be used for images of persons.
      */
     shouldShowRoundImageOrIcon?: boolean;
     /**
      * Whether a separator should be displayed below this item. In this case, the border is displayed thicker than normal.
      */
     shouldShowSeparatorBelow?: boolean;
+    /**
+     * Whether a Tooltip should be displayed on hover, if the title is cut.
+     */
+    shouldShowTooltipOnTitleOverflow?: boolean;
     /**
      * Subtitle of the `ListItem` displayed in the head below the title
      */
@@ -162,15 +177,18 @@ const ListItem: FC<ListItemProps> = ({
     onLongPress,
     onOpen,
     rightElements,
+    shouldShowTooltipOnTitleOverflow = false,
     shouldForceBackground = false,
+    shouldForceBottomLine = false,
+    shouldForceHover = false,
     shouldHideBottomLine = false,
+    shouldOpenImageOnClick = false,
     shouldHideImageOrIconBackground,
     shouldHideIndicator = false,
-    shouldOpenImageOnClick = false,
     shouldPreventLayoutAnimation = false,
+    shouldRenderClosed = false,
     shouldShowRoundImageOrIcon,
     shouldShowSeparatorBelow = false,
-    shouldForceHover = false,
     subtitle,
     title,
     titleElement,
@@ -186,6 +204,7 @@ const ListItem: FC<ListItemProps> = ({
     const { isWrapped: isParentAccordionWrapped } = useContext(AccordionContext);
 
     const isInitialRenderRef = useRef(true);
+    const listItemRef = useRef<HTMLDivElement>(null);
 
     const uuid = useUuid();
 
@@ -194,6 +213,8 @@ const ListItem: FC<ListItemProps> = ({
 
     const onCloseRef = useRef(onClose);
     const onOpenRef = useRef(onOpen);
+
+    const [shouldEnableTooltip, setShouldEnableTooltip] = useState(false);
 
     useEffect(() => {
         onCloseRef.current = onClose;
@@ -243,23 +264,20 @@ const ListItem: FC<ListItemProps> = ({
 
     const isClickable = typeof onClick === 'function' || isExpandable;
 
-    return (
-        <StyledMotionListItem
-            animate={{ height: 'auto', opacity: 1 }}
-            className="beta-chayns-list-item"
-            exit={{ height: 0, opacity: 0 }}
-            initial={{ height: 0, opacity: 0 }}
-            key={`list-item-${uuid}`}
-            layout={shouldPreventLayoutAnimation ? undefined : 'position'}
-            $isClickable={isClickable}
-            $isInAccordion={typeof isParentAccordionWrapped === 'boolean'}
-            $isOpen={isItemOpen}
-            $isWrapped={isWrapped}
-            $shouldForceBackground={shouldForceBackground}
-            $shouldHideBottomLine={shouldHideBottomLine}
-            $shouldHideIndicator={shouldHideIndicator}
-            $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
-        >
+    const handleTitleWidthChange = (titleWidth: number) => {
+        if (listItemRef.current) {
+            const { offsetWidth } = listItemRef.current;
+
+            if (offsetWidth - 18 < titleWidth) {
+                setShouldEnableTooltip(true);
+            } else {
+                setShouldEnableTooltip(false);
+            }
+        }
+    };
+
+    const headContent = useMemo(
+        () => (
             <ListItemHead
                 hoverItem={hoverItem}
                 careOfLocationId={careOfLocationId}
@@ -268,6 +286,7 @@ const ListItem: FC<ListItemProps> = ({
                 images={images}
                 isAnyItemExpandable={isAnyItemExpandable}
                 isExpandable={isExpandable}
+                onTitleWidthChange={handleTitleWidthChange}
                 isOpen={isItemOpen}
                 isTitleGreyed={isTitleGreyed}
                 leftElements={leftElements}
@@ -283,9 +302,73 @@ const ListItem: FC<ListItemProps> = ({
                 title={title}
                 titleElement={titleElement}
             />
+        ),
+        [
+            careOfLocationId,
+            handleHeadClick,
+            hoverItem,
+            icons,
+            imageBackground,
+            images,
+            isAnyItemExpandable,
+            isClickable,
+            isExpandable,
+            isItemOpen,
+            isTitleGreyed,
+            leftElements,
+            onLongPress,
+            rightElements,
+            shouldForceHover,
+            shouldHideImageOrIconBackground,
+            shouldHideIndicator,
+            shouldOpenImageOnClick,
+            shouldShowRoundImageOrIcon,
+            subtitle,
+            title,
+            titleElement,
+        ],
+    );
+
+    return (
+        <StyledMotionListItem
+            animate={{ height: 'auto', opacity: 1 }}
+            className="beta-chayns-list-item"
+            exit={{ height: 0, opacity: 0 }}
+            initial={{ height: 0, opacity: 0 }}
+            key={`list-item-${uuid}`}
+            ref={listItemRef}
+            layout={shouldPreventLayoutAnimation ? undefined : 'position'}
+            $isClickable={isClickable}
+            $isInAccordion={typeof isParentAccordionWrapped === 'boolean'}
+            $isOpen={isItemOpen}
+            $isWrapped={isWrapped}
+            $shouldForceBackground={shouldForceBackground}
+            $shouldForceBottomLine={shouldForceBottomLine}
+            $shouldHideBottomLine={shouldHideBottomLine}
+            $shouldHideIndicator={shouldHideIndicator}
+            $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
+        >
+            {shouldShowTooltipOnTitleOverflow && shouldEnableTooltip ? (
+                <Tooltip
+                    shouldUseFullWidth
+                    item={
+                        <StyledListItemTooltip key={`list-item-tooltip-${uuid}`}>
+                            {title}
+                        </StyledListItemTooltip>
+                    }
+                >
+                    {headContent}
+                </Tooltip>
+            ) : (
+                headContent
+            )}
             <AnimatePresence initial={false}>
-                {isExpandable && isItemOpen && (
-                    <ListItemBody id={uuid} key={`listItemBody-${uuid}`}>
+                {isExpandable && (isItemOpen || shouldRenderClosed) && (
+                    <ListItemBody
+                        id={uuid}
+                        key={`listItemBody-${uuid}`}
+                        shouldHideBody={shouldRenderClosed && !isItemOpen}
+                    >
                         <AreaContextProvider>{children}</AreaContextProvider>
                     </ListItemBody>
                 )}
