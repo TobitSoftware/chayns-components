@@ -65,11 +65,21 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({ children }) => {
         setData((prevState) => ({ ...prevState, [key]: newData }));
     }, []);
 
-    // ToDo missing request result
     const addFriend = useCallback((personId: string) => {
         void postFriends(personId).then((result) => {
             if (result) {
-                setFriends((prev) => [...(prev ?? []), result]);
+                const { firstName, lastName, verificationState } = result;
+
+                setFriends((prev) => [
+                    ...(prev ?? []),
+                    {
+                        id: personId,
+                        isVerified: verificationState === 1,
+                        commonSites: 0,
+                        firstName,
+                        lastName,
+                    },
+                ]);
             }
         });
     }, []);
@@ -86,11 +96,12 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({ children }) => {
         void getFriends().then((result) => {
             if (result) {
                 setFriends(
-                    result.map(({ personId, firstName, lastName }) => ({
+                    result.map(({ personId, firstName, lastName, verificationState }) => ({
                         lastName,
                         firstName,
                         id: personId,
                         commonSites: 0,
+                        isVerified: verificationState === 1,
                     })),
                 );
             }
