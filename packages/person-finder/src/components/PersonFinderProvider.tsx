@@ -71,8 +71,7 @@ interface PersonFinderProviderProps {
 const PersonFinderProvider: FC<PersonFinderProviderProps> = ({ children, friendsPriority }) => {
     const [data, setData] = useState<IPersonFinderContext['data']>();
     const [friends, setFriends] = useState<PersonEntry[]>();
-    const [activeFilter, setActiveFilter] =
-        useState<IPersonFinderContext['activeFilter']>(ALL_FILTERS);
+    const [activeFilter, setActiveFilter] = useState<IPersonFinderContext['activeFilter']>();
     const [search, setSearch] = useState('');
 
     const latestRequestRef = useRef<number>(0);
@@ -162,7 +161,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({ children, friends
             void (async () => {
                 const result = await loadData({
                     searchString: search,
-                    filter: activeFilter ?? [],
+                    filter: activeFilter ?? ALL_FILTERS,
                     skipMap: {},
                 });
 
@@ -192,16 +191,6 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({ children, friends
                     count: friends.length,
                 },
             });
-        } else {
-            void (async () => {
-                const result = await loadData({
-                    searchString: '',
-                    filter: ALL_FILTERS,
-                    skipMap: {},
-                });
-
-                setData(result);
-            })();
         }
     }, [friends, friendsPriority]);
 
