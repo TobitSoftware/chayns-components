@@ -39,6 +39,15 @@ export const StyledPersonFinderBodyHeaderFilter = styled.div`
     padding: 10px;
 `;
 
+export const StyledPersonFinderBodyWaitCursor = styled.div`
+    display: flex;
+    justify-content: center;
+`;
+
+export const StyledPersonFinderBodyErrorMessage = styled.div`
+    text-align: center;
+`;
+
 export const StyledPersonFinderBodyHeaderGroupName = styled.div`
     padding: 5px 10px;
     font-weight: bold;

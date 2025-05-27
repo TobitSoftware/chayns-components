@@ -221,6 +221,10 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({ children, friends
         lastExecutionRef.current = now;
 
         void (async () => {
+            (activeFilter ?? ALL_FILTERS).forEach((key) => {
+                updateLoadingState(key, LoadingState.Pending);
+            });
+
             const result = await loadData({
                 searchString: search,
                 filter: activeFilter ?? ALL_FILTERS,
@@ -230,12 +234,18 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({ children, friends
             if (result && requestTimestamp > latestRequestRef.current) {
                 Object.entries(result).forEach(([key, value]) => {
                     updateData(key as PersonFinderFilterTypes, value);
+
+                    if (value.entries.length === 0) {
+                        updateLoadingState(key as PersonFinderFilterTypes, LoadingState.Error);
+                    } else {
+                        updateLoadingState(key as PersonFinderFilterTypes, LoadingState.Success);
+                    }
                 });
 
                 latestRequestRef.current = requestTimestamp;
             }
         })();
-    }, [search, activeFilter, updateData]);
+    }, [search, activeFilter, updateData, updateLoadingState]);
 
     // load initial data
     useEffect(() => {

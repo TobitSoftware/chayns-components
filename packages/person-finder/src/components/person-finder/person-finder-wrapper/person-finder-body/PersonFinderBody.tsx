@@ -4,9 +4,11 @@ import {
     StyledPersonFinderBodyContent,
     StyledPersonFinderBodyContentButtonWrapper,
     StyledPersonFinderBodyContentGroupName,
+    StyledPersonFinderBodyErrorMessage,
     StyledPersonFinderBodyHeader,
     StyledPersonFinderBodyHeaderFilter,
     StyledPersonFinderBodyHeaderGroupName,
+    StyledPersonFinderBodyWaitCursor,
 } from './PersonFinderBody.styles';
 import { LoadingState, PersonFinderFilterTypes } from '../../../../types/personFinder';
 import {
@@ -15,6 +17,7 @@ import {
     FilterButtons,
     FilterButtonSize,
     List,
+    SmallWaitCursor,
 } from '@chayns-components/core';
 import { usePersonFinder } from '../../../PersonFinderProvider';
 import { IFilterButtonItem } from '@chayns-components/core/lib/types/types/filterButtons';
@@ -72,39 +75,66 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
 
         const content = useMemo(
             () =>
-                Object.entries(data ?? {}).map(([key, singleData], index) => (
-                    <div key={`person-finder-group--${key}`}>
-                        {shouldShowGroupNames && index !== 0 && (
-                            <StyledPersonFinderBodyContentGroupName className="person-finder-group-name">
-                                {getGroupName(key)}
-                            </StyledPersonFinderBodyContentGroupName>
-                        )}
-                        <List>
-                            {singleData?.entries.map((entry) => (
-                                <PersonFinderItem
-                                    key={`person-finder-entry--${entry.id}`}
-                                    entry={entry}
-                                    onAdd={onAdd}
-                                />
-                            ))}
-                        </List>
-                        {singleData.entries.length < singleData.count && (
-                            <StyledPersonFinderBodyContentButtonWrapper>
-                                <Button
-                                    shouldShowWaitCursor={
-                                        loadingState
-                                            ? loadingState[key as PersonFinderFilterTypes] ===
-                                              LoadingState.Pending
-                                            : false
-                                    }
-                                    onClick={() => handleLoadMore(key as PersonFinderFilterTypes)}
-                                >
-                                    Mehr {getGroupName(key)}
-                                </Button>
-                            </StyledPersonFinderBodyContentButtonWrapper>
-                        )}
-                    </div>
-                )),
+                Object.entries(data ?? {}).map(([key, singleData], index) => {
+                    const loadingStateByKey = loadingState
+                        ? (loadingState[key as PersonFinderFilterTypes] ?? LoadingState.None)
+                        : LoadingState.None;
+
+                    const shouldShowWaitCursor =
+                        singleData.entries.length === 0 &&
+                        loadingStateByKey === LoadingState.Pending;
+
+                    const shouldShowErrorMessage =
+                        singleData.entries.length === 0 && loadingStateByKey === LoadingState.Error;
+
+                    const groupName = getGroupName(key);
+
+                    return (
+                        <div key={`person-finder-group--${key}`}>
+                            {shouldShowGroupNames && index !== 0 && (
+                                <StyledPersonFinderBodyContentGroupName className="person-finder-group-name">
+                                    {groupName}
+                                </StyledPersonFinderBodyContentGroupName>
+                            )}
+                            {shouldShowWaitCursor && (
+                                <StyledPersonFinderBodyWaitCursor>
+                                    <SmallWaitCursor shouldHideBackground />
+                                </StyledPersonFinderBodyWaitCursor>
+                            )}
+                            {shouldShowErrorMessage && (
+                                <StyledPersonFinderBodyErrorMessage>
+                                    Es konnten keine {groupName} zu der Suche &#34;
+                                    {singleData.searchString}&#34; gefunden werden.
+                                </StyledPersonFinderBodyErrorMessage>
+                            )}
+                            {singleData.entries.length > 0 && (
+                                <List>
+                                    {singleData?.entries.map((entry) => (
+                                        <PersonFinderItem
+                                            key={`person-finder-entry--${entry.id}`}
+                                            entry={entry}
+                                            onAdd={onAdd}
+                                        />
+                                    ))}
+                                </List>
+                            )}
+                            {singleData.entries.length < singleData.count && (
+                                <StyledPersonFinderBodyContentButtonWrapper>
+                                    <Button
+                                        shouldShowWaitCursor={
+                                            loadingStateByKey === LoadingState.Pending
+                                        }
+                                        onClick={() =>
+                                            handleLoadMore(key as PersonFinderFilterTypes)
+                                        }
+                                    >
+                                        Mehr {getGroupName(key)}
+                                    </Button>
+                                </StyledPersonFinderBodyContentButtonWrapper>
+                            )}
+                        </div>
+                    );
+                }),
             [data, handleLoadMore, loadingState, onAdd, shouldShowGroupNames],
         );
 

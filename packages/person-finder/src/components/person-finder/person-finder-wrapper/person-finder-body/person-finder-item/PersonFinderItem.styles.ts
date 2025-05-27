@@ -6,6 +6,8 @@ type StyledPersonFinderItemProps = WithTheme<{ $isSelected?: boolean }>;
 export const StyledPersonFinderItem = styled.div<StyledPersonFinderItemProps>`
     cursor: pointer;
 
+    transition: background-color 0.2s;
+
     &:hover {
         background-color: ${({ theme }: StyledPersonFinderItemProps) => theme['102']};
     }
