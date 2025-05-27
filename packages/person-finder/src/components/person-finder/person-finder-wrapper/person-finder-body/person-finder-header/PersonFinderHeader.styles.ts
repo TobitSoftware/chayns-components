@@ -17,7 +17,11 @@ export const StyledPersonFinderHeaderFilter = styled.div`
     padding: 10px;
 `;
 
-export const StyledPersonFinderHeaderGroupName = styled.div`
+type StyledPersonFinderHeaderGroupNameProps = WithTheme<unknown>;
+
+export const StyledPersonFinderHeaderGroupName = styled.div<StyledPersonFinderHeaderGroupNameProps>`
     padding: 5px 10px;
     font-weight: bold;
+
+    color: ${({ theme }: StyledPersonFinderHeaderGroupNameProps) => theme.text};
 `;

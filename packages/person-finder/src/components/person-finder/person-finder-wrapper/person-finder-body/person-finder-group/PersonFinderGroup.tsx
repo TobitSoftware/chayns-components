@@ -48,7 +48,7 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
     const waitCursor =
         (entries.length === 0 || areOnlyFriendsGiven) && loadingState === LoadingState.Pending ? (
             <StyledPersonFinderGroupWaitCursor>
-                <SmallWaitCursor />
+                <SmallWaitCursor shouldHideBackground />
             </StyledPersonFinderGroupWaitCursor>
         ) : null;
 
