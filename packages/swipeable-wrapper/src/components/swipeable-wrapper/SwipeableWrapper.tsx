@@ -43,6 +43,10 @@ export type SwipeableWrapperProps = {
      * Whether the opacity should be animated when swiping in the actions.
      */
     shouldUseOpacityAnimation?: boolean;
+    /**
+     * Whether the swipeable functionality is disabled
+     */
+    isDisabled: boolean;
 };
 
 const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
@@ -50,6 +54,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
     leftActions = [],
     rightActions = [],
     shouldUseOpacityAnimation,
+    isDisabled = false,
 }) => {
     const [leftThreshold, setLeftThreshold] = useState(
         calcThreshold({
@@ -266,8 +271,8 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
 
     return (
         <StyledMotionSwipeableWrapper
-            onPan={handlePan}
-            onPanEnd={handlePanEnd}
+            onPan={isDisabled ? undefined : handlePan}
+            onPanEnd={isDisabled ? undefined : handlePanEnd}
             ref={swipeableWrapperRef}
             style={{ x: listItemXOffset }}
         >
