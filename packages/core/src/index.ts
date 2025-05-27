@@ -119,3 +119,4 @@ export { filterFilesByMimeType, getFileAsArrayBuffer, selectFiles } from './util
 export { isTobitEmployee } from './utils/isTobitEmployee';
 export { getUsableHeight } from './utils/pageProvider';
 export { uploadFile } from './utils/uploadFile';
+export type { Theme } from './components/color-scheme-provider/ColorSchemeProvider';

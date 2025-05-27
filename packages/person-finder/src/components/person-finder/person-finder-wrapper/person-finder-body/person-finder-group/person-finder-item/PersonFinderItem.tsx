@@ -1,9 +1,10 @@
 import React, { FC, MouseEvent } from 'react';
 import { StyledPersonFinderItem } from './PersonFinderItem.styles';
-import { Icon, ListItem } from '@chayns-components/core';
+import { Icon, ListItem, Theme } from '@chayns-components/core';
 import { PersonEntry, SiteEntry } from '../../../../../../types/personFinder';
 import { useFriends, usePersonFinderItem } from '../../../../../../hooks/personFinder';
 import { usePersonFinder } from '../../../../../PersonFinderProvider';
+import { useTheme } from 'styled-components';
 
 export interface PersonFinderItemProps {
     entry: PersonEntry | SiteEntry;
@@ -16,6 +17,7 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd }) => {
     const { isSite, imageUrl, title, subtitle, titleElement } = usePersonFinderItem(entry);
     const { isFriend, addFriend, removeFriend } = useFriends(id);
     const { tags } = usePersonFinder();
+    const theme = useTheme() as Theme;
 
     const handleIconClick = (event: MouseEvent) => {
         event.stopPropagation();
@@ -33,7 +35,7 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd }) => {
     const rightElements = (
         <Icon
             icons={[`${isFriend ? 'fas' : 'far'} fa-star`]}
-            color={isFriend ? 'var(--chayns-color--yellow-3)' : undefined}
+            color={isFriend ? theme['yellow-3'] : undefined}
             onClick={handleIconClick}
         />
     );
