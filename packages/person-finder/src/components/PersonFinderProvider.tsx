@@ -217,35 +217,91 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({ children, friends
         }
 
         const requestTimestamp = now;
-
         lastExecutionRef.current = now;
 
+        const active = activeFilter ?? ALL_FILTERS;
+
+        if (
+            friendsPriority === Priority.HIGH &&
+            friends &&
+            active.includes(PersonFinderFilterTypes.PERSON)
+        ) {
+            const matchingFriends = friends.filter(
+                (f) =>
+                    f.firstName?.toLowerCase().includes(search.toLowerCase()) ||
+                    f.lastName?.toLowerCase().includes(search.toLowerCase()),
+            );
+
+            if (matchingFriends.length > 0) {
+                updateData(PersonFinderFilterTypes.PERSON, {
+                    entries: matchingFriends,
+                    searchString: search,
+                    skip: matchingFriends.length,
+                    count: matchingFriends.length,
+                });
+
+                updateLoadingState(PersonFinderFilterTypes.PERSON, LoadingState.Pending);
+            }
+        }
+
         void (async () => {
-            (activeFilter ?? ALL_FILTERS).forEach((key) => {
+            active.forEach((key) => {
                 updateLoadingState(key, LoadingState.Pending);
             });
 
             const result = await loadData({
                 searchString: search,
-                filter: activeFilter ?? ALL_FILTERS,
+                filter: active,
                 skipMap: {},
             });
 
             if (result && requestTimestamp > latestRequestRef.current) {
-                Object.entries(result).forEach(([key, value]) => {
-                    updateData(key as PersonFinderFilterTypes, value);
+                Object.entries(result).forEach(([keyString, value]) => {
+                    const key = keyString as PersonFinderFilterTypes;
+
+                    if (
+                        key === PersonFinderFilterTypes.PERSON &&
+                        friendsPriority === Priority.HIGH &&
+                        friends
+                    ) {
+                        const friendIds = new Set(friends.map((f) => f.id));
+
+                        const serverFriendEntries = value.entries.filter((entry) =>
+                            friendIds.has(entry.id),
+                        );
+                        const serverFriendIds = new Set(serverFriendEntries.map((f) => f.id));
+
+                        const missingFriends = friends
+                            .filter((f) => !serverFriendIds.has(f.id))
+                            .filter(
+                                (f) =>
+                                    f.firstName?.toLowerCase().includes(search.toLowerCase()) ||
+                                    f.lastName?.toLowerCase().includes(search.toLowerCase()),
+                            );
+
+                        const otherEntries = value.entries.filter(
+                            (entry) => !friendIds.has(entry.id),
+                        );
+
+                        updateData(key, {
+                            ...value,
+                            entries: [...serverFriendEntries, ...missingFriends, ...otherEntries],
+                        });
+                    } else {
+                        updateData(key, value);
+                    }
 
                     if (value.entries.length === 0) {
-                        updateLoadingState(key as PersonFinderFilterTypes, LoadingState.Error);
+                        updateLoadingState(key, LoadingState.Error);
                     } else {
-                        updateLoadingState(key as PersonFinderFilterTypes, LoadingState.Success);
+                        updateLoadingState(key, LoadingState.Success);
                     }
                 });
 
                 latestRequestRef.current = requestTimestamp;
             }
         })();
-    }, [search, activeFilter, updateData, updateLoadingState]);
+    }, [search, activeFilter, updateData, updateLoadingState, friends, friendsPriority]);
 
     // load initial data
     useEffect(() => {

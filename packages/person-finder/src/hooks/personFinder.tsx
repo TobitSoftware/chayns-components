@@ -1,6 +1,6 @@
-import React, { RefObject, useCallback, useEffect, useState } from 'react';
-import { PersonEntry, PersonFinderFilterTypes, SiteEntry } from '../types/personFinder';
-import { destructureData, isSiteEntry, loadData } from '../utils/personFinder';
+import React, { RefObject, useEffect, useMemo, useState } from 'react';
+import { PersonEntry, PersonFinderEntry, SiteEntry } from '../types/personFinder';
+import { isSiteEntry } from '../utils/personFinder';
 import { VerificationBadge } from '@chayns-components/core';
 import { usePersonFinder } from '../components/PersonFinderProvider';
 
@@ -79,56 +79,15 @@ export const useFriends = (personId: string) => {
     };
 };
 
-export const useLoadData = () => {
-    const { data, activeFilter, updateData } = usePersonFinder();
+export const useOnlyFriends = (entries: PersonFinderEntry[]) => {
+    const { friends } = usePersonFinder();
 
-    const search = '';
+    return useMemo(() => {
+        if (!entries?.length) return false;
+        if (!friends?.length) return false;
 
-    const handleLoadData = useCallback(
-        (filterToLoadMore?: PersonFinderFilterTypes) => {
-            /**
-             * Load data for the selected types.
-             * If the active filters are undefined or an empty array, all filter should be loaded.
-             * If a filter is given to load more, only this filter is used.
-             */
-            const filtersToProcess = filterToLoadMore
-                ? [filterToLoadMore]
-                : Object.values(PersonFinderFilterTypes).filter(
-                      (filterType) =>
-                          !activeFilter ||
-                          activeFilter.length === 0 ||
-                          activeFilter.includes(filterType),
-                  );
+        const friendIds = new Set(friends.map((friend) => friend.id));
 
-            filtersToProcess.forEach((filterType) => {
-                const { entries, skip, searchString } = destructureData(data, filterType);
-
-                /**
-                 * This means only the active filter has changed, so nothing should be loaded for this filter.
-                 */
-                if (search === searchString && !filterToLoadMore) {
-                    return;
-                }
-
-                void loadData({ skip }).then((result) => {
-                    const newData = {
-                        count: result.count,
-                        skip: result.skip,
-                        searchString: search,
-                        entries:
-                            typeof filterToLoadMore === 'string'
-                                ? [...entries, ...result.entries]
-                                : result.entries,
-                    };
-
-                    if (typeof updateData === 'function') {
-                        updateData(filterType, newData);
-                    }
-                });
-            });
-        },
-        [activeFilter, data, updateData],
-    );
-
-    return { handleLoadData };
+        return entries.every((entry) => friendIds.has(entry.id));
+    }, [entries, friends]);
 };

@@ -15,6 +15,7 @@ import {
 } from './PersonFinderGroup.styles';
 import { usePersonFinder } from '../../../../PersonFinderProvider';
 import PersonFinderItem from './person-finder-item/PersonFinderItem';
+import { useOnlyFriends } from '../../../../../hooks/personFinder';
 
 export type PersonFinderGroupProps = {
     filterKey: PersonFinderFilterTypes;
@@ -34,6 +35,7 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
     onAdd,
 }) => {
     const { loadMore, loadingState: loadingStateFromState } = usePersonFinder();
+    const areOnlyFriendsGiven = useOnlyFriends(entries);
 
     const groupName = getGroupName(filterKey);
 
@@ -41,8 +43,10 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
         ? (loadingStateFromState[filterKey] ?? LoadingState.None)
         : LoadingState.None;
 
+    const shouldShowLoadMoreButton = entries.length < count;
+
     const waitCursor =
-        entries.length === 0 && loadingState === LoadingState.Pending ? (
+        (entries.length === 0 || areOnlyFriendsGiven) && loadingState === LoadingState.Pending ? (
             <StyledPersonFinderGroupWaitCursor>
                 <SmallWaitCursor />
             </StyledPersonFinderGroupWaitCursor>
@@ -69,8 +73,6 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
                     {groupName}
                 </StyledPersonFinderGroupName>
             )}
-            {waitCursor}
-            {errorMessage}
             {entries.length > 0 && (
                 <List>
                     {entries.map((entry) => (
@@ -82,7 +84,9 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
                     ))}
                 </List>
             )}
-            {entries.length < count && (
+            {waitCursor}
+            {errorMessage}
+            {shouldShowLoadMoreButton && (
                 <StyledPersonFinderGroupButtonWrapper>
                     <Button
                         shouldShowWaitCursor={loadingState === LoadingState.Pending}
