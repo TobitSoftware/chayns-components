@@ -23,36 +23,6 @@ export const StyledMotionPersonFinderBody = styled(motion.div)<StyledMotionPerso
         rgba(${({ theme }: StyledMotionPersonFinderBodyProps) => theme['009-rgb']}, 0.08) inset;
 `;
 
-type StyledPersonFinderBodyHeaderProps = WithTheme<{ $isScrollTop: boolean }>;
-
-export const StyledPersonFinderBodyHeader = styled.div<StyledPersonFinderBodyHeaderProps>`
-    transition: box-shadow 0.2s;
-
-    ${({ $isScrollTop }: StyledPersonFinderBodyHeaderProps) =>
-        !$isScrollTop &&
-        css`
-            box-shadow: 0 1px 4px #0000001a;
-        `}
-`;
-
-export const StyledPersonFinderBodyHeaderFilter = styled.div`
-    padding: 10px;
-`;
-
-export const StyledPersonFinderBodyWaitCursor = styled.div`
-    display: flex;
-    justify-content: center;
-`;
-
-export const StyledPersonFinderBodyErrorMessage = styled.div`
-    text-align: center;
-`;
-
-export const StyledPersonFinderBodyHeaderGroupName = styled.div`
-    padding: 5px 10px;
-    font-weight: bold;
-`;
-
 type StyledPersonFinderBodyContentProps = WithTheme<{ $browser: BrowserName }>;
 
 export const StyledPersonFinderBodyContent = styled.div<StyledPersonFinderBodyContentProps>`
@@ -94,15 +64,4 @@ export const StyledPersonFinderBodyContent = styled.div<StyledPersonFinderBodyCo
                       background-color: transparent;
                   }
               `}
-`;
-
-export const StyledPersonFinderBodyContentGroupName = styled.div`
-    padding: 5px 10px;
-    font-weight: bold;
-`;
-
-export const StyledPersonFinderBodyContentButtonWrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
 `;

@@ -1,9 +1,9 @@
 import React, { FC, MouseEvent } from 'react';
 import { StyledPersonFinderItem } from './PersonFinderItem.styles';
 import { Icon, ListItem } from '@chayns-components/core';
-import { PersonEntry, SiteEntry } from '../../../../../types/personFinder';
-import { useFriends, usePersonFinderItem } from '../../../../../hooks/personFinder';
-import { usePersonFinder } from '../../../../PersonFinderProvider';
+import { PersonEntry, SiteEntry } from '../../../../../../types/personFinder';
+import { useFriends, usePersonFinderItem } from '../../../../../../hooks/personFinder';
+import { usePersonFinder } from '../../../../../PersonFinderProvider';
 
 export interface PersonFinderItemProps {
     entry: PersonEntry | SiteEntry;
