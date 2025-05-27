@@ -58,6 +58,7 @@ export const StyledComboBoxItemImage = styled.img<StyledComboBoxItemImageProps>`
         rgba(${({ theme }: StyledComboBoxItemImageProps) => theme['009-rgb']}, 0.15);
     flex: 0 0 auto;
     height: ${({ $shouldShowBigImage }) => ($shouldShowBigImage ? '40px' : '22px')};
+    object-fit: cover;
     width: ${({ $shouldShowBigImage }) => ($shouldShowBigImage ? '40px' : '22px')};
 `;
 
