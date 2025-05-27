@@ -52,6 +52,10 @@ export type NumberInputProps = {
      */
     shouldShowOnlyBottomBorder?: boolean;
     /**
+     * Whether the onChange function should be triggert when the value is formatted on the focus or blur
+     */
+    shouldTriggerChangeOnFormat?: boolean;
+    /**
      * The value, that should be displayed in the input, when it is in focus.
      * You can also pass a stringified number as default value.
      * NOTE: If you pass a stringified number, it will be formatted to the selected format
@@ -66,6 +70,7 @@ const NumberInput: FC<NumberInputProps> = ({
     isInvalid,
     maxNumber = Infinity,
     value,
+    shouldTriggerChangeOnFormat = true,
     placeholder,
     onBlur,
     isDisabled,
@@ -155,7 +160,7 @@ const NumberInput: FC<NumberInputProps> = ({
         setPlainText(newStringValue.replaceAll('.', ''));
         setHasFocus(false);
 
-        if (typeof onChange === 'function') {
+        if (typeof onChange === 'function' && shouldTriggerChangeOnFormat) {
             onChange(newStringValue.replaceAll('.', ''));
         }
 
@@ -174,7 +179,7 @@ const NumberInput: FC<NumberInputProps> = ({
         setPlainText(formattedValue.replaceAll('.', '').replace('€', '').replaceAll(' ', ''));
 
         // This will update the external state
-        if (typeof onChange === 'function') {
+        if (typeof onChange === 'function' && shouldTriggerChangeOnFormat) {
             onChange(formattedValue.replaceAll('.', '').replace('€', '').replaceAll(' ', ''));
         }
 
