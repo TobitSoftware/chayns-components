@@ -24,7 +24,8 @@ export const useAdaptiveTranslation = (
         const timeoutRef = setTimeout(() => {
             if (shouldTranslate) {
                 setIsFetching(true);
-                void translationHandler.translateText(originalText, fromLanguage, toLanguage)
+                void translationHandler
+                    .translateText(originalText, fromLanguage, toLanguage)
                     .then((text) => {
                         setTranslatedText(text);
                     })

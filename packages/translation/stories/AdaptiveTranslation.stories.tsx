@@ -9,7 +9,7 @@ export default {
 } as Meta<typeof AdaptiveTranslation>;
 
 const Template: StoryFn<typeof AdaptiveTranslation> = ({ ...args }) => (
-    <AdaptiveTranslation {...args}/>
+    <AdaptiveTranslation {...args} />
 );
 
 export const General = Template.bind({});

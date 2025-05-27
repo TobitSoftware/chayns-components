@@ -11,5 +11,5 @@ export const fetchTranslations = async (textList: TranslationRequest[]): Promise
             'Content-Type': 'application/json',
         },
     });
-        return (await response.json()) as string[];
+    return (await response.json()) as string[];
 };

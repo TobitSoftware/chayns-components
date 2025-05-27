@@ -27,6 +27,10 @@ import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export type TagInputProps = {
     /**
+     * An element that should be displayed on the left side of the input.
+     */
+    leftElement?: ReactElement;
+    /**
      * Function to be executed when a tag is added.
      */
     onAdd?: (tag: Tag) => void;
@@ -46,14 +50,35 @@ export type TagInputProps = {
      * The tags that should be displayed.
      */
     tags?: Tag[];
+    /**
+     * Whether multiple tags should be allowed.
+     */
+    shouldAllowMultiple?: boolean;
+    /**
+     * Whether the enter key should be prevented.
+     */
+    shouldPreventEnter?: boolean;
 };
 
 export type TagInputRef = {
     getUnsavedTagText: Tag['text'] | undefined;
+    resetValue: () => void;
 };
 
 const TagInput = forwardRef<TagInputRef, TagInputProps>(
-    ({ placeholder, tags, onRemove, onAdd, onChange }, ref) => {
+    (
+        {
+            placeholder,
+            tags,
+            onRemove,
+            onChange,
+            onAdd,
+            leftElement,
+            shouldAllowMultiple = true,
+            shouldPreventEnter,
+        },
+        ref,
+    ) => {
         const [internalTags, setInternalTags] = useState<Tag[]>();
         const [currentValue, setCurrentValue] = useState('');
         const [selectedId, setSelectedId] = useState<Tag['id']>();
@@ -64,9 +89,13 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
 
         useEffect(() => {
             if (tags) {
-                setInternalTags(tags);
+                setInternalTags(shouldAllowMultiple ? tags : tags.slice(0, 1));
             }
-        }, [tags]);
+        }, [shouldAllowMultiple, tags]);
+
+        const handleResetValue = () => {
+            setCurrentValue('');
+        };
 
         const shouldChangeColor = useMemo(
             () => areaProvider.shouldChangeColor ?? false,
@@ -77,19 +106,23 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             ref,
             () => ({
                 getUnsavedTagText: currentValue !== '' ? currentValue : undefined,
+                resetValue: handleResetValue,
             }),
             [currentValue],
         );
 
         const handleKeyDown = useCallback(
             (event: KeyboardEvent) => {
-                if (event.key === 'Enter') {
+                if (event.key === 'Enter' && !shouldPreventEnter) {
                     setCurrentValue((prevValue) => {
                         if (!prevValue) {
                             return '';
                         }
 
                         setInternalTags((prevTags) => {
+                            if (!shouldAllowMultiple && (prevTags?.length ?? 0) > 0)
+                                return prevTags;
+
                             const newTag = { id: uuidv4(), text: prevValue };
 
                             if (typeof onAdd === 'function') {
@@ -139,7 +172,15 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                     });
                 }
             },
-            [currentValue, internalTags, onAdd, onRemove, selectedId],
+            [
+                currentValue,
+                internalTags,
+                onAdd,
+                onRemove,
+                selectedId,
+                shouldAllowMultiple,
+                shouldPreventEnter,
+            ],
         );
 
         const handleChange = useCallback(
@@ -179,7 +220,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                 return items;
             }
 
-            internalTags.forEach(({ text, id }) => {
+            internalTags.forEach(({ text, id, rightElement }) => {
                 items.push(
                     <Badge
                         key={`tag-input-${id}`}
@@ -189,7 +230,16 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                     >
                         <StyledTagInputTagWrapper>
                             <StyledTagInputTagWrapperText>{text}</StyledTagInputTagWrapperText>
-                            <Icon icons={['ts-wrong']} onClick={() => handleIconClick(id)} />
+                            {rightElement}
+                            <Icon
+                                icons={['ts-wrong']}
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+
+                                    handleIconClick(id);
+                                }}
+                            />
                         </StyledTagInputTagWrapper>
                     </Badge>,
                 );
@@ -198,16 +248,24 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             return items;
         }, [handleIconClick, internalTags, selectedId, theme]);
 
+        const shouldShowInput = useMemo(
+            () => shouldAllowMultiple || (internalTags?.length ?? 0) < 1,
+            [internalTags?.length, shouldAllowMultiple],
+        );
+
         return useMemo(
             () => (
                 <StyledTagInput $shouldChangeColor={shouldChangeColor}>
+                    {leftElement && leftElement}
                     {content}
-                    <StyledTagInputTagInput
-                        placeholder={tags && tags.length > 0 ? undefined : placeholder}
-                        onKeyDown={handleKeyDown}
-                        onChange={handleChange}
-                        value={currentValue}
-                    />
+                    {shouldShowInput && (
+                        <StyledTagInputTagInput
+                            placeholder={tags && tags.length > 0 ? undefined : placeholder}
+                            onKeyDown={handleKeyDown}
+                            onChange={handleChange}
+                            value={currentValue}
+                        />
+                    )}
                 </StyledTagInput>
             ),
             [
@@ -215,8 +273,10 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                 currentValue,
                 handleChange,
                 handleKeyDown,
+                leftElement,
                 placeholder,
                 shouldChangeColor,
+                shouldShowInput,
                 tags,
             ],
         );

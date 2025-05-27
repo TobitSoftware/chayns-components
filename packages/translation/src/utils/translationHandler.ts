@@ -11,9 +11,7 @@ class TranslationHandler {
 
     #handleTranslation = async (batch: TranslationBatchItem[]) => {
         try {
-            const result = await fetchTranslations(
-                batch.map(({ deferred: d, ...item }) => item),
-            );
+            const result = await fetchTranslations(batch.map(({ deferred: d, ...item }) => item));
 
             result.forEach((item, index) => {
                 const batchItem = batch[index];
@@ -28,13 +26,13 @@ class TranslationHandler {
                 this.cachedTranslations[from] ??= {};
                 this.cachedTranslations[from][to] ??= {};
                 this.cachedTranslations[from][to][text] = item;
-            })
+            });
         } catch (ex) {
             batch.forEach((item) => {
                 item.deferred.reject(ex);
             });
         }
-    }
+    };
 
     #processedTranslationQueue = async () => {
         let totalLength = 0;
@@ -62,7 +60,7 @@ class TranslationHandler {
         if (batch.length > 0) {
             await this.#handleTranslation(batch);
         }
-    }
+    };
 
     #throttledProcessTranslationQueue = throttle(this.#processedTranslationQueue, 1000, {
         leading: false,
@@ -84,7 +82,7 @@ class TranslationHandler {
         this.translationQueue.push({ text: original, deferred, to, from });
         void this.#throttledProcessTranslationQueue();
         return deferred.promise;
-    }
+    };
 }
 
 const translationHandler = new TranslationHandler();
