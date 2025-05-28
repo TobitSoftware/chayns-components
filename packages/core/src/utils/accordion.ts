@@ -19,7 +19,6 @@ export const getAccordionHeadHeight = ({
 }: GetAccordionHeadHeightOptions): GetAccordionHeadHeightResult => {
     const element = document.createElement('div');
 
-    element.style.fontSize = '1rem';
     element.style.opacity = '0';
     element.style.pointerEvents = 'none';
     element.style.whiteSpace = 'nowrap';
