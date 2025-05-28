@@ -114,6 +114,19 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         if (typeof onTitleInputChange === 'function') {
             setHeadHeight({ closed: 50, open: 50 });
         } else {
+            console.debug('TEST', {
+                isWrapped,
+                title,
+                width: titleWrapperRef.current?.clientWidth ?? 0,
+                hasSearch: typeof onSearchChange === 'function',
+                height: getAccordionHeadHeight({
+                    isWrapped,
+                    title,
+                    width: titleWrapperRef.current?.clientWidth ?? 0,
+                    hasSearch: typeof onSearchChange === 'function',
+                }),
+            });
+
             setHeadHeight(
                 getAccordionHeadHeight({
                     isWrapped,
@@ -158,6 +171,14 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         // The height of the titleElement is increased by 8px because of the padding of the accordion head element.
         accordionHeadHeight = titleElementChildrenSize.height + 8;
     }
+
+    console.debug('TEST 2', {
+        accordionHeadHeight,
+        headHeight,
+        test: titleElementChildrenSize && titleElementChildrenSize.height > accordionHeadHeight,
+        titleElementChildrenSize,
+        titleElement: titleElementWrapperRef.current,
+    });
 
     return (
         <StyledMotionAccordionHead
