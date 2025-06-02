@@ -27,6 +27,10 @@ type StyledTooltipItemHeadlineProps = WithTheme<unknown>;
 export const StyledTooltipItemHeadline = styled.h5<StyledTooltipItemHeadlineProps>`
     color: ${({ theme }: StyledTooltipItemHeadlineProps) => theme.headline};
     margin: 0;
+
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    width: 100%;
 `;
 
 export const StyledTooltipItemImage = styled.img``;
@@ -40,4 +44,8 @@ type StyledTooltipItemTextProps = WithTheme<unknown>;
 
 export const StyledTooltipItemText = styled.p<StyledTooltipItemTextProps>`
     color: ${({ theme }: StyledTooltipItemTextProps) => theme.text};
+
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    width: 100%;
 `;
