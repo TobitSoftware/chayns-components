@@ -36,6 +36,30 @@ export const selectLanguageToChange = ({ textstringName }: SelectLanguageToChang
     });
 };
 
+interface InitTextstringsOptions {
+    /**
+     * The language that should be used.
+     */
+    language: string;
+    /**
+     * The name of the library.
+     */
+    libraryName: string;
+}
+
+export const initTextstrings = ({ libraryName, language }: InitTextstringsOptions) => {
+    void loadLibrary({ libraryName, language }).then((result) => {
+        if (result) {
+            const prevTextstrings = window.Textstrings;
+
+            window.Textstrings = {
+                ...prevTextstrings,
+                [libraryName]: result,
+            };
+        }
+    });
+};
+
 interface GetTextstringValueOptions {
     textstring: ITextstring;
     libraryName: string;
