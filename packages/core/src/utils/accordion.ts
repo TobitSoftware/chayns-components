@@ -19,28 +19,35 @@ export const getAccordionHeadHeight = ({
 }: GetAccordionHeadHeightOptions): GetAccordionHeadHeightResult => {
     const element = document.createElement('div');
 
-    element.style.opacity = '0';
+    element.style.opacity = '1';
     element.style.pointerEvents = 'none';
     element.style.whiteSpace = 'nowrap';
+    // element.style.gridArea = 'header';
     element.style.width = `${width}px`;
 
     element.innerHTML = title;
 
     document.body.appendChild(element);
 
+    console.debug('TEST0 1', element);
+
     const closedHeight = Math.max(element.clientHeight + 8, isWrapped ? 40 : 33);
 
     if (isWrapped) {
         element.style.fontWeight = 'bold';
         element.style.whiteSpace = 'nowrap';
+
+        console.debug('TEST0 2', element);
     } else {
         element.style.fontSize = '1.3rem';
         element.style.whiteSpace = hasSearch ? 'nowrap' : 'normal';
+
+        console.debug('TEST0 3', element);
     }
 
     const openHeight = Math.max(element.clientHeight + 8, isWrapped ? 40 : 33);
 
-    document.body.removeChild(element);
+    // document.body.removeChild(element);
 
     return { closed: closedHeight, open: openHeight };
 };
