@@ -75,7 +75,15 @@ export const getTextstringValue = ({
         typeof window !== 'undefined' ? window.Textstrings?.[libraryName] : undefined;
 
     if (!textstrings) {
-        return textstring.fallback;
+        if (!replacements) {
+            return textstring.fallback;
+        }
+
+        return Object.keys(replacements).reduce(
+            (current, key) =>
+                current.replace(new RegExp(key, 'g'), <string>replacements[key] || ''),
+            textstring.fallback,
+        );
     }
 
     const value = textstrings[textstring.name] ?? textstring.fallback;
