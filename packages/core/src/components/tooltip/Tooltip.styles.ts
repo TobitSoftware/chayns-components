@@ -9,6 +9,8 @@ type StyledTooltipChildrenProps = WithTheme<{
     $shouldUseFullWidth: boolean;
 }>;
 export const StyledTooltipChildren = styled.div<StyledTooltipChildrenProps>`
+    display: flex;
+
     ${({ $shouldUseChildrenWidth }) =>
         $shouldUseChildrenWidth &&
         css`
