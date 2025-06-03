@@ -24,6 +24,7 @@ export type PersonFinderGroupProps = {
     search: string;
     shouldShowGroupName: boolean;
     onAdd: (id: string) => void;
+    onRemove: (id: string) => void;
 };
 
 const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
@@ -33,6 +34,7 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
     count,
     shouldShowGroupName,
     onAdd,
+    onRemove,
 }) => {
     const { loadMore, loadingState: loadingStateFromState } = usePersonFinder();
     const areOnlyFriendsGiven = useOnlyFriends(entries);
@@ -80,6 +82,7 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
                             key={`person-finder-entry--${entry.id}`}
                             entry={entry}
                             onAdd={onAdd}
+                            onRemove={onRemove}
                         />
                     ))}
                 </List>

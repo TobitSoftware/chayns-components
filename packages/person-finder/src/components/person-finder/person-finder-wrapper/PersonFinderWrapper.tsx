@@ -93,17 +93,20 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
             </StyledPersonFinderLeftElement>
         );
 
-        const handleRemove = (id: string) => {
-            if (typeof setTags !== 'function') {
-                return;
-            }
+        const handleRemove = useCallback(
+            (id: string) => {
+                if (typeof setTags !== 'function') {
+                    return;
+                }
 
-            setTags((prevState) => prevState.filter((entry) => entry.id !== id));
+                setTags((prevState) => prevState.filter((entry) => entry.id !== id));
 
-            if (typeof onRemove === 'function') {
-                onRemove(id);
-            }
-        };
+                if (typeof onRemove === 'function') {
+                    onRemove(id);
+                }
+            },
+            [onRemove, setTags],
+        );
 
         const handleClose = useCallback(() => {
             setShouldShowBody(false);
@@ -143,7 +146,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
 
                 const tag: Tag = {
                     id,
-                    text: name ?? `${firstName ?? ''} ${lastName ?? ''}`,
+                    text: name ?? `${(firstName as string) ?? ''} ${(lastName as string) ?? ''}`,
                 };
 
                 setTags((prevState) => {
@@ -240,6 +243,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
                                 width={width}
                                 ref={contentRef}
                                 onAdd={handleAdd}
+                                onRemove={handleRemove}
                                 filterTypes={filterTypes}
                             />
                         )}
@@ -247,7 +251,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
                     container,
                 ),
             );
-        }, [container, filterTypes, handleAdd, shouldShowBody, width]);
+        }, [container, filterTypes, handleAdd, handleRemove, shouldShowBody, width]);
 
         return (
             <StyledPersonFinder ref={boxRef} onFocus={handleOpen}>

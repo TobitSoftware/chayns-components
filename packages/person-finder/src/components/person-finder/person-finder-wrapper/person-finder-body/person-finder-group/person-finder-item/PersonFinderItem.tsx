@@ -9,15 +9,18 @@ import { useTheme } from 'styled-components';
 export interface PersonFinderItemProps {
     entry: PersonEntry | SiteEntry;
     onAdd: (id: string) => void;
+    onRemove: (id: string) => void;
 }
 
-const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd }) => {
+const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd, onRemove }) => {
     const { id } = entry;
 
     const { isSite, imageUrl, title, subtitle, titleElement } = usePersonFinderItem(entry);
     const { isFriend, addFriend, removeFriend } = useFriends(id);
     const { tags } = usePersonFinder();
     const theme = useTheme() as Theme;
+
+    const isSelected = tags && tags.map((tag) => tag.id).includes(id);
 
     const handleIconClick = (event: MouseEvent) => {
         event.stopPropagation();
@@ -32,6 +35,14 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd }) => {
         }
     };
 
+    const handleClick = () => {
+        if (isSelected) {
+            onRemove(id);
+        } else {
+            onAdd(id);
+        }
+    };
+
     const rightElements = (
         <Icon
             icons={[`${isFriend ? 'fas' : 'far'} fa-star`]}
@@ -41,10 +52,7 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd }) => {
     );
 
     return (
-        <StyledPersonFinderItem
-            onClick={() => onAdd(id)}
-            $isSelected={tags && tags.map((tag) => tag.id).includes(id)}
-        >
+        <StyledPersonFinderItem onClick={handleClick} $isSelected={isSelected}>
             <ListItem
                 title={title}
                 subtitle={subtitle}

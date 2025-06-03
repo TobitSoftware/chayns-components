@@ -14,12 +14,13 @@ import PersonFinderHeader from './person-finder-header/PersonFinderHeader';
 
 export type PersonFinderBodyProps = {
     onAdd: (id: string) => void;
+    onRemove: (id: string) => void;
     width: number;
     filterTypes?: PersonFinderFilterTypes[];
 };
 
 const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
-    ({ onAdd, width, filterTypes }, ref) => {
+    ({ onAdd, width, filterTypes, onRemove }, ref) => {
         const { activeFilter, data } = usePersonFinder();
 
         const { browser } = getDevice();
@@ -48,6 +49,7 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
                             key={`person-finder-group--${key}`}
                             filterKey={key as PersonFinderFilterTypes}
                             onAdd={onAdd}
+                            onRemove={onRemove}
                             entries={entries}
                             count={count}
                             search={searchString}
