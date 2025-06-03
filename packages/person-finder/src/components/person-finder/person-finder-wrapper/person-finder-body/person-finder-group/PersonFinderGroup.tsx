@@ -15,7 +15,7 @@ import {
 } from './PersonFinderGroup.styles';
 import { usePersonFinder } from '../../../../PersonFinderProvider';
 import PersonFinderItem from './person-finder-item/PersonFinderItem';
-import { useOnlyFriends } from '../../../../../hooks/personFinder';
+import { useErrorMessage, useOnlyFriends } from '../../../../../hooks/personFinder';
 
 export type PersonFinderGroupProps = {
     filterKey: PersonFinderFilterTypes;
@@ -54,13 +54,12 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
             </StyledPersonFinderGroupWaitCursor>
         ) : null;
 
-    const errorMessage =
-        entries.length === 0 && loadingState === LoadingState.Error ? (
-            <StyledPersonFinderGroupErrorMessage>
-                Es konnten keine {groupName} zu der Suche &#34;
-                {search}&#34; gefunden werden.
-            </StyledPersonFinderGroupErrorMessage>
-        ) : null;
+    const errorMessage = useErrorMessage({
+        entries,
+        loadingState,
+        search,
+        groupName,
+    });
 
     const handleLoadMore = useCallback(() => {
         if (typeof loadMore === 'function') {

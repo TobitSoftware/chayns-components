@@ -57,7 +57,7 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
                         />
                     );
                 }),
-            [data, onAdd, shouldShowGroupNames],
+            [data, onAdd, onRemove, shouldShowGroupNames],
         );
 
         return (

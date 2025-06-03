@@ -1,8 +1,9 @@
 import React, { RefObject, useEffect, useMemo, useState } from 'react';
-import { PersonEntry, PersonFinderEntry, SiteEntry } from '../types/personFinder';
+import { LoadingState, PersonEntry, PersonFinderEntry, SiteEntry } from '../types/personFinder';
 import { isSiteEntry } from '../utils/personFinder';
 import { VerificationBadge } from '@chayns-components/core';
 import { usePersonFinder } from '../components/PersonFinderProvider';
+import { StyledPersonFinderGroupErrorMessage } from '../components/person-finder/person-finder-wrapper/person-finder-body/person-finder-group/PersonFinderGroup.styles';
 
 export const useClosestElementAbove = (containerRef: RefObject<HTMLElement>, itemClass: string) => {
     const [closestElement, setClosestElement] = useState<HTMLElement | null>(null);
@@ -90,4 +91,46 @@ export const useOnlyFriends = (entries: PersonFinderEntry[]) => {
 
         return entries.every((entry) => friendIds.has(entry.id));
     }, [entries, friends]);
+};
+
+interface UseErrorMessageOptions {
+    loadingState: LoadingState;
+    search: string;
+    entries: PersonFinderEntry[];
+    groupName?: string;
+}
+
+export const useErrorMessage = ({
+    loadingState,
+    search,
+    entries,
+    groupName,
+}: UseErrorMessageOptions) => {
+    console.log('TEST', {
+        loadingState,
+        search,
+        entries,
+        groupName,
+    });
+
+    if (entries.length === 0) {
+        if (loadingState === LoadingState.Error && search.length) {
+            return (
+                <StyledPersonFinderGroupErrorMessage>
+                    Es konnten keine {groupName} zu der Suche &#34;
+                    {search}&#34; gefunden werden.
+                </StyledPersonFinderGroupErrorMessage>
+            );
+        }
+
+        if (search.length === 0) {
+            return (
+                <StyledPersonFinderGroupErrorMessage>
+                    Gib einen Suchbegriff ein, um nach {groupName} zu suchen.
+                </StyledPersonFinderGroupErrorMessage>
+            );
+        }
+    }
+
+    return null;
 };

@@ -29,13 +29,13 @@ export const filterDataByKeys = (
         return data;
     }
 
-    return keys.reduce((acc, key) => {
-        if (data[key]) {
-            return { ...acc, [key]: data[key] };
-        }
-
-        return acc;
-    }, {});
+    return keys.reduce(
+        (acc, key) => ({
+            ...acc,
+            [key]: data[key] ?? { searchString: '', count: 0, skip: 0, entries: [] },
+        }),
+        {},
+    );
 };
 
 export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
