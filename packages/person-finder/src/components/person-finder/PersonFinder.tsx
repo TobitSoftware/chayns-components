@@ -29,6 +29,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             maxEntries,
             onRemove,
             onAdd,
+            leftElement,
         },
         ref,
     ) => {
@@ -45,6 +46,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                         filterTypes={filterTypes}
                         maxEntries={maxEntries}
                         onAdd={onAdd}
+                        leftElement={leftElement}
                         onRemove={onRemove}
                         placeholder={placeholder}
                         shouldAllowMultiple={shouldAllowMultiple}

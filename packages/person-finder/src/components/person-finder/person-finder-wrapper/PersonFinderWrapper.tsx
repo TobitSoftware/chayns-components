@@ -1,6 +1,7 @@
 import React, {
     type ChangeEvent,
     forwardRef,
+    type ReactElement,
     ReactPortal,
     useCallback,
     useEffect,
@@ -37,6 +38,10 @@ export type PersonFinderWrapperProps = {
      */
     filterTypes?: PersonFinderFilterTypes[];
     /**
+     * An element that should be displayed on the left side of the input.
+     */
+    leftElement?: ReactElement;
+    /**
      * The maximum amount of entries that can be selected.
      */
     maxEntries?: number;
@@ -68,6 +73,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
             onAdd,
             onRemove,
             maxEntries = Infinity,
+            leftElement: leftElementProp,
         },
         ref,
     ) => {
@@ -81,7 +87,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
         const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement>(null);
 
-        const leftElement = (
+        const leftElement = leftElementProp ?? (
             <StyledPersonFinderLeftElement>
                 <Icon icons={['fa fa-search']} />
             </StyledPersonFinderLeftElement>
