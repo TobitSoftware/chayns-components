@@ -65,6 +65,18 @@ export const loadData = async ({
         const skip = skipMap[filterType] ?? 0;
 
         if (filterType === PersonFinderFilterTypes.PERSON) {
+            if (searchString.length <= 2) {
+                return {
+                    key: PersonFinderFilterTypes.PERSON,
+                    value: {
+                        searchString,
+                        count: 0,
+                        skip: 0,
+                        entries: [],
+                    },
+                };
+            }
+
             const data = await getPersons({ search: searchString, skip });
 
             return {
@@ -79,6 +91,18 @@ export const loadData = async ({
         }
 
         if (filterType === PersonFinderFilterTypes.SITE) {
+            if (searchString.length <= 2) {
+                return {
+                    key: PersonFinderFilterTypes.SITE,
+                    value: {
+                        searchString,
+                        count: 0,
+                        skip: 0,
+                        entries: [],
+                    },
+                };
+            }
+
             const data = await getSites({ search: searchString, skip });
 
             return {

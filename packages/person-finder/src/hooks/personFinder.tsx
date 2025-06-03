@@ -106,12 +106,13 @@ export const useErrorMessage = ({
     entries,
     groupName,
 }: UseErrorMessageOptions) => {
-    console.log('TEST', {
-        loadingState,
-        search,
-        entries,
-        groupName,
-    });
+    if (search.length <= 2) {
+        return (
+            <StyledPersonFinderGroupErrorMessage>
+                Gib einen Suchbegriff mit mindestens drei Zeichen ein.
+            </StyledPersonFinderGroupErrorMessage>
+        );
+    }
 
     if (entries.length === 0) {
         if (loadingState === LoadingState.Error && search.length) {

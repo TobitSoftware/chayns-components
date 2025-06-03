@@ -9,7 +9,6 @@ import { getGroupName } from '../../../../../utils/personFinder';
 import {
     StyledPersonFinderGroup,
     StyledPersonFinderGroupButtonWrapper,
-    StyledPersonFinderGroupErrorMessage,
     StyledPersonFinderGroupName,
     StyledPersonFinderGroupWaitCursor,
 } from './PersonFinderGroup.styles';
