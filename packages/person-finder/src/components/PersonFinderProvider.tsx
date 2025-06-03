@@ -12,6 +12,7 @@ import React, {
     useState,
 } from 'react';
 import {
+    DefaultEntry,
     LoadingState,
     LoadingStateMap,
     PersonEntry,
@@ -84,14 +85,21 @@ export const usePersonFinder = () => useContext(PersonFinderContext);
 interface PersonFinderProviderProps {
     children: ReactNode;
     friendsPriority: Priority;
+    defaultEntries?: DefaultEntry[];
 }
 
-const PersonFinderProvider: FC<PersonFinderProviderProps> = ({ children, friendsPriority }) => {
+const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
+    children,
+    friendsPriority,
+    defaultEntries,
+}) => {
     const [data, setData] = useState<IPersonFinderContext['data']>();
     const [friends, setFriends] = useState<PersonEntry[]>();
     const [activeFilter, setActiveFilter] = useState<IPersonFinderContext['activeFilter']>();
     const [search, setSearch] = useState('');
-    const [tags, setTags] = useState<Tag[]>([]);
+    const [tags, setTags] = useState<Tag[]>(
+        defaultEntries?.map(({ id, name }) => ({ id, text: name })) ?? [],
+    );
     const [loadingState, setLoadingState] = useState<LoadingStateMap>({
         [PersonFinderFilterTypes.PERSON]: LoadingState.None,
         [PersonFinderFilterTypes.SITE]: LoadingState.None,

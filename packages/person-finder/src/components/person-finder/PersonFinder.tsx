@@ -1,5 +1,5 @@
 import React, { forwardRef, useRef } from 'react';
-import { PersonFinderFilterTypes, Priority } from '../../types/personFinder';
+import { DefaultEntry, PersonFinderFilterTypes, Priority } from '../../types/personFinder';
 import PersonFinderProvider from '../PersonFinderProvider';
 import PersonFinderWrapper, {
     PersonFinderWrapperProps,
@@ -10,6 +10,10 @@ import { useContainer } from '@chayns-components/core';
 const DEFAULT_FILTER_TYPES = [PersonFinderFilterTypes.PERSON, PersonFinderFilterTypes.SITE];
 
 export type PersonFinderProps = PersonFinderWrapperProps & {
+    /**
+     * Sites an Persons that are selected by default.
+     */
+    defaultEntries?: DefaultEntry[];
     /**
      * Determines the priority level for displaying friends in search results.
      */
@@ -28,6 +32,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             shouldAllowMultiple = true,
             maxEntries,
             onRemove,
+            defaultEntries,
             onAdd,
             leftElement,
         },
@@ -38,7 +43,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
         const newContainer = useContainer({ ref: personFinderRef, container });
 
         return (
-            <PersonFinderProvider friendsPriority={friendsPriority}>
+            <PersonFinderProvider friendsPriority={friendsPriority} defaultEntries={defaultEntries}>
                 <div className="beta-chayns-person-finder" ref={personFinderRef}>
                     <PersonFinderWrapper
                         ref={ref}

@@ -6,6 +6,7 @@ export {
     PersonFinderFilterTypes,
     Priority,
     type PersonEntry,
+    type DefaultEntry,
     type SiteEntry,
     type PersonFinderEntry,
 } from './types/personFinder';

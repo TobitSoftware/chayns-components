@@ -28,6 +28,11 @@ export enum LoadingState {
 
 export type LoadingStateMap = { [K in PersonFinderFilterTypes]?: LoadingState };
 
+export interface DefaultEntry {
+    id: string;
+    name: string;
+}
+
 export type PersonFinderEntry = PersonEntry | SiteEntry;
 
 export interface PersonEntry {
