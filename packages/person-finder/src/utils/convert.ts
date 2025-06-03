@@ -1,10 +1,17 @@
-import { PersonEntry, PersonEntryResult, SiteEntry, SiteEntryResult } from '../types/personFinder';
+import {
+    PersonEntry,
+    PersonEntryResult,
+    PersonFinderFilterTypes,
+    SiteEntry,
+    SiteEntryResult,
+} from '../types/personFinder';
 
 export const convertSiteEntry = (entries: SiteEntryResult[]): SiteEntry[] =>
     entries.map((entry) => ({
         id: entry.siteId,
         name: entry.name,
         url: `https://${entry.domain}`,
+        type: PersonFinderFilterTypes.SITE,
     }));
 
 export const convertPersonEntry = (entries: PersonEntryResult[]): PersonEntry[] =>
@@ -14,4 +21,5 @@ export const convertPersonEntry = (entries: PersonEntryResult[]): PersonEntry[] 
         lastName: entry.lastName,
         commonSites: entry.relationCount,
         isVerified: entry.verified,
+        type: PersonFinderFilterTypes.PERSON,
     }));

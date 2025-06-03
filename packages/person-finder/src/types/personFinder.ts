@@ -41,12 +41,14 @@ export interface PersonEntry {
     lastName: string;
     commonSites: number;
     isVerified: boolean;
+    type: PersonFinderFilterTypes.PERSON;
 }
 
 export interface SiteEntry {
     id: string;
     url: string;
     name: string;
+    type: PersonFinderFilterTypes.SITE;
 }
 
 export interface SiteEntryResult {

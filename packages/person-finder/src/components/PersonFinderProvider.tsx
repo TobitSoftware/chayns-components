@@ -185,6 +185,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                         commonSites: 0,
                         firstName,
                         lastName,
+                        type: PersonFinderFilterTypes.PERSON,
                     },
                 ]);
             }
@@ -209,6 +210,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                         id: personId,
                         commonSites: 0,
                         isVerified: verificationState === 1,
+                        type: PersonFinderFilterTypes.PERSON,
                     })),
                 );
             }
