@@ -29,7 +29,11 @@ const PersonFinderHeader: FC<PersonFinderHeaderProps> = ({
 
     const handleFilterSelect = (keys: string[]) => {
         if (typeof updateActiveFilter === 'function') {
-            updateActiveFilter(keys as PersonFinderFilterTypes[]);
+            const ordered = [PersonFinderFilterTypes.PERSON, PersonFinderFilterTypes.SITE].filter(
+                (key) => keys.includes(key),
+            );
+
+            updateActiveFilter(ordered);
         }
     };
 
