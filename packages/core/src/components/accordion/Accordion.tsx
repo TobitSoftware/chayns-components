@@ -276,7 +276,10 @@ const Accordion: FC<AccordionProps> = ({
         [isWrapped],
     );
 
-    const areaContextProviderValue = useMemo(() => ({ shouldChangeColor: true }), []);
+    const areaContextProviderValue = useMemo(
+        () => ({ shouldChangeColor: !shouldHideBackground }),
+        [shouldHideBackground],
+    );
 
     const accordionWrappedContextProviderValue = useMemo(() => ({ isWrapped: true }), []);
     return (
