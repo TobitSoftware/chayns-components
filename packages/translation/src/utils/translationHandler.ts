@@ -62,7 +62,7 @@ class TranslationHandler {
         }
     };
 
-    #throttledProcessTranslationQueue = throttle(this.#processedTranslationQueue, 1000, {
+    #throttledProcessTranslationQueue = throttle(this.#processedTranslationQueue, 200, {
         leading: false,
     });
 
@@ -81,6 +81,9 @@ class TranslationHandler {
         const deferred = new Deferred<string>();
         this.translationQueue.push({ text: original, deferred, to, from });
         void this.#throttledProcessTranslationQueue();
+        if (this.translationQueue.length >= MAX_ITEMS_PER_BATCH) {
+            void this.#throttledProcessTranslationQueue.flush();
+        }
         return deferred.promise;
     };
 }
