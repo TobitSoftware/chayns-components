@@ -39,3 +39,11 @@ export const StyledTagInputTagInput = styled.input<StyledTagInputTagInputProps>`
     background-color: transparent;
     color: ${({ theme }: StyledTagInputTagInputProps) => theme.text};
 `;
+
+export const StyledTagInputIconWrapper = styled.div`
+    align-items: baseline;
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: center;
+    margin-left: 5px;
+`;

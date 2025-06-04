@@ -10,6 +10,7 @@ import React, {
     useImperativeHandle,
     useContext,
     ChangeEventHandler,
+    ReactNode,
 } from 'react';
 import { useTheme } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,6 +19,7 @@ import Badge from '../badge/Badge';
 import Icon from '../icon/Icon';
 import {
     StyledTagInput,
+    StyledTagInputIconWrapper,
     StyledTagInputTagInput,
     StyledTagInputTagWrapper,
     StyledTagInputTagWrapperText,
@@ -29,7 +31,7 @@ export type TagInputProps = {
     /**
      * An element that should be displayed on the left side of the input.
      */
-    leftElement?: ReactElement;
+    leftElement?: ReactNode;
     /**
      * Function to be executed when a tag is added.
      */
@@ -256,7 +258,9 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
         return useMemo(
             () => (
                 <StyledTagInput $shouldChangeColor={shouldChangeColor}>
-                    {leftElement && leftElement}
+                    {leftElement && (
+                        <StyledTagInputIconWrapper>{leftElement}</StyledTagInputIconWrapper>
+                    )}
                     {content}
                     {shouldShowInput && (
                         <StyledTagInputTagInput
