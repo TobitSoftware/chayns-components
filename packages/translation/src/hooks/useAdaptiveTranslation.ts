@@ -1,5 +1,6 @@
-﻿import { useEffect, useMemo, useState } from 'react';
-import { Language, useLanguage } from 'chayns-api';
+﻿import { useContext, useEffect, useMemo, useState } from 'react';
+import { Language } from 'chayns-api';
+import { TranslationOptionsContext } from '../constants/translationOptionsContext';
 import translationHandler from '../utils/translationHandler';
 
 export const useAdaptiveTranslation = (
@@ -12,9 +13,9 @@ export const useAdaptiveTranslation = (
         from?: Exclude<Language, Language.Unknown>;
     } = {},
 ): { text: string; isLoading: boolean; isFetching: boolean } => {
-    const { active, site } = useLanguage();
-    const toLanguage = to || active;
-    const fromLanguage = from || site;
+    const options = useContext(TranslationOptionsContext);
+    const toLanguage = to || options.to;
+    const fromLanguage = from || options.from;
     const shouldTranslate = useMemo(() => toLanguage !== fromLanguage, [fromLanguage, toLanguage]);
     const [translatedText, setTranslatedText] = useState<string>(originalText);
     const [isLoading, setIsLoading] = useState(shouldTranslate);
