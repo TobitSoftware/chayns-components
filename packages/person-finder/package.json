@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/person-finder",
-    "version": "5.0.0-beta.1135",
+    "version": "5.0.0-beta.1136",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
