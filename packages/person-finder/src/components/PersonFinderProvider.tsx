@@ -11,6 +11,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import throttle from 'lodash.throttle';
 import {
     DefaultEntry,
     LoadingState,
@@ -20,6 +21,7 @@ import {
     PersonFinderEntry,
     PersonFinderFilterTypes,
     Priority,
+    ThrottledFunction,
 } from '../types/personFinder';
 import { getFriends } from '../api/friends/get';
 import { postFriends } from '../api/friends/post';
@@ -107,9 +109,6 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         [PersonFinderFilterTypes.PERSON]: LoadingState.None,
         [PersonFinderFilterTypes.SITE]: LoadingState.None,
     });
-
-    const lastExecutionRef = useRef(0);
-    const latestRequestRef = useRef(0);
 
     const updateActiveFilter = useCallback((filter: IPersonFinderContext['activeFilter']) => {
         setActiveFilter(filter);
@@ -220,55 +219,38 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         });
     }, []);
 
-    useEffect(() => {
-        const now = Date.now();
+    const latestArgsRef = useRef<{ search: string; filter: PersonFinderFilterTypes[] } | null>(
+        null,
+    );
+    const latestHandledRequestRef = useRef<number>(0);
 
-        if (!search) return;
+    const throttledRequest = useRef<ThrottledFunction<() => void>>(
+        throttle(
+            async () => {
+                const args = latestArgsRef.current;
+                if (!args) return;
 
-        if (now - lastExecutionRef.current < THROTTLE_INTERVAL) {
-            return;
-        }
+                const { search: searchString, filter } = args;
+                const requestTimestamp = Date.now();
 
-        const requestTimestamp = now;
-        lastExecutionRef.current = now;
-
-        const active = activeFilter ?? ALL_FILTERS;
-
-        if (
-            friendsPriority === Priority.HIGH &&
-            friends &&
-            active.includes(PersonFinderFilterTypes.PERSON)
-        ) {
-            const matchingFriends = friends.filter(
-                (f) =>
-                    f.firstName?.toLowerCase().includes(search.toLowerCase()) ||
-                    f.lastName?.toLowerCase().includes(search.toLowerCase()),
-            );
-
-            if (matchingFriends.length > 0) {
-                updateData(PersonFinderFilterTypes.PERSON, {
-                    entries: matchingFriends,
-                    searchString: search,
-                    skip: matchingFriends.length,
-                    count: matchingFriends.length,
+                filter.forEach((key) => {
+                    updateLoadingState(key, LoadingState.Pending);
                 });
 
-                updateLoadingState(PersonFinderFilterTypes.PERSON, LoadingState.Pending);
-            }
-        }
+                const result = await loadData({
+                    searchString,
+                    filter,
+                    skipMap: {},
+                });
 
-        void (async () => {
-            active.forEach((key) => {
-                updateLoadingState(key, LoadingState.Pending);
-            });
+                if (requestTimestamp < latestHandledRequestRef.current) {
+                    return;
+                }
 
-            const result = await loadData({
-                searchString: search,
-                filter: active,
-                skipMap: {},
-            });
+                latestHandledRequestRef.current = requestTimestamp;
 
-            if (result && requestTimestamp > latestRequestRef.current) {
+                if (!result) return;
+
                 Object.entries(result).forEach(([keyString, value]) => {
                     const key = keyString as PersonFinderFilterTypes;
 
@@ -278,7 +260,6 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                         friends
                     ) {
                         const friendIds = new Set(friends.map((f) => f.id));
-
                         const serverFriendEntries = value.entries.filter((entry) =>
                             friendIds.has(entry.id),
                         );
@@ -288,8 +269,10 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                             .filter((f) => !serverFriendIds.has(f.id))
                             .filter(
                                 (f) =>
-                                    f.firstName?.toLowerCase().includes(search.toLowerCase()) ||
-                                    f.lastName?.toLowerCase().includes(search.toLowerCase()),
+                                    f.firstName
+                                        ?.toLowerCase()
+                                        .includes(searchString.toLowerCase()) ||
+                                    f.lastName?.toLowerCase().includes(searchString.toLowerCase()),
                             );
 
                         const otherEntries = value.entries.filter(
@@ -304,17 +287,41 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                         updateData(key, value);
                     }
 
-                    if (value.entries.length === 0) {
-                        updateLoadingState(key, LoadingState.Error);
-                    } else {
-                        updateLoadingState(key, LoadingState.Success);
-                    }
+                    updateLoadingState(
+                        key,
+                        value.entries.length === 0 ? LoadingState.Error : LoadingState.Success,
+                    );
                 });
+            },
+            THROTTLE_INTERVAL,
+            { leading: false, trailing: true },
+        ),
+    ).current;
 
-                latestRequestRef.current = requestTimestamp;
-            }
-        })();
-    }, [search, activeFilter, updateData, updateLoadingState, friends, friendsPriority]);
+    useEffect(() => {
+        if (!search) return;
+
+        const active = activeFilter ?? ALL_FILTERS;
+
+        latestArgsRef.current = { search, filter: active };
+
+        throttledRequest();
+    }, [
+        search,
+        activeFilter,
+        friends,
+        friendsPriority,
+        updateData,
+        updateLoadingState,
+        throttledRequest,
+    ]);
+
+    useEffect(
+        () => () => {
+            throttledRequest.cancel();
+        },
+        [throttledRequest],
+    );
 
     // load initial data
     useEffect(() => {

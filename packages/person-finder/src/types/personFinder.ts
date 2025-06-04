@@ -70,3 +70,9 @@ export interface PersonEntryResult {
     signOfLife: Date;
     verified: boolean;
 }
+
+export type ThrottledFunction<T extends (...args: any[]) => any> = {
+    (...args: Parameters<T>): ReturnType<T>;
+    cancel: () => void;
+    flush: () => void;
+};
