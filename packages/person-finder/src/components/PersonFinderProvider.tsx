@@ -17,6 +17,7 @@ import {
     LoadingStateMap,
     PersonEntry,
     PersonFinderData,
+    PersonFinderEntry,
     PersonFinderFilterTypes,
     Priority,
 } from '../types/personFinder';
@@ -86,12 +87,14 @@ interface PersonFinderProviderProps {
     children: ReactNode;
     friendsPriority: Priority;
     defaultEntries?: DefaultEntry[];
+    excludedEntryIds?: PersonFinderEntry['id'][];
 }
 
 const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     children,
     friendsPriority,
     defaultEntries,
+    excludedEntryIds,
 }) => {
     const [data, setData] = useState<IPersonFinderContext['data']>();
     const [friends, setFriends] = useState<PersonEntry[]>();
@@ -329,7 +332,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
     const providerValue = useMemo<IPersonFinderContext>(
         () => ({
-            data: filterDataByKeys(data, activeFilter),
+            data: filterDataByKeys(data, activeFilter, excludedEntryIds),
             updateData,
             activeFilter,
             updateActiveFilter,
@@ -347,6 +350,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         [
             data,
             activeFilter,
+            excludedEntryIds,
             updateData,
             updateActiveFilter,
             friends,

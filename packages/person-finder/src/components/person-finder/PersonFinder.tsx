@@ -1,5 +1,10 @@
 import React, { forwardRef, useRef } from 'react';
-import { DefaultEntry, PersonFinderFilterTypes, Priority } from '../../types/personFinder';
+import {
+    DefaultEntry,
+    PersonFinderEntry,
+    PersonFinderFilterTypes,
+    Priority,
+} from '../../types/personFinder';
 import PersonFinderProvider from '../PersonFinderProvider';
 import PersonFinderWrapper, {
     PersonFinderWrapperProps,
@@ -14,6 +19,10 @@ export type PersonFinderProps = PersonFinderWrapperProps & {
      * Sites an Persons that are selected by default.
      */
     defaultEntries?: DefaultEntry[];
+    /**
+     * Entry ids to exclude from the results
+     */
+    excludedEntryIds?: PersonFinderEntry['id'][];
     /**
      * Determines the priority level for displaying friends in search results.
      */
@@ -35,6 +44,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             defaultEntries,
             onAdd,
             leftElement,
+            excludedEntryIds,
         },
         ref,
     ) => {
@@ -43,7 +53,11 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
         const newContainer = useContainer({ ref: personFinderRef, container });
 
         return (
-            <PersonFinderProvider friendsPriority={friendsPriority} defaultEntries={defaultEntries}>
+            <PersonFinderProvider
+                friendsPriority={friendsPriority}
+                defaultEntries={defaultEntries}
+                excludedEntryIds={excludedEntryIds}
+            >
                 <AreaProvider shouldChangeColor={false} shouldDisableListItemPadding>
                     <div className="beta-chayns-person-finder" ref={personFinderRef}>
                         <PersonFinderWrapper

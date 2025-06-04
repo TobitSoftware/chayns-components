@@ -2,6 +2,7 @@ import {
     PersonEntry,
     PersonFinderData,
     PersonFinderDataMap,
+    PersonFinderEntry,
     PersonFinderFilterTypes,
     SiteEntry,
 } from '../types/personFinder';
@@ -24,18 +25,29 @@ export const isSiteEntry = (entry: PersonEntry | SiteEntry): entry is SiteEntry 
 export const filterDataByKeys = (
     data: { [key: string]: PersonFinderData } = {},
     keys: PersonFinderFilterTypes[] = [],
+    excludedEntryIds: PersonFinderEntry['id'][] = [],
 ): { [key: string]: PersonFinderData } => {
-    if (keys.length === 0) {
-        return data;
-    }
+    const filterSingle = (entry: PersonFinderData): PersonFinderData => {
+        const filteredEntries = entry.entries.filter((e) => !excludedEntryIds.includes(e.id));
 
-    return keys.reduce(
-        (acc, key) => ({
+        const excludedCount = entry.entries.length - filteredEntries.length;
+
+        return {
+            ...entry,
+            entries: filteredEntries,
+            count: Math.max(0, entry.count - excludedCount),
+        };
+    };
+
+    const relevantKeys = keys.length > 0 ? keys : Object.keys(data);
+
+    return relevantKeys.reduce((acc, key) => {
+        const original = data[key] ?? { searchString: '', count: 0, skip: 0, entries: [] };
+        return {
             ...acc,
-            [key]: data[key] ?? { searchString: '', count: 0, skip: 0, entries: [] },
-        }),
-        {},
-    );
+            [key]: filterSingle(original),
+        };
+    }, {});
 };
 
 export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
