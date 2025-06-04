@@ -13,6 +13,7 @@ import PersonFinderGroup from './person-finder-group/PersonFinderGroup';
 import PersonFinderHeader from './person-finder-header/PersonFinderHeader';
 
 export type PersonFinderBodyProps = {
+    coordinates: { x: number; y: number };
     onAdd: (id: string) => void;
     onRemove: (id: string) => void;
     width: number;
@@ -20,7 +21,7 @@ export type PersonFinderBodyProps = {
 };
 
 const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
-    ({ onAdd, width, filterTypes, onRemove }, ref) => {
+    ({ onAdd, width, filterTypes, onRemove, coordinates }, ref) => {
         const { activeFilter, data } = usePersonFinder();
 
         const { browser } = getDevice();
@@ -61,7 +62,11 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
         );
 
         return (
-            <StyledMotionPersonFinderBody ref={ref} $width={width}>
+            <StyledMotionPersonFinderBody
+                ref={ref}
+                $width={width}
+                style={{ left: coordinates.x, top: coordinates.y }}
+            >
                 <PersonFinderHeader
                     filterTypes={filterTypes}
                     isScrollTop={isScrollTop}
