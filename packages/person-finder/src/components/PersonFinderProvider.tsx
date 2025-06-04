@@ -34,7 +34,7 @@ const ALL_FILTERS: PersonFinderFilterTypes[] = [
     PersonFinderFilterTypes.SITE,
 ];
 
-const THROTTLE_INTERVAL = 300;
+const THROTTLE_INTERVAL = 500;
 
 interface IPersonFinderContext {
     // Data
