@@ -1,4 +1,5 @@
 ﻿import { Language } from 'chayns-api';
+import React from 'react';
 import { Deferred } from '../utils/deferred';
 
 export interface TranslationProps {
@@ -6,6 +7,8 @@ export interface TranslationProps {
     to?: Exclude<Language, Language.Unknown>;
     from?: Exclude<Language, Language.Unknown>;
     tagName?: keyof HTMLElementTagNameMap;
+    style?: React.CSSProperties;
+    className?: string;
 }
 
 interface BaseTranslation {
