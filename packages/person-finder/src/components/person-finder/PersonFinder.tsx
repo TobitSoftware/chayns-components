@@ -5,7 +5,7 @@ import PersonFinderWrapper, {
     PersonFinderWrapperProps,
     PersonFinderWrapperRef,
 } from './person-finder-wrapper/PersonFinderWrapper';
-import { useContainer } from '@chayns-components/core';
+import { AreaProvider, useContainer } from '@chayns-components/core';
 
 const DEFAULT_FILTER_TYPES = [PersonFinderFilterTypes.PERSON, PersonFinderFilterTypes.SITE];
 
@@ -44,19 +44,21 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
 
         return (
             <PersonFinderProvider friendsPriority={friendsPriority} defaultEntries={defaultEntries}>
-                <div className="beta-chayns-person-finder" ref={personFinderRef}>
-                    <PersonFinderWrapper
-                        ref={ref}
-                        container={newContainer}
-                        filterTypes={filterTypes}
-                        maxEntries={maxEntries}
-                        onAdd={onAdd}
-                        leftElement={leftElement}
-                        onRemove={onRemove}
-                        placeholder={placeholder}
-                        shouldAllowMultiple={shouldAllowMultiple}
-                    />
-                </div>
+                <AreaProvider shouldChangeColor={false} shouldDisableListItemPadding>
+                    <div className="beta-chayns-person-finder" ref={personFinderRef}>
+                        <PersonFinderWrapper
+                            ref={ref}
+                            container={newContainer}
+                            filterTypes={filterTypes}
+                            maxEntries={maxEntries}
+                            onAdd={onAdd}
+                            leftElement={leftElement}
+                            onRemove={onRemove}
+                            placeholder={placeholder}
+                            shouldAllowMultiple={shouldAllowMultiple}
+                        />
+                    </div>
+                </AreaProvider>
             </PersonFinderProvider>
         );
     },

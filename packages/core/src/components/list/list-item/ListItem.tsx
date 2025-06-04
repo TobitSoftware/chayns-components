@@ -15,7 +15,7 @@ import React, {
 import { useUuid } from '../../../hooks/uuid';
 import type { IListItemRightElements } from '../../../types/list';
 import { AccordionContext } from '../../accordion/Accordion';
-import AreaContextProvider from '../../area-provider/AreaContextProvider';
+import AreaContextProvider, { AreaContext } from '../../area-provider/AreaContextProvider';
 import { ListContext } from '../List';
 import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
@@ -203,6 +203,8 @@ const ListItem: FC<ListItemProps> = ({
 
     const { isWrapped: isParentAccordionWrapped } = useContext(AccordionContext);
 
+    const areaProvider = useContext(AreaContext);
+
     const isInitialRenderRef = useRef(true);
     const listItemRef = useRef<HTMLDivElement>(null);
 
@@ -215,6 +217,11 @@ const ListItem: FC<ListItemProps> = ({
     const onOpenRef = useRef(onOpen);
 
     const [shouldEnableTooltip, setShouldEnableTooltip] = useState(false);
+
+    const shouldDisablePadding = useMemo(
+        () => areaProvider.shouldDisableListItemPadding ?? false,
+        [areaProvider.shouldDisableListItemPadding],
+    );
 
     useEffect(() => {
         onCloseRef.current = onClose;
@@ -339,7 +346,7 @@ const ListItem: FC<ListItemProps> = ({
             ref={listItemRef}
             layout={shouldPreventLayoutAnimation ? undefined : 'position'}
             $isClickable={isClickable}
-            $isInAccordion={typeof isParentAccordionWrapped === 'boolean'}
+            $isInAccordion={typeof isParentAccordionWrapped === 'boolean' && !shouldDisablePadding}
             $isOpen={isItemOpen}
             $isWrapped={isWrapped}
             $shouldForceBackground={shouldForceBackground}
