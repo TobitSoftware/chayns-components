@@ -98,6 +98,7 @@ interface UseErrorMessageOptions {
     search: string;
     entries: PersonFinderEntry[];
     groupName?: string;
+    areOnlyFriendsGiven?: boolean;
 }
 
 export const useErrorMessage = ({
@@ -105,8 +106,9 @@ export const useErrorMessage = ({
     search,
     entries,
     groupName,
+    areOnlyFriendsGiven,
 }: UseErrorMessageOptions) => {
-    if (search.length <= 2) {
+    if (search.length <= 2 && !areOnlyFriendsGiven) {
         return (
             <StyledPersonFinderGroupErrorMessage>
                 Gib einen Suchbegriff mit mindestens drei Zeichen ein.

@@ -54,6 +54,7 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
         ) : null;
 
     const errorMessage = useErrorMessage({
+        areOnlyFriendsGiven,
         entries,
         loadingState,
         search,
