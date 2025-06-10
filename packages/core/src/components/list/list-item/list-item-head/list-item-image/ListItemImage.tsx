@@ -1,12 +1,6 @@
 import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
-import React, { CSSProperties, MouseEventHandler, useCallback, useState } from 'react';
+import React, { CSSProperties, MouseEventHandler, useCallback } from 'react';
 import GroupedImage from '../../../../grouped-image/GroupedImage';
-import {
-    StyledCareOfImage,
-    StyledListImageWrapper,
-    StyledListItemHeadImage,
-    StyledListItemHeadImageWrapper,
-} from './ListItemImage.styles';
 
 type ListItemImageProps = {
     careOfLocationId?: number;
@@ -27,11 +21,6 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
     shouldShowRoundImage,
     shouldOpenImageOnClick,
 }) => {
-    const [hasLoadedImage, setHasLoadedImage] = useState(false);
-    const handleImageLoaded = useCallback(() => {
-        setHasLoadedImage(true);
-    }, []);
-
     const handleImageClick = useCallback<MouseEventHandler<HTMLDivElement>>(
         (event) => {
             if (!shouldOpenImageOnClick) {
@@ -53,45 +42,20 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
         [images, shouldOpenImageOnClick],
     );
 
-    if (images && images[0] && images[1]) {
+    if (images && images[0]) {
         const careOfImage = careOfLocationId
             ? `https://sub60.tobit.com/l/${careOfLocationId}?size=128`
             : undefined;
 
         return (
-            <StyledListImageWrapper onClick={handleImageClick}>
-                <GroupedImage
-                    images={images}
-                    shouldPreventBackground={shouldHideBackground}
-                    shouldShowRoundImage={shouldShowRoundImage}
-                    imageBackground={imageBackground}
-                    cornerImage={cornerImage ?? careOfImage}
-                />
-            </StyledListImageWrapper>
-        );
-    }
-
-    if (images && images[0]) {
-        return (
-            <StyledListItemHeadImageWrapper onClick={handleImageClick}>
-                <StyledListItemHeadImage
-                    $isHidden={!hasLoadedImage}
-                    onLoad={handleImageLoaded}
-                    $shouldShowRoundImage={shouldShowRoundImage}
-                    $background={imageBackground}
-                    $shouldHideBackground={shouldHideBackground}
-                    $isSmall={!!careOfLocationId}
-                    src={images[0]}
-                />
-                {careOfLocationId && (
-                    <StyledCareOfImage
-                        $shouldHideBackground={shouldHideBackground}
-                        $background={imageBackground}
-                        src={`https://sub60.tobit.com/l/${careOfLocationId}?size=128`}
-                        alt="care-of"
-                    />
-                )}
-            </StyledListItemHeadImageWrapper>
+            <GroupedImage
+                cornerImage={cornerImage ?? careOfImage}
+                imageBackground={imageBackground}
+                images={images}
+                onClick={handleImageClick}
+                shouldPreventBackground={shouldHideBackground}
+                shouldShowRoundImage={shouldShowRoundImage}
+            />
         );
     }
 

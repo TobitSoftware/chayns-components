@@ -1,4 +1,4 @@
-import React, { CSSProperties, useMemo } from 'react';
+import React, { CSSProperties, MouseEventHandler, useMemo } from 'react';
 import {
     ImageSize,
     StyledCornerImage,
@@ -24,6 +24,10 @@ interface GroupedImageProps {
      */
     images: string[];
     /**
+     * Optional click handler for the grouped image.
+     */
+    onClick?: MouseEventHandler<HTMLDivElement>;
+    /**
      * Whether to prevent the background of the images from being set.
      */
     shouldPreventBackground?: boolean;
@@ -38,6 +42,7 @@ const GroupedImage: React.FC<GroupedImageProps> = ({
     height = '40px',
     imageBackground,
     images,
+    onClick,
     shouldPreventBackground = false,
     shouldShowRoundImage = false,
 }) => {
@@ -68,7 +73,7 @@ const GroupedImage: React.FC<GroupedImageProps> = ({
         ));
 
     return (
-        <StyledGroupedImage $height={height}>
+        <StyledGroupedImage onClick={onClick} $height={height}>
             {imageElements}
             {hasCornerImage && (
                 <StyledCornerImage
