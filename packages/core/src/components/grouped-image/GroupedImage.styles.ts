@@ -23,7 +23,7 @@ type StyledImageProps = WithTheme<{
     $background?: CSSProperties['background'];
     $imageSize: ImageSize;
     $isSecondImage?: boolean;
-    $shouldHideBackground?: boolean;
+    $shouldPreventBackground?: boolean;
     $shouldShowRoundImage?: boolean;
 }>;
 
@@ -44,8 +44,8 @@ export const StyledImage = styled.img<StyledImageProps>`
                   left: 0;
               `}
 
-    ${({ $background, $shouldHideBackground, theme }) =>
-        !$shouldHideBackground &&
+    ${({ $background, $shouldPreventBackground, theme }) =>
+        !$shouldPreventBackground &&
         css`
             background: ${$background || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
             box-shadow: 0 0 0 1px rgba(${theme['009-rgb']}, 0.08) inset;

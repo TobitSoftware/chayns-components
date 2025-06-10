@@ -10,7 +10,7 @@ export default {
             'https://picsum.photos/id/669/160/160.jpg',
             'https://picsum.photos/id/823/160/160.jpg',
         ],
-        shouldHideBackground: false,
+        shouldPreventBackground: false,
         shouldShowRoundImage: true,
     },
 } as Meta<typeof GroupedImage>;

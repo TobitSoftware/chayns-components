@@ -7,12 +7,30 @@ import {
 } from './GroupedImage.styles';
 
 interface GroupedImageProps {
+    /**
+     * Optional image to display in the bottom right corner of the grouped image.
+     */
     cornerImage?: string;
+    /**
+     * Height of the grouped image container.
+     */
     height?: CSSProperties['height'];
+    /**
+     * Background for the single images.
+     */
     imageBackground?: CSSProperties['background'];
+    /**
+     * Array of image URLs to display in the grouped image. If only one image is provided, it will be displayed as a full image.
+     */
     images: string[];
-    shouldHideBackground: boolean;
-    shouldShowRoundImage: boolean;
+    /**
+     * Whether to prevent the background of the images from being set.
+     */
+    shouldPreventBackground?: boolean;
+    /**
+     * Whether to show the images in a round shape.
+     */
+    shouldShowRoundImage?: boolean;
 }
 
 const GroupedImage: React.FC<GroupedImageProps> = ({
@@ -20,8 +38,8 @@ const GroupedImage: React.FC<GroupedImageProps> = ({
     height = '40px',
     imageBackground,
     images,
-    shouldHideBackground,
-    shouldShowRoundImage,
+    shouldPreventBackground = false,
+    shouldShowRoundImage = false,
 }) => {
     const hasCornerImage = Boolean(cornerImage);
     const hasMultipleImages = images.length > 1;
@@ -41,7 +59,7 @@ const GroupedImage: React.FC<GroupedImageProps> = ({
                 $background={imageBackground}
                 $imageSize={imageSize}
                 $isSecondImage={index === 1}
-                $shouldHideBackground={shouldHideBackground}
+                $shouldPreventBackground={shouldPreventBackground}
                 $shouldShowRoundImage={shouldShowRoundImage}
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
