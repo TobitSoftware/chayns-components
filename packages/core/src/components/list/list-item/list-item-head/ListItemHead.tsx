@@ -40,6 +40,7 @@ interface HeadHeight {
 
 type ListItemHeadProps = {
     careOfLocationId?: number;
+    cornerImage?: string;
     hoverItem?: ReactNode;
     icons?: string[];
     imageBackground?: CSSProperties['background'];
@@ -65,6 +66,7 @@ type ListItemHeadProps = {
 
 const ListItemHead: FC<ListItemHeadProps> = ({
     careOfLocationId,
+    cornerImage,
     hoverItem,
     icons,
     imageBackground,

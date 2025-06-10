@@ -10,6 +10,7 @@ import {
 
 type ListItemImageProps = {
     careOfLocationId?: number;
+    cornerImage?: string;
     imageBackground?: CSSProperties['background'];
     images: string[];
     shouldHideBackground: boolean;
@@ -19,6 +20,7 @@ type ListItemImageProps = {
 
 const ListItemImage: React.FC<ListItemImageProps> = ({
     careOfLocationId,
+    cornerImage,
     imageBackground,
     images,
     shouldHideBackground,
@@ -52,6 +54,10 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
     );
 
     if (images && images[0] && images[1]) {
+        const careOfImage = careOfLocationId
+            ? `https://sub60.tobit.com/l/${careOfLocationId}?size=128`
+            : undefined;
+
         return (
             <StyledListImageWrapper onClick={handleImageClick}>
                 <GroupedImage
@@ -59,11 +65,7 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
                     shouldPreventBackground={shouldHideBackground}
                     shouldShowRoundImage={shouldShowRoundImage}
                     imageBackground={imageBackground}
-                    cornerImage={
-                        careOfLocationId
-                            ? `https://sub60.tobit.com/l/${careOfLocationId}?size=128`
-                            : undefined
-                    }
+                    cornerImage={cornerImage ?? careOfImage}
                 />
             </StyledListImageWrapper>
         );

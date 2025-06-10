@@ -26,7 +26,7 @@ export type ListItemElements = [ReactNode, ...ReactNode[]];
 
 export type ListItemProps = {
     /**
-     * The locationId of the care-of site.
+     * DEPRECATED: Use `cornerImage` instead.
      */
     careOfLocationId?: number;
     /**
@@ -34,6 +34,10 @@ export type ListItemProps = {
      * it can be opened and also gets an icon as an indicator automatically.
      */
     children?: ReactNode;
+    /**
+     * The image that is displayed in the bottom right corner of the grouped image of list item.
+     */
+    cornerImage?: string;
     /**
      * Element that is displayed when hovering over the `ListItem` on the right
      * side. On mobile devices, this element is not displayed.
@@ -164,6 +168,7 @@ export type ListItemProps = {
 const ListItem: FC<ListItemProps> = ({
     careOfLocationId,
     children,
+    cornerImage,
     hoverItem,
     icons,
     imageBackground,
