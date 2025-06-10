@@ -89,7 +89,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     const color = colorProp ?? internalColor;
     const colorMode = colorModeProp ?? internalColorMode;
     const overrideParagraphFormat =
-        (color && color !== internalColor) || (colorMode && colorMode !== internalColorMode);
+        (color && color !== internalColor) || colorMode !== internalColorMode;
     const paragraphFormat = useMemo(
         () => (overrideParagraphFormat ? [] : undefined),
         [overrideParagraphFormat],
