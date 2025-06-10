@@ -70,7 +70,14 @@ const GroupedImage: React.FC<GroupedImageProps> = ({
     return (
         <StyledGroupedImage $height={height}>
             {imageElements}
-            {hasCornerImage && <StyledCornerImage src={cornerImage} key="corner-image" />}
+            {hasCornerImage && (
+                <StyledCornerImage
+                    $background={imageBackground}
+                    $shouldPreventBackground={shouldPreventBackground}
+                    src={cornerImage}
+                    key="corner-image"
+                />
+            )}
         </StyledGroupedImage>
     );
 };

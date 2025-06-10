@@ -52,16 +52,22 @@ export const StyledImage = styled.img<StyledImageProps>`
         `}
 `;
 
-type StyledCornerImageProps = WithTheme<unknown>;
+type StyledCornerImageProps = WithTheme<{
+    $background?: CSSProperties['background'];
+    $shouldPreventBackground?: boolean;
+}>;
 
 export const StyledCornerImage = styled.img<StyledCornerImageProps>`
     aspect-ratio: 1;
-    background: ${({ theme }: StyledCornerImageProps) =>
-        `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
-    box-shadow: ${({ theme }: StyledCornerImageProps) =>
-        `0 0 0 1px rgba(${theme['009-rgb'] ?? '0,0,0'}, 0.08) inset`};
     bottom: 0;
     height: 50%;
     position: absolute;
     right: 0;
+
+    ${({ $background, $shouldPreventBackground, theme }) =>
+        !$shouldPreventBackground &&
+        css`
+            background: ${$background || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
+            box-shadow: 0 0 0 1px rgba(${theme['009-rgb']}, 0.08) inset;
+        `}
 `;
