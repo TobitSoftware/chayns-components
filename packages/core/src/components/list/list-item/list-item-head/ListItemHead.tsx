@@ -221,6 +221,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 <ListItemImage
                     imageBackground={imageBackground}
                     careOfLocationId={careOfLocationId}
+                    cornerImage={cornerImage}
                     images={images}
                     shouldOpenImageOnClick={shouldOpenImageOnClick}
                     shouldHideBackground={!!shouldHideImageOrIconBackground}
@@ -232,6 +233,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         return undefined;
     }, [
         careOfLocationId,
+        cornerImage,
         icons,
         imageBackground,
         images,

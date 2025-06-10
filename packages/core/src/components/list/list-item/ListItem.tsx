@@ -293,6 +293,7 @@ const ListItem: FC<ListItemProps> = ({
             <ListItemHead
                 hoverItem={hoverItem}
                 careOfLocationId={careOfLocationId}
+                cornerImage={cornerImage}
                 icons={icons}
                 imageBackground={imageBackground}
                 images={images}
@@ -317,6 +318,7 @@ const ListItem: FC<ListItemProps> = ({
         ),
         [
             careOfLocationId,
+            cornerImage,
             handleHeadClick,
             hoverItem,
             icons,
