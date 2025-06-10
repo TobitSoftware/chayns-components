@@ -6,6 +6,7 @@ export const StyledListItemRightElements = styled.div`
     align-items: start;
     gap: 6px;
     margin-left: 8px;
+    flex: 0 0 auto;
 `;
 
 export const StyledListItemRightElementsLeft = styled.div`
