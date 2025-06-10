@@ -48,44 +48,6 @@ export const StyledListImageWrapper = styled.div`
     height: 40px;
 `;
 
-export type StyledListImageWrapperImageProps = WithTheme<{
-    $isSecondImage?: boolean;
-    $isSmall: boolean;
-    $shouldHideBackground?: boolean;
-    $background?: CSSProperties['background'];
-}>;
-
-export const StyledListImageWrapperImage = styled.img<StyledListImageWrapperImageProps>`
-    border-radius: 100px;
-    height: ${({ $isSmall }) => ($isSmall ? '65%' : '80%')};
-    aspect-ratio: 1;
-    position: absolute;
-
-    ${({ $isSecondImage, $isSmall }) =>
-        $isSecondImage
-            ? css`
-                  bottom: ${$isSmall ? '6px' : 0};
-                  right: ${$isSmall ? '6px' : 0};
-              `
-            : css`
-                  top: 0;
-                  left: 0;
-              `}
-
-    transition:
-    opacity 0.4s ease,
-    background-color 0.3s ease,
-    border-radius 0.3s ease,
-    box-shadow 0.3s ease;
-
-    ${({ $shouldHideBackground, $background, theme }: StyledListImageWrapperImageProps) =>
-        !$shouldHideBackground &&
-        css`
-            background: ${$background || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
-            box-shadow: 0 0 0 1px rgba(${theme['009-rgb']}, 0.08) inset;
-        `}
-`;
-
 type StyledCareOfImageProps = WithTheme<{
     $shouldHideBackground?: boolean;
     $background?: CSSProperties['background'];

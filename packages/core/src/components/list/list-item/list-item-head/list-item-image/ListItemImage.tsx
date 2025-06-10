@@ -1,9 +1,9 @@
 import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
 import React, { CSSProperties, MouseEventHandler, useCallback, useState } from 'react';
+import GroupedImage from '../../../../grouped-image/GroupedImage';
 import {
     StyledCareOfImage,
     StyledListImageWrapper,
-    StyledListImageWrapperImage,
     StyledListItemHeadImage,
     StyledListItemHeadImageWrapper,
 } from './ListItemImage.styles';
@@ -54,27 +54,17 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
     if (images && images[0] && images[1]) {
         return (
             <StyledListImageWrapper onClick={handleImageClick}>
-                <StyledListImageWrapperImage
-                    src={images[0]}
-                    $shouldHideBackground={shouldHideBackground}
-                    $background={imageBackground}
-                    $isSmall={!!careOfLocationId}
+                <GroupedImage
+                    images={images}
+                    shouldPreventBackground={shouldHideBackground}
+                    shouldShowRoundImage={shouldShowRoundImage}
+                    imageBackground={imageBackground}
+                    cornerImage={
+                        careOfLocationId
+                            ? `https://sub60.tobit.com/l/${careOfLocationId}?size=128`
+                            : undefined
+                    }
                 />
-                <StyledListImageWrapperImage
-                    src={images[1]}
-                    $isSecondImage
-                    $shouldHideBackground={shouldHideBackground}
-                    $background={imageBackground}
-                    $isSmall={!!careOfLocationId}
-                />
-                {careOfLocationId && (
-                    <StyledCareOfImage
-                        $shouldHideBackground={shouldHideBackground}
-                        $background={imageBackground}
-                        src={`https://sub60.tobit.com/l/${careOfLocationId}?size=128`}
-                        alt="care-of"
-                    />
-                )}
             </StyledListImageWrapper>
         );
     }
