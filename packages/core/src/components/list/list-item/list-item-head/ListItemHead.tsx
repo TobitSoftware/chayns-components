@@ -92,7 +92,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const [shouldRenderPseudoElements, setShouldRenderPseudoElements] = useState(true);
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
     const [openTitleWidth, setOpenTitleWidth] = useState(0);
-    const [headHeight, setHeadHeight] = useState<HeadHeight>({ closed: 40, open: 40 });
+    const [headHeight, setHeadHeight] = useState<HeadHeight>({ closed: 64, open: 64 });
     const [, setIsFirstRender] = useState(false);
 
     const longPressTimeoutRef = useRef<number>();
