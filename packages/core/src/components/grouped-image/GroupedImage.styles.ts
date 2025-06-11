@@ -7,6 +7,7 @@ type StyledGroupedImageProps = WithTheme<{
 }>;
 
 export const StyledGroupedImage = styled.div<StyledGroupedImageProps>`
+    flex: 0 0 auto;
     height: ${({ $height }) => $height};
     position: relative;
     width: ${({ $height }) => $height};
