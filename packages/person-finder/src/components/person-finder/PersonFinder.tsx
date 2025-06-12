@@ -56,6 +56,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             <PersonFinderProvider
                 friendsPriority={friendsPriority}
                 defaultEntries={defaultEntries}
+                filterTypes={filterTypes}
                 excludedEntryIds={excludedEntryIds}
             >
                 <AreaProvider shouldChangeColor={false} shouldDisableListItemPadding>

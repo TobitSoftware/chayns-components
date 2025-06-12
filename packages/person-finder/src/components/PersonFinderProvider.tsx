@@ -29,11 +29,6 @@ import { deleteFriends } from '../api/friends/delete';
 import { filterDataByKeys, loadData } from '../utils/personFinder';
 import { Tag } from '@chayns-components/core/lib/types/types/tagInput';
 
-const ALL_FILTERS: PersonFinderFilterTypes[] = [
-    PersonFinderFilterTypes.PERSON,
-    PersonFinderFilterTypes.SITE,
-];
-
 const THROTTLE_INTERVAL = 500;
 
 interface IPersonFinderContext {
@@ -88,6 +83,7 @@ export const usePersonFinder = () => useContext(PersonFinderContext);
 interface PersonFinderProviderProps {
     children: ReactNode;
     friendsPriority: Priority;
+    filterTypes: PersonFinderFilterTypes[];
     defaultEntries?: DefaultEntry[];
     excludedEntryIds?: PersonFinderEntry['id'][];
 }
@@ -95,6 +91,7 @@ interface PersonFinderProviderProps {
 const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     children,
     friendsPriority,
+    filterTypes,
     defaultEntries,
     excludedEntryIds,
 }) => {
@@ -301,12 +298,13 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     useEffect(() => {
         if (!search) return;
 
-        const active = activeFilter ?? ALL_FILTERS;
+        const active = activeFilter ?? filterTypes;
 
         latestArgsRef.current = { search, filter: active };
 
         throttledRequest();
     }, [
+        filterTypes,
         search,
         activeFilter,
         friends,
