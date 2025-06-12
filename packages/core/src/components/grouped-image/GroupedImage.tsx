@@ -3,7 +3,7 @@ import {
     ImageSize,
     StyledCornerImage,
     StyledGroupedImage,
-    StyledImage,
+    StyledGroupImageElement,
 } from './GroupedImage.styles';
 
 interface GroupedImageProps {
@@ -60,7 +60,7 @@ const GroupedImage: React.FC<GroupedImageProps> = ({
     const imageElements = images
         .slice(0, 2) // Limit to 2 images for grouping
         .map((src, index) => (
-            <StyledImage
+            <StyledGroupImageElement
                 $background={imageBackground}
                 $imageSize={imageSize}
                 $isSecondImage={index === 1}
