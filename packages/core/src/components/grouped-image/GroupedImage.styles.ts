@@ -32,6 +32,7 @@ export const StyledGroupImageElement = styled.img<StyledImageProps>`
     aspect-ratio: 1;
     border-radius: ${({ $shouldShowRoundImage }) => ($shouldShowRoundImage ? '50%' : '0')};
     height: ${({ $imageSize }) => $imageSize};
+    object-fit: cover;
     position: absolute;
 
     ${({ $imageSize, $isSecondImage }) =>
