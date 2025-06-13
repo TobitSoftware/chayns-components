@@ -5,6 +5,7 @@ export const StyledSharingBar = styled.div`
     cursor: pointer;
     display: flex;
     align-items: center;
+    width: fit-content;
 `;
 
 export const StyledSharingBarIconWrapper = styled.div``;
