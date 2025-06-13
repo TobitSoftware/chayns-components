@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import {
     DefaultEntry,
     PersonFinderEntry,
@@ -8,7 +8,7 @@ import {
 import PersonFinderProvider from '../PersonFinderProvider';
 import PersonFinderWrapper, {
     PersonFinderWrapperProps,
-    PersonFinderWrapperRef,
+    PersonFinderRef,
 } from './person-finder-wrapper/PersonFinderWrapper';
 import { AreaProvider, useContainer } from '@chayns-components/core';
 
@@ -29,8 +29,6 @@ export type PersonFinderProps = PersonFinderWrapperProps & {
     friendsPriority?: Priority;
 };
 
-export type PersonFinderRef = PersonFinderWrapperRef;
-
 const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
     (
         {
@@ -49,8 +47,13 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
         ref,
     ) => {
         const personFinderRef = useRef<HTMLDivElement>(null);
+        const innerRef = useRef<PersonFinderRef>(null);
 
         const newContainer = useContainer({ ref: personFinderRef, container });
+
+        useImperativeHandle(ref, () => ({
+            clear: () => innerRef.current?.clear(),
+        }));
 
         return (
             <PersonFinderProvider
@@ -62,7 +65,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                 <AreaProvider shouldChangeColor={false} shouldDisableListItemPadding>
                     <div className="beta-chayns-person-finder" ref={personFinderRef}>
                         <PersonFinderWrapper
-                            ref={ref}
+                            ref={innerRef}
                             container={newContainer}
                             filterTypes={filterTypes}
                             maxEntries={maxEntries}

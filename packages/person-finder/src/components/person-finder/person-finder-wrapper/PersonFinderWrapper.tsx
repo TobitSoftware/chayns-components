@@ -26,7 +26,7 @@ import { usePersonFinder } from '../../PersonFinderProvider';
 import { Tag } from '@chayns-components/core/lib/types/types/tagInput';
 import { TagInputRef } from '@chayns-components/core/lib/types/components/tag-input/TagInput';
 
-export type PersonFinderWrapperRef = {
+export type PersonFinderRef = {
     clear: () => void;
 };
 
@@ -65,7 +65,7 @@ export type PersonFinderWrapperProps = {
     shouldAllowMultiple?: boolean;
 };
 
-const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapperProps>(
+const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps>(
     (
         {
             shouldAllowMultiple,
@@ -80,6 +80,8 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
         ref,
     ) => {
         const { data, updateSearch, setTags, tags } = usePersonFinder();
+
+        console.log('TEST 4', ref);
 
         const [portal, setPortal] = useState<ReactPortal>();
         const [width, setWidth] = useState(0);
@@ -154,9 +156,13 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
         }, [container]);
 
         const handleClear = useCallback(() => {
+            console.log('TEST');
+
             if (typeof setTags !== 'function') {
                 return;
             }
+
+            console.log('TEST 1');
 
             tagInputRef.current?.resetValue();
 
@@ -262,7 +268,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderWrapperRef, PersonFinderWrapp
         useImperativeHandle(
             ref,
             () => ({
-                clear: () => handleClear,
+                clear: () => handleClear(),
             }),
             [handleClear],
         );
