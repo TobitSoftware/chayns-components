@@ -2,15 +2,13 @@ import React, {
     type ChangeEvent,
     forwardRef,
     type ReactElement,
-    ReactPortal,
     useCallback,
-    useEffect,
     useImperativeHandle,
     useMemo,
     useRef,
     useState,
 } from 'react';
-import { type ContextMenuCoordinates, Icon, TagInput } from '@chayns-components/core';
+import { DropdownBodyWrapper, Icon, TagInput } from '@chayns-components/core';
 import { v4 as uuidV4 } from 'uuid';
 import {
     PersonEntry,
@@ -19,8 +17,6 @@ import {
     SiteEntry,
 } from '../../../types/personFinder';
 import { StyledPersonFinder, StyledPersonFinderLeftElement } from './PersonFinderWrapper.styles';
-import { createPortal } from 'react-dom';
-import { AnimatePresence } from 'motion/react';
 import PersonFinderBody from './person-finder-body/PersonFinderBody';
 import { usePersonFinder } from '../../PersonFinderProvider';
 import { Tag } from '@chayns-components/core/lib/types/types/tagInput';
@@ -34,7 +30,7 @@ export type PersonFinderWrapperProps = {
     /**
      * The element where the content of the `PersonFinder` should be rendered via React Portal.
      */
-    container?: Element | null;
+    container?: Element;
     /**
      * The filter options of the component.
      */
@@ -81,15 +77,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
     ) => {
         const { data, updateSearch, setTags, tags } = usePersonFinder();
 
-        console.log('TEST 4', ref);
-
-        const [portal, setPortal] = useState<ReactPortal>();
-        const [width, setWidth] = useState(0);
         const [shouldShowBody, setShouldShowBody] = useState(false);
-        const [internalCoordinates, setInternalCoordinates] = useState<ContextMenuCoordinates>({
-            x: 0,
-            y: 0,
-        });
 
         const tagInputRef = useRef<TagInputRef>(null);
         const boxRef = useRef<HTMLDivElement>(null);
@@ -102,17 +90,6 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
                 <Icon icons={['fa fa-search']} />
             </StyledPersonFinderLeftElement>
         );
-
-        useEffect(() => {
-            if (boxRef.current) {
-                const { x, y } = boxRef.current.getBoundingClientRect();
-
-                setInternalCoordinates({
-                    x,
-                    y,
-                });
-            }
-        }, []);
 
         const handleRemove = useCallback(
             (id: string) => {
@@ -134,35 +111,13 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
         }, []);
 
         const handleOpen = useCallback(() => {
-            if (boxRef.current && container) {
-                const {
-                    left: comboBoxLeft,
-                    top: comboBoxTop,
-                    height: bodyHeight,
-                } = boxRef.current.getBoundingClientRect();
-
-                const { left, top } = container.getBoundingClientRect();
-
-                const x = comboBoxLeft - left + container.scrollLeft;
-                const y = comboBoxTop - top + container.scrollTop;
-
-                setInternalCoordinates({
-                    x,
-                    y: y + bodyHeight,
-                });
-
-                setShouldShowBody(true);
-            }
-        }, [container]);
+            setShouldShowBody(true);
+        }, []);
 
         const handleClear = useCallback(() => {
-            console.log('TEST');
-
             if (typeof setTags !== 'function') {
                 return;
             }
-
-            console.log('TEST 1');
 
             tagInputRef.current?.resetValue();
 
@@ -209,23 +164,6 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             [data, maxEntries, onAdd, setTags],
         );
 
-        /**
-         * This function closes the body
-         */
-        const handleOutsideClick = useCallback(
-            (event: MouseEvent) => {
-                if (
-                    boxRef.current &&
-                    !boxRef.current.contains(event.target as Node) &&
-                    contentRef.current &&
-                    !contentRef.current.contains(event.target as Node)
-                ) {
-                    handleClose();
-                }
-            },
-            [handleClose],
-        );
-
         const handleChange = useCallback(
             (event: ChangeEvent<HTMLInputElement>) => {
                 if (typeof updateSearch === 'function') {
@@ -235,36 +173,6 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             [updateSearch],
         );
 
-        /**
-         * This hook calculates the width
-         */
-        useEffect(() => {
-            const input = document.getElementById(`person_finder_input--${uuid}`);
-
-            const getInputWidth = () => {
-                if (input) {
-                    setWidth(input.offsetWidth);
-                }
-            };
-
-            if (input) {
-                new ResizeObserver(getInputWidth).observe(input);
-            }
-        }, [uuid]);
-
-        /**
-         * This hook listens for clicks
-         */
-        useEffect(() => {
-            document.addEventListener('click', handleOutsideClick);
-            window.addEventListener('blur', () => handleClose());
-
-            return () => {
-                document.removeEventListener('click', handleOutsideClick);
-                window.addEventListener('blur', () => handleClose());
-            };
-        }, [handleOutsideClick, handleClose]);
-
         useImperativeHandle(
             ref,
             () => ({
@@ -273,53 +181,33 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             [handleClear],
         );
 
-        useEffect(() => {
-            if (!container) {
-                return;
-            }
-
-            setPortal(() =>
-                createPortal(
-                    <AnimatePresence initial={false}>
-                        {shouldShowBody && (
-                            <PersonFinderBody
-                                coordinates={internalCoordinates}
-                                width={width}
-                                ref={contentRef}
-                                onAdd={handleAdd}
-                                onRemove={handleRemove}
-                                filterTypes={filterTypes}
-                            />
-                        )}
-                    </AnimatePresence>,
-                    container,
-                ),
-            );
-        }, [
-            container,
-            filterTypes,
-            handleAdd,
-            handleRemove,
-            internalCoordinates,
-            shouldShowBody,
-            width,
-        ]);
-
         return (
             <StyledPersonFinder ref={boxRef} onFocus={handleOpen} key={`person-finder-${uuid}`}>
-                <div id={`person_finder_input--${uuid}`}>
-                    <TagInput
-                        ref={tagInputRef}
-                        placeholder={placeholder}
-                        leftElement={leftElement}
-                        shouldAllowMultiple={shouldAllowMultiple}
-                        shouldPreventEnter
-                        onRemove={handleRemove}
-                        onChange={handleChange}
-                        tags={tags}
-                    />
-                </div>
-                {portal}
+                <TagInput
+                    ref={tagInputRef}
+                    placeholder={placeholder}
+                    leftElement={leftElement}
+                    shouldAllowMultiple={shouldAllowMultiple}
+                    shouldPreventEnter
+                    onRemove={handleRemove}
+                    onChange={handleChange}
+                    tags={tags}
+                />
+                {boxRef.current && (
+                    <DropdownBodyWrapper
+                        anchorElement={boxRef.current}
+                        shouldShowDropdown={shouldShowBody}
+                        container={container}
+                        onClose={handleClose}
+                    >
+                        <PersonFinderBody
+                            ref={contentRef}
+                            onAdd={handleAdd}
+                            onRemove={handleRemove}
+                            filterTypes={filterTypes}
+                        />
+                    </DropdownBodyWrapper>
+                )}
             </StyledPersonFinder>
         );
     },
