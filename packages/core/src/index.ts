@@ -30,6 +30,7 @@ export {
     type IFileItem as FileListItem,
 } from './components/file-list/FileList';
 export { default as FileSelect } from './components/file-select/FileSelect';
+export { default as DropdownBodyWrapper } from './components/dropdown-body-wrapper/DropdownBodyWrapper';
 export {
     default as ComboBox,
     type ComboBoxTextStyles,
