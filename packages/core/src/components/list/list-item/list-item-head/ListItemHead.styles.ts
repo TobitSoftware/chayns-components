@@ -87,7 +87,11 @@ export const StyledListItemHeadTitleElement = styled.div`
     margin-left: 8px;
 `;
 
-type StyledListItemHeadTitleTextProps = WithTheme<{ $isOpen: boolean; $width: number }>;
+type StyledListItemHeadTitleTextProps = WithTheme<{
+    $isOpen: boolean;
+    $width: number;
+    $shouldShowMultilineTitle: boolean;
+}>;
 
 export const StyledListItemHeadTitleText = styled(motion.span)<StyledListItemHeadTitleTextProps>`
     font-weight: ${({ $isOpen }) => ($isOpen ? 'bold' : 'normal')};
@@ -95,9 +99,23 @@ export const StyledListItemHeadTitleText = styled(motion.span)<StyledListItemHea
     min-width: ${({ $isOpen, $width }) => ($isOpen ? `${$width}px` : undefined)};
     overflow: hidden;
     text-overflow: ellipsis;
+
+    ${({ $shouldShowMultilineTitle, $isOpen }) =>
+        $shouldShowMultilineTitle &&
+        !$isOpen &&
+        css`
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            text-overflow: ellipsis;
+            white-space: normal;
+        `}
 `;
 
-type StyledListItemHeadTitleTextPseudoProps = WithTheme<{ $isOpen: boolean }>;
+type StyledListItemHeadTitleTextPseudoProps = WithTheme<{
+    $isOpen: boolean;
+    $shouldShowMultilineTitle: boolean;
+}>;
 
 export const StyledListItemHeadTitleTextPseudo = styled.span<StyledListItemHeadTitleTextPseudoProps>`
     font-weight: ${({ $isOpen }) => ($isOpen ? 'bold' : 'normal')};
@@ -109,6 +127,17 @@ export const StyledListItemHeadTitleTextPseudo = styled.span<StyledListItemHeadT
     pointer-events: none;
     user-select: none;
     position: absolute;
+
+    ${({ $shouldShowMultilineTitle, $isOpen }) =>
+        $shouldShowMultilineTitle &&
+        !$isOpen &&
+        css`
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            text-overflow: ellipsis;
+            white-space: normal;
+        `}
 `;
 
 export const StyledListItemHeadSubtitle = styled.div`
