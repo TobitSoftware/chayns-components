@@ -15,9 +15,14 @@ import {
 import { useContainer } from '../../hooks/container';
 import { createPortal } from 'react-dom';
 import { AnimatePresence } from 'motion/react';
-import { DropdownCoordinates } from '../../types/dropdown';
+import { DropdownAlignment, DropdownCoordinates } from '../../types/dropdown';
+import { ComboBoxDirection } from '../../types/comboBox';
 
 interface DropdownBodyWrapperProps {
+    /**
+     * The alignment of the dropdown.
+     */
+    alignment?: DropdownAlignment;
     /**
      * The anchor element of the dropdown.
      */
@@ -30,6 +35,10 @@ interface DropdownBodyWrapperProps {
      * The element where the content should be rendered via React Portal.
      */
     container?: Element;
+    /**
+     * The height of the content
+     */
+    contentHeight?: number;
     /**
      * The max height of the dropdown.
      */
@@ -45,13 +54,18 @@ interface DropdownBodyWrapperProps {
 }
 
 const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
+    alignment = DropdownAlignment.BOTTOM_RIGHT,
     children,
     container: containerProp,
     shouldShowDropdown,
     anchorElement,
+    contentHeight = 0,
     maxHeight = 300,
     onClose,
 }) => {
+    const [shouldUseTopAlignment, setShouldUseTopAlignment] = useState(false);
+    const [translateX, setTranslateX] = useState<string>('0px');
+    const [translateY, setTranslateY] = useState<string>('0px');
     const [coordinates, setCoordinates] = useState<DropdownCoordinates>({ x: 0, y: 0 });
     const [portal, setPortal] = useState<ReactPortal>();
 
@@ -64,22 +78,73 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     useEffect(() => {
         if (container) {
             const {
-                left: comboBoxLeft,
-                top: comboBoxTop,
-                height: bodyHeight,
+                left: anchorLeft,
+                top: anchorTop,
+                height: anchorHeight,
             } = anchorElement.getBoundingClientRect();
 
-            const { left, top } = container.getBoundingClientRect();
+            const { left, top, height } = container.getBoundingClientRect();
 
-            const x = comboBoxLeft - left + container.scrollLeft;
-            const y = comboBoxTop - top + container.scrollTop;
+            const x = anchorLeft - left + container.scrollLeft;
+            const y = anchorTop - top + container.scrollTop;
 
-            setCoordinates({
-                x,
-                y: y + bodyHeight,
-            });
+            let useTopAlignment = [
+                DropdownAlignment.TOP,
+                DropdownAlignment.TOP_LEFT,
+                DropdownAlignment.TOP_RIGHT,
+            ].includes(alignment);
+
+            const hasBottomAlignment = [
+                DropdownAlignment.BOTTOM,
+                DropdownAlignment.BOTTOM_LEFT,
+                DropdownAlignment.BOTTOM_RIGHT,
+            ].includes(alignment);
+
+            if (!hasBottomAlignment && y + anchorHeight + contentHeight > height) {
+                useTopAlignment = true;
+
+                setShouldUseTopAlignment(true);
+            } else {
+                setShouldUseTopAlignment(false);
+            }
+
+            setCoordinates({ x, y: useTopAlignment ? y : y + anchorHeight });
         }
-    }, [anchorElement, container]);
+    }, [alignment, anchorElement, container, contentHeight]);
+
+    useEffect(() => {
+        if (
+            [
+                DropdownAlignment.BOTTOM_LEFT,
+                DropdownAlignment.TOP_LEFT,
+                DropdownAlignment.LEFT,
+            ].includes(alignment) &&
+            typeof bodyWidth === 'number' &&
+            typeof minWidth === 'number'
+        ) {
+            const difference = minWidth - bodyWidth;
+
+            setTranslateX(`${difference}px`);
+        } else {
+            setTranslateX('0px');
+        }
+    }, [bodyWidth, alignment, minWidth]);
+
+    useEffect(() => {
+        const useTopAlignment =
+            shouldUseTopAlignment ||
+            [
+                DropdownAlignment.TOP,
+                DropdownAlignment.TOP_LEFT,
+                DropdownAlignment.TOP_RIGHT,
+            ].includes(alignment);
+
+        if (useTopAlignment) {
+            setTranslateY('-100%');
+        } else {
+            setTranslateY('0px');
+        }
+    }, [alignment, shouldUseTopAlignment]);
 
     const handleClose = useCallback(() => {
         if (typeof onClose === 'function') {
