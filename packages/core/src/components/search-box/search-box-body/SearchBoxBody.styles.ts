@@ -1,26 +1,10 @@
-import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import { BrowserName } from '../../../types/chayns';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
-type StyledMotionSearchBoxBodyProps = WithTheme<{
-    $width: number;
-}>;
-
-export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBoxBodyProps>`
-    background: ${({ theme }: StyledMotionSearchBoxBodyProps) => theme['000']};
-    position: absolute;
-    z-index: 4;
+export const StyledSearchBoxBody = styled.div`
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(160, 160, 160, 0.3);
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-    border-top: none;
-    width: ${({ $width }) => $width - 2}px;
-    max-height: 300px;
-    box-shadow: 0 0 0 1px
-        rgba(${({ theme }: StyledMotionSearchBoxBodyProps) => theme['009-rgb']}, 0.08) inset;
 `;
 
 export const StyledSearchBoxBodyHead = styled.div<StyledSearchBoxHeadProps>`
