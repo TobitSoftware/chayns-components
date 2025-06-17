@@ -25,6 +25,7 @@ export type {
     WithTheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
 export { useContainer, ContainerAnchor } from './hooks/container';
+export type { DropdownDirection, DropdownCoordinates } from './types/dropdown';
 export {
     default as FileList,
     type IFileItem as FileListItem,
@@ -98,7 +99,6 @@ export { default as Truncation } from './components/truncation/Truncation';
 export { MentionFinderPopupAlignment } from './constants/mentionFinder';
 export { useElementSize } from './hooks/useElementSize';
 export type { BrowserName } from './types/chayns';
-export { ComboBoxDirection } from './types/comboBox';
 export { ContentCardType } from './types/contentCard';
 export { ContextMenuAlignment } from './types/contextMenu';
 export type { FileItem, Image, InternalFileItem, Meta, Video } from './types/file';

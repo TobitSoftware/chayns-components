@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ChangeEvent, useState } from 'react';
-import { ComboBoxDirection } from '../src';
+import { DropdownDirection } from '../src/types/dropdown';
 import ComboBox, { IComboBoxItem } from '../src/components/combobox/ComboBox';
 import Icon from '../src/components/icon/Icon';
 
@@ -150,7 +150,7 @@ export const WithTextStyle = Template.bind({});
 
 OwnWidth.args = {
     bodyWidth: 300,
-    direction: ComboBoxDirection.LEFT,
+    direction: DropdownDirection.LEFT,
     shouldUseFullWidth: true,
 };
 
