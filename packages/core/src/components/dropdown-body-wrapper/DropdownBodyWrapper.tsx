@@ -15,18 +15,17 @@ import {
 import { useContainer } from '../../hooks/container';
 import { createPortal } from 'react-dom';
 import { AnimatePresence } from 'motion/react';
-import { DropdownAlignment, DropdownCoordinates } from '../../types/dropdown';
-import { ComboBoxDirection } from '../../types/comboBox';
+import { DropdownDirection, DropdownCoordinates } from '../../types/dropdown';
 
 interface DropdownBodyWrapperProps {
-    /**
-     * The alignment of the dropdown.
-     */
-    alignment?: DropdownAlignment;
     /**
      * The anchor element of the dropdown.
      */
     anchorElement: Element;
+    /**
+     * The width of the Body.
+     */
+    bodyWidth?: number;
     /**
      * The content of the dropdown body.
      */
@@ -40,9 +39,17 @@ interface DropdownBodyWrapperProps {
      */
     contentHeight?: number;
     /**
+     * The direction of the dropdown.
+     */
+    direction?: DropdownDirection;
+    /**
      * The max height of the dropdown.
      */
     maxHeight?: number;
+    /**
+     * The minimum width of the body.
+     */
+    minBodyWidth?: number;
     /**
      * Function to be executed when the body is closed.
      */
@@ -54,7 +61,7 @@ interface DropdownBodyWrapperProps {
 }
 
 const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
-    alignment = DropdownAlignment.BOTTOM_RIGHT,
+    direction = DropdownDirection.BOTTOM_RIGHT,
     children,
     container: containerProp,
     shouldShowDropdown,
@@ -62,6 +69,8 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     contentHeight = 0,
     maxHeight = 300,
     onClose,
+    minBodyWidth,
+    bodyWidth,
 }) => {
     const [shouldUseTopAlignment, setShouldUseTopAlignment] = useState(false);
     const [translateX, setTranslateX] = useState<string>('0px');
@@ -89,16 +98,16 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
             const y = anchorTop - top + container.scrollTop;
 
             let useTopAlignment = [
-                DropdownAlignment.TOP,
-                DropdownAlignment.TOP_LEFT,
-                DropdownAlignment.TOP_RIGHT,
-            ].includes(alignment);
+                DropdownDirection.TOP,
+                DropdownDirection.TOP_LEFT,
+                DropdownDirection.TOP_RIGHT,
+            ].includes(direction);
 
             const hasBottomAlignment = [
-                DropdownAlignment.BOTTOM,
-                DropdownAlignment.BOTTOM_LEFT,
-                DropdownAlignment.BOTTOM_RIGHT,
-            ].includes(alignment);
+                DropdownDirection.BOTTOM,
+                DropdownDirection.BOTTOM_LEFT,
+                DropdownDirection.BOTTOM_RIGHT,
+            ].includes(direction);
 
             if (!hasBottomAlignment && y + anchorHeight + contentHeight > height) {
                 useTopAlignment = true;
@@ -110,41 +119,41 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
 
             setCoordinates({ x, y: useTopAlignment ? y : y + anchorHeight });
         }
-    }, [alignment, anchorElement, container, contentHeight]);
+    }, [direction, anchorElement, container, contentHeight]);
 
     useEffect(() => {
         if (
             [
-                DropdownAlignment.BOTTOM_LEFT,
-                DropdownAlignment.TOP_LEFT,
-                DropdownAlignment.LEFT,
-            ].includes(alignment) &&
+                DropdownDirection.BOTTOM_LEFT,
+                DropdownDirection.TOP_LEFT,
+                DropdownDirection.LEFT,
+            ].includes(direction) &&
             typeof bodyWidth === 'number' &&
-            typeof minWidth === 'number'
+            typeof minBodyWidth === 'number'
         ) {
-            const difference = minWidth - bodyWidth;
+            const difference = minBodyWidth - bodyWidth;
 
             setTranslateX(`${difference}px`);
         } else {
             setTranslateX('0px');
         }
-    }, [bodyWidth, alignment, minWidth]);
+    }, [bodyWidth, direction, minBodyWidth]);
 
     useEffect(() => {
         const useTopAlignment =
             shouldUseTopAlignment ||
             [
-                DropdownAlignment.TOP,
-                DropdownAlignment.TOP_LEFT,
-                DropdownAlignment.TOP_RIGHT,
-            ].includes(alignment);
+                DropdownDirection.TOP,
+                DropdownDirection.TOP_LEFT,
+                DropdownDirection.TOP_RIGHT,
+            ].includes(direction);
 
         if (useTopAlignment) {
             setTranslateY('-100%');
         } else {
             setTranslateY('0px');
         }
-    }, [alignment, shouldUseTopAlignment]);
+    }, [direction, shouldUseTopAlignment]);
 
     const handleClose = useCallback(() => {
         if (typeof onClose === 'function') {
@@ -192,6 +201,9 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
                             $width={width}
                             $coordinates={coordinates}
                             $maxHeight={maxHeight}
+                            $translateX={translateX}
+                            $translateY={translateY}
+                            $direction={direction}
                             ref={ref}
                             initial={{ height: 0, opacity: 0 }}
                             exit={{ height: 0, opacity: 0 }}
@@ -208,7 +220,17 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
                 container,
             ),
         );
-    }, [children, container, coordinates, maxHeight, shouldShowDropdown, width]);
+    }, [
+        direction,
+        children,
+        container,
+        coordinates,
+        maxHeight,
+        shouldShowDropdown,
+        translateX,
+        translateY,
+        width,
+    ]);
 
     return <StyledDropdownBodyWrapper>{portal}</StyledDropdownBodyWrapper>;
 };

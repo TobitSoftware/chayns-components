@@ -3,7 +3,7 @@ export interface DropdownCoordinates {
     y: number;
 }
 
-export enum DropdownAlignment {
+export enum DropdownDirection {
     BOTTOM,
     TOP,
     BOTTOM_LEFT,
