@@ -25,6 +25,8 @@ export type {
     WithTheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
 export { useContainer, ContainerAnchor } from './hooks/container';
+export { useIsMeasuredClone } from './hooks/element';
+export { useCombinedRefs } from './hooks/ref';
 export {
     default as FileList,
     type IFileItem as FileListItem,

@@ -1,4 +1,3 @@
-import { getWindowMetrics } from 'chayns-api';
 import { AnimatePresence } from 'motion/react';
 import React, {
     forwardRef,
@@ -15,7 +14,8 @@ import { useUuid } from '../../hooks/uuid';
 import { PopupAlignment, PopupCoordinates, PopupRef } from '../../types/popup';
 import AreaContextProvider from '../area-provider/AreaContextProvider';
 import PopupContentWrapper from './popup-content-wrapper/PopupContentWrapper';
-import { StyledPopup, StyledPopupPseudo } from './Popup.styles';
+import { StyledPopup } from './Popup.styles';
+import { useMeasuredClone } from '../../hooks/element';
 
 export type PopupProps = {
     /**
@@ -97,8 +97,6 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const [offset, setOffset] = useState<number>(0);
         const [isOpen, setIsOpen] = useState(false);
         const [portal, setPortal] = useState<ReactPortal>();
-        const [menuHeight, setMenuHeight] = useState(0);
-        const [isMeasuring, setIsMeasuring] = useState(true);
         const [pseudoSize, setPseudoSize] = useState<{ height: number; width: number }>();
         const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
 
@@ -106,10 +104,11 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         const uuid = useUuid();
 
+        const { height, width, measuredElement } = useMeasuredClone({ content });
+
         // ToDo: Replace with hook if new chayns api is ready
 
         const popupContentRef = useRef<HTMLDivElement>(null);
-        const popupPseudoContentRef = useRef<HTMLDivElement>(null);
         const popupRef = useRef<HTMLDivElement>(null);
 
         useEffect(() => {
@@ -128,37 +127,9 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             }
         }, [container]);
 
-        const measureHeight = () => {
-            if (popupPseudoContentRef.current) {
-                const height = popupPseudoContentRef.current.offsetHeight;
-                const width = popupPseudoContentRef.current.offsetWidth + 1;
-
-                setPseudoSize({ height, width });
-            }
-        };
-
         useEffect(() => {
-            measureHeight();
-
-            setIsMeasuring(false);
-        }, []);
-
-        useEffect(() => {
-            const handleResize = () => {
-                setIsMeasuring(true);
-
-                setTimeout(() => {
-                    measureHeight();
-                    setIsMeasuring(false);
-                }, 0);
-            };
-
-            window.addEventListener('resize', handleResize);
-
-            return () => {
-                window.removeEventListener('resize', handleResize);
-            };
-        }, []);
+            setPseudoSize({ height, width });
+        }, [height, width]);
 
         const handleShow = useCallback(() => {
             if (popupRef.current && pseudoSize) {
@@ -175,10 +146,15 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     width: childrenWidth,
                 } = popupRef.current.getBoundingClientRect();
 
-                const { height, width, top, left } = newContainer.getBoundingClientRect();
+                const {
+                    height: containerHeight,
+                    width: containerWidth,
+                    top,
+                    left,
+                } = newContainer.getBoundingClientRect();
 
-                const zoomX = width / (newContainer as HTMLElement).offsetWidth;
-                const zoomY = height / (newContainer as HTMLElement).offsetHeight;
+                const zoomX = containerWidth / (newContainer as HTMLElement).offsetWidth;
+                const zoomY = containerHeight / (newContainer as HTMLElement).offsetHeight;
 
                 if (
                     pseudoHeight > childrenTop - 25 ||
@@ -333,13 +309,13 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             [handleHide, handleShow],
         );
 
-        useEffect(() => {
-            void getWindowMetrics().then((result) => {
-                if (result.topBarHeight) {
-                    setMenuHeight(result.topBarHeight);
-                }
-            });
-        }, []);
+        // useEffect(() => {
+        //     void getWindowMetrics().then((result) => {
+        //         if (result.topBarHeight) {
+        //             setMenuHeight(result.topBarHeight);
+        //         }
+        //     });
+        // }, []);
 
         useEffect(() => {
             if (isOpen) {
@@ -404,11 +380,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         return (
             <>
-                {isMeasuring && (
-                    <StyledPopupPseudo ref={popupPseudoContentRef} $menuHeight={menuHeight}>
-                        {content}
-                    </StyledPopupPseudo>
-                )}
+                {measuredElement}
                 <StyledPopup
                     className="beta-chayns-popup"
                     ref={popupRef}

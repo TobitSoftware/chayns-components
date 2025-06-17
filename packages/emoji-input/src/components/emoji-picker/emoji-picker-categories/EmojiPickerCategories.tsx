@@ -6,6 +6,7 @@ import {
     StyledEmojiPickerCategories,
     StyledMotionEmojiPickerCategory,
 } from './EmojiPickerCategories.styles';
+import { useCombinedRefs, useIsMeasuredClone } from '@chayns-components/core';
 
 export type EmojiPickerCategoriesProps = {
     onSelect: (category: Category) => void;
@@ -20,7 +21,11 @@ const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({
 }) => {
     const [focusedIndex, setFocusedIndex] = useState(1);
 
+    const [shouldPreventListener, ref] = useIsMeasuredClone();
+
     const categoryRef = useRef<HTMLDivElement>(null);
+
+    const combinedRef = useCombinedRefs(categoryRef, ref);
 
     const isSearchStringGiven = searchString.trim() !== '';
 
@@ -33,6 +38,10 @@ const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
+            if (shouldPreventListener) {
+                return;
+            }
+
             if (event.key === 'Tab' || (event.key === 'Tab' && event.shiftKey)) {
                 event.preventDefault();
 
@@ -81,7 +90,7 @@ const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [focusedIndex, handleSelect]);
+    }, [focusedIndex, handleSelect, shouldPreventListener]);
 
     const handleClick = useCallback(
         (slug: Category) => {
@@ -118,7 +127,7 @@ const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({
     }, [handleClick, isSearchStringGiven, selectedCategory]);
 
     return (
-        <StyledEmojiPickerCategories ref={categoryRef}>{categories}</StyledEmojiPickerCategories>
+        <StyledEmojiPickerCategories ref={combinedRef}>{categories}</StyledEmojiPickerCategories>
     );
 };
 
