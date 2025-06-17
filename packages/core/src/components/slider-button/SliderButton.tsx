@@ -1,7 +1,7 @@
 import { setRefreshScrollEnabled } from 'chayns-api';
 import { AnimatePresence, useAnimate } from 'motion/react';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { element } from '../../hooks/element';
+import { useElementSize } from '../../hooks/element';
 import { PopupRef } from '../../types/popup';
 import type { SliderButtonItem } from '../../types/slider-button';
 import { calculateBiggestWidth } from '../../utils/calculate';
@@ -53,7 +53,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
     const [scope, animate] = useAnimate();
 
     const initialItemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
-    const elementSize = element(sliderButtonRef);
+    const elementSize = useElementSize(sliderButtonRef);
 
     useEffect(() => {
         if (elementSize) setSliderSize(elementSize);
