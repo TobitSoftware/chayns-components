@@ -95,7 +95,7 @@ export { default as TextArea } from './components/text-area/TextArea';
 export { default as Tooltip } from './components/tooltip/Tooltip';
 export { default as Truncation } from './components/truncation/Truncation';
 export { MentionFinderPopupAlignment } from './constants/mentionFinder';
-export { useElementSize } from './hooks/useElementSize';
+export { useElementSize } from './hooks/element';
 export type { BrowserName } from './types/chayns';
 export { ComboBoxDirection } from './types/comboBox';
 export { ContentCardType } from './types/contentCard';

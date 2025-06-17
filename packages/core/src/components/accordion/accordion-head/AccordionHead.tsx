@@ -12,7 +12,7 @@ import React, {
     type CSSProperties,
 } from 'react';
 import { useTheme } from 'styled-components';
-import { useElementSize } from '../../../hooks/useElementSize';
+import { useElementSize } from '../../../hooks/element';
 import { getAccordionHeadHeight, getElementClickEvent } from '../../../utils/accordion';
 import { AreaContext } from '../../area-provider/AreaContextProvider';
 import type { Theme } from '../../color-scheme-provider/ColorSchemeProvider';

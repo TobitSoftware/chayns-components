@@ -1,7 +1,7 @@
 import { setRefreshScrollEnabled } from 'chayns-api';
 import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from 'styled-components';
-import { useElementSize } from '../../hooks/useElementSize';
+import { useElementSize } from '../../hooks/element';
 import {
     calculateGradientOffset,
     calculatePopupPosition,

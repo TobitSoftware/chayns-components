@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { FC, ReactNode, useRef, type CSSProperties, type MouseEventHandler } from 'react';
-import { useElementSize } from '../../hooks/useElementSize';
+import { useElementSize } from '../../hooks/element';
 import { StyledBadge } from './Badge.styles';
 import { BadgeDesign, BadgeSize } from '../../types/badge';
 

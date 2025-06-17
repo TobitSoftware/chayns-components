@@ -8,7 +8,7 @@ import React, {
     useState,
     type ReactNode,
 } from 'react';
-import { useElementSize } from '../../../hooks/useElementSize';
+import { useElementSize } from '../../../hooks/element';
 import { useUuid } from '../../../hooks/uuid';
 import { BrowserName } from '../../../types/chayns';
 import type { IFilterButtonItem } from '../../../types/filterButtons';
