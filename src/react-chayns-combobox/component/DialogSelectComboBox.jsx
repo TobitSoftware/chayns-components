@@ -28,7 +28,7 @@ const DialogSelectComboBox = ({
     parent,
     onSelect,
     style,
-    value,
+    value = null,
 }) => {
     const [position, setPosition] = useState({
         bottom: 0,
