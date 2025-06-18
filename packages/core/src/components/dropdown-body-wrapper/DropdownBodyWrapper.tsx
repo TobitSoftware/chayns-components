@@ -87,7 +87,7 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
 
     const handleClose = useCallback(() => {
         if (typeof onClose === 'function') {
-            // onClose();
+            onClose();
         }
     }, [onClose]);
 
