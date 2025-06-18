@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
 import Button from '../src/components/button/Button';

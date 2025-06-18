@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Calendar from '../src/components/calendar/Calendar';
 import { CalendarType, CustomThumbColors } from '../src/types/calendar';
+import React from 'react';
 
 const getDayOfCurrentMonth = (day: number) => {
     const today = new Date();

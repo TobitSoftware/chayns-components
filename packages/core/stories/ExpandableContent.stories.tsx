@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Button from '../src/components/button/Button';
 import ExpandableContent from '../src/components/expandable-content/ExpandableContent';
 

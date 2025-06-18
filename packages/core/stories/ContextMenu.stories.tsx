@@ -2,6 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
 import ContextMenu from '../src/components/context-menu/ContextMenu';
+import React from 'react';
 
 export default {
     title: 'Core/ContextMenu',

@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Icon from '../src/components/icon/Icon';
+import React from 'react';
 
 export default {
     title: 'Core/Icon',

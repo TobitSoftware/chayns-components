@@ -1,6 +1,5 @@
-import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import FileList from '../src/components/file-list/FileList';
 
 export default {

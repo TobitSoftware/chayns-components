@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import ScrollView from '../src/components/scroll-view/ScrollView';
+import React from 'react';
 
 export default {
     title: 'Core/ScrollView',

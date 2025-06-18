@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import { Icon } from '../src';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
@@ -243,7 +243,7 @@ InputAsTitle.args = {
         </AccordionContent>
     ),
     title: 'Lorem ipsum',
-    onTitleInputChange: {},
+    onTitleInputChange: undefined,
     titleInputProps: {
         rightElement: (
             <div
@@ -460,10 +460,14 @@ WrappedAccordionWithListItems.args = {
     children: (
         <>
             <List>
-                <ListItem images={[locationImages[0]]} title="Tolor tantem">
+                <ListItem images={[locationImages[0] ?? '']} title="Tolor tantem">
                     <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
                 </ListItem>
-                <ListItem images={[locationImages[0]]} shouldHideIndicator title="Tolor tantem">
+                <ListItem
+                    images={[locationImages[0] ?? '']}
+                    shouldHideIndicator
+                    title="Tolor tantem"
+                >
                     <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
                 </ListItem>
                 <ListItem title="Tolor tantem">
@@ -476,11 +480,11 @@ WrappedAccordionWithListItems.args = {
             <AccordionGroup isWrapped>
                 <Accordion title="Lorem ipsum">
                     <List>
-                        <ListItem images={[locationImages[0]]} title="Tolor tantem">
+                        <ListItem images={[locationImages[0] ?? '']} title="Tolor tantem">
                             <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
                         </ListItem>
                         <ListItem
-                            images={[locationImages[0]]}
+                            images={[locationImages[0] ?? '']}
                             shouldHideIndicator
                             title="Tolor tantem"
                         >
@@ -498,11 +502,11 @@ WrappedAccordionWithListItems.args = {
                     <AccordionGroup isWrapped>
                         <Accordion title="Dolor sit amet">
                             <List>
-                                <ListItem images={[locationImages[0]]} title="Tolor tantem">
+                                <ListItem images={[locationImages[0] ?? '']} title="Tolor tantem">
                                     <ListItemContent>Consetetur sadipscing elitr</ListItemContent>
                                 </ListItem>
                                 <ListItem
-                                    images={[locationImages[0]]}
+                                    images={[locationImages[0] ?? '']}
                                     shouldHideIndicator
                                     title="Tolor tantem"
                                 >

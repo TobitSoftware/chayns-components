@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import SliderButton from '../src/components/slider-button/SliderButton';
+import React from 'react';
 
 export default {
     title: 'Core/SliderButton',

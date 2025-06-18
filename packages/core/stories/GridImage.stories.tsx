@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import GridImage from '../src/components/grid-image/GridImage';
+import React from 'react';
 
 export default {
     title: 'Core/GridImage',

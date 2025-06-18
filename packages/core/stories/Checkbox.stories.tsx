@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Checkbox from '../src/components/checkbox/Checkbox';
+import React from 'react';
 
 export default {
     title: 'Core/Checkbox',

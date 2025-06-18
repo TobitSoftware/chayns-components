@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import NumberInput from '../src/components/number-input/NumberInput';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export default {
     title: 'Core/NumberInput',

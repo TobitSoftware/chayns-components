@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import FilterButtons from '../src/components/filter-buttons/FilterButtons';
 import { FilterButtonSize } from '../src/types/filterButtons';
+import React from 'react';
 
 export default {
     title: 'Core/FilterButtons',

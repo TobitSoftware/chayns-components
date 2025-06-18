@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { DropdownDirection } from '../src/types/dropdown';
 import ComboBox, { IComboBoxItem } from '../src/components/combobox/ComboBox';
 import Icon from '../src/components/icon/Icon';
@@ -104,8 +104,8 @@ const WithInputTemplate: StoryFn<typeof ComboBox> = (args) => {
         setValue((event.target as HTMLInputElement).value);
     };
 
-    const handleSelect = (item: IComboBoxItem) => {
-        setValue(item.text);
+    const handleSelect = (item?: IComboBoxItem) => {
+        setValue(item?.text ?? '');
     };
 
     return (

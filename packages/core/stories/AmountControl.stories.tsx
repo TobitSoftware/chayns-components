@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import AmountControl from '../src/components/amount-control/AmountControl';
 import Button from '../src/components/button/Button';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export default {
     title: 'Core/AmountControl',

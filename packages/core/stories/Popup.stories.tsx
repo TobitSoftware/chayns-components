@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Button from '../src/components/button/Button';
 import Popup from '../src/components/popup/Popup';
+import React from 'react';
 
 export default {
     title: 'Core/Popup',

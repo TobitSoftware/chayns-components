@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import EmojiPickerPopup from '../src/components/emoji-picker-popup/EmojiPickerPopup';
+import React from 'react';
 
 export default {
     title: 'EmojiInput/EmojiPickerPopup',

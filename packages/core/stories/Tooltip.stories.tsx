@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { Checkbox, Input } from '../src';
 import Tooltip from '../src/components/tooltip/Tooltip';
+import React from 'react';
 
 export default {
     title: 'Core/Tooltip',

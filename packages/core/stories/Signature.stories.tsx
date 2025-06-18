@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { SignatureRef } from '../lib/types';
 import { Button } from '../src';
 import Signature from '../src/components/signature/Signature';

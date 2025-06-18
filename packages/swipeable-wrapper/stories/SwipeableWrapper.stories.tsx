@@ -1,5 +1,6 @@
 import { Icon, ListItem } from '@chayns-components/core';
 import { Meta, StoryFn } from '@storybook/react';
+import React from 'react';
 import SwipeableWrapper from '../src/components/swipeable-wrapper/SwipeableWrapper';
 
 export default {
