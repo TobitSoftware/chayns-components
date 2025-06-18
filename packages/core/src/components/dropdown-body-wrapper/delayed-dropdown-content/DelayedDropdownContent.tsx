@@ -8,10 +8,25 @@ import {
 import { AnimatePresence } from 'motion/react';
 
 export type DelayedDropdownContentProps = {
+    /**
+     * The content to be rendered inside the dropdown.
+     */
     children: ReactNode;
-    shouldShowContent: boolean;
-    onMeasure?: (measurements: DropdownMeasurements) => void;
+    /**
+     * The absolute coordinates used to position the dropdown.
+     */
     coordinates: DropdownCoordinates;
+    /**
+     * Callback that returns the dimensions of the dropdown after measuring.
+     */
+    onMeasure?: (measurements: DropdownMeasurements) => void;
+    /**
+     * Whether the dropdown should be rendered and animated in.
+     */
+    shouldShowContent: boolean;
+    /**
+     * CSS transform data (e.g. translate offsets) to apply for positioning.
+     */
     transform: DropdownTransform;
 };
 
@@ -23,7 +38,6 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
     transform,
 }) => {
     const [hasMeasured, setHasMeasured] = useState(false);
-    const [isMounted, setIsMounted] = useState(false);
 
     const ref = useRef<HTMLDivElement>(null);
     const initialRender = useRef(true);
@@ -49,18 +63,6 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
             }
         }
     }, [onMeasure]);
-
-    useEffect(() => {
-        if (shouldShowContent) {
-            setIsMounted(true);
-
-            return () => {};
-        }
-
-        const timeout = setTimeout(() => setIsMounted(false), 200);
-
-        return () => clearTimeout(timeout);
-    }, [shouldShowContent]);
 
     useEffect(() => {
         if (!shouldShowContent) return () => {};
