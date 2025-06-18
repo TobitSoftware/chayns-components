@@ -94,6 +94,12 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         setInternalSearchValue(searchValue);
     }, [searchValue]);
 
+    useEffect(() => {
+        if (typeof onSearchChange === 'function' && !isOpen) {
+            setIsSearchActive(false);
+        }
+    }, [isOpen, onSearchChange]);
+
     const handleOnSearchChance = (event: ChangeEvent<HTMLInputElement>) => {
         setInternalSearchValue(event.target.value);
         if (typeof onSearchChange === 'function') {
