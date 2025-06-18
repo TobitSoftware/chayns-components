@@ -1,10 +1,9 @@
-import { motion } from 'motion/react';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import { BrowserName } from '../../types/chayns';
-import { ComboBoxDirection } from '../../types/comboBox';
 import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ComboBoxProps } from './ComboBox';
+import { DropdownDirection } from '../../types/dropdown';
 
 type StyledComboBoxProps = WithTheme<{
     $minWidth?: number;
@@ -44,7 +43,7 @@ export const StyledComboBox = styled.div<StyledComboBoxProps>`
 type StyledComboBoxHeaderProps = WithTheme<{
     $isTouch: boolean;
     $isOpen: boolean;
-    $direction: ComboBoxDirection;
+    $direction: DropdownDirection;
     $isDisabled?: boolean;
     $shouldChangeColor: boolean;
     $shouldShowBigImage: ComboBoxProps['shouldShowBigImage'];
@@ -69,9 +68,9 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     ${({ $isOpen, $direction }) => {
         if ($isOpen) {
             return [
-                ComboBoxDirection.BOTTOM,
-                ComboBoxDirection.BOTTOM_LEFT,
-                ComboBoxDirection.BOTTOM_RIGHT,
+                DropdownDirection.BOTTOM,
+                DropdownDirection.BOTTOM_LEFT,
+                DropdownDirection.BOTTOM_RIGHT,
             ].includes($direction)
                 ? css`
                       border-top-left-radius: 3px;
@@ -180,84 +179,19 @@ export const StyledComboBoxIconWrapper = styled.div<StyledComboBoxIconWrapperPro
 `;
 
 type StyledComboBoxBodyProps = WithTheme<{
-    $overflowY: CSSProperties['overflowY'];
-    $maxHeight: CSSProperties['maxHeight'];
-    $translateX: string;
-    $translateY: string;
-    $direction: ComboBoxDirection;
-    $browser: BrowserName;
-    $minWidth: number;
     $shouldUseCurrentItemWidth: boolean;
 }>;
 
-export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyProps>`
-    background: ${({ theme }: StyledComboBoxBodyProps) => theme['000']};
+export const StyledComboBoxBody = styled.div<StyledComboBoxBodyProps>`
     display: flex;
-    position: absolute;
-    z-index: 4;
     flex-direction: column;
-    border: 1px solid rgba(160, 160, 160, 0.3);
     cursor: pointer;
-    max-height: ${({ $maxHeight }) => $maxHeight};
-    overflow-y: ${({ $overflowY }) => $overflowY};
-    overflow-x: hidden;
-    transform: ${({ $translateX, $translateY }) => `translate(${$translateX}, ${$translateY})`};
-    min-width: ${({ $minWidth }) => $minWidth}px;
 
     ${({ $minWidth, $overflowY, $shouldUseCurrentItemWidth }) =>
         !$shouldUseCurrentItemWidth &&
         css`
             max-width: ${$minWidth - ($overflowY === 'scroll' ? 5 : 0)}px;
         `}
-
-    ${({ $direction }) => {
-        if (
-            [
-                ComboBoxDirection.BOTTOM,
-                ComboBoxDirection.BOTTOM_LEFT,
-                ComboBoxDirection.BOTTOM_RIGHT,
-            ].includes($direction)
-        ) {
-            return css`
-                border-bottom-left-radius: 3px;
-                border-bottom-right-radius: 3px;
-                box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2);
-            `;
-        }
-
-        return css`
-            border-top-left-radius: 3px;
-            border-top-right-radius: 3px;
-            box-shadow: 0 -3px 10px 0 rgba(0, 0, 0, 0.2);
-        `;
-    }}
-
-    // Styles for custom scrollbar
-    ${({ $browser, theme }: StyledComboBoxBodyProps) =>
-        $browser === 'firefox'
-            ? css`
-                  scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
-                  scrollbar-width: thin;
-              `
-            : css`
-                  &::-webkit-scrollbar {
-                      width: 5px;
-                  }
-
-                  &::-webkit-scrollbar-track {
-                      background-color: transparent;
-                  }
-
-                  &::-webkit-scrollbar-button {
-                      background-color: transparent;
-                      height: 5px;
-                  }
-
-                  &::-webkit-scrollbar-thumb {
-                      background-color: rgba(${theme['text-rgb']}, 0.15);
-                      border-radius: 20px;
-                  }
-              `}
 `;
 
 type StyledComboBoxTopicProps = WithTheme<unknown>;

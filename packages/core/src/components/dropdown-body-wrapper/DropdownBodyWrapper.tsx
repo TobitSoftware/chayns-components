@@ -1,21 +1,24 @@
 import React, {
+    type CSSProperties,
     FC,
     ReactNode,
     ReactPortal,
     useCallback,
     useEffect,
-    useMemo,
     useRef,
     useState,
 } from 'react';
 import {
     StyledDropdownBodyWrapper,
-    StyledMotionDropdownBodyWrapperContent,
+    StyledDropdownBodyWrapperContent,
 } from './DropdownBodyWrapper.styles';
-import { useContainer } from '../../hooks/container';
 import { createPortal } from 'react-dom';
 import { AnimatePresence } from 'motion/react';
-import { DropdownDirection, DropdownCoordinates } from '../../types/dropdown';
+import { DropdownDirection } from '../../types/dropdown';
+import { BrowserName } from '../../types/chayns';
+import { useDevice } from 'chayns-api';
+import DelayedDropdownContent from './delayed-dropdown-content/DelayedDropdownContent';
+import { useDropdown, useDropdownListener } from '../../hooks/dropdown';
 
 interface DropdownBodyWrapperProps {
     /**
@@ -63,7 +66,7 @@ interface DropdownBodyWrapperProps {
 const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     direction = DropdownDirection.BOTTOM_RIGHT,
     children,
-    container: containerProp,
+    container,
     shouldShowDropdown,
     anchorElement,
     contentHeight = 0,
@@ -72,92 +75,42 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     minBodyWidth,
     bodyWidth,
 }) => {
-    const [shouldUseTopAlignment, setShouldUseTopAlignment] = useState(false);
-    const [translateX, setTranslateX] = useState<string>('0px');
-    const [translateY, setTranslateY] = useState<string>('0px');
-    const [coordinates, setCoordinates] = useState<DropdownCoordinates>({ x: 0, y: 0 });
+    const [overflowY, setOverflowY] = useState<CSSProperties['overflowY']>('hidden');
     const [portal, setPortal] = useState<ReactPortal>();
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const container = useContainer({ anchorElement, container: containerProp });
+    const { browser } = useDevice();
 
-    const width = useMemo(() => anchorElement.clientWidth, [anchorElement]);
+    const { translateY, translateX, width, coordinates } = useDropdown({
+        direction,
+        minBodyWidth,
+        bodyWidth,
+        contentHeight,
+        container,
+        anchorElement,
+    });
 
-    useEffect(() => {
-        if (container) {
-            const {
-                left: anchorLeft,
-                top: anchorTop,
-                height: anchorHeight,
-            } = anchorElement.getBoundingClientRect();
-
-            const { left, top, height } = container.getBoundingClientRect();
-
-            const x = anchorLeft - left + container.scrollLeft;
-            const y = anchorTop - top + container.scrollTop;
-
-            let useTopAlignment = [
-                DropdownDirection.TOP,
-                DropdownDirection.TOP_LEFT,
-                DropdownDirection.TOP_RIGHT,
-            ].includes(direction);
-
-            const hasBottomAlignment = [
-                DropdownDirection.BOTTOM,
-                DropdownDirection.BOTTOM_LEFT,
-                DropdownDirection.BOTTOM_RIGHT,
-            ].includes(direction);
-
-            if (!hasBottomAlignment && y + anchorHeight + contentHeight > height) {
-                useTopAlignment = true;
-
-                setShouldUseTopAlignment(true);
-            } else {
-                setShouldUseTopAlignment(false);
-            }
-
-            setCoordinates({ x, y: useTopAlignment ? y : y + anchorHeight });
-        }
-    }, [direction, anchorElement, container, contentHeight]);
-
-    useEffect(() => {
-        if (
-            [
-                DropdownDirection.BOTTOM_LEFT,
-                DropdownDirection.TOP_LEFT,
-                DropdownDirection.LEFT,
-            ].includes(direction) &&
-            typeof bodyWidth === 'number' &&
-            typeof minBodyWidth === 'number'
-        ) {
-            const difference = minBodyWidth - bodyWidth;
-
-            setTranslateX(`${difference}px`);
-        } else {
-            setTranslateX('0px');
-        }
-    }, [bodyWidth, direction, minBodyWidth]);
-
-    useEffect(() => {
-        const useTopAlignment =
-            shouldUseTopAlignment ||
-            [
-                DropdownDirection.TOP,
-                DropdownDirection.TOP_LEFT,
-                DropdownDirection.TOP_RIGHT,
-            ].includes(direction);
-
-        if (useTopAlignment) {
-            setTranslateY('-100%');
-        } else {
-            setTranslateY('0px');
-        }
-    }, [direction, shouldUseTopAlignment]);
+    // useEffect(() => {
+    //     const currentContent = ref.current;
+    //
+    //     console.log("TEST", currentContent?.scrollHeight);
+    //
+    //     if (currentContent) {
+    //         const scrollHeight = currentContent.scrollHeight ?? 0;
+    //
+    //         const maxHeightInPixels = getMaxHeightInPixels(
+    //             maxHeight,
+    //             anchorElement,
+    //         );
+    //
+    //         setOverflowY(scrollHeight > maxHeightInPixels ? 'scroll' : 'hidden');
+    //     }
+    // }, [anchorElement, children, maxHeight]);
 
     const handleClose = useCallback(() => {
         if (typeof onClose === 'function') {
-            onClose();
+            // onClose();
         }
     }, [onClose]);
 
@@ -180,15 +133,15 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     /**
      * This hook listens for clicks
      */
-    useEffect(() => {
-        document.addEventListener('click', handleOutsideClick);
-        window.addEventListener('blur', () => handleClose());
+    useDropdownListener({
+        onOutsideClick: handleOutsideClick,
+        onClose: handleClose,
+    });
 
-        return () => {
-            document.removeEventListener('click', handleOutsideClick);
-            window.addEventListener('blur', () => handleClose());
-        };
-    }, [handleOutsideClick, handleClose]);
+    const handleMeasure = (rect: DOMRect) => {
+        //ToDo set overflowY
+        console.log('TEST', rect);
+    };
 
     useEffect(() => {
         if (!container) return;
@@ -196,26 +149,25 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
         setPortal(() =>
             createPortal(
                 <AnimatePresence initial={false}>
-                    {shouldShowDropdown && (
-                        <StyledMotionDropdownBodyWrapperContent
+                    <DelayedDropdownContent
+                        shouldShowContent={shouldShowDropdown}
+                        onMeasure={handleMeasure}
+                        coordinates={coordinates}
+                    >
+                        <StyledDropdownBodyWrapperContent
                             $width={width}
-                            $coordinates={coordinates}
+                            $minWidth={minBodyWidth ?? 0}
+                            $browser={browser?.name as BrowserName}
+                            $overflowY={overflowY}
                             $maxHeight={maxHeight}
                             $translateX={translateX}
                             $translateY={translateY}
                             $direction={direction}
                             ref={ref}
-                            initial={{ height: 0, opacity: 0 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'fit-content', opacity: 1 }}
-                            transition={{
-                                duration: 0.2,
-                                type: 'tween',
-                            }}
                         >
                             {children}
-                        </StyledMotionDropdownBodyWrapperContent>
-                    )}
+                        </StyledDropdownBodyWrapperContent>
+                    </DelayedDropdownContent>
                 </AnimatePresence>,
                 container,
             ),
@@ -230,6 +182,9 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
         translateX,
         translateY,
         width,
+        minBodyWidth,
+        browser?.name,
+        overflowY,
     ]);
 
     return <StyledDropdownBodyWrapper>{portal}</StyledDropdownBodyWrapper>;

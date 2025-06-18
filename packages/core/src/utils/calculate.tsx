@@ -121,7 +121,7 @@ export const getHeightOfSingleTextLine = () => {
 
 export const getMaxHeightInPixels = (
     maxHeight: CSSProperties['maxHeight'],
-    rootElement: HTMLElement,
+    rootElement: Element,
 ): number => {
     const tempElement = document.createElement('div');
 
