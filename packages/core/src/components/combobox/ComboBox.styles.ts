@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import { BrowserName } from '../../types/chayns';
 import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
@@ -180,6 +179,9 @@ export const StyledComboBoxIconWrapper = styled.div<StyledComboBoxIconWrapperPro
 
 type StyledComboBoxBodyProps = WithTheme<{
     $shouldUseCurrentItemWidth: boolean;
+    $browser: BrowserName;
+    $maxHeight: number;
+    $minWidth: number;
 }>;
 
 export const StyledComboBoxBody = styled.div<StyledComboBoxBodyProps>`
@@ -187,11 +189,45 @@ export const StyledComboBoxBody = styled.div<StyledComboBoxBodyProps>`
     flex-direction: column;
     cursor: pointer;
 
-    ${({ $minWidth, $overflowY, $shouldUseCurrentItemWidth }) =>
-        !$shouldUseCurrentItemWidth &&
-        css`
-            max-width: ${$minWidth - ($overflowY === 'scroll' ? 5 : 0)}px;
-        `}
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    max-height: ${({ $maxHeight }) => $maxHeight}px;
+
+    // Styles for custom scrollbar
+    ${({ $browser, theme }: StyledComboBoxBodyProps) =>
+        $browser === 'firefox'
+            ? css`
+                  scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
+                  scrollbar-width: thin;
+              `
+            : css`
+                  &::-webkit-scrollbar {
+                      width: 10px;
+                      height: 10px;
+                  }
+
+                  &::-webkit-scrollbar-track {
+                      background-color: transparent;
+                  }
+
+                  &::-webkit-scrollbar-button {
+                      background-color: transparent;
+                      height: 5px;
+                      width: 5px;
+                  }
+
+                  &::-webkit-scrollbar-thumb {
+                      background-color: rgba(${theme['text-rgb']}, 0.15);
+                      border-radius: 20px;
+                      background-clip: padding-box;
+                      border: solid 3px transparent;
+                  }
+
+                  &::-webkit-scrollbar-corner {
+                      background-color: transparent;
+                  }
+              `}
 `;
 
 type StyledComboBoxTopicProps = WithTheme<unknown>;

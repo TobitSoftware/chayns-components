@@ -1,24 +1,15 @@
-import React, {
-    type CSSProperties,
-    FC,
-    ReactNode,
-    ReactPortal,
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import React, { FC, ReactNode, ReactPortal, useCallback, useEffect, useRef, useState } from 'react';
 import {
     StyledDropdownBodyWrapper,
     StyledDropdownBodyWrapperContent,
 } from './DropdownBodyWrapper.styles';
 import { createPortal } from 'react-dom';
-import { AnimatePresence } from 'motion/react';
 import { DropdownDirection } from '../../types/dropdown';
-import { BrowserName } from '../../types/chayns';
-import { useDevice } from 'chayns-api';
-import DelayedDropdownContent from './delayed-dropdown-content/DelayedDropdownContent';
+import DelayedDropdownContent, {
+    DelayedDropdownContentProps,
+} from './delayed-dropdown-content/DelayedDropdownContent';
 import { useDropdown, useDropdownListener } from '../../hooks/dropdown';
+import { useContainer } from '../../hooks/container';
 
 interface DropdownBodyWrapperProps {
     /**
@@ -58,6 +49,10 @@ interface DropdownBodyWrapperProps {
      */
     onClose?: VoidFunction;
     /**
+     * Function to be executed when the content is measured.
+     */
+    onMeasure?: DelayedDropdownContentProps['onMeasure'];
+    /**
      * Whether the dropdown should be visible.
      */
     shouldShowDropdown: boolean;
@@ -66,47 +61,29 @@ interface DropdownBodyWrapperProps {
 const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     direction = DropdownDirection.BOTTOM_RIGHT,
     children,
-    container,
+    container: containerProp,
     shouldShowDropdown,
     anchorElement,
     contentHeight = 0,
     maxHeight = 300,
     onClose,
-    minBodyWidth,
+    onMeasure,
+    minBodyWidth = 0,
     bodyWidth,
 }) => {
-    const [overflowY, setOverflowY] = useState<CSSProperties['overflowY']>('hidden');
     const [portal, setPortal] = useState<ReactPortal>();
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const { browser } = useDevice();
+    const container = useContainer({ anchorElement, container: containerProp });
 
-    const { translateY, translateX, width, coordinates } = useDropdown({
+    const { transform, width, coordinates } = useDropdown({
         direction,
-        minBodyWidth,
         bodyWidth,
         contentHeight,
         container,
         anchorElement,
     });
-
-    // useEffect(() => {
-    //     const currentContent = ref.current;
-    //
-    //     console.log("TEST", currentContent?.scrollHeight);
-    //
-    //     if (currentContent) {
-    //         const scrollHeight = currentContent.scrollHeight ?? 0;
-    //
-    //         const maxHeightInPixels = getMaxHeightInPixels(
-    //             maxHeight,
-    //             anchorElement,
-    //         );
-    //
-    //         setOverflowY(scrollHeight > maxHeightInPixels ? 'scroll' : 'hidden');
-    //     }
-    // }, [anchorElement, children, maxHeight]);
 
     const handleClose = useCallback(() => {
         if (typeof onClose === 'function') {
@@ -138,37 +115,26 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
         onClose: handleClose,
     });
 
-    const handleMeasure = (rect: DOMRect) => {
-        //ToDo set overflowY
-        console.log('TEST', rect);
-    };
-
     useEffect(() => {
         if (!container) return;
 
         setPortal(() =>
             createPortal(
-                <AnimatePresence initial={false}>
-                    <DelayedDropdownContent
-                        shouldShowContent={shouldShowDropdown}
-                        onMeasure={handleMeasure}
-                        coordinates={coordinates}
+                <DelayedDropdownContent
+                    shouldShowContent={shouldShowDropdown}
+                    coordinates={coordinates}
+                    transform={transform}
+                >
+                    <StyledDropdownBodyWrapperContent
+                        $width={width}
+                        $minWidth={minBodyWidth}
+                        $maxHeight={maxHeight}
+                        $direction={direction}
+                        ref={ref}
                     >
-                        <StyledDropdownBodyWrapperContent
-                            $width={width}
-                            $minWidth={minBodyWidth ?? 0}
-                            $browser={browser?.name as BrowserName}
-                            $overflowY={overflowY}
-                            $maxHeight={maxHeight}
-                            $translateX={translateX}
-                            $translateY={translateY}
-                            $direction={direction}
-                            ref={ref}
-                        >
-                            {children}
-                        </StyledDropdownBodyWrapperContent>
-                    </DelayedDropdownContent>
-                </AnimatePresence>,
+                        {children}
+                    </StyledDropdownBodyWrapperContent>
+                </DelayedDropdownContent>,
                 container,
             ),
         );
@@ -179,12 +145,10 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
         coordinates,
         maxHeight,
         shouldShowDropdown,
-        translateX,
-        translateY,
         width,
         minBodyWidth,
-        browser?.name,
-        overflowY,
+        transform,
+        onMeasure,
     ]);
 
     return <StyledDropdownBodyWrapper>{portal}</StyledDropdownBodyWrapper>;

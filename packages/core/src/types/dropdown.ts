@@ -3,6 +3,11 @@ export interface DropdownCoordinates {
     y: number;
 }
 
+export interface DropdownTransform {
+    x: string;
+    y: string;
+}
+
 export enum DropdownDirection {
     BOTTOM,
     TOP,
@@ -12,4 +17,13 @@ export enum DropdownDirection {
     TOP_RIGHT,
     LEFT,
     RIGHT,
+}
+
+export interface DropdownMeasurements {
+    width: number;
+    height: number;
+    scrollHeight: number;
+    x: number;
+    y: number;
+    element: Element;
 }

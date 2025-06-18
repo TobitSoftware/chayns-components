@@ -1,6 +1,5 @@
-import { type CSSProperties, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { DropdownCoordinates, DropdownDirection } from '../types/dropdown';
-import { useContainer } from './container';
 
 interface UseDropdownListenerOptions {
     onClose: () => void;
@@ -23,13 +22,13 @@ interface UseDropdownAlignmentOptions {
     direction: DropdownDirection;
     shouldUseTopAlignment: boolean;
     bodyWidth?: number;
-    minBodyWidth?: number;
+    anchorElement: Element;
 }
 
 export const useDropdownAlignment = ({
     direction,
     shouldUseTopAlignment,
-    minBodyWidth,
+    anchorElement,
     bodyWidth,
 }: UseDropdownAlignmentOptions) => {
     const [translateX, setTranslateX] = useState<string>('0px');
@@ -42,16 +41,15 @@ export const useDropdownAlignment = ({
                 DropdownDirection.TOP_LEFT,
                 DropdownDirection.LEFT,
             ].includes(direction) &&
-            typeof bodyWidth === 'number' &&
-            typeof minBodyWidth === 'number'
+            typeof bodyWidth === 'number'
         ) {
-            const difference = minBodyWidth - bodyWidth;
+            const difference = anchorElement.clientWidth - bodyWidth;
 
             setTranslateX(`${difference}px`);
         } else {
             setTranslateX('0px');
         }
-    }, [bodyWidth, direction, minBodyWidth]);
+    }, [anchorElement.clientWidth, bodyWidth, direction]);
 
     useEffect(() => {
         const useTopAlignment =
@@ -69,7 +67,7 @@ export const useDropdownAlignment = ({
         }
     }, [direction, shouldUseTopAlignment]);
 
-    return { translateX, translateY };
+    return useMemo(() => ({ x: translateX, y: translateY }), [translateX, translateY]);
 };
 
 interface UseDropdownPositionOptions {
@@ -82,13 +80,11 @@ interface UseDropdownPositionOptions {
 export const useDropdownPosition = ({
     direction,
     anchorElement,
-    container: containerProp,
+    container,
     contentHeight = 0,
 }: UseDropdownPositionOptions) => {
     const [coordinates, setCoordinates] = useState<DropdownCoordinates>({ x: 0, y: 0 });
     const [shouldUseTopAlignment, setShouldUseTopAlignment] = useState(false);
-
-    const container = useContainer({ anchorElement, container: containerProp });
 
     useEffect(() => {
         if (container) {
@@ -127,7 +123,10 @@ export const useDropdownPosition = ({
         }
     }, [direction, anchorElement, container, contentHeight]);
 
-    return { shouldUseTopAlignment, coordinates };
+    return useMemo(
+        () => ({ shouldUseTopAlignment, coordinates }),
+        [coordinates, shouldUseTopAlignment],
+    );
 };
 
 interface UseDropdownOptions {
@@ -135,7 +134,6 @@ interface UseDropdownOptions {
     anchorElement: Element;
     direction: DropdownDirection;
     bodyWidth?: number;
-    minBodyWidth?: number;
     contentHeight?: number;
 }
 
@@ -144,7 +142,6 @@ export const useDropdown = ({
     container,
     contentHeight,
     bodyWidth,
-    minBodyWidth,
     direction,
 }: UseDropdownOptions) => {
     const { shouldUseTopAlignment, coordinates } = useDropdownPosition({
@@ -153,14 +150,14 @@ export const useDropdown = ({
         anchorElement,
         direction,
     });
-    const { translateX, translateY } = useDropdownAlignment({
+    const transform = useDropdownAlignment({
         shouldUseTopAlignment,
         bodyWidth,
-        minBodyWidth,
+        anchorElement,
         direction,
     });
 
     const width = useMemo(() => anchorElement.clientWidth, [anchorElement]);
 
-    return { coordinates, translateX, translateY, width };
+    return useMemo(() => ({ coordinates, transform, width }), [coordinates, transform, width]);
 };

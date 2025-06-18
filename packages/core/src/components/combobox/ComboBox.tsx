@@ -4,6 +4,7 @@ import React, {
     type CSSProperties,
     FC,
     FocusEventHandler,
+    Fragment,
     ReactHTML,
     type ReactNode,
     useCallback,
@@ -161,7 +162,6 @@ const ComboBox: FC<ComboBoxProps> = ({
     const [minWidth, setMinWidth] = useState<number | undefined>(undefined);
     const [bodyMinWidth, setBodyMinWidth] = useState(0);
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
-    const [overflowY, setOverflowY] = useState<CSSProperties['overflowY']>('hidden');
 
     const isInputFocused = useRef(false);
 
@@ -172,6 +172,8 @@ const ComboBox: FC<ComboBoxProps> = ({
     const values = useValues();
 
     const isTouch = getIsTouch();
+
+    const { browser } = useDevice();
 
     const areaProvider = useContext(AreaContext);
 
@@ -279,58 +281,58 @@ const ComboBox: FC<ComboBoxProps> = ({
     );
 
     useEffect(() => {
-        const currentContent = contentRef.current;
-
-        if (currentContent) {
-            const scrollHeight = currentContent.scrollHeight ?? 0;
-
-            const maxHeightInPixels = getMaxHeightInPixels(
-                maxHeight,
-                styledComboBoxElementRef.current ?? document.body,
-            );
-
-            setOverflowY(scrollHeight > maxHeightInPixels ? 'scroll' : 'hidden');
-        }
-    }, [isAnimating, maxHeight]);
-
-    useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (!isAnimating) {
-                return;
-            }
+            if (!isAnimating) return;
 
             if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 e.preventDefault();
 
                 const children = contentRef.current?.children;
 
-                if (children && children.length > 0) {
-                    const newIndex =
-                        focusedIndex !== null
-                            ? (focusedIndex + (e.key === 'ArrowUp' ? -1 : 1) + children.length) %
-                              children.length
-                            : 0;
+                if (!children || children.length === 0) return;
 
-                    if (focusedIndex !== null) {
-                        const prevElement = children[focusedIndex] as HTMLDivElement;
+                const stepDirection = e.key === 'ArrowUp' ? -1 : 1;
 
-                        prevElement.tabIndex = -1;
-                    }
+                let newIndex = focusedIndex ?? -1;
 
-                    setFocusedIndex(newIndex);
+                let attempts = 0;
+
+                do {
+                    newIndex = (newIndex + stepDirection + children.length) % children.length;
 
                     const newElement = children[newIndex] as HTMLDivElement;
 
-                    newElement.tabIndex = 0;
+                    let shouldSkip = false;
 
-                    newElement.focus();
+                    if (
+                        newElement.id.startsWith('combobox-group--') ||
+                        newElement.id.endsWith('--disabled-item')
+                    ) {
+                        shouldSkip = true;
+                    }
+
+                    if (!shouldSkip) break;
+
+                    attempts++;
+                } while (attempts < children.length);
+
+                if (focusedIndex !== null) {
+                    const prevElement = children[focusedIndex] as HTMLDivElement;
+
+                    prevElement.tabIndex = -1;
                 }
+
+                setFocusedIndex(newIndex);
+
+                const focusedElement = children[newIndex] as HTMLDivElement;
+
+                focusedElement.tabIndex = 0;
+
+                focusedElement.focus();
             } else if (e.key === 'Enter' && focusedIndex !== null) {
                 const element = contentRef.current?.children[focusedIndex];
 
-                if (!element) {
-                    return;
-                }
+                if (!element) return;
 
                 const { id } = element;
 
@@ -340,22 +342,19 @@ const ComboBox: FC<ComboBoxProps> = ({
                     newSelectedItem = list.list.find(
                         ({ value }) => String(value) === id.replace('combobox-item__', ''),
                     );
+
                     return !!newSelectedItem;
                 });
 
-                if (!newSelectedItem) {
-                    return;
+                if (newSelectedItem) {
+                    handleSetSelectedItem(newSelectedItem);
                 }
-
-                handleSetSelectedItem(newSelectedItem);
             }
         };
 
         document.addEventListener('keydown', handleKeyDown);
 
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-        };
+        return () => document.removeEventListener('keydown', handleKeyDown);
     }, [focusedIndex, handleSetSelectedItem, isAnimating, lists]);
 
     /**
@@ -514,9 +513,11 @@ const ComboBox: FC<ComboBoxProps> = ({
     const comboBoxGroups = useMemo(
         () =>
             lists.map((list) => (
-                <div key={list.groupName ?? 'default-group'}>
+                <Fragment key={list.groupName ?? 'default-group'}>
                     {list.groupName && lists.length > 1 && (
-                        <StyledComboBoxTopic>{list.groupName}</StyledComboBoxTopic>
+                        <StyledComboBoxTopic id={`combobox-group--${list.groupName}`}>
+                            {list.groupName}
+                        </StyledComboBoxTopic>
                     )}
                     {list.list.map((item) => (
                         // ToDo: Cleanup this - item should be given as a prop to avoid full spreading
@@ -539,7 +540,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                             textStyles={item.textStyles}
                         />
                     ))}
-                </div>
+                </Fragment>
             )),
         [handleSetSelectedItem, lists, selectedItem, shouldShowBigImage, shouldShowRoundImage],
     );
@@ -622,8 +623,11 @@ const ComboBox: FC<ComboBoxProps> = ({
                     >
                         <StyledComboBoxBody
                             $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
-                            tabIndex={0}
+                            $maxHeight={maxHeight}
+                            $minWidth={bodyWidth ?? bodyMinWidth}
+                            $browser={browser?.name as BrowserName}
                             ref={contentRef}
+                            tabIndex={0}
                         >
                             {comboBoxGroups}
                         </StyledComboBoxBody>
@@ -656,12 +660,13 @@ const ComboBox: FC<ComboBoxProps> = ({
             shouldShowClearIcon,
             handleClear,
             shouldDisableActions,
+            bodyWidth,
             contentHeight,
             handleClose,
             container,
-            bodyWidth,
             bodyMinWidth,
             maxHeight,
+            browser?.name,
             comboBoxGroups,
         ],
     );

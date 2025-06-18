@@ -27,7 +27,7 @@ export const useContainer = ({
     container,
     anchors = DEFAULT_CONTAINER_ANCHORS,
 }: UseContainerProps) => {
-    const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
+    const [newContainer, setNewContainer] = useState<Element | undefined>(container ?? undefined);
 
     // Get the closest container if none is set
     useEffect(() => {
@@ -40,7 +40,7 @@ export const useContainer = ({
         if (!container) {
             const element = el.closest(anchors?.join(', '));
 
-            setNewContainer(element);
+            setNewContainer(element ?? undefined);
         }
     }, [anchors, container, anchorElement, ref]);
 
