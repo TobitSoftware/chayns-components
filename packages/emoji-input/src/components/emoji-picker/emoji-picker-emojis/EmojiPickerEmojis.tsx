@@ -1,4 +1,4 @@
-import { BrowserName } from '@chayns-components/core';
+import { BrowserName, useCombinedRefs, useIsMeasuredClone } from '@chayns-components/core';
 import { getDevice } from 'chayns-api';
 import emojiLib from 'emojilib';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -32,8 +32,12 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
     const [shouldShowSkinTonePopup, setShouldShowSkinTonePopup] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState<number>(0);
 
+    const [shouldPreventListener, ref] = useIsMeasuredClone();
+
     const emojiRef = useRef<HTMLDivElement>(null);
     const shouldPreventEmojiControlsRef = useRef(false);
+
+    const combinedRef = useCombinedRefs(emojiRef, ref);
 
     const { browser } = getDevice();
 
@@ -88,6 +92,10 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
+            if (shouldPreventListener) {
+                return;
+            }
+
             if (
                 !shouldPreventEmojiControlsRef.current &&
                 (event.key === 'ArrowUp' ||
@@ -170,7 +178,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [focusedIndex, handleSelect]);
+    }, [focusedIndex, handleSelect, shouldPreventListener]);
 
     const handleRightClick = useCallback((index: number) => {
         setFocusedIndex(index);
@@ -277,7 +285,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
             $browser={browser?.name as BrowserName}
             $shouldPreventScroll={shouldPreventScroll}
             $shouldShowNoContentInfo={shouldShowNoContentInfo}
-            ref={emojiRef}
+            ref={combinedRef}
         >
             {emojis}
             {shouldShowNoContentInfo && (

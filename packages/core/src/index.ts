@@ -26,6 +26,8 @@ export type {
 } from './components/color-scheme-provider/ColorSchemeProvider';
 export { useContainer, ContainerAnchor } from './hooks/container';
 export type { DropdownDirection, DropdownCoordinates } from './types/dropdown';
+export { useIsMeasuredClone } from './hooks/element';
+export { useCombinedRefs } from './hooks/ref';
 export {
     default as FileList,
     type IFileItem as FileListItem,
@@ -97,7 +99,7 @@ export { default as TextArea } from './components/text-area/TextArea';
 export { default as Tooltip } from './components/tooltip/Tooltip';
 export { default as Truncation } from './components/truncation/Truncation';
 export { MentionFinderPopupAlignment } from './constants/mentionFinder';
-export { useElementSize } from './hooks/useElementSize';
+export { useElementSize } from './hooks/element';
 export type { BrowserName } from './types/chayns';
 export { ContentCardType } from './types/contentCard';
 export { ContextMenuAlignment } from './types/contextMenu';

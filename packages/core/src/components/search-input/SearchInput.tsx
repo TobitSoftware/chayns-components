@@ -20,7 +20,7 @@ import {
 } from './SearchInput.styles';
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
-import { useElementSize } from '../../hooks/useElementSize';
+import { useElementSize } from '../../hooks/element';
 
 export type SearchInputProps = {
     /**

@@ -17,6 +17,7 @@ import {
     rgbToHsv,
 } from '../../../utils/color';
 import { ColorPickerContext } from '../../ColorPickerProvider';
+import { useIsMeasuredClone } from '@chayns-components/core';
 
 const ColorArea = () => {
     const {
@@ -39,6 +40,8 @@ const ColorArea = () => {
     const canDrag = useRef(false);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const pseudoRef = useRef<HTMLDivElement>(null);
+
+    const [shouldPreventListener, ref] = useIsMeasuredClone<HTMLDivElement>();
 
     const dragControls = useDragControls();
 
@@ -224,6 +227,10 @@ const ColorArea = () => {
 
     const handleMouseMove = useCallback(
         (event: MouseEvent) => {
+            if (shouldPreventListener) {
+                return;
+            }
+
             if (canDrag.current && pseudoRef.current) {
                 const { left, top } = pseudoRef.current.getBoundingClientRect();
 
@@ -233,7 +240,7 @@ const ColorArea = () => {
                 move(xCords, yCords);
             }
         },
-        [move],
+        [move, shouldPreventListener],
     );
 
     const handleTouchMove = useCallback(
@@ -269,6 +276,10 @@ const ColorArea = () => {
         window.addEventListener('touchmove', handleTouchMove);
 
         const endTouching = () => {
+            if (shouldPreventListener) {
+                return;
+            }
+
             handlePointerUp();
 
             window.removeEventListener('mousemove', handleMouseMove);
@@ -279,11 +290,17 @@ const ColorArea = () => {
 
         window.addEventListener('pointerup', endTouching);
         window.addEventListener('touchend', endTouching);
-    }, [handleMouseMove, handlePointerUp, handleTouchMove, updateShouldGetCoordinates]);
+    }, [
+        handleMouseMove,
+        handlePointerUp,
+        handleTouchMove,
+        shouldPreventListener,
+        updateShouldGetCoordinates,
+    ]);
 
     return useMemo(
         () => (
-            <StyledColorArea>
+            <StyledColorArea ref={ref}>
                 <StyledColorAreaCanvas ref={canvasRef} />
                 <StyledColorAreaPseudo
                     ref={pseudoRef}
@@ -302,7 +319,7 @@ const ColorArea = () => {
                 </StyledColorAreaPseudo>
             </StyledColorArea>
         ),
-        [dragControls, handleClick, handleDrag, handleStartDrag, x, y],
+        [dragControls, handleClick, handleDrag, handleStartDrag, ref, x, y],
     );
 };
 
