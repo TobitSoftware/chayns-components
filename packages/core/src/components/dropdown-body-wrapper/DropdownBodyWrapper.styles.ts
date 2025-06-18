@@ -9,7 +9,6 @@ type StyledDropdownBodyWrapperContentProps = WithTheme<{
     $maxHeight: number;
     $minWidth: number;
     $direction: DropdownDirection;
-    $;
 }>;
 
 export const StyledDropdownBodyWrapperContent = styled.div<StyledDropdownBodyWrapperContentProps>`
