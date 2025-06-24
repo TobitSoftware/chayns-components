@@ -71,6 +71,17 @@ const tokenizer = {
     br() {
         return undefined;
     },
+    // Only recognizes ordered lists, that start with the number 1.
+    // Also recognizes ordered lists, that contain a list item with the number 1, so those lists are
+    list(src: string) {
+        // The regex is copied from marked.js: https://github.com/markedjs/marked/blob/4fc639e053a605b25abf66dccaa70c1bf6562eb7/src/rules.ts#L115
+        if (/^( {0,3}[*+-]|1[.)])/.test(src)) {
+            return false;
+        }
+
+        // Prevents the text from being recognized as a list.
+        return undefined;
+    },
 };
 
 const renderer = {
@@ -93,6 +104,26 @@ const renderer = {
     // If a user types '- [X]' it will be replaced with '- [x]' => the capitalization is lost.
     checkbox({ checked }: Tokens.Checkbox) {
         return checked ? '[x]' : '[ ]';
+    },
+    // Ensures that the numbering of ordered lists is preserved.
+    listitem: function (item: Tokens.ListItem) {
+        if (item.task) {
+            return false;
+        }
+
+        const match = item.raw.trim().match(/^\d{1,9}[.)]/);
+        // Removes the trailing dot or parenthesis from the match.
+        const value = match ? match[0].slice(0, match[0].length - 1) : '';
+        if (value) {
+            let itemBody = '';
+            // @ts-ignore
+            itemBody += this.parser.parse(item.tokens, !!item.loose);
+            // Sets the value attribute of the list item to the number of the list item.
+            return `<li value="${value}">${itemBody}</li>\n`;
+        }
+
+        // Ensures that the default listitem renderer from marked js is used.
+        return false;
     },
 };
 
