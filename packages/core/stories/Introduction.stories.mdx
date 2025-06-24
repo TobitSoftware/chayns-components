@@ -1,3 +1,4 @@
+
 import { Meta } from '@storybook/addon-docs';
 
 <Meta title="Introduction" />
@@ -11,99 +12,97 @@ import { Meta } from '@storybook/addon-docs';
     <img
         src="https://chayns.space/77896-21884/chayns_components.png"
         width="600px"
-        alt="chayns-intercom"
+        alt="chayns-components"
     />
     <p style={{ fontSize: '85%', marginTop: 0, opacity: 0.85 }}>
-        A set of beautiful React components for developing your own applications with chayns.
+        A modern, modular React component library for building powerful chayns® applications.
     </p>
 </div>
 
 ---
 
-<p style={{ fontSize: '1.1rem' }}>
-    This is the Storybook for the new version<sup>1</sup> of the chayns-components. You can navigate
-    through the components using the left-hand side navigation to get an overview. The basic
-    components are categorized under the Core section, while additional components can be found in a
-    separate area.
-</p>
+## Overview
 
-> <sup>1</sup> In the latest version, the components have undergone a complete refactor. They have
-> been transformed into functional components with hooks. Additionally, some optimizations have been
-> applied to the animations, which have been converted to FramerMotion animations. Furthermore, the
-> properties have been updated to enhance their clarity and ease of use.
+Welcome to the Storybook documentation for the **chayns-components**.
+This library has been completely reworked using modern React patterns.
+Use the navigation on the left to explore the available components.
+Core components are listed under the `Core` section, while additional packages are grouped separately.
 
-<h2 style={{ marginTop: '32px' }}>Installation</h2>
+> <sup>1</sup> In the latest version, all components have been rewritten as functional components with React Hooks. Animations now use **Framer Motion**, and the component props have been simplified and improved for better clarity and usability.
 
-<p style={{ fontSize: '1.1rem' }}>
-    We differentiate between the core components and sub-components, which need to be installed
-    separately. The installation of packages can be done using npm or yarn.
-</p>
+---
+
+## Installation
+
+This library is modular. Core and additional packages must be installed separately using either `npm` or `yarn`.
 
 <details>
-    <summary>Installation using NPM</summary>
+    <summary>Install using NPM</summary>
+
     ```bash
-    # core components
+    # Core components
     npm install @chayns-components/core
 
-    # sub-components
+    # Additional components
     npm install @chayns-components/code-highlighter
-    npm install @chayns-components/color-picker # beta
+    npm install @chayns-components/color-picker
     npm install @chayns-components/date
+    npm install @chayns-components/devalue-slider
     npm install @chayns-components/emoji-input
+    npm install @chayns-components/format
     npm install @chayns-components/gallery
     npm install @chayns-components/maps
+    npm install @chayns-components/person-finder
     npm install @chayns-components/swipeable-wrapper
     npm install @chayns-components/textstring
+    npm install @chayns-components/translation
     npm install @chayns-components/typewriter
-    npm install @chayns-components/person-finder # coming soon
     ```
 
 </details>
 
 <details>
-    <summary>Installation using Yarn</summary>
+    <summary>Install using Yarn</summary>
+
     ```bash
-    # core components
+    # Core components
     yarn add @chayns-components/core
 
-    # sub-components
+    # Additional components
     yarn add @chayns-components/code-highlighter
-    yarn add @chayns-components/color-picker # beta
+    yarn add @chayns-components/color-picker
     yarn add @chayns-components/date
+    yarn add @chayns-components/devalue-slider
     yarn add @chayns-components/emoji-input
+    yarn add @chayns-components/format
     yarn add @chayns-components/gallery
     yarn add @chayns-components/maps
+    yarn add @chayns-components/person-finder
     yarn add @chayns-components/swipeable-wrapper
     yarn add @chayns-components/textstring
+    yarn add @chayns-components/translation
     yarn add @chayns-components/typewriter
-    yarn add @chayns-components/person-finder # coming soon
     ```
 
 </details>
 
-> **Information:** The styles for the components are supplied directly by the package in the new
-> version.
+> **Note:** Styles are bundled within each package and are applied automatically.
 
-<h2 style={{ marginTop: '32px' }}>How to use</h2>
+---
 
-<p style={{ fontSize: '1.1rem' }}>
-    Initially, ensure the installation of the core package along with any additional packages you
-    wish to incorporate. Follow the commands outlined in the <b>Installation</b> guide for this
-    purpose. Once all the packages are successfully installed, enclose your top-level elements with
-    the ColorSchemeProvider as demonstrated below:
-</p>
+## Usage
+
+First, make sure to install the core package and any additional components you need. Then, wrap your application using the `ChaynsProvider` and apply the color scheme via `ColorSchemeProvider`:
 
 ```tsx
 import React from 'react';
 import { ChaynsProvider } from 'chayns-api';
 
-const AppWrapper = () => {
-    return (
-        <ChaynsProvider>
-            <App />
-        </ChaynsProvider>
-    );
-};
+const AppWrapper = () => (
+    <ChaynsProvider>
+        <App />
+    </ChaynsProvider>
+);
 
 export default AppWrapper;
 ```
@@ -126,12 +125,11 @@ const App = () => {
 export default App;
 ```
 
-<h2 style={{ marginTop: '32px' }}>Contribution</h2>
+---
 
-<p style={{ fontSize: '1.1rem' }}>
-    Make sure that your node version is 16 or above. To begin, install all the dependencies for the
-    main project and its sub-projects, and then link them. Simply use the provided commands:
-</p>
+## Contribution
+
+Make sure you're using **Node.js v16** or higher. To get started:
 
 ```bash
 # NPM
@@ -141,10 +139,17 @@ npm install
 yarn install
 ```
 
-<p style={{ fontSize: '1.1rem' }}>
-    Next, run one of the given commands to initiate the local version of Storybook and start
-    developing within it:
-</p>
+Build the packages locally:
+
+```bash
+# NPM
+npm run lerna:build
+
+# Yarn
+yarn run lerna:build
+```
+
+Start the local Storybook instance to begin development:
 
 ```bash
 # NPM
@@ -154,5 +159,4 @@ npm run storybook
 yarn run storybook
 ```
 
-> **Information:** The local Storybook can be accessed through port 6006 on your localhost. You can
-> visit it using the following URL: `http://localhost:6006/`
+> **Note:** You can access the local Storybook at [http://localhost:6006](http://localhost:6006)
