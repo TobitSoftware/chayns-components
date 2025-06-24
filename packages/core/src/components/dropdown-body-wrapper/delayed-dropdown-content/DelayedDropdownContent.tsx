@@ -1,11 +1,20 @@
-import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { StyledMotionDelayedDropdownContent } from './DelayedDropdownContent.styles';
 import {
     DropdownCoordinates,
     DropdownMeasurements,
     DropdownTransform,
 } from '../../../types/dropdown';
-import { AnimatePresence } from 'motion/react';
+
+const ANIMATION_DELAY_MS = 200;
+
+enum AnimationType {
+    None,
+    Hidden,
+    Visible,
+    FadeIn,
+    FadeOut,
+}
 
 export type DelayedDropdownContentProps = {
     /**
@@ -37,19 +46,14 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
     coordinates,
     transform,
 }) => {
-    const [hasMeasured, setHasMeasured] = useState(false);
+    const [animationState, setAnimationState] = useState<AnimationType>(AnimationType.None);
 
     const ref = useRef<HTMLDivElement>(null);
-    const initialRender = useRef(true);
-
-    const shouldHideContent = useMemo(() => initialRender.current && !hasMeasured, [hasMeasured]);
 
     const measureElement = useCallback(() => {
         if (ref.current) {
             const { height, width, x, y } = ref.current.getBoundingClientRect();
             const { scrollHeight } = ref.current;
-
-            setHasMeasured(true);
 
             if (typeof onMeasure === 'function') {
                 onMeasure({
@@ -61,6 +65,12 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
                     element: ref.current,
                 });
             }
+
+            setAnimationState(AnimationType.FadeIn);
+
+            window.setTimeout(() => {
+                setAnimationState(AnimationType.Visible);
+            }, ANIMATION_DELAY_MS);
         }
     }, [onMeasure]);
 
@@ -68,9 +78,6 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
         if (!shouldShowContent) return () => {};
 
         const observer = new ResizeObserver(() => {
-            setHasMeasured(false);
-            initialRender.current = false;
-
             measureElement();
         });
 
@@ -81,25 +88,48 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
         return () => observer.disconnect();
     }, [measureElement, shouldShowContent]);
 
+    useEffect(() => {
+        if (shouldShowContent) {
+            setAnimationState(AnimationType.Hidden);
+
+            window.setTimeout(() => {
+                measureElement();
+            }, 1);
+        } else {
+            setAnimationState((prevState) => {
+                if (prevState === AnimationType.None) {
+                    return prevState;
+                }
+
+                return AnimationType.FadeOut;
+            });
+
+            window.setTimeout(() => {
+                setAnimationState(AnimationType.None);
+            }, ANIMATION_DELAY_MS);
+        }
+    }, [measureElement, shouldShowContent]);
+
+    if (animationState === AnimationType.None) {
+        return null;
+    }
+
+    // ToDo improve fade-in animation
     return (
-        <AnimatePresence initial={false}>
-            {shouldShowContent && (
-                <StyledMotionDelayedDropdownContent
-                    ref={ref}
-                    $coordinates={coordinates}
-                    $transform={transform}
-                    $shouldHideContent={shouldHideContent}
-                    initial={{ opacity: 0 }}
-                    animate={{
-                        opacity: shouldHideContent ? 0 : 1,
-                    }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2, type: 'tween' }}
-                >
-                    {children}
-                </StyledMotionDelayedDropdownContent>
-            )}
-        </AnimatePresence>
+        <StyledMotionDelayedDropdownContent
+            ref={ref}
+            $coordinates={coordinates}
+            $transform={transform}
+            $shouldHideContent={animationState === AnimationType.Hidden}
+            animate={{
+                opacity: [AnimationType.FadeIn, AnimationType.Visible].includes(animationState)
+                    ? 1
+                    : 0,
+            }}
+            transition={{ duration: ANIMATION_DELAY_MS / 1000, type: 'tween' }}
+        >
+            {children}
+        </StyledMotionDelayedDropdownContent>
     );
 };
 
