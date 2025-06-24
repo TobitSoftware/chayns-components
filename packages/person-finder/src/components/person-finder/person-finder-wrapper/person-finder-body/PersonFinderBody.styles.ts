@@ -4,6 +4,7 @@ import { BrowserName, WithTheme } from '@chayns-components/core';
 export const StyledPersonFinderBody = styled.div`
     display: flex;
     flex-direction: column;
+    height: 300px;
 `;
 
 type StyledPersonFinderBodyContentProps = WithTheme<{ $browser: BrowserName }>;
