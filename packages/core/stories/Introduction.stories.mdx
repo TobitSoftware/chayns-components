@@ -24,11 +24,9 @@ import { Meta } from '@storybook/addon-docs';
 ## Overview
 
 Welcome to the Storybook documentation for the **chayns-components**.
-This library has been completely reworked using modern React patterns.
+This library has been completely reworked using modern React patterns. Animations now use **Motion**, and the component props have been simplified and improved for better clarity and usability.
 Use the navigation on the left to explore the available components.
 Core components are listed under the `Core` section, while additional packages are grouped separately.
-
-> <sup>1</sup> In the latest version, all components have been rewritten as functional components with React Hooks. Animations now use **Framer Motion**, and the component props have been simplified and improved for better clarity and usability.
 
 ---
 
@@ -92,7 +90,7 @@ This library is modular. Core and additional packages must be installed separate
 
 ## Usage
 
-First, make sure to install the core package and any additional components you need. Then, wrap your application using the `ChaynsProvider` and apply the color scheme via `ColorSchemeProvider`:
+First, make sure to install the core package and any additional components you need. Then, wrap your application using the `ChaynsProvider` and apply the color scheme via `PageProvider` or `ColorSchemeProvider`:
 
 ```tsx
 import React from 'react';
@@ -109,16 +107,16 @@ export default AppWrapper;
 
 ```tsx
 import React from 'react';
-import { ColorSchemeProvider } from '@chayns-components/core';
+import { PageProvider } from '@chayns-components/core';
 import { getSite } from 'chayns-api';
 
 const App = () => {
     const { color, colorMode } = getSite();
 
     return (
-        <ColorSchemeProvider color={color} colorMode={colorMode}>
+        <PageProvider color={color} colorMode={colorMode}>
             <YourComponent />
-        </ColorSchemeProvider>
+        </PageProvider>
     );
 };
 
@@ -129,7 +127,7 @@ export default App;
 
 ## Contribution
 
-Make sure you're using **Node.js v16** or higher. To get started:
+Make sure you're using **Node.js v20** or higher. To get started:
 
 ```bash
 # NPM
