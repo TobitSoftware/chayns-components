@@ -6,7 +6,7 @@ import {
     useDragControls,
     useMotionValue,
     useTransform,
-    type DragHandlers,
+    type DragHandler,
 } from 'motion/react';
 import React, {
     forwardRef,
@@ -182,11 +182,11 @@ const Slider = forwardRef<SliderRef, SliderProps>(
             setTrackRef(node);
         }, []);
 
-        const handleDragStart = useCallback<NonNullable<DragHandlers['onDragStart']>>(() => {
+        const handleDragStart = useCallback<NonNullable<DragHandler>>(() => {
             void containerAnimation.start('dragging');
         }, [containerAnimation]);
 
-        const handleDragEnd = useCallback<NonNullable<DragHandlers['onDragEnd']>>(() => {
+        const handleDragEnd = useCallback<NonNullable<DragHandler>>(() => {
             if (relativeValue.get() > 98) {
                 void handleRedeem();
                 return;
