@@ -80,13 +80,13 @@ PersonFinderContext.displayName = 'PersonFinderContext';
 
 export const usePersonFinder = () => useContext(PersonFinderContext);
 
-interface PersonFinderProviderProps {
+type PersonFinderProviderProps = {
     children: ReactNode;
     friendsPriority: Priority;
     filterTypes: PersonFinderFilterTypes[];
     defaultEntries?: DefaultEntry[];
     excludedEntryIds?: PersonFinderEntry['id'][];
-}
+};
 
 const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     children,

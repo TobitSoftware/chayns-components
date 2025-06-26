@@ -1,11 +1,11 @@
-import React, { FC, ReactNode, useRef, useState } from 'react';
+import React, { FC, ReactNode, useRef } from 'react';
 import { StyledMotionListItemBody } from './ListItemBody.styles';
 
-interface ListItemBodyProps {
+type ListItemBodyProps = {
     children?: ReactNode;
     id: string;
     shouldHideBody: boolean;
-}
+};
 
 const ListItemBody: FC<ListItemBodyProps> = ({ children, id, shouldHideBody }) => {
     const containerRef = useRef<HTMLDivElement | null>(null);

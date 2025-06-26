@@ -384,7 +384,6 @@ AccordionWithSearch.args = {
         </AccordionContent>
     ),
     onSearchChange: () => {},
-    searchIcon: ['fa fa-search'],
     searchPlaceholder: 'Suchen',
     title: 'Lorem ipsum dolor sit amet',
 };

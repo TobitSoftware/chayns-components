@@ -1,4 +1,4 @@
-import React, { CSSProperties, MouseEventHandler, useMemo } from 'react';
+import React, { CSSProperties, FC, MouseEventHandler, useMemo } from 'react';
 import {
     ImageSize,
     StyledCornerImage,
@@ -6,7 +6,7 @@ import {
     StyledGroupImageElement,
 } from './GroupedImage.styles';
 
-interface GroupedImageProps {
+type GroupedImageProps = {
     /**
      * Optional image to display in the bottom right corner of the grouped image.
      */
@@ -35,9 +35,9 @@ interface GroupedImageProps {
      * Whether to show the images in a round shape.
      */
     shouldShowRoundImage?: boolean;
-}
+};
 
-const GroupedImage: React.FC<GroupedImageProps> = ({
+const GroupedImage: FC<GroupedImageProps> = ({
     cornerImage,
     height = '40px',
     imageBackground,

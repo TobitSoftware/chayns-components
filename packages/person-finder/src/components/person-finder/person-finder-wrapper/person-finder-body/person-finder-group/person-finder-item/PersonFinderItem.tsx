@@ -6,11 +6,11 @@ import { useFriends, usePersonFinderItem } from '../../../../../../hooks/personF
 import { usePersonFinder } from '../../../../../PersonFinderProvider';
 import { useTheme } from 'styled-components';
 
-export interface PersonFinderItemProps {
+export type PersonFinderItemProps = {
     entry: PersonEntry | SiteEntry;
     onAdd: (id: string) => void;
     onRemove: (id: string) => void;
-}
+};
 
 const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd, onRemove }) => {
     const { id } = entry;

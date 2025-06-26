@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useAdaptiveTranslation } from '../hooks/useAdaptiveTranslation';
 import { Language } from 'chayns-api';
 
-interface AdaptiveTranslationProps {
+type AdaptiveTranslationProps = {
     /**
      * The Text that should be translated.
      */
@@ -28,7 +28,7 @@ interface AdaptiveTranslationProps {
      * The language to which the text should be translated.
      */
     to?: Exclude<Language, Language.Unknown>;
-}
+};
 
 const AdaptiveTranslation = ({
     children,
