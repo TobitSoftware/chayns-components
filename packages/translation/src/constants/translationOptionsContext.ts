@@ -1,7 +1,7 @@
 import { Language } from 'chayns-api';
-import React from 'react';
+import { createContext } from 'react';
 
-export const TranslationOptionsContext = React.createContext<{
+export const TranslationOptionsContext = createContext<{
     from: Exclude<Language, Language.Unknown>;
     to: Exclude<Language, Language.Unknown>;
 }>({

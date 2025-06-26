@@ -3,15 +3,20 @@ import { Language } from 'chayns-api';
 import { TranslationOptionsContext } from '../constants/translationOptionsContext';
 import translationHandler from '../utils/translationHandler';
 
+interface UseAdaptiveTranslationOptions {
+    /**
+     * The language from which the text should be translated.
+     */
+    from?: Exclude<Language, Language.Unknown>;
+    /**
+     * The language to which the text should be translated.
+     */
+    to?: Exclude<Language, Language.Unknown>;
+}
+
 export const useAdaptiveTranslation = (
     originalText: string,
-    {
-        to,
-        from,
-    }: {
-        to?: Exclude<Language, Language.Unknown>;
-        from?: Exclude<Language, Language.Unknown>;
-    } = {},
+    { to, from }: UseAdaptiveTranslationOptions = {},
 ): { text: string; isLoading: boolean; isFetching: boolean } => {
     const options = useContext(TranslationOptionsContext);
     const toLanguage = to || options.to;

@@ -1,12 +1,21 @@
 import { Language } from 'chayns-api';
-import React, { useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { TranslationOptionsContext } from '../constants/translationOptionsContext';
 
-type TranslationOptionsProviderProps = {
+interface TranslationOptionsProviderProps {
+    /**
+     * The content that should benefit from the options.
+     */
+    children: ReactNode;
+    /**
+     * The language from which the texts should be translated.
+     */
     from: Exclude<Language, Language.Unknown>;
+    /**
+     * The language to which the texts should be translated.
+     */
     to: Exclude<Language, Language.Unknown>;
-    children: React.ReactNode;
-};
+}
 
 export const TranslationOptionsProvider = ({
     from,

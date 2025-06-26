@@ -15,7 +15,7 @@ import React, {
     useState,
 } from 'react';
 import { BrowserName } from '../../types/chayns';
-import { calculateContentWidth, getMaxHeightInPixels } from '../../utils/calculate';
+import { calculateContentWidth } from '../../utils/calculate';
 import { getIsTouch } from '../../utils/environment';
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import Icon from '../icon/Icon';
@@ -62,6 +62,9 @@ export interface IComboBoxItem {
 }
 
 export type ComboBoxProps = {
+    /**
+     * The width of the body.
+     */
     bodyWidth?: number;
     /**
      * The element where the content of the `ComboBox` should be rendered via React Portal.
@@ -94,9 +97,10 @@ export type ComboBoxProps = {
     /**
      * Function to be executed when the optional input lost its focus.
      */
-    onInputBlur?: FocusEventHandler<HTMLInputElement> /**
+    onInputBlur?: FocusEventHandler<HTMLInputElement>;
+    /**
      * Function to be executed when the optional input gets its focus.
-     */;
+     */
     onInputFocus?: FocusEventHandler<HTMLInputElement>;
     /**
      * Function that should be executed when an item is selected. If the function returns false, the item will not be selected.

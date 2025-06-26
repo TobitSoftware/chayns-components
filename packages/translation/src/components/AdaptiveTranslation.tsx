@@ -1,7 +1,34 @@
-﻿import React from 'react';
+﻿import React, { CSSProperties } from 'react';
 import clsx from 'clsx';
 import { useAdaptiveTranslation } from '../hooks/useAdaptiveTranslation';
-import { TranslationProps } from '../types/translation';
+import { Language } from 'chayns-api';
+
+interface AdaptiveTranslationProps {
+    /**
+     * The Text that should be translated.
+     */
+    children: string;
+    /**
+     * The className of the element.
+     */
+    className?: string;
+    /**
+     * The language from which the text should be translated.
+     */
+    from?: Exclude<Language, Language.Unknown>;
+    /**
+     * Optional styles of the HTML element.
+     */
+    style?: CSSProperties;
+    /**
+     * The HTML tag of the children.
+     */
+    tagName?: keyof HTMLElementTagNameMap;
+    /**
+     * The language to which the text should be translated.
+     */
+    to?: Exclude<Language, Language.Unknown>;
+}
 
 const AdaptiveTranslation = ({
     children,
@@ -10,7 +37,7 @@ const AdaptiveTranslation = ({
     tagName: TagName = 'span',
     style,
     className,
-}: TranslationProps) => {
+}: AdaptiveTranslationProps) => {
     const { text, isLoading, isFetching } = useAdaptiveTranslation(children, { from, to });
 
     return (
