@@ -10,48 +10,38 @@ import React, {
 } from 'react';
 import { useElementSize } from '../../../hooks/element';
 import { useUuid } from '../../../hooks/uuid';
-import { BrowserName } from '../../../types/chayns';
 import type { IFilterButtonItem } from '../../../types/filterButtons';
 import { getCurrentGroupName } from '../../../utils/searchBox';
 import FilterButtons from '../../filter-buttons/FilterButtons';
 import {
-    StyledMotionSearchBoxBody,
+    StyledSearchBoxBody,
     StyledSearchBoxBodyContent,
     StyledSearchBoxBodyHead,
     StyledSearchBoxBodyHeadGroupName,
 } from './SearchBoxBody.styles';
+import { useDevice } from 'chayns-api';
+import { BrowserName } from '../../../types/chayns';
 
 export type SearchBoxBodyProps = {
     children: ReactNode;
     filterButtons?: IFilterButtonItem[];
     selectedGroups?: string[];
     height: number;
-    width: number;
-    browser: BrowserName;
     onGroupSelect?: (keys: string[]) => void;
-    coordinates: { x: number; y: number };
     shouldHideFilterButtons?: boolean;
 };
 
 const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
     (
-        {
-            filterButtons,
-            coordinates,
-            selectedGroups,
-            width,
-            browser,
-            height,
-            children,
-            onGroupSelect,
-            shouldHideFilterButtons,
-        },
+        { filterButtons, selectedGroups, height, children, onGroupSelect, shouldHideFilterButtons },
         ref,
     ) => {
         const [hasScrolled, setHasScrolled] = useState(false);
         const [currentGroupName, setCurrentGroupName] = useState('');
 
         const headRef = useRef<HTMLDivElement>(null);
+
+        const { browser } = useDevice();
 
         const headSize = useElementSize(headRef);
 
@@ -94,18 +84,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
 
         return useMemo(
             () => (
-                <StyledMotionSearchBoxBody
-                    ref={ref}
-                    $width={width}
-                    style={{ left: coordinates.x, top: coordinates.y }}
-                    initial={{ height: 0, opacity: 0 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'fit-content', opacity: 1 }}
-                    transition={{
-                        duration: 0.2,
-                        type: 'tween',
-                    }}
-                >
+                <StyledSearchBoxBody ref={ref}>
                     {filterButtons && filterButtons?.length > 1 && (
                         <StyledSearchBoxBodyHead
                             ref={headRef}
@@ -130,19 +109,17 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                         $headHeight={headHeight}
                         key="content"
                         id={`searchbox-content__${uuid}`}
-                        $browser={browser}
+                        $browser={(browser as { name: BrowserName })?.name}
                         tabIndex={0}
                         onScroll={handleScroll}
                     >
                         {children}
                     </StyledSearchBoxBodyContent>
-                </StyledMotionSearchBoxBody>
+                </StyledSearchBoxBody>
             ),
             [
                 browser,
                 children,
-                coordinates.x,
-                coordinates.y,
                 currentGroupName,
                 filterButtons,
                 handleScroll,
@@ -154,7 +131,6 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                 selectedGroups,
                 shouldHideFilterButtons,
                 uuid,
-                width,
             ],
         );
     },

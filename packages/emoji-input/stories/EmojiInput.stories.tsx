@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import Button from '../../core/src/components/button/Button';
 import EmojiInput, { EmojiInputRef } from '../src/components/emoji-input/EmojiInput';
 

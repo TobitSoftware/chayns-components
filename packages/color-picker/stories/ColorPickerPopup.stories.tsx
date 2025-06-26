@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import ColorPickerPopup from '../src/components/color-picker-popup/ColorPickerPopup';
+import React from 'react';
 
 export default {
     title: 'ColorPicker/ColorPickerPopup',

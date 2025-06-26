@@ -1,7 +1,7 @@
 import { CodeHighlighter } from '@chayns-components/code-highlighter';
 import { Input, TextArea } from '@chayns-components/core';
 import { Meta, StoryFn } from '@storybook/react';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CursorType, TypewriterSpeed } from '../src';
 import Typewriter from '../src/components/typewriter/Typewriter';
 

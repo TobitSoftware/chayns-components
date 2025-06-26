@@ -15,28 +15,34 @@ const DEFAULT_CONTAINER_ANCHORS = [
 ];
 
 interface UseContainerProps {
-    ref: MutableRefObject<HTMLDivElement | HTMLLabelElement | HTMLSpanElement | null>;
+    ref?: MutableRefObject<HTMLDivElement | HTMLLabelElement | HTMLSpanElement | null>;
+    anchorElement?: Element;
     container?: Element | null;
     anchors?: ContainerAnchor[];
 }
 
 export const useContainer = ({
     ref,
+    anchorElement,
     container,
     anchors = DEFAULT_CONTAINER_ANCHORS,
 }: UseContainerProps) => {
-    const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
+    const [newContainer, setNewContainer] = useState<Element | undefined>(container ?? undefined);
 
     // Get the closest container if none is set
     useEffect(() => {
-        if (ref.current && !container) {
-            const el = ref.current as HTMLElement;
+        let el = anchorElement as HTMLElement;
 
+        if (ref?.current) {
+            el = ref.current as HTMLElement;
+        }
+
+        if (!container) {
             const element = el.closest(anchors?.join(', '));
 
-            setNewContainer(element);
+            setNewContainer(element ?? undefined);
         }
-    }, [anchors, container, ref]);
+    }, [anchors, container, anchorElement, ref]);
 
     useEffect(() => {
         if (container instanceof Element) {

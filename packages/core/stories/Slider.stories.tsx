@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Slider from '../src/components/slider/Slider';
+import React from 'react';
 
 export default {
     title: 'Core/Slider',

@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import ProgressBar from '../src/components/progress-bar/ProgressBar';
+import React from 'react';
 
 export default {
     title: 'Core/ProgressBar',

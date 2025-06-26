@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import RadioButtonGroup, {
     type RadioButtonGroupRef,
 } from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
@@ -24,11 +24,11 @@ const MultipleRadioButtonsTemplate: StoryFn<typeof RadioButton> = () => {
     const foodRadioButtonGroupRef = useRef<RadioButtonGroupRef>(null);
 
     const handleResetDrinksButtonClick = () => {
-        drinksRadioButtonGroupRef.current.updateSelectedRadioButtonId(undefined);
+        drinksRadioButtonGroupRef.current?.updateSelectedRadioButtonId(undefined);
     };
 
     const handleResetFoodButtonClick = () => {
-        foodRadioButtonGroupRef.current.updateSelectedRadioButtonId(undefined);
+        foodRadioButtonGroupRef.current?.updateSelectedRadioButtonId(undefined);
     };
 
     return (

@@ -13,6 +13,7 @@
         "build:storybook": "storybook build",
         "lerna:version": "lerna version --no-push",
         "lerna:build": "lerna run build",
+        "lerna:clean": "npx lerna clean -y",
         "prepare": "husky install",
         "upgrade:minor": "lerna exec -- ncu -u -t minor",
         "upgrade": "lerna exec -- ncu -u"
@@ -63,6 +64,7 @@
         "eslint-plugin-storybook": "^0.8.0",
         "husky": "^8.0.3",
         "lerna": "8.1.9",
+        "motion": "^12.19.1",
         "organize-imports-cli": "^0.10.0",
         "prettier": "^3.3.3",
         "react": "^18.3.1",

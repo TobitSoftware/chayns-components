@@ -10,7 +10,7 @@ import PersonFinderWrapper, {
     PersonFinderWrapperProps,
     PersonFinderRef,
 } from './person-finder-wrapper/PersonFinderWrapper';
-import { AreaProvider, useContainer } from '@chayns-components/core';
+import { AreaProvider } from '@chayns-components/core';
 
 const DEFAULT_FILTER_TYPES = [PersonFinderFilterTypes.PERSON, PersonFinderFilterTypes.SITE];
 
@@ -49,8 +49,6 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
         const personFinderRef = useRef<HTMLDivElement>(null);
         const innerRef = useRef<PersonFinderRef>(null);
 
-        const newContainer = useContainer({ ref: personFinderRef, container });
-
         useImperativeHandle(ref, () => ({
             clear: () => innerRef.current?.clear(),
         }));
@@ -66,7 +64,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                     <div className="beta-chayns-person-finder" ref={personFinderRef}>
                         <PersonFinderWrapper
                             ref={innerRef}
-                            container={newContainer}
+                            container={container}
                             filterTypes={filterTypes}
                             maxEntries={maxEntries}
                             onAdd={onAdd}

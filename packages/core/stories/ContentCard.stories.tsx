@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import ContentCard from '../src/components/content-card/ContentCard';
+import React from 'react';
 
 export default {
     title: 'Core/ContentCard',

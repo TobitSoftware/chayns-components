@@ -59,7 +59,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
     return useMemo(
         () => (
             <StyledComboBoxItem
-                id={`combobox-item__${typeof id === 'number' ? String(id) : id}`}
+                id={`combobox-item__${typeof id === 'number' ? String(id) : id}${isDisabled ? '--disabled-item' : ''}`}
                 onClick={handleItemClick}
                 $isDisabled={isDisabled}
                 $isSelected={isSelected}

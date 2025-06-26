@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import SmallWaitCursor from '../src/components/small-wait-cursor/SmallWaitCursor';
+import React from 'react';
 
 export default {
     title: 'Core/SmallWaitCursor',

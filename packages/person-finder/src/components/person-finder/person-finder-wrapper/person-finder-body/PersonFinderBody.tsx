@@ -1,30 +1,25 @@
 import React, { forwardRef, UIEvent, useMemo, useRef, useState } from 'react';
-import {
-    StyledMotionPersonFinderBody,
-    StyledPersonFinderBodyContent,
-} from './PersonFinderBody.styles';
+import { StyledPersonFinderBody, StyledPersonFinderBodyContent } from './PersonFinderBody.styles';
 import { PersonFinderFilterTypes } from '../../../../types/personFinder';
 import { BrowserName } from '@chayns-components/core';
 import { usePersonFinder } from '../../../PersonFinderProvider';
-import { getDevice } from 'chayns-api';
+import { useDevice } from 'chayns-api';
 import { getGroupName } from '../../../../utils/personFinder';
 import { useClosestElementAbove } from '../../../../hooks/personFinder';
 import PersonFinderGroup from './person-finder-group/PersonFinderGroup';
 import PersonFinderHeader from './person-finder-header/PersonFinderHeader';
 
 export type PersonFinderBodyProps = {
-    coordinates: { x: number; y: number };
     onAdd: (id: string) => void;
     onRemove: (id: string) => void;
-    width: number;
     filterTypes?: PersonFinderFilterTypes[];
 };
 
 const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
-    ({ onAdd, width, filterTypes, onRemove, coordinates }, ref) => {
+    ({ onAdd, filterTypes, onRemove }, ref) => {
         const { activeFilter, data } = usePersonFinder();
 
-        const { browser } = getDevice();
+        const { browser } = useDevice();
 
         const [isScrollTop, setIsScrollTop] = useState(true);
 
@@ -62,11 +57,7 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
         );
 
         return (
-            <StyledMotionPersonFinderBody
-                ref={ref}
-                $width={width}
-                style={{ left: coordinates.x, top: coordinates.y }}
-            >
+            <StyledPersonFinderBody ref={ref}>
                 <PersonFinderHeader
                     filterTypes={filterTypes}
                     isScrollTop={isScrollTop}
@@ -81,7 +72,7 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
                 >
                     {content}
                 </StyledPersonFinderBodyContent>
-            </StyledMotionPersonFinderBody>
+            </StyledPersonFinderBody>
         );
     },
 );

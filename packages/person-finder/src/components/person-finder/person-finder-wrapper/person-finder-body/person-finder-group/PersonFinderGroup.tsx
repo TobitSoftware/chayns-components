@@ -89,8 +89,9 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
             {waitCursor}
             {errorMessage}
             {shouldShowLoadMoreButton && (
-                <StyledPersonFinderGroupButtonWrapper>
+                <StyledPersonFinderGroupButtonWrapper key={`more-button-wrapper--${filterKey}`}>
                     <Button
+                        key={`more-button--${filterKey}`}
                         shouldShowWaitCursor={loadingState === LoadingState.Pending}
                         onClick={handleLoadMore}
                     >

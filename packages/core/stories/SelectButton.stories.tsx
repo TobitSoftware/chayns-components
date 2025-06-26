@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import SelectButton from '../src/components/select-button/SelectButton';
+import React from 'react';
 
 export default {
     title: 'Core/SelectButton',

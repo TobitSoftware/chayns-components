@@ -1,5 +1,3 @@
-import { getDevice } from 'chayns-api';
-import { AnimatePresence } from 'motion/react';
 import React, {
     ChangeEvent,
     ChangeEventHandler,
@@ -9,7 +7,6 @@ import React, {
     forwardRef,
     KeyboardEventHandler,
     ReactElement,
-    ReactPortal,
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -17,15 +14,12 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { createPortal } from 'react-dom';
 import { useTheme } from 'styled-components';
-import { BrowserName } from '../../types/chayns';
 import type { IFilterButtonItem } from '../../types/filterButtons';
 import type { ISearchBoxItem, ISearchBoxItems } from '../../types/searchBox';
 import { calculateContentHeight } from '../../utils/calculate';
 import { searchList } from '../../utils/searchBox';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
-import type { ContextMenuCoordinates } from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
 import Input from '../input/Input';
 import GroupName from './group-name/GroupName';
@@ -38,6 +32,7 @@ import {
     StyledSearchBoxLeftWrapper,
 } from './SearchBox.styles';
 import { useUuid } from '../../hooks/uuid';
+import DropdownBodyWrapper from '../dropdown-body-wrapper/DropdownBodyWrapper';
 
 export type SearchBoxRef = {
     clear: VoidFunction;
@@ -142,20 +137,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const [value, setValue] = useState(
             typeof presetValue === 'string' && presetValue !== '' ? presetValue : '',
         );
-        const [isAnimating, setIsAnimating] = useState(false);
         const [height, setHeight] = useState<number>(0);
-        const [width, setWidth] = useState(0);
         const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
         const [hasMultipleGroups, setHasMultipleGroups] = useState<boolean>(lists.length > 1);
         const [filteredChildrenArray, setFilteredChildrenArray] = useState<Element[]>();
         const [inputToListValue, setInputToListValue] = useState<string>('');
         const [groups, setGroups] = useState<string[]>(['all']);
-        const [portal, setPortal] = useState<ReactPortal>();
-        const [internalCoordinates, setInternalCoordinates] = useState<ContextMenuCoordinates>({
-            x: 0,
-            y: 0,
-        });
-        const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
+        const [shouldShowBody, setShouldShowBody] = useState(false);
 
         const uuid = useUuid();
 
@@ -170,35 +158,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         );
 
         const theme = useTheme() as Theme;
-
-        const { browser } = getDevice();
-
-        useEffect(() => {
-            if (boxRef.current && !container) {
-                const el = boxRef.current as HTMLElement;
-
-                const element = el.closest('.dialog-inner') || el.closest('body');
-
-                setNewContainer(element);
-            }
-        }, [container]);
-
-        useEffect(() => {
-            if (container instanceof Element) {
-                setNewContainer(container);
-            }
-        }, [container]);
-
-        useEffect(() => {
-            if (boxRef.current) {
-                const { x, y } = boxRef.current.getBoundingClientRect();
-
-                setInternalCoordinates({
-                    x,
-                    y,
-                });
-            }
-        }, []);
 
         /**
          * Checks if Lists are smaller then 1
@@ -278,64 +237,16 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         }, [groups, lists, customFilter, shouldAddInputToList, value]);
 
         const handleOpen = useCallback(() => {
-            if (boxRef.current && newContainer) {
-                const {
-                    left: comboBoxLeft,
-                    top: comboBoxTop,
-                    height: bodyHeight,
-                } = boxRef.current.getBoundingClientRect();
-
-                const { left, top } = newContainer.getBoundingClientRect();
-
-                const x = comboBoxLeft - left + newContainer.scrollLeft;
-                const y = comboBoxTop - top + newContainer.scrollTop;
-
-                setInternalCoordinates({
-                    x,
-                    y: y + bodyHeight,
-                });
-
-                setIsAnimating(true);
-            }
-        }, [newContainer]);
+            setShouldShowBody(true);
+        }, []);
 
         const handleClose = useCallback(() => {
-            setIsAnimating(false);
+            setShouldShowBody(false);
         }, []);
 
         const handleFilterButtonsGroupSelect = (keys: string[]) => {
             setGroups(keys.length === 0 ? ['all'] : keys);
         };
-
-        /**
-         * This function closes the list of items
-         */
-        const handleOutsideClick = useCallback(
-            (event: MouseEvent) => {
-                if (
-                    boxRef.current &&
-                    !boxRef.current.contains(event.target as Node) &&
-                    contentRef.current &&
-                    !contentRef.current.contains(event.target as Node)
-                ) {
-                    handleClose();
-                }
-            },
-            [handleClose],
-        );
-
-        /**
-         * This hook listens for clicks
-         */
-        useEffect(() => {
-            document.addEventListener('click', handleOutsideClick);
-            window.addEventListener('blur', () => handleClose());
-
-            return () => {
-                document.removeEventListener('click', handleOutsideClick);
-                window.addEventListener('blur', () => handleClose());
-            };
-        }, [handleOutsideClick, boxRef, handleClose]);
 
         /**
          * This hook calculates the height
@@ -357,23 +268,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
             setHeight(calculateContentHeight(textArray));
         }, [inputToListValue, activeList, placeholder, shouldAddInputToList]);
-
-        /**
-         * This hook calculates the width
-         */
-        useEffect(() => {
-            const input = document.getElementById(`search_box_input${uuid}`);
-
-            const getInputWidth = () => {
-                if (input) {
-                    setWidth(input.offsetWidth);
-                }
-            };
-
-            if (input) {
-                new ResizeObserver(getInputWidth).observe(input);
-            }
-        }, [uuid]);
 
         useEffect(() => {
             if (selectedId) {
@@ -406,8 +300,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         }, [selectedId]);
 
         useEffect(() => {
-            isAnimatingRef.current = isAnimating;
-        }, [isAnimating]);
+            isAnimatingRef.current = shouldShowBody;
+        }, [shouldShowBody]);
 
         useEffect(() => {
             if (matchingListsItems.length !== 0 && !isAnimatingRef.current && hasFocusRef.current) {
@@ -510,12 +404,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         ]);
 
         const handleClick = useCallback(() => {
-            if (isAnimating) {
+            if (shouldShowBody) {
                 handleClose();
             } else {
                 handleOpen();
             }
-        }, [handleClose, handleOpen, isAnimating]);
+        }, [handleClose, handleOpen, shouldShowBody]);
 
         const rightElement = useMemo(() => {
             if (!shouldShowToggleIcon) {
@@ -683,7 +577,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         useEffect(() => {
             const handleKeyDown = (e: KeyboardEvent) => {
-                if (!isAnimating || matchingListsItems.length === 0) {
+                if (!shouldShowBody || matchingListsItems.length === 0) {
                     return;
                 }
 
@@ -766,8 +660,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             filteredChildrenArray,
             focusedIndex,
             handleSelect,
-            isAnimating,
             matchingListsItems.length,
+            shouldShowBody,
         ]);
 
         const handleKeyPress = useCallback((event: KeyboardEvent) => {
@@ -801,56 +695,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             }
         }, [presetValue]);
 
-        useEffect(() => {
-            if (!newContainer) {
-                return;
-            }
-
-            setPortal(() =>
-                createPortal(
-                    <AnimatePresence
-                        initial={false}
-                        key={`search-box-body-animation-wrapper-${uuid}`}
-                    >
-                        {isAnimating &&
-                            matchingListsItems.length !== 0 &&
-                            (value.trim() !== '' || shouldShowContentOnEmptyInput) && (
-                                <SearchBoxBody
-                                    key={`search-box-body-${uuid}`}
-                                    filterButtons={filterButtons}
-                                    selectedGroups={groups}
-                                    width={width}
-                                    coordinates={internalCoordinates}
-                                    browser={browser?.name as BrowserName}
-                                    height={height}
-                                    ref={contentRef}
-                                    onGroupSelect={handleFilterButtonsGroupSelect}
-                                    shouldHideFilterButtons={shouldHideFilterButtons}
-                                >
-                                    {content}
-                                </SearchBoxBody>
-                            )}
-                    </AnimatePresence>,
-                    newContainer,
-                ),
-            );
-        }, [
-            browser?.name,
-            newContainer,
-            content,
-            filterButtons,
-            groups,
-            height,
-            internalCoordinates,
-            isAnimating,
-            width,
-            shouldHideFilterButtons,
-            matchingListsItems.length,
-            value,
-            shouldShowContentOnEmptyInput,
-            uuid,
-        ]);
-
         return useMemo(
             () => (
                 <StyledSearchBox ref={boxRef} key={`search-box-${uuid}`}>
@@ -868,19 +712,52 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             value={value}
                         />
                     </div>
-                    {portal}
+                    {boxRef.current && (
+                        <DropdownBodyWrapper
+                            shouldShowDropdown={
+                                shouldShowBody &&
+                                matchingListsItems.length !== 0 &&
+                                (value.trim() !== '' || shouldShowContentOnEmptyInput)
+                            }
+                            onClose={handleClose}
+                            anchorElement={boxRef.current}
+                            maxHeight={300}
+                            container={container}
+                        >
+                            <SearchBoxBody
+                                key={`search-box-body-${uuid}`}
+                                filterButtons={filterButtons}
+                                selectedGroups={groups}
+                                height={height}
+                                ref={contentRef}
+                                onGroupSelect={handleFilterButtonsGroupSelect}
+                                shouldHideFilterButtons={shouldHideFilterButtons}
+                            >
+                                {content}
+                            </SearchBoxBody>
+                        </DropdownBodyWrapper>
+                    )}
                 </StyledSearchBox>
             ),
             [
+                container,
+                content,
+                filterButtons,
+                groups,
                 handleBlur,
                 handleChange,
+                handleClose,
                 handleFocus,
+                height,
                 isInvalid,
                 leftElement,
+                matchingListsItems.length,
                 onKeyDown,
                 placeholder,
-                portal,
                 rightElement,
+                shouldHideFilterButtons,
+                shouldShowBody,
+                shouldShowContentOnEmptyInput,
                 uuid,
                 value,
             ],

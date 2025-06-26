@@ -2,6 +2,7 @@ import { Typewriter } from '@chayns-components/typewriter';
 import { Meta, StoryFn } from '@storybook/react';
 import Icon from '../src/components/icon/Icon';
 import Input from '../src/components/input/Input';
+import React from 'react';
 
 export default {
     title: 'Core/Input',

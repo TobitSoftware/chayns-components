@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import TransparencySlider from '../src/components/transparency-slider/TransparencySlider';
+import React from 'react';
 
 export default {
     title: 'ColorPicker/TransparencySlider',

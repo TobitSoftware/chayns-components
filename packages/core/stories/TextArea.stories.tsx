@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import Icon from '../src/components/icon/Icon';
 import TextArea from '../src/components/text-area/TextArea';
 import Button from '../src/components/button/Button';

@@ -1,13 +1,12 @@
 import { useDevice, useFunctions, useValues } from 'chayns-api';
-import { AnimatePresence } from 'motion/react';
 import React, {
     ChangeEventHandler,
     type CSSProperties,
     FC,
     FocusEventHandler,
+    Fragment,
     ReactHTML,
     type ReactNode,
-    ReactPortal,
     useCallback,
     useContext,
     useEffect,
@@ -15,17 +14,15 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { createPortal } from 'react-dom';
 import { BrowserName } from '../../types/chayns';
-import { ComboBoxDirection } from '../../types/comboBox';
 import { calculateContentWidth, getMaxHeightInPixels } from '../../utils/calculate';
 import { getIsTouch } from '../../utils/environment';
 import { AreaContext } from '../area-provider/AreaContextProvider';
-import type { ContextMenuCoordinates } from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
 import ComboBoxItem from './combobox-item/ComboBoxItem';
 import {
     StyledComboBox,
+    StyledComboBoxBody,
     StyledComboBoxClearIconWrapper,
     StyledComboBoxHeader,
     StyledComboBoxIconWrapper,
@@ -36,8 +33,9 @@ import {
     StyledComboBoxPrefix,
     StyledComboBoxPrefixAndPlaceholderWrapper,
     StyledComboBoxTopic,
-    StyledMotionComboBoxBody,
 } from './ComboBox.styles';
+import DropdownBodyWrapper from '../dropdown-body-wrapper/DropdownBodyWrapper';
+import { DropdownDirection } from '../../types/dropdown';
 
 export interface IComboBoxItems {
     groupName?: string;
@@ -72,7 +70,7 @@ export type ComboBoxProps = {
     /**
      * The direction in which the combobox should open.
      */
-    direction?: ComboBoxDirection;
+    direction?: DropdownDirection;
     /**
      * The value of the optional input.
      */
@@ -88,7 +86,7 @@ export type ComboBoxProps = {
     /**
      * The maximum height of the combobox content.
      */
-    maxHeight?: CSSProperties['maxHeight'];
+    maxHeight?: number;
     /**
      * Function to be executed when the value of the optional input is changed.
      */
@@ -140,10 +138,10 @@ export type ComboBoxProps = {
 
 const ComboBox: FC<ComboBoxProps> = ({
     bodyWidth,
-    direction = ComboBoxDirection.RIGHT,
+    direction = DropdownDirection.RIGHT,
     isDisabled = false,
     lists,
-    maxHeight = '280px',
+    maxHeight = 280,
     onSelect,
     placeholder,
     prefix,
@@ -164,16 +162,6 @@ const ComboBox: FC<ComboBoxProps> = ({
     const [minWidth, setMinWidth] = useState<number | undefined>(undefined);
     const [bodyMinWidth, setBodyMinWidth] = useState(0);
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
-    const [overflowY, setOverflowY] = useState<CSSProperties['overflowY']>('hidden');
-    const [translateX, setTranslateX] = useState<string>('0px');
-    const [translateY, setTranslateY] = useState<string>('0px');
-    const [portal, setPortal] = useState<ReactPortal>();
-    const [internalCoordinates, setInternalCoordinates] = useState<ContextMenuCoordinates>({
-        x: 0,
-        y: 0,
-    });
-    const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
-    const [shouldUseTopAlignment, setShouldUseTopAlignment] = useState(false);
 
     const isInputFocused = useRef(false);
 
@@ -183,9 +171,9 @@ const ComboBox: FC<ComboBoxProps> = ({
     const functions = useFunctions();
     const values = useValues();
 
-    const { browser } = useDevice();
-
     const isTouch = getIsTouch();
+
+    const { browser } = useDevice();
 
     const areaProvider = useContext(AreaContext);
 
@@ -228,23 +216,6 @@ const ComboBox: FC<ComboBoxProps> = ({
         return result;
     }, [lists, maxHeight]);
 
-    useEffect(() => {
-        if (styledComboBoxElementRef.current && !container) {
-            const el = styledComboBoxElementRef.current as HTMLElement;
-
-            const element =
-                el.closest('.dialog-inner') || el.closest('.page-provider') || el.closest('body');
-
-            setNewContainer(element);
-        }
-    }, [container]);
-
-    useEffect(() => {
-        if (container instanceof Element) {
-            setNewContainer(container);
-        }
-    }, [container]);
-
     const handleInputFocus: FocusEventHandler<HTMLInputElement> = useCallback(
         (event) => {
             isInputFocused.current = true;
@@ -261,76 +232,13 @@ const ComboBox: FC<ComboBoxProps> = ({
         [onInputBlur],
     );
 
-    const handleClick = useCallback(
-        (event: MouseEvent) => {
-            if (
-                styledComboBoxElementRef.current &&
-                !styledComboBoxElementRef.current.contains(event.target as Node) &&
-                contentRef.current &&
-                !contentRef.current.contains(event.target as Node)
-            ) {
-                setIsAnimating(false);
-            }
-        },
-        [styledComboBoxElementRef],
-    );
-
     const handleOpen = useCallback(() => {
-        if (shouldDisableActions) {
-            return;
-        }
-
-        if (styledComboBoxElementRef.current && newContainer) {
-            const {
-                left: comboBoxLeft,
-                top: comboBoxTop,
-                height,
-            } = styledComboBoxElementRef.current.getBoundingClientRect();
-
-            const { left, top, height: containerHeight } = newContainer.getBoundingClientRect();
-
-            const x = comboBoxLeft - left + newContainer.scrollLeft;
-            const y = comboBoxTop - top + newContainer.scrollTop;
-
-            let useTopAlignment = [
-                ComboBoxDirection.TOP,
-                ComboBoxDirection.TOP_LEFT,
-                ComboBoxDirection.TOP_RIGHT,
-            ].includes(direction);
-
-            const hasBottomAlignment = [
-                ComboBoxDirection.BOTTOM,
-                ComboBoxDirection.BOTTOM_LEFT,
-                ComboBoxDirection.BOTTOM_RIGHT,
-            ].includes(direction);
-
-            if (!hasBottomAlignment && y + height + contentHeight > containerHeight) {
-                useTopAlignment = true;
-
-                setShouldUseTopAlignment(true);
-            } else {
-                setShouldUseTopAlignment(false);
-            }
-
-            setInternalCoordinates({ x, y: useTopAlignment ? y : y + height });
-            setIsAnimating(true);
-        }
-    }, [shouldDisableActions, newContainer, contentHeight, direction]);
+        setIsAnimating(true);
+    }, []);
 
     const handleClose = useCallback(() => {
         setIsAnimating(false);
     }, []);
-
-    /**
-     * This function adds an event listener to the document to close the combobox when the user clicks outside of it
-     */
-    useEffect(() => {
-        document.addEventListener('click', handleClick);
-
-        return () => {
-            document.removeEventListener('click', handleClick);
-        };
-    }, [handleClick, styledComboBoxElementRef]);
 
     /**
      * This function sets the selected item
@@ -373,58 +281,58 @@ const ComboBox: FC<ComboBoxProps> = ({
     );
 
     useEffect(() => {
-        const currentContent = contentRef.current;
-
-        if (portal && isAnimating && currentContent) {
-            const scrollHeight = currentContent.scrollHeight ?? 0;
-
-            const maxHeightInPixels = getMaxHeightInPixels(
-                maxHeight,
-                styledComboBoxElementRef.current ?? document.body,
-            );
-
-            setOverflowY(scrollHeight > maxHeightInPixels ? 'scroll' : 'hidden');
-        }
-    }, [isAnimating, maxHeight, portal]);
-
-    useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (!isAnimating) {
-                return;
-            }
+            if (!isAnimating) return;
 
             if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 e.preventDefault();
 
                 const children = contentRef.current?.children;
 
-                if (children && children.length > 0) {
-                    const newIndex =
-                        focusedIndex !== null
-                            ? (focusedIndex + (e.key === 'ArrowUp' ? -1 : 1) + children.length) %
-                              children.length
-                            : 0;
+                if (!children || children.length === 0) return;
 
-                    if (focusedIndex !== null) {
-                        const prevElement = children[focusedIndex] as HTMLDivElement;
+                const stepDirection = e.key === 'ArrowUp' ? -1 : 1;
 
-                        prevElement.tabIndex = -1;
-                    }
+                let newIndex = focusedIndex ?? -1;
 
-                    setFocusedIndex(newIndex);
+                let attempts = 0;
+
+                do {
+                    newIndex = (newIndex + stepDirection + children.length) % children.length;
 
                     const newElement = children[newIndex] as HTMLDivElement;
 
-                    newElement.tabIndex = 0;
+                    let shouldSkip = false;
 
-                    newElement.focus();
+                    if (
+                        newElement.id.startsWith('combobox-group--') ||
+                        newElement.id.endsWith('--disabled-item')
+                    ) {
+                        shouldSkip = true;
+                    }
+
+                    if (!shouldSkip) break;
+
+                    attempts++;
+                } while (attempts < children.length);
+
+                if (focusedIndex !== null) {
+                    const prevElement = children[focusedIndex] as HTMLDivElement;
+
+                    prevElement.tabIndex = -1;
                 }
+
+                setFocusedIndex(newIndex);
+
+                const focusedElement = children[newIndex] as HTMLDivElement;
+
+                focusedElement.tabIndex = 0;
+
+                focusedElement.focus();
             } else if (e.key === 'Enter' && focusedIndex !== null) {
                 const element = contentRef.current?.children[focusedIndex];
 
-                if (!element) {
-                    return;
-                }
+                if (!element) return;
 
                 const { id } = element;
 
@@ -434,22 +342,19 @@ const ComboBox: FC<ComboBoxProps> = ({
                     newSelectedItem = list.list.find(
                         ({ value }) => String(value) === id.replace('combobox-item__', ''),
                     );
+
                     return !!newSelectedItem;
                 });
 
-                if (!newSelectedItem) {
-                    return;
+                if (newSelectedItem) {
+                    handleSetSelectedItem(newSelectedItem);
                 }
-
-                handleSetSelectedItem(newSelectedItem);
             }
         };
 
         document.addEventListener('keydown', handleKeyDown);
 
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-        };
+        return () => document.removeEventListener('keydown', handleKeyDown);
     }, [focusedIndex, handleSetSelectedItem, isAnimating, lists]);
 
     /**
@@ -543,24 +448,6 @@ const ComboBox: FC<ComboBoxProps> = ({
         setInternalSelectedItem(selectedItem);
     }, [selectedItem]);
 
-    useEffect(() => {
-        if (
-            [
-                ComboBoxDirection.BOTTOM_LEFT,
-                ComboBoxDirection.TOP_LEFT,
-                ComboBoxDirection.LEFT,
-            ].includes(direction) &&
-            typeof bodyWidth === 'number' &&
-            typeof minWidth === 'number'
-        ) {
-            const difference = minWidth - bodyWidth;
-
-            setTranslateX(`${difference}px`);
-        } else {
-            setTranslateX('0px');
-        }
-    }, [bodyWidth, direction, minWidth]);
-
     const placeholderImageUrl = useMemo(() => {
         if (selectedItem) {
             return selectedItem.imageUrl;
@@ -626,9 +513,11 @@ const ComboBox: FC<ComboBoxProps> = ({
     const comboBoxGroups = useMemo(
         () =>
             lists.map((list) => (
-                <div key={list.groupName ?? 'default-group'}>
+                <Fragment key={list.groupName ?? 'default-group'}>
                     {list.groupName && lists.length > 1 && (
-                        <StyledComboBoxTopic>{list.groupName}</StyledComboBoxTopic>
+                        <StyledComboBoxTopic id={`combobox-group--${list.groupName}`}>
+                            {list.groupName}
+                        </StyledComboBoxTopic>
                     )}
                     {list.list.map((item) => (
                         // ToDo: Cleanup this - item should be given as a prop to avoid full spreading
@@ -651,81 +540,10 @@ const ComboBox: FC<ComboBoxProps> = ({
                             textStyles={item.textStyles}
                         />
                     ))}
-                </div>
+                </Fragment>
             )),
         [handleSetSelectedItem, lists, selectedItem, shouldShowBigImage, shouldShowRoundImage],
     );
-
-    const bodyStyles = useMemo(
-        () => ({ left: internalCoordinates.x, top: internalCoordinates.y }),
-        [internalCoordinates.x, internalCoordinates.y],
-    );
-
-    useEffect(() => {
-        const useTopAlignment =
-            shouldUseTopAlignment ||
-            [
-                ComboBoxDirection.TOP,
-                ComboBoxDirection.TOP_LEFT,
-                ComboBoxDirection.TOP_RIGHT,
-            ].includes(direction);
-
-        if (useTopAlignment) {
-            setTranslateY('-100%');
-        } else {
-            setTranslateY('0px');
-        }
-    }, [direction, shouldUseTopAlignment]);
-
-    useEffect(() => {
-        if (!newContainer) {
-            return;
-        }
-
-        setPortal(() =>
-            createPortal(
-                <AnimatePresence initial={false}>
-                    {isAnimating && (
-                        <StyledMotionComboBoxBody
-                            $browser={browser?.name as BrowserName}
-                            animate={{ height: 'fit-content', opacity: 1 }}
-                            $overflowY={overflowY}
-                            $translateX={translateX}
-                            $translateY={translateY}
-                            initial={{ height: 0, opacity: 0 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            $maxHeight={maxHeight}
-                            $minWidth={bodyWidth ?? bodyMinWidth}
-                            style={bodyStyles}
-                            $direction={direction}
-                            $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
-                            transition={{ duration: 0.2 }}
-                            tabIndex={0}
-                            ref={contentRef}
-                        >
-                            {comboBoxGroups}
-                        </StyledMotionComboBoxBody>
-                    )}
-                </AnimatePresence>,
-                newContainer,
-            ),
-        );
-    }, [
-        bodyWidth,
-        bodyMinWidth,
-        bodyStyles,
-        browser?.name,
-        comboBoxGroups,
-        newContainer,
-        direction,
-        isAnimating,
-        maxHeight,
-        minWidth,
-        overflowY,
-        shouldUseCurrentItemWidth,
-        translateX,
-        translateY,
-    ]);
 
     return useMemo(
         () => (
@@ -791,7 +609,30 @@ const ComboBox: FC<ComboBoxProps> = ({
                         </StyledComboBoxIconWrapper>
                     )}
                 </StyledComboBoxHeader>
-                {portal}
+                {styledComboBoxElementRef.current && (
+                    <DropdownBodyWrapper
+                        anchorElement={styledComboBoxElementRef.current}
+                        bodyWidth={bodyWidth}
+                        contentHeight={contentHeight}
+                        onClose={handleClose}
+                        direction={direction}
+                        container={container}
+                        shouldShowDropdown={isAnimating}
+                        minBodyWidth={bodyWidth ?? bodyMinWidth}
+                        maxHeight={maxHeight}
+                    >
+                        <StyledComboBoxBody
+                            $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
+                            $maxHeight={maxHeight}
+                            $minWidth={bodyWidth ?? bodyMinWidth}
+                            $browser={browser?.name as BrowserName}
+                            ref={contentRef}
+                            tabIndex={0}
+                        >
+                            {comboBoxGroups}
+                        </StyledComboBoxBody>
+                    </DropdownBodyWrapper>
+                )}
             </StyledComboBox>
         ),
         [
@@ -819,7 +660,14 @@ const ComboBox: FC<ComboBoxProps> = ({
             shouldShowClearIcon,
             handleClear,
             shouldDisableActions,
-            portal,
+            bodyWidth,
+            contentHeight,
+            handleClose,
+            container,
+            bodyMinWidth,
+            maxHeight,
+            browser?.name,
+            comboBoxGroups,
         ],
     );
 };

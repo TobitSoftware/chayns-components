@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import PositionInput from '../src/components/position-input/PositionInput';
+import React from 'react';
 
 export default {
     title: 'Maps/PositionInput',

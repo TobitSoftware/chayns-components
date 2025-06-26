@@ -3,6 +3,7 @@ import Input from '../src/components/input/Input';
 import RadioButtonGroup from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '../src/components/radio-button/RadioButton';
 import SetupWizardItem from '../src/components/setup-wizard/setup-wizard-item/SetupWizardItem';
+import React from 'react';
 
 export default {
     title: 'Core/SetupWizardItem',

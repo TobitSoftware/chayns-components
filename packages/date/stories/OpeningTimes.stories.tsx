@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import OpeningTimes from '../src/components/opening-times/OpeningTimes';
+import React from 'react';
 
 const WEEKDAYS = [
     { id: 0, name: 'Montag' },
