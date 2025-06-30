@@ -132,7 +132,7 @@ describe('HTML Formatter Function', () => {
                 const expectedUnorderedListResult =
                     '<ul>\n<li>Item 1</li>\n<li>Item 2</li>\n<li>Item 3</li>\n</ul>';
                 const expectedOrderedListResult =
-                    '<ol>\n<li>Item 1</li>\n<li>Item 2</li>\n<li>Item 3</li>\n</ol>';
+                    '<ol>\n<li value="1">Item 1</li>\n<li value="2">Item 2</li>\n<li value="3">Item 3</li>\n</ol>';
 
                 const unorderedListResult1 = formatStringToHtml('- Item 1\n- Item 2\n- Item 3');
                 expect(unorderedListResult1.html).toEqual(expectedUnorderedListResult);
