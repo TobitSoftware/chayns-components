@@ -24,7 +24,7 @@ export type {
     WithTheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
 export { useContainer, ContainerAnchor } from './hooks/container';
-export type { DropdownDirection, DropdownCoordinates } from './types/dropdown';
+export { DropdownDirection, type DropdownCoordinates } from './types/dropdown';
 export { useIsMeasuredClone } from './hooks/element';
 export { useCombinedRefs } from './hooks/ref';
 export {
