@@ -49,6 +49,7 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
     const [animationState, setAnimationState] = useState<AnimationType>(AnimationType.None);
 
     const ref = useRef<HTMLDivElement>(null);
+    const timeoutRef = useRef<number>();
 
     const measureElement = useCallback(() => {
         if (ref.current) {
@@ -68,7 +69,7 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
 
             setAnimationState(AnimationType.FadeIn);
 
-            window.setTimeout(() => {
+            timeoutRef.current = window.setTimeout(() => {
                 setAnimationState(AnimationType.Visible);
             }, ANIMATION_DELAY_MS);
         }
@@ -96,6 +97,8 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
                 measureElement();
             }, 1);
         } else {
+            clearTimeout(timeoutRef.current);
+
             setAnimationState((prevState) => {
                 if (prevState === AnimationType.None) {
                     return prevState;
@@ -114,7 +117,6 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
         return null;
     }
 
-    // ToDo improve fade-in animation
     return (
         <StyledMotionDelayedDropdownContent
             ref={ref}
