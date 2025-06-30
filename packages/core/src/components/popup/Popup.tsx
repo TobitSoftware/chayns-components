@@ -106,8 +106,6 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         const { height, width, measuredElement } = useMeasuredClone({ content });
 
-        // ToDo: Replace with hook if new chayns api is ready
-
         const popupContentRef = useRef<HTMLDivElement>(null);
         const popupRef = useRef<HTMLDivElement>(null);
 

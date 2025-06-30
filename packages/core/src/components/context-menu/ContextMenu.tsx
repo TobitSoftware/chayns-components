@@ -135,7 +135,6 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
         const uuid = useUuid();
 
-        // ToDo: Replace with hook if new chayns api is ready
         const contextMenuContentRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<HTMLSpanElement>(null);
 
