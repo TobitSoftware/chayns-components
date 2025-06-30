@@ -1,4 +1,3 @@
-import useResizeObserver from '@react-hook/resize-observer';
 import React, {
     cloneElement,
     HTMLAttributes,
@@ -6,22 +5,9 @@ import React, {
     ReactElement,
     ReactNode,
     useEffect,
-    useLayoutEffect,
     useRef,
     useState,
 } from 'react';
-
-const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
-
-class ResizeObserverPolyFill {
-    // eslint-disable-next-line class-methods-use-this
-    observe = () => {};
-
-    // eslint-disable-next-line class-methods-use-this
-    unobserve = () => {};
-}
-
-const options = typeof window === 'undefined' ? { polyfill: ResizeObserverPolyFill } : undefined;
 
 interface UseElementSizeOptions {
     shouldUseChildElement?: boolean;
@@ -33,22 +19,33 @@ export const useElementSize = (
 ): DOMRectReadOnly | undefined => {
     const [size, setSize] = useState<DOMRectReadOnly>();
 
-    const element = ((shouldUseChildElement ? ref.current?.firstElementChild : ref.current) ??
-        null) as HTMLDivElement | HTMLLabelElement | null;
+    useEffect(() => {
+        const target = (
+            shouldUseChildElement ? ref.current?.firstElementChild : ref.current
+        ) as HTMLElement | null;
 
-    useIsomorphicLayoutEffect(() => {
-        if (element) {
-            setSize(element.getBoundingClientRect());
-        } else {
-            setSize(undefined);
-        }
-    }, [element]);
+        if (!target) return () => {};
 
-    // TODO: Replace with ssr-compatible implementation
-    useResizeObserver(element, (entry) => setSize(entry.contentRect), options);
+        const updateSize = () => setSize(target.getBoundingClientRect());
+
+        updateSize();
+
+        const observer = new ResizeObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.target === target) {
+                    setSize(entry.contentRect);
+                }
+            });
+        });
+
+        observer.observe(target);
+
+        return () => observer.disconnect();
+    }, [ref, shouldUseChildElement]);
 
     return size;
 };
+
 interface UseMeasuredCloneOptions {
     content: ReactNode;
 }
