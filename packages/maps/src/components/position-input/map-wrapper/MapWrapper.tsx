@@ -197,9 +197,6 @@ const MapWrapper: FC<MapWrapperProps> = ({
         () => (
             <StyledMapWrapper>
                 <Wrapper apiKey={apiToken} libraries={['places']}>
-                    {/* ToDo find better solution */}
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
                     <Map
                         onClick={handleClick}
                         onIdle={handleIdle}
@@ -210,8 +207,10 @@ const MapWrapper: FC<MapWrapperProps> = ({
                         mapTypeControl={false}
                         streetViewControl={false}
                     >
-                        {markerList}
-                        {canPolyDraw && <Polygon path={polygonPath} options={polygonOptions} />}
+                        <>
+                            {markerList}
+                            {canPolyDraw && <Polygon path={polygonPath} options={polygonOptions} />}
+                        </>
                     </Map>
                 </Wrapper>
             </StyledMapWrapper>
