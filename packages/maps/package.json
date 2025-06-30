@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/maps",
-    "version": "5.0.0-beta.1160",
+    "version": "5.0.0-beta.1161",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -70,7 +70,7 @@
         "typescript": "^5.8.3"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.1160",
+        "@chayns-components/core": "^5.0.0-beta.1161",
         "@googlemaps/react-wrapper": "^1.2.0",
         "@googlemaps/typescript-guards": "^2.0.3",
         "@react-google-maps/api": "^2.20.6",
