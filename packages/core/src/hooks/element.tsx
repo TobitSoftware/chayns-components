@@ -1,6 +1,7 @@
 import React, {
     cloneElement,
     HTMLAttributes,
+    isValidElement,
     MutableRefObject,
     ReactElement,
     ReactNode,
@@ -46,14 +47,7 @@ export const useElementSize = (
     return size;
 };
 
-interface UseMeasuredCloneOptions {
-    content: ReactNode;
-}
-
-export const useMeasuredClone = ({ content }: UseMeasuredCloneOptions) => {
-    const ref = useRef<HTMLDivElement>(null);
-    const [size, setSize] = useState({ width: 0, height: 0 });
-
+const getClonedElement = (content: ReactNode) => {
     const preventEvents: Partial<HTMLAttributes<any>> = {
         onClick: (e) => e.stopPropagation(),
         onMouseDown: (e) => e.stopPropagation(),
@@ -64,10 +58,32 @@ export const useMeasuredClone = ({ content }: UseMeasuredCloneOptions) => {
         onBlur: (e) => e.stopPropagation(),
     };
 
-    const clonedElement = cloneElement(content as unknown as ReactElement, {
+    const props = {
         ...preventEvents,
         'data-measured-clone': true,
-    });
+    };
+
+    if (isValidElement(content)) {
+        return cloneElement(content as unknown as ReactElement, props);
+    }
+
+    if (typeof content === 'string') {
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        return <span {...props}>{content}</span>;
+    }
+
+    return content;
+};
+
+interface UseMeasuredCloneOptions {
+    content: ReactNode;
+}
+
+export const useMeasuredClone = ({ content }: UseMeasuredCloneOptions) => {
+    const ref = useRef<HTMLDivElement>(null);
+    const [size, setSize] = useState({ width: 0, height: 0 });
+
+    const clonedElement = getClonedElement(content);
 
     useEffect(() => {
         const measure = () => {
