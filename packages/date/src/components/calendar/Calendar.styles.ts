@@ -15,6 +15,13 @@ export const StyledCalendarIconWrapper = styled.div`
     z-index: 2;
 `;
 
+export const StyledCalendarIconWrapperContent = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: fit-content;
+`;
+
 export const StyledCalendarIconWrapperPseudo = styled.div`
     width: 15px;
 `;

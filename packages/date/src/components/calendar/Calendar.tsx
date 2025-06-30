@@ -20,6 +20,7 @@ import {
 import {
     StyledCalendar,
     StyledCalendarIconWrapper,
+    StyledCalendarIconWrapperContent,
     StyledCalendarIconWrapperPseudo,
     StyledPseudoMonthYearPicker,
 } from './Calendar.styles';
@@ -427,21 +428,14 @@ const Calendar: FC<CalendarProps> = ({
         <StyledCalendar ref={calendarRef} $isDisabled={isDisabled}>
             {ShouldShowLeftArrow ? (
                 <StyledCalendarIconWrapper onClick={handleLeftArrowClick}>
-                    <div // TODO Use styled-components instead of inline styles
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            flexWrap: 'nowrap',
-                            height: 'fit-content',
-                        }}
-                    >
+                    <StyledCalendarIconWrapperContent>
                         {showMonthYearPickers && (
                             <StyledPseudoMonthYearPicker>
                                 <ComboBox lists={[{ list: [] }]} placeholder="" />
                             </StyledPseudoMonthYearPicker>
                         )}
                         <Icon icons={['fa fa-angle-left']} />
-                    </div>
+                    </StyledCalendarIconWrapperContent>
                 </StyledCalendarIconWrapper>
             ) : (
                 <StyledCalendarIconWrapperPseudo />
@@ -470,21 +464,14 @@ const Calendar: FC<CalendarProps> = ({
             )}
             {ShouldShowRightArrow ? (
                 <StyledCalendarIconWrapper onClick={handleRightArrowClick}>
-                    <div // TODO Use styled-components instead of inline styles
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            flexWrap: 'nowrap',
-                            height: 'fit-content',
-                        }}
-                    >
+                    <StyledCalendarIconWrapperContent>
                         {showMonthYearPickers && (
                             <StyledPseudoMonthYearPicker>
                                 <ComboBox lists={[{ list: [] }]} placeholder="" />
                             </StyledPseudoMonthYearPicker>
                         )}
                         <Icon icons={['fa fa-angle-right']} />
-                    </div>
+                    </StyledCalendarIconWrapperContent>
                 </StyledCalendarIconWrapper>
             ) : (
                 <StyledCalendarIconWrapperPseudo />
