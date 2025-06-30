@@ -1,9 +1,6 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
-import type {
-    FramerMotionBugFix,
-    WithTheme,
-} from '../../../color-scheme-provider/ColorSchemeProvider';
+import type { WithTheme } from '../../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledListItemHeadProps = WithTheme<{
     $isClickable: boolean;
@@ -38,7 +35,7 @@ export const StyledListItemHeadLeftWrapper = styled.div`
     margin: auto 0;
 `;
 
-export const StyledMotionListItemHeadIndicator = styled(motion.div)<FramerMotionBugFix>`
+export const StyledMotionListItemHeadIndicator = styled(motion.div)`
     align-items: center;
     display: flex;
     flex: 0 0 auto;

@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
-import type { FramerMotionBugFix, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledFileSelect = styled.div``;
 
@@ -51,4 +51,4 @@ export const StyledFileSelectText = styled.p<StyledFileSelectTextProps>`
     color: ${({ theme }: StyledFileSelectTextProps) => theme.text};
 `;
 
-export const StyledMotionFileSelectList = styled(motion.div)<FramerMotionBugFix>``;
+export const StyledMotionFileSelectList = styled(motion.div)``;

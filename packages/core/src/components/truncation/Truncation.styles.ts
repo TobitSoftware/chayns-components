@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import { ClampPosition } from '../../types/truncation';
-import type { FramerMotionBugFix, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledTruncation = styled.div`
     position: relative;
@@ -9,7 +9,7 @@ export const StyledTruncation = styled.div`
 `;
 
 // Fix framer-motion bug
-export const StyledMotionTruncationContent = styled(motion.div)<FramerMotionBugFix>`
+export const StyledMotionTruncationContent = styled(motion.div)`
     overflow: hidden;
     position: relative;
 `;

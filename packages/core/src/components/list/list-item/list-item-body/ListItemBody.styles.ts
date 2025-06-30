@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import styled from 'styled-components';
-import type { FramerMotionBugFix } from '../../../color-scheme-provider/ColorSchemeProvider';
 
-export const StyledMotionListItemBody = styled(motion.div)<FramerMotionBugFix>`
+export const StyledMotionListItemBody = styled(motion.div)`
     overflow: hidden;
 `;

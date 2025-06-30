@@ -1,10 +1,7 @@
 import { motion } from 'motion/react';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
-import type {
-    FramerMotionBugFix,
-    WithTheme,
-} from '../../color-scheme-provider/ColorSchemeProvider';
+import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledMotionAccordionHeadProps = WithTheme<unknown>;
 
@@ -16,7 +13,7 @@ export const StyledMotionAccordionHead = styled(motion.div)<StyledMotionAccordio
     padding: 4px 0;
 `;
 
-export const StyledMotionIconWrapper = styled(motion.div)<FramerMotionBugFix>`
+export const StyledMotionIconWrapper = styled(motion.div)`
     align-items: center;
     cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};
     display: flex;
@@ -58,7 +55,7 @@ export const StyledMotionContentWrapper = styled(motion.div)<StyledMotionContent
         `}
 `;
 
-export const StyledMotionTitleWrapper = styled(motion.div)<FramerMotionBugFix>`
+export const StyledMotionTitleWrapper = styled(motion.div)`
     display: grid;
     flex: 0 1 auto;
     grid-template-areas: 'header';
@@ -93,7 +90,7 @@ export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
         `}
 `;
 
-export const StyledMotionTitleElementWrapper = styled(motion.div)<FramerMotionBugFix>`
+export const StyledMotionTitleElementWrapper = styled(motion.div)`
     align-items: center;
     display: flex;
     flex: 1 1 auto;
@@ -116,7 +113,7 @@ export const StyledRightWrapper = styled.div<StyledRightWrapperProps>`
     width: ${({ $isSearchActive }) => ($isSearchActive ? '40%' : undefined)};
 `;
 
-export const StyledMotionSearchWrapper = styled(motion.div)<FramerMotionBugFix>`
+export const StyledMotionSearchWrapper = styled(motion.div)`
     align-items: center;
     justify-content: end;
     position: relative;
@@ -124,7 +121,7 @@ export const StyledMotionSearchWrapper = styled(motion.div)<FramerMotionBugFix>`
     width: 100%;
 `;
 
-export const StyledMotionRightElementWrapper = styled(motion.div)<FramerMotionBugFix>`
+export const StyledMotionRightElementWrapper = styled(motion.div)`
     align-items: center;
     display: flex;
 
@@ -149,7 +146,7 @@ export const StyledMotionRightInput = styled(motion.input)<StyledMotionRightInpu
     padding: ${({ $hasIcon }) => ($hasIcon ? '5px 23px 5px 1px' : '5px 1px')};
 `;
 
-export const StyledMotionRightInputIconWrapper = styled(motion.div)<FramerMotionBugFix>`
+export const StyledMotionRightInputIconWrapper = styled(motion.div)`
     align-items: center;
     display: flex;
     height: 100%;

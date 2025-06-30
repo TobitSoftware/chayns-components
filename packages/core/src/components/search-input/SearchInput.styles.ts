@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
-import type { FramerMotionBugFix, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { InputSize } from '../input/Input';
 
 type StyledSearchInputProps = WithTheme<{
@@ -60,7 +60,7 @@ export const StyledMotionSearchInputContentWrapper = styled(
     overflow: hidden;
 `;
 
-export const StyledMotionSearchInputIconWrapperContent = styled(motion.div)<FramerMotionBugFix>`
+export const StyledMotionSearchInputIconWrapperContent = styled(motion.div)`
     display: flex;
     cursor: pointer;
 `;

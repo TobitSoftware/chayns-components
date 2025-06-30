@@ -21,7 +21,6 @@ export {
 export { BadgeSize, BadgeDesign } from './types/badge';
 export type {
     ColorSchemeContextProps,
-    FramerMotionBugFix,
     WithTheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
 export { useContainer, ContainerAnchor } from './hooks/container';

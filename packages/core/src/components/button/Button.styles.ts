@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
-import type { FramerMotionBugFix, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledButtonProps = WithTheme<{
     $hasIcon: boolean;
@@ -94,11 +94,11 @@ export const StyledIconWrapper = styled.span`
     width: 30px;
 `;
 
-export const StyledMotionChildrenWrapper = styled(motion.div)<FramerMotionBugFix>`
+export const StyledMotionChildrenWrapper = styled(motion.div)`
     will-change: unset !important;
 `;
 
-export const StyledMotionWaitCursorWrapper = styled(motion.div)<FramerMotionBugFix>`
+export const StyledMotionWaitCursorWrapper = styled(motion.div)`
     align-items: center;
     display: flex;
     justify-content: center;

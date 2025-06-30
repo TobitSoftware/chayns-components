@@ -1,9 +1,9 @@
-import type { FramerMotionBugFix, WithTheme } from '@chayns-components/core';
+import type { WithTheme } from '@chayns-components/core';
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import { AnchorAlignment } from '../../../../../constants/alignment';
 
-export const StyledMotionSkinTonePopup = styled(motion.div)<FramerMotionBugFix>`
+export const StyledMotionSkinTonePopup = styled(motion.div)`
     z-index: 1;
 `;
 
