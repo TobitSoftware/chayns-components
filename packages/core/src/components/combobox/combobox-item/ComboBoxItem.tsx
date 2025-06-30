@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useCallback, useMemo } from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
 import { getIsTouch } from '../../../utils/environment';
 import Icon from '../../icon/Icon';
 import type { ComboBoxProps, IComboBoxItem } from '../ComboBox';
@@ -14,40 +14,34 @@ import {
 } from './ComboBoxItem.styles';
 
 export type ComboBoxItemProps = {
-    icons?: IComboBoxItem['icons'];
-    id: IComboBoxItem['value'];
-    imageBackground?: IComboBoxItem['imageBackground'];
-    imageUrl: IComboBoxItem['imageUrl'];
-    isDisabled?: IComboBoxItem['isDisabled'];
+    item: IComboBoxItem;
     isSelected: boolean;
     onSelect: (itemToSelect: IComboBoxItem) => void;
-    rightElement: IComboBoxItem['rightElement'];
     shouldShowBigImage: ComboBoxProps['shouldShowBigImage'];
     shouldShowRoundImage: ComboBoxProps['shouldShowRoundImage'];
-    subtext: IComboBoxItem['subtext'];
-    suffixElement?: ReactNode;
-    text: IComboBoxItem['text'];
-    value: IComboBoxItem['value'];
-    textStyles?: IComboBoxItem['textStyles'];
 };
 
 const ComboBoxItem: FC<ComboBoxItemProps> = ({
-    icons,
-    id,
-    imageBackground,
-    imageUrl,
-    isDisabled,
+    item,
     isSelected,
     onSelect,
-    rightElement,
     shouldShowBigImage,
     shouldShowRoundImage,
-    subtext,
-    suffixElement,
-    textStyles,
-    text,
-    value,
 }) => {
+    const {
+        icons,
+        imageUrl,
+        isDisabled,
+        imageBackground,
+        suffixElement,
+        textStyles,
+        rightElement,
+        text,
+        value,
+        subtext,
+    } = item;
+    const id = value;
+
     const handleItemClick = useCallback(() => {
         if (!isDisabled) {
             onSelect({ text, value, suffixElement, imageUrl, icons });

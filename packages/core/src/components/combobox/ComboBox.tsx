@@ -519,24 +519,12 @@ const ComboBox: FC<ComboBoxProps> = ({
                         </StyledComboBoxTopic>
                     )}
                     {list.list.map((item) => (
-                        // ToDo: Cleanup this - item should be given as a prop to avoid full spreading
                         <ComboBoxItem
-                            icons={item.icons}
-                            id={item.value}
-                            imageBackground={item.imageBackground}
-                            imageUrl={item.imageUrl}
-                            isDisabled={item.isDisabled}
+                            item={item}
                             isSelected={selectedItem ? item.value === selectedItem.value : false}
-                            key={item.value}
                             onSelect={handleSetSelectedItem}
-                            rightElement={item.rightElement}
                             shouldShowBigImage={shouldShowBigImage}
                             shouldShowRoundImage={list.shouldShowRoundImage ?? shouldShowRoundImage}
-                            subtext={item.subtext}
-                            suffixElement={item.suffixElement}
-                            text={item.text}
-                            value={item.value}
-                            textStyles={item.textStyles}
                         />
                     ))}
                 </Fragment>
