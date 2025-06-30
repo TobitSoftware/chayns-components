@@ -208,13 +208,8 @@ const ComboBox: FC<ComboBoxProps> = ({
             result += lists.length * 36;
         }
 
-        // ToDo: Implement a better solution to also work with percentage values or other units
-        if (maxHeight.toString().includes('px')) {
-            const maxHeightValue = parseInt(maxHeight.toString().replace('px', ''), 10);
-
-            if (maxHeightValue < result) {
-                result = maxHeightValue;
-            }
+        if (maxHeight < result) {
+            result = maxHeight;
         }
 
         return result;
