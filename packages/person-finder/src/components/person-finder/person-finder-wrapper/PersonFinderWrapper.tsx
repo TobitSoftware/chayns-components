@@ -3,6 +3,7 @@ import React, {
     forwardRef,
     type ReactElement,
     useCallback,
+    useEffect,
     useImperativeHandle,
     useMemo,
     useRef,
@@ -48,6 +49,14 @@ export type PersonFinderWrapperProps = {
      */
     onAdd?: (entry: PersonFinderEntry) => void;
     /**
+     * Function to be executed if the dropdown is hidden.
+     */
+    onDropdownHide?: () => void;
+    /**
+     * Function to be executed if the dropdown is shown.
+     */
+    onDropdownShow?: () => void;
+    /**
      * Function to be executed if a person or site is removed.
      */
     onRemove?: (id: PersonFinderEntry['id']) => void;
@@ -69,6 +78,8 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             filterTypes,
             container,
             onAdd,
+            onDropdownHide,
+            onDropdownShow,
             onRemove,
             maxEntries = Infinity,
             leftElement: leftElementProp,
@@ -180,6 +191,16 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             }),
             [handleClear],
         );
+
+        useEffect(() => {
+            if (shouldShowBody) {
+                if (typeof onDropdownShow === 'function') {
+                    onDropdownShow();
+                }
+            } else if (typeof onDropdownHide === 'function') {
+                onDropdownHide();
+            }
+        }, [onDropdownHide, onDropdownShow, shouldShowBody]);
 
         return (
             <StyledPersonFinder ref={boxRef} onFocus={handleOpen} key={`person-finder-${uuid}`}>

@@ -38,6 +38,8 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             placeholder = 'Person oder Site finden',
             shouldAllowMultiple = true,
             maxEntries,
+            onDropdownHide,
+            onDropdownShow,
             onRemove,
             defaultEntries,
             onAdd,
@@ -68,6 +70,8 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                             filterTypes={filterTypes}
                             maxEntries={maxEntries}
                             onAdd={onAdd}
+                            onDropdownHide={onDropdownHide}
+                            onDropdownShow={onDropdownShow}
                             leftElement={leftElement}
                             onRemove={onRemove}
                             placeholder={placeholder}
