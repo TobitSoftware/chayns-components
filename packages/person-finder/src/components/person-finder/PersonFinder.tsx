@@ -16,7 +16,7 @@ const DEFAULT_FILTER_TYPES = [PersonFinderFilterTypes.PERSON, PersonFinderFilter
 
 export type PersonFinderProps = PersonFinderWrapperProps & {
     /**
-     * Sites an Persons that are selected by default.
+     * Sites and persons that are selected by default.
      */
     defaultEntries?: DefaultEntry[];
     /**
