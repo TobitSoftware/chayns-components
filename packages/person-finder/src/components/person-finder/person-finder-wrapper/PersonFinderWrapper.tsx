@@ -41,7 +41,7 @@ export type PersonFinderWrapperProps = {
      */
     leftElement?: ReactElement;
     /**
-     * The maximum amount of entries that can be selected.
+     * The maximum number of entries that can be selected.
      */
     maxEntries?: number;
     /**
@@ -73,16 +73,16 @@ export type PersonFinderWrapperProps = {
 const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps>(
     (
         {
-            shouldAllowMultiple,
-            placeholder,
-            filterTypes,
             container,
+            filterTypes,
+            leftElement: leftElementProp,
+            maxEntries = Infinity,
             onAdd,
             onDropdownHide,
             onDropdownShow,
             onRemove,
-            maxEntries = Infinity,
-            leftElement: leftElementProp,
+            placeholder,
+            shouldAllowMultiple,
         },
         ref,
     ) => {
@@ -205,27 +205,27 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
         return (
             <StyledPersonFinder ref={boxRef} onFocus={handleOpen} key={`person-finder-${uuid}`}>
                 <TagInput
-                    ref={tagInputRef}
-                    placeholder={placeholder}
                     leftElement={leftElement}
+                    onChange={handleChange}
+                    onRemove={handleRemove}
+                    placeholder={placeholder}
+                    ref={tagInputRef}
                     shouldAllowMultiple={shouldAllowMultiple}
                     shouldPreventEnter
-                    onRemove={handleRemove}
-                    onChange={handleChange}
                     tags={tags}
                 />
                 {boxRef.current && (
                     <DropdownBodyWrapper
                         anchorElement={boxRef.current}
-                        shouldShowDropdown={shouldShowBody}
                         container={container}
                         onClose={handleClose}
+                        shouldShowDropdown={shouldShowBody}
                     >
                         <PersonFinderBody
-                            ref={contentRef}
+                            filterTypes={filterTypes}
                             onAdd={handleAdd}
                             onRemove={handleRemove}
-                            filterTypes={filterTypes}
+                            ref={contentRef}
                         />
                     </DropdownBodyWrapper>
                 )}
