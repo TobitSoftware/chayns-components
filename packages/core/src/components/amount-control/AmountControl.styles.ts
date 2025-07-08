@@ -30,7 +30,7 @@ type StyledAmountControlInputProps = WithTheme<{
     $shouldShowWideInput: boolean;
 }>;
 
-export const StyledInputWrapper = styled.div<WithTheme<never>>`
+export const StyledInputWrapper = styled.div<WithTheme<unknown>>`
     background-color: ${({ theme }) => theme['408']};
 `;
 
