@@ -15,6 +15,7 @@ import {
     StyledAmountControl,
     StyledAmountControlInput,
     StyledAmountControlPseudoInput,
+    StyledInputWrapper,
     StyledMotionAmountControlButton,
 } from './AmountControl.styles';
 
@@ -246,16 +247,20 @@ const AmountControl: FC<AmountControlProps> = ({
 
         switch (displayState) {
             case 'default':
-                item = <Icon icons={[icon ?? 'fa fa-cart-shopping']} size={15} color={iconColor} />;
+                item = (
+                    <Icon
+                        icons={[icon ?? 'fa fa-cart-shopping']}
+                        size={14}
+                        color={iconColor ?? 'white'}
+                    />
+                );
                 break;
             case 'delete':
                 item = <Icon icons={['fa ts-check']} size={20} color="white" />;
                 break;
             case 'normal':
-                item = <Icon icons={['fa fa-minus']} size={15} color="red" />;
-                break;
             case 'maxAmount':
-                item = <Icon icons={['fa fa-minus']} size={15} color="red" />;
+                item = <Icon icons={['fa fa-minus']} size={15} color="white" />;
                 break;
             default:
                 break;
@@ -264,65 +269,75 @@ const AmountControl: FC<AmountControlProps> = ({
         return item;
     }, [displayState, icon, iconColor]);
 
+    const shouldShowRightIcon = useMemo(
+        () => shouldShowIcon && displayState === 'default' && !icon,
+        [displayState, icon, shouldShowIcon],
+    );
+
     const shouldShowLeftIcon = useMemo(() => {
         if (shouldShowAddIconOnMinAmount && displayState === 'minAmount') {
             return false;
         }
 
         if (shouldShowIcon) {
-            return true;
+            return !shouldShowRightIcon;
         }
 
         return !((displayState === 'default' || displayState === 'minAmount') && !shouldShowIcon);
-    }, [displayState, shouldShowAddIconOnMinAmount, shouldShowIcon]);
+    }, [displayState, shouldShowAddIconOnMinAmount, shouldShowIcon, shouldShowRightIcon]);
+
+    const iconButton = useMemo(
+        () => (
+            <StyledMotionAmountControlButton
+                key="right_button"
+                initial={{ width: 0, opacity: 0, padding: 0 }}
+                animate={{
+                    width: displayState === 'normal' || displayState === 'maxAmount' ? 40 : 28,
+                    opacity: 1,
+                    padding: 0,
+                }}
+                exit={{ width: 0, opacity: 0, padding: 0 }}
+                $isWide={displayState === 'normal' || displayState === 'maxAmount'}
+                transition={{ duration: 0.2, type: 'tween' }}
+                onClick={handleAmountRemove}
+                $color={displayState === 'delete' ? 'rgb(32, 198, 90)' : undefined}
+                disabled={amountValue !== 0 && amountValue <= minAmount}
+                $isDisabled={amountValue !== 0 && amountValue <= minAmount}
+            >
+                {leftIcon}
+            </StyledMotionAmountControlButton>
+        ),
+        [amountValue, displayState, handleAmountRemove, leftIcon, minAmount],
+    );
 
     return useMemo(
         () => (
             <StyledAmountControl onClick={handleFirstAmount} $isDisabled={isDisabled}>
                 <AnimatePresence initial={false}>
-                    {shouldShowLeftIcon && (
-                        <StyledMotionAmountControlButton
-                            key="right_button"
-                            initial={{ width: 0, opacity: 0, padding: 0 }}
-                            animate={{
-                                width:
-                                    displayState === 'normal' || displayState === 'maxAmount'
-                                        ? 40
-                                        : 28,
-                                opacity: 1,
-                                padding: 0,
-                            }}
-                            exit={{ width: 0, opacity: 0, padding: 0 }}
-                            $isWide={displayState === 'normal' || displayState === 'maxAmount'}
-                            transition={{ duration: 0.2, type: 'tween' }}
-                            onClick={handleAmountRemove}
-                            $color={displayState === 'delete' ? 'rgb(32, 198, 90)' : undefined}
-                            disabled={amountValue !== 0 && amountValue <= minAmount}
-                            $isDisabled={amountValue !== 0 && amountValue <= minAmount}
-                        >
-                            {leftIcon}
-                        </StyledMotionAmountControlButton>
-                    )}
+                    {shouldShowLeftIcon && iconButton}
                 </AnimatePresence>
-                {displayState === 'delete' || inputValue === '0' ? (
-                    <StyledAmountControlPseudoInput
-                        onClick={handleDeleteIconClick}
-                        $shouldShowWideInput={shouldShowWideInput}
-                    >
-                        {displayState === 'default' && label ? label : inputValue}
-                    </StyledAmountControlPseudoInput>
-                ) : (
-                    <StyledAmountControlInput
-                        ref={inputRef}
-                        $displayState={displayState}
-                        $shouldShowIcon={shouldShowIcon}
-                        $shouldShowWideInput={shouldShowWideInput}
-                        $hasFocus={hasFocus}
-                        onBlur={handleInputBlur}
-                        onChange={handleInputChange}
-                        value={displayState === 'default' && label ? label : inputValue}
-                    />
-                )}
+                <StyledInputWrapper>
+                    {displayState === 'delete' || inputValue === '0' ? (
+                        <StyledAmountControlPseudoInput
+                            onClick={handleDeleteIconClick}
+                            $shouldShowWideInput={shouldShowWideInput}
+                            $shouldShowRightIcon={shouldShowRightIcon}
+                        >
+                            {displayState === 'default' && label ? label : inputValue}
+                        </StyledAmountControlPseudoInput>
+                    ) : (
+                        <StyledAmountControlInput
+                            ref={inputRef}
+                            $displayState={displayState}
+                            $shouldShowIcon={shouldShowIcon}
+                            $shouldShowWideInput={shouldShowWideInput}
+                            $hasFocus={hasFocus}
+                            onBlur={handleInputBlur}
+                            onChange={handleInputChange}
+                            value={displayState === 'default' && label ? label : inputValue}
+                        />
+                    )}
+                </StyledInputWrapper>
                 <AnimatePresence initial={false}>
                     {(displayState === 'normal' || displayState === 'minAmount') && (
                         <StyledMotionAmountControlButton
@@ -340,9 +355,12 @@ const AmountControl: FC<AmountControlProps> = ({
                             disabled={maxAmount ? amountValue >= maxAmount : false}
                             $isDisabled={maxAmount ? amountValue >= maxAmount : false}
                         >
-                            <Icon icons={['fa fa-plus']} size={15} color="green" />
+                            <Icon icons={['fa fa-plus']} size={15} color="white" />
                         </StyledMotionAmountControlButton>
                     )}
+                </AnimatePresence>
+                <AnimatePresence initial={false}>
+                    {shouldShowRightIcon && iconButton}
                 </AnimatePresence>
             </StyledAmountControl>
         ),
@@ -365,6 +383,8 @@ const AmountControl: FC<AmountControlProps> = ({
             shouldShowIcon,
             shouldShowLeftIcon,
             shouldShowWideInput,
+            shouldShowRightIcon,
+            iconButton,
         ],
     );
 };
