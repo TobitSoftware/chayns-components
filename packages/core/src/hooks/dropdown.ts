@@ -1,5 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { DropdownCoordinates, DropdownDirection } from '../types/dropdown';
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 interface UseDropdownListenerOptions {
     onClose: () => void;
@@ -71,17 +73,19 @@ export const useDropdownAlignment = ({
 };
 
 interface UseDropdownPositionOptions {
-    container?: Element;
     anchorElement: Element;
-    direction: DropdownDirection;
+    container?: Element;
     contentHeight?: number;
+    direction: DropdownDirection;
+    shouldShowDropdown: boolean;
 }
 
 export const useDropdownPosition = ({
-    direction,
     anchorElement,
     container,
     contentHeight = 0,
+    direction,
+    shouldShowDropdown,
 }: UseDropdownPositionOptions) => {
     const [coordinates, setCoordinates] = useState<DropdownCoordinates>({ x: 0, y: 0 });
     const [shouldUseTopAlignment, setShouldUseTopAlignment] = useState(false);
@@ -123,19 +127,17 @@ export const useDropdownPosition = ({
         }
     }, [anchorElement, container, contentHeight, direction]);
 
-    useEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         calculateCoordinates();
 
-        setTimeout(() => {
-            calculateCoordinates(); // Recalculate after a short delay to ensure the layout is updated
-        }, 500);
-
-        window.addEventListener('resize', calculateCoordinates);
+        if (shouldShowDropdown) {
+            window.addEventListener('resize', calculateCoordinates);
+        }
 
         return () => {
             window.removeEventListener('resize', calculateCoordinates);
         };
-    }, [calculateCoordinates]);
+    }, [calculateCoordinates, shouldShowDropdown]);
 
     return useMemo(
         () => ({ shouldUseTopAlignment, coordinates }),
@@ -144,26 +146,30 @@ export const useDropdownPosition = ({
 };
 
 interface UseDropdownOptions {
-    container?: Element;
     anchorElement: Element;
-    direction: DropdownDirection;
     bodyWidth?: number;
+    container?: Element;
     contentHeight?: number;
+    direction: DropdownDirection;
+    shouldShowDropdown: boolean;
 }
 
 export const useDropdown = ({
     anchorElement,
+    bodyWidth,
     container,
     contentHeight,
-    bodyWidth,
     direction,
+    shouldShowDropdown,
 }: UseDropdownOptions) => {
     const { shouldUseTopAlignment, coordinates } = useDropdownPosition({
-        contentHeight,
-        container,
         anchorElement,
+        container,
+        contentHeight,
         direction,
+        shouldShowDropdown,
     });
+
     const transform = useDropdownAlignment({
         shouldUseTopAlignment,
         bodyWidth,
