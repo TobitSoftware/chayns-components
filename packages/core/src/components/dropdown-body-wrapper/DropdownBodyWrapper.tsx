@@ -83,6 +83,7 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
         contentHeight,
         container,
         anchorElement,
+        shouldShowDropdown,
     });
 
     const handleClose = useCallback(() => {
