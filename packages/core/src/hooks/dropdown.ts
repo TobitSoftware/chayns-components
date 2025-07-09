@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DropdownCoordinates, DropdownDirection } from '../types/dropdown';
 
 interface UseDropdownListenerOptions {
@@ -86,7 +86,7 @@ export const useDropdownPosition = ({
     const [coordinates, setCoordinates] = useState<DropdownCoordinates>({ x: 0, y: 0 });
     const [shouldUseTopAlignment, setShouldUseTopAlignment] = useState(false);
 
-    useEffect(() => {
+    const calculateCoordinates = useCallback(() => {
         if (container) {
             const {
                 left: anchorLeft,
@@ -121,7 +121,21 @@ export const useDropdownPosition = ({
 
             setCoordinates({ x, y: useTopAlignment ? y : y + anchorHeight });
         }
-    }, [direction, anchorElement, container, contentHeight]);
+    }, [anchorElement, container, contentHeight, direction]);
+
+    useEffect(() => {
+        calculateCoordinates();
+
+        setTimeout(() => {
+            calculateCoordinates(); // Recalculate after a short delay to ensure the layout is updated
+        }, 500);
+
+        window.addEventListener('resize', calculateCoordinates);
+
+        return () => {
+            window.removeEventListener('resize', calculateCoordinates);
+        };
+    }, [calculateCoordinates]);
 
     return useMemo(
         () => ({ shouldUseTopAlignment, coordinates }),
