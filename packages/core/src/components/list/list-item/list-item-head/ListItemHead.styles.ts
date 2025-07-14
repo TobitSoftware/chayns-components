@@ -15,6 +15,7 @@ export const StyledListItemHead = styled(motion.div)<StyledListItemHeadProps>`
     min-height: 64px;
     padding: 12px 9px;
     position: relative;
+    width: 100%;
 
     ${({ $isAnyItemExpandable }) =>
         !$isAnyItemExpandable &&
