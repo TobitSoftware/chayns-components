@@ -31,6 +31,7 @@ import {
     StyledMotionListItemHeadIndicator,
 } from './ListItemHead.styles';
 import { useResizeDetector } from 'react-resize-detector';
+import { OnRefChangeType } from 'react-resize-detector/build/types';
 
 interface HeadHeight {
     closed: number;
@@ -97,38 +98,46 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     const shouldShowSubtitleRow = subtitle || typeof subtitle === 'string';
 
+    const handleShowTooltipResize = useCallback(
+        (ref: OnRefChangeType<HTMLDivElement>) => {
+            if (ref.current) {
+                const el = ref.current;
+                setShouldEnableTooltip(el.scrollWidth > el.clientWidth);
+            }
+        },
+        [setShouldEnableTooltip],
+    );
+
     const {
         ref: titleRef,
         height: titleHeight,
         width: titleWidth,
     } = useResizeDetector<HTMLDivElement>({
-        onResize: () => {
-            if (titleRef.current) {
-                const el = titleRef.current;
-                setShouldEnableTooltip(el.scrollWidth > el.clientWidth);
-            }
-        },
+        onResize: () => handleShowTooltipResize(titleRef),
     });
+
+    const { ref: ellipsisTitleRef, height: ellipsisTitleHeight } =
+        useResizeDetector<HTMLDivElement>({
+            onResize: () => handleShowTooltipResize(ellipsisTitleRef),
+        });
 
     const { ref: subTitleRef, height: subTitleHeight } = useResizeDetector();
 
     const { ref: listItemRef } = useResizeDetector({
         onResize: () => {
-            if (titleHeight && titleWidth) {
-                setOpenTitleWidth(titleWidth);
+            setOpenTitleWidth(titleWidth ?? 0);
 
-                let closedHeight = titleHeight + 24;
-                let openHeight = titleHeight + 24;
+            let closedHeight = (ellipsisTitleHeight ?? 0) + 24;
+            let openHeight = (titleHeight ?? 0) + 24;
 
-                if (shouldShowSubtitleRow) {
-                    if (subTitleHeight) {
-                        closedHeight += subTitleHeight + 4;
-                        openHeight += subTitleHeight + 4;
-                    }
+            if (shouldShowSubtitleRow) {
+                if (subTitleHeight) {
+                    closedHeight += (ellipsisTitleHeight ?? 0) + 4;
+                    openHeight += subTitleHeight + 4;
                 }
-
-                setHeadHeight({ closed: closedHeight, open: openHeight });
             }
+
+            setHeadHeight({ closed: closedHeight, open: openHeight });
         },
         refreshMode: 'debounce',
         refreshRate: 100,
@@ -144,16 +153,6 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const handleMouseEnter = useCallback(() => setShouldShowHoverItem(true), []);
 
     const handleMouseLeave = useCallback(() => setShouldShowHoverItem(false), []);
-
-    const marginTop = useMemo(() => {
-        const height = headHeight[isOpen ? 'open' : 'closed'];
-
-        if (height < 64) {
-            return (64 - height) / 2;
-        }
-
-        return 0;
-    }, [headHeight, isOpen]);
 
     const handleTouchStart = useCallback<TouchEventHandler<HTMLDivElement>>(
         (event) => {
@@ -267,19 +266,36 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             <StyledListItemHeadContent
                 ref={listItemRef}
                 $isIconOrImageGiven={iconOrImageElement !== undefined}
-                $marginTop={marginTop}
                 $isOpen={isOpen}
             >
                 <StyledListItemHeadTitle>
                     <StyledListItemHeadTitleContent>
-                        <StyledListItemHeadTitleText
-                            ref={titleRef}
-                            $isOpen={isOpen}
-                            $width={openTitleWidth}
-                            $shouldShowMultilineTitle={shouldShowMultilineTitle}
-                        >
-                            {title}
-                        </StyledListItemHeadTitleText>
+                        {isOpen ? (
+                            <StyledListItemHeadTitleText
+                                ref={titleRef}
+                                $width={openTitleWidth}
+                                $shouldShowMultilineTitle={shouldShowMultilineTitle}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.4 }}
+                            >
+                                {title}
+                            </StyledListItemHeadTitleText>
+                        ) : (
+                            <StyledListItemHeadTitleText
+                                $isEllipsis
+                                ref={ellipsisTitleRef}
+                                $width={openTitleWidth}
+                                $shouldShowMultilineTitle={shouldShowMultilineTitle}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                {title}
+                            </StyledListItemHeadTitleText>
+                        )}
                         <StyledListItemHeadTitleElement>
                             {titleElement}
                         </StyledListItemHeadTitleElement>

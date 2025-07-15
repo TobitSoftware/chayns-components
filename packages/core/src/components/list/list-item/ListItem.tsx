@@ -356,7 +356,10 @@ const ListItem: FC<ListItemProps> = ({
                 <Tooltip
                     shouldUseFullWidth
                     item={
-                        <StyledListItemTooltip key={`list-item-tooltip-${uuid}`}>
+                        <StyledListItemTooltip
+                            style={{ cursor: 'default' }}
+                            key={`list-item-tooltip-${uuid}`}
+                        >
                             {title}
                         </StyledListItemTooltip>
                     }
