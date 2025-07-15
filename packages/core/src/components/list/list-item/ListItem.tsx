@@ -21,6 +21,7 @@ import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
 import { StyledListItemTooltip, StyledMotionListItem } from './ListItem.styles';
 import Tooltip from '../../tooltip/Tooltip';
+import { useResizeDetector } from 'react-resize-detector';
 
 export type ListItemElements = [ReactNode, ...ReactNode[]];
 
@@ -211,7 +212,8 @@ const ListItem: FC<ListItemProps> = ({
     const areaProvider = useContext(AreaContext);
 
     const isInitialRenderRef = useRef(true);
-    const listItemRef = useRef<HTMLDivElement>(null);
+
+    const { ref: listItemRef } = useResizeDetector();
 
     const uuid = useUuid();
 
@@ -276,18 +278,6 @@ const ListItem: FC<ListItemProps> = ({
 
     const isClickable = typeof onClick === 'function' || isExpandable;
 
-    const handleTitleWidthChange = (titleWidth: number) => {
-        if (listItemRef.current) {
-            const { offsetWidth } = listItemRef.current;
-
-            if (offsetWidth - 18 < titleWidth) {
-                setShouldEnableTooltip(true);
-            } else {
-                setShouldEnableTooltip(false);
-            }
-        }
-    };
-
     const headContent = useMemo(
         () => (
             <ListItemHead
@@ -299,7 +289,6 @@ const ListItem: FC<ListItemProps> = ({
                 images={images}
                 isAnyItemExpandable={isAnyItemExpandable}
                 isExpandable={isExpandable}
-                onTitleWidthChange={handleTitleWidthChange}
                 isOpen={isItemOpen}
                 isTitleGreyed={isTitleGreyed}
                 leftElements={leftElements}
@@ -314,6 +303,7 @@ const ListItem: FC<ListItemProps> = ({
                 subtitle={subtitle}
                 title={title}
                 titleElement={titleElement}
+                setShouldEnableTooltip={setShouldEnableTooltip}
             />
         ),
         [
@@ -366,7 +356,10 @@ const ListItem: FC<ListItemProps> = ({
                 <Tooltip
                     shouldUseFullWidth
                     item={
-                        <StyledListItemTooltip key={`list-item-tooltip-${uuid}`}>
+                        <StyledListItemTooltip
+                            style={{ cursor: 'default' }}
+                            key={`list-item-tooltip-${uuid}`}
+                        >
                             {title}
                         </StyledListItemTooltip>
                     }
