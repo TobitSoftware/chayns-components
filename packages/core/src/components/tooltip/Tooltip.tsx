@@ -107,6 +107,7 @@ const Tooltip: FC<TooltipProps> = ({
                         yOffset={yOffset}
                         shouldUseChildrenWidth={shouldUseChildrenWidth}
                         shouldUseFullWidth={shouldUseFullWidth}
+                        shouldScrollWithContent
                     >
                         <StyledTooltipChildren
                             $isOnlyText={isTextOnlyElement(children)}

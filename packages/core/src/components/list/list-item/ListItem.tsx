@@ -352,23 +352,20 @@ const ListItem: FC<ListItemProps> = ({
             $shouldHideIndicator={shouldHideIndicator}
             $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
         >
-            {shouldShowTooltipOnTitleOverflow && shouldEnableTooltip ? (
-                <Tooltip
-                    shouldUseFullWidth
-                    item={
-                        <StyledListItemTooltip
-                            style={{ cursor: 'default' }}
-                            key={`list-item-tooltip-${uuid}`}
-                        >
-                            {title}
-                        </StyledListItemTooltip>
-                    }
-                >
-                    {headContent}
-                </Tooltip>
-            ) : (
-                headContent
-            )}
+            <Tooltip
+                shouldUseFullWidth
+                isDisabled={!shouldShowTooltipOnTitleOverflow || !shouldEnableTooltip}
+                item={
+                    <StyledListItemTooltip
+                        style={{ cursor: 'default' }}
+                        key={`list-item-tooltip-${uuid}`}
+                    >
+                        {title}
+                    </StyledListItemTooltip>
+                }
+            >
+                {headContent}
+            </Tooltip>
             <AnimatePresence initial={false}>
                 {isExpandable && (isItemOpen || shouldRenderClosed) && (
                     <ListItemBody
