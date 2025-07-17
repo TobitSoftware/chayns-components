@@ -30,7 +30,7 @@ import {
     StyledMotionListItemHeadHoverItemWrapper,
     StyledMotionListItemHeadIndicator,
 } from './ListItemHead.styles';
-import { useResizeDetector } from 'react-resize-detector';
+import { ResizePayload, useResizeDetector } from 'react-resize-detector';
 import { OnRefChangeType } from 'react-resize-detector/build/types';
 
 interface HeadHeight {
@@ -90,60 +90,47 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     setShouldEnableTooltip,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
-    const [openTitleWidth, setOpenTitleWidth] = useState(0);
-    const [headHeight, setHeadHeight] = useState<HeadHeight>({ closed: 64, open: 64 });
     const [, setIsFirstRender] = useState(false);
 
     const longPressTimeoutRef = useRef<number>();
 
     const shouldShowSubtitleRow = subtitle || typeof subtitle === 'string';
 
+    const { ref: subTitleRef, height: subTitleHeight = 0 } = useResizeDetector();
+
+    const shouldShowMultilineTitle = useMemo(() => !subtitle, [subtitle]);
+
     const handleShowTooltipResize = useCallback(
-        (ref: OnRefChangeType<HTMLDivElement>) => {
-            if (ref.current) {
-                const el = ref.current;
-                setShouldEnableTooltip(el.scrollWidth > el.clientWidth);
-            }
+        (data: ResizePayload) => {
+            const el = data.entry?.target;
+            if (!el) return;
+            setShouldEnableTooltip(el.scrollWidth > el.clientWidth);
         },
         [setShouldEnableTooltip],
     );
 
     const {
         ref: titleRef,
-        height: titleHeight,
-        width: titleWidth,
+        height: titleHeight = 0,
+        width: titleWidth = 0,
     } = useResizeDetector<HTMLDivElement>({
-        onResize: () => handleShowTooltipResize(titleRef),
+        onResize: handleShowTooltipResize,
     });
 
-    const { ref: ellipsisTitleRef, height: ellipsisTitleHeight } =
-        useResizeDetector<HTMLDivElement>({
-            onResize: () => handleShowTooltipResize(ellipsisTitleRef),
-        });
-
-    const { ref: subTitleRef, height: subTitleHeight } = useResizeDetector();
-
-    const { ref: listItemRef } = useResizeDetector({
-        onResize: () => {
-            setOpenTitleWidth(titleWidth ?? 0);
-
-            let closedHeight = (ellipsisTitleHeight ?? 0) + 24;
-            let openHeight = (titleHeight ?? 0) + 24;
-
-            if (shouldShowSubtitleRow) {
-                if (subTitleHeight) {
-                    closedHeight += (ellipsisTitleHeight ?? 0) + 4;
-                    openHeight += subTitleHeight + 4;
-                }
-            }
-
-            setHeadHeight({ closed: closedHeight, open: openHeight });
-        },
-        refreshMode: 'debounce',
-        refreshRate: 100,
+    const {
+        ref: ellipsisTitleRef,
+        height: ellipsisTitleHeight = 0,
+        width: ellipsisTitleWidth = 0,
+    } = useResizeDetector<HTMLDivElement>({
+        onResize: handleShowTooltipResize,
     });
 
-    const shouldShowMultilineTitle = useMemo(() => !subtitle, [subtitle]);
+    const height = useMemo(
+        () =>
+            (isOpen ? titleHeight : ellipsisTitleHeight) +
+            (shouldShowSubtitleRow ? subTitleHeight + 4 : 0),
+        [ellipsisTitleHeight, isOpen, shouldShowSubtitleRow, subTitleHeight, titleHeight],
+    );
 
     // This is used to trigger a rerender, so the head height can be calculated
     useEffect(() => {
@@ -234,7 +221,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     return (
         <StyledListItemHead
             animate={{
-                height: isOpen ? headHeight.open : headHeight.closed,
+                height,
                 opacity: isTitleGreyed ? 0.5 : 1,
             }}
             initial={false}
@@ -264,7 +251,6 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 {iconOrImageElement}
             </StyledListItemHeadLeftWrapper>
             <StyledListItemHeadContent
-                ref={listItemRef}
                 $isIconOrImageGiven={iconOrImageElement !== undefined}
                 $isOpen={isOpen}
             >
@@ -272,8 +258,9 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     <StyledListItemHeadTitleContent>
                         {isOpen ? (
                             <StyledListItemHeadTitleText
+                                key="title"
                                 ref={titleRef}
-                                $width={openTitleWidth}
+                                $width={titleWidth}
                                 $shouldShowMultilineTitle={shouldShowMultilineTitle}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -284,9 +271,10 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                             </StyledListItemHeadTitleText>
                         ) : (
                             <StyledListItemHeadTitleText
+                                key="ellipsisTitle"
                                 $isEllipsis
                                 ref={ellipsisTitleRef}
-                                $width={openTitleWidth}
+                                $width={ellipsisTitleWidth}
                                 $shouldShowMultilineTitle={shouldShowMultilineTitle}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
