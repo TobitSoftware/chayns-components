@@ -1,8 +1,10 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
+import { CSSProperties } from 'react';
 
 type StyledListItemProps = WithTheme<{
+    $backgroundColor?: CSSProperties['backgroundColor'];
     $isClickable: boolean;
     $isInAccordion: boolean;
     $isOpen: boolean;
@@ -28,6 +30,13 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
         ((!$isInAccordion && $isOpen) || $shouldForceBackground) &&
         css`
             background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
+        `}
+    
+    ${({ $backgroundColor, $isInAccordion, $isOpen, $shouldForceBackground }) =>
+        $backgroundColor &&
+        ((!$isInAccordion && $isOpen) || $shouldForceBackground) &&
+        css`
+            background-color: ${$backgroundColor} !important;
         `}
 
     ${({ $isClickable, $isInAccordion, theme }) =>

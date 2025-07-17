@@ -26,6 +26,10 @@ export type ListItemElements = [ReactNode, ...ReactNode[]];
 
 export type ListItemProps = {
     /**
+     * The background color of the `ListItem`.
+     */
+    backgroundColor?: CSSProperties['backgroundColor'];
+    /**
      * DEPRECATED: Use `cornerImage` instead.
      */
     careOfLocationId?: number;
@@ -166,6 +170,7 @@ export type ListItemProps = {
 };
 
 const ListItem: FC<ListItemProps> = ({
+    backgroundColor,
     careOfLocationId,
     children,
     cornerImage,
@@ -341,6 +346,7 @@ const ListItem: FC<ListItemProps> = ({
             key={`list-item-${uuid}`}
             ref={listItemRef}
             layout={shouldPreventLayoutAnimation ? undefined : 'position'}
+            $backgroundColor={backgroundColor}
             $isClickable={isClickable}
             $isInAccordion={typeof isParentAccordionWrapped === 'boolean' && !shouldDisablePadding}
             $isOpen={isItemOpen}
