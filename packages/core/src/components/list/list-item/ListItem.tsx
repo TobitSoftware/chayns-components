@@ -21,7 +21,6 @@ import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
 import { StyledListItemTooltip, StyledMotionListItem } from './ListItem.styles';
 import Tooltip from '../../tooltip/Tooltip';
-import { useResizeDetector } from 'react-resize-detector';
 
 export type ListItemElements = [ReactNode, ...ReactNode[]];
 
@@ -213,7 +212,7 @@ const ListItem: FC<ListItemProps> = ({
 
     const isInitialRenderRef = useRef(true);
 
-    const { ref: listItemRef } = useResizeDetector();
+    const listItemRef = useRef<HTMLDivElement>(null);
 
     const uuid = useUuid();
 
