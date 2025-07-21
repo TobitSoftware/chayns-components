@@ -73,7 +73,6 @@
         "@chayns/colors": "^2.0.0",
         "@chayns/uac-service": "~0.0.58",
         "clsx": "^2.1.1",
-        "react-resize-detector": "^12.1.0",
         "uuid": "^10.0.0"
     },
     "peerDependencies": {

@@ -30,7 +30,6 @@ import {
     StyledMotionListItemHeadHoverItemWrapper,
     StyledMotionListItemHeadIndicator,
 } from './ListItemHead.styles';
-import { ResizePayload, useResizeDetector } from 'react-resize-detector';
 
 type ListItemHeadProps = {
     careOfLocationId?: number;
@@ -84,7 +83,8 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     setShouldEnableTooltip,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
-    const [, setIsFirstRender] = useState(false);
+
+    const titleWrapperRef = useRef<HTMLDivElement>(null);
 
     const longPressTimeoutRef = useRef<number>();
 
@@ -93,27 +93,23 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const shouldShowMultilineTitle = useMemo(() => !subtitle, [subtitle]);
 
     const handleShowTooltipResize = useCallback(
-        (data: ResizePayload) => {
-            const el = data.entry?.target;
+        (entries: ResizeObserverEntry[]) => {
+            const el = entries[0]?.target;
             if (!el) return;
             setShouldEnableTooltip(el.scrollWidth > el.clientWidth);
         },
         [setShouldEnableTooltip],
     );
 
-    const { ref: titleRef } = useResizeDetector<HTMLDivElement>({
-        onResize: handleShowTooltipResize,
-        skipOnMount: true,
-    });
-    const { ref: ellipsisTitleRef } = useResizeDetector<HTMLDivElement>({
-        onResize: handleShowTooltipResize,
-        skipOnMount: true,
-    });
-
-    // This is used to trigger a rerender, so the head height can be calculated
     useEffect(() => {
-        setIsFirstRender(true);
-    }, []);
+        const element = titleWrapperRef?.current;
+        if (!element) return undefined;
+
+        const resizeObserver = new ResizeObserver(handleShowTooltipResize);
+        resizeObserver.observe(element);
+
+        return () => resizeObserver.disconnect();
+    }, [handleShowTooltipResize]);
 
     const handleMouseEnter = useCallback(() => setShouldShowHoverItem(true), []);
 
@@ -234,32 +230,13 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             >
                 <StyledListItemHeadTitle>
                     <StyledListItemHeadTitleContent>
-                        {isOpen ? (
-                            <StyledListItemHeadTitleText
-                                key="title"
-                                ref={titleRef}
-                                $shouldShowMultilineTitle={shouldShowMultilineTitle}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.4 }}
-                            >
-                                {title}
-                            </StyledListItemHeadTitleText>
-                        ) : (
-                            <StyledListItemHeadTitleText
-                                key="ellipsisTitle"
-                                $isEllipsis
-                                ref={ellipsisTitleRef}
-                                $shouldShowMultilineTitle={shouldShowMultilineTitle}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                {title}
-                            </StyledListItemHeadTitleText>
-                        )}
+                        <StyledListItemHeadTitleText
+                            $isEllipsis={!isOpen}
+                            ref={titleWrapperRef}
+                            $shouldShowMultilineTitle={shouldShowMultilineTitle}
+                        >
+                            {title}
+                        </StyledListItemHeadTitleText>
                         <StyledListItemHeadTitleElement>
                             {titleElement}
                         </StyledListItemHeadTitleElement>
