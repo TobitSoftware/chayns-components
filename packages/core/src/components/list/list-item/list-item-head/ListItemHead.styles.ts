@@ -80,7 +80,6 @@ export const StyledListItemHeadTitleElement = styled.div`
 `;
 
 type StyledListItemHeadTitleTextProps = WithTheme<{
-    $width: number;
     $shouldShowMultilineTitle: boolean;
     $isEllipsis?: boolean;
 }>;
@@ -88,7 +87,7 @@ type StyledListItemHeadTitleTextProps = WithTheme<{
 export const StyledListItemHeadTitleText = styled(motion.span)<StyledListItemHeadTitleTextProps>`
     font-weight: ${({ $isEllipsis }) => ($isEllipsis ? 'normal' : 'bold')};
     white-space: ${({ $isEllipsis }) => ($isEllipsis ? 'nowrap' : 'normal')};
-    min-width: ${({ $width }) => `${$width}px`};
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
 
