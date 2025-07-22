@@ -4,6 +4,7 @@ export enum ContainerAnchor {
     BODY = 'body',
     DIALOG = '.dialog-inner',
     PAGE = '.page-provider',
+    ROOT = '#root',
     TAPP = '.tapp',
     WALLET = '.wallet',
 }
@@ -12,6 +13,7 @@ const DEFAULT_CONTAINER_ANCHORS = [
     ContainerAnchor.BODY,
     ContainerAnchor.DIALOG,
     ContainerAnchor.PAGE,
+    ContainerAnchor.ROOT,
     ContainerAnchor.TAPP,
     ContainerAnchor.WALLET,
 ];
@@ -40,10 +42,16 @@ export const useContainer = ({
         }
 
         if (!container) {
+            const rootContainer = document.querySelector(ContainerAnchor.ROOT);
             const walletContainer = document.querySelector(ContainerAnchor.WALLET);
 
-            if (walletContainer && walletContainer.contains(el)) {
-                setNewContainer(walletContainer);
+            if (
+                rootContainer &&
+                walletContainer &&
+                rootContainer.contains(el) &&
+                walletContainer.contains(el)
+            ) {
+                setNewContainer(rootContainer);
 
                 return;
             }
