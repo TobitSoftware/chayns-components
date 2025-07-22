@@ -30,6 +30,6 @@ export const StyledMotionDelayedDropdownContent = styled(
                   z-index: -1;
               `
             : css`
-                  z-index: 4;
+                  z-index: 5;
               `}
 `;
