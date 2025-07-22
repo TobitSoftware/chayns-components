@@ -40,6 +40,14 @@ export const useContainer = ({
         }
 
         if (!container) {
+            const walletContainer = document.querySelector(ContainerAnchor.WALLET);
+
+            if (walletContainer && walletContainer.contains(el)) {
+                setNewContainer(walletContainer);
+
+                return;
+            }
+
             const element = el.closest(anchors?.join(', '));
 
             setNewContainer(element ?? undefined);
