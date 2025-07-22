@@ -1,13 +1,15 @@
 import { MutableRefObject, useEffect, useState } from 'react';
 
 export enum ContainerAnchor {
-    TAPP = '.tapp',
     BODY = 'body',
     DIALOG = '.dialog-inner',
     PAGE = '.page-provider',
+    TAPP = '.tapp',
+    WALLET = '.wallet',
 }
 
 const DEFAULT_CONTAINER_ANCHORS = [
+    ContainerAnchor.WALLET,
     ContainerAnchor.DIALOG,
     ContainerAnchor.PAGE,
     ContainerAnchor.TAPP,
