@@ -9,11 +9,11 @@ export enum ContainerAnchor {
 }
 
 const DEFAULT_CONTAINER_ANCHORS = [
-    ContainerAnchor.WALLET,
+    ContainerAnchor.BODY,
     ContainerAnchor.DIALOG,
     ContainerAnchor.PAGE,
     ContainerAnchor.TAPP,
-    ContainerAnchor.BODY,
+    ContainerAnchor.WALLET,
 ];
 
 interface UseContainerProps {
