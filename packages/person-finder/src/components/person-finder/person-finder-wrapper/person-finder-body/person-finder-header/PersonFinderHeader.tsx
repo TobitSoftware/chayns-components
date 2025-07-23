@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, MouseEvent } from 'react';
 import {
     StyledPersonFinderHeader,
     StyledPersonFinderHeaderFilter,
@@ -46,8 +46,13 @@ const PersonFinderHeader: FC<PersonFinderHeaderProps> = ({
         return null;
     }
 
+    const handlePreventDefault = (event: MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+    };
+
     return (
-        <StyledPersonFinderHeader $isScrollTop={isScrollTop}>
+        <StyledPersonFinderHeader $isScrollTop={isScrollTop} onClick={handlePreventDefault}>
             <StyledPersonFinderHeaderFilter>
                 <FilterButtons
                     size={FilterButtonSize.Small}

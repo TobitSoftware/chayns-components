@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, MouseEvent, useCallback } from 'react';
 import { Button, List, SmallWaitCursor } from '@chayns-components/core';
 import {
     LoadingState,
@@ -67,8 +67,13 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
         }
     }, [filterKey, loadMore]);
 
+    const handlePreventDefault = (event: MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+    };
+
     return (
-        <StyledPersonFinderGroup>
+        <StyledPersonFinderGroup onClick={handlePreventDefault}>
             {shouldShowGroupName && (
                 <StyledPersonFinderGroupName className="person-finder-group-name">
                     {groupName}

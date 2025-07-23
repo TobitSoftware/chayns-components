@@ -23,8 +23,8 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd, onRemove })
     const isSelected = tags && tags.map((tag) => tag.id).includes(id);
 
     const handleIconClick = (event: MouseEvent) => {
-        event.stopPropagation();
         event.preventDefault();
+        event.stopPropagation();
 
         if (isFriend) {
             if (typeof removeFriend === 'function') {
@@ -35,7 +35,10 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd, onRemove })
         }
     };
 
-    const handleClick = () => {
+    const handleClick = (event: MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+
         if (isSelected) {
             onRemove(id);
         } else {
