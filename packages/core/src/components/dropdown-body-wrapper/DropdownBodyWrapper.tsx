@@ -158,7 +158,7 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
             DropdownDirection.BOTTOM_RIGHT,
         ].includes(direction);
 
-        const reservationWrapperElement = document.querySelector<HTMLDivElement>(
+        const reservationWrapperElement = anchorElement.closest<HTMLDivElement>(
             ContainerAnchor.RESERVATION_WRAPPER,
         );
 
