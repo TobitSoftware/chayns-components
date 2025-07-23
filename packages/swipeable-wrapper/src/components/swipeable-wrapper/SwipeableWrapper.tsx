@@ -46,7 +46,7 @@ export type SwipeableWrapperProps = {
     /**
      * Whether the swipeable functionality is disabled
      */
-    isDisabled: boolean;
+    isDisabled?: boolean;
 };
 
 const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
@@ -142,7 +142,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
     // Vibrate when the threshold is passed
     useEffect(
         () =>
-            listItemXOffset.onChange((newValue: number) => {
+            listItemXOffset.on('change', (newValue: number) => {
                 const previous = listItemXOffset.getPrevious();
 
                 if (!previous) {
