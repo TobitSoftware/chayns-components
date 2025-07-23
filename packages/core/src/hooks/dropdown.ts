@@ -141,14 +141,20 @@ export const useDropdownPosition = ({
     }, [anchorElement, container, contentHeight, direction]);
 
     useIsomorphicLayoutEffect(() => {
-        calculateCoordinates();
+        const handleResize = () => {
+            calculateCoordinates();
+
+            setTimeout(calculateCoordinates, 300);
+        };
+
+        handleResize();
 
         if (shouldShowDropdown) {
-            window.addEventListener('resize', calculateCoordinates);
+            window.addEventListener('resize', handleResize);
         }
 
         return () => {
-            window.removeEventListener('resize', calculateCoordinates);
+            window.removeEventListener('resize', handleResize);
         };
     }, [calculateCoordinates, shouldShowDropdown]);
 
