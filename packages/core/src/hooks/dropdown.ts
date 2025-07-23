@@ -4,20 +4,33 @@ import { DropdownCoordinates, DropdownDirection } from '../types/dropdown';
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 interface UseDropdownListenerOptions {
+    onClick: (event: MouseEvent) => void;
     onClose: () => void;
-    onOutsideClick: (event: MouseEvent) => void;
+    onTouchEnd: (event: TouchEvent) => void;
+    onTouchStart: (event: TouchEvent) => void;
 }
 
-export const useDropdownListener = ({ onClose, onOutsideClick }: UseDropdownListenerOptions) => {
+export const useDropdownListener = ({
+    onClick,
+    onClose,
+    onTouchEnd,
+    onTouchStart,
+}: UseDropdownListenerOptions) => {
     useEffect(() => {
-        document.addEventListener('click', onOutsideClick);
+        document.addEventListener('click', onClick);
+        document.addEventListener('touchend', onTouchEnd);
+        document.addEventListener('touchstart', onTouchStart);
+
         window.addEventListener('blur', () => onClose());
 
         return () => {
-            document.removeEventListener('click', onOutsideClick);
+            document.removeEventListener('click', onClick);
+            document.removeEventListener('touchend', onTouchEnd);
+            document.removeEventListener('touchstart', onTouchStart);
+
             window.addEventListener('blur', () => onClose());
         };
-    }, [onOutsideClick, onClose]);
+    }, [onClick, onClose, onTouchEnd, onTouchStart]);
 };
 
 interface UseDropdownAlignmentOptions {

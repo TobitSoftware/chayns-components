@@ -74,6 +74,8 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     const [portal, setPortal] = useState<ReactPortal>();
 
     const ref = useRef<HTMLDivElement>(null);
+    const shouldPreventClickRef = useRef<boolean>(false);
+    const touchTimeoutRef = useRef<number | undefined>(undefined);
 
     const container = useContainer({ anchorElement, container: containerProp });
 
@@ -95,25 +97,40 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     /**
      * This function closes the body
      */
-    const handleOutsideClick = useCallback(
+    const handleClick = useCallback(
         (event: MouseEvent) => {
             if (
+                !shouldPreventClickRef.current &&
                 !anchorElement.contains(event.target as Node) &&
                 ref.current &&
                 !ref.current.contains(event.target as Node)
             ) {
                 handleClose();
             }
+
+            shouldPreventClickRef.current = false;
         },
         [anchorElement, handleClose],
     );
+
+    const handleTouchEnd = useCallback(() => {
+        clearTimeout(touchTimeoutRef.current);
+    }, []);
+
+    const handleTouchStart = useCallback(() => {
+        touchTimeoutRef.current = window.setTimeout(() => {
+            shouldPreventClickRef.current = true;
+        }, 500);
+    }, []);
 
     /**
      * This hook listens for clicks
      */
     useDropdownListener({
-        onOutsideClick: handleOutsideClick,
+        onClick: handleClick,
         onClose: handleClose,
+        onTouchEnd: handleTouchEnd,
+        onTouchStart: handleTouchStart,
     });
 
     useEffect(() => {
