@@ -189,6 +189,17 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
                 reservationWrapperElement.style.marginBottom = '0px';
             }
         }
+
+        if (isInChaynsWalletRef.current && reservationWrapperElement && !shouldShowDropdown) {
+            // Reset the margin bottom when the dropdown is closed.
+            reservationWrapperElement.style.marginBottom = '0px';
+        }
+
+        return () => {
+            if (reservationWrapperElement) {
+                reservationWrapperElement.style.marginBottom = '0px';
+            }
+        };
     }, [anchorElement, direction, measuredContentHeight, shouldShowDropdown]);
 
     useEffect(() => {
