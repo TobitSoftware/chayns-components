@@ -4,12 +4,12 @@ import {
     StyledDropdownBodyWrapperContent,
 } from './DropdownBodyWrapper.styles';
 import { createPortal } from 'react-dom';
-import { DropdownDirection } from '../../types/dropdown';
+import { DropdownDirection, DropdownMeasurements } from '../../types/dropdown';
 import DelayedDropdownContent, {
     DelayedDropdownContentProps,
 } from './delayed-dropdown-content/DelayedDropdownContent';
 import { useDropdown, useDropdownListener } from '../../hooks/dropdown';
-import { useContainer } from '../../hooks/container';
+import { ContainerAnchor, useContainer } from '../../hooks/container';
 
 interface DropdownBodyWrapperProps {
     /**
@@ -71,6 +71,9 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     minBodyWidth = 0,
     bodyWidth,
 }) => {
+    const isInChaynsWalletRef = useRef(false);
+
+    const [measuredContentHeight, setMeasuredContentHeight] = useState<number>(0);
     const [portal, setPortal] = useState<ReactPortal>();
 
     const ref = useRef<HTMLDivElement>(null);
@@ -113,6 +116,21 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
         [anchorElement, handleClose],
     );
 
+    const handleContentMeasure = useCallback(
+        (measurements: DropdownMeasurements) => {
+            // Measurements are only needed if the content is shown in the chayns wallet. To prevent
+            // unnecessary renders, we only set the height if the content is shown in the wallet.
+            if (isInChaynsWalletRef.current) {
+                setMeasuredContentHeight(measurements.height);
+            }
+
+            if (typeof onMeasure === 'function') {
+                onMeasure(measurements);
+            }
+        },
+        [onMeasure],
+    );
+
     const handleTouchEnd = useCallback(() => {
         clearTimeout(touchTimeoutRef.current);
     }, []);
@@ -134,13 +152,54 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     });
 
     useEffect(() => {
+        const isBottomDirection = [
+            DropdownDirection.BOTTOM,
+            DropdownDirection.BOTTOM_LEFT,
+            DropdownDirection.BOTTOM_RIGHT,
+        ].includes(direction);
+
+        const reservationWrapperElement = document.querySelector<HTMLDivElement>(
+            ContainerAnchor.RESERVATION_WRAPPER,
+        );
+
+        isInChaynsWalletRef.current =
+            !!(reservationWrapperElement && reservationWrapperElement.contains(anchorElement)) ||
+            true;
+
+        // This effect checks if additional space is needed to show dropdown content in chayns cards.
+        if (
+            isBottomDirection &&
+            isInChaynsWalletRef.current &&
+            measuredContentHeight > 0 &&
+            reservationWrapperElement &&
+            shouldShowDropdown
+        ) {
+            const availableHeight =
+                window.innerHeight - anchorElement.getBoundingClientRect().bottom;
+
+            // If the content height is greater than the available height, we need to add additional space.
+            // This is to ensure that the dropdown content is fully visible. The 16 pixels are a buffer for shadows.
+            const additionalNeededSpace = measuredContentHeight + 16 - availableHeight;
+
+            if (additionalNeededSpace > 0) {
+                // Add margin bottom to the reservation wrapper to ensure the dropdown content is fully visible.
+                reservationWrapperElement.style.marginBottom = `${additionalNeededSpace}px`;
+            } else {
+                // Reset the margin bottom if no additional space is needed.
+                reservationWrapperElement.style.marginBottom = '0px';
+            }
+        }
+    }, [anchorElement, direction, measuredContentHeight, shouldShowDropdown]);
+
+    useEffect(() => {
         if (!container) return;
 
         setPortal(() =>
             createPortal(
                 <DelayedDropdownContent
-                    shouldShowContent={shouldShowDropdown}
                     coordinates={coordinates}
+                    onMeasure={handleContentMeasure}
+                    shouldShowContent={shouldShowDropdown}
                     transform={transform}
                 >
                     <StyledDropdownBodyWrapperContent
@@ -157,16 +216,16 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
             ),
         );
     }, [
-        direction,
         children,
         container,
         coordinates,
+        direction,
+        handleContentMeasure,
         maxHeight,
-        shouldShowDropdown,
-        width,
         minBodyWidth,
+        shouldShowDropdown,
         transform,
-        onMeasure,
+        width,
     ]);
 
     return <StyledDropdownBodyWrapper>{portal}</StyledDropdownBodyWrapper>;
