@@ -4,6 +4,7 @@ export enum ContainerAnchor {
     BODY = 'body',
     DIALOG = '.dialog-inner',
     PAGE = '.page-provider',
+    RESERVATION_WRAPPER = '.reservation-wrapper',
     ROOT = '#root',
     TAPP = '.tapp',
     WALLET = '.wallet',
@@ -15,7 +16,6 @@ const DEFAULT_CONTAINER_ANCHORS = [
     ContainerAnchor.PAGE,
     ContainerAnchor.ROOT,
     ContainerAnchor.TAPP,
-    ContainerAnchor.WALLET,
 ];
 
 interface UseContainerProps {
@@ -42,15 +42,18 @@ export const useContainer = ({
         }
 
         if (!container) {
+            const reservationWrapperContainer = document.querySelector(
+                ContainerAnchor.RESERVATION_WRAPPER,
+            );
+
             const rootContainer = document.querySelector(ContainerAnchor.ROOT);
             const walletContainer = document.querySelector(ContainerAnchor.WALLET);
 
-            if (
-                rootContainer &&
-                walletContainer &&
-                rootContainer.contains(el) &&
-                walletContainer.contains(el)
-            ) {
+            const isInWallet =
+                (reservationWrapperContainer && reservationWrapperContainer.contains(el)) ||
+                (walletContainer && walletContainer.contains(el));
+
+            if (isInWallet && rootContainer && rootContainer.contains(el)) {
                 setNewContainer(rootContainer);
 
                 return;
