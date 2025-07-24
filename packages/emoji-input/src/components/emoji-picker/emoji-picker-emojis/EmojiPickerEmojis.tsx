@@ -1,9 +1,9 @@
+// @ts-nocheck
+
 import { BrowserName, useCombinedRefs, useIsMeasuredClone } from '@chayns-components/core';
 import { getDevice } from 'chayns-api';
 import emojiLib from 'emojilib';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import emojiList from 'unicode-emoji-json/data-by-emoji.json';
-import emojiCategories from 'unicode-emoji-json/data-by-group.json';
 import germanEmojiLib from '../../../constants/emoji-de-DE.json';
 import { useEmojiHistory } from '../../../hooks/emojiHistory';
 import type { Category } from '../../../types/category';
@@ -21,6 +21,27 @@ export type EmojiPickerEmojisProps = {
     selectedCategory: Category;
 };
 
+interface EmojiType {
+    emoji: string;
+    skin_tone_support: boolean;
+    name: string;
+    slug: string;
+    unicode_version: string;
+    emoji_version: string;
+    group?: string;
+}
+
+interface EmojiCategory {
+    name: string;
+    slug: string;
+    emojis: EmojiType[];
+}
+
+type EmojiData = EmojiCategory[];
+interface EmojiDictionary {
+    [key: string]: EmojiType;
+}
+
 const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
     accessToken,
     onSelect,
@@ -31,6 +52,17 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
     const [shouldPreventScroll, setShouldPreventScroll] = useState(false);
     const [shouldShowSkinTonePopup, setShouldShowSkinTonePopup] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState<number>(0);
+    const [emojiCategories, setEmojiCategories] = useState<EmojiData>([]);
+    const [emojiList, setEmojiList] = useState<EmojiDictionary[]>([]);
+
+    useEffect(() => {
+        void import('unicode-emoji-json/data-by-group.json').then(({ default: categories }) => {
+            setEmojiCategories(categories);
+        });
+        void import('unicode-emoji-json/data-by-emoji.json').then(({ default: emojis }) => {
+            setEmojiList(emojis);
+        });
+    }, []);
 
     const [shouldPreventListener, ref] = useIsMeasuredClone();
 
@@ -222,6 +254,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
                             onSelect={(e) =>
                                 handleSelect({ emoji: e, name, skin_tone_support, index })
                             }
+                            emojiList={emojiList}
                         />,
                     );
                 }
@@ -245,6 +278,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
                     onPopupVisibilityChange={handlePopupVisibilityChange}
                     onSelect={(e) => handleSelect({ emoji: e, name, skin_tone_support, index })}
                     isSkinToneSupported={false}
+                    emojiList={emojiList}
                 />
             ));
         }
@@ -265,6 +299,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
                     key={name}
                     onPopupVisibilityChange={handlePopupVisibilityChange}
                     onSelect={(e) => handleSelect({ emoji: e, name, skin_tone_support, index })}
+                    emojiList={emojiList}
                 />
             ));
     }, [

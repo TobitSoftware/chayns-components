@@ -1,5 +1,4 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import unicodeEmoji from 'unicode-emoji-json/data-by-group.json';
 import { CATEGORY_EMOJIS } from '../../../constants/categories';
 import type { Category } from '../../../types/category';
 import {
@@ -99,32 +98,30 @@ const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({
         [handleSelect],
     );
 
-    const categories = useMemo(() => {
-        const categorySlugs = unicodeEmoji.map(({ slug }) => slug);
+    const categories = useMemo(
+        () =>
+            Object.keys(CATEGORY_EMOJIS).map((slug) => {
+                const isSelected = selectedCategory === slug && !isSearchStringGiven;
 
-        categorySlugs.unshift('history');
-
-        return categorySlugs.map((slug) => {
-            const isSelected = selectedCategory === slug && !isSearchStringGiven;
-
-            return (
-                <StyledMotionEmojiPickerCategory
-                    animate={{
-                        filter: `grayscale(${isSelected ? 0 : 0.75})`,
-                        opacity: isSelected ? 1 : 0.5,
-                    }}
-                    className="prevent-lose-focus"
-                    initial={false}
-                    key={slug}
-                    id={slug}
-                    onClick={() => handleClick(slug as Category)}
-                    transition={{ duration: 0.2 }}
-                >
-                    {CATEGORY_EMOJIS[slug as Category]}
-                </StyledMotionEmojiPickerCategory>
-            );
-        });
-    }, [handleClick, isSearchStringGiven, selectedCategory]);
+                return (
+                    <StyledMotionEmojiPickerCategory
+                        animate={{
+                            filter: `grayscale(${isSelected ? 0 : 0.75})`,
+                            opacity: isSelected ? 1 : 0.5,
+                        }}
+                        className="prevent-lose-focus"
+                        initial={false}
+                        key={slug}
+                        id={slug}
+                        onClick={() => handleClick(slug as Category)}
+                        transition={{ duration: 0.2 }}
+                    >
+                        {CATEGORY_EMOJIS[slug as Category]}
+                    </StyledMotionEmojiPickerCategory>
+                );
+            }),
+        [handleClick, isSearchStringGiven, selectedCategory],
+    );
 
     return (
         <StyledEmojiPickerCategories ref={combinedRef}>{categories}</StyledEmojiPickerCategories>
