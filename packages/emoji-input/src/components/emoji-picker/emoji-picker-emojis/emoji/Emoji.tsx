@@ -15,6 +15,7 @@ export type EmojiProps = {
     onSelect: (emoji: string) => void;
     onRightClick: (newIndex: number) => void;
     shouldShowSkinTonePopup: boolean;
+    emojiList: { [x: string]: { skin_tone_support: any } };
 };
 
 const Emoji: FC<EmojiProps> = ({
@@ -27,6 +28,7 @@ const Emoji: FC<EmojiProps> = ({
     shouldShowSkinTonePopup,
     onRightClick,
     index,
+    emojiList,
 }) => {
     const [shouldShowPopup, setShouldShowPopup] = useState(false);
     const [skinTonePopupAnchorAlignment, setSkinTonePopupAnchorAlignment] = useState(
@@ -172,6 +174,7 @@ const Emoji: FC<EmojiProps> = ({
                         onSelect={onSelect}
                         overlayPosition={skinTonePopupOverlayPosition}
                         position={skinTonePopupPosition}
+                        emojiList={emojiList}
                     />
                 )}
             </AnimatePresence>

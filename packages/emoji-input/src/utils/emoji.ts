@@ -1,4 +1,3 @@
-import emojiList from 'unicode-emoji-json/data-by-emoji.json';
 import { asciiList, regAscii, regShortnames, shortNameList } from '../constants/emoji';
 
 const convert = (unicode: string) => {
@@ -112,13 +111,16 @@ export const convertEmojisToUnicode = (text: string): string => {
     return result;
 };
 
-export const addSkinToneToEmoji = (emoji: string, skinTone: string): string =>
+export const addSkinToneToEmoji = (
+    emojiList: { [x: string]: { skin_tone_support: any } },
+    emoji: string,
+    skinTone: string,
+): string =>
     emoji
         .split('\u{200D}')
         .map((rawEmoji) => {
             const parts = [rawEmoji.replace(/\ufe0f/, '')];
 
-            // @ts-expect-error: Difficult to type external json file
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             if (emojiList[rawEmoji]?.skin_tone_support) {
                 parts.push(skinTone);

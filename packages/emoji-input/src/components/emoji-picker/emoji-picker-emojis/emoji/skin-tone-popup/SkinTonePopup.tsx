@@ -17,6 +17,7 @@ export type SkinTonePopupProps = {
     onSelect: (emojiWithSkinTone: string) => void;
     overlayPosition: { top: number };
     position: { left: number; top: number };
+    emojiList: { [x: string]: { skin_tone_support: any } };
 };
 
 const SkinTonePopup: FC<SkinTonePopupProps> = ({
@@ -27,6 +28,7 @@ const SkinTonePopup: FC<SkinTonePopupProps> = ({
     onSelect,
     overlayPosition,
     position,
+    emojiList,
 }) => {
     const [focusedIndex, setFocusedIndex] = useState<number>(0);
 
@@ -106,7 +108,7 @@ const SkinTonePopup: FC<SkinTonePopupProps> = ({
 
         Object.entries(emojiComponents).forEach(([key, value], index) => {
             if (key.includes('skin_tone')) {
-                const emojiWithSkinTone = addSkinToneToEmoji(emoji, value);
+                const emojiWithSkinTone = addSkinToneToEmoji(emojiList, emoji, value);
 
                 const handleClick = (event: MouseEvent<HTMLDivElement>) => {
                     event.preventDefault();
@@ -131,7 +133,7 @@ const SkinTonePopup: FC<SkinTonePopupProps> = ({
         });
 
         return result;
-    }, [emoji, focusedIndex, onHidePopup, onSelect]);
+    }, [emoji, emojiList, focusedIndex, onHidePopup, onSelect]);
 
     return (
         <StyledMotionSkinTonePopup
