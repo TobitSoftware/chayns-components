@@ -196,7 +196,7 @@ export const useDropdown = ({
         direction,
     });
 
-    const width = useMemo(() => anchorElement.clientWidth, [anchorElement]);
+    const width = anchorElement.clientWidth;
 
     return useMemo(() => ({ coordinates, transform, width }), [coordinates, transform, width]);
 };
