@@ -1,4 +1,5 @@
-import { asciiList, regAscii, regShortnames, shortNameList } from '../constants/emoji';
+import { asciiList, regAscii } from '../constants/emoji';
+import { regShortnames, shortNameList } from './emojiShortList';
 
 const convert = (unicode: string) => {
     if (unicode.indexOf('-') > -1) {

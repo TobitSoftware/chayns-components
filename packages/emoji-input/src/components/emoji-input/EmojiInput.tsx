@@ -42,6 +42,7 @@ import {
     StyledMotionEmojiInputProgress,
 } from './EmojiInput.styles';
 import PrefixElement from './prefix-element/PrefixElement';
+import { loadEmojiShortNames } from '../../utils/asyncEmojiData';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
@@ -172,7 +173,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const [isPopupVisible, setIsPopupVisible] = useState(false);
         const [isPrefixAnimationFinished, setIsPrefixAnimationFinished] = useState(!prefixElement);
         const [prefixElementWidth, setPrefixElementWidth] = useState<number | undefined>();
-        const [textLength, setTextLength] = useState(0);
+        const [emojiShortNames, setEmojiShortNames] = useState(null);
 
         const areaProvider = useContext(AreaContext);
 
@@ -191,6 +192,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             () => areaProvider.shouldChangeColor ?? false,
             [areaProvider.shouldChangeColor],
         );
+
+        useEffect(() => {
+            loadEmojiShortNames((data) => {
+                console.log('nice', data);
+            });
+        }, []);
 
         /**
          * This function updates the content of the 'contentEditable' element if the new text is
