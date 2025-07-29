@@ -49,6 +49,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             onRemove,
             placeholder = 'Person oder Site finden',
             shouldAllowMultiple = true,
+            shouldHideResultsOnAdd = false,
             shouldShowOwnUser = false,
         },
         ref,
@@ -82,6 +83,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                             onRemove={onRemove}
                             placeholder={placeholder}
                             shouldAllowMultiple={shouldAllowMultiple}
+                            shouldHideResultsOnAdd={shouldHideResultsOnAdd}
                         />
                     </div>
                 </AreaProvider>

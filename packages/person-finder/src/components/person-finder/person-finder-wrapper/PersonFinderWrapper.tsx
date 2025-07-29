@@ -68,6 +68,10 @@ export type PersonFinderWrapperProps = {
      * Whether multiple persons and sites should be selected.
      */
     shouldAllowMultiple?: boolean;
+    /**
+     * Whether the dropdown should be hidden after adding an entry. By default, it is not hidden.
+     */
+    shouldHideResultsOnAdd?: boolean;
 };
 
 const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps>(
@@ -83,6 +87,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             onRemove,
             placeholder,
             shouldAllowMultiple,
+            shouldHideResultsOnAdd,
         },
         ref,
     ) => {
@@ -169,10 +174,14 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
                         onAdd(selectedEntry);
                     }
 
+                    if (shouldHideResultsOnAdd) {
+                        setShouldShowBody(false);
+                    }
+
                     return [...prevState, tag];
                 });
             },
-            [data, maxEntries, onAdd, setTags],
+            [data, maxEntries, onAdd, setTags, shouldHideResultsOnAdd],
         );
 
         const handleChange = useCallback(
