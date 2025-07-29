@@ -5,6 +5,7 @@ import { PersonEntry, SiteEntry } from '../../../../../../types/personFinder';
 import { useFriends, usePersonFinderItem } from '../../../../../../hooks/personFinder';
 import { usePersonFinder } from '../../../../../PersonFinderProvider';
 import { useTheme } from 'styled-components';
+import { useUser } from 'chayns-api';
 
 export type PersonFinderItemProps = {
     entry: PersonEntry | SiteEntry;
@@ -18,7 +19,9 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd, onRemove })
     const { isSite, imageUrl, title, subtitle, titleElement } = usePersonFinderItem(entry);
     const { isFriend, addFriend, removeFriend } = useFriends(id);
     const { tags } = usePersonFinder();
+
     const theme = useTheme() as Theme;
+    const user = useUser();
 
     const isSelected = tags && tags.map((tag) => tag.id).includes(id);
 
@@ -62,7 +65,7 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd, onRemove })
                 images={[imageUrl]}
                 titleElement={titleElement}
                 shouldShowRoundImageOrIcon={!isSite}
-                rightElements={!isSite ? rightElements : undefined}
+                rightElements={!isSite && id !== user.personId ? rightElements : undefined}
                 shouldForceHover
             />
         </StyledPersonFinderItem>

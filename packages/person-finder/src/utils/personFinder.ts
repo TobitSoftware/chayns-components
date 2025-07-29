@@ -9,6 +9,7 @@ import {
 import { getPersons } from '../api/person/get';
 import { getSites } from '../api/site/get';
 import { convertPersonEntry, convertSiteEntry } from './convert';
+import { getUser } from 'chayns-api';
 
 export const getGroupName = (key: string) => {
     const names: { [key: string]: string } = {
@@ -22,13 +23,24 @@ export const getGroupName = (key: string) => {
 export const isSiteEntry = (entry: PersonEntry | SiteEntry): entry is SiteEntry =>
     'name' in entry && !('firstName' in entry);
 
+interface FilterDataByKeysOptions {
+    excludedEntryIds?: PersonFinderEntry['id'][];
+    shouldShowOwnUser?: boolean;
+}
+
 export const filterDataByKeys = (
     data: { [key: string]: PersonFinderData } = {},
     keys: PersonFinderFilterTypes[] = [],
-    excludedEntryIds: PersonFinderEntry['id'][] = [],
+    options: FilterDataByKeysOptions = {},
 ): { [key: string]: PersonFinderData } => {
     const filterSingle = (entry: PersonFinderData): PersonFinderData => {
-        const filteredEntries = entry.entries.filter((e) => !excludedEntryIds.includes(e.id));
+        let filteredEntries = entry.entries;
+
+        const { excludedEntryIds } = options;
+
+        if (Array.isArray(excludedEntryIds) && excludedEntryIds.length > 0) {
+            filteredEntries = filteredEntries.filter((e) => !excludedEntryIds.includes(e.id));
+        }
 
         const excludedCount = entry.entries.length - filteredEntries.length;
 
@@ -43,10 +55,36 @@ export const filterDataByKeys = (
 
     return relevantKeys.reduce((acc, key) => {
         const original = data[key] ?? { searchString: '', count: 0, skip: 0, entries: [] };
-        return {
-            ...acc,
-            [key]: filterSingle(original),
-        };
+
+        const filteredEntry = filterSingle(original);
+
+        if (options.shouldShowOwnUser && key === PersonFinderFilterTypes.PERSON) {
+            const user = getUser();
+
+            if (typeof user?.personId === 'string') {
+                // Ensure that the own user is always included in the person filter
+                const ownUserEntry: PersonEntry = {
+                    commonSites: 0,
+                    firstName: user.firstName ?? '',
+                    id: user.personId,
+                    isVerified: false,
+                    lastName: user.lastName ?? '',
+                    type: PersonFinderFilterTypes.PERSON,
+                };
+
+                const fullName = `${ownUserEntry.firstName} ${ownUserEntry.lastName}`.trim();
+
+                if (
+                    original.searchString.length < 3 ||
+                    fullName.toLowerCase().includes(original.searchString.toLowerCase())
+                ) {
+                    filteredEntry.entries = [ownUserEntry, ...filteredEntry.entries];
+                    filteredEntry.count += 1; // Increment count to account for the own user
+                }
+            }
+        }
+
+        return { ...acc, [key]: filteredEntry };
     }, {});
 };
 

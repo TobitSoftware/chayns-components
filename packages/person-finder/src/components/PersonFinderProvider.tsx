@@ -86,6 +86,7 @@ type PersonFinderProviderProps = {
     filterTypes: PersonFinderFilterTypes[];
     defaultEntries?: DefaultEntry[];
     excludedEntryIds?: PersonFinderEntry['id'][];
+    shouldShowOwnUser?: boolean;
 };
 
 const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
@@ -94,6 +95,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     filterTypes,
     defaultEntries,
     excludedEntryIds,
+    shouldShowOwnUser = false,
 }) => {
     const [data, setData] = useState<IPersonFinderContext['data']>();
     const [friends, setFriends] = useState<PersonEntry[]>();
@@ -337,7 +339,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
     const providerValue = useMemo<IPersonFinderContext>(
         () => ({
-            data: filterDataByKeys(data, activeFilter, excludedEntryIds),
+            data: filterDataByKeys(data, activeFilter, { excludedEntryIds, shouldShowOwnUser }),
             updateData,
             activeFilter,
             updateActiveFilter,
@@ -353,20 +355,21 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             tags,
         }),
         [
-            data,
             activeFilter,
-            excludedEntryIds,
-            updateData,
-            updateActiveFilter,
-            friends,
             addFriend,
-            removeFriend,
-            search,
-            updateSearch,
+            data,
+            excludedEntryIds,
+            friends,
             loadMore,
             loadingState,
-            updateLoadingState,
+            removeFriend,
+            search,
+            shouldShowOwnUser,
             tags,
+            updateActiveFilter,
+            updateData,
+            updateLoadingState,
+            updateSearch,
         ],
     );
 

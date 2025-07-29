@@ -27,6 +27,10 @@ export type PersonFinderProps = PersonFinderWrapperProps & {
      * Determines the priority level for displaying friends in search results.
      */
     friendsPriority?: Priority;
+    /**
+     * Whether the own user should be shown in the results. By default, it is not shown.
+     */
+    shouldShowOwnUser?: boolean;
 };
 
 const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
@@ -45,6 +49,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             onRemove,
             placeholder = 'Person oder Site finden',
             shouldAllowMultiple = true,
+            shouldShowOwnUser = false,
         },
         ref,
     ) => {
@@ -61,6 +66,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                 defaultEntries={defaultEntries}
                 filterTypes={filterTypes}
                 excludedEntryIds={excludedEntryIds}
+                shouldShowOwnUser={shouldShowOwnUser}
             >
                 <AreaProvider shouldChangeColor={false} shouldDisableListItemPadding>
                     <div className="beta-chayns-person-finder" ref={personFinderRef}>
