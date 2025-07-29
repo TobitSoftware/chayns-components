@@ -155,7 +155,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             void loadData({
                 searchString: search ?? '',
                 filter: [key],
-                skipMap: { [key]: current.skip + current.entries.length },
+                skipMap: { [key]: current.skip },
             })
                 .then((result) => {
                     const newData = result?.[key];

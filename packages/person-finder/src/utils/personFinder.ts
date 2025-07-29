@@ -96,7 +96,7 @@ export const loadData = async ({
                 value: {
                     searchString,
                     count: data?.count ?? 0,
-                    skip: data?.list?.length ?? skip,
+                    skip: skip + (data?.list?.length ?? 0),
                     entries: convertPersonEntry(data?.list ?? []),
                 },
             };
@@ -122,7 +122,7 @@ export const loadData = async ({
                 value: {
                     searchString,
                     count: data?.count ?? 0,
-                    skip: data?.list?.length ?? skip,
+                    skip: skip + (data?.list?.length ?? 0),
                     entries: convertSiteEntry(data?.list ?? []),
                 },
             };
