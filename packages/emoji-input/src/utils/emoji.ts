@@ -1,5 +1,4 @@
 import { asciiList, regAscii } from '../constants/emoji';
-import { regShortnames, shortNameList } from './emojiShortList';
 
 const convert = (unicode: string) => {
     if (unicode.indexOf('-') > -1) {
@@ -74,7 +73,7 @@ export const escapeHTML = (text: string) => {
     return text.replace(/[&<>"']/g, (match) => escaped[match] ?? match);
 };
 
-export const convertEmojisToUnicode = (text: string): string => {
+export const convertEmojisToUnicode = (text: string, regShortnames: RegExp, shortNameList: { [p: string]: string }): string => {
     let result = text;
 
     result = result.replace(/https?:\/\/.*?(?=$|\s)/gi, (fullMatch) =>

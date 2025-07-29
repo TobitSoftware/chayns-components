@@ -1,2 +1,1 @@
-export const loadEmojiShortNames = () => import('./emojiShortList');
-export const loadEmojiRegex = () => import('./emojiShortList');
+export const loadEmojiShortList = () => import('./emojiShortList');

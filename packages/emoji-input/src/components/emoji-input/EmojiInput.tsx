@@ -42,7 +42,7 @@ import {
     StyledMotionEmojiInputProgress,
 } from './EmojiInput.styles';
 import PrefixElement from './prefix-element/PrefixElement';
-import { loadEmojiShortNames } from '../../utils/asyncEmojiData';
+import { loadEmojiShortList } from '../../utils/asyncEmojiData';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
@@ -173,7 +173,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const [isPopupVisible, setIsPopupVisible] = useState(false);
         const [isPrefixAnimationFinished, setIsPrefixAnimationFinished] = useState(!prefixElement);
         const [prefixElementWidth, setPrefixElementWidth] = useState<number | undefined>();
-        const [emojiShortNames, setEmojiShortNames] = useState(null);
+        const [emojiShortNames, setEmojiShortNames] = useState<{ [p: string]: string }>({});
+        const [emojiRegShortNames, setEmojiRegShortNames] = useState<RegExp>((/./));
 
         const areaProvider = useContext(AreaContext);
 
@@ -194,9 +195,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         );
 
         useEffect(() => {
-            loadEmojiShortNames((data) => {
-                console.log('nice', data);
-            });
+            void loadEmojiShortList().then(({shortNameList, regShortnames}) => {
+                setEmojiShortNames(shortNameList);
+                setEmojiRegShortNames(regShortnames);
+            })
         }, []);
 
         /**
@@ -212,7 +214,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 return;
             }
 
-            let newInnerHTML = convertEmojisToUnicode(html);
+            let newInnerHTML = convertEmojisToUnicode(html, emojiRegShortNames, emojiShortNames);
 
             newInnerHTML = convertTextToHTML(newInnerHTML);
 
@@ -223,7 +225,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
                 restoreSelection(editorRef.current);
             }
-        }, []);
+        }, [emojiRegShortNames, emojiShortNames]);
 
         const handleBeforeInput = useCallback(
             (event: FormEvent<HTMLDivElement>) => {
@@ -244,7 +246,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     event.preventDefault();
                     event.stopPropagation();
 
-                    const text = convertEmojisToUnicode(data);
+                    const text = convertEmojisToUnicode(data, emojiRegShortNames, emojiShortNames);
 
                     insertTextAtCursorPosition({ editorElement: editorRef.current, text });
 
@@ -253,7 +255,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     editorRef.current.dispatchEvent(newEvent);
                 }
             },
-            [isDisabled],
+            [emojiRegShortNames, emojiShortNames, isDisabled],
         );
 
         /**
@@ -389,7 +391,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     // This ensures, that only the copied text is inserted and not its HTML formatting.
                     let text = event.clipboardData.getData('text/plain');
 
-                    text = convertEmojisToUnicode(text);
+                    text = convertEmojisToUnicode(text, emojiRegShortNames, emojiShortNames);
 
                     /* This ensures, that valid HTML in the inserted text is not interpreted as such. e.g. if the user
                        pasted the text '<b>test</b>' (not as formatted html), the <b> tags need to be escaped, to
@@ -411,7 +413,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     editorRef.current.dispatchEvent(newEvent);
                 }
             },
-            [isDisabled],
+            [emojiRegShortNames, emojiShortNames, isDisabled],
         );
 
         /**
@@ -437,7 +439,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         return;
                     }
 
-                    text = convertEmojisToUnicode(text);
+                    text = convertEmojisToUnicode(text, emojiRegShortNames, emojiShortNames);
 
                     /* This ensures, that valid HTML in the inserted text is not interpreted as such. e.g. if the user
                        drops the text '<b>test</b>' (not as formatted html), the <b> tags need to be escaped, to
@@ -454,7 +456,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     editorRef.current.dispatchEvent(newEvent);
                 }
             },
-            [isDisabled],
+            [emojiRegShortNames, emojiShortNames, isDisabled],
         );
 
         /**
@@ -667,14 +669,14 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
         useEffect(() => {
             if (editorRef.current && prefixElement) {
-                const text = convertEmojisToUnicode(prefixElement);
+                const text = convertEmojisToUnicode(prefixElement, emojiRegShortNames, emojiShortNames);
 
                 insertTextAtCursorPosition({ editorElement: editorRef.current, text });
 
                 handleUpdateHTML(prefixElement);
                 hasPrefixRendered.current = true;
             }
-        }, [handleUpdateHTML, prefixElement]);
+        }, [emojiRegShortNames, emojiShortNames, handleUpdateHTML, prefixElement]);
 
         useEffect(() => {
             if (
