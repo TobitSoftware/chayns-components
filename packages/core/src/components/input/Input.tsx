@@ -1,10 +1,12 @@
 import React, {
     ChangeEvent,
     ChangeEventHandler,
+    CSSProperties,
     FocusEventHandler,
     forwardRef,
     HTMLInputTypeAttribute,
     KeyboardEventHandler,
+    type ReactElement,
     ReactNode,
     useCallback,
     useContext,
@@ -13,7 +15,6 @@ import React, {
     useMemo,
     useRef,
     useState,
-    type ReactElement,
 } from 'react';
 import { useTheme } from 'styled-components';
 import { useElementSize } from '../../hooks/element';
@@ -31,6 +32,7 @@ import {
     StyledMotionInputClearIcon,
     StyledMotionInputLabelWrapper,
 } from './Input.styles';
+import { ContentCardType } from '../../types/contentCard';
 
 export type InputRef = {
     focus: VoidFunction;
@@ -131,7 +133,7 @@ export type InputProps = {
      */
     size?: InputSize;
     /**
-     * Input type set for input element (e.g. 'text', 'number' or 'password')
+     * Input type set for an input element (e.g. 'text', 'number' or 'password')
      */
     type?: HTMLInputTypeAttribute;
     /**
@@ -185,11 +187,6 @@ const Input = forwardRef<InputRef, InputProps>(
             }
         }, [placeholderSize, shouldShowOnlyBottomBorder]);
 
-        const shouldChangeColor = useMemo(
-            () => areaProvider.shouldChangeColor ?? false,
-            [areaProvider.shouldChangeColor],
-        );
-
         const handleClearIconClick = useCallback(() => {
             if (inputRef.current) {
                 inputRef.current.value = '';
@@ -231,6 +228,21 @@ const Input = forwardRef<InputRef, InputProps>(
             }
         }, [value]);
 
+        let backgroundColor: CSSProperties['backgroundColor'] | undefined;
+        let color: CSSProperties['color'] | undefined;
+
+        if (
+            areaProvider.contentCardType &&
+            [ContentCardType.Error, ContentCardType.Success, ContentCardType.Warning].includes(
+                areaProvider.contentCardType,
+            )
+        ) {
+            backgroundColor = 'white';
+            color = '#555';
+        } else if (areaProvider.shouldChangeColor) {
+            backgroundColor = theme['000'];
+        }
+
         const labelPosition = useMemo(() => {
             if (hasValue && !shouldRemainPlaceholder && !shouldPreventPlaceholderAnimation) {
                 return shouldShowOnlyBottomBorder
@@ -250,7 +262,7 @@ const Input = forwardRef<InputRef, InputProps>(
         return (
             <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
                 <StyledInputContentWrapper
-                    $shouldChangeColor={shouldChangeColor}
+                    $backgroundColor={backgroundColor}
                     $isInvalid={isInvalid}
                     $shouldRoundRightCorners={shouldShowBorder}
                     $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
@@ -259,6 +271,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     {leftElement && <StyledInputIconWrapper>{leftElement}</StyledInputIconWrapper>}
                     <StyledInputContent $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}>
                         <StyledInputField
+                            $color={color}
                             $placeholderWidth={placeholderWidth}
                             id={id}
                             disabled={isDisabled}

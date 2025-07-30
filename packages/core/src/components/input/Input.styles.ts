@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { InputSize } from './Input';
+import { CSSProperties } from 'react';
 
 type StyledInputProps = WithTheme<{ $isDisabled?: boolean }>;
 
@@ -12,17 +13,17 @@ export const StyledInput = styled.div<StyledInputProps>`
 `;
 
 type StyledInputContentWrapperProps = WithTheme<{
+    $backgroundColor?: CSSProperties['backgroundColor'];
     $shouldRoundRightCorners: boolean;
     $shouldShowOnlyBottomBorder?: boolean;
     $isInvalid?: boolean;
-    $shouldChangeColor: boolean;
     $size: InputSize;
 }>;
 
 export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
     align-items: center;
-    background-color: ${({ theme, $shouldChangeColor }: StyledInputContentWrapperProps) =>
-        theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
+    background-color: ${({ theme, $backgroundColor }: StyledInputContentWrapperProps) =>
+        $backgroundColor ?? theme['100']};
     border: 1px solid
         ${({ theme, $isInvalid }: StyledInputContentWrapperProps) =>
             $isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)'};
@@ -81,16 +82,17 @@ export const StyledInputContent = styled.div<StyledInputContentProps>`
 `;
 
 type StyledInputFieldProps = WithTheme<{
+    $color?: CSSProperties['color'];
     $isInvalid?: boolean;
-    $shouldShowCenteredContent: boolean;
     $placeholderWidth: number;
+    $shouldShowCenteredContent: boolean;
 }>;
 
 export const StyledInputField = styled.input<StyledInputFieldProps>`
     background: none;
     border: none;
-    color: ${({ theme, $isInvalid }: StyledInputFieldProps) =>
-        $isInvalid ? theme.wrong : theme.text};
+    color: ${({ theme, $color, $isInvalid }: StyledInputFieldProps) =>
+        $color ?? ($isInvalid ? theme.wrong : theme.text)};
     padding: 0;
     width: ${({ $placeholderWidth }) => `calc(100% - ${$placeholderWidth}px)`};
     line-height: 1em;
