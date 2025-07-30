@@ -57,7 +57,7 @@ export const StyledListItemHeadContent = styled.div<StyledListItemHeadContentPro
     min-width: 0;
 `;
 
-export const StyledListItemHeadTitle = styled.div`
+export const StyledMotionListItemHeadTitle = styled(motion.div)`
     align-items: center;
     display: flex;
     justify-content: space-between;

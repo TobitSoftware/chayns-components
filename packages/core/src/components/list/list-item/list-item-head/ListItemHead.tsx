@@ -1,3 +1,4 @@
+import { LayoutGroup } from 'motion/react';
 import React, {
     CSSProperties,
     FC,
@@ -22,7 +23,7 @@ import {
     StyledListItemHeadLeftWrapper,
     StyledListItemHeadSubtitle,
     StyledListItemHeadSubtitleText,
-    StyledListItemHeadTitle,
+    StyledMotionListItemHeadTitle,
     StyledListItemHeadTitleContent,
     StyledListItemHeadTitleElement,
     StyledListItemHeadTitleText,
@@ -228,27 +229,29 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 $isIconOrImageGiven={iconOrImageElement !== undefined}
                 $isOpen={isOpen}
             >
-                <StyledListItemHeadTitle>
-                    <StyledListItemHeadTitleContent>
-                        <StyledListItemHeadTitleText
-                            $isEllipsis={!isOpen}
-                            ref={titleWrapperRef}
-                            $shouldShowMultilineTitle={shouldShowMultilineTitle}
-                        >
-                            {title}
-                        </StyledListItemHeadTitleText>
-                        <StyledListItemHeadTitleElement>
-                            {titleElement}
-                        </StyledListItemHeadTitleElement>
-                    </StyledListItemHeadTitleContent>
-                </StyledListItemHeadTitle>
-                {shouldShowSubtitleRow && (
-                    <StyledListItemHeadSubtitle>
-                        <StyledListItemHeadSubtitleText $isOpen={isOpen}>
-                            {subtitle}
-                        </StyledListItemHeadSubtitleText>
-                    </StyledListItemHeadSubtitle>
-                )}
+                <LayoutGroup>
+                    <StyledMotionListItemHeadTitle layout="position">
+                        <StyledListItemHeadTitleContent>
+                            <StyledListItemHeadTitleText
+                                $isEllipsis={!isOpen}
+                                ref={titleWrapperRef}
+                                $shouldShowMultilineTitle={shouldShowMultilineTitle}
+                            >
+                                {title}
+                            </StyledListItemHeadTitleText>
+                            <StyledListItemHeadTitleElement>
+                                {titleElement}
+                            </StyledListItemHeadTitleElement>
+                        </StyledListItemHeadTitleContent>
+                    </StyledMotionListItemHeadTitle>
+                    {shouldShowSubtitleRow && (
+                        <StyledListItemHeadSubtitle>
+                            <StyledListItemHeadSubtitleText $isOpen={isOpen}>
+                                {subtitle}
+                            </StyledListItemHeadSubtitleText>
+                        </StyledListItemHeadSubtitle>
+                    )}
+                </LayoutGroup>
             </StyledListItemHeadContent>
             {rightElements && (
                 <ListItemRightElements
