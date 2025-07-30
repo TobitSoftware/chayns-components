@@ -152,7 +152,7 @@ export type ListItemProps = {
      */
     shouldShowSeparatorBelow?: boolean;
     /**
-     * Whether a Tooltip should be displayed on hover, if the title is cut.
+     * Whether a Tooltip should be displayed on hover if the title is cut.
      */
     shouldShowTooltipOnTitleOverflow?: boolean;
     /**
@@ -266,7 +266,7 @@ const ListItem: FC<ListItemProps> = ({
 
     useEffect(() => {
         if (isExpandable && !shouldHideIndicator) {
-            // The incrementExpandableItemCount function returns an cleanup
+            // The incrementExpandableItemCount function returns a cleanup
             // function to decrement expandableItemCount if component unmounts
             return incrementExpandableItemCount();
         }
