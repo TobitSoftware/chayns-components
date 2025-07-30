@@ -42,7 +42,7 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
                     --chayns-color-rgb--text: rgb(34, 34, 34);
 
                     label {
-                        color: #222 !important;
+                        color: #555 !important;
                     }
                 `;
             case ContentCardType.Success:
@@ -55,7 +55,7 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
                     --chayns-color-rgb--text: rgb(34, 34, 34);
 
                     label {
-                        color: #222 !important;
+                        color: #555 !important;
                     }
                 `;
             case ContentCardType.Warning:
@@ -68,7 +68,7 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
                     --chayns-color-rgb--text: rgb(34, 34, 34);
 
                     label {
-                        color: #222 !important;
+                        color: #555 !important;
                     }
                 `;
             case ContentCardType.SiteColor:
