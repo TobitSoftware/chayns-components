@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import React from 'react';
+import React, { FC, ReactNode } from 'react';
 import { Badge, Icon } from '../src';
 import Button from '../src/components/button/Button';
 import List from '../src/components/list/List';
@@ -33,6 +33,8 @@ export const ListItemsWithIcon = Template.bind({});
 export const ExpandableListItems = Template.bind({});
 
 export const MixedListItems = Template.bind({});
+
+export const ListItemsWithElementAsSubtitle = Template.bind({});
 
 export const ListItemWithTitleElement = Template.bind({});
 
@@ -638,6 +640,43 @@ MixedListItems.args = {
                 tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
                 eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
                 takimata sanctus est Lorem ipsum dolor sit amet.
+            </ListItemContent>
+        </ListItem>,
+    ],
+};
+
+const FirstSubtitleElement: FC = () => (
+    <div
+        style={{
+            color: '#666',
+        }}
+    >
+        Wahlweise mit 100 Gramm zertifiziertem, saftigem Neuland Rinderhacksteak oder vegetarischem
+        Patty, mit knackigem Lollo Bionda, Tomate, Gurke, roten frischen Zwiebeln und würzigem
+        Dressing. Verpackt im gerösteten Handmade Bun frisch aus der Backstube.
+    </div>
+);
+
+const SecondSubtitleElement: FC = () => (
+    <div
+        style={{
+            color: '#666',
+        }}
+    >
+        Saftiges Rumpsteak vom Grill. Dazu gegrilltes Gemüse und geröstete Kartoffeln.
+    </div>
+);
+
+ListItemsWithElementAsSubtitle.args = {
+    children: [
+        <ListItem subtitle={<FirstSubtitleElement />} title="Chicken Burger">
+            <ListItemContent>
+                <FirstSubtitleElement />
+            </ListItemContent>
+        </ListItem>,
+        <ListItem subtitle={<SecondSubtitleElement />} title="BamBoo! Prime Steak">
+            <ListItemContent>
+                <SecondSubtitleElement />
             </ListItemContent>
         </ListItem>,
     ],
