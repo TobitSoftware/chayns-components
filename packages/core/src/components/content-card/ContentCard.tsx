@@ -32,7 +32,7 @@ const ContentCard: FC<ContentCardProps> = ({
 
     return (
         <StyledContentCard onClick={onClick} $type={type} $shouldChangeColor={shouldChangeColor}>
-            <AreaContextProvider shouldChangeColor={!shouldChangeColor}>
+            <AreaContextProvider contentCardType={type} shouldChangeColor={!shouldChangeColor}>
                 {children}
             </AreaContextProvider>
         </StyledContentCard>
