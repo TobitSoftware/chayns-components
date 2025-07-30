@@ -4,7 +4,8 @@ import React, {
     FC,
     ReactElement,
     useCallback,
-    useMemo,
+    useEffect,
+    useRef,
     useState,
 } from 'react';
 import { useUuid } from '../../hooks/uuid';
@@ -12,6 +13,7 @@ import { getHeightOfSingleTextLine } from '../../utils/calculate';
 import {
     StyledCheckbox,
     StyledCheckboxBox,
+    StyledCheckboxBoxWrapper,
     StyledCheckboxInput,
     StyledCheckboxLabel,
 } from './Checkbox.styles';
@@ -62,6 +64,10 @@ const Checkbox: FC<CheckboxProps> = ({
     shouldChangeOnLabelClick = true,
 }) => {
     const [isActive, setIsActive] = useState(isChecked ?? false);
+    const [checkboxTop, setCheckboxTop] = useState<number | undefined>(undefined);
+
+    const checkboxBoxRef = useRef<HTMLLabelElement>(null);
+    const checkboxRootRef = useRef<HTMLDivElement>(null);
 
     const handleChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -76,13 +82,20 @@ const Checkbox: FC<CheckboxProps> = ({
 
     const uuid = useUuid();
 
-    const lineHeight = useMemo(
-        () => (!children || shouldShowCentered ? undefined : getHeightOfSingleTextLine()),
-        [children, shouldShowCentered],
-    );
+    useEffect(() => {
+        if (checkboxRootRef.current && !shouldShowCentered) {
+            const singleLineHeight = getHeightOfSingleTextLine({
+                container: checkboxRootRef.current,
+            });
+
+            const boxHeight = checkboxBoxRef.current?.getBoundingClientRect().height ?? 0;
+
+            setCheckboxTop((singleLineHeight - boxHeight) / 2);
+        }
+    }, [shouldShowCentered]);
 
     return (
-        <StyledCheckbox>
+        <StyledCheckbox ref={checkboxRootRef}>
             <StyledCheckboxInput
                 checked={isChecked}
                 disabled={isDisabled}
@@ -90,17 +103,25 @@ const Checkbox: FC<CheckboxProps> = ({
                 onChange={handleChange}
                 type="checkbox"
             />
-            <StyledCheckboxBox
-                htmlFor={uuid}
-                $isChecked={isChecked ?? isActive}
-                $isDisabled={isDisabled}
-                $shouldShowAsSwitch={shouldShowAsSwitch}
-                $lineHeight={lineHeight}
-            />
+            <StyledCheckboxBoxWrapper
+                style={{
+                    top: shouldShowCentered ? '50%' : checkboxTop,
+                    transform: shouldShowCentered ? 'translateY(-50%)' : undefined,
+                }}
+            >
+                <StyledCheckboxBox
+                    htmlFor={uuid}
+                    ref={checkboxBoxRef}
+                    $isChecked={isChecked ?? isActive}
+                    $isDisabled={isDisabled}
+                    $shouldShowAsSwitch={shouldShowAsSwitch}
+                />
+            </StyledCheckboxBoxWrapper>
             <StyledCheckboxLabel
                 className={labelClassName}
                 $isDisabled={isDisabled}
                 $shouldChangeOnLabelClick={shouldChangeOnLabelClick}
+                $shouldShowAsSwitch={shouldShowAsSwitch}
                 htmlFor={shouldChangeOnLabelClick ? uuid : undefined}
             >
                 {children}

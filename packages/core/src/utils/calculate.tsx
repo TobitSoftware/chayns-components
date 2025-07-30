@@ -105,16 +105,24 @@ export const calculateContentHeight = (elements: string[]) => {
     return heights.reduce((partialSum, a) => partialSum + a, 0);
 };
 
-export const getHeightOfSingleTextLine = () => {
-    const span = document.createElement('span');
+interface GetHeightOfSingleTextLineOptions {
+    container: Element;
+}
 
-    span.innerText = 'A';
+export const getHeightOfSingleTextLine = ({ container }: GetHeightOfSingleTextLineOptions) => {
+    const div = document.createElement('div');
 
-    document.body.appendChild(span);
+    div.style.visibility = 'hidden';
+    div.style.position = 'absolute';
+    div.style.whiteSpace = 'nowrap';
 
-    const height = span.offsetHeight;
+    div.innerText = 'Single text line';
 
-    document.body.removeChild(span);
+    container.appendChild(div);
+
+    const { height } = div.getBoundingClientRect();
+
+    container.removeChild(div);
 
     return height;
 };
