@@ -17,7 +17,7 @@ import ListItemIcon from './list-item-icon/ListItemIcon';
 import ListItemImage from './list-item-image/ListItemImage';
 import ListItemRightElements from './list-item-right-elements/ListItemRightElements';
 import {
-    StyledListItemHead,
+    StyledMotionListItemHead,
     StyledListItemHeadContent,
     StyledListItemHeadLeftWrapper,
     StyledListItemHeadSubtitle,
@@ -193,7 +193,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     ]);
 
     return (
-        <StyledListItemHead
+        <StyledMotionListItemHead
             layout
             animate={{
                 opacity: isTitleGreyed ? 0.5 : 1,
@@ -272,7 +272,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     </StyledMotionListItemHeadHoverItem>
                 </StyledMotionListItemHeadHoverItemWrapper>
             )}
-        </StyledListItemHead>
+        </StyledMotionListItemHead>
     );
 };
 

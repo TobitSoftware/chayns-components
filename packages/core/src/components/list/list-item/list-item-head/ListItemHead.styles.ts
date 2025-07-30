@@ -7,7 +7,7 @@ type StyledListItemHeadProps = WithTheme<{
     $isAnyItemExpandable: boolean;
 }>;
 
-export const StyledListItemHead = styled(motion.div)<StyledListItemHeadProps>`
+export const StyledMotionListItemHead = styled(motion.div)<StyledListItemHeadProps>`
     //align-items: center;
     overflow: hidden;
     color: ${({ theme }: StyledListItemHeadProps) => theme.text};
@@ -63,7 +63,7 @@ export const StyledListItemHeadTitle = styled.div`
     justify-content: space-between;
 `;
 
-export const StyledListItemHeadTitleContent = styled(motion.div)`
+export const StyledListItemHeadTitleContent = styled.div`
     align-items: center;
     display: flex;
     flex: 1 1 auto;
@@ -84,7 +84,7 @@ type StyledListItemHeadTitleTextProps = WithTheme<{
     $isEllipsis?: boolean;
 }>;
 
-export const StyledListItemHeadTitleText = styled(motion.span)<StyledListItemHeadTitleTextProps>`
+export const StyledListItemHeadTitleText = styled.span<StyledListItemHeadTitleTextProps>`
     font-weight: ${({ $isEllipsis }) => ($isEllipsis ? 'normal' : 'bold')};
     white-space: ${({ $isEllipsis }) => ($isEllipsis ? 'nowrap' : 'normal')};
     min-width: 0;
