@@ -106,7 +106,7 @@ export const useMeasuredClone = ({ content }: UseMeasuredCloneOptions) => {
             data-measured-clone="true"
             ref={ref}
             style={{
-                position: 'absolute',
+                position: 'fixed',
                 opacity: 0,
                 pointerEvents: 'none',
                 zIndex: -1,
