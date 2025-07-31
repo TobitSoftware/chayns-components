@@ -3,4 +3,4 @@ export type { EmojiInputRef } from './components/emoji-input/EmojiInput';
 export { default as EmojiPickerPopup } from './components/emoji-picker-popup/EmojiPickerPopup';
 export { default as EmojiPicker } from './components/emoji-picker/EmojiPicker';
 export { PopupAlignment } from './constants/alignment';
-export { convertEmojisToUnicodeAsync } from './utils/convertEmojisToUnicodeAsync';
+export { loadEmojiShortList, convertEmojisToUnicodeAsync, convertEmojiToUnicodeSync } from './utils/convertEmojisToUnicodeAsync';
