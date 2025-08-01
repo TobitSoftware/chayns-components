@@ -1,13 +1,18 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../../color-scheme-provider/ColorSchemeProvider';
+import {
+    LIST_ITEM_HEAD_HTML_TAG,
+    LIST_ITEM_HEAD_INDICATOR_HTML_TAG,
+    LIST_ITEM_HEAD_TITLE_HTML_TAG,
+} from '../../../../constants/list';
 
 type StyledListItemHeadProps = WithTheme<{
     $isClickable: boolean;
     $isAnyItemExpandable: boolean;
 }>;
 
-export const StyledMotionListItemHead = styled(motion.div)<StyledListItemHeadProps>`
+export const StyledListItemHead = styled[LIST_ITEM_HEAD_HTML_TAG]<StyledListItemHeadProps>`
     //align-items: center;
     overflow: hidden;
     color: ${({ theme }: StyledListItemHeadProps) => theme.text};
@@ -32,7 +37,7 @@ export const StyledListItemHeadLeftWrapper = styled.div`
     margin: auto 0;
 `;
 
-export const StyledMotionListItemHeadIndicator = styled(motion.div)`
+export const StyledListItemHeadIndicator = styled[LIST_ITEM_HEAD_INDICATOR_HTML_TAG]`
     align-items: center;
     display: flex;
     flex: 0 0 auto;
@@ -57,7 +62,7 @@ export const StyledListItemHeadContent = styled.div<StyledListItemHeadContentPro
     min-width: 0;
 `;
 
-export const StyledMotionListItemHeadTitle = styled(motion.div)`
+export const StyledListItemHeadTitle = styled[LIST_ITEM_HEAD_TITLE_HTML_TAG]`
     align-items: center;
     display: flex;
     justify-content: space-between;

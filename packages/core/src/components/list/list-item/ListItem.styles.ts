@@ -1,7 +1,7 @@
-import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 import { CSSProperties } from 'react';
+import { LIST_ITEM_HTML_TAG } from '../../../constants/list';
 
 type StyledListItemProps = WithTheme<{
     $backgroundColor?: CSSProperties['backgroundColor'];
@@ -16,7 +16,7 @@ type StyledListItemProps = WithTheme<{
     $shouldShowSeparatorBelow: boolean;
 }>;
 
-export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
+export const StyledListItem = styled[LIST_ITEM_HTML_TAG]<StyledListItemProps>`
     overflow: hidden;
     transition: background-color 0.3s ease;
 
@@ -31,7 +31,7 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
         css`
             background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
         `}
-    
+
     ${({ $backgroundColor, $isInAccordion, $isOpen, $shouldForceBackground }) =>
         $backgroundColor &&
         ((!$isInAccordion && $isOpen) || $shouldForceBackground) &&
@@ -47,7 +47,7 @@ export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
                 background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
             }
         `}
-    
+
     ${({
         $isInAccordion,
         $isOpen,

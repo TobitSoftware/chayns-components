@@ -1,4 +1,4 @@
-import { LayoutGroup } from 'motion/react';
+import { LayoutGroup, motion } from 'motion/react';
 import React, {
     CSSProperties,
     FC,
@@ -18,19 +18,24 @@ import ListItemIcon from './list-item-icon/ListItemIcon';
 import ListItemImage from './list-item-image/ListItemImage';
 import ListItemRightElements from './list-item-right-elements/ListItemRightElements';
 import {
-    StyledMotionListItemHead,
     StyledListItemHeadContent,
     StyledListItemHeadLeftWrapper,
     StyledListItemHeadSubtitle,
     StyledListItemHeadSubtitleText,
-    StyledMotionListItemHeadTitle,
     StyledListItemHeadTitleContent,
     StyledListItemHeadTitleElement,
     StyledListItemHeadTitleText,
     StyledMotionListItemHeadHoverItem,
     StyledMotionListItemHeadHoverItemWrapper,
-    StyledMotionListItemHeadIndicator,
+    StyledListItemHead,
+    StyledListItemHeadIndicator,
+    StyledListItemHeadTitle,
 } from './ListItemHead.styles';
+import {
+    LIST_ITEM_HEAD_HTML_TAG,
+    LIST_ITEM_HEAD_INDICATOR_HTML_TAG,
+    LIST_ITEM_HEAD_TITLE_HTML_TAG,
+} from '../../../../constants/list';
 
 type ListItemHeadProps = {
     careOfLocationId?: number;
@@ -56,6 +61,7 @@ type ListItemHeadProps = {
     titleElement?: ReactNode;
     shouldForceHover?: boolean;
     setShouldEnableTooltip: (value: boolean) => void;
+    shouldDisableAnimation?: boolean;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -82,6 +88,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     title,
     titleElement,
     setShouldEnableTooltip,
+    shouldDisableAnimation = false,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
 
@@ -194,7 +201,8 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     ]);
 
     return (
-        <StyledMotionListItemHead
+        <StyledListItemHead
+            as={shouldDisableAnimation ? undefined : motion[LIST_ITEM_HEAD_HTML_TAG]}
             layout
             animate={{
                 opacity: isTitleGreyed ? 0.5 : 1,
@@ -212,7 +220,12 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         >
             <StyledListItemHeadLeftWrapper>
                 {isAnyItemExpandable && (
-                    <StyledMotionListItemHeadIndicator
+                    <StyledListItemHeadIndicator
+                        as={
+                            shouldDisableAnimation
+                                ? undefined
+                                : motion[LIST_ITEM_HEAD_INDICATOR_HTML_TAG]
+                        }
                         animate={{ rotate: isOpen ? 90 : 0 }}
                         initial={false}
                         transition={{ type: 'tween' }}
@@ -220,7 +233,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                         {isExpandable && !shouldHideIndicator && (
                             <Icon icons={['fa fa-chevron-right']} />
                         )}
-                    </StyledMotionListItemHeadIndicator>
+                    </StyledListItemHeadIndicator>
                 )}
                 {leftElements}
                 {iconOrImageElement}
@@ -230,7 +243,14 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 $isOpen={isOpen}
             >
                 <LayoutGroup>
-                    <StyledMotionListItemHeadTitle layout="position">
+                    <StyledListItemHeadTitle
+                        as={
+                            shouldDisableAnimation
+                                ? undefined
+                                : motion[LIST_ITEM_HEAD_TITLE_HTML_TAG]
+                        }
+                        layout="position"
+                    >
                         <StyledListItemHeadTitleContent>
                             <StyledListItemHeadTitleText
                                 $isEllipsis={!isOpen}
@@ -243,7 +263,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                                 {titleElement}
                             </StyledListItemHeadTitleElement>
                         </StyledListItemHeadTitleContent>
-                    </StyledMotionListItemHeadTitle>
+                    </StyledListItemHeadTitle>
                     {shouldShowSubtitleRow && (
                         <StyledListItemHeadSubtitle>
                             <StyledListItemHeadSubtitleText $isOpen={isOpen}>
@@ -275,7 +295,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     </StyledMotionListItemHeadHoverItem>
                 </StyledMotionListItemHeadHoverItemWrapper>
             )}
-        </StyledMotionListItemHead>
+        </StyledListItemHead>
     );
 };
 

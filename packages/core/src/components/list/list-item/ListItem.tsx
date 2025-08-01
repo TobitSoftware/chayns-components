@@ -1,4 +1,4 @@
-import { AnimatePresence } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import React, {
     CSSProperties,
     FC,
@@ -19,8 +19,9 @@ import AreaContextProvider, { AreaContext } from '../../area-provider/AreaContex
 import { ListContext } from '../List';
 import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
-import { StyledListItemTooltip, StyledMotionListItem } from './ListItem.styles';
+import { StyledListItem, StyledListItemTooltip } from './ListItem.styles';
 import Tooltip from '../../tooltip/Tooltip';
+import { LIST_ITEM_HTML_TAG } from '../../../constants/list';
 
 export type ListItemElements = [ReactNode, ...ReactNode[]];
 
@@ -167,6 +168,11 @@ export type ListItemProps = {
      * Additional elements to be displayed in the header next to the title.
      */
     titleElement?: ReactNode;
+
+    /**
+     * Whether the ListItem Animation should be disabled.
+     */
+    shouldDisableAnimation?: boolean;
 };
 
 const ListItem: FC<ListItemProps> = ({
@@ -202,6 +208,7 @@ const ListItem: FC<ListItemProps> = ({
     subtitle,
     title,
     titleElement,
+    shouldDisableAnimation = false,
 }) => {
     const {
         incrementExpandableItemCount,
@@ -308,6 +315,7 @@ const ListItem: FC<ListItemProps> = ({
                 title={title}
                 titleElement={titleElement}
                 setShouldEnableTooltip={setShouldEnableTooltip}
+                shouldDisableAnimation={shouldDisableAnimation}
             />
         ),
         [
@@ -334,11 +342,13 @@ const ListItem: FC<ListItemProps> = ({
             subtitle,
             title,
             titleElement,
+            shouldDisableAnimation,
         ],
     );
 
     return (
-        <StyledMotionListItem
+        <StyledListItem
+            as={shouldDisableAnimation ? undefined : motion[LIST_ITEM_HTML_TAG]}
             animate={{ height: 'auto', opacity: 1 }}
             className="beta-chayns-list-item"
             exit={{ height: 0, opacity: 0 }}
@@ -382,7 +392,7 @@ const ListItem: FC<ListItemProps> = ({
                     </ListItemBody>
                 )}
             </AnimatePresence>
-        </StyledMotionListItem>
+        </StyledListItem>
     );
 };
 
