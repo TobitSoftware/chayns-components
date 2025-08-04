@@ -38,9 +38,7 @@ export const calculateContentWidth = (
             // Due to the fact that the element is never rendered visible, the values are irrelevant.
             div.innerHTML += renderToString(
                 <ChaynsProvider data={values} functions={functions} isModule>
-                    <ColorSchemeProvider color="#005EB8" colorMode={0}>
-                        {suffixElement}
-                    </ColorSchemeProvider>
+                    <ColorSchemeProvider>{suffixElement}</ColorSchemeProvider>
                 </ChaynsProvider>,
             );
         }

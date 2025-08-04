@@ -138,6 +138,10 @@ export type ComboBoxProps = {
      * Whether the width of the 'ComboBox' should be the width of the parent or of the widest item.
      */
     shouldUseFullWidth?: boolean;
+    /**
+     * If true, the dropdown will use the maximum width of the items.
+     */
+    shouldDropDownUseMaxItemWidth?: boolean;
 };
 
 const ComboBox: FC<ComboBoxProps> = ({
@@ -160,6 +164,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     shouldUseCurrentItemWidth = false,
     onInputBlur,
     inputValue,
+    shouldDropDownUseMaxItemWidth = false,
 }) => {
     const [internalSelectedItem, setInternalSelectedItem] = useState<IComboBoxItem>();
     const [isAnimating, setIsAnimating] = useState(false);
@@ -361,6 +366,24 @@ const ComboBox: FC<ComboBoxProps> = ({
      */
     useEffect(() => {
         const allItems = lists.flatMap((list) => list.list);
+
+        let baseWidth = calculateContentWidth(
+            [
+                ...allItems,
+                { text: placeholder, value: 'placeholder' },
+                ...(selectedItem ? [selectedItem] : []),
+            ],
+            functions,
+            values,
+        );
+
+        if (shouldDropDownUseMaxItemWidth) {
+            baseWidth += 20 + 2; // 20px padding left and right and 2px border
+            setBodyMinWidth(baseWidth);
+            setMinWidth(baseWidth);
+            return;
+        }
+
         const hasImage = [selectedItem, ...allItems].some((item) => item?.imageUrl);
         const hasIcon = [selectedItem, ...allItems].some((item) => item?.icons);
 
@@ -380,16 +403,6 @@ const ComboBox: FC<ComboBoxProps> = ({
             prefixWidth = Math.max(prefixTextWidth, 32);
         }
 
-        const baseWidth = calculateContentWidth(
-            [
-                ...allItems,
-                { text: placeholder, value: 'placeholder' },
-                ...(selectedItem ? [selectedItem] : []),
-            ],
-            functions,
-            values,
-        );
-
         const calculatedWidth = baseWidth + paddingWidth + imageWidth + iconWidth + prefixWidth;
 
         let tmpMinWidth = calculatedWidth;
@@ -402,7 +415,6 @@ const ComboBox: FC<ComboBoxProps> = ({
             tmpBodyMinWidth =
                 parentWidth < calculatedWidth - 20 ? calculatedWidth - 20 : parentWidth;
         }
-
         // Current item width settings
         else if (shouldUseCurrentItemWidth && internalSelectedItem) {
             const itemWidth =
@@ -437,6 +449,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         selectedItem,
         functions,
         values,
+        shouldDropDownUseMaxItemWidth,
     ]);
 
     /**
