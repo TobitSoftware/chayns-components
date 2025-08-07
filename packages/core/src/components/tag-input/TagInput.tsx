@@ -12,6 +12,7 @@ import React, {
     ChangeEventHandler,
     ReactNode,
     FocusEventHandler,
+    useRef,
 } from 'react';
 import { useTheme } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
@@ -72,6 +73,7 @@ export type TagInputProps = {
 };
 
 export type TagInputRef = {
+    blur: () => void;
     getUnsavedTagText: Tag['text'] | undefined;
     resetValue: () => void;
 };
@@ -98,6 +100,8 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
 
         const areaProvider = useContext(AreaContext);
 
+        const inputRef = useRef<HTMLInputElement | null>(null);
+
         const theme = useTheme() as Theme;
 
         useEffect(() => {
@@ -118,6 +122,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
         useImperativeHandle(
             ref,
             () => ({
+                blur: () => inputRef.current?.blur(),
                 getUnsavedTagText: currentValue !== '' ? currentValue : undefined,
                 resetValue: handleResetValue,
             }),
@@ -280,6 +285,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                             onFocus={onFocus}
                             onKeyDown={handleKeyDown}
                             placeholder={tags && tags.length > 0 ? undefined : placeholder}
+                            ref={inputRef}
                             value={currentValue}
                         />
                     )}
