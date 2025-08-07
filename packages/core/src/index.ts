@@ -93,7 +93,9 @@ export {
     SmallWaitCursorSize,
     SmallWaitCursorSpeed,
 } from './components/small-wait-cursor/SmallWaitCursor';
+export type { Tag } from './types/tagInput';
 export { default as TagInput } from './components/tag-input/TagInput';
+export type { TagInputRef } from './components/tag-input/TagInput';
 export { default as TextArea } from './components/text-area/TextArea';
 export { default as Tooltip } from './components/tooltip/Tooltip';
 export { default as Truncation } from './components/truncation/Truncation';
