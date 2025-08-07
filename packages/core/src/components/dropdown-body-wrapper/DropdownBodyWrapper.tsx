@@ -53,23 +53,29 @@ interface DropdownBodyWrapperProps {
      */
     onMeasure?: DelayedDropdownContentProps['onMeasure'];
     /**
+     * Whether the dropdown should prevent closing on click. This is useful for mobile devices if
+     * the input is focused and the dropdown should not close when user wants to close the keyboard.
+     */
+    shouldPreventCloseOnClick?: boolean;
+    /**
      * Whether the dropdown should be visible.
      */
     shouldShowDropdown: boolean;
 }
 
 const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
-    direction = DropdownDirection.BOTTOM_RIGHT,
+    anchorElement,
+    bodyWidth,
     children,
     container: containerProp,
-    shouldShowDropdown,
-    anchorElement,
     contentHeight = 0,
+    direction = DropdownDirection.BOTTOM_RIGHT,
     maxHeight = 300,
+    minBodyWidth = 0,
     onClose,
     onMeasure,
-    minBodyWidth = 0,
-    bodyWidth,
+    shouldPreventCloseOnClick = false,
+    shouldShowDropdown,
 }) => {
     const isInChaynsWalletRef = useRef(false);
 
@@ -103,17 +109,22 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     const handleClick = useCallback(
         (event: MouseEvent) => {
             if (
-                !shouldPreventClickRef.current &&
-                !anchorElement.contains(event.target as Node) &&
                 ref.current &&
+                shouldShowDropdown &&
+                !anchorElement.contains(event.target as Node) &&
                 !ref.current.contains(event.target as Node)
             ) {
-                handleClose();
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (!shouldPreventClickRef.current && !shouldPreventCloseOnClick) {
+                    handleClose();
+                }
             }
 
             shouldPreventClickRef.current = false;
         },
-        [anchorElement, handleClose],
+        [anchorElement, handleClose, shouldPreventCloseOnClick, shouldShowDropdown],
     );
 
     const handleContentMeasure = useCallback(
