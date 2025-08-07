@@ -17,28 +17,40 @@ import {
     StyledSliderButtonPopupContentItem,
     StyledSliderButtonWrapper,
 } from './SliderButton.styles';
+import { useTheme } from 'styled-components';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export type SliderButtonProps = {
     /**
-     * Whether the button is disabled.
+     * Whether the button is disabled and cannot be clicked anymore.
      */
     isDisabled?: boolean;
     /**
-     * Function to be executed when a button is selected.
+     * Displays the button in the secondary style.
+     */
+    isSecondary?: boolean;
+    /**
+     * The items that should be displayed in the slider button.
+     */
+    items: SliderButtonItem[];
+    /**
+     * Function to be executed when a button is selected. The id of the selected button is passed as an argument.
      * @param id
      */
     onChange?: (id: string) => void;
     /**
-     * The buttons that are slidable.
-     */
-    items: SliderButtonItem[];
-    /**
-     * The id of a button that should be selected.
+     * The id of the button that should be selected.
      */
     selectedButtonId?: string;
 };
 
-const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, items, onChange }) => {
+const SliderButton: FC<SliderButtonProps> = ({
+    isDisabled,
+    isSecondary,
+    items,
+    onChange,
+    selectedButtonId,
+}) => {
     const [dragRange, setDragRange] = useState({ left: 0, right: 0 });
     const [shownItemsCount, setShownItemsCount] = useState(items.length);
     const [sliderSize, setSliderSize] = useState({ width: 0 });
@@ -51,6 +63,8 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
     const popupRef = useRef<PopupRef>(null);
 
     const [scope, animate] = useAnimate();
+
+    const theme = useTheme() as Theme;
 
     const initialItemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
     const elementSize = useElementSize(sliderButtonRef);
@@ -194,6 +208,38 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         [isDisabled, onChange, setItemPosition, setPopupId],
     );
 
+    const backgroundColor = useMemo(() => {
+        let color;
+
+        if (isSecondary) {
+            color = theme['202'];
+        } else {
+            color = theme.buttonBackgroundColor ?? theme['408'];
+        }
+
+        if (theme.buttonDesign === '2') {
+            color = `rgba(${theme['102-rgb'] ?? ''}, 0)`;
+        }
+
+        return color;
+    }, [isSecondary, theme]);
+
+    const thumbBackgroundColor = useMemo(() => {
+        let color;
+
+        if (isSecondary) {
+            color = theme['207'];
+        } else {
+            color = `rgba(${theme['405-rgb'] ?? ''}, 0.75)`;
+        }
+
+        if (theme.buttonDesign === '2') {
+            color = `rgba(${theme['102-rgb'] ?? ''}, 0)`;
+        }
+
+        return color;
+    }, [isSecondary, theme]);
+
     const buttons = useMemo(() => {
         if (items.length > shownItemsCount) {
             const newItems = items.slice(0, shownItemsCount - 1);
@@ -201,6 +247,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
             const elements = newItems.map(({ id, text }, index) => (
                 <StyledSliderButtonItem
+                    $isSecondary={isSecondary}
                     $width={itemWidth}
                     key={`slider-button-${id}`}
                     onClick={() => handleClick(id, index)}
@@ -222,7 +269,11 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
             const id = 'more';
 
             elements.push(
-                <StyledSliderButtonItem $width={itemWidth} key={`slider-button-${id}`}>
+                <StyledSliderButtonItem
+                    $isSecondary={isSecondary}
+                    $width={itemWidth}
+                    key={`slider-button-${id}`}
+                >
                     <Popup
                         ref={popupRef}
                         content={
@@ -239,11 +290,15 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
             return elements;
         }
         return items.map(({ id, text }) => (
-            <StyledSliderButtonItem $width={itemWidth} key={`slider-button-${id}`}>
+            <StyledSliderButtonItem
+                $isSecondary={isSecondary}
+                $width={itemWidth}
+                key={`slider-button-${id}`}
+            >
                 {text}
             </StyledSliderButtonItem>
         ));
-    }, [currentPopupId, handleClick, itemWidth, items, shownItemsCount]);
+    }, [currentPopupId, handleClick, isSecondary, itemWidth, items, shownItemsCount]);
 
     const pseudoButtons = useMemo(() => {
         if (items.length > shownItemsCount) {
@@ -251,6 +306,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
             const elements = newItems.map(({ id, text }, index) => (
                 <StyledSliderButtonItem
+                    $isSecondary={isSecondary}
                     $width={itemWidth}
                     key={`pseudo-slider-button-${id}`}
                     onClick={() => handleClick(id, index)}
@@ -263,6 +319,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
             elements.push(
                 <StyledSliderButtonItem
+                    $isSecondary={isSecondary}
                     $width={itemWidth}
                     key={`pseudo-slider-button-${id}`}
                     onClick={() => handleClick(id, newItems.length)}
@@ -275,6 +332,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         }
         return items.map(({ id, text }, index) => (
             <StyledSliderButtonItem
+                $isSecondary={isSecondary}
                 $width={itemWidth}
                 key={`pseudo-slider-button-${id}`}
                 onClick={() => handleClick(id, index)}
@@ -282,7 +340,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                 {text}
             </StyledSliderButtonItem>
         ));
-    }, [handleClick, itemWidth, items, shownItemsCount]);
+    }, [handleClick, isSecondary, itemWidth, items, shownItemsCount]);
 
     /**
      * Creates an array with the snap points relative to the width of the items
@@ -380,11 +438,13 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                     onDragEnd={handleDragEnd}
                     onDragStart={handleDragStart}
                     onClick={() => handleClick(currentId, currentIndex)}
+                    style={{ backgroundColor: thumbBackgroundColor }}
                 />
                 <StyledSliderButtonWrapper
                     $isDisabled={isDisabled}
                     $width={!isSliderBigger ? dragRange.right + itemWidth : dragRange.right}
                     ref={sliderButtonWrapperRef}
+                    style={{ backgroundColor }}
                 >
                     <AnimatePresence>
                         <StyledSliderButtonButtonsWrapper>
@@ -395,6 +455,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
             </StyledSliderButton>
         ),
         [
+            backgroundColor,
             buttons,
             currentId,
             currentIndex,
@@ -407,6 +468,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
             itemWidth,
             pseudoButtons,
             scope,
+            thumbBackgroundColor,
         ],
     );
 };

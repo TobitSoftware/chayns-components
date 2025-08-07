@@ -15,7 +15,6 @@ type StyledSliderButtonWrapperProps = WithTheme<{ $width: number; $isDisabled?: 
 
 export const StyledSliderButtonWrapper = styled.div<StyledSliderButtonWrapperProps>`
     align-items: center;
-    background-color: ${({ theme }: StyledMotionSliderButtonThumbProps) => theme['408']};
     border-radius: 3px;
     border: none;
     color: white;
@@ -45,7 +44,10 @@ export const StyledSliderButtonWrapper = styled.div<StyledSliderButtonWrapperPro
     scrollbar-width: none;
 `;
 
-type StyledSliderButtonItemProps = WithTheme<{ $width: number }>;
+type StyledSliderButtonItemProps = WithTheme<{
+    $isSecondary?: boolean;
+    $width: number;
+}>;
 
 export const StyledSliderButtonItem = styled.div<StyledSliderButtonItemProps>`
     font-size: 110%;
@@ -56,7 +58,8 @@ export const StyledSliderButtonItem = styled.div<StyledSliderButtonItemProps>`
     display: flex;
     white-space: nowrap;
     justify-content: center;
-    color: white;
+    color: ${({ $isSecondary, theme }: StyledSliderButtonItemProps) =>
+        $isSecondary ? theme.text : (theme.buttonColor ?? 'white')};
 `;
 
 export const StyledSliderButtonPopupContent = styled.div`
@@ -92,7 +95,6 @@ type StyledMotionSliderButtonThumbProps = WithTheme<{ $width: number }>;
 export const StyledMotionSliderButtonThumb = styled(motion.div)<StyledMotionSliderButtonThumbProps>`
     font-size: 110%;
     font-family: 'Roboto Medium', serif;
-    background-color: ${({ theme }: StyledSliderButtonProps) => theme['405']};
     opacity: 1;
     width: ${({ $width }) => $width - 8}px;
     position: absolute;
