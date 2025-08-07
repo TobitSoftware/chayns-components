@@ -11,6 +11,7 @@ import React, {
     useContext,
     ChangeEventHandler,
     ReactNode,
+    FocusEventHandler,
 } from 'react';
 import { useTheme } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
@@ -37,9 +38,17 @@ export type TagInputProps = {
      */
     onAdd?: (tag: Tag) => void;
     /**
+     * Function to be executed when the input is blurred.
+     */
+    onBlur?: FocusEventHandler;
+    /**
      * Function to be executed when the value of the input is changed.
      */
     onChange?: ChangeEventHandler<HTMLInputElement>;
+    /**
+     * Function to be executed when the input is focused.
+     */
+    onFocus?: FocusEventHandler;
     /**
      * Function to be executed when a tag is removed.
      */
@@ -49,10 +58,6 @@ export type TagInputProps = {
      */
     placeholder?: string;
     /**
-     * The tags that should be displayed.
-     */
-    tags?: Tag[];
-    /**
      * Whether multiple tags should be allowed.
      */
     shouldAllowMultiple?: boolean;
@@ -60,6 +65,10 @@ export type TagInputProps = {
      * Whether the enter key should be prevented.
      */
     shouldPreventEnter?: boolean;
+    /**
+     * The tags that should be displayed.
+     */
+    tags?: Tag[];
 };
 
 export type TagInputRef = {
@@ -70,14 +79,16 @@ export type TagInputRef = {
 const TagInput = forwardRef<TagInputRef, TagInputProps>(
     (
         {
-            placeholder,
-            tags,
-            onRemove,
-            onChange,
-            onAdd,
             leftElement,
+            onAdd,
+            onBlur,
+            onChange,
+            onFocus,
+            onRemove,
+            placeholder,
             shouldAllowMultiple = true,
             shouldPreventEnter,
+            tags,
         },
         ref,
     ) => {
@@ -264,9 +275,11 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                     {content}
                     {shouldShowInput && (
                         <StyledTagInputTagInput
-                            placeholder={tags && tags.length > 0 ? undefined : placeholder}
-                            onKeyDown={handleKeyDown}
+                            onBlur={onBlur}
                             onChange={handleChange}
+                            onFocus={onFocus}
+                            onKeyDown={handleKeyDown}
+                            placeholder={tags && tags.length > 0 ? undefined : placeholder}
                             value={currentValue}
                         />
                     )}
@@ -278,6 +291,8 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                 handleChange,
                 handleKeyDown,
                 leftElement,
+                onBlur,
+                onFocus,
                 placeholder,
                 shouldChangeColor,
                 shouldShowInput,
