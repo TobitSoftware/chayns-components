@@ -17,18 +17,18 @@ export const useDropdownListener = ({
     onTouchStart,
 }: UseDropdownListenerOptions) => {
     useEffect(() => {
-        document.addEventListener('click', onClick);
-        document.addEventListener('touchend', onTouchEnd);
-        document.addEventListener('touchstart', onTouchStart);
+        document.addEventListener('click', onClick, true);
+        document.addEventListener('touchend', onTouchEnd, true);
+        document.addEventListener('touchstart', onTouchStart, true);
 
-        window.addEventListener('blur', () => onClose());
+        window.addEventListener('blur', () => onClose(), true);
 
         return () => {
-            document.removeEventListener('click', onClick);
-            document.removeEventListener('touchend', onTouchEnd);
-            document.removeEventListener('touchstart', onTouchStart);
+            document.removeEventListener('click', onClick, true);
+            document.removeEventListener('touchend', onTouchEnd, true);
+            document.removeEventListener('touchstart', onTouchStart, true);
 
-            window.addEventListener('blur', () => onClose());
+            window.addEventListener('blur', () => onClose(), true);
         };
     }, [onClick, onClose, onTouchEnd, onTouchStart]);
 };
