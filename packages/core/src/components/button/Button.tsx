@@ -26,7 +26,7 @@ export type ButtonProps = {
      */
     icon?: string;
     /**
-     * Disables the button so that it cannot be clicked anymore
+     * Whether the button is disabled and cannot be clicked anymore.
      */
     isDisabled?: boolean;
     /**
