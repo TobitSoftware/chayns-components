@@ -54,10 +54,12 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
     border-radius: 3px;
     cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
     display: inline-flex;
+    flex: 0 0 auto;
     line-height: 22px;
     min-height: 32px;
     position: relative;
     user-select: none;
+    width: fit-content;
 
     ${({ $hasIcon, $hasChildren, $shouldShowWaitCursor }) => {
         if ($shouldShowWaitCursor) {
@@ -81,7 +83,7 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
         `;
     }}
 `;
-//
+
 export const StyledIconWrapper = styled.span`
     align-items: center;
     background-color: rgba(255, 255, 255, 0.2);
