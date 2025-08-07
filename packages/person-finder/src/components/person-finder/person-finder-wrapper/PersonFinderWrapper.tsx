@@ -1,3 +1,11 @@
+import {
+    DropdownBodyWrapper,
+    Icon,
+    type Tag,
+    TagInput,
+    type TagInputRef,
+} from '@chayns-components/core';
+import { useDevice } from 'chayns-api';
 import React, {
     type ChangeEvent,
     forwardRef,
@@ -5,11 +13,9 @@ import React, {
     useCallback,
     useEffect,
     useImperativeHandle,
-    useMemo,
     useRef,
     useState,
 } from 'react';
-import { DropdownBodyWrapper, Icon, TagInput } from '@chayns-components/core';
 import { v4 as uuidV4 } from 'uuid';
 import {
     PersonEntry,
@@ -20,8 +26,6 @@ import {
 import { StyledPersonFinder, StyledPersonFinderLeftElement } from './PersonFinderWrapper.styles';
 import PersonFinderBody from './person-finder-body/PersonFinderBody';
 import { usePersonFinder } from '../../PersonFinderProvider';
-import { Tag } from '@chayns-components/core/lib/types/types/tagInput';
-import { TagInputRef } from '@chayns-components/core/lib/types/components/tag-input/TagInput';
 
 export type PersonFinderRef = {
     clear: () => void;
@@ -93,19 +97,29 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
     ) => {
         const { data, updateSearch, setTags, tags } = usePersonFinder();
 
+        const [isFocused, setIsFocused] = useState(false);
         const [shouldShowBody, setShouldShowBody] = useState(false);
 
-        const tagInputRef = useRef<TagInputRef>(null);
         const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement>(null);
+        const keyRef = useRef(`person-finder-${uuidV4()}`);
+        const tagInputRef = useRef<TagInputRef>(null);
 
-        const uuid = useMemo(() => uuidV4(), []);
+        const { isTouch } = useDevice();
 
         const leftElement = leftElementProp ?? (
             <StyledPersonFinderLeftElement>
                 <Icon icons={['fa fa-search']} />
             </StyledPersonFinderLeftElement>
         );
+
+        const handleTagInputBlur = useCallback(() => {
+            setIsFocused(false);
+        }, []);
+
+        const handleTagInputFocus = useCallback(() => {
+            setIsFocused(true);
+        }, []);
 
         const handleRemove = useCallback(
             (id: string) => {
@@ -139,6 +153,12 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
 
             setTags([]);
         }, [setTags]);
+
+        const handleDropdownOutsideClick = useCallback(() => {
+            tagInputRef.current?.blur();
+
+            return isFocused && isTouch;
+        }, [isFocused, isTouch]);
 
         const handleAdd = useCallback(
             (id: string) => {
@@ -212,10 +232,12 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
         }, [onDropdownHide, onDropdownShow, shouldShowBody]);
 
         return (
-            <StyledPersonFinder ref={boxRef} onFocus={handleOpen} key={`person-finder-${uuid}`}>
+            <StyledPersonFinder ref={boxRef} onFocus={handleOpen} key={keyRef.current}>
                 <TagInput
                     leftElement={leftElement}
+                    onBlur={handleTagInputBlur}
                     onChange={handleChange}
+                    onFocus={handleTagInputFocus}
                     onRemove={handleRemove}
                     placeholder={placeholder}
                     ref={tagInputRef}
@@ -228,6 +250,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
                         anchorElement={boxRef.current}
                         container={container}
                         onClose={handleClose}
+                        onOutsideClick={handleDropdownOutsideClick}
                         shouldShowDropdown={shouldShowBody}
                     >
                         <PersonFinderBody
