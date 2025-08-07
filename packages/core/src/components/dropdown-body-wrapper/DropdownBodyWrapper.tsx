@@ -49,14 +49,14 @@ interface DropdownBodyWrapperProps {
      */
     onClose?: VoidFunction;
     /**
+     * Function to be executed when the user clicks outside the dropdown.
+     * If the function returns `true`, the dropdown will not be closed.
+     */
+    onOutsideClick?: () => boolean | void;
+    /**
      * Function to be executed when the content is measured.
      */
     onMeasure?: DelayedDropdownContentProps['onMeasure'];
-    /**
-     * Whether the dropdown should prevent closing on click. This is useful for mobile devices if
-     * the input is focused and the dropdown should not close when user wants to close the keyboard.
-     */
-    shouldPreventCloseOnClick?: boolean;
     /**
      * Whether the dropdown should be visible.
      */
@@ -73,8 +73,8 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     maxHeight = 300,
     minBodyWidth = 0,
     onClose,
+    onOutsideClick,
     onMeasure,
-    shouldPreventCloseOnClick = false,
     shouldShowDropdown,
 }) => {
     const isInChaynsWalletRef = useRef(false);
@@ -117,6 +117,8 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
                 event.preventDefault();
                 event.stopPropagation();
 
+                const shouldPreventCloseOnClick = onOutsideClick?.() ?? false;
+
                 if (!shouldPreventClickRef.current && !shouldPreventCloseOnClick) {
                     handleClose();
                 }
@@ -124,7 +126,7 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
 
             shouldPreventClickRef.current = false;
         },
-        [anchorElement, handleClose, shouldPreventCloseOnClick, shouldShowDropdown],
+        [anchorElement, handleClose, onOutsideClick, shouldShowDropdown],
     );
 
     const handleContentMeasure = useCallback(
