@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import Input from '../src/components/input/Input';
+import OldInput from '../src/components/old-input/OldInput';
 import RadioButtonGroup from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '../src/components/radio-button/RadioButton';
 import SetupWizardItem from '../src/components/setup-wizard/setup-wizard-item/SetupWizardItem';
@@ -23,7 +23,7 @@ export default {
                     <RadioButton id="3" label="Salat" />
                 </RadioButtonGroup>
                 <h5>Dein Essen ist nicht dabei? Kein Problem, schreibe es uns einfach.</h5>
-                <Input placeholder="Essen eingeben" />
+                <OldInput placeholder="Essen eingeben" />
             </>
         ),
     },

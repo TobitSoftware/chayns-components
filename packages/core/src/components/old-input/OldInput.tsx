@@ -31,15 +31,15 @@ import {
     StyledInputRightElement,
     StyledMotionInputClearIcon,
     StyledMotionInputLabelWrapper,
-} from './Input.styles';
+} from './OldInput.styles';
 import { ContentCardType } from '../../types/contentCard';
 
-export type InputRef = {
+export type OldInputRef = {
     focus: VoidFunction;
     blur: VoidFunction;
 };
 
-type InputMode =
+type OldInputMode =
     | 'email'
     | 'search'
     | 'tel'
@@ -50,46 +50,46 @@ type InputMode =
     | 'decimal'
     | undefined;
 
-export enum InputSize {
+export enum OldInputSize {
     Small = 'small',
     Medium = 'medium',
 }
 
-export type InputProps = {
+export type OldInputProps = {
     /**
-     * An element to be displayed on the left side of the input field
+     * An element to be displayed on the left side of the old-input field
      */
     leftElement?: ReactNode;
     /**
-     * The id of the input
+     * The id of the old-input
      */
     id?: string;
     /**
-     * Defines the input mode of the input
+     * Defines the old-input mode of the old-input
      */
-    inputMode?: InputMode;
+    inputMode?: OldInputMode;
     /**
-     * Disables the input so that it cannot be changed anymore
+     * Disables the old-input so that it cannot be changed anymore
      */
     isDisabled?: boolean;
     /**
-     * If true, the input field is marked as invalid
+     * If true, the old-input field is marked as invalid
      */
     isInvalid?: boolean;
     /**
-     * Function that is executed when the input field loses focus
+     * Function that is executed when the old-input field loses focus
      */
     onBlur?: FocusEventHandler<HTMLInputElement>;
     /**
-     * Function that is executed when the text of the input changes
+     * Function that is executed when the text of the old-input changes
      */
     onChange?: ChangeEventHandler<HTMLInputElement>;
     /**
-     * Function that is executed when the input field is focused
+     * Function that is executed when the old-input field is focused
      */
     onFocus?: FocusEventHandler<HTMLInputElement>;
     /**
-     * Function that is executed when content is pasted into the input field
+     * Function that is executed when content is pasted into the old-input field
      */
     onPaste?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
     /**
@@ -97,11 +97,11 @@ export type InputProps = {
      */
     onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
     /**
-     * Placeholder for the input field
+     * Placeholder for the old-input field
      */
     placeholder?: ReactNode;
     /**
-     * An element that should be displayed on the right side of the Input.
+     * An element that should be displayed on the right side of the OldInput.
      */
     rightElement?: ReactElement;
     /**
@@ -113,11 +113,11 @@ export type InputProps = {
      */
     shouldRemainPlaceholder?: boolean;
     /**
-     * Whether the content should be displayed centered inside the input.
+     * Whether the content should be displayed centered inside the old-input.
      */
     shouldShowCenteredContent?: boolean;
     /**
-     * If true, a clear icon is displayed at the end of the input field
+     * If true, a clear icon is displayed at the end of the old-input field
      */
     shouldShowClearIcon?: boolean;
     /**
@@ -125,24 +125,24 @@ export type InputProps = {
      */
     shouldShowOnlyBottomBorder?: boolean;
     /**
-     * If true, the input field is focused when the component is mounted
+     * If true, the old-input field is focused when the component is mounted
      */
     shouldUseAutoFocus?: boolean;
     /**
-     * The size of the input field
+     * The size of the old-input field
      */
-    size?: InputSize;
+    size?: OldInputSize;
     /**
-     * Input type set for an input element (e.g. 'text', 'number' or 'password')
+     * OldInput type set for an old-input element (e.g. 'text', 'number' or 'password')
      */
     type?: HTMLInputTypeAttribute;
     /**
-     * Value if the input field should be controlled
+     * Value if the old-input field should be controlled
      */
     value?: string;
 };
 
-const Input = forwardRef<InputRef, InputProps>(
+const OldInput = forwardRef<OldInputRef, OldInputProps>(
     (
         {
             leftElement,
@@ -159,7 +159,7 @@ const Input = forwardRef<InputRef, InputProps>(
             shouldRemainPlaceholder = false,
             shouldShowClearIcon = false,
             shouldShowCenteredContent = false,
-            size = InputSize.Medium,
+            size = OldInputSize.Medium,
             type = 'text',
             value,
             shouldUseAutoFocus = false,
@@ -247,7 +247,7 @@ const Input = forwardRef<InputRef, InputProps>(
             if (hasValue && !shouldRemainPlaceholder && !shouldPreventPlaceholderAnimation) {
                 return shouldShowOnlyBottomBorder
                     ? { right: 3, top: -1.5 }
-                    : { bottom: size === InputSize.Small ? -4 : -10, right: -6 };
+                    : { bottom: size === OldInputSize.Small ? -4 : -10, right: -6 };
             }
 
             return { left: -1 };
@@ -346,6 +346,6 @@ const Input = forwardRef<InputRef, InputProps>(
     },
 );
 
-Input.displayName = 'Input';
+OldInput.displayName = 'OldInput';
 
-export default Input;
+export default OldInput;

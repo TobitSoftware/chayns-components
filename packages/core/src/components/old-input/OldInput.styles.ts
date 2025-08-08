@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import type { InputSize } from './Input';
+import type { OldInputSize } from './OldInput';
 import { CSSProperties } from 'react';
 
 type StyledInputProps = WithTheme<{ $isDisabled?: boolean }>;
@@ -17,7 +17,7 @@ type StyledInputContentWrapperProps = WithTheme<{
     $shouldRoundRightCorners: boolean;
     $shouldShowOnlyBottomBorder?: boolean;
     $isInvalid?: boolean;
-    $size: InputSize;
+    $size: OldInputSize;
 }>;
 
 export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
@@ -135,7 +135,7 @@ export const StyledInputLabel = styled.label<StyledInputLabelProps>`
 
 type StyledMotionInputClearIconProps = WithTheme<{
     $shouldShowOnlyBottomBorder?: boolean;
-    $size: InputSize;
+    $size: OldInputSize;
 }>;
 
 export const StyledMotionInputClearIcon = styled(motion.div)<StyledMotionInputClearIconProps>`

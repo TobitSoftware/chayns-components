@@ -16,7 +16,7 @@ import React, {
 } from 'react';
 import { BrowserName } from '../../types/chayns';
 import { AreaContext } from '../area-provider/AreaContextProvider';
-import { StyledInputRightElement } from '../input/Input.styles';
+import { StyledInputRightElement } from '../old-input/OldInput.styles';
 import {
     StyledTextArea,
     StyledTextAreaContent,

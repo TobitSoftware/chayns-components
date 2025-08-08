@@ -1,7 +1,7 @@
 import React, { ChangeEventHandler, FC, useEffect, useState } from 'react';
 import { NUMBER_CLEAR_REGEX } from '../../constants/numberInput';
 import { formateNumber, isValidString, parseFloatWithDecimals } from '../../utils/numberInput';
-import Input from '../input/Input';
+import OldInput from '../old-input/OldInput';
 
 export type NumberInputProps = {
     /**
@@ -225,7 +225,7 @@ const NumberInput: FC<NumberInputProps> = ({
     }, [value]);
 
     return (
-        <Input
+        <OldInput
             shouldRemainPlaceholder={shouldRemainPlaceholder}
             shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
             inputMode="decimal"

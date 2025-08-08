@@ -1,10 +1,10 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import type { InputSize } from '../input/Input';
+import type { OldInputSize } from '../old-input/OldInput';
 
 type StyledSearchInputProps = WithTheme<{
-    $size: InputSize;
+    $size: OldInputSize;
     $shouldUseAbsolutePositioning: boolean;
 }>;
 

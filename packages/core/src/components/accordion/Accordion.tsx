@@ -15,7 +15,7 @@ import React, {
 } from 'react';
 import { useUuid } from '../../hooks/uuid';
 import { AreaContext } from '../area-provider/AreaContextProvider';
-import type { InputProps } from '../input/Input';
+import type { OldInputProps } from '../old-input/OldInput';
 import AccordionBody from './accordion-body/AccordionBody';
 import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';

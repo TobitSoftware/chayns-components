@@ -17,7 +17,7 @@ import { getAccordionHeadHeight, getElementClickEvent } from '../../../utils/acc
 import { AreaContext } from '../../area-provider/AreaContextProvider';
 import type { Theme } from '../../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../../icon/Icon';
-import Input, { InputSize, type InputProps } from '../../input/Input';
+import OldInput, { OldInputSize, type OldInputProps } from '../../old-input/OldInput';
 import SearchInput from '../../search-input/SearchInput';
 import {
     StyledAccordionIcon,
@@ -48,7 +48,7 @@ export type AccordionHeadProps = {
     titleElement?: ReactNode;
     uuid: string;
     onTitleInputChange?: ChangeEventHandler<HTMLInputElement>;
-    titleInputProps?: InputProps;
+    titleInputProps?: OldInputProps;
     titleColor?: CSSProperties['color'];
 };
 
@@ -195,7 +195,11 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                     // eslint-disable-next-line react/jsx-no-constructed-context-values
                     <AreaContext.Provider value={{ shouldChangeColor: true }}>
                         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                        <Input {...titleInputProps} value={title} onChange={onTitleInputChange} />
+                        <OldInput
+                            {...titleInputProps}
+                            value={title}
+                            onChange={onTitleInputChange}
+                        />
                     </AreaContext.Provider>
                 ) : (
                     <LayoutGroup key={`accordionHeadLayoutGroup--${uuid}`}>
@@ -253,7 +257,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                     onChange={handleOnSearchChance}
                                     onActiveChange={(isActive) => setIsSearchActive(isActive)}
                                     placeholder={searchPlaceholder}
-                                    size={InputSize.Small}
+                                    size={OldInputSize.Small}
                                     value={internalSearchValue}
                                 />
                             </StyledMotionSearchWrapper>
