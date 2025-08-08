@@ -203,12 +203,16 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     return (
         <StyledListItemHead
             as={shouldDisableAnimation ? undefined : motion[LIST_ITEM_HEAD_HTML_TAG]}
-            layout
-            animate={{
-                opacity: isTitleGreyed ? 0.5 : 1,
-            }}
-            initial={false}
-            transition={{ duration: 0.2, type: 'tween' }}
+            layout={shouldDisableAnimation ? undefined : true}
+            animate={
+                shouldDisableAnimation
+                    ? undefined
+                    : {
+                          opacity: isTitleGreyed ? 0.5 : 1,
+                      }
+            }
+            initial={shouldDisableAnimation ? undefined : false}
+            transition={shouldDisableAnimation ? undefined : { duration: 0.2, type: 'tween' }}
             className="beta-chayns-list-item-head"
             $isClickable={typeof onClick === 'function' || isExpandable}
             $isAnyItemExpandable={isAnyItemExpandable}
@@ -226,9 +230,9 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                                 ? undefined
                                 : motion[LIST_ITEM_HEAD_INDICATOR_HTML_TAG]
                         }
-                        animate={{ rotate: isOpen ? 90 : 0 }}
-                        initial={false}
-                        transition={{ type: 'tween' }}
+                        animate={shouldDisableAnimation ? undefined : { rotate: isOpen ? 90 : 0 }}
+                        initial={shouldDisableAnimation ? undefined : false}
+                        transition={shouldDisableAnimation ? undefined : { type: 'tween' }}
                     >
                         {isExpandable && !shouldHideIndicator && (
                             <Icon icons={['fa fa-chevron-right']} />

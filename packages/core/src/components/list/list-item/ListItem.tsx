@@ -349,13 +349,13 @@ const ListItem: FC<ListItemProps> = ({
     return (
         <StyledListItem
             as={shouldDisableAnimation ? undefined : motion[LIST_ITEM_HTML_TAG]}
-            animate={{ height: 'auto', opacity: 1 }}
+            animate={shouldDisableAnimation ? undefined : { height: 'auto', opacity: 1 }}
             className="beta-chayns-list-item"
-            exit={{ height: 0, opacity: 0 }}
-            initial={{ height: 0, opacity: 0 }}
+            exit={shouldDisableAnimation ? undefined : { height: 0, opacity: 0 }}
+            initial={shouldDisableAnimation ? undefined : { height: 0, opacity: 0 }}
             key={`list-item-${uuid}`}
             ref={listItemRef}
-            layout={shouldPreventLayoutAnimation ? undefined : 'position'}
+            layout={shouldPreventLayoutAnimation || shouldDisableAnimation ? undefined : 'position'}
             $backgroundColor={backgroundColor}
             $isClickable={isClickable}
             $isInAccordion={typeof isParentAccordionWrapped === 'boolean' && !shouldDisablePadding}
