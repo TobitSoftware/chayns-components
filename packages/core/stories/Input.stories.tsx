@@ -7,6 +7,7 @@ export default {
     component: Input,
     args: {
         placeholder: 'Try me out',
+        shouldUseAutoFocus: true,
     },
 } as Meta<typeof Input>;
 

@@ -28,6 +28,14 @@ export const StyledInput = styled.div<StyledInputProps>`
     width: 100%;
 `;
 
+export const StyledInputContentWrapper = styled.div`
+    align-items: center;
+    display: flex;
+    flex: 1 1 auto;
+    position: relative;
+    width: 100%;
+`;
+
 type StyledInputFieldProps = WithTheme<{
     $color?: CSSProperties['color'];
     $isInvalid?: boolean;
@@ -39,6 +47,7 @@ export const StyledInputField = styled.input<StyledInputFieldProps>`
     color: ${({ theme, $color, $isInvalid }: StyledInputFieldProps) =>
         $color ?? ($isInvalid ? theme.wrong : theme.text)};
     flex: 1 1 auto;
+    height: 100%;
     line-height: 1em;
     padding: 0;
     width: 100%;
