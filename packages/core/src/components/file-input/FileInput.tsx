@@ -1,13 +1,14 @@
 import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useState } from 'react';
 import { filterDuplicateFile, filterDuplicateFileUrls, isValidFileType } from '../../utils/file';
 import { StyledFileInput } from './FileInput.styles';
-import { FileList, FileListItem, FileSelect } from '../../index';
+import FileList, { IFileItem } from '../file-list/FileList';
+import FileSelect from '../file-select/FileSelect';
 
 export type FileInputProps = {
     /**
      * Already uploaded files to display.
      */
-    files?: FileListItem[];
+    files?: IFileItem[];
     /**
      * An array of icons that should be displayed inside the FileInput
      */
@@ -51,7 +52,7 @@ export type FileInputProps = {
     /**
      * A function to be executed when a file is removed.
      */
-    onRemove?: (file: File | FileListItem | string) => void;
+    onRemove?: (file: File | IFileItem | string) => void;
 };
 
 export type FileInputRef = {
@@ -168,7 +169,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
 
         const handleDeleteFile = useCallback(
             (id: string) => {
-                let fileToDelete: File | FileListItem | string | undefined;
+                let fileToDelete: File | IFileItem | string | undefined;
 
                 const filteredFiles = internalFiles.filter((file) => {
                     const { name } = file;
@@ -229,8 +230,8 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             return false;
         }, [internalFiles.length, internalImages.length, isDisabled, maxFiles, onMaxFilesReached]);
 
-        const filesToDisplay: FileListItem[] = useMemo(() => {
-            const items: FileListItem[] = internalFiles.map(({ type, name, size }) => ({
+        const filesToDisplay: IFileItem[] = useMemo(() => {
+            const items: IFileItem[] = internalFiles.map(({ type, name, size }) => ({
                 id: name,
                 name,
                 size,
