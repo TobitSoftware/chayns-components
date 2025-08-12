@@ -215,6 +215,9 @@ const Input = forwardRef<unknown, InputProps>(
             [onFocus],
         );
 
+        // eslint-disable-next-line no-nested-ternary
+        const inputFieldPaddingRight = rightElement ? 2 : design === InputDesign.Rounded ? 18 : 12;
+
         return (
             <StyledInput $design={design} $isDisabled={isDisabled} $isFocused={isFocused}>
                 {leftElement}
