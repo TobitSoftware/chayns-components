@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import { InputDesign } from '../../types/input';
 
@@ -18,6 +18,7 @@ export const StyledInput = styled.div<StyledInputProps>`
     box-shadow: 0 3px 6px ${({ $isFocused }) => ($isFocused ? '#00000016' : '#00000000')};
     display: flex;
     font-size: 18px;
+    gap: 6px;
     min-height: 52px;
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     padding: 2px ${({ $design }) => ($design === InputDesign.Rounded ? '18px' : '12px')};

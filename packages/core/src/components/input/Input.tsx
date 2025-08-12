@@ -2,13 +2,14 @@ import React, {
     FocusEvent,
     forwardRef,
     HTMLInputTypeAttribute,
+    ReactNode,
     useCallback,
     useRef,
     useState,
 } from 'react';
-import { StyledInput, StyledInputContentWrapper, StyledInputField } from './Input.styles';
 import { InputDesign, InputPlaceholderMode } from '../../types/input';
 import InputPlaceholder from './input-placeholder/InputPlaceholder';
+import { StyledInput, StyledInputContentWrapper, StyledInputField } from './Input.styles';
 
 export type InputProps = {
     /**
@@ -62,6 +63,17 @@ export type InputProps = {
      * @optional
      */
     isInvalid?: boolean;
+    /**
+     * Element to be displayed on the left side of the input field.
+     * @description
+     * The `leftElement` prop allows you to pass a React node that will be rendered on the left side of the input field.
+     * This can be used for icons, labels, or any other element that should appear alongside the input.
+     * If not provided, no element will be displayed on the left side.
+     * @example
+     * <Input leftElement={<Icon icons={['fa fa-search']} />} />
+     * @optional
+     */
+    leftElement?: ReactNode;
     /**
      * Callback function triggered when the input field loses focus.
      * @description
@@ -120,6 +132,17 @@ export type InputProps = {
      */
     placeholderMode?: InputPlaceholderMode;
     /**
+     * Element to be displayed on the right side of the input field.
+     * @description
+     * The `rightElement` prop allows you to pass a React node that will be rendered on the right side of the input field.
+     * This can be used for icons, buttons, or any other element that should appear alongside the input.
+     * If not provided, no element will be displayed on the right side.
+     * @example
+     * <Input rightElement={<Button onClick={() => console.log('Button clicked')}>Click me</Button>} />
+     * @optional
+     */
+    rightElement?: ReactNode;
+    /**
      * Whether the input should be automatically focused when the component mounts.
      * @description
      * This prop determines if the input field should receive focus automatically when the component is rendered.
@@ -150,11 +173,13 @@ const Input = forwardRef<unknown, InputProps>(
         inputType = 'text',
         isDisabled = false,
         isInvalid = false,
+        leftElement,
         onBlur,
         onChange,
         onFocus,
         placeholder,
         placeholderMode = InputPlaceholderMode.Default,
+        rightElement,
         shouldUseAutoFocus = false,
         value,
     }) => {
@@ -192,6 +217,7 @@ const Input = forwardRef<unknown, InputProps>(
 
         return (
             <StyledInput $design={design} $isDisabled={isDisabled} $isFocused={isFocused}>
+                {leftElement}
                 <StyledInputContentWrapper>
                     <StyledInputField
                         $isInvalid={isInvalid}
@@ -212,6 +238,7 @@ const Input = forwardRef<unknown, InputProps>(
                         />
                     )}
                 </StyledInputContentWrapper>
+                {rightElement}
             </StyledInput>
         );
     },
