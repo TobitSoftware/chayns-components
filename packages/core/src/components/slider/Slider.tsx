@@ -1,5 +1,14 @@
 import { setRefreshScrollEnabled } from 'chayns-api';
-import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+    ChangeEvent,
+    FC,
+    ReactNode,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { useTheme } from 'styled-components';
 import { useElementSize } from '../../hooks/element';
 import {
@@ -10,6 +19,7 @@ import {
 } from '../../utils/slider';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import {
+    StyledHighlightedStep,
     StyledSlider,
     StyledSliderInput,
     StyledSliderThumb,
@@ -83,6 +93,17 @@ export type SliderProps = {
      */
     onSelect?: (value?: number, interval?: SliderInterval) => void;
     /**
+     * Indicates whether the slider should highlight steps.
+     * @description
+     * The `shouldHighlightSteps` prop determines whether the slider should visually indicate the steps between values.
+     * When set to `true`, the slider will show visual markers for each step, making it easier for users to see the increments.
+     * @default false
+     * @example
+     * <Slider shouldHighlightSteps={true} />
+     * @optional
+     */
+    shouldHighlightSteps?: boolean;
+    /**
      * Indicates whether the slider should show a label on the thumb.
      * @description
      * The `shouldShowThumbLabel` prop determines whether the slider should display a label on the thumb that shows the current value.
@@ -146,6 +167,7 @@ const Slider: FC<SliderProps> = ({
     minValue,
     onChange,
     onSelect,
+    shouldHighlightSteps = false,
     shouldShowThumbLabel = false,
     step = 1,
     steps = 1,
@@ -353,31 +375,40 @@ const Slider: FC<SliderProps> = ({
     );
 
     const fromSliderThumbPosition = useMemo(() => {
-        if (fromSliderRef.current && fromSliderThumbRef.current && sliderWrapperSize) {
+        if (
+            typeof fromSliderRef.current?.offsetWidth === 'number' &&
+            typeof sliderWrapperSize?.width === 'number'
+        ) {
             return calculateGradientOffset({
-                max: maxValue,
-                min: minValue,
-                value: fromValue,
+                maxValue,
+                minValue,
+                sliderWidth: fromSliderRef.current.offsetWidth,
                 thumbWidth: 20,
-                containerWidth: fromSliderRef.current.offsetWidth,
+                value: fromValue,
+                wrapperWidth: sliderWrapperSize.width,
             });
         }
 
         return 0;
-    }, [fromValue, maxValue, minValue, sliderWrapperSize]);
+    }, [fromValue, maxValue, minValue, sliderWrapperSize?.width]);
 
     const toSliderThumbPosition = useMemo(() => {
-        if (toSliderRef.current && toSliderThumbRef.current && sliderWrapperSize) {
+        if (
+            typeof toSliderRef.current?.offsetWidth === 'number' &&
+            typeof sliderWrapperSize?.width === 'number'
+        ) {
             return calculateGradientOffset({
-                max: maxValue,
-                min: minValue,
-                value: toValue,
+                maxValue,
+                minValue,
+                sliderWidth: toSliderRef.current.offsetWidth,
                 thumbWidth: 20,
-                containerWidth: toSliderRef.current.offsetWidth,
+                value: toValue,
+                wrapperWidth: sliderWrapperSize.width,
             });
         }
+
         return 0;
-    }, [toValue, minValue, maxValue, sliderWrapperSize]);
+    }, [maxValue, minValue, sliderWrapperSize?.width, toValue]);
 
     const toSliderThumbContentPosition = useMemo(
         () =>
@@ -435,9 +466,43 @@ const Slider: FC<SliderProps> = ({
         }
     }, [interval, isDisabled, onSelect, shouldShowThumbLabel]);
 
+    const highlightedStepElements = useMemo(() => {
+        const sliderWidth = fromSliderRef.current?.offsetWidth ?? 0;
+        const wrapperWidth = sliderWrapperSize?.width ?? 0;
+
+        if (!shouldHighlightSteps || interval || sliderWidth === 0 || wrapperWidth === 0) {
+            return null;
+        }
+
+        const elements: ReactNode[] = [];
+
+        for (let i = minValue; i <= maxValue; i += step) {
+            const offset = (wrapperWidth - sliderWidth) / 2;
+            const stepWidth = (sliderWidth / (maxValue - minValue)) * step;
+
+            elements.push(
+                <StyledHighlightedStep
+                    $isFilled={i < fromValue}
+                    $leftPosition={offset + stepWidth * i}
+                />,
+            );
+        }
+
+        return elements;
+    }, [
+        fromValue,
+        interval,
+        maxValue,
+        minValue,
+        shouldHighlightSteps,
+        sliderWrapperSize?.width,
+        step,
+    ]);
+
     return useMemo(
         () => (
             <StyledSlider ref={sliderWrapperRef} $isDisabled={isDisabled}>
+                {highlightedStepElements}
                 <StyledSliderInput
                     animate={{ height: isBigSlider ? 30 : 10 }}
                     initial={{ height: 10 }}
@@ -521,25 +586,26 @@ const Slider: FC<SliderProps> = ({
             </StyledSlider>
         ),
         [
-            isDisabled,
-            isBigSlider,
-            interval,
+            fromSliderThumbContentPosition,
+            fromSliderThumbPosition,
             fromValue,
-            maxValue,
-            minValue,
-            handleTouchStart,
-            handleTouchEnd,
+            handleControlToSlider,
             handleInputChange,
             handleMouseUp,
-            fromSliderThumbPosition,
+            handleTouchEnd,
+            handleTouchStart,
+            highlightedStepElements,
+            interval,
+            isBigSlider,
+            isDisabled,
+            maxValue,
+            minValue,
             shouldShowThumbLabel,
-            thumbWidth,
-            fromSliderThumbContentPosition,
             thumbLabelFormatter,
-            toSliderThumbPosition,
+            thumbWidth,
             toSliderThumbContentPosition,
+            toSliderThumbPosition,
             toValue,
-            handleControlToSlider,
         ],
     );
 };

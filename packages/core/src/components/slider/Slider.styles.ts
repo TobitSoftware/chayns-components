@@ -169,3 +169,19 @@ export const StyledSliderThumbLabel = styled.span.attrs<StyledSliderThumbLabelPr
         z-index: -1;
     }
 `;
+
+type StyledHighlightedStepProps = WithTheme<{
+    $isFilled: boolean;
+    $leftPosition: number;
+}>;
+
+export const StyledHighlightedStep = styled.div<StyledHighlightedStepProps>`
+    background-color: ${({ $isFilled, theme }) => ($isFilled ? theme['409'] : theme['403'])};
+    border-radius: 50%;
+    height: 18px;
+    left: ${({ $leftPosition }) => $leftPosition}px;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 18px;
+`;
