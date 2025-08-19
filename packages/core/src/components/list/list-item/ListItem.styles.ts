@@ -9,6 +9,7 @@ type StyledListItemProps = WithTheme<{
     $isInAccordion: boolean;
     $isOpen: boolean;
     $isWrapped: boolean;
+    $shouldChangeColor?: boolean;
     $shouldForceBackground?: boolean;
     $shouldForceBottomLine?: boolean;
     $shouldHideBottomLine: boolean;
@@ -26,10 +27,13 @@ export const StyledListItem = styled[LIST_ITEM_HTML_TAG]<StyledListItemProps>`
             padding-left: ${$shouldHideIndicator ? '16px' : '8px'};
         `}
 
-    ${({ $isInAccordion, $isOpen, $shouldForceBackground, theme }) =>
+    ${({ $isInAccordion, $isOpen, $shouldChangeColor, $shouldForceBackground, theme }) =>
         ((!$isInAccordion && $isOpen) || $shouldForceBackground) &&
         css`
-            background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
+            background-color: rgba(
+                ${$shouldChangeColor ? theme['101-rgb'] : theme['100-rgb']},
+                ${theme.cardBackgroundOpacity}
+            );
         `}
 
     ${({ $backgroundColor, $isInAccordion, $isOpen, $shouldForceBackground }) =>
@@ -39,12 +43,15 @@ export const StyledListItem = styled[LIST_ITEM_HTML_TAG]<StyledListItemProps>`
             background-color: ${$backgroundColor} !important;
         `}
 
-    ${({ $isClickable, $isInAccordion, theme }) =>
+    ${({ $isClickable, $isInAccordion, $shouldChangeColor, theme }) =>
         $isClickable &&
         !$isInAccordion &&
         css`
             &&:hover {
-                background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
+                background-color: rgba(
+                    ${$shouldChangeColor ? theme['101-rgb'] : theme['100-rgb']},
+                    ${theme.cardBackgroundOpacity}
+                );
             }
         `}
 

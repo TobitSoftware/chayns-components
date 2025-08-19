@@ -236,11 +236,6 @@ const ListItem: FC<ListItemProps> = ({
 
     const [shouldEnableTooltip, setShouldEnableTooltip] = useState(false);
 
-    const shouldDisablePadding = useMemo(
-        () => areaProvider.shouldDisableListItemPadding ?? false,
-        [areaProvider.shouldDisableListItemPadding],
-    );
-
     useEffect(() => {
         onCloseRef.current = onClose;
         onOpenRef.current = onOpen;
@@ -358,9 +353,13 @@ const ListItem: FC<ListItemProps> = ({
             layout={shouldPreventLayoutAnimation || shouldDisableAnimation ? undefined : 'position'}
             $backgroundColor={backgroundColor}
             $isClickable={isClickable}
-            $isInAccordion={typeof isParentAccordionWrapped === 'boolean' && !shouldDisablePadding}
+            $isInAccordion={
+                typeof isParentAccordionWrapped === 'boolean' &&
+                !areaProvider.shouldDisableListItemPadding
+            }
             $isOpen={isItemOpen}
             $isWrapped={isWrapped}
+            $shouldChangeColor={areaProvider.shouldChangeColor}
             $shouldForceBackground={shouldForceBackground}
             $shouldForceBottomLine={shouldForceBottomLine}
             $shouldHideBottomLine={shouldHideBottomLine}
