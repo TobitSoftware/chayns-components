@@ -23,58 +23,134 @@ export interface SliderInterval {
 
 export type SliderProps = {
     /**
-     * The range that can be selected with two thumbs..
+     * The current interval of the slider.
+     * @description
+     * The `interval` prop is used to define a range for the slider, allowing users to select a minimum and maximum value.
+     * This is particularly useful for scenarios where you want to allow users to select a range of values, such as price ranges or date ranges.
+     * When provided, the slider will display two thumbs, one for the minimum value and one for the maximum value.
+     * @example
+     * <Slider interval={{ minValue: 10, maxValue: 50 }} />
      */
     interval?: SliderInterval;
     /**
-     * Whether the slider is disabled.
+     * Disables the slider, preventing user interaction.
+     * @description
+     * The `isDisabled` prop is used to disable the slider, making it unresponsive to user input.
+     * When set to `true`, the slider cannot be moved, and its appearance may change to indicate that it is disabled.
+     * This is useful for scenarios where the slider should not be interacted with, such as when the data it controls is not available or when the user does not have permission to change the value.
+     * @default false
+     * @example
+     * <Slider isDisabled={true} />
+     * @optional
      */
     isDisabled?: boolean;
     /**
      * The maximum value of the slider.
+     * @description
+     * The `maxValue` prop defines the upper limit of the slider's range. It is used to set the maximum value that can be selected by the user.
+     * This value should be greater than or equal to `minValue`.
+     * @example
+     * <Slider maxValue={200} />
      */
     maxValue: number;
     /**
      * The minimum value of the slider.
+     * @description
+     * The `minValue` prop defines the lower limit of the slider's range. It is used to set the minimum value that can be selected by the user.
+     * This value should be less than or equal to `maxValue`.
+     * @example
+     * <Slider minValue={0} />
      */
     minValue: number;
     /**
-     * Function that will be executed when the value is selected.
-     */
-    onSelect?: (value?: number, interval?: SliderInterval) => void;
-    /**
-     * Function that will be executed when the value is changed.
+     * Callback function that is called when the slider value changes.
+     * @description
+     * The `onChange` prop is a callback function that is triggered whenever the slider value changes.
+     * It receives the new value or interval of the slider as an argument, allowing you to update your application state or perform other actions based on the new value.
+     * If the slider is configured as an interval, it will receive an object with `minValue` and `maxValue`.
+     * @example
+     * <Slider onChange={(value, interval) => console.log('Slider changed', { value, interval })} />
      */
     onChange?: (value?: number, interval?: SliderInterval) => void;
     /**
-     * Whether the current value should be displayed inside the slider thumb.
+     * Callback function that is called when the slider selection is finalized.
+     * @description
+     * The `onSelect` prop is a callback function that is triggered when the user finishes interacting with the slider, such as releasing the mouse or touch after dragging the thumb.
+     * It receives the selected value or interval as arguments, allowing you to perform actions based on the final selection.
+     * If the slider is configured as an interval, it will receive an object with `minValue` and `maxValue`.
+     * @example
+     * <Slider onSelect={(value, interval) => console.log('Slider selected', { value, interval })} />
+     */
+    onSelect?: (value?: number, interval?: SliderInterval) => void;
+    /**
+     * Indicates whether the slider should show a label on the thumb.
+     * @description
+     * The `shouldShowThumbLabel` prop determines whether the slider should display a label on the thumb that shows the current value.
+     * When set to `true`, a label will be shown above the thumb, providing users with immediate feedback on the selected value.
+     * @default false
+     * @example
+     * <Slider shouldShowThumbLabel={true} />
+     * @optional
      */
     shouldShowThumbLabel?: boolean;
     /**
-     * The steps of the slider.
+     * The step size for the slider.
+     * @description
+     * The `step` prop defines the increment by which the slider value changes when the user interacts with it.
+     * It is used to control the granularity of the slider's movement. For example, if `step` is set to 1, the slider will move in increments of 1.
+     * @default 1
+     * @example
+     * <Slider step={5} />
+     * @optional
+     */
+    step?: number;
+    /**
+     * The step size for the slider.
+     * @description
+     * The `steps` prop defines the increment by which the slider value changes when the user interacts with it.
+     * It is used to control the granularity of the slider's movement. For example, if `step` is set to 1, the slider will move in increments of 1.
+     * @default 1
+     * @example
+     * <Slider steps={5} />
+     * @optional
+     * @deprecated Use `step` instead. This prop will be removed in future versions.
      */
     steps?: number;
     /**
      * A function to format the thumb label.
+     * @description
+     * The `thumbLabelFormatter` prop is a function that formats the value displayed on the thumb label.
+     * It receives the current value as an argument and should return a string that will be displayed on the thumb label.
+     * This is useful for customizing the appearance of the label, such as adding currency symbols or units.
+     * @example
+     * <Slider thumbLabelFormatter={(value) => `${value} €`} />
+     * @optional
      */
     thumbLabelFormatter?: (value: number) => string;
     /**
-     * the Value that the slider should have.
+     * The current value of the slider.
+     * @description
+     * The `value` prop is used to set the current value of the slider when it is not configured as an interval.
+     * It should be a number between `minValue` and `maxValue`. If the slider is configured as an interval, this prop will be ignored.
+     * @example
+     * <Slider value={50} />
+     * @optional
      */
     value?: number;
 };
 
 const Slider: FC<SliderProps> = ({
-    maxValue,
-    minValue,
-    value,
-    onSelect,
-    onChange,
     interval,
     isDisabled,
-    thumbLabelFormatter,
+    maxValue,
+    minValue,
+    onChange,
+    onSelect,
     shouldShowThumbLabel = false,
+    step = 1,
     steps = 1,
+    thumbLabelFormatter,
+    value,
 }) => {
     const [fromValue, setFromValue] = useState(0);
     const [toValue, setToValue] = useState(maxValue);
@@ -146,12 +222,12 @@ const Slider: FC<SliderProps> = ({
 
             let newValue = Number(event.target.value);
 
-            if (newValue > maxValue || newValue > maxValue - (maxValue % steps)) {
+            if (newValue > maxValue || newValue > maxValue - (maxValue % (step ?? steps))) {
                 newValue = maxValue;
             } else if (newValue < minValue) {
                 newValue = minValue;
             } else {
-                newValue = Math.round(newValue / steps) * steps;
+                newValue = Math.round(newValue / (step ?? steps)) * (step ?? steps);
             }
 
             setFromValue(newValue);
@@ -175,7 +251,7 @@ const Slider: FC<SliderProps> = ({
                 fromSliderRef.current.value = String(newValue);
             }
         },
-        [maxValue, minValue, onChange, steps, theme],
+        [maxValue, minValue, onChange, step, steps, theme],
     );
 
     const handleControlToSlider = useCallback(
@@ -190,12 +266,12 @@ const Slider: FC<SliderProps> = ({
 
             let newValue = Number(event.target.value);
 
-            if (newValue > maxValue || newValue > maxValue - (maxValue % steps)) {
+            if (newValue > maxValue || newValue > maxValue - (maxValue % (step ?? steps))) {
                 newValue = maxValue;
             } else if (newValue < minValue) {
                 newValue = minValue;
             } else {
-                newValue = Math.round(newValue / steps) * steps;
+                newValue = Math.round(newValue / (step ?? steps)) * (step ?? steps);
             }
 
             setToValue(newValue);
@@ -219,7 +295,7 @@ const Slider: FC<SliderProps> = ({
                 toSliderRef.current.value = String(from);
             }
         },
-        [isDisabled, maxValue, minValue, onChange, steps, theme],
+        [isDisabled, maxValue, minValue, onChange, step, steps, theme],
     );
 
     useEffect(() => {
@@ -253,12 +329,12 @@ const Slider: FC<SliderProps> = ({
 
             let newValue = Number(event.target.value);
 
-            if (newValue > maxValue || newValue > maxValue - (maxValue % steps)) {
+            if (newValue > maxValue || newValue > maxValue - (maxValue % (step ?? steps))) {
                 newValue = maxValue;
             } else if (newValue < minValue) {
                 newValue = minValue;
             } else {
-                newValue = Math.round(newValue / steps) * steps;
+                newValue = Math.round(newValue / (step ?? steps)) * (step ?? steps);
             }
 
             if (interval) {
@@ -273,7 +349,7 @@ const Slider: FC<SliderProps> = ({
                 onChange(newValue);
             }
         },
-        [handleControlFromSlider, interval, isDisabled, maxValue, minValue, onChange, steps],
+        [handleControlFromSlider, interval, isDisabled, maxValue, minValue, onChange, step, steps],
     );
 
     const fromSliderThumbPosition = useMemo(() => {
