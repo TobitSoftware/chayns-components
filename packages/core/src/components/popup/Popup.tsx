@@ -354,7 +354,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                                 onMouseLeave={handleMouseLeave}
                                 onMouseEnter={handleMouseEnter}
                             >
-                                <AreaContextProvider shouldChangeColor={false}>
+                                <AreaContextProvider shouldChangeColor>
                                     {content}
                                 </AreaContextProvider>
                             </PopupContentWrapper>
@@ -377,11 +377,6 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             shouldScrollWithContent,
         ]);
 
-        const areaContextProviderValue = useMemo(
-            () => ({ shouldChangeColor: true }),
-            [],
-        );
-
         return (
             <>
                 {measuredElement}
@@ -394,9 +389,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     $shouldUseChildrenWidth={shouldUseChildrenWidth}
                     $shouldUseFullWidth={shouldUseFullWidth}
                 >
-                    <AreaContext.Provider value={areaContextProviderValue}>
-                        {children}
-                    </AreaContext.Provider>
+                    {children}
                 </StyledPopup>
                 {portal}
             </>
