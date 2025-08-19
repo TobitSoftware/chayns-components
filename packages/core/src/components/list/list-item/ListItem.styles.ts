@@ -31,7 +31,7 @@ export const StyledListItem = styled[LIST_ITEM_HTML_TAG]<StyledListItemProps>`
         ((!$isInAccordion && $isOpen) || $shouldForceBackground) &&
         css`
             background-color: rgba(
-                ${$shouldChangeColor ? theme['101-rgb'] : theme['100-rgb']},
+                ${$shouldChangeColor ? theme['102-rgb'] : theme['100-rgb']},
                 ${theme.cardBackgroundOpacity}
             );
         `}
@@ -49,7 +49,7 @@ export const StyledListItem = styled[LIST_ITEM_HTML_TAG]<StyledListItemProps>`
         css`
             &&:hover {
                 background-color: rgba(
-                    ${$shouldChangeColor ? theme['101-rgb'] : theme['100-rgb']},
+                    ${$shouldChangeColor ? theme['102-rgb'] : theme['100-rgb']},
                     ${theme.cardBackgroundOpacity}
                 );
             }
