@@ -6,13 +6,14 @@ import React, {
     useCallback,
     useEffect,
     useImperativeHandle,
+    useMemo,
     useRef,
     useState,
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
 import { PopupAlignment, PopupCoordinates, PopupRef } from '../../types/popup';
-import AreaContextProvider from '../area-provider/AreaContextProvider';
+import AreaContextProvider, { AreaContext } from '../area-provider/AreaContextProvider';
 import PopupContentWrapper from './popup-content-wrapper/PopupContentWrapper';
 import { StyledPopup } from './Popup.styles';
 import { useMeasuredClone } from '../../hooks/element';
@@ -376,6 +377,11 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             shouldScrollWithContent,
         ]);
 
+        const areaContextProviderValue = useMemo(
+            () => ({ shouldChangeColor: true }),
+            [],
+        );
+
         return (
             <>
                 {measuredElement}
@@ -388,7 +394,9 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     $shouldUseChildrenWidth={shouldUseChildrenWidth}
                     $shouldUseFullWidth={shouldUseFullWidth}
                 >
-                    {children}
+                    <AreaContext.Provider value={areaContextProviderValue}>
+                        {children}
+                    </AreaContext.Provider>
                 </StyledPopup>
                 {portal}
             </>
