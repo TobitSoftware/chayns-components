@@ -40,6 +40,7 @@ export type SliderProps = {
      * When provided, the slider will display two thumbs, one for the minimum value and one for the maximum value.
      * @example
      * <Slider interval={{ minValue: 10, maxValue: 50 }} />
+     * @optional
      */
     interval?: SliderInterval;
     /**
@@ -55,6 +56,17 @@ export type SliderProps = {
      */
     isDisabled?: boolean;
     /**
+     * The maximum enabled value of the slider.
+     * @description
+     * The `maxEnabledValue` prop is used to define the maximum value that can be selected on the slider.
+     * It is particularly useful when you want to set an upper limit for the slider's range, ensuring that users cannot select values above this threshold.
+     * This prop is optional and can be used in conjunction with the `maxValue` prop to create a more flexible slider.
+     * @example
+     * <Slider maxEnabledValue={75} />
+     * @optional
+     */
+    maxEnabledValue?: number;
+    /**
      * The maximum value of the slider.
      * @description
      * The `maxValue` prop defines the upper limit of the slider's range. It is used to set the maximum value that can be selected by the user.
@@ -63,6 +75,17 @@ export type SliderProps = {
      * <Slider maxValue={200} />
      */
     maxValue: number;
+    /**
+     * The minimum enabled value of the slider.
+     * @description
+     * The `minEnabledValue` prop is used to define the minimum value that can be selected on the slider.
+     * It is particularly useful when you want to set a lower limit for the slider's range, ensuring that users cannot select values below this threshold.
+     * This prop is optional and can be used in conjunction with the `minValue` prop to create a more flexible slider.
+     * @example
+     * <Slider minEnabledValue={25} />
+     * @optional
+     */
+    minEnabledValue?: number;
     /**
      * The minimum value of the slider.
      * @description
@@ -163,19 +186,21 @@ export type SliderProps = {
 const Slider: FC<SliderProps> = ({
     interval,
     isDisabled,
+    maxEnabledValue,
     maxValue,
+    minEnabledValue,
     minValue,
     onChange,
     onSelect,
     shouldHighlightSteps = false,
     shouldShowThumbLabel = false,
-    step = 1,
     steps = 1,
+    step = steps ?? 1,
     thumbLabelFormatter,
     value,
 }) => {
-    const [fromValue, setFromValue] = useState(0);
-    const [toValue, setToValue] = useState(maxValue);
+    const [fromValue, setFromValue] = useState(minEnabledValue ?? minValue);
+    const [toValue, setToValue] = useState(maxEnabledValue ?? maxValue);
     const [thumbWidth, setThumbWidth] = useState(20);
     const [isBigSlider, setIsBigSlider] = useState(false);
 
@@ -201,14 +226,16 @@ const Slider: FC<SliderProps> = ({
      * This function sets the value
      */
     useEffect(() => {
-        if (typeof value !== 'number') {
-            return;
-        }
-
-        if (value >= minValue && value <= maxValue) {
+        if (
+            typeof value === 'number' &&
+            value >= minValue &&
+            value <= maxValue &&
+            (typeof minEnabledValue !== 'number' || value >= minEnabledValue) &&
+            (typeof maxEnabledValue !== 'number' || value <= maxEnabledValue)
+        ) {
             setFromValue(value);
         }
-    }, [maxValue, minValue, value]);
+    }, [maxEnabledValue, maxValue, minEnabledValue, minValue, value]);
 
     useEffect(() => {
         if (fromValue > toValue) {
@@ -244,12 +271,12 @@ const Slider: FC<SliderProps> = ({
 
             let newValue = Number(event.target.value);
 
-            if (newValue > maxValue || newValue > maxValue - (maxValue % (step ?? steps))) {
+            if (newValue > maxValue || newValue > maxValue - (maxValue % step)) {
                 newValue = maxValue;
             } else if (newValue < minValue) {
                 newValue = minValue;
             } else {
-                newValue = Math.round(newValue / (step ?? steps)) * (step ?? steps);
+                newValue = Math.round(newValue / step) * step;
             }
 
             setFromValue(newValue);
@@ -273,7 +300,7 @@ const Slider: FC<SliderProps> = ({
                 fromSliderRef.current.value = String(newValue);
             }
         },
-        [maxValue, minValue, onChange, step, steps, theme],
+        [maxValue, minValue, onChange, step, theme],
     );
 
     const handleControlToSlider = useCallback(
@@ -288,12 +315,12 @@ const Slider: FC<SliderProps> = ({
 
             let newValue = Number(event.target.value);
 
-            if (newValue > maxValue || newValue > maxValue - (maxValue % (step ?? steps))) {
+            if (newValue > maxValue || newValue > maxValue - (maxValue % step)) {
                 newValue = maxValue;
             } else if (newValue < minValue) {
                 newValue = minValue;
             } else {
-                newValue = Math.round(newValue / (step ?? steps)) * (step ?? steps);
+                newValue = Math.round(newValue / step) * step;
             }
 
             setToValue(newValue);
@@ -317,7 +344,7 @@ const Slider: FC<SliderProps> = ({
                 toSliderRef.current.value = String(from);
             }
         },
-        [isDisabled, maxValue, minValue, onChange, step, steps, theme],
+        [isDisabled, maxValue, minValue, onChange, step, theme],
     );
 
     useEffect(() => {
@@ -336,7 +363,7 @@ const Slider: FC<SliderProps> = ({
             toSlider: toSliderRef.current,
             theme,
         });
-        // Note: interval can´t be in the deps because of rerender
+        // Note: An interval can't be in the deps because of rerender
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [theme]);
 
@@ -349,29 +376,50 @@ const Slider: FC<SliderProps> = ({
                 return;
             }
 
-            let newValue = Number(event.target.value);
-
-            if (newValue > maxValue || newValue > maxValue - (maxValue % (step ?? steps))) {
-                newValue = maxValue;
-            } else if (newValue < minValue) {
-                newValue = minValue;
-            } else {
-                newValue = Math.round(newValue / (step ?? steps)) * (step ?? steps);
-            }
-
+            // If interval mode is active, delegate to the "from" handler and return early
             if (interval) {
                 handleControlFromSlider(event);
 
                 return;
             }
 
+            // Respect optionally enabled bounds in addition to absolute min/max
+            const effectiveMin =
+                typeof minEnabledValue === 'number'
+                    ? Math.max(minValue, minEnabledValue)
+                    : minValue;
+
+            const effectiveMax =
+                typeof maxEnabledValue === 'number'
+                    ? Math.min(maxValue, maxEnabledValue)
+                    : maxValue;
+
+            let newValue = Number(event.target.value);
+
+            // Clamp to effective range first
+            if (Number.isNaN(newValue)) {
+                newValue = effectiveMin;
+            }
+
+            if (newValue < effectiveMin) newValue = effectiveMin;
+            else if (newValue > effectiveMax - (effectiveMax % step)) newValue = effectiveMax;
+            else newValue = Math.round(newValue / step) * step;
+
             setFromValue(newValue);
 
-            if (onChange) {
-                onChange(newValue);
-            }
+            if (typeof onChange === 'function') onChange(newValue);
         },
-        [handleControlFromSlider, interval, isDisabled, maxValue, minValue, onChange, step, steps],
+        [
+            handleControlFromSlider,
+            interval,
+            isDisabled,
+            maxEnabledValue,
+            maxValue,
+            minEnabledValue,
+            minValue,
+            onChange,
+            step,
+        ],
     );
 
     const fromSliderThumbPosition = useMemo(() => {
@@ -477,11 +525,16 @@ const Slider: FC<SliderProps> = ({
         const elements: ReactNode[] = [];
 
         for (let i = minValue; i <= maxValue; i += step) {
+            const isStepDisabled =
+                (typeof minEnabledValue === 'number' && i < minEnabledValue) ||
+                (typeof maxEnabledValue === 'number' && i > maxEnabledValue);
+
             const offset = (wrapperWidth - sliderWidth) / 2;
             const stepWidth = (sliderWidth / (maxValue - minValue)) * step;
 
             elements.push(
                 <StyledHighlightedStep
+                    $isDisabled={isStepDisabled}
                     $isFilled={i < fromValue}
                     $leftPosition={offset + stepWidth * i}
                 />,
@@ -492,12 +545,43 @@ const Slider: FC<SliderProps> = ({
     }, [
         fromValue,
         interval,
+        maxEnabledValue,
         maxValue,
+        minEnabledValue,
         minValue,
         shouldHighlightSteps,
         sliderWrapperSize?.width,
         step,
     ]);
+
+    const fromInputBackground = useMemo(() => {
+        if (interval) return undefined;
+
+        const gradientPoints: string[] = [];
+
+        const getPercentage = (x: number) => ((x - minValue) / (maxValue - minValue)) * 100;
+
+        if (typeof minEnabledValue === 'number') {
+            gradientPoints.push('rgb(215, 215, 215) 0%');
+            gradientPoints.push(`rgb(215, 215, 215) ${getPercentage(minEnabledValue)}%`);
+            gradientPoints.push(`${theme['409'] ?? ''} ${getPercentage(minEnabledValue)}%`);
+        } else {
+            gradientPoints.push(`${theme['409'] ?? ''} 0%`);
+        }
+
+        gradientPoints.push(`${theme['409'] ?? ''} ${getPercentage(fromValue)}%`);
+        gradientPoints.push(`${theme['403'] ?? ''} ${getPercentage(fromValue)}%`);
+
+        if (typeof maxEnabledValue === 'number') {
+            gradientPoints.push(`${theme['403'] ?? ''} ${getPercentage(maxEnabledValue)}%`);
+            gradientPoints.push(`rgb(215, 215, 215) ${getPercentage(maxEnabledValue)}%`);
+            gradientPoints.push('rgb(215, 215, 215) 100%');
+        } else {
+            gradientPoints.push(`${theme['403'] ?? ''} 100%`);
+        }
+
+        return `linear-gradient(to right, ${gradientPoints.join(', ')})`;
+    }, [fromValue, interval, maxEnabledValue, maxValue, minEnabledValue, minValue, theme]);
 
     return useMemo(
         () => (
@@ -519,9 +603,7 @@ const Slider: FC<SliderProps> = ({
                     onTouchEnd={handleTouchEnd}
                     onChange={handleInputChange}
                     onMouseUp={handleMouseUp}
-                    $max={maxValue}
-                    $min={minValue}
-                    $value={fromValue}
+                    $background={fromInputBackground}
                 />
                 <StyledSliderThumb
                     ref={fromSliderThumbRef}
@@ -567,9 +649,6 @@ const Slider: FC<SliderProps> = ({
                         initial={{ height: 10 }}
                         exit={{ height: 10 }}
                         $thumbWidth={40}
-                        $max={maxValue}
-                        $min={minValue}
-                        $value={toValue}
                         ref={toSliderRef}
                         $isInterval={!!interval}
                         type="range"

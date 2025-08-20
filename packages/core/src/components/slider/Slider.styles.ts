@@ -18,29 +18,17 @@ export const StyledSlider = styled.div<StyledSliderProps>`
 `;
 
 type StyledSliderInputProps = WithTheme<{
-    $min: number;
-    $max: number;
-    $value: number;
+    $background?: string;
     $isInterval: boolean;
     $thumbWidth: number;
 }>;
 
 export const StyledSliderInput = styled(motion.input).attrs<StyledSliderInputProps>(
-    ({ $isInterval, $value, $thumbWidth, $min, $max, theme }) => ({
+    ({ $background, $isInterval, $thumbWidth }) => ({
         style: {
             pointerEvents: $isInterval ? 'none' : 'all',
             width: `calc(100% - ${$thumbWidth}px)`,
-            background: !$isInterval
-                ? `linear-gradient(
-            to right,
-            ${(theme as Theme)['409'] ?? ''} 0%,
-            ${(theme as Theme)['409'] ?? ''}
-            ${(($value - $min) / ($max - $min)) * 100}%,
-            ${(theme as Theme)['403'] ?? ''}
-            ${(($value - $min) / ($max - $min)) * 100}%,
-            ${(theme as Theme)['403'] ?? ''}
-        )`
-                : undefined,
+            background: $background,
         },
     }),
 )`
@@ -97,7 +85,7 @@ export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(
     background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     pointer-events: none;
-    z-index: 3;
+    z-index: 5;
     position: absolute;
     display: flex;
     align-items: center;
@@ -171,17 +159,24 @@ export const StyledSliderThumbLabel = styled.span.attrs<StyledSliderThumbLabelPr
 `;
 
 type StyledHighlightedStepProps = WithTheme<{
+    $isDisabled: boolean;
     $isFilled: boolean;
     $leftPosition: number;
 }>;
 
 export const StyledHighlightedStep = styled.div<StyledHighlightedStepProps>`
-    background-color: ${({ $isFilled, theme }) => ($isFilled ? theme['409'] : theme['403'])};
+    background-color: ${({ $isDisabled, $isFilled, theme }) => {
+        if ($isDisabled) return 'rgb(215, 215, 215)';
+        if ($isFilled) return theme['409'];
+        return theme['403'];
+    }};
     border-radius: 50%;
     height: 18px;
     left: ${({ $leftPosition }) => $leftPosition}px;
+    pointer-events: none;
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);
     width: 18px;
+    z-index: 3;
 `;

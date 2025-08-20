@@ -39,6 +39,8 @@ export const RangeSlider = Template.bind({});
 
 export const WithHighlightedSteps = Template.bind({});
 
+export const WithPartialRange = Template.bind({});
+
 export const WithThumbLabelFormatter = WithFormatterTemplate.bind({});
 
 RangeSlider.args = {
@@ -53,6 +55,17 @@ WithHighlightedSteps.args = {
     maxValue: 4,
     shouldHighlightSteps: true,
     step: 1,
+    value: 1,
+};
+
+WithPartialRange.args = {
+    maxEnabledValue: 3,
+    maxValue: 4,
+    minEnabledValue: 1,
+    minValue: 0,
+    shouldHighlightSteps: true,
+    step: 1,
+    value: 2,
 };
 
 WithThumbLabelFormatter.args = {
