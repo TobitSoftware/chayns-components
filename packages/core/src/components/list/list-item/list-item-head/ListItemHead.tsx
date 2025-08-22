@@ -203,7 +203,6 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     return (
         <StyledListItemHead
             as={shouldDisableAnimation ? undefined : motion[LIST_ITEM_HEAD_HTML_TAG]}
-            layout={shouldDisableAnimation ? undefined : 'size'}
             animate={
                 shouldDisableAnimation
                     ? undefined
