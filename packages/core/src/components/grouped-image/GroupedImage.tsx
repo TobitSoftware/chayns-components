@@ -1,6 +1,7 @@
-import React, { CSSProperties, FC, MouseEventHandler, useMemo } from 'react';
+import React, { CSSProperties, FC, MouseEventHandler, ReactNode, useMemo } from 'react';
 import {
     ImageSize,
+    StyledCornerElement,
     StyledCornerImage,
     StyledGroupedImage,
     StyledGroupImageElement,
@@ -35,6 +36,10 @@ type GroupedImageProps = {
      * Whether to show the images in a round shape.
      */
     shouldShowRoundImage?: boolean;
+    /**
+     * Optional Element to display in the right corner of the image
+     */
+    cornerElement?: ReactNode;
 };
 
 const GroupedImage: FC<GroupedImageProps> = ({
@@ -45,8 +50,10 @@ const GroupedImage: FC<GroupedImageProps> = ({
     onClick,
     shouldPreventBackground = false,
     shouldShowRoundImage = false,
+    cornerElement,
 }) => {
     const hasCornerImage = Boolean(cornerImage);
+    const hasCornerElement = Boolean(cornerElement);
     const hasMultipleImages = images.length > 1;
 
     const imageSize = useMemo(() => {
@@ -83,6 +90,7 @@ const GroupedImage: FC<GroupedImageProps> = ({
                     key="corner-image"
                 />
             )}
+            {hasCornerElement && <StyledCornerElement>{cornerElement}</StyledCornerElement>}
         </StyledGroupedImage>
     );
 };

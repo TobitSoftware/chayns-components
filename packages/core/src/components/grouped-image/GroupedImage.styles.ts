@@ -73,3 +73,21 @@ export const StyledCornerImage = styled.img<StyledCornerImageProps>`
             box-shadow: 0 0 0 1px rgba(${theme['009-rgb']}, 0.08) inset;
         `}
 `;
+
+export const StyledCornerElement = styled.span`
+    height: 18px;
+    width: 18px;
+    position: absolute;
+    bottom: 0;
+    right: -5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & > * {
+        max-height: 100%;
+        max-width: 100%;
+        display: block;
+    }
+`;

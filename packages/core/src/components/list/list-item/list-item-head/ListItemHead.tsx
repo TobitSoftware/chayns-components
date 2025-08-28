@@ -62,6 +62,7 @@ type ListItemHeadProps = {
     shouldForceHover?: boolean;
     setShouldEnableTooltip: (value: boolean) => void;
     shouldDisableAnimation?: boolean;
+    cornerElement?: ReactNode;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -89,6 +90,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     titleElement,
     setShouldEnableTooltip,
     shouldDisableAnimation = false,
+    cornerElement,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
 
@@ -177,6 +179,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         if (images) {
             return (
                 <ListItemImage
+                    cornerElement={cornerElement}
                     imageBackground={imageBackground}
                     careOfLocationId={careOfLocationId}
                     cornerImage={cornerImage}
@@ -191,6 +194,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         return undefined;
     }, [
         careOfLocationId,
+        cornerElement,
         cornerImage,
         icons,
         imageBackground,

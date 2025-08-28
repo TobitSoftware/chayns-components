@@ -173,6 +173,10 @@ export type ListItemProps = {
      * Whether the ListItem Animation should be disabled.
      */
     shouldDisableAnimation?: boolean;
+    /**
+     * Optional Element to display in the right corner of the image
+     */
+    cornerElement?: ReactNode;
 };
 
 const ListItem: FC<ListItemProps> = ({
@@ -209,6 +213,7 @@ const ListItem: FC<ListItemProps> = ({
     title,
     titleElement,
     shouldDisableAnimation = false,
+    cornerElement,
 }) => {
     const {
         incrementExpandableItemCount,
@@ -289,6 +294,7 @@ const ListItem: FC<ListItemProps> = ({
             <ListItemHead
                 hoverItem={hoverItem}
                 careOfLocationId={careOfLocationId}
+                cornerElement={cornerElement}
                 cornerImage={cornerImage}
                 icons={icons}
                 imageBackground={imageBackground}
@@ -315,6 +321,7 @@ const ListItem: FC<ListItemProps> = ({
         ),
         [
             careOfLocationId,
+            cornerElement,
             cornerImage,
             handleHeadClick,
             hoverItem,
