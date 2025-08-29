@@ -6,7 +6,7 @@ import FileItem from './file-item/FileItem';
 export interface IFileItem {
     id: string;
     name: string;
-    size: number;
+    size?: number;
     mimeType: string;
 }
 

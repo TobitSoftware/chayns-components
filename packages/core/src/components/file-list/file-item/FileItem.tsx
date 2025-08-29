@@ -2,18 +2,21 @@ import React, { FC, useMemo } from 'react';
 import { getHumanSize, getIconByMimeType } from '../../../utils/file';
 import Icon from '../../icon/Icon';
 import ListItem from '../../list/list-item/ListItem';
+import type { IFileItem } from '../FileList';
 import { StyledFileItem } from './FileItem.styles';
 
-export type FileItemProps = {
-    id: string;
-    name: string;
-    size: number;
-    mimeType: string;
+export type FileItemProps = IFileItem & {
     onRemove?: (name: string) => void;
 };
 
 const FileItem: FC<FileItemProps> = ({ mimeType, onRemove, size, name, id }) => {
-    const humanFileSize = useMemo(() => getHumanSize(size), [size]);
+    const humanFileSize = useMemo(() => {
+        if (typeof size === 'number') {
+            return getHumanSize(size);
+        }
+
+        return undefined;
+    }, [size]);
 
     const icon = useMemo(() => getIconByMimeType(mimeType), [mimeType]);
 
