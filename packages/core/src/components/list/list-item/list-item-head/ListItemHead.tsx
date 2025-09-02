@@ -4,6 +4,7 @@ import React, {
     FC,
     MouseEventHandler,
     ReactNode,
+    SyntheticEvent,
     TouchEventHandler,
     useCallback,
     useEffect,
@@ -63,6 +64,7 @@ type ListItemHeadProps = {
     setShouldEnableTooltip: (value: boolean) => void;
     shouldDisableAnimation?: boolean;
     cornerElement?: ReactNode;
+    onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -91,6 +93,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     setShouldEnableTooltip,
     shouldDisableAnimation = false,
     cornerElement,
+    onImageError,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
 
@@ -187,6 +190,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     shouldOpenImageOnClick={shouldOpenImageOnClick}
                     shouldHideBackground={!!shouldHideImageOrIconBackground}
                     shouldShowRoundImage={!!shouldShowRoundImageOrIcon}
+                    onImageError={onImageError}
                 />
             );
         }

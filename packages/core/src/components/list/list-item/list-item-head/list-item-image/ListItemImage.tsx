@@ -1,5 +1,11 @@
 import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
-import React, { CSSProperties, MouseEventHandler, ReactNode, useCallback } from 'react';
+import React, {
+    CSSProperties,
+    MouseEventHandler,
+    ReactNode,
+    SyntheticEvent,
+    useCallback,
+} from 'react';
 import GroupedImage from '../../../../grouped-image/GroupedImage';
 
 type ListItemImageProps = {
@@ -11,6 +17,7 @@ type ListItemImageProps = {
     shouldShowRoundImage: boolean;
     shouldOpenImageOnClick: boolean;
     cornerElement?: ReactNode;
+    onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
 };
 
 const ListItemImage: React.FC<ListItemImageProps> = ({
@@ -22,6 +29,7 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
     shouldShowRoundImage,
     shouldOpenImageOnClick,
     cornerElement,
+    onImageError,
 }) => {
     const handleImageClick = useCallback<MouseEventHandler<HTMLDivElement>>(
         (event) => {
@@ -58,6 +66,7 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
                 onClick={handleImageClick}
                 shouldPreventBackground={shouldHideBackground}
                 shouldShowRoundImage={shouldShowRoundImage}
+                onImageError={onImageError}
             />
         );
     }

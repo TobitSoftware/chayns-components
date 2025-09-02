@@ -4,6 +4,7 @@ import React, {
     FC,
     MouseEventHandler,
     ReactNode,
+    SyntheticEvent,
     TouchEventHandler,
     useCallback,
     useContext,
@@ -177,6 +178,10 @@ export type ListItemProps = {
      * Optional Element to display in the right corner of the image
      */
     cornerElement?: ReactNode;
+    /**
+     * Optional handler for image load errors.
+     */
+    onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
 };
 
 const ListItem: FC<ListItemProps> = ({
@@ -214,6 +219,7 @@ const ListItem: FC<ListItemProps> = ({
     titleElement,
     shouldDisableAnimation = false,
     cornerElement,
+    onImageError,
 }) => {
     const {
         incrementExpandableItemCount,
@@ -317,26 +323,27 @@ const ListItem: FC<ListItemProps> = ({
                 titleElement={titleElement}
                 setShouldEnableTooltip={setShouldEnableTooltip}
                 shouldDisableAnimation={shouldDisableAnimation}
+                onImageError={onImageError}
             />
         ),
         [
+            hoverItem,
             careOfLocationId,
             cornerElement,
             cornerImage,
-            handleHeadClick,
-            hoverItem,
             icons,
             imageBackground,
             images,
             isAnyItemExpandable,
-            isClickable,
             isExpandable,
             isItemOpen,
             isTitleGreyed,
             leftElements,
+            isClickable,
+            handleHeadClick,
             onLongPress,
-            rightElements,
             shouldForceHover,
+            rightElements,
             shouldHideImageOrIconBackground,
             shouldHideIndicator,
             shouldOpenImageOnClick,
@@ -345,6 +352,7 @@ const ListItem: FC<ListItemProps> = ({
             title,
             titleElement,
             shouldDisableAnimation,
+            onImageError,
         ],
     );
 
