@@ -21,8 +21,7 @@ export const getUsableHeight = async () => {
 export const useUsableHeight = () => {
     let usableHeight;
 
-    const { bottomBarHeight, offsetTop, topBarHeight, windowHeight } = useWindowMetrics();
-
+    const { bottomBarHeight, offsetTop, windowHeight } = useWindowMetrics();
     usableHeight = windowHeight;
 
     if (bottomBarHeight) {
@@ -31,10 +30,6 @@ export const useUsableHeight = () => {
 
     if (offsetTop) {
         usableHeight -= offsetTop;
-    }
-
-    if (topBarHeight) {
-        usableHeight -= topBarHeight;
     }
 
     return usableHeight;
