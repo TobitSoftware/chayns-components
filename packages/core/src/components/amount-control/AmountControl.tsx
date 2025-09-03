@@ -19,7 +19,7 @@ import {
     StyledMotionAmountControlButton,
 } from './AmountControl.styles';
 
-export type DisplayState = 'default' | 'delete' | 'normal' | 'maxAmount' | 'minAmount';
+export type DisplayState = 'default' | 'normal' | 'maxAmount' | 'minAmount';
 
 export type AmountControlProps = {
     /**
@@ -39,11 +39,11 @@ export type AmountControlProps = {
      */
     isDisabled?: boolean;
     /**
-     * A Text that should be displayed, if no amount is selected;
+     * A Text that should be displayed if no amount is selected;
      */
     label?: string;
     /**
-     * The maximum allowed amount. If the maxAmount is set to one, a delete button is displayed on the left side.
+     * The maximum allowed amount. If the maxAmount is reached, a check icon is displayed on the left side.
      */
     maxAmount?: number;
     /**
@@ -55,7 +55,7 @@ export type AmountControlProps = {
      */
     onChange?: (amount: number) => void;
     /**
-     * Whether the add icon should be displayed if the minAmount is reached.
+     * Whether the "add"-icon should be displayed if the minAmount is reached.
      */
     shouldShowAddIconOnMinAmount?: boolean;
     /**
@@ -102,9 +102,6 @@ const AmountControl: FC<AmountControlProps> = ({
      */
     useEffect(() => {
         switch (true) {
-            case maxAmount === 1 && amountValue === 1:
-                setDisplayState('delete');
-                return;
             case maxAmount && amountValue >= maxAmount:
                 setDisplayState('maxAmount');
                 return;
@@ -255,11 +252,10 @@ const AmountControl: FC<AmountControlProps> = ({
                     />
                 );
                 break;
-            case 'delete':
+            case 'maxAmount':
                 item = <Icon icons={['fa ts-check']} size={20} color="white" />;
                 break;
             case 'normal':
-            case 'maxAmount':
                 item = <Icon icons={['fa fa-minus']} size={15} color="white" />;
                 break;
             default:
@@ -292,15 +288,14 @@ const AmountControl: FC<AmountControlProps> = ({
                 key="right_button"
                 initial={{ width: 0, opacity: 0, padding: 0 }}
                 animate={{
-                    width: displayState === 'normal' || displayState === 'maxAmount' ? 40 : 28,
+                    width: displayState === 'normal' ? 40 : 28,
                     opacity: 1,
                     padding: 0,
                 }}
                 exit={{ width: 0, opacity: 0, padding: 0 }}
-                $isWide={displayState === 'normal' || displayState === 'maxAmount'}
                 transition={{ duration: 0.2, type: 'tween' }}
                 onClick={handleAmountRemove}
-                $color={displayState === 'delete' ? 'rgb(32, 198, 90)' : undefined}
+                $color={displayState === 'maxAmount' ? 'rgb(32, 198, 90)' : undefined}
                 disabled={amountValue !== 0 && amountValue <= minAmount}
                 $isDisabled={amountValue !== 0 && amountValue <= minAmount}
             >
@@ -317,7 +312,7 @@ const AmountControl: FC<AmountControlProps> = ({
                     {shouldShowLeftIcon && iconButton}
                 </AnimatePresence>
                 <StyledInputWrapper>
-                    {displayState === 'delete' || inputValue === '0' ? (
+                    {displayState === 'maxAmount' || inputValue === '0' ? (
                         <StyledAmountControlPseudoInput
                             onClick={handleDeleteIconClick}
                             $shouldShowWideInput={shouldShowWideInput}
@@ -351,7 +346,6 @@ const AmountControl: FC<AmountControlProps> = ({
                             exit={{ width: 0, opacity: 0, padding: 0 }}
                             transition={{ duration: 0.2, type: 'tween' }}
                             onClick={handleAmountAdd}
-                            $isWide
                             disabled={maxAmount ? amountValue >= maxAmount : false}
                             $isDisabled={maxAmount ? amountValue >= maxAmount : false}
                         >
@@ -368,23 +362,20 @@ const AmountControl: FC<AmountControlProps> = ({
             amountValue,
             displayState,
             handleAmountAdd,
-            handleAmountRemove,
             handleDeleteIconClick,
             handleFirstAmount,
             handleInputBlur,
             handleInputChange,
             hasFocus,
+            iconButton,
             inputValue,
             isDisabled,
             label,
-            leftIcon,
             maxAmount,
-            minAmount,
             shouldShowIcon,
             shouldShowLeftIcon,
-            shouldShowWideInput,
             shouldShowRightIcon,
-            iconButton,
+            shouldShowWideInput,
         ],
     );
 };

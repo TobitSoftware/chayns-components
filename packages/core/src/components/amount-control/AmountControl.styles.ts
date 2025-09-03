@@ -87,17 +87,18 @@ export const StyledAmountControlPseudoInput = styled.div<StyledAmountControlPseu
 type StyledAmountControlButtonProps = WithTheme<{
     $isDisabled: boolean;
     $color?: string;
-    $isWide?: boolean;
 }>;
 
 export const StyledMotionAmountControlButton = styled(
     motion.button,
 )<StyledAmountControlButtonProps>`
-    overflow: hidden;
+    align-items: center;
     background-color: ${({ theme, $color }: StyledAmountControlButtonProps) =>
         $color ?? theme['408']};
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
     transition: background-color 0.2s ease-in-out;
-    width: ${({ $isWide }) => ($isWide ? 40 : 28)}px;
 
     ${({ $isDisabled }) =>
         $isDisabled &&
