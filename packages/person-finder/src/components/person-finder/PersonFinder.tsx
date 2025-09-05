@@ -37,6 +37,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
     (
         {
             container,
+            dropdownDirection,
             defaultEntries,
             excludedEntryIds,
             filterTypes = DEFAULT_FILTER_TYPES,
@@ -74,6 +75,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                         <PersonFinderWrapper
                             ref={innerRef}
                             container={container}
+                            dropdownDirection={dropdownDirection}
                             filterTypes={filterTypes}
                             maxEntries={maxEntries}
                             onAdd={onAdd}
