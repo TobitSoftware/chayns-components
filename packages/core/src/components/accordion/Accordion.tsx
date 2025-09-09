@@ -131,6 +131,11 @@ export type AccordionProps = {
      */
     shouldRotateIcon?: boolean;
     /**
+     * Whether the animation should be skipped.
+     * If 'isDefaultOpen' is true the initial animation will be skipped even this prop is false
+     */
+    shouldSkipAnimation?: boolean;
+    /**
      * Title of the Accordion displayed in the head
      */
     title: string;
@@ -175,6 +180,7 @@ const Accordion: FC<AccordionProps> = ({
     titleElement,
     onTitleInputChange,
     titleInputProps,
+    shouldSkipAnimation: shouldSkipAnimationProp = false,
     titleColor,
     onBodyAnimationComplete,
 }) => {
@@ -205,14 +211,8 @@ const Accordion: FC<AccordionProps> = ({
 
     const initialRenderSkipRef = useInitialRenderRef(true);
 
-    const shouldSkipAnimation = initialRenderSkipRef.current && isDefaultOpen;
-
-    console.debug('TEST', {
-        shouldSkipAnimation,
-        isDefaultOpen,
-        skipRef: initialRenderSkipRef.current,
-        initialRef: isInitialRenderRef.current,
-    });
+    const shouldSkipAnimation =
+        shouldSkipAnimationProp ?? (initialRenderSkipRef.current && isDefaultOpen);
 
     const isOpenRef = useRef(isOpen);
     const onCloseRef = useRef(onClose);
