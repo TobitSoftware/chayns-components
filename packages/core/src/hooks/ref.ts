@@ -1,4 +1,12 @@
-import { MutableRefObject, Ref, RefCallback, useCallback } from 'react';
+import {
+    MutableRefObject,
+    Ref,
+    RefCallback,
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+} from 'react';
 
 export const useCombinedRefs = <T>(...refs: (Ref<T> | undefined)[]): RefCallback<T> =>
     useCallback(
@@ -15,3 +23,15 @@ export const useCombinedRefs = <T>(...refs: (Ref<T> | undefined)[]): RefCallback
         },
         [refs],
     );
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+export const useInitialRenderRef = (initialValue: boolean) => {
+    const ref = useRef<boolean>(initialValue);
+
+    useIsomorphicLayoutEffect(() => {
+        ref.current = false;
+    }, []);
+
+    return ref;
+};

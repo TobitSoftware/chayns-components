@@ -21,6 +21,7 @@ import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';
 import { AccordionWrappedContext } from './accordion-provider/AccordionContextProvider';
 import { StyledMotionAccordion } from './Accordion.styles';
+import { useInitialRenderRef } from '../../hooks/ref';
 
 export const AccordionContext = React.createContext<{ isWrapped?: boolean }>({
     isWrapped: undefined,
@@ -202,7 +203,9 @@ const Accordion: FC<AccordionProps> = ({
 
     const isOpen = isInGroup ? openAccordionUuid === uuid : isAccordionOpen;
 
-    const shouldSkipAnimation = isInitialRenderRef.current && isDefaultOpen;
+    const initialRenderSkipRef = useInitialRenderRef(true);
+
+    const shouldSkipAnimation = initialRenderSkipRef.current && isDefaultOpen;
 
     const isOpenRef = useRef(isOpen);
     const onCloseRef = useRef(onClose);
