@@ -202,6 +202,8 @@ const Accordion: FC<AccordionProps> = ({
 
     const isOpen = isInGroup ? openAccordionUuid === uuid : isAccordionOpen;
 
+    const shouldSkipAnimation = isInitialRenderRef.current && isDefaultOpen;
+
     const isOpenRef = useRef(isOpen);
     const onCloseRef = useRef(onClose);
     const onOpenRef = useRef(onOpen);
@@ -298,6 +300,7 @@ const Accordion: FC<AccordionProps> = ({
             $shouldHideBottomLine={shouldHideBottomLine}
             onMouseEnter={onHoverStart}
             onMouseLeave={onHoverEnd}
+            transition={{ duration: shouldSkipAnimation ? 0 : 0.25 }}
         >
             <AccordionContext.Provider value={accordionContextProviderValue}>
                 <MotionConfig transition={{ type: 'tween' }}>
@@ -305,6 +308,7 @@ const Accordion: FC<AccordionProps> = ({
                         uuid={uuid}
                         icon={icon}
                         isOpen={isOpen}
+                        shouldSkipAnimation={shouldSkipAnimation}
                         isFixed={isFixed}
                         isTitleGreyed={isTitleGreyed || isDisabled}
                         isWrapped={isWrapped === true}
@@ -323,6 +327,7 @@ const Accordion: FC<AccordionProps> = ({
                     <AnimatePresence initial={false}>
                         {(isOpen || shouldRenderClosed) && (
                             <AccordionBody
+                                shouldSkipAnimation={shouldSkipAnimation}
                                 maxHeight={bodyMaxHeight}
                                 onScroll={onBodyScroll}
                                 onAnimationComplete={onBodyAnimationComplete}

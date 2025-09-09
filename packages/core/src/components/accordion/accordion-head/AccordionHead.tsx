@@ -50,6 +50,7 @@ export type AccordionHeadProps = {
     onTitleInputChange?: ChangeEventHandler<HTMLInputElement>;
     titleInputProps?: InputProps;
     titleColor?: CSSProperties['color'];
+    shouldSkipAnimation?: boolean;
 };
 
 interface HeadHeight {
@@ -71,6 +72,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     shouldRotateIcon,
     title,
     titleElement,
+    shouldSkipAnimation,
     uuid,
     titleInputProps,
     onTitleInputChange,
@@ -174,12 +176,14 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             className="beta-chayns-accordion-head"
             initial={false}
             key={`accordionHead--${uuid}`}
+            transition={{ duration: shouldSkipAnimation ? 0 : 0.25 }}
         >
             <StyledMotionIconWrapper
                 animate={{ rotate: (isOpen || isFixed) && shouldRotateIcon ? 90 : 0 }}
                 initial={false}
                 onClick={!isFixed ? onClick : undefined}
                 key={`accordionHeadIcon--${uuid}`}
+                transition={{ duration: shouldSkipAnimation ? 0 : 0.25 }}
             >
                 {iconElement}
             </StyledMotionIconWrapper>
@@ -213,6 +217,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                     $color={titleColor}
                                     $hasSearch={typeof onSearchChange === 'function'}
                                     transition={{
+                                        duration: shouldSkipAnimation ? 0 : 0.25,
                                         opacity: {
                                             duration: 0,
                                         },
