@@ -207,6 +207,13 @@ const Accordion: FC<AccordionProps> = ({
 
     const shouldSkipAnimation = initialRenderSkipRef.current && isDefaultOpen;
 
+    console.debug('TEST', {
+        shouldSkipAnimation,
+        isDefaultOpen,
+        skipRef: initialRenderSkipRef.current,
+        initialRef: isInitialRenderRef.current,
+    });
+
     const isOpenRef = useRef(isOpen);
     const onCloseRef = useRef(onClose);
     const onOpenRef = useRef(onOpen);
