@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/code-highlighter",
-    "version": "5.0.0-beta.1215",
+    "version": "5.0.0-beta.1216",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -68,7 +68,7 @@
         "typescript": "^5.9.2"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.1215",
+        "@chayns-components/core": "^5.0.0-beta.1216",
         "@types/react-syntax-highlighter": "^15.5.13",
         "babel-prettier-parser": "^0.10.8",
         "prettier": "^2.8.8",
