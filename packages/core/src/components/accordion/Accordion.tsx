@@ -205,14 +205,14 @@ const Accordion: FC<AccordionProps> = ({
 
     const isInitialRenderRef = useRef(true);
 
-    const isInGroup = typeof updateOpenAccordionUuid === 'function';
-
-    const isOpen = isInGroup ? openAccordionUuid === uuid : isAccordionOpen;
-
     const initialRenderSkipRef = useInitialRenderRef(true);
 
     const shouldSkipAnimation =
         shouldSkipAnimationProp ?? (initialRenderSkipRef.current && isDefaultOpen);
+
+    const isInGroup = shouldSkipAnimation ? false : typeof updateOpenAccordionUuid === 'function';
+
+    const isOpen = isInGroup ? openAccordionUuid === uuid : isAccordionOpen;
 
     const isOpenRef = useRef(isOpen);
     const onCloseRef = useRef(onClose);
