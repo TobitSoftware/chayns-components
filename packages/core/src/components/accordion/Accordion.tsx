@@ -294,13 +294,22 @@ const Accordion: FC<AccordionProps> = ({
     );
 
     const accordionWrappedContextProviderValue = useMemo(() => ({ isWrapped: true }), []);
+
+    const initialAnimation = useMemo(() => {
+        if (shouldSkipAnimation) {
+            return { height: 'auto', opacity: 1 };
+        }
+
+        return isOpen ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 };
+    }, [isOpen, shouldSkipAnimation]);
+
     return (
         <StyledMotionAccordion
             animate={{ height: 'auto', opacity: 1 }}
             data-uuid={`${accordionGroupUuid ?? ''}---${uuid}`}
             className="beta-chayns-accordion"
             exit={{ height: 0, opacity: 0 }}
-            initial={{ height: 0, opacity: 0 }}
+            initial={initialAnimation}
             $isOpen={isOpen}
             $shouldShowLines={!isLastAccordion || !isWrapped}
             $isParentWrapped={isParentWrapped}
