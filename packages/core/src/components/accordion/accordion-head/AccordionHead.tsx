@@ -80,7 +80,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
 }) => {
     const [headHeight, setHeadHeight] = useState<HeadHeight>({
         closed: isWrapped ? 40 : 32,
-        open: isWrapped ? 40 : 32,
+        open: isWrapped ? 40 : 42,
     });
 
     const [isSearchActive, setIsSearchActive] = useState(false);
