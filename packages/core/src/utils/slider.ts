@@ -37,25 +37,26 @@ export const fillSlider = ({ fromSlider, toSlider, theme, fromValue, toValue }: 
 };
 
 interface CalculateGradientOffset {
-    value: number;
-    min: number;
-    max: number;
+    maxValue: number;
+    minValue: number;
+    sliderWidth: number;
     thumbWidth: number;
-    containerWidth: number;
+    value: number;
+    wrapperWidth: number;
 }
 
 export const calculateGradientOffset = ({
-    value,
-    min,
-    max,
+    maxValue,
+    minValue,
+    sliderWidth,
     thumbWidth,
-    containerWidth,
+    value,
+    wrapperWidth,
 }: CalculateGradientOffset): number => {
-    const percentage = (value - min) / (max - min);
+    const offset = (wrapperWidth - sliderWidth) / 2;
+    const percentage = (value - minValue) / (maxValue - minValue);
 
-    const adjustedWidth = containerWidth - thumbWidth / 2;
-
-    return percentage * adjustedWidth + thumbWidth / 2 + 5;
+    return offset - thumbWidth / 2 + percentage * sliderWidth;
 };
 
 interface GetThumbMaxWidthOptions {
@@ -76,14 +77,11 @@ export const calculatePopupPosition = ({
     max,
     popupWidth,
 }: CalculatePopupPositionOptions) => {
-    // Berechnung des Prozentwerts des Sliders zwischen min und max
     const percentage = (sliderValue - min) / (max - min);
 
-    // Berechnung des linken Versatzes bei 0% (-10px) und bei 100% (-popupWidth + 20px)
     const leftAtMin = -10;
     const leftAtMax = -popupWidth + 25;
 
-    // Berechnung des dynamischen Left-Werts basierend auf dem Slider-Prozentwert
     return leftAtMin + percentage * (leftAtMax - leftAtMin);
 };
 

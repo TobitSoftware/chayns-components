@@ -1,6 +1,14 @@
-import React, { CSSProperties, FC, MouseEventHandler, useMemo } from 'react';
+import React, {
+    CSSProperties,
+    FC,
+    MouseEventHandler,
+    ReactNode,
+    SyntheticEvent,
+    useMemo,
+} from 'react';
 import {
     ImageSize,
+    StyledCornerElement,
     StyledCornerImage,
     StyledGroupedImage,
     StyledGroupImageElement,
@@ -35,6 +43,14 @@ type GroupedImageProps = {
      * Whether to show the images in a round shape.
      */
     shouldShowRoundImage?: boolean;
+    /**
+     * Optional Element to display in the right corner of the image
+     */
+    cornerElement?: ReactNode;
+    /**
+     * Optional handler for image load errors.
+     */
+    onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
 };
 
 const GroupedImage: FC<GroupedImageProps> = ({
@@ -45,8 +61,11 @@ const GroupedImage: FC<GroupedImageProps> = ({
     onClick,
     shouldPreventBackground = false,
     shouldShowRoundImage = false,
+    cornerElement,
+    onImageError,
 }) => {
     const hasCornerImage = Boolean(cornerImage);
+    const hasCornerElement = Boolean(cornerElement);
     const hasMultipleImages = images.length > 1;
 
     const imageSize = useMemo(() => {
@@ -69,6 +88,9 @@ const GroupedImage: FC<GroupedImageProps> = ({
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
                 src={src}
+                onError={(event) =>
+                    typeof onImageError === 'function' && onImageError(event, index)
+                }
             />
         ));
 
@@ -83,6 +105,7 @@ const GroupedImage: FC<GroupedImageProps> = ({
                     key="corner-image"
                 />
             )}
+            {hasCornerElement && <StyledCornerElement>{cornerElement}</StyledCornerElement>}
         </StyledGroupedImage>
     );
 };

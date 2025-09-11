@@ -6,13 +6,14 @@ import React, {
     useCallback,
     useEffect,
     useImperativeHandle,
+    useMemo,
     useRef,
     useState,
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
 import { PopupAlignment, PopupCoordinates, PopupRef } from '../../types/popup';
-import AreaContextProvider from '../area-provider/AreaContextProvider';
+import AreaContextProvider, { AreaContext } from '../area-provider/AreaContextProvider';
 import PopupContentWrapper from './popup-content-wrapper/PopupContentWrapper';
 import { StyledPopup } from './Popup.styles';
 import { useMeasuredClone } from '../../hooks/element';
@@ -353,7 +354,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                                 onMouseLeave={handleMouseLeave}
                                 onMouseEnter={handleMouseEnter}
                             >
-                                <AreaContextProvider shouldChangeColor={false}>
+                                <AreaContextProvider shouldChangeColor>
                                     {content}
                                 </AreaContextProvider>
                             </PopupContentWrapper>

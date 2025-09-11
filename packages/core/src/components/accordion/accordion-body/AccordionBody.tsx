@@ -22,6 +22,10 @@ export type AccordionBodyProps = {
      * Whether the body should be shown.
      */
     shouldHideBody: boolean;
+    /**
+     * Whether the animation should be skipped.
+     */
+    shouldSkipAnimation?: boolean;
 
     onAnimationComplete?: VoidFunction;
 };
@@ -31,6 +35,7 @@ const AccordionBody: FC<AccordionBodyProps> = ({
     maxHeight,
     onScroll,
     shouldHideBody,
+    shouldSkipAnimation,
     onAnimationComplete,
 }) => {
     const { browser } = getDevice();
@@ -42,15 +47,20 @@ const AccordionBody: FC<AccordionBodyProps> = ({
 
     return (
         <StyledMotionAccordionBody
-            animate={{ height: shouldHideBody ? '0' : 'auto', opacity: shouldHideBody ? 0 : 1 }}
-            className="beta-chayns-accordion-body"
+            initial={
+                shouldSkipAnimation ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }
+            }
+            animate={{ height: shouldHideBody ? 0 : 'auto', opacity: shouldHideBody ? 0 : 1 }}
             exit={{ height: 0, opacity: 0 }}
-            initial={{ height: 0, opacity: 0 }}
+            transition={{
+                height: shouldSkipAnimation ? { duration: 0, ease: 'linear' } : { duration: 0.25 },
+                opacity: shouldSkipAnimation ? { duration: 0 } : { duration: 0.25 },
+            }}
+            className="beta-chayns-accordion-body"
             $maxHeight={maxHeight}
             $browser={browser?.name as BrowserName}
             onAnimationComplete={onAnimationComplete}
             onScroll={onScroll}
-            transition={{ opacity: { duration: 0.25 } }}
         >
             <AccordionGroupContext.Provider value={AccordionGroupContextProviderValue}>
                 {children}

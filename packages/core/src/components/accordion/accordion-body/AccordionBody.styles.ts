@@ -10,6 +10,7 @@ type StyledMotionAccordionBodyProps = WithTheme<{
 
 export const StyledMotionAccordionBody = styled(motion.div)<StyledMotionAccordionBodyProps>`
     overflow: hidden;
+    transition: none !important;
 
     ${({ $maxHeight }) =>
         typeof $maxHeight === 'number' &&

@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/emoji-input",
-    "version": "5.0.0-beta.1196",
+    "version": "5.0.0-beta.1219",
     "description": "Input field that supports HTML elements and emojis",
     "sideEffects": false,
     "browserslist": [
@@ -54,12 +54,12 @@
         "url": "https://github.com/TobitSoftware/chayns-components/issues"
     },
     "devDependencies": {
-        "@babel/cli": "^7.28.0",
-        "@babel/core": "^7.28.0",
-        "@babel/preset-env": "^7.28.0",
+        "@babel/cli": "^7.28.3",
+        "@babel/core": "^7.28.3",
+        "@babel/preset-env": "^7.28.3",
         "@babel/preset-react": "^7.27.1",
         "@babel/preset-typescript": "^7.27.1",
-        "@types/react": "^18.3.23",
+        "@types/react": "^18.3.24",
         "@types/react-dom": "^18.3.7",
         "@types/styled-components": "^5.1.34",
         "@types/uuid": "^10.0.0",
@@ -72,7 +72,7 @@
         "typescript": "^5.9.2"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.1196",
+        "@chayns-components/core": "^5.0.0-beta.1219",
         "emojilib": "^3.0.12",
         "unicode-emoji-json": "^0.8.0"
     },

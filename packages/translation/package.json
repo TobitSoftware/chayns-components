@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/translation",
-    "version": "5.0.0-beta.1195",
+    "version": "5.0.0-beta.1209",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -51,13 +51,13 @@
         "url": "https://github.com/TobitSoftware/chayns-components/issues"
     },
     "devDependencies": {
-        "@babel/cli": "^7.28.0",
-        "@babel/core": "^7.28.0",
-        "@babel/preset-env": "^7.28.0",
+        "@babel/cli": "^7.28.3",
+        "@babel/core": "^7.28.3",
+        "@babel/preset-env": "^7.28.3",
         "@babel/preset-react": "^7.27.1",
         "@babel/preset-typescript": "^7.27.1",
         "@types/lodash.throttle": "^4.1.9",
-        "@types/react": "^18.3.23",
+        "@types/react": "^18.3.24",
         "@types/react-dom": "^18.3.7",
         "babel-loader": "^9.2.1",
         "cross-env": "^7.0.3",

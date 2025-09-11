@@ -21,6 +21,7 @@ import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';
 import { AccordionWrappedContext } from './accordion-provider/AccordionContextProvider';
 import { StyledMotionAccordion } from './Accordion.styles';
+import { useInitialRenderRef } from '../../hooks/ref';
 
 export const AccordionContext = React.createContext<{ isWrapped?: boolean }>({
     isWrapped: undefined,
@@ -130,6 +131,11 @@ export type AccordionProps = {
      */
     shouldRotateIcon?: boolean;
     /**
+     * Whether the animation should be skipped.
+     * If 'isDefaultOpen' is true the initial animation will be skipped even this prop is false
+     */
+    shouldSkipAnimation?: boolean;
+    /**
      * Title of the Accordion displayed in the head
      */
     title: string;
@@ -174,6 +180,7 @@ const Accordion: FC<AccordionProps> = ({
     titleElement,
     onTitleInputChange,
     titleInputProps,
+    shouldSkipAnimation: shouldSkipAnimationProp = false,
     titleColor,
     onBodyAnimationComplete,
 }) => {
@@ -198,7 +205,12 @@ const Accordion: FC<AccordionProps> = ({
 
     const isInitialRenderRef = useRef(true);
 
-    const isInGroup = typeof updateOpenAccordionUuid === 'function';
+    const initialRenderSkipRef = useInitialRenderRef(true);
+
+    const shouldSkipAnimation =
+        shouldSkipAnimationProp ?? (initialRenderSkipRef.current && isDefaultOpen);
+
+    const isInGroup = shouldSkipAnimation ? false : typeof updateOpenAccordionUuid === 'function';
 
     const isOpen = isInGroup ? openAccordionUuid === uuid : isAccordionOpen;
 
@@ -282,13 +294,22 @@ const Accordion: FC<AccordionProps> = ({
     );
 
     const accordionWrappedContextProviderValue = useMemo(() => ({ isWrapped: true }), []);
+
+    const initialAnimation = useMemo(() => {
+        if (shouldSkipAnimation) {
+            return { height: 'auto', opacity: 1 };
+        }
+
+        return isOpen ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 };
+    }, [isOpen, shouldSkipAnimation]);
+
     return (
         <StyledMotionAccordion
             animate={{ height: 'auto', opacity: 1 }}
             data-uuid={`${accordionGroupUuid ?? ''}---${uuid}`}
             className="beta-chayns-accordion"
             exit={{ height: 0, opacity: 0 }}
-            initial={{ height: 0, opacity: 0 }}
+            initial={initialAnimation}
             $isOpen={isOpen}
             $shouldShowLines={!isLastAccordion || !isWrapped}
             $isParentWrapped={isParentWrapped}
@@ -298,6 +319,7 @@ const Accordion: FC<AccordionProps> = ({
             $shouldHideBottomLine={shouldHideBottomLine}
             onMouseEnter={onHoverStart}
             onMouseLeave={onHoverEnd}
+            transition={{ duration: shouldSkipAnimation ? 0 : 0.25 }}
         >
             <AccordionContext.Provider value={accordionContextProviderValue}>
                 <MotionConfig transition={{ type: 'tween' }}>
@@ -305,6 +327,7 @@ const Accordion: FC<AccordionProps> = ({
                         uuid={uuid}
                         icon={icon}
                         isOpen={isOpen}
+                        shouldSkipAnimation={shouldSkipAnimation}
                         isFixed={isFixed}
                         isTitleGreyed={isTitleGreyed || isDisabled}
                         isWrapped={isWrapped === true}
@@ -323,6 +346,7 @@ const Accordion: FC<AccordionProps> = ({
                     <AnimatePresence initial={false}>
                         {(isOpen || shouldRenderClosed) && (
                             <AccordionBody
+                                shouldSkipAnimation={shouldSkipAnimation}
                                 maxHeight={bodyMaxHeight}
                                 onScroll={onBodyScroll}
                                 onAnimationComplete={onBodyAnimationComplete}

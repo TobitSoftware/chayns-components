@@ -35,19 +35,41 @@ const WithFormatterTemplate: StoryFn<typeof Slider> = (args) => {
 
 export const General = Template.bind({});
 
-export const WithThumbLabelFormatter = WithFormatterTemplate.bind({});
-
 export const RangeSlider = Template.bind({});
 
-WithThumbLabelFormatter.args = {
-    shouldShowThumbLabel: true,
-    maxValue: 13.37,
-    minValue: 0,
-};
+export const WithHighlightedSteps = Template.bind({});
+
+export const WithPartialRange = Template.bind({});
+
+export const WithThumbLabelFormatter = WithFormatterTemplate.bind({});
 
 RangeSlider.args = {
     interval: {
         maxValue: 50,
         minValue: 10,
     },
+};
+
+WithHighlightedSteps.args = {
+    minValue: 0,
+    maxValue: 4,
+    shouldHighlightSteps: true,
+    step: 1,
+    value: 1,
+};
+
+WithPartialRange.args = {
+    maxEnabledValue: 3,
+    maxValue: 4,
+    minEnabledValue: 1,
+    minValue: 0,
+    shouldHighlightSteps: true,
+    step: 1,
+    value: 2,
+};
+
+WithThumbLabelFormatter.args = {
+    shouldShowThumbLabel: true,
+    maxValue: 13.37,
+    minValue: 0,
 };

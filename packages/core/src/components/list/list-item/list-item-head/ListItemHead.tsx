@@ -4,6 +4,7 @@ import React, {
     FC,
     MouseEventHandler,
     ReactNode,
+    SyntheticEvent,
     TouchEventHandler,
     useCallback,
     useEffect,
@@ -62,6 +63,8 @@ type ListItemHeadProps = {
     shouldForceHover?: boolean;
     setShouldEnableTooltip: (value: boolean) => void;
     shouldDisableAnimation?: boolean;
+    cornerElement?: ReactNode;
+    onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -89,6 +92,8 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     titleElement,
     setShouldEnableTooltip,
     shouldDisableAnimation = false,
+    cornerElement,
+    onImageError,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
 
@@ -177,6 +182,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         if (images) {
             return (
                 <ListItemImage
+                    cornerElement={cornerElement}
                     imageBackground={imageBackground}
                     careOfLocationId={careOfLocationId}
                     cornerImage={cornerImage}
@@ -184,6 +190,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     shouldOpenImageOnClick={shouldOpenImageOnClick}
                     shouldHideBackground={!!shouldHideImageOrIconBackground}
                     shouldShowRoundImage={!!shouldShowRoundImageOrIcon}
+                    onImageError={onImageError}
                 />
             );
         }
@@ -191,6 +198,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         return undefined;
     }, [
         careOfLocationId,
+        cornerElement,
         cornerImage,
         icons,
         imageBackground,
@@ -203,12 +211,15 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     return (
         <StyledListItemHead
             as={shouldDisableAnimation ? undefined : motion[LIST_ITEM_HEAD_HTML_TAG]}
-            layout
-            animate={{
-                opacity: isTitleGreyed ? 0.5 : 1,
-            }}
-            initial={false}
-            transition={{ duration: 0.2, type: 'tween' }}
+            animate={
+                shouldDisableAnimation
+                    ? undefined
+                    : {
+                          opacity: isTitleGreyed ? 0.5 : 1,
+                      }
+            }
+            initial={shouldDisableAnimation ? undefined : false}
+            transition={shouldDisableAnimation ? undefined : { duration: 0.2, type: 'tween' }}
             className="beta-chayns-list-item-head"
             $isClickable={typeof onClick === 'function' || isExpandable}
             $isAnyItemExpandable={isAnyItemExpandable}
@@ -226,9 +237,9 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                                 ? undefined
                                 : motion[LIST_ITEM_HEAD_INDICATOR_HTML_TAG]
                         }
-                        animate={{ rotate: isOpen ? 90 : 0 }}
-                        initial={false}
-                        transition={{ type: 'tween' }}
+                        animate={shouldDisableAnimation ? undefined : { rotate: isOpen ? 90 : 0 }}
+                        initial={shouldDisableAnimation ? undefined : false}
+                        transition={shouldDisableAnimation ? undefined : { type: 'tween' }}
                     >
                         {isExpandable && !shouldHideIndicator && (
                             <Icon icons={['fa fa-chevron-right']} />

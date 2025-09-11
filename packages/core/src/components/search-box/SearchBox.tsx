@@ -424,12 +424,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         }, [handleClick, shouldShowToggleIcon, theme]);
 
         const leftElement = useMemo(
-            () => (
-                <StyledSearchBoxLeftWrapper>
-                    {leftIcons && <Icon icons={leftIcons} />}
-                    {selectedImage && selectedImage}
-                </StyledSearchBoxLeftWrapper>
-            ),
+            () =>
+                (leftIcons || selectedImage) && (
+                    <StyledSearchBoxLeftWrapper>
+                        {leftIcons && <Icon icons={leftIcons} />}
+                        {selectedImage && selectedImage}
+                    </StyledSearchBoxLeftWrapper>
+                ),
             [leftIcons, selectedImage],
         );
 

@@ -50,6 +50,7 @@ export type AccordionHeadProps = {
     onTitleInputChange?: ChangeEventHandler<HTMLInputElement>;
     titleInputProps?: OldInputProps;
     titleColor?: CSSProperties['color'];
+    shouldSkipAnimation?: boolean;
 };
 
 interface HeadHeight {
@@ -71,6 +72,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     shouldRotateIcon,
     title,
     titleElement,
+    shouldSkipAnimation,
     uuid,
     titleInputProps,
     onTitleInputChange,
@@ -78,7 +80,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
 }) => {
     const [headHeight, setHeadHeight] = useState<HeadHeight>({
         closed: isWrapped ? 40 : 32,
-        open: isWrapped ? 40 : 32,
+        open: isWrapped ? 40 : 42,
     });
 
     const [isSearchActive, setIsSearchActive] = useState(false);
@@ -174,12 +176,14 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             className="beta-chayns-accordion-head"
             initial={false}
             key={`accordionHead--${uuid}`}
+            transition={{ duration: shouldSkipAnimation ? 0 : 0.25 }}
         >
             <StyledMotionIconWrapper
                 animate={{ rotate: (isOpen || isFixed) && shouldRotateIcon ? 90 : 0 }}
                 initial={false}
                 onClick={!isFixed ? onClick : undefined}
                 key={`accordionHeadIcon--${uuid}`}
+                transition={{ duration: shouldSkipAnimation ? 0 : 0.25 }}
             >
                 {iconElement}
             </StyledMotionIconWrapper>
@@ -204,23 +208,37 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 ) : (
                     <LayoutGroup key={`accordionHeadLayoutGroup--${uuid}`}>
                         <StyledMotionTitleWrapper key={`accordionHeadTitleWrapperWrapper--${uuid}`}>
+                            {/* I don't know why, but it fixes a glitch while animating the title.
+                            I guess it's the mode="sync" */}
                             <AnimatePresence
                                 initial={false}
+                                mode="sync"
                                 key={`accordionHeadTitleWrapper--${uuid}`}
                             >
                                 <StyledMotionTitle
-                                    animate={{ scale: 1 }}
-                                    initial={{ scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }}
-                                    exit={{ opacity: 0 }}
+                                    initial={
+                                        shouldSkipAnimation
+                                            ? false
+                                            : { scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }
+                                    }
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    exit={
+                                        shouldSkipAnimation
+                                            ? {
+                                                  opacity: 0,
+                                                  transition: { duration: 0 },
+                                                  transitionEnd: { display: 'none' },
+                                              }
+                                            : { opacity: 0 }
+                                    }
+                                    transition={{
+                                        duration: shouldSkipAnimation ? 0 : 0.25,
+                                        opacity: { duration: 0 },
+                                    }}
                                     $isOpen={isOpen}
                                     $isWrapped={isWrapped}
                                     $color={titleColor}
                                     $hasSearch={typeof onSearchChange === 'function'}
-                                    transition={{
-                                        opacity: {
-                                            duration: 0,
-                                        },
-                                    }}
                                     key={
                                         isOpen && !isWrapped
                                             ? `accordionHeadTitleBig--${uuid}`

@@ -4,6 +4,7 @@ import React, {
     FC,
     MouseEventHandler,
     ReactNode,
+    SyntheticEvent,
     TouchEventHandler,
     useCallback,
     useContext,
@@ -173,6 +174,14 @@ export type ListItemProps = {
      * Whether the ListItem Animation should be disabled.
      */
     shouldDisableAnimation?: boolean;
+    /**
+     * Optional Element to display in the right corner of the image
+     */
+    cornerElement?: ReactNode;
+    /**
+     * Optional handler for image load errors.
+     */
+    onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
 };
 
 const ListItem: FC<ListItemProps> = ({
@@ -209,6 +218,8 @@ const ListItem: FC<ListItemProps> = ({
     title,
     titleElement,
     shouldDisableAnimation = false,
+    cornerElement,
+    onImageError,
 }) => {
     const {
         incrementExpandableItemCount,
@@ -235,11 +246,6 @@ const ListItem: FC<ListItemProps> = ({
     const onOpenRef = useRef(onOpen);
 
     const [shouldEnableTooltip, setShouldEnableTooltip] = useState(false);
-
-    const shouldDisablePadding = useMemo(
-        () => areaProvider.shouldDisableListItemPadding ?? false,
-        [areaProvider.shouldDisableListItemPadding],
-    );
 
     useEffect(() => {
         onCloseRef.current = onClose;
@@ -294,6 +300,7 @@ const ListItem: FC<ListItemProps> = ({
             <ListItemHead
                 hoverItem={hoverItem}
                 careOfLocationId={careOfLocationId}
+                cornerElement={cornerElement}
                 cornerImage={cornerImage}
                 icons={icons}
                 imageBackground={imageBackground}
@@ -316,25 +323,27 @@ const ListItem: FC<ListItemProps> = ({
                 titleElement={titleElement}
                 setShouldEnableTooltip={setShouldEnableTooltip}
                 shouldDisableAnimation={shouldDisableAnimation}
+                onImageError={onImageError}
             />
         ),
         [
-            careOfLocationId,
-            cornerImage,
-            handleHeadClick,
             hoverItem,
+            careOfLocationId,
+            cornerElement,
+            cornerImage,
             icons,
             imageBackground,
             images,
             isAnyItemExpandable,
-            isClickable,
             isExpandable,
             isItemOpen,
             isTitleGreyed,
             leftElements,
+            isClickable,
+            handleHeadClick,
             onLongPress,
-            rightElements,
             shouldForceHover,
+            rightElements,
             shouldHideImageOrIconBackground,
             shouldHideIndicator,
             shouldOpenImageOnClick,
@@ -343,24 +352,29 @@ const ListItem: FC<ListItemProps> = ({
             title,
             titleElement,
             shouldDisableAnimation,
+            onImageError,
         ],
     );
 
     return (
         <StyledListItem
             as={shouldDisableAnimation ? undefined : motion[LIST_ITEM_HTML_TAG]}
-            animate={{ height: 'auto', opacity: 1 }}
+            animate={shouldDisableAnimation ? undefined : { height: 'auto', opacity: 1 }}
             className="beta-chayns-list-item"
-            exit={{ height: 0, opacity: 0 }}
-            initial={{ height: 0, opacity: 0 }}
+            exit={shouldDisableAnimation ? undefined : { height: 0, opacity: 0 }}
+            initial={shouldDisableAnimation ? undefined : { height: 0, opacity: 0 }}
             key={`list-item-${uuid}`}
             ref={listItemRef}
-            layout={shouldPreventLayoutAnimation ? undefined : 'position'}
+            layout={shouldPreventLayoutAnimation || shouldDisableAnimation ? undefined : 'position'}
             $backgroundColor={backgroundColor}
             $isClickable={isClickable}
-            $isInAccordion={typeof isParentAccordionWrapped === 'boolean' && !shouldDisablePadding}
+            $isInAccordion={
+                typeof isParentAccordionWrapped === 'boolean' &&
+                !areaProvider.shouldDisableListItemPadding
+            }
             $isOpen={isItemOpen}
             $isWrapped={isWrapped}
+            $shouldChangeColor={areaProvider.shouldChangeColor}
             $shouldForceBackground={shouldForceBackground}
             $shouldForceBottomLine={shouldForceBottomLine}
             $shouldHideBottomLine={shouldHideBottomLine}

@@ -43,6 +43,7 @@ import {
 } from './EmojiInput.styles';
 import PrefixElement from './prefix-element/PrefixElement';
 import { loadEmojiShortList } from '../../utils/asyncEmojiData';
+import { scrollCursorIntoView } from '../../utils/scroll';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
@@ -174,7 +175,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const [isPrefixAnimationFinished, setIsPrefixAnimationFinished] = useState(!prefixElement);
         const [prefixElementWidth, setPrefixElementWidth] = useState<number | undefined>();
         const [emojiShortNames, setEmojiShortNames] = useState<{ [p: string]: string }>({});
-        const [emojiRegShortNames, setEmojiRegShortNames] = useState<RegExp>((/./));
+        const [emojiRegShortNames, setEmojiRegShortNames] = useState<RegExp>(/./);
 
         const areaProvider = useContext(AreaContext);
 
@@ -195,10 +196,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         );
 
         useEffect(() => {
-            void loadEmojiShortList().then(({shortNameList, regShortnames}) => {
+            void loadEmojiShortList().then(({ shortNameList, regShortnames }) => {
                 setEmojiShortNames(shortNameList);
                 setEmojiRegShortNames(regShortnames);
-            })
+            });
         }, []);
 
         /**
@@ -209,23 +210,30 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
          * When updating the HTML, the current cursor position is saved before replacing the content, so
          * that it can be set again afterward.
          */
-        const handleUpdateHTML = useCallback((html: string) => {
-            if (!editorRef.current) {
-                return;
-            }
+        const handleUpdateHTML = useCallback(
+            (html: string) => {
+                if (!editorRef.current) {
+                    return;
+                }
 
-            let newInnerHTML = convertEmojisToUnicode(html, emojiRegShortNames, emojiShortNames);
+                let newInnerHTML = convertEmojisToUnicode(
+                    html,
+                    emojiRegShortNames,
+                    emojiShortNames,
+                );
 
-            newInnerHTML = convertTextToHTML(newInnerHTML);
+                newInnerHTML = convertTextToHTML(newInnerHTML);
 
-            if (newInnerHTML !== editorRef.current.innerHTML) {
-                saveSelection(editorRef.current, { shouldIgnoreEmptyTextNodes: true });
+                if (newInnerHTML !== editorRef.current.innerHTML) {
+                    saveSelection(editorRef.current, { shouldIgnoreEmptyTextNodes: true });
 
-                editorRef.current.innerHTML = newInnerHTML;
+                    editorRef.current.innerHTML = newInnerHTML;
 
-                restoreSelection(editorRef.current);
-            }
-        }, [emojiRegShortNames, emojiShortNames]);
+                    restoreSelection(editorRef.current);
+                }
+            },
+            [emojiRegShortNames, emojiShortNames],
+        );
 
         const handleBeforeInput = useCallback(
             (event: FormEvent<HTMLDivElement>) => {
@@ -336,6 +344,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
                     // noinspection JSDeprecatedSymbols
                     document.execCommand('insertLineBreak', false);
+                }
+
+                if (event.key === 'Enter') {
+                    requestAnimationFrame(() => {
+                        if (editorRef.current) scrollCursorIntoView(editorRef.current);
+                    });
                 }
 
                 if (
@@ -669,7 +683,11 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
         useEffect(() => {
             if (editorRef.current && prefixElement) {
-                const text = convertEmojisToUnicode(prefixElement, emojiRegShortNames, emojiShortNames);
+                const text = convertEmojisToUnicode(
+                    prefixElement,
+                    emojiRegShortNames,
+                    emojiShortNames,
+                );
 
                 insertTextAtCursorPosition({ editorElement: editorRef.current, text });
 

@@ -1,5 +1,6 @@
 import {
     DropdownBodyWrapper,
+    DropdownDirection,
     Icon,
     type Tag,
     TagInput,
@@ -36,6 +37,10 @@ export type PersonFinderWrapperProps = {
      * The element where the content of the `PersonFinder` should be rendered via React Portal.
      */
     container?: Element;
+    /**
+     * The direction in which the dropdown should be displayed. By default, it is displayed below the input.
+     */
+    dropdownDirection?: DropdownDirection;
     /**
      * The filter options of the component.
      */
@@ -82,6 +87,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
     (
         {
             container,
+            dropdownDirection,
             filterTypes,
             leftElement: leftElementProp,
             maxEntries = Infinity,
@@ -249,6 +255,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
                     <DropdownBodyWrapper
                         anchorElement={boxRef.current}
                         container={container}
+                        direction={dropdownDirection}
                         onClose={handleClose}
                         onOutsideClick={handleDropdownOutsideClick}
                         shouldShowDropdown={shouldShowBody}
