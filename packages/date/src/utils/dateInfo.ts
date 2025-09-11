@@ -4,18 +4,19 @@ import { isCurrentYear, isToday, isTomorrow, isYesterday } from './date';
 
 export const getDateInfo = ({
     date,
+    language,
     shouldShowYear,
     shouldShowTime,
     shouldShowDayOfWeek,
     shouldShowRelativeDayOfWeek,
     shouldUseShortText,
 }: Omit<UseDateInfoOptions, 'shouldShowDateToNowDifference' & 'preText'>) => {
-    const { active: language } = getLanguage();
+    const { active: activeLanguage } = getLanguage();
 
     let dayPart = '';
 
     if (shouldShowRelativeDayOfWeek) {
-        const rtf = new Intl.RelativeTimeFormat(language, { numeric: 'auto' });
+        const rtf = new Intl.RelativeTimeFormat(language ?? activeLanguage, { numeric: 'auto' });
 
         if (isToday(date)) {
             dayPart = capitalizeFirstLetter(rtf.format(0, 'day'));
@@ -31,7 +32,7 @@ export const getDateInfo = ({
     }
 
     if (!dayPart && shouldShowDayOfWeek) {
-        dayPart = date.toLocaleDateString(language, {
+        dayPart = date.toLocaleDateString(language ?? activeLanguage, {
             weekday: shouldUseShortText ? 'short' : 'long',
         });
     }
@@ -54,14 +55,14 @@ export const getDateInfo = ({
 
     let formattedTime = '';
     if (Object.keys(timeParts).length > 0) {
-        formattedTime = `, ${date.toLocaleTimeString(language, { ...timeParts })}`;
+        formattedTime = `, ${date.toLocaleTimeString(language ?? activeLanguage, { ...timeParts })}`;
     }
 
-    const hourWord = getTimeString({ language });
+    const hourWord = getTimeString({ language: language ?? activeLanguage });
 
     formattedTime += shouldShowTime ? ` ${hourWord}` : '';
 
-    const formattedDate = `${date.toLocaleDateString(language, dateParts)}${formattedTime}`;
+    const formattedDate = `${date.toLocaleDateString(language ?? activeLanguage, dateParts)}${formattedTime}`;
 
     return `${dayPart}${dayPart ? ', ' : ''}${formattedDate}`;
 };
