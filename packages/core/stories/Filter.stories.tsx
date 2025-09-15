@@ -1,7 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
-import React from 'react';
+import React, { useState } from 'react';
 import Filter from '../src/components/filter/Filter';
 import { FilterButtonSize } from '../src';
+import { SortItem } from '../src/types/filter';
 
 export default {
     title: 'Core/Filter',
@@ -9,7 +10,39 @@ export default {
     args: {},
 } as Meta<typeof Filter>;
 
-const Template: StoryFn<typeof Filter> = ({ ...args }) => <Filter {...args} />;
+const Template: StoryFn<typeof Filter> = ({ ...args }) => {
+    const [searchValue, setSearchValue] = useState('');
+    const [sortItem, setSortItem] = useState<SortItem>({
+        text: 'alphanumerisch',
+        id: 'alphanumerisch',
+    });
+
+    const handleSearchChange = (value: string) => {
+        setSearchValue(value);
+    };
+
+    const handleSortChange = (item: SortItem) => {
+        setSortItem(item);
+    };
+
+    return (
+        <Filter
+            {...args}
+            searchConfig={
+                args.searchConfig ? { searchValue, onSearchChange: handleSearchChange } : undefined
+            }
+            sortConfig={
+                args.sortConfig
+                    ? {
+                          onSortChange: handleSortChange,
+                          items: args.sortConfig.items,
+                          selectedItem: sortItem,
+                      }
+                    : undefined
+            }
+        />
+    );
+};
 
 export const General = Template.bind({});
 

@@ -17,3 +17,15 @@ export interface SortConfig {
 }
 
 export type FilterButtonConfig = FilterButtonsProps;
+
+export type FilterRef = {
+    hide: VoidFunction;
+    show: VoidFunction;
+};
+
+export enum FilterType {
+    ONLY_SEARCH,
+    ONLY_FILTER,
+    ONLY_SORT,
+    MULTIPLE,
+}
