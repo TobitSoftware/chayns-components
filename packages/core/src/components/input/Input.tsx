@@ -50,6 +50,21 @@ type InputMode =
     | 'decimal'
     | undefined;
 
+type AutoComplete =
+    | 'on'
+    | 'off'
+    | 'name'
+    | 'username'
+    | 'email'
+    | 'new-password'
+    | 'current-password'
+    | 'tel'
+    | 'url'
+    | 'street-address'
+    | 'postal-code'
+    | 'country'
+    | undefined;
+
 export enum InputSize {
     Small = 'small',
     Medium = 'medium',
@@ -68,6 +83,10 @@ export type InputProps = {
      * Defines the input mode of the input
      */
     inputMode?: InputMode;
+    /**
+     * Defines the auto Complete of the input
+     */
+    autoComplete?: AutoComplete;
     /**
      * Disables the input so that it cannot be changed anymore
      */
@@ -166,6 +185,7 @@ const Input = forwardRef<InputRef, InputProps>(
             isInvalid = false,
             shouldPreventPlaceholderAnimation = false,
             id,
+            autoComplete,
         },
         ref,
     ) => {
@@ -289,6 +309,7 @@ const Input = forwardRef<InputRef, InputProps>(
                             value={value}
                             autoFocus={shouldUseAutoFocus}
                             inputMode={inputMode}
+                            autoComplete={autoComplete}
                             $isInvalid={isInvalid}
                             $shouldShowCenteredContent={shouldShowCenteredContent}
                         />
