@@ -42,15 +42,21 @@ export const selectFiles = ({
                 return;
             }
 
-            const target = event.target as HTMLInputElement;
-            const { files } = target;
+            const { files } = event.target as HTMLInputElement;
 
             if (!files) {
                 resolve([]);
+
                 return;
             }
 
-            const fileArray = Object.values(files);
+            const fileArray = Object.values(files).map((file) => {
+                if (file.type === '') {
+                    return new File([file], file.name, { type: getMimeType(file) });
+                }
+
+                return file;
+            });
 
             let filteredFileArray = fileArray.filter((file) => {
                 const sizeInMB = file.size / 1024 / 1024;
@@ -132,3 +138,77 @@ export const getFileAsArrayBuffer = (file: File): Promise<string | ArrayBuffer> 
 
         reader.readAsArrayBuffer(file);
     });
+
+/**
+ * Mapping file extensions to MIME types
+ * (expandable if necessary)
+ */
+const extensionToMime: Record<string, string> = {
+    // Text & Code
+    txt: 'text/plain',
+    md: 'text/markdown',
+    csv: 'text/csv',
+    json: 'application/json',
+    xml: 'application/xml',
+    yaml: 'application/x-yaml',
+    yml: 'application/x-yaml',
+    html: 'text/html',
+    htm: 'text/html',
+    css: 'text/css',
+    js: 'application/javascript',
+    ts: 'application/typescript',
+
+    // Image
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
+    png: 'image/png',
+    gif: 'image/gif',
+    webp: 'image/webp',
+    bmp: 'image/bmp',
+    svg: 'image/svg+xml',
+    ico: 'image/x-icon',
+
+    // Audio
+    mp3: 'audio/mpeg',
+    wav: 'audio/wav',
+    ogg: 'audio/ogg',
+    flac: 'audio/flac',
+    m4a: 'audio/mp4',
+
+    // Video
+    mp4: 'video/mp4',
+    webm: 'video/webm',
+    avi: 'video/x-msvideo',
+    mov: 'video/quicktime',
+    mkv: 'video/x-matroska',
+
+    // Document
+    pdf: 'application/pdf',
+    doc: 'application/msword',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    xls: 'application/vnd.ms-excel',
+    xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    ppt: 'application/vnd.ms-powerpoint',
+    pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+
+    // Archive & binary
+    zip: 'application/zip',
+    rar: 'application/vnd.rar',
+    '7z': 'application/x-7z-compressed',
+    tar: 'application/x-tar',
+    gz: 'application/gzip',
+    exe: 'application/vnd.microsoft.portable-executable',
+};
+
+/**
+ * Ermittelt den MIME-Type eines Files
+ * - nutzt File.type, falls vorhanden
+ * - sonst Fallback über Dateiendung
+ */
+const getMimeType = (file: File): string => {
+    if (file.type) return file.type;
+
+    const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+
+    return extensionToMime[ext] || '';
+};
