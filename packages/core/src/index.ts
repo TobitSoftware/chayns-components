@@ -27,6 +27,7 @@ export { useContainer, ContainerAnchor } from './hooks/container';
 export { DropdownDirection, type DropdownCoordinates } from './types/dropdown';
 export { useIsMeasuredClone } from './hooks/element';
 export { useCombinedRefs } from './hooks/ref';
+export { default as Filter } from './components/filter/Filter';
 export {
     default as FileList,
     type IFileItem as FileListItem,
