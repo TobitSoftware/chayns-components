@@ -23,10 +23,8 @@ import {
     SearchConfig,
     SortConfig,
 } from '../../types/filter';
-import Popup from '../popup/Popup';
-import { PopupRef } from '../../types/popup';
-import FilterPopupContent from './filter-popup-content/FilterPopupContent';
 import SearchInput from '../search-input/SearchInput';
+import ContextMenu, { ContextMenuItem, ContextMenuRef } from '../context-menu/ContextMenu';
 
 export type FilterProps = {
     headline: string;
@@ -40,7 +38,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
         const [isOpen, setIsOpen] = useState(false);
         const [isSearchActive, setIsSearchActive] = useState(false);
 
-        const popupRef = useRef<PopupRef>(null);
+        const contextMenuRef = useRef<ContextMenuRef>(null);
 
         const type = useMemo(() => {
             if (filterButtonConfig && !searchConfig && !sortConfig) {
@@ -72,8 +70,8 @@ const Filter = forwardRef<FilterRef, FilterProps>(
         const handleHide = useCallback(() => {
             setIsOpen(false);
 
-            if (type === FilterType.ONLY_SORT && popupRef.current) {
-                popupRef.current.hide();
+            if (type === FilterType.ONLY_SORT && contextMenuRef.current) {
+                contextMenuRef.current.hide();
             }
 
             if (type === FilterType.ONLY_SEARCH) {
@@ -84,8 +82,8 @@ const Filter = forwardRef<FilterRef, FilterProps>(
         const handleShow = useCallback(() => {
             setIsOpen(true);
 
-            if (type === FilterType.ONLY_SORT && popupRef.current) {
-                popupRef.current.hide();
+            if (type === FilterType.ONLY_SORT && contextMenuRef.current) {
+                contextMenuRef.current.hide();
             }
 
             if (type === FilterType.ONLY_SEARCH) {
@@ -119,6 +117,22 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             [handleIconClick, icons],
         );
 
+        const sortItems: ContextMenuItem[] = useMemo(() => {
+            if (!sortConfig) {
+                return [];
+            }
+
+            const { selectedItem, onSortChange } = sortConfig;
+
+            return sortConfig.items.map(({ id, text }) => ({
+                text,
+                key: id.toString(),
+                isSelected: id === selectedItem.id,
+                icons: id === selectedItem.id ? ['fas fa-circle-small'] : [],
+                onClick: () => onSortChange({ text, id }),
+            }));
+        }, [sortConfig]);
+
         return useMemo(
             () => (
                 <StyledFilter>
@@ -142,12 +156,9 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                             </StyledFilterSearch>
                         )}
                         {type === FilterType.ONLY_SORT && sortConfig && (
-                            <Popup
-                                content={<FilterPopupContent sortConfig={sortConfig} />}
-                                ref={popupRef}
-                            >
+                            <ContextMenu ref={contextMenuRef} items={sortItems}>
                                 {iconElement}
-                            </Popup>
+                            </ContextMenu>
                         )}
                     </StyledFilterHead>
                     {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
@@ -166,9 +177,10 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 headline,
                 type,
                 iconElement,
-                sortConfig,
-                isOpen,
                 searchConfig,
+                sortConfig,
+                sortItems,
+                isOpen,
                 filterButtonConfig,
             ],
         );
