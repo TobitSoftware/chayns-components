@@ -20,3 +20,27 @@ export const StyledRankingEntryRightElement = styled.div`
     gap: 8px;
     align-items: center;
 `;
+
+export const StyledRankingEntryContent = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+`;
+
+export const StyledRankingEntryContentHeadline = styled.div`
+    font-weight: bold;
+    font-size: 80%;
+
+    margin-bottom: -8px;
+`;
+
+export const StyledRankingEntryContentEntry = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+export const StyledRankingEntryContentEntryName = styled.div``;
+
+export const StyledRankingEntryContentEntryValue = styled.div``;

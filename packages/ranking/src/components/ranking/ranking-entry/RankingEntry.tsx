@@ -1,13 +1,18 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import {
     StyledRankingEntry,
+    StyledRankingEntryContent,
+    StyledRankingEntryContentEntry,
+    StyledRankingEntryContentEntryName,
+    StyledRankingEntryContentEntryValue,
+    StyledRankingEntryContentHeadline,
     StyledRankingEntryElement,
     StyledRankingEntryElementLeft,
     StyledRankingEntryElementRight,
     StyledRankingEntryRightElement,
 } from './RankingEntry.styles';
-import { Accordion, Icon } from '@chayns-components/core';
-import { IRankingEntry } from '../../../types/ranking';
+import { Accordion, AccordionContent, Icon } from '@chayns-components/core';
+import { IRankingEntry, RankingContentEntry, RankingContentHeadline } from '../../../types/ranking';
 
 export type RankingEntryProps = {
     onFriendAdd?: (personId: string) => void;
@@ -23,7 +28,7 @@ export type RankingEntryProps = {
 
 const RankingEntry: FC<RankingEntryProps> = ({
     rank,
-    name,
+    name: fullname,
     personId,
     icons,
     points,
@@ -44,7 +49,7 @@ const RankingEntry: FC<RankingEntryProps> = ({
         const titleElement = (
             <span>
                 <strong>{rank}. </strong>
-                {name}
+                {fullname}
             </span>
         );
 
@@ -61,14 +66,43 @@ const RankingEntry: FC<RankingEntryProps> = ({
         );
 
         return { title: titleElement, rightElement: rightElements };
-    }, [handleIconClick, icons, isFriend, name, points, rank]);
+    }, [handleIconClick, icons, isFriend, fullname, points, rank]);
+
+    const entryContent = useMemo(() => {
+        if (!content) return null;
+
+        return (content as (RankingContentHeadline & RankingContentEntry)[]).map(
+            ({ name, value, headline, id }) => {
+                if (typeof headline === 'string') {
+                    return (
+                        <StyledRankingEntryContentHeadline key={id}>
+                            {headline}
+                        </StyledRankingEntryContentHeadline>
+                    );
+                }
+
+                return (
+                    <StyledRankingEntryContentEntry key={id}>
+                        <StyledRankingEntryContentEntryName>
+                            {name}
+                        </StyledRankingEntryContentEntryName>
+                        <StyledRankingEntryContentEntryValue>
+                            {value}
+                        </StyledRankingEntryContentEntryValue>
+                    </StyledRankingEntryContentEntry>
+                );
+            },
+        );
+    }, [content]);
 
     return useMemo(
         () => (
             <StyledRankingEntry>
-                {content ? (
+                {entryContent ? (
                     <Accordion title="" titleElement={title} rightElement={rightElement}>
-                        test
+                        <AccordionContent>
+                            <StyledRankingEntryContent>{entryContent}</StyledRankingEntryContent>
+                        </AccordionContent>
                     </Accordion>
                 ) : (
                     <StyledRankingEntryElement>
@@ -80,7 +114,7 @@ const RankingEntry: FC<RankingEntryProps> = ({
                 )}
             </StyledRankingEntry>
         ),
-        [content, rightElement, title],
+        [entryContent, rightElement, title],
     );
 };
 
