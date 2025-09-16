@@ -80,7 +80,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             shouldHideOnChildrenLeave,
             shouldShowOnHover = false,
             shouldUseChildrenWidth = true,
-            shouldScrollWithContent = false,
+            shouldScrollWithContent = true,
             shouldUseFullWidth = false,
             yOffset = 0,
         },
@@ -145,15 +145,17 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     width: childrenWidth,
                 } = popupRef.current.getBoundingClientRect();
 
+                const element = shouldScrollWithContent ? newContainer : document.body;
+
                 const {
                     height: containerHeight,
                     width: containerWidth,
                     top,
                     left,
-                } = newContainer.getBoundingClientRect();
+                } = element.getBoundingClientRect();
 
-                const zoomX = containerWidth / (newContainer as HTMLElement).offsetWidth;
-                const zoomY = containerHeight / (newContainer as HTMLElement).offsetHeight;
+                const zoomX = containerWidth / (element as HTMLElement).offsetWidth;
+                const zoomY = containerHeight / (element as HTMLElement).offsetHeight;
 
                 if (
                     pseudoHeight > childrenTop - 25 ||
@@ -174,10 +176,10 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     }
 
                     const x =
-                        (childrenLeft + childrenWidth / 2 - left) / zoomX + newContainer.scrollLeft;
+                        (childrenLeft + childrenWidth / 2 - left) / zoomX + element.scrollLeft;
                     const y =
                         (childrenTop + childrenHeight / 2 - top) / zoomY +
-                        newContainer.scrollTop -
+                        element.scrollTop -
                         yOffset;
 
                     let newOffset;
@@ -221,10 +223,10 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     }
 
                     const x =
-                        (childrenLeft + childrenWidth / 2 - left) / zoomX + newContainer.scrollLeft;
+                        (childrenLeft + childrenWidth / 2 - left) / zoomX + element.scrollLeft;
                     const y =
                         (childrenTop + childrenHeight / 2 - top) / zoomY +
-                        newContainer.scrollTop -
+                        element.scrollTop -
                         yOffset;
 
                     let newOffset;
@@ -257,7 +259,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
                 setIsOpen(true);
             }
-        }, [alignment, newContainer, pseudoSize, yOffset]);
+        }, [alignment, newContainer, pseudoSize, shouldScrollWithContent, yOffset]);
 
         useEffect(() => {
             if (!newContainer) return;
