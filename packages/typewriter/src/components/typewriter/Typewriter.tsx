@@ -461,9 +461,12 @@ const Typewriter: FC<TypewriterProps> = ({
                 ) : (
                     <StyledTypewriterText
                         $shouldRemainSingleLine={shouldRemainSingleLine}
+                        dangerouslySetInnerHTML={
+                            typeof sortedChildren === 'string' ? { __html: shownText } : undefined
+                        }
                         style={textStyle}
                     >
-                        {sortedChildren}
+                        {typeof sortedChildren !== 'string' ? sortedChildren : undefined}
                     </StyledTypewriterText>
                 )}
                 {isAnimatingText && (
