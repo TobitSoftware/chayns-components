@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import { PopupAlignment } from '../../../types/popup';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
+import { BrowserName } from '../../../types/chayns';
 
 type StyledMotionPopupContentWrapperProps = WithTheme<{
     $position: PopupAlignment;
@@ -77,4 +78,56 @@ export const StyledMotionPopupContentWrapper = styled(
         top: 0;
         z-index: -1;
     }
+`;
+
+type StyledPopupContentWrapperContentProps = WithTheme<{
+    $browser: BrowserName;
+    $maxHeight?: number;
+}>;
+
+export const StyledPopupContentWrapperContent = styled.div<StyledPopupContentWrapperContentProps>`
+    height: 100%;
+    width: 100%;
+
+    ${({ $maxHeight }) =>
+        $maxHeight &&
+        css`
+            max-height: ${$maxHeight}px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        `}
+
+    ${({ $browser, theme }: StyledPopupContentWrapperContentProps) =>
+        $browser === 'firefox'
+            ? css`
+                  scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
+                  scrollbar-width: thin;
+              `
+            : css`
+                  &::-webkit-scrollbar {
+                      width: 10px;
+                      height: 10px;
+                  }
+
+                  &::-webkit-scrollbar-track {
+                      background-color: transparent;
+                  }
+
+                  &::-webkit-scrollbar-button {
+                      background-color: transparent;
+                      height: 5px;
+                      width: 5px;
+                  }
+
+                  &::-webkit-scrollbar-thumb {
+                      background-color: rgba(${theme['text-rgb']}, 0.15);
+                      border-radius: 20px;
+                      background-clip: padding-box;
+                      border: solid 3px transparent;
+                  }
+
+                  &::-webkit-scrollbar-corner {
+                      background-color: transparent;
+                  }
+              `}
 `;

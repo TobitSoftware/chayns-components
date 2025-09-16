@@ -1,7 +1,11 @@
-import { useSite } from 'chayns-api';
+import { getDevice, useSite } from 'chayns-api';
 import React, { ReactNode, type MouseEventHandler } from 'react';
 import { PopupAlignment, PopupCoordinates } from '../../../types/popup';
-import { StyledMotionPopupContentWrapper } from './PopupContentWrapper.styles';
+import {
+    StyledMotionPopupContentWrapper,
+    StyledPopupContentWrapperContent,
+} from './PopupContentWrapper.styles';
+import { BrowserName } from '../../../types/chayns';
 
 type PopupContentProps = {
     alignment: PopupAlignment;
@@ -12,6 +16,7 @@ type PopupContentProps = {
     onMouseEnter: MouseEventHandler<HTMLSpanElement>;
     shouldScrollWithContent: boolean;
     width: number;
+    maxHeight?: number;
 };
 
 const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
@@ -25,10 +30,13 @@ const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
             onMouseLeave,
             shouldScrollWithContent,
             onMouseEnter,
+            maxHeight,
         },
         ref,
     ) => {
         const { colorMode } = useSite();
+
+        const { browser } = getDevice();
 
         const isBottomLeftAlignment = alignment === PopupAlignment.BottomLeft;
         const isTopLeftAlignment = alignment === PopupAlignment.TopLeft;
@@ -65,7 +73,12 @@ const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
                     translateY(${y})
                 `}
             >
-                {children}
+                <StyledPopupContentWrapperContent
+                    $browser={browser?.name as BrowserName}
+                    $maxHeight={maxHeight}
+                >
+                    {children}
+                </StyledPopupContentWrapperContent>
             </StyledMotionPopupContentWrapper>
         );
     },

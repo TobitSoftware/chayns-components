@@ -20,16 +20,7 @@ const Template: StoryFn<typeof Popup> = ({ ...args }) => (
     <>
         <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis et dui eget sapien
-            convallis tincidunt. Sed dictum vestibulum mi, quis euismod nunc suscipit vitae. Aenean
-            quis nisi eu purus efficitur ullamcorper sed vitae est. Duis quis diam non orci
-            facilisis mattis at a justo. Nam tempor lacinia nisl id sagittis. Nunc ultricies ex
-            eros, ac lobortis nulla lobortis vel. Integer volutpat sem sem, id aliquam magna viverra
-            nec. In tempus neque quis urna facilisis, vel pulvinar sapien pretium. Vivamus
-            condimentum dignissim massa eu posuere. Sed rutrum, enim vel ullamcorper lobortis,
-            libero turpis ultrices metus, in sodales lectus dui et lorem. Donec tincidunt arcu diam,
-            et maximus nibh convallis sit amet. Aenean tristique et felis at dignissim. Nam a
-            interdum risus, sit amet vestibulum turpis. Integer dolor risus, sodales a faucibus eu,
-            iaculis dignissim augue.
+            convallis tincidunt.
         </p>
         <Popup {...args}>
             <Button onClick={() => {}}>Popup öffnen</Button>
@@ -38,3 +29,38 @@ const Template: StoryFn<typeof Popup> = ({ ...args }) => (
 );
 
 export const General = Template.bind({});
+
+export const LongContent = Template.bind({});
+
+LongContent.args = {
+    content: (
+        <div style={{ padding: 4, display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <div>A - Apfel</div>
+            <div>B - Baum</div>
+            <div>C - Computer</div>
+            <div>D - Dach</div>
+            <div>E - Elefant</div>
+            <div>F - Fahrrad</div>
+            <div>G - Gitarre</div>
+            <div>H - Haus</div>
+            <div>I - Insel</div>
+            <div>J - Jaguar</div>
+            <div>K - Känguru</div>
+            <div>L - Lampe</div>
+            <div>M - Mond</div>
+            <div>N - Nase</div>
+            <div>O - Orange</div>
+            <div>P - Papier</div>
+            <div>Q - Quelle</div>
+            <div>R - Rakete</div>
+            <div>S - Sonne</div>
+            <div>T - Tiger</div>
+            <div>U - Uhr</div>
+            <div>V - Vogel</div>
+            <div>W - Wasser</div>
+            <div>X - Xylophon</div>
+            <div>Y - Yacht</div>
+            <div>Z - Zitrone</div>
+        </div>
+    ),
+};

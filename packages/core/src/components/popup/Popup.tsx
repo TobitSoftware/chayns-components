@@ -6,14 +6,13 @@ import React, {
     useCallback,
     useEffect,
     useImperativeHandle,
-    useMemo,
     useRef,
     useState,
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
 import { PopupAlignment, PopupCoordinates, PopupRef } from '../../types/popup';
-import AreaContextProvider, { AreaContext } from '../area-provider/AreaContextProvider';
+import AreaContextProvider from '../area-provider/AreaContextProvider';
 import PopupContentWrapper from './popup-content-wrapper/PopupContentWrapper';
 import { StyledPopup } from './Popup.styles';
 import { useMeasuredClone } from '../../hooks/element';
@@ -100,6 +99,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const [portal, setPortal] = useState<ReactPortal>();
         const [pseudoSize, setPseudoSize] = useState<{ height: number; width: number }>();
         const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
+        const [contentMaxHeight, setContentMaxHeight] = useState<number | undefined>(undefined);
 
         const timeout = useRef<number>();
 
@@ -259,6 +259,24 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             }
         }, [alignment, newContainer, pseudoSize, yOffset]);
 
+        useEffect(() => {
+            if (!newContainer) return;
+
+            const viewHeight = newContainer.clientHeight;
+
+            if (
+                [
+                    PopupAlignment.TopLeft,
+                    PopupAlignment.TopRight,
+                    PopupAlignment.TopCenter,
+                ].includes(internalAlignment)
+            ) {
+                setContentMaxHeight(coordinates.y - 20);
+            } else {
+                setContentMaxHeight(viewHeight - coordinates.y - 20);
+            }
+        }, [coordinates.y, internalAlignment, newContainer]);
+
         const handleChildrenClick = () => {
             handleShow();
         };
@@ -308,14 +326,6 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             [handleHide, handleShow],
         );
 
-        // useEffect(() => {
-        //     void getWindowMetrics().then((result) => {
-        //         if (result.topBarHeight) {
-        //             setMenuHeight(result.topBarHeight);
-        //         }
-        //     });
-        // }, []);
-
         useEffect(() => {
             if (isOpen) {
                 document.addEventListener('click', handleDocumentClick, true);
@@ -349,6 +359,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                                 shouldScrollWithContent={shouldScrollWithContent}
                                 coordinates={coordinates}
                                 key={`tooltip_${uuid}`}
+                                maxHeight={contentMaxHeight}
                                 alignment={internalAlignment}
                                 ref={popupContentRef}
                                 onMouseLeave={handleMouseLeave}
@@ -364,6 +375,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 ),
             );
         }, [
+            contentMaxHeight,
             internalAlignment,
             newContainer,
             content,
