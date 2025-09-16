@@ -89,7 +89,7 @@ export const useMeasuredClone = ({ content }: UseMeasuredCloneOptions) => {
         const measure = () => {
             if (!ref.current) return;
             const { offsetWidth: width, offsetHeight: height } = ref.current;
-            setSize({ width: width + 6, height });
+            setSize({ width: width + 10, height });
         };
 
         measure();

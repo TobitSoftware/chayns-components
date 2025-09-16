@@ -36,7 +36,15 @@ export const LongContent = Template.bind({});
 
 LongContent.args = {
     content: (
-        <div style={{ padding: 4, display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <div
+            style={{
+                padding: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 4,
+                whiteSpace: 'nowrap',
+            }}
+        >
             <div>A - Apfel</div>
             <div>B - Baum</div>
             <div>C - Computer</div>
