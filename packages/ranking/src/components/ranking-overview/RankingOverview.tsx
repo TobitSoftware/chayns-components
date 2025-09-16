@@ -4,6 +4,7 @@ import {
     StyledRankingOverviewSubtitle,
     StyledRankingOverviewTitle,
 } from './RankingOverview.styles';
+import { AnimatedNumber } from '@chayns-components/core';
 
 export type RankingOverviewProps = {
     /**
@@ -23,10 +24,10 @@ export type RankingOverviewProps = {
 const RankingOverview: FC<RankingOverviewProps> = ({ userRank, totalPlayers, suffix }) => (
     <StyledRankingOverview>
         <StyledRankingOverviewTitle>
-            Platz {userRank.toLocaleString('de')}
+            Platz <AnimatedNumber value={userRank} />
         </StyledRankingOverviewTitle>
         <StyledRankingOverviewSubtitle>
-            {suffix} von {totalPlayers.toLocaleString('de')} Mitspielern
+            {suffix} von <AnimatedNumber value={totalPlayers} /> Mitspielern
         </StyledRankingOverviewSubtitle>
     </StyledRankingOverview>
 );
