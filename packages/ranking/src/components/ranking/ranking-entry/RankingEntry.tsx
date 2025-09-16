@@ -10,6 +10,7 @@ import {
     StyledRankingEntryElementLeft,
     StyledRankingEntryElementRight,
     StyledRankingEntryRightElement,
+    StyledRankingEntryRightElementPoints,
 } from './RankingEntry.styles';
 import { Accordion, AccordionContent, Icon } from '@chayns-components/core';
 import { IRankingEntry, RankingContentEntry, RankingContentHeadline } from '../../../types/ranking';
@@ -28,7 +29,7 @@ export type RankingEntryProps = {
 
 const RankingEntry: FC<RankingEntryProps> = ({
     rank,
-    name: fullname,
+    name: fullName,
     personId,
     icons,
     points,
@@ -49,13 +50,15 @@ const RankingEntry: FC<RankingEntryProps> = ({
         const titleElement = (
             <span>
                 <strong>{rank}. </strong>
-                {fullname}
+                {fullName}
             </span>
         );
 
         const rightElements = (
             <StyledRankingEntryRightElement>
-                {points}
+                <StyledRankingEntryRightElementPoints>
+                    {points}
+                </StyledRankingEntryRightElementPoints>
                 {icons && <Icon icons={icons} />}
                 <Icon
                     icons={isFriend ? ['fas fa-star'] : ['far fa-star']}
@@ -66,7 +69,7 @@ const RankingEntry: FC<RankingEntryProps> = ({
         );
 
         return { title: titleElement, rightElement: rightElements };
-    }, [handleIconClick, icons, isFriend, fullname, points, rank]);
+    }, [handleIconClick, icons, isFriend, fullName, points, rank]);
 
     const entryContent = useMemo(() => {
         if (!content) return null;
@@ -97,7 +100,7 @@ const RankingEntry: FC<RankingEntryProps> = ({
 
     return useMemo(
         () => (
-            <StyledRankingEntry>
+            <StyledRankingEntry $shouldShowLines={!entryContent}>
                 {entryContent ? (
                     <Accordion title="" titleElement={title} rightElement={rightElement}>
                         <AccordionContent>

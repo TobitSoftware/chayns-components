@@ -1,6 +1,20 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { WithTheme } from '@chayns-components/core';
 
-export const StyledRankingEntry = styled.div``;
+type StyledRankingEntryProps = WithTheme<{
+    $shouldShowLines: boolean;
+}>;
+
+export const StyledRankingEntry = styled.div<StyledRankingEntryProps>`
+    ${({ theme, $shouldShowLines }) =>
+        theme.accordionLines &&
+        $shouldShowLines &&
+        css`
+            &:not(:last-child) {
+                border-bottom: 1px solid rgba(${theme['headline-rgb']}, 0.5);
+            }
+        `}
+`;
 
 export const StyledRankingEntryElement = styled.div`
     display: flex;
@@ -19,6 +33,10 @@ export const StyledRankingEntryRightElement = styled.div`
     display: flex;
     gap: 8px;
     align-items: center;
+`;
+
+export const StyledRankingEntryRightElementPoints = styled.div`
+    line-height: 15px;
 `;
 
 export const StyledRankingEntryContent = styled.div`
