@@ -1,4 +1,4 @@
-import { action as brokenAction } from '@storybook/addon-actions';
+import { action as brokenAction, HandlerFunction } from '@storybook/addon-actions';
 import { ChaynsProvider } from 'chayns-api';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import PageProvider from '../packages/core/src/components/page-provider/PageProvider';
@@ -20,6 +20,7 @@ export const parameters = {
 };
 
 export const decorators = [
+    // @ts-ignore
     (Story, context) => {
         const colorMode = context.globals.backgrounds?.value || 0;
 
