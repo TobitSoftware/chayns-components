@@ -6,34 +6,34 @@ import RankingEntry from './ranking-entry/RankingEntry';
 
 export type RankingProps = {
     /**
-     *
+     * Array of ranking entries to be displayed in the ranking list.
      */
     entries: IRankingEntry[];
     /**
-     *
+     * Array of personIds that represent the user's friends.
      */
     friendPersonIds: string[];
     /**
-     *
-     * @param personId
+     * Callback function triggered when a friend is added to the friends list.
+     * @param personId - The ID of the person to be added as friend
      */
     onFriendAdd?: (personId: string) => void;
     /**
-     *
-     * @param personId
+     * Callback function triggered when a friend is removed from the friends list.
+     * @param personId - The ID of the person to be removed from friends
      */
     onFriendRemove?: (personId: string) => void;
     /**
-     *
+     * Callback function triggered when the visibility of friends is toggled.
      */
     onFriendVisibleChange?: () => void;
     /**
-     *
-     * @param value
+     * Callback function triggered when the search input value changes.
+     * @param value - The current search input value
      */
     onSearchChange?: (value: string) => void;
     /**
-     *
+     * The current value of the search input field.
      */
     searchValue?: string;
     /**
