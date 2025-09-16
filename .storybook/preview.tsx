@@ -2,6 +2,7 @@ import { action as brokenAction } from '@storybook/addon-actions';
 import { ChaynsProvider } from 'chayns-api';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import PageProvider from '../packages/core/src/components/page-provider/PageProvider';
+import React from 'react';
 
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
@@ -31,6 +32,8 @@ export const decorators = [
                 document.body.style.backgroundColor = '#FFFFFF';
             }
         }, [colorMode]);
+
+        document.body.style.height = '100vh';
 
         // region fix SyntheticEvents of React
         // This could be removed when the issue https://github.com/storybookjs/storybook/issues/6471 is fixed
@@ -80,7 +83,7 @@ export const decorators = [
         // endregion
 
         return (
-            <div style={{ maxWidth: '556px' }}>
+            <div style={{ maxWidth: '556px', height: '100%' }}>
                 <ChaynsProvider>
                     <PageProvider colorMode={colorMode} shouldRemovePadding>
                         <Story />
