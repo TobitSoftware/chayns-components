@@ -262,9 +262,10 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, [alignment, newContainer, pseudoSize, shouldScrollWithContent, yOffset]);
 
         useEffect(() => {
-            if (!newContainer) return;
+            if (!newContainer || !popupRef.current) return;
 
             const viewHeight = newContainer.clientHeight;
+            const childrenHeight = popupRef.current.getBoundingClientRect().height;
 
             if (
                 [
@@ -275,7 +276,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             ) {
                 setContentMaxHeight(coordinates.y - 20);
             } else {
-                setContentMaxHeight(viewHeight - coordinates.y - 20);
+                setContentMaxHeight(viewHeight - childrenHeight - coordinates.y - 20);
             }
         }, [coordinates.y, internalAlignment, newContainer]);
 

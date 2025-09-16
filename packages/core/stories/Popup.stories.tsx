@@ -19,8 +19,10 @@ export default {
 const Template: StoryFn<typeof Popup> = ({ ...args }) => (
     <>
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis et dui eget sapien
-            convallis tincidunt.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan sagittis dolor,
+            vitae iaculis lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
+            per inceptos himenaeos. Donec cursus, ipsum a consectetur pellentesque, leo tortor
+            vestibulum diam, in elementum arcu dui vitae nibh.
         </p>
         <Popup {...args}>
             <Button onClick={() => {}}>Popup öffnen</Button>
