@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FC, useCallback, useMemo } from 'react';
-import { StyledRanking } from './Ranking.styles';
+import { StyledRanking, StyledRankingLoadMoreButton } from './Ranking.styles';
 import { IRankingEntry } from '../../types/ranking';
-import { Accordion, AccordionGroup, Icon } from '@chayns-components/core';
+import { Accordion, AccordionContent, AccordionGroup, Button, Icon } from '@chayns-components/core';
 import RankingEntry from './ranking-entry/RankingEntry';
 
 export type RankingProps = {
@@ -13,6 +13,10 @@ export type RankingProps = {
      * Array of personIds that represent the user's friends.
      */
     friendPersonIds: string[];
+    /**
+     * Whether new data is loading.
+     */
+    isLoadingData?: boolean;
     /**
      * Callback function triggered when a friend is added to the friends list.
      * @param personId - The ID of the person to be added as friend
@@ -27,6 +31,10 @@ export type RankingProps = {
      * Callback function triggered when the visibility of friends is toggled.
      */
     onFriendVisibleChange?: () => void;
+    /**
+     * Callback function when the load more button is clicked.
+     */
+    onLoadMore?: () => void;
     /**
      * Callback function triggered when the search input value changes.
      * @param value - The current search input value
@@ -53,8 +61,10 @@ const Ranking: FC<RankingProps> = ({
     onFriendAdd,
     shouldShowOnlyFriends,
     friendPersonIds,
+    isLoadingData,
     onSearchChange,
     searchValue,
+    onLoadMore,
     onFriendVisibleChange,
 }) => {
     const content = useMemo(
@@ -101,13 +111,24 @@ const Ranking: FC<RankingProps> = ({
                     }
                 >
                     <AccordionGroup>{content}</AccordionGroup>
+                    {typeof onLoadMore === 'function' && (
+                        <AccordionContent>
+                            <StyledRankingLoadMoreButton>
+                                <Button onClick={onLoadMore} shouldShowWaitCursor={isLoadingData}>
+                                    Mehr
+                                </Button>
+                            </StyledRankingLoadMoreButton>
+                        </AccordionContent>
+                    )}
                 </Accordion>
             </StyledRanking>
         ),
         [
             content,
             handleSearchChange,
+            isLoadingData,
             onFriendVisibleChange,
+            onLoadMore,
             searchValue,
             shouldShowOnlyFriends,
             title,
