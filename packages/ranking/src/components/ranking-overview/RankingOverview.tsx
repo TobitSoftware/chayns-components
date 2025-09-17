@@ -18,13 +18,13 @@ export type RankingOverviewProps = {
     /**
      * The Rank of the current user.
      */
-    userRank: number;
+    userRank?: number;
 };
 
 const RankingOverview: FC<RankingOverviewProps> = ({ userRank, totalPlayers, suffix }) => (
     <StyledRankingOverview>
         <StyledRankingOverviewTitle>
-            Platz <AnimatedNumber value={userRank} />
+            Platz {userRank ? <AnimatedNumber value={userRank} /> : '-'}
         </StyledRankingOverviewTitle>
         <StyledRankingOverviewSubtitle>
             {suffix} von <AnimatedNumber value={totalPlayers} /> Mitspielern
