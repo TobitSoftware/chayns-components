@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, isValidElement, useCallback, useMemo } from 'react';
 import {
     StyledRankingEntry,
     StyledRankingEntryContent,
@@ -59,7 +59,8 @@ const RankingEntry: FC<RankingEntryProps> = ({
                 <StyledRankingEntryRightElementPoints>
                     {points}
                 </StyledRankingEntryRightElementPoints>
-                {icons && <Icon icons={icons} />}
+                {icons && !isValidElement(icons) && <Icon icons={icons as string[]} />}
+                {icons && isValidElement(icons) && icons}
                 <Icon
                     icons={isFriend ? ['fas fa-star'] : ['far fa-star']}
                     size={15}
