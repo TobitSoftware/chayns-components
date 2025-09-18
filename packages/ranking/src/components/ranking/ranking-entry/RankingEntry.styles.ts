@@ -25,7 +25,13 @@ export const StyledRankingEntryElement = styled.div`
     padding: 4px 6px;
 `;
 
-export const StyledRankingEntryElementLeft = styled.div``;
+export const StyledRankingEntryElementLeft = styled.div`
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+`;
 
 export const StyledRankingEntryElementRight = styled.div``;
 
