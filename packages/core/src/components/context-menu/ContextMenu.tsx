@@ -31,6 +31,7 @@ export type ContextMenuItem = {
     onClick: (event?: MouseEvent<HTMLDivElement>) => Promise<void> | void;
     isSelected?: boolean;
     text: string;
+    shouldShowSpacer?: boolean;
 };
 
 export type ContextMenuRef = {

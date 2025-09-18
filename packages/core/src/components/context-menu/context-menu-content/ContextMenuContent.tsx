@@ -7,7 +7,9 @@ import {
     StyledContextMenuContentItem,
     StyledContextMenuContentItemBorder,
     StyledContextMenuContentItemIconWrapper,
+    StyledContextMenuContentItemSpacer,
     StyledContextMenuContentItemText,
+    StyledContextMenuContentItemWrapper,
     StyledMotionContextMenuContent,
 } from './ContextMenuContent.styles';
 
@@ -84,24 +86,27 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
 
         const content = useMemo(
             () =>
-                items.map(({ onClick, key, text, icons }, index) => {
+                items.map(({ onClick, key, text, icons, shouldShowSpacer }, index) => {
                     const item = (
-                        <StyledContextMenuContentItem
-                            key={key}
-                            onClick={(event) => {
-                                event.preventDefault();
-                                event.stopPropagation();
+                        <StyledContextMenuContentItem>
+                            <StyledContextMenuContentItemWrapper
+                                key={key}
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    event.stopPropagation();
 
-                                void onClick(event);
-                            }}
-                            $shouldHidePopupArrow={shouldHidePopupArrow}
-                        >
-                            <StyledContextMenuContentItemIconWrapper>
-                                <Icon icons={icons} />
-                            </StyledContextMenuContentItemIconWrapper>
-                            <StyledContextMenuContentItemText>
-                                {text}
-                            </StyledContextMenuContentItemText>
+                                    void onClick(event);
+                                }}
+                                $shouldHidePopupArrow={shouldHidePopupArrow}
+                            >
+                                <StyledContextMenuContentItemIconWrapper>
+                                    <Icon icons={icons} />
+                                </StyledContextMenuContentItemIconWrapper>
+                                <StyledContextMenuContentItemText>
+                                    {text}
+                                </StyledContextMenuContentItemText>
+                            </StyledContextMenuContentItemWrapper>
+                            {shouldShowSpacer && <StyledContextMenuContentItemSpacer />}
                         </StyledContextMenuContentItem>
                     );
 

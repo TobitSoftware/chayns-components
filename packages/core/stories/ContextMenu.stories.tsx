@@ -20,6 +20,7 @@ export default {
                 key: 'show',
                 onClick: () => alert('Option "Einblenden" wurde geklickt...'),
                 text: 'Einblenden',
+                shouldShowSpacer: true,
             },
             {
                 icons: ['fa fa-trash'],

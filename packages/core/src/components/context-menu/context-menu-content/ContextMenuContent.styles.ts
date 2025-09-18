@@ -96,11 +96,30 @@ export const StyledMotionContextMenuContent = styled(
     }
 `;
 
-type StyledContextMenuContentItemProps = WithTheme<{
+export const StyledContextMenuContentItem = styled.div``;
+
+type StyledContextMenuContentItemSpacerProps = WithTheme<unknown>;
+
+export const StyledContextMenuContentItemSpacer = styled.div<StyledContextMenuContentItemSpacerProps>`
+    position: relative;
+    margin-bottom: 10px;
+
+    &:before {
+        position: absolute;
+        bottom: -5px;
+        height: 1px;
+        background-color: ${({ theme }) => theme['003']};
+        width: 100%;
+        left: 0;
+        content: '';
+    }
+`;
+
+type StyledContextMenuContentItemWrapperProps = WithTheme<{
     $shouldHidePopupArrow: boolean;
 }>;
 
-export const StyledContextMenuContentItem = styled.div<StyledContextMenuContentItemProps>`
+export const StyledContextMenuContentItemWrapper = styled.div<StyledContextMenuContentItemWrapperProps>`
     cursor: pointer;
     display: flex;
     padding: 5px 8px 5px 5px;
@@ -109,7 +128,7 @@ export const StyledContextMenuContentItem = styled.div<StyledContextMenuContentI
     margin: ${({ $shouldHidePopupArrow }) => ($shouldHidePopupArrow ? '3px' : 0)};
 
     &:hover {
-        background-color: ${({ theme }: StyledContextMenuContentItemProps) =>
+        background-color: ${({ theme }: StyledContextMenuContentItemWrapperProps) =>
             theme['secondary-103']};
     }
 `;
