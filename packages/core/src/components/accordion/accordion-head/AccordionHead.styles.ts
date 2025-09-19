@@ -109,8 +109,6 @@ export const StyledRightWrapper = styled.div<StyledRightWrapperProps>`
     margin-right: 5px;
     overflow: hidden;
     position: relative;
-
-    width: ${({ $isSearchActive }) => ($isSearchActive ? '40%' : undefined)};
 `;
 
 export const StyledMotionSearchWrapper = styled(motion.div)`
