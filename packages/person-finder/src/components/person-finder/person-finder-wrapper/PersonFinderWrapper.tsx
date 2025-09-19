@@ -176,7 +176,10 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
                     .flat()
                     .map(({ entries }) => entries)
                     .flat()
-                    .find((entry) => entry.id === id);
+                    .find(
+                        (entry) =>
+                            (typeof entry.id === 'string' ? entry.id : entry.id.toString()) === id,
+                    );
 
                 if (!selectedEntry) {
                     return;

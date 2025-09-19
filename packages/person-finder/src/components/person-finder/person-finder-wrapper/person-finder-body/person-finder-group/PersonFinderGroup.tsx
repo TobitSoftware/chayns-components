@@ -36,7 +36,8 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
     onRemove,
 }) => {
     const { loadMore, loadingState: loadingStateFromState } = usePersonFinder();
-    const areOnlyFriendsGiven = useOnlyFriends(entries);
+    const areOnlyFriendsGiven =
+        useOnlyFriends(entries) || filterKey === PersonFinderFilterTypes.UAC;
 
     const groupName = getGroupName(filterKey);
 

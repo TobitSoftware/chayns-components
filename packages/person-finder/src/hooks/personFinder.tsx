@@ -1,5 +1,11 @@
 import React, { RefObject, useEffect, useMemo, useState } from 'react';
-import { LoadingState, PersonEntry, PersonFinderEntry, SiteEntry } from '../types/personFinder';
+import {
+    LoadingState,
+    PersonEntry,
+    PersonFinderEntry,
+    SiteEntry,
+    UACEntry,
+} from '../types/personFinder';
 import { isSiteEntry } from '../utils/personFinder';
 import { VerificationBadge } from '@chayns-components/core';
 import { usePersonFinder } from '../components/PersonFinderProvider';
@@ -46,18 +52,27 @@ export const useClosestElementAbove = (containerRef: RefObject<HTMLElement>, ite
     return closestElement?.textContent;
 };
 
-export const usePersonFinderItem = (entry: PersonEntry | SiteEntry) => {
-    const isSite = isSiteEntry(entry);
+export const usePersonFinderItem = (entry: PersonFinderEntry) => {
+    if (typeof entry.id === 'number') {
+        const { name } = entry as UACEntry;
+
+        return {
+            title: name,
+            isSite: true,
+        };
+    }
+
+    const isSite = isSiteEntry(entry as PersonEntry | SiteEntry);
 
     const { url, commonSites, name, firstName, lastName, id, isVerified } = entry as PersonEntry &
         SiteEntry;
 
-    const imageUrl = `https://sub60.tobit.com/${isSite ? 'l' : 'u'}/${id}?size=120`;
+    const imageUrl = `https://sub60.tobit.com/${isSite ? 'l' : 'u'}/${id as string}?size=120`;
     const titleElement = isVerified && <VerificationBadge />;
-    const title = isSite ? name : `${firstName ?? ''} ${lastName ?? ''}`;
+    const title = isSite ? name : `${(firstName as string) ?? ''} ${(lastName as string) ?? ''}`;
     const subtitle = isSite
         ? url
-        : `chaynsID: ${id}${commonSites ? ` - ${commonSites} gemeinsame Sites` : ''}`;
+        : `chaynsID: ${id as string}${commonSites ? ` - ${commonSites as number} gemeinsame Sites` : ''}`;
 
     return {
         isSite,
@@ -89,7 +104,7 @@ export const useOnlyFriends = (entries: PersonFinderEntry[]) => {
 
         const friendIds = new Set(friends.map((friend) => friend.id));
 
-        return entries.every((entry) => friendIds.has(entry.id));
+        return entries.every((entry) => friendIds.has(entry.id as string));
     }, [entries, friends]);
 };
 
