@@ -19,6 +19,7 @@ export const StyledMotionMentionFinderPopup = styled(motion.div)<StyledMentionFi
     overflow-y: scroll;
     position: absolute;
     width: 100%;
+    z-index: 5;
 
     ${({ $popupAlignment }) => {
         switch ($popupAlignment) {
