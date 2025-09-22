@@ -203,57 +203,56 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                     </AreaContext.Provider>
                 ) : (
                     <LayoutGroup key={`accordionHeadLayoutGroup--${uuid}`}>
-                        <StyledMotionTitleWrapper key={`accordionHeadTitleWrapperWrapper--${uuid}`}>
-                            {/* I don't know why, but it fixes a glitch while animating the title.
-                            I guess it's the mode="sync" */}
-                            <AnimatePresence
-                                initial={false}
-                                mode="sync"
-                                key={`accordionHeadTitleWrapper--${uuid}`}
+                        <AnimatePresence
+                            initial={false}
+                            mode="sync"
+                            key={`accordionHeadTitleWrapper--${uuid}`}
+                        >
+                            <StyledMotionTitleWrapper
+                                key={`accordionHeadTitleWrapperWrapper--${uuid}`}
+                                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                                initial={
+                                    !shouldSkipAnimation
+                                        ? { scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }
+                                        : false
+                                }
+                                exit={
+                                    shouldSkipAnimation
+                                        ? {
+                                              opacity: 0,
+                                              transition: { duration: 0 },
+                                              transitionEnd: { display: 'none' },
+                                          }
+                                        : { scale: 1, opacity: 0 }
+                                }
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{
+                                    duration: shouldSkipAnimation ? 0 : 0.25,
+                                    opacity: { duration: 0 },
+                                }}
                             >
                                 <StyledMotionTitle
-                                    initial={
-                                        shouldSkipAnimation
-                                            ? false
-                                            : { scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }
-                                    }
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    exit={
-                                        shouldSkipAnimation
-                                            ? {
-                                                  opacity: 0,
-                                                  transition: { duration: 0 },
-                                                  transitionEnd: { display: 'none' },
-                                              }
-                                            : { opacity: 0 }
-                                    }
-                                    transition={{
-                                        duration: shouldSkipAnimation ? 0 : 0.25,
-                                        opacity: { duration: 0 },
-                                    }}
                                     $isOpen={isOpen}
                                     $isWrapped={isWrapped}
                                     $color={titleColor}
                                     $hasSearch={typeof onSearchChange === 'function'}
-                                    key={
-                                        isOpen && !isWrapped
-                                            ? `accordionHeadTitleBig--${uuid}`
-                                            : `accordionHeadTitle--${uuid}`
-                                    }
+                                    animate={{ fontSize: isOpen && !isWrapped ? '1.3rem' : '1rem' }}
+                                    initial={shouldSkipAnimation ? false : { fontSize: '1rem' }}
+                                    transition={{ duration: shouldSkipAnimation ? 0 : 0.25 }}
                                 >
                                     {title}
                                 </StyledMotionTitle>
-                            </AnimatePresence>
-                        </StyledMotionTitleWrapper>
-                        {titleElement && (
-                            <StyledMotionTitleElementWrapper
-                                layout
-                                key={`accordionTitleElement--${uuid}`}
-                                ref={titleElementWrapperRef}
-                            >
-                                {titleElement}
-                            </StyledMotionTitleElementWrapper>
-                        )}
+
+                                {titleElement && (
+                                    <StyledMotionTitleElementWrapper
+                                        key={`accordionTitleElement--${uuid}`}
+                                        ref={titleElementWrapperRef}
+                                    >
+                                        {titleElement}
+                                    </StyledMotionTitleElementWrapper>
+                                )}
+                            </StyledMotionTitleWrapper>
+                        </AnimatePresence>
                     </LayoutGroup>
                 )}
             </StyledMotionContentWrapper>
