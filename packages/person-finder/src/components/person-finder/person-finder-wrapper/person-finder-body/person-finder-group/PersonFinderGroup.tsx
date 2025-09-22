@@ -15,6 +15,7 @@ import {
 import { usePersonFinder } from '../../../../PersonFinderProvider';
 import PersonFinderItem from './person-finder-item/PersonFinderItem';
 import { useErrorMessage, useOnlyFriends } from '../../../../../hooks/personFinder';
+import PersonFinderSmallItem from './person-finder-small-item/PersonFinderSmallItem';
 
 export type PersonFinderGroupProps = {
     filterKey: PersonFinderFilterTypes;
@@ -36,7 +37,8 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
     onRemove,
 }) => {
     const { loadMore, loadingState: loadingStateFromState } = usePersonFinder();
-    const areOnlyFriendsGiven = useOnlyFriends(entries);
+    const areOnlyFriendsGiven =
+        useOnlyFriends(entries) || filterKey === PersonFinderFilterTypes.UAC;
 
     const groupName = getGroupName(filterKey);
 
@@ -81,14 +83,23 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
             )}
             {entries.length > 0 && (
                 <List>
-                    {entries.map((entry) => (
-                        <PersonFinderItem
-                            key={`person-finder-entry--${entry.id}`}
-                            entry={entry}
-                            onAdd={onAdd}
-                            onRemove={onRemove}
-                        />
-                    ))}
+                    {entries.map((entry) =>
+                        typeof entry.id === 'number' ? (
+                            <PersonFinderSmallItem
+                                key={`person-finder-entry--${entry.id}`}
+                                entry={entry}
+                                onAdd={onAdd}
+                                onRemove={onRemove}
+                            />
+                        ) : (
+                            <PersonFinderItem
+                                key={`person-finder-entry--${entry.id}`}
+                                entry={entry}
+                                onAdd={onAdd}
+                                onRemove={onRemove}
+                            />
+                        ),
+                    )}
                 </List>
             )}
             {waitCursor}

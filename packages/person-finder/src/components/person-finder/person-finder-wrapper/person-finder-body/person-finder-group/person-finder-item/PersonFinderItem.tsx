@@ -1,20 +1,22 @@
 import React, { FC, MouseEvent } from 'react';
 import { StyledPersonFinderItem } from './PersonFinderItem.styles';
 import { Icon, ListItem, Theme } from '@chayns-components/core';
-import { PersonEntry, SiteEntry } from '../../../../../../types/personFinder';
+import { PersonFinderEntry } from '../../../../../../types/personFinder';
 import { useFriends, usePersonFinderItem } from '../../../../../../hooks/personFinder';
 import { usePersonFinder } from '../../../../../PersonFinderProvider';
 import { useTheme } from 'styled-components';
 import { useUser } from 'chayns-api';
 
 export type PersonFinderItemProps = {
-    entry: PersonEntry | SiteEntry;
+    entry: PersonFinderEntry;
     onAdd: (id: string) => void;
     onRemove: (id: string) => void;
 };
 
 const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd, onRemove }) => {
-    const { id } = entry;
+    const { id: entryId } = entry;
+
+    const id = typeof entryId === 'string' ? entryId : entryId.toString();
 
     const { isSite, imageUrl, title, subtitle, titleElement } = usePersonFinderItem(entry);
     const { isFriend, addFriend, removeFriend } = useFriends(id);
@@ -62,7 +64,7 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd, onRemove })
             <ListItem
                 title={title}
                 subtitle={subtitle}
-                images={[imageUrl]}
+                images={imageUrl ? [imageUrl] : undefined}
                 titleElement={titleElement}
                 shouldShowRoundImageOrIcon={!isSite}
                 rightElements={!isSite && id !== user.personId ? rightElements : undefined}

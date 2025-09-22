@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import PersonFinder from '../src/components/person-finder/PersonFinder';
 import React from 'react';
+import { PersonFinderFilterTypes } from '../src';
 
 export default {
     title: 'PersonFinder/PersonFinder',
@@ -11,3 +12,9 @@ export default {
 const Template: StoryFn<typeof PersonFinder> = ({ ...args }) => <PersonFinder {...args} />;
 
 export const General = Template.bind({});
+
+export const UACGroups = Template.bind({});
+
+UACGroups.args = {
+    filterTypes: [PersonFinderFilterTypes.UAC],
+};

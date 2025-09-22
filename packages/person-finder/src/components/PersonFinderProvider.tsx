@@ -22,12 +22,14 @@ import {
     PersonFinderFilterTypes,
     Priority,
     ThrottledFunction,
+    UACEntry,
 } from '../types/personFinder';
 import { getFriends } from '../api/friends/get';
 import { postFriends } from '../api/friends/post';
 import { deleteFriends } from '../api/friends/delete';
 import { filterDataByKeys, loadData } from '../utils/personFinder';
 import { Tag } from '@chayns-components/core/lib/types/types/tagInput';
+import { getUACGroups } from '../utils/uac';
 
 const THROTTLE_INTERVAL = 500;
 
@@ -202,6 +204,10 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     }, []);
 
     useEffect(() => {
+        if (!filterTypes.includes(PersonFinderFilterTypes.PERSON)) {
+            return;
+        }
+
         void getFriends().then((result) => {
             if (result) {
                 setFriends(
@@ -216,7 +222,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 );
             }
         });
-    }, []);
+    }, [filterTypes]);
 
     const latestArgsRef = useRef<{ search: string; filter: PersonFinderFilterTypes[] } | null>(
         null,
@@ -227,6 +233,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         throttle(
             async () => {
                 const args = latestArgsRef.current;
+
                 if (!args) return;
 
                 const { search: searchString, filter } = args;
@@ -260,7 +267,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                     ) {
                         const friendIds = new Set(friends.map((f) => f.id));
                         const serverFriendEntries = value.entries.filter((entry) =>
-                            friendIds.has(entry.id),
+                            friendIds.has(entry.id as string),
                         );
                         const serverFriendIds = new Set(serverFriendEntries.map((f) => f.id));
 
@@ -275,7 +282,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                             );
 
                         const otherEntries = value.entries.filter(
-                            (entry) => !friendIds.has(entry.id),
+                            (entry) => !friendIds.has(entry.id as string),
                         );
 
                         updateData(key, {
@@ -297,14 +304,48 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         ),
     ).current;
 
+    const searchData = useCallback(
+        ({ filter }: { filter: PersonFinderFilterTypes[] }) => {
+            filter.forEach((key) => {
+                updateLoadingState(key, LoadingState.Pending);
+
+                if (data && data[key]) {
+                    // Add all Types that are not searched by a request
+                    const entries = data[key].entries as UACEntry[];
+
+                    const filteredEntries = entries.filter(({ name }) =>
+                        name.toLowerCase().includes(search.toLowerCase()),
+                    );
+
+                    updateData(key, {
+                        entries: filteredEntries,
+                        searchString: search,
+                        count: filteredEntries.length,
+                        skip: filteredEntries.length,
+                    });
+
+                    updateLoadingState(
+                        key,
+                        filteredEntries.length === 0 ? LoadingState.Error : LoadingState.Success,
+                    );
+                }
+            });
+        },
+        [data, search, updateData, updateLoadingState],
+    );
+
     useEffect(() => {
         if (!search) return;
 
         const active = activeFilter ?? filterTypes;
 
-        latestArgsRef.current = { search, filter: active };
+        if (active?.includes(PersonFinderFilterTypes.UAC)) {
+            searchData({ filter: [PersonFinderFilterTypes.UAC] });
+        } else {
+            latestArgsRef.current = { search, filter: active };
 
-        throttledRequest();
+            throttledRequest();
+        }
     }, [
         filterTypes,
         search,
@@ -314,6 +355,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         updateData,
         updateLoadingState,
         throttledRequest,
+        searchData,
     ]);
 
     useEffect(
@@ -325,7 +367,25 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
     // load initial data
     useEffect(() => {
-        if (friendsPriority === Priority.HIGH && friends && search === '') {
+        if (filterTypes.includes(PersonFinderFilterTypes.UAC)) {
+            void getUACGroups().then((result) => {
+                setData({
+                    uac: {
+                        entries: result,
+                        searchString: '',
+                        skip: result.length,
+                        count: result.length,
+                    },
+                });
+            });
+        }
+
+        if (
+            friendsPriority === Priority.HIGH &&
+            filterTypes.includes(PersonFinderFilterTypes.PERSON) &&
+            friends &&
+            search === ''
+        ) {
             setData({
                 person: {
                     entries: friends,
@@ -335,7 +395,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 },
             });
         }
-    }, [friends, friendsPriority, search]);
+    }, [filterTypes, friends, friendsPriority, search]);
 
     const providerValue = useMemo<IPersonFinderContext>(
         () => ({

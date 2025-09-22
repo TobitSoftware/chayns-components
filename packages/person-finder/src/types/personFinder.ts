@@ -1,6 +1,7 @@
 export enum PersonFinderFilterTypes {
     PERSON = 'person',
     SITE = 'site',
+    UAC = 'uac',
 }
 
 export enum Priority {
@@ -33,7 +34,7 @@ export interface DefaultEntry {
     name: string;
 }
 
-export type PersonFinderEntry = PersonEntry | SiteEntry;
+export type PersonFinderEntry = PersonEntry | SiteEntry | UACEntry;
 
 export interface PersonEntry {
     id: string;
@@ -49,6 +50,12 @@ export interface SiteEntry {
     url: string;
     name: string;
     type: PersonFinderFilterTypes.SITE;
+}
+
+export interface UACEntry {
+    id: number;
+    name: string;
+    isSystemGroup: boolean;
 }
 
 export interface SiteEntryResult {
