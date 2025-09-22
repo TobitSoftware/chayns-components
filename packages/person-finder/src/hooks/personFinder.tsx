@@ -53,15 +53,6 @@ export const useClosestElementAbove = (containerRef: RefObject<HTMLElement>, ite
 };
 
 export const usePersonFinderItem = (entry: PersonFinderEntry) => {
-    if (typeof entry.id === 'number') {
-        const { name } = entry as UACEntry;
-
-        return {
-            title: name,
-            isSite: true,
-        };
-    }
-
     const isSite = isSiteEntry(entry as PersonEntry | SiteEntry);
 
     const { url, commonSites, name, firstName, lastName, id, isVerified } = entry as PersonEntry &
@@ -80,6 +71,14 @@ export const usePersonFinderItem = (entry: PersonFinderEntry) => {
         subtitle,
         imageUrl,
         titleElement,
+    };
+};
+
+export const usePersonFinderSmallItem = (entry: PersonFinderEntry) => {
+    const { name } = entry as UACEntry;
+
+    return {
+        title: name,
     };
 };
 
