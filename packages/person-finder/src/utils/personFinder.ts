@@ -156,13 +156,15 @@ export const loadData = async ({
 
             const data = await getSites({ search: searchString, skip });
 
+            const filteredList = data?.list.filter(({ siteId }) => siteId !== null);
+
             return {
                 key: PersonFinderFilterTypes.SITE,
                 value: {
                     searchString,
                     count: data?.count ?? 0,
-                    skip: skip + (data?.list?.length ?? 0),
-                    entries: convertSiteEntry(data?.list ?? []),
+                    skip: skip + (filteredList?.length ?? 0),
+                    entries: convertSiteEntry(filteredList ?? []),
                 },
             };
         }
