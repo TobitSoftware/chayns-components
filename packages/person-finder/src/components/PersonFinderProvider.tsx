@@ -111,6 +111,8 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         [PersonFinderFilterTypes.SITE]: LoadingState.None,
     });
 
+    const dataRef = useRef<IPersonFinderContext['data']>();
+
     const updateActiveFilter = useCallback((filter: IPersonFinderContext['activeFilter']) => {
         setActiveFilter(filter);
     }, []);
@@ -304,14 +306,20 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         ),
     ).current;
 
+    useEffect(() => {
+        dataRef.current = data;
+    }, [data]);
+
     const searchData = useCallback(
         ({ filter }: { filter: PersonFinderFilterTypes[] }) => {
+            const tmpData = dataRef.current;
+
             filter.forEach((key) => {
                 updateLoadingState(key, LoadingState.Pending);
 
-                if (data && data[key]) {
+                if (tmpData && tmpData[key]) {
                     // Add all Types that are not searched by a request
-                    const entries = data[key].entries as UACEntry[];
+                    const entries = tmpData[key].entries as UACEntry[];
 
                     const filteredEntries = entries.filter(({ name }) =>
                         name.toLowerCase().includes(search.toLowerCase()),
@@ -331,7 +339,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 }
             });
         },
-        [data, search, updateData, updateLoadingState],
+        [search, updateData, updateLoadingState],
     );
 
     useEffect(() => {
@@ -367,7 +375,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
     // load initial data
     useEffect(() => {
-        if (filterTypes.includes(PersonFinderFilterTypes.UAC)) {
+        if (filterTypes.includes(PersonFinderFilterTypes.UAC) && search === '') {
             void getUACGroups().then((result) => {
                 setData({
                     uac: {
