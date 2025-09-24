@@ -28,7 +28,7 @@ export type SelectButtonProps = {
     /**
      * Function to be executed after an item is selected.
      */
-    onSelect?: (ids: number[]) => void;
+    onSelect?: (ids: (number | string)[]) => void;
     /**
      * If a string is given and `shouldAllowMultiSelect` is true, the dialog displays a checkbox to select all items at once.
      */
@@ -36,7 +36,7 @@ export type SelectButtonProps = {
     /**
      * The id of an item that should be preselected.
      */
-    selectedItemIds?: number[];
+    selectedItemIds?: (number | string)[];
     /**
      * Whether more than one item should be selectable.
      */
@@ -134,7 +134,7 @@ const SelectButton: FC<SelectButtonProps> = ({
                     // Ignore because there is no type
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    onSelect((result.result as string[]).map(Number));
+                    onSelect(result.result);
                 }
             });
     };

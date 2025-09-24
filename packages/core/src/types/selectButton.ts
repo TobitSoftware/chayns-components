@@ -1,4 +1,4 @@
 export interface SelectButtonItem {
     text: string;
-    id: number;
+    id: number | string;
 }
