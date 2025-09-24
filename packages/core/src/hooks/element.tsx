@@ -12,18 +12,25 @@ import React, {
 
 interface UseElementSizeOptions {
     shouldUseChildElement?: boolean;
+    shouldUseParentElement?: boolean;
 }
 
 export const useElementSize = (
     ref: MutableRefObject<HTMLDivElement | HTMLLabelElement | null>,
-    { shouldUseChildElement = false }: UseElementSizeOptions = {},
+    { shouldUseChildElement = false, shouldUseParentElement = false }: UseElementSizeOptions = {},
 ): DOMRectReadOnly | undefined => {
     const [size, setSize] = useState<DOMRectReadOnly>();
 
     useEffect(() => {
-        const target = (
-            shouldUseChildElement ? ref.current?.firstElementChild : ref.current
-        ) as HTMLElement | null;
+        let target = ref.current as HTMLElement | null;
+
+        if (shouldUseParentElement) {
+            target = ref.current?.parentElement as HTMLElement | null;
+        }
+
+        if (shouldUseChildElement) {
+            target = ref.current?.firstElementChild as HTMLElement | null;
+        }
 
         if (!target) return () => {};
 
@@ -42,7 +49,7 @@ export const useElementSize = (
         observer.observe(target);
 
         return () => observer.disconnect();
-    }, [ref, shouldUseChildElement]);
+    }, [ref, shouldUseChildElement, shouldUseParentElement]);
 
     return size;
 };

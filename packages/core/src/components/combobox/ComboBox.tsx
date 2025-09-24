@@ -36,6 +36,7 @@ import {
 } from './ComboBox.styles';
 import DropdownBodyWrapper from '../dropdown-body-wrapper/DropdownBodyWrapper';
 import { DropdownDirection } from '../../types/dropdown';
+import { useElementSize } from '../../hooks/element';
 
 export interface IComboBoxItems {
     groupName?: string;
@@ -177,6 +178,8 @@ const ComboBox: FC<ComboBoxProps> = ({
     const styledComboBoxElementRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
 
+    const parentSize = useElementSize(styledComboBoxElementRef, { shouldUseParentElement: true });
+
     const functions = useFunctions();
     const values = useValues();
 
@@ -185,6 +188,12 @@ const ComboBox: FC<ComboBoxProps> = ({
     const { browser } = useDevice();
 
     const areaProvider = useContext(AreaContext);
+
+    useEffect(() => {
+        if (shouldUseFullWidth && parentSize) {
+            setMinWidth(parentSize.width);
+        }
+    }, [parentSize, shouldUseFullWidth]);
 
     const shouldChangeColor = useMemo(
         () => areaProvider.shouldChangeColor ?? false,
