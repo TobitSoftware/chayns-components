@@ -61,20 +61,13 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
         if ($shouldShowTransparentBackground) {
             if (theme.colorMode === 'dark') {
                 return css`
-                    border-color: rgba(0, 0, 0, 0.5);
-                    background-color: transparent;
-                `;
-            }
-
-            if (theme.colorMode === 'light') {
-                return css`
                     border-color: rgba(255, 255, 255, 0.5);
                     background-color: transparent;
                 `;
             }
 
             return css`
-                border-color: rgba(160, 160, 160, 0.5);
+                border-color: rgba(0, 0, 0, 0.5);
                 background-color: transparent;
             `;
         }

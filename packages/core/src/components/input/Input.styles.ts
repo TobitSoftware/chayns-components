@@ -42,18 +42,12 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
         if ($shouldShowTransparentBackground) {
             if (theme.colorMode === 'dark') {
                 return css`
-                    border-color: rgba(0, 0, 0, 0.5);
-                `;
-            }
-
-            if (theme.colorMode === 'light') {
-                return css`
                     border-color: rgba(255, 255, 255, 0.5);
                 `;
             }
 
             return css`
-                border-color: rgba(160, 160, 160, 0.5);
+                border-color: rgba(0, 0, 0, 0.5);
             `;
         }
 

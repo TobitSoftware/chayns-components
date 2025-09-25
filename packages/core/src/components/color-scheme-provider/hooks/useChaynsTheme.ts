@@ -62,6 +62,26 @@ const createTheme = ({
         });
     }
 
+    if (designSettings) {
+        Object.keys(designSettings).forEach((key) => {
+            if (key === 'iconStyle') {
+                result[key] = convertIconStyle(designSettings.iconStyle);
+
+                return;
+            }
+            result[key] = designSettings[key as keyof ChaynsDesignSettings] as string;
+        });
+    }
+
+    if (paragraphFormat) {
+        const { themeResult } = getHeadlineColorSelector(paragraphFormat);
+
+        // Update Theme
+        Object.keys(themeResult).forEach((key) => {
+            result[key] = themeResult[key] as string;
+        });
+    }
+
     switch (colorMode) {
         case ColorMode.Light:
             result.colorMode = 'light';
@@ -73,24 +93,7 @@ const createTheme = ({
             result.colorMode = 'classic';
             break;
     }
-    if (designSettings) {
-        Object.keys(designSettings).forEach((key) => {
-            if (key === 'iconStyle') {
-                result[key] = convertIconStyle(designSettings.iconStyle);
 
-                return;
-            }
-            result[key] = designSettings[key as keyof ChaynsDesignSettings] as string;
-        });
-    }
-    if (paragraphFormat) {
-        const { themeResult } = getHeadlineColorSelector(paragraphFormat);
-
-        // Update Theme
-        Object.keys(themeResult).forEach((key) => {
-            result[key] = themeResult[key] as string;
-        });
-    }
     result.fontSize = (designSettings?.fontSizePx || 15) as unknown as string;
 
     return result;
