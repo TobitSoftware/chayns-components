@@ -21,14 +21,14 @@ export const useDropdownListener = ({
         document.addEventListener('touchend', onTouchEnd, true);
         document.addEventListener('touchstart', onTouchStart, true);
 
-        window.addEventListener('blur', () => onClose(), true);
+        window.addEventListener('blur', onClose);
 
         return () => {
             document.removeEventListener('click', onClick, true);
             document.removeEventListener('touchend', onTouchEnd, true);
             document.removeEventListener('touchstart', onTouchStart, true);
 
-            window.addEventListener('blur', () => onClose(), true);
+            window.removeEventListener('blur', onClose);
         };
     }, [onClick, onClose, onTouchEnd, onTouchStart]);
 };
