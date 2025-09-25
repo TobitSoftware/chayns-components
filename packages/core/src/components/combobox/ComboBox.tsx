@@ -128,6 +128,10 @@ export type ComboBoxProps = {
      */
     shouldShowClearIcon?: boolean;
     /**
+     * Whether the background should be transparent.
+     */
+    shouldShowTransparentBackground?: boolean;
+    /**
      * If true, the images of the items are displayed in a round shape.
      */
     shouldShowRoundImage?: boolean;
@@ -164,6 +168,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     onInputChange,
     shouldUseCurrentItemWidth = false,
     onInputBlur,
+    shouldShowTransparentBackground = false,
     inputValue,
     shouldDropDownUseMaxItemWidth = false,
 }) => {
@@ -567,6 +572,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                     onClick={handleHeaderClick}
                     $isOpen={isAnimating}
                     $isTouch={isTouch}
+                    $shouldShowTransparentBackground={shouldShowTransparentBackground}
                     $isDisabled={isDisabled}
                     $shouldChangeColor={shouldChangeColor}
                     $shouldShowBigImage={shouldShowBigImage}
@@ -652,6 +658,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             handleHeaderClick,
             isAnimating,
             isTouch,
+            shouldShowTransparentBackground,
             isDisabled,
             shouldChangeColor,
             shouldShowBigImage,

@@ -18,20 +18,49 @@ type StyledInputContentWrapperProps = WithTheme<{
     $shouldShowOnlyBottomBorder?: boolean;
     $isInvalid?: boolean;
     $size: InputSize;
+    $shouldShowTransparentBackground: boolean;
 }>;
 
 export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
     align-items: center;
     background-color: ${({ theme, $backgroundColor }: StyledInputContentWrapperProps) =>
         $backgroundColor ?? theme['100']};
-    border: 1px solid
-        ${({ theme, $isInvalid }: StyledInputContentWrapperProps) =>
-            $isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)'};
+    border: 1px solid transparent;
     color: ${({ theme }: StyledInputContentWrapperProps) => theme['006']};
     display: flex;
     justify-content: space-between;
     width: 100%;
     transition: opacity 0.3s ease;
+
+    ${({ theme, $isInvalid, $shouldShowTransparentBackground }) => {
+        if ($isInvalid) {
+            return css`
+                border-color: ${theme.wrong};
+            `;
+        }
+
+        if ($shouldShowTransparentBackground) {
+            if (theme.colorMode === 'dark') {
+                return css`
+                    border-color: rgba(0, 0, 0, 0.5);
+                `;
+            }
+
+            if (theme.colorMode === 'light') {
+                return css`
+                    border-color: rgba(255, 255, 255, 0.5);
+                `;
+            }
+
+            return css`
+                border-color: rgba(160, 160, 160, 0.5);
+            `;
+        }
+
+        return css`
+            border-color: rgba(160, 160, 160, 0.3);
+        `;
+    }}
 
     ${({ $size }) =>
         $size === 'small' &&

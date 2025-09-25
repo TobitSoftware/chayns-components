@@ -144,6 +144,10 @@ export type InputProps = {
      */
     shouldShowOnlyBottomBorder?: boolean;
     /**
+     * Whether the background should be transparent.
+     */
+    shouldShowTransparentBackground?: boolean;
+    /**
      * If true, the input field is focused when the component is mounted
      */
     shouldUseAutoFocus?: boolean;
@@ -185,6 +189,7 @@ const Input = forwardRef<InputRef, InputProps>(
             isInvalid = false,
             shouldPreventPlaceholderAnimation = false,
             id,
+            shouldShowTransparentBackground = false,
             autoComplete,
         },
         ref,
@@ -251,7 +256,9 @@ const Input = forwardRef<InputRef, InputProps>(
         let backgroundColor: CSSProperties['backgroundColor'] | undefined;
         let color: CSSProperties['color'] | undefined;
 
-        if (
+        if (shouldShowTransparentBackground) {
+            backgroundColor = 'transparent';
+        } else if (
             areaProvider.contentCardType &&
             [ContentCardType.Error, ContentCardType.Success, ContentCardType.Warning].includes(
                 areaProvider.contentCardType,
@@ -282,6 +289,7 @@ const Input = forwardRef<InputRef, InputProps>(
         return (
             <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
                 <StyledInputContentWrapper
+                    $shouldShowTransparentBackground={shouldShowTransparentBackground}
                     $backgroundColor={backgroundColor}
                     $isInvalid={isInvalid}
                     $shouldRoundRightCorners={shouldShowBorder}

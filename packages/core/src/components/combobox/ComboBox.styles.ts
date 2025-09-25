@@ -46,17 +46,46 @@ type StyledComboBoxHeaderProps = WithTheme<{
     $isDisabled?: boolean;
     $shouldChangeColor: boolean;
     $shouldShowBigImage: ComboBoxProps['shouldShowBigImage'];
+    $shouldShowTransparentBackground: boolean;
 }>;
 
 export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     display: flex;
-    background-color: ${({ theme, $shouldChangeColor }: StyledComboBoxHeaderProps) =>
-        theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
-    border: 1px solid rgba(160, 160, 160, 0.3);
+    border: 1px solid transparent;
     cursor: ${({ $isDisabled }) => (!$isDisabled ? 'pointer' : 'default')};
     justify-content: space-between;
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     transition: background-color 0.2s ease-in-out;
+
+    ${({ theme, $shouldShowTransparentBackground, $shouldChangeColor }) => {
+        if ($shouldShowTransparentBackground) {
+            if (theme.colorMode === 'dark') {
+                return css`
+                    border-color: rgba(0, 0, 0, 0.5);
+                    background-color: transparent;
+                `;
+            }
+
+            if (theme.colorMode === 'light') {
+                return css`
+                    border-color: rgba(255, 255, 255, 0.5);
+                    background-color: transparent;
+                `;
+            }
+
+            return css`
+                border-color: rgba(160, 160, 160, 0.5);
+                background-color: transparent;
+            `;
+        }
+
+        return css`
+            border-color: rgba(160, 160, 160, 0.3);
+            background-color: ${theme.colorMode === 'classic' || $shouldChangeColor
+                ? theme['000']
+                : theme['100']};
+        `;
+    }}
 
     ${({ $shouldShowBigImage }) =>
         $shouldShowBigImage &&
