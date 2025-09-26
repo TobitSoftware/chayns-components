@@ -40,6 +40,7 @@ export {
     type ComboBoxTextStyles,
     type IComboBoxItem as ComboBoxItem,
     type IComboBoxItems as ComboBoxItems,
+    type ComboBoxRef,
 } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as HighlightSLider } from './components/highlight-slider/HighlightSlider';

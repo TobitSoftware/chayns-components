@@ -4,12 +4,14 @@ import React, {
     type CSSProperties,
     FC,
     FocusEventHandler,
+    forwardRef,
     Fragment,
     ReactHTML,
     type ReactNode,
     useCallback,
     useContext,
     useEffect,
+    useImperativeHandle,
     useMemo,
     useRef,
     useState,
@@ -37,6 +39,11 @@ import {
 import DropdownBodyWrapper from '../dropdown-body-wrapper/DropdownBodyWrapper';
 import { DropdownDirection } from '../../types/dropdown';
 import { useElementSize } from '../../hooks/element';
+
+export interface ComboBoxRef {
+    hide: VoidFunction;
+    show: VoidFunction;
+}
 
 export interface IComboBoxItems {
     groupName?: string;
@@ -149,544 +156,567 @@ export type ComboBoxProps = {
     shouldDropDownUseMaxItemWidth?: boolean;
 };
 
-const ComboBox: FC<ComboBoxProps> = ({
-    bodyWidth,
-    direction = DropdownDirection.RIGHT,
-    isDisabled = false,
-    lists,
-    maxHeight = 280,
-    onSelect,
-    placeholder,
-    prefix,
-    container,
-    selectedItem,
-    shouldShowBigImage,
-    shouldShowClearIcon,
-    shouldShowRoundImage,
-    onInputFocus,
-    shouldUseFullWidth = false,
-    onInputChange,
-    shouldUseCurrentItemWidth = false,
-    onInputBlur,
-    shouldShowTransparentBackground = false,
-    inputValue,
-    shouldDropDownUseMaxItemWidth = false,
-}) => {
-    const [internalSelectedItem, setInternalSelectedItem] = useState<IComboBoxItem>();
-    const [isAnimating, setIsAnimating] = useState(false);
-    const [minWidth, setMinWidth] = useState<number | undefined>(undefined);
-    const [bodyMinWidth, setBodyMinWidth] = useState(0);
-    const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
+    (
+        {
+            bodyWidth,
+            direction = DropdownDirection.RIGHT,
+            isDisabled = false,
+            lists,
+            maxHeight = 280,
+            onSelect,
+            placeholder,
+            prefix,
+            container,
+            selectedItem,
+            shouldShowBigImage,
+            shouldShowClearIcon,
+            shouldShowRoundImage,
+            onInputFocus,
+            shouldUseFullWidth = false,
+            onInputChange,
+            shouldUseCurrentItemWidth = false,
+            onInputBlur,
+            shouldShowTransparentBackground = false,
+            inputValue,
+            shouldDropDownUseMaxItemWidth = false,
+        },
+        ref,
+    ) => {
+        const [internalSelectedItem, setInternalSelectedItem] = useState<IComboBoxItem>();
+        const [isAnimating, setIsAnimating] = useState(false);
+        const [minWidth, setMinWidth] = useState<number | undefined>(undefined);
+        const [bodyMinWidth, setBodyMinWidth] = useState(0);
+        const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
-    const isInputFocused = useRef(false);
+        const isInputFocused = useRef(false);
 
-    const styledComboBoxElementRef = useRef<HTMLDivElement>(null);
-    const contentRef = useRef<HTMLDivElement | null>(null);
+        const styledComboBoxElementRef = useRef<HTMLDivElement>(null);
+        const contentRef = useRef<HTMLDivElement | null>(null);
 
-    const parentSize = useElementSize(styledComboBoxElementRef, { shouldUseParentElement: true });
+        const parentSize = useElementSize(styledComboBoxElementRef, {
+            shouldUseParentElement: true,
+        });
 
-    const functions = useFunctions();
-    const values = useValues();
+        const functions = useFunctions();
+        const values = useValues();
 
-    const isTouch = getIsTouch();
+        const isTouch = getIsTouch();
 
-    const { browser } = useDevice();
+        const { browser } = useDevice();
 
-    const areaProvider = useContext(AreaContext);
+        const areaProvider = useContext(AreaContext);
 
-    useEffect(() => {
-        if (shouldUseFullWidth && parentSize) {
-            setMinWidth(parentSize.width);
-        }
-    }, [parentSize, shouldUseFullWidth]);
+        useEffect(() => {
+            if (shouldUseFullWidth && parentSize) {
+                setMinWidth(parentSize.width);
+            }
+        }, [parentSize, shouldUseFullWidth]);
 
-    const shouldChangeColor = useMemo(
-        () => areaProvider.shouldChangeColor ?? false,
-        [areaProvider.shouldChangeColor],
-    );
-
-    const shouldDisableActions = useMemo(() => {
-        if (!selectedItem) {
-            return false;
-        }
-
-        const combinedLists = lists.flatMap((list) => list.list);
-
-        return (
-            combinedLists.length === 1 &&
-            combinedLists.some((item) => item.value === selectedItem.value)
+        const shouldChangeColor = useMemo(
+            () => areaProvider.shouldChangeColor ?? false,
+            [areaProvider.shouldChangeColor],
         );
-    }, [lists, selectedItem]);
 
-    const contentHeight = useMemo(() => {
-        const flatItems = lists.flatMap((list) => list.list);
-
-        let result = flatItems.length * 36;
-
-        if (lists.length > 1) {
-            result += lists.length * 36;
-        }
-
-        if (maxHeight < result) {
-            result = maxHeight;
-        }
-
-        return result;
-    }, [lists, maxHeight]);
-
-    const handleInputFocus: FocusEventHandler<HTMLInputElement> = useCallback(
-        (event) => {
-            isInputFocused.current = true;
-            onInputFocus?.(event);
-        },
-        [onInputFocus],
-    );
-
-    const handleInputBlur: FocusEventHandler<HTMLInputElement> = useCallback(
-        (event) => {
-            isInputFocused.current = false;
-            onInputBlur?.(event);
-        },
-        [onInputBlur],
-    );
-
-    const handleOpen = useCallback(() => {
-        setIsAnimating(true);
-    }, []);
-
-    const handleClose = useCallback(() => {
-        setIsAnimating(false);
-    }, []);
-
-    /**
-     * This function sets the selected item
-     */
-    const handleSetSelectedItem = useCallback(
-        (itemToSelect?: IComboBoxItem) => {
-            if (typeof onSelect === 'function') {
-                const onSelectResult = onSelect(itemToSelect);
-
-                if (onSelectResult === false) {
-                    return;
-                }
-
-                if (onSelectResult instanceof Promise) {
-                    void onSelectResult.then((shouldPreventSelection) => {
-                        if (shouldPreventSelection) return;
-
-                        setInternalSelectedItem(itemToSelect);
-                        setIsAnimating(false);
-                    });
-
-                    return;
-                }
+        const shouldDisableActions = useMemo(() => {
+            if (!selectedItem) {
+                return false;
             }
 
-            setInternalSelectedItem(itemToSelect);
+            const combinedLists = lists.flatMap((list) => list.list);
+
+            return (
+                combinedLists.length === 1 &&
+                combinedLists.some((item) => item.value === selectedItem.value)
+            );
+        }, [lists, selectedItem]);
+
+        const contentHeight = useMemo(() => {
+            const flatItems = lists.flatMap((list) => list.list);
+
+            let result = flatItems.length * 36;
+
+            if (lists.length > 1) {
+                result += lists.length * 36;
+            }
+
+            if (maxHeight < result) {
+                result = maxHeight;
+            }
+
+            return result;
+        }, [lists, maxHeight]);
+
+        const handleInputFocus: FocusEventHandler<HTMLInputElement> = useCallback(
+            (event) => {
+                isInputFocused.current = true;
+                onInputFocus?.(event);
+            },
+            [onInputFocus],
+        );
+
+        const handleInputBlur: FocusEventHandler<HTMLInputElement> = useCallback(
+            (event) => {
+                isInputFocused.current = false;
+                onInputBlur?.(event);
+            },
+            [onInputBlur],
+        );
+
+        const handleOpen = useCallback(() => {
+            setIsAnimating(true);
+        }, []);
+
+        const handleClose = useCallback(() => {
             setIsAnimating(false);
-        },
-        [onSelect],
-    );
+        }, []);
 
-    const handleClear = useCallback(
-        (event: React.MouseEvent<HTMLDivElement>) => {
-            event.preventDefault();
-            event.stopPropagation();
+        /**
+         * This function sets the selected item
+         */
+        const handleSetSelectedItem = useCallback(
+            (itemToSelect?: IComboBoxItem) => {
+                if (typeof onSelect === 'function') {
+                    const onSelectResult = onSelect(itemToSelect);
 
-            handleSetSelectedItem(undefined);
-        },
-        [handleSetSelectedItem],
-    );
-
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (!isAnimating) return;
-
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-                e.preventDefault();
-
-                const children = contentRef.current?.children;
-
-                if (!children || children.length === 0) return;
-
-                const stepDirection = e.key === 'ArrowUp' ? -1 : 1;
-
-                let newIndex = focusedIndex ?? -1;
-
-                let attempts = 0;
-
-                do {
-                    newIndex = (newIndex + stepDirection + children.length) % children.length;
-
-                    const newElement = children[newIndex] as HTMLDivElement;
-
-                    let shouldSkip = false;
-
-                    if (
-                        newElement.id.startsWith('combobox-group--') ||
-                        newElement.id.endsWith('--disabled-item')
-                    ) {
-                        shouldSkip = true;
+                    if (onSelectResult === false) {
+                        return;
                     }
 
-                    if (!shouldSkip) break;
+                    if (onSelectResult instanceof Promise) {
+                        void onSelectResult.then((shouldPreventSelection) => {
+                            if (shouldPreventSelection) return;
 
-                    attempts++;
-                } while (attempts < children.length);
+                            setInternalSelectedItem(itemToSelect);
+                            setIsAnimating(false);
+                        });
 
-                if (focusedIndex !== null) {
-                    const prevElement = children[focusedIndex] as HTMLDivElement;
-
-                    prevElement.tabIndex = -1;
+                        return;
+                    }
                 }
 
-                setFocusedIndex(newIndex);
+                setInternalSelectedItem(itemToSelect);
+                setIsAnimating(false);
+            },
+            [onSelect],
+        );
 
-                const focusedElement = children[newIndex] as HTMLDivElement;
+        const handleClear = useCallback(
+            (event: React.MouseEvent<HTMLDivElement>) => {
+                event.preventDefault();
+                event.stopPropagation();
 
-                focusedElement.tabIndex = 0;
+                handleSetSelectedItem(undefined);
+            },
+            [handleSetSelectedItem],
+        );
 
-                focusedElement.focus();
-            } else if (e.key === 'Enter' && focusedIndex !== null) {
-                const element = contentRef.current?.children[focusedIndex];
+        useEffect(() => {
+            const handleKeyDown = (e: KeyboardEvent) => {
+                if (!isAnimating) return;
 
-                if (!element) return;
+                if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                    e.preventDefault();
 
-                const { id } = element;
+                    const children = contentRef.current?.children;
 
-                let newSelectedItem: IComboBoxItem | undefined;
+                    if (!children || children.length === 0) return;
 
-                lists.some((list) => {
-                    newSelectedItem = list.list.find(
-                        ({ value }) => String(value) === id.replace('combobox-item__', ''),
-                    );
+                    const stepDirection = e.key === 'ArrowUp' ? -1 : 1;
 
-                    return !!newSelectedItem;
-                });
+                    let newIndex = focusedIndex ?? -1;
 
-                if (newSelectedItem) {
-                    handleSetSelectedItem(newSelectedItem);
+                    let attempts = 0;
+
+                    do {
+                        newIndex = (newIndex + stepDirection + children.length) % children.length;
+
+                        const newElement = children[newIndex] as HTMLDivElement;
+
+                        let shouldSkip = false;
+
+                        if (
+                            newElement.id.startsWith('combobox-group--') ||
+                            newElement.id.endsWith('--disabled-item')
+                        ) {
+                            shouldSkip = true;
+                        }
+
+                        if (!shouldSkip) break;
+
+                        attempts++;
+                    } while (attempts < children.length);
+
+                    if (focusedIndex !== null) {
+                        const prevElement = children[focusedIndex] as HTMLDivElement;
+
+                        prevElement.tabIndex = -1;
+                    }
+
+                    setFocusedIndex(newIndex);
+
+                    const focusedElement = children[newIndex] as HTMLDivElement;
+
+                    focusedElement.tabIndex = 0;
+
+                    focusedElement.focus();
+                } else if (e.key === 'Enter' && focusedIndex !== null) {
+                    const element = contentRef.current?.children[focusedIndex];
+
+                    if (!element) return;
+
+                    const { id } = element;
+
+                    let newSelectedItem: IComboBoxItem | undefined;
+
+                    lists.some((list) => {
+                        newSelectedItem = list.list.find(
+                            ({ value }) => String(value) === id.replace('combobox-item__', ''),
+                        );
+
+                        return !!newSelectedItem;
+                    });
+
+                    if (newSelectedItem) {
+                        handleSetSelectedItem(newSelectedItem);
+                    }
                 }
+            };
+
+            document.addEventListener('keydown', handleKeyDown);
+
+            return () => document.removeEventListener('keydown', handleKeyDown);
+        }, [focusedIndex, handleSetSelectedItem, isAnimating, lists]);
+
+        /**
+         * This function calculates the greatest width
+         */
+        useEffect(() => {
+            const allItems = lists.flatMap((list) => list.list);
+
+            let baseWidth = calculateContentWidth(
+                [
+                    ...allItems,
+                    { text: placeholder, value: 'placeholder' },
+                    ...(selectedItem ? [selectedItem] : []),
+                ],
+                functions,
+                values,
+            );
+
+            if (shouldDropDownUseMaxItemWidth) {
+                baseWidth += 20 + 2; // 20px padding left and right and 2px border
+                setBodyMinWidth(baseWidth);
+                setMinWidth(baseWidth);
+                return;
             }
-        };
 
-        document.addEventListener('keydown', handleKeyDown);
+            const hasImage = [selectedItem, ...allItems].some((item) => item?.imageUrl);
+            const hasIcon = [selectedItem, ...allItems].some((item) => item?.icons);
 
-        return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [focusedIndex, handleSetSelectedItem, isAnimating, lists]);
+            const parentWidth =
+                styledComboBoxElementRef.current?.parentElement?.getBoundingClientRect().width ?? 0;
 
-    /**
-     * This function calculates the greatest width
-     */
-    useEffect(() => {
-        const allItems = lists.flatMap((list) => list.list);
+            const paddingWidth = 20 + 2 + 40 + 40; // padding + border + arrow icon + optional clear icon
+            const imageWidth = hasImage ? 32 : 0; // image width + gap if images present
+            const iconWidth = hasIcon ? 40 : 0; // icon width + gap if icons present
 
-        let baseWidth = calculateContentWidth(
-            [
-                ...allItems,
-                { text: placeholder, value: 'placeholder' },
-                ...(selectedItem ? [selectedItem] : []),
-            ],
-            functions,
-            values,
-        );
+            let prefixWidth = 0;
 
-        if (shouldDropDownUseMaxItemWidth) {
-            baseWidth += 20 + 2; // 20px padding left and right and 2px border
-            setBodyMinWidth(baseWidth);
-            setMinWidth(baseWidth);
-            return;
-        }
+            if (prefix) {
+                const prefixTextWidth =
+                    calculateContentWidth([{ text: prefix, value: 'prefix' }], functions, values) +
+                    5;
 
-        const hasImage = [selectedItem, ...allItems].some((item) => item?.imageUrl);
-        const hasIcon = [selectedItem, ...allItems].some((item) => item?.icons);
-
-        const parentWidth =
-            styledComboBoxElementRef.current?.parentElement?.getBoundingClientRect().width ?? 0;
-
-        const paddingWidth = 20 + 2 + 40 + 40; // padding + border + arrow icon + optional clear icon
-        const imageWidth = hasImage ? 32 : 0; // image width + gap if images present
-        const iconWidth = hasIcon ? 40 : 0; // icon width + gap if icons present
-
-        let prefixWidth = 0;
-
-        if (prefix) {
-            const prefixTextWidth =
-                calculateContentWidth([{ text: prefix, value: 'prefix' }], functions, values) + 5;
-
-            prefixWidth = Math.max(prefixTextWidth, 32);
-        }
-
-        const calculatedWidth = baseWidth + paddingWidth + imageWidth + iconWidth + prefixWidth;
-
-        let tmpMinWidth = calculatedWidth;
-        let tmpBodyMinWidth = calculatedWidth;
-
-        // Full width settings
-        if (shouldUseFullWidth) {
-            tmpMinWidth = parentWidth;
-
-            tmpBodyMinWidth =
-                parentWidth < calculatedWidth - 20 ? calculatedWidth - 20 : parentWidth;
-        }
-        // Current item width settings
-        else if (shouldUseCurrentItemWidth && internalSelectedItem) {
-            const itemWidth =
-                calculateContentWidth([internalSelectedItem], functions, values) +
-                paddingWidth +
-                imageWidth +
-                iconWidth +
-                prefixWidth;
-
-            tmpMinWidth = itemWidth;
-
-            tmpBodyMinWidth = itemWidth < calculatedWidth - 20 ? calculatedWidth - 20 : itemWidth;
-        }
-
-        if (tmpMinWidth > parentWidth) {
-            tmpMinWidth = parentWidth;
-        }
-
-        if (tmpBodyMinWidth > parentWidth) {
-            tmpBodyMinWidth = parentWidth;
-        }
-
-        setMinWidth(tmpMinWidth);
-        setBodyMinWidth(shouldUseCurrentItemWidth ? tmpMinWidth : tmpBodyMinWidth);
-    }, [
-        lists,
-        placeholder,
-        shouldUseFullWidth,
-        shouldUseCurrentItemWidth,
-        internalSelectedItem,
-        prefix,
-        selectedItem,
-        functions,
-        values,
-        shouldDropDownUseMaxItemWidth,
-    ]);
-
-    /**
-     * This function sets the external selected item
-     */
-    useEffect(() => {
-        setIsAnimating(false);
-        setInternalSelectedItem(selectedItem);
-    }, [selectedItem]);
-
-    const placeholderImageUrl = useMemo(() => {
-        if (selectedItem) {
-            return selectedItem.imageUrl;
-        }
-
-        if (internalSelectedItem) {
-            return internalSelectedItem.imageUrl;
-        }
-
-        return undefined;
-    }, [internalSelectedItem, selectedItem]);
-
-    const placeholderIcon = useMemo(() => {
-        if (selectedItem) {
-            return selectedItem.icons;
-        }
-
-        if (internalSelectedItem) {
-            return internalSelectedItem.icons;
-        }
-
-        return undefined;
-    }, [internalSelectedItem, selectedItem]);
-
-    /**
-     * This function resets the placeholder
-     */
-    const placeholderText = useMemo(() => {
-        let text = placeholder;
-
-        if (selectedItem) {
-            text = selectedItem.text;
-        } else if (internalSelectedItem) {
-            text = internalSelectedItem.text;
-        }
-
-        return text;
-    }, [internalSelectedItem, placeholder, selectedItem]);
-
-    const shouldShowRoundPlaceholderImage = useMemo(() => {
-        const selectedItemList = lists.find((list) =>
-            list.list.some(
-                ({ value }) => value === (selectedItem?.value ?? internalSelectedItem?.value),
-            ),
-        );
-
-        return selectedItemList?.shouldShowRoundImage ?? shouldShowRoundImage;
-    }, [internalSelectedItem?.value, lists, selectedItem?.value, shouldShowRoundImage]);
-
-    /**
-     * This function opens the content of the combobox
-     */
-    const handleHeaderClick = useCallback(() => {
-        if (!isDisabled && !isInputFocused.current) {
-            if (isAnimating) {
-                handleClose();
-            } else {
-                handleOpen();
+                prefixWidth = Math.max(prefixTextWidth, 32);
             }
-        }
-    }, [handleClose, handleOpen, isAnimating, isDisabled]);
 
-    const comboBoxGroups = useMemo(
-        () =>
-            lists.map((list) => (
-                <Fragment key={list.groupName ?? 'default-group'}>
-                    {list.groupName && lists.length > 1 && (
-                        <StyledComboBoxTopic id={`combobox-group--${list.groupName}`}>
-                            {list.groupName}
-                        </StyledComboBoxTopic>
-                    )}
-                    {list.list.map((item) => (
-                        <ComboBoxItem
-                            item={item}
-                            isSelected={selectedItem ? item.value === selectedItem.value : false}
-                            onSelect={handleSetSelectedItem}
-                            shouldShowBigImage={shouldShowBigImage}
-                            shouldShowRoundImage={list.shouldShowRoundImage ?? shouldShowRoundImage}
-                        />
-                    ))}
-                </Fragment>
-            )),
-        [handleSetSelectedItem, lists, selectedItem, shouldShowBigImage, shouldShowRoundImage],
-    );
+            const calculatedWidth = baseWidth + paddingWidth + imageWidth + iconWidth + prefixWidth;
 
-    return useMemo(
-        () => (
-            <StyledComboBox
-                ref={styledComboBoxElementRef}
-                $minWidth={minWidth}
-                $shouldUseFullWidth={shouldUseFullWidth}
-                $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
-            >
-                <StyledComboBoxHeader
-                    $direction={direction}
-                    onClick={handleHeaderClick}
-                    $isOpen={isAnimating}
-                    $isTouch={isTouch}
-                    $shouldShowTransparentBackground={shouldShowTransparentBackground}
-                    $isDisabled={isDisabled}
-                    $shouldChangeColor={shouldChangeColor}
-                    $shouldShowBigImage={shouldShowBigImage}
-                >
-                    <StyledComboBoxPrefixAndPlaceholderWrapper>
-                        {prefix && <StyledComboBoxPrefix>{prefix}</StyledComboBoxPrefix>}
-                        <StyledComboBoxPlaceholder
-                            $shouldReduceOpacity={!selectedItem && !internalSelectedItem}
-                        >
-                            {placeholderImageUrl && (
-                                <StyledComboBoxPlaceholderImage
-                                    src={placeholderImageUrl}
-                                    $shouldShowBigImage={shouldShowBigImage}
-                                    $shouldShowRoundImage={shouldShowRoundPlaceholderImage}
-                                />
-                            )}
-                            {placeholderIcon && <Icon icons={placeholderIcon} />}
-                            {typeof inputValue === 'string' ? (
-                                <StyledComboBoxInput
-                                    disabled={isDisabled}
-                                    value={inputValue}
-                                    onChange={onInputChange}
-                                    onBlur={handleInputBlur}
-                                    onFocus={handleInputFocus}
-                                    placeholder={placeholderText}
-                                />
-                            ) : (
-                                <StyledComboBoxPlaceholderText>
-                                    {placeholderText}
-                                </StyledComboBoxPlaceholderText>
-                            )}
-                            {internalSelectedItem &&
-                                internalSelectedItem.suffixElement &&
-                                internalSelectedItem.suffixElement}
-                        </StyledComboBoxPlaceholder>
-                    </StyledComboBoxPrefixAndPlaceholderWrapper>
-                    {shouldShowClearIcon && internalSelectedItem && (
-                        <StyledComboBoxClearIconWrapper onClick={handleClear}>
-                            <Icon icons={['fa fa-times']} />
-                        </StyledComboBoxClearIconWrapper>
-                    )}
-                    {!shouldDisableActions && (
-                        <StyledComboBoxIconWrapper
-                            $shouldShowBorderLeft={
-                                shouldShowClearIcon === true && internalSelectedItem !== undefined
-                            }
-                        >
-                            <Icon icons={['fa fa-chevron-down']} />
-                        </StyledComboBoxIconWrapper>
-                    )}
-                </StyledComboBoxHeader>
-                {styledComboBoxElementRef.current && (
-                    <DropdownBodyWrapper
-                        anchorElement={styledComboBoxElementRef.current}
-                        bodyWidth={bodyWidth}
-                        contentHeight={contentHeight}
-                        onClose={handleClose}
-                        direction={direction}
-                        container={container}
-                        shouldShowDropdown={isAnimating}
-                        minBodyWidth={bodyWidth ?? bodyMinWidth}
-                        maxHeight={maxHeight}
-                    >
-                        <StyledComboBoxBody
-                            $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
-                            $maxHeight={maxHeight}
-                            $minWidth={bodyWidth ?? bodyMinWidth}
-                            $browser={browser?.name as BrowserName}
-                            ref={contentRef}
-                            tabIndex={0}
-                        >
-                            {comboBoxGroups}
-                        </StyledComboBoxBody>
-                    </DropdownBodyWrapper>
-                )}
-            </StyledComboBox>
-        ),
-        [
-            minWidth,
+            let tmpMinWidth = calculatedWidth;
+            let tmpBodyMinWidth = calculatedWidth;
+
+            // Full width settings
+            if (shouldUseFullWidth) {
+                tmpMinWidth = parentWidth;
+
+                tmpBodyMinWidth =
+                    parentWidth < calculatedWidth - 20 ? calculatedWidth - 20 : parentWidth;
+            }
+            // Current item width settings
+            else if (shouldUseCurrentItemWidth && internalSelectedItem) {
+                const itemWidth =
+                    calculateContentWidth([internalSelectedItem], functions, values) +
+                    paddingWidth +
+                    imageWidth +
+                    iconWidth +
+                    prefixWidth;
+
+                tmpMinWidth = itemWidth;
+
+                tmpBodyMinWidth =
+                    itemWidth < calculatedWidth - 20 ? calculatedWidth - 20 : itemWidth;
+            }
+
+            if (tmpMinWidth > parentWidth) {
+                tmpMinWidth = parentWidth;
+            }
+
+            if (tmpBodyMinWidth > parentWidth) {
+                tmpBodyMinWidth = parentWidth;
+            }
+
+            setMinWidth(tmpMinWidth);
+            setBodyMinWidth(shouldUseCurrentItemWidth ? tmpMinWidth : tmpBodyMinWidth);
+        }, [
+            lists,
+            placeholder,
             shouldUseFullWidth,
             shouldUseCurrentItemWidth,
-            direction,
-            handleHeaderClick,
-            isAnimating,
-            isTouch,
-            shouldShowTransparentBackground,
-            isDisabled,
-            shouldChangeColor,
-            shouldShowBigImage,
+            internalSelectedItem,
             prefix,
             selectedItem,
-            internalSelectedItem,
-            placeholderImageUrl,
-            shouldShowRoundPlaceholderImage,
-            placeholderIcon,
-            inputValue,
-            onInputChange,
-            handleInputBlur,
-            handleInputFocus,
-            placeholderText,
-            shouldShowClearIcon,
-            handleClear,
-            shouldDisableActions,
-            bodyWidth,
-            contentHeight,
-            handleClose,
-            container,
-            bodyMinWidth,
-            maxHeight,
-            browser?.name,
-            comboBoxGroups,
-        ],
-    );
-};
+            functions,
+            values,
+            shouldDropDownUseMaxItemWidth,
+        ]);
+
+        /**
+         * This function sets the external selected item
+         */
+        useEffect(() => {
+            setIsAnimating(false);
+            setInternalSelectedItem(selectedItem);
+        }, [selectedItem]);
+
+        const placeholderImageUrl = useMemo(() => {
+            if (selectedItem) {
+                return selectedItem.imageUrl;
+            }
+
+            if (internalSelectedItem) {
+                return internalSelectedItem.imageUrl;
+            }
+
+            return undefined;
+        }, [internalSelectedItem, selectedItem]);
+
+        const placeholderIcon = useMemo(() => {
+            if (selectedItem) {
+                return selectedItem.icons;
+            }
+
+            if (internalSelectedItem) {
+                return internalSelectedItem.icons;
+            }
+
+            return undefined;
+        }, [internalSelectedItem, selectedItem]);
+
+        /**
+         * This function resets the placeholder
+         */
+        const placeholderText = useMemo(() => {
+            let text = placeholder;
+
+            if (selectedItem) {
+                text = selectedItem.text;
+            } else if (internalSelectedItem) {
+                text = internalSelectedItem.text;
+            }
+
+            return text;
+        }, [internalSelectedItem, placeholder, selectedItem]);
+
+        const shouldShowRoundPlaceholderImage = useMemo(() => {
+            const selectedItemList = lists.find((list) =>
+                list.list.some(
+                    ({ value }) => value === (selectedItem?.value ?? internalSelectedItem?.value),
+                ),
+            );
+
+            return selectedItemList?.shouldShowRoundImage ?? shouldShowRoundImage;
+        }, [internalSelectedItem?.value, lists, selectedItem?.value, shouldShowRoundImage]);
+
+        /**
+         * This function opens the content of the combobox
+         */
+        const handleHeaderClick = useCallback(() => {
+            if (!isDisabled && !isInputFocused.current) {
+                if (isAnimating) {
+                    handleClose();
+                } else {
+                    handleOpen();
+                }
+            }
+        }, [handleClose, handleOpen, isAnimating, isDisabled]);
+
+        useImperativeHandle(
+            ref,
+            () => ({
+                hide: handleClose,
+                show: handleOpen,
+            }),
+            [handleClose, handleOpen],
+        );
+
+        const comboBoxGroups = useMemo(
+            () =>
+                lists.map((list) => (
+                    <Fragment key={list.groupName ?? 'default-group'}>
+                        {list.groupName && lists.length > 1 && (
+                            <StyledComboBoxTopic id={`combobox-group--${list.groupName}`}>
+                                {list.groupName}
+                            </StyledComboBoxTopic>
+                        )}
+                        {list.list.map((item) => (
+                            <ComboBoxItem
+                                item={item}
+                                isSelected={
+                                    selectedItem ? item.value === selectedItem.value : false
+                                }
+                                onSelect={handleSetSelectedItem}
+                                shouldShowBigImage={shouldShowBigImage}
+                                shouldShowRoundImage={
+                                    list.shouldShowRoundImage ?? shouldShowRoundImage
+                                }
+                            />
+                        ))}
+                    </Fragment>
+                )),
+            [handleSetSelectedItem, lists, selectedItem, shouldShowBigImage, shouldShowRoundImage],
+        );
+
+        return useMemo(
+            () => (
+                <StyledComboBox
+                    ref={styledComboBoxElementRef}
+                    $minWidth={minWidth}
+                    $shouldUseFullWidth={shouldUseFullWidth}
+                    $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
+                >
+                    <StyledComboBoxHeader
+                        $direction={direction}
+                        onClick={handleHeaderClick}
+                        $isOpen={isAnimating}
+                        $isTouch={isTouch}
+                        $shouldShowTransparentBackground={shouldShowTransparentBackground}
+                        $isDisabled={isDisabled}
+                        $shouldChangeColor={shouldChangeColor}
+                        $shouldShowBigImage={shouldShowBigImage}
+                    >
+                        <StyledComboBoxPrefixAndPlaceholderWrapper>
+                            {prefix && <StyledComboBoxPrefix>{prefix}</StyledComboBoxPrefix>}
+                            <StyledComboBoxPlaceholder
+                                $shouldReduceOpacity={!selectedItem && !internalSelectedItem}
+                            >
+                                {placeholderImageUrl && (
+                                    <StyledComboBoxPlaceholderImage
+                                        src={placeholderImageUrl}
+                                        $shouldShowBigImage={shouldShowBigImage}
+                                        $shouldShowRoundImage={shouldShowRoundPlaceholderImage}
+                                    />
+                                )}
+                                {placeholderIcon && <Icon icons={placeholderIcon} />}
+                                {typeof inputValue === 'string' ? (
+                                    <StyledComboBoxInput
+                                        disabled={isDisabled}
+                                        value={inputValue}
+                                        onChange={onInputChange}
+                                        onBlur={handleInputBlur}
+                                        onFocus={handleInputFocus}
+                                        placeholder={placeholderText}
+                                    />
+                                ) : (
+                                    <StyledComboBoxPlaceholderText>
+                                        {placeholderText}
+                                    </StyledComboBoxPlaceholderText>
+                                )}
+                                {internalSelectedItem &&
+                                    internalSelectedItem.suffixElement &&
+                                    internalSelectedItem.suffixElement}
+                            </StyledComboBoxPlaceholder>
+                        </StyledComboBoxPrefixAndPlaceholderWrapper>
+                        {shouldShowClearIcon && internalSelectedItem && (
+                            <StyledComboBoxClearIconWrapper onClick={handleClear}>
+                                <Icon icons={['fa fa-times']} />
+                            </StyledComboBoxClearIconWrapper>
+                        )}
+                        {!shouldDisableActions && (
+                            <StyledComboBoxIconWrapper
+                                $shouldShowBorderLeft={
+                                    shouldShowClearIcon === true &&
+                                    internalSelectedItem !== undefined
+                                }
+                            >
+                                <Icon icons={['fa fa-chevron-down']} />
+                            </StyledComboBoxIconWrapper>
+                        )}
+                    </StyledComboBoxHeader>
+                    {styledComboBoxElementRef.current && (
+                        <DropdownBodyWrapper
+                            anchorElement={styledComboBoxElementRef.current}
+                            bodyWidth={bodyWidth}
+                            contentHeight={contentHeight}
+                            onClose={handleClose}
+                            direction={direction}
+                            container={container}
+                            shouldShowDropdown={isAnimating}
+                            minBodyWidth={bodyWidth ?? bodyMinWidth}
+                            maxHeight={maxHeight}
+                        >
+                            <StyledComboBoxBody
+                                $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
+                                $maxHeight={maxHeight}
+                                $minWidth={bodyWidth ?? bodyMinWidth}
+                                $browser={browser?.name as BrowserName}
+                                ref={contentRef}
+                                tabIndex={0}
+                            >
+                                {comboBoxGroups}
+                            </StyledComboBoxBody>
+                        </DropdownBodyWrapper>
+                    )}
+                </StyledComboBox>
+            ),
+            [
+                minWidth,
+                shouldUseFullWidth,
+                shouldUseCurrentItemWidth,
+                direction,
+                handleHeaderClick,
+                isAnimating,
+                isTouch,
+                shouldShowTransparentBackground,
+                isDisabled,
+                shouldChangeColor,
+                shouldShowBigImage,
+                prefix,
+                selectedItem,
+                internalSelectedItem,
+                placeholderImageUrl,
+                shouldShowRoundPlaceholderImage,
+                placeholderIcon,
+                inputValue,
+                onInputChange,
+                handleInputBlur,
+                handleInputFocus,
+                placeholderText,
+                shouldShowClearIcon,
+                handleClear,
+                shouldDisableActions,
+                bodyWidth,
+                contentHeight,
+                handleClose,
+                container,
+                bodyMinWidth,
+                maxHeight,
+                browser?.name,
+                comboBoxGroups,
+            ],
+        );
+    },
+);
 
 ComboBox.displayName = 'ComboBox';
 
