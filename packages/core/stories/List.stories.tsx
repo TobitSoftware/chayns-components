@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React, { FC, ReactNode } from 'react';
-import { Badge, Icon } from '../src';
+import { AmountControl, Badge, Icon } from '../src';
 import Button from '../src/components/button/Button';
 import List from '../src/components/list/List';
 import ListItemContent from '../src/components/list/list-item/list-item-content/ListItemContent';
@@ -201,32 +201,20 @@ ListItemsWithRightElements.args = {
         <ListItem
             images={[locationImages[0]]}
             rightElements={{
-                top: '09:01 Uhr',
-                bottom: (
-                    <Badge backgroundColor="red" fontColor="white">
-                        1
-                    </Badge>
-                ),
-                center: <Icon icons={['fa fa-star']} />,
+                center: <AmountControl />,
             }}
             title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr consetetur"
             subtitle="Lorem ipsum dolor sit amet, consetetur sadipscing elitr consetetur amet dolor"
         />,
         <ListItem
             images={[locationImages[1]]}
-            rightElements="08:59 Uhr"
+            rightElements={<AmountControl />}
             title="No sea takimata sanctus est Lorem ipsum dolor sit amet"
         />,
         <ListItem
             images={[locationImages[1]]}
             rightElements={{
-                top: (
-                    <Badge backgroundColor="lightgreen" fontColor="white" onClick={console.log}>
-                        - 13,54%
-                    </Badge>
-                ),
-                bottom: 'Bottom',
-                center: <Icon icons={['fa fa-star']} />,
+                center: <AmountControl />,
             }}
             subtitle="Dolor sit ipsum amet"
             title="gubergren, no sea takimata"
@@ -244,11 +232,7 @@ ListItemsWithRightElements.args = {
         </ListItem>,
         <ListItem
             images={[locationImages[1]]}
-            rightElements={
-                <Badge backgroundColor="red" fontColor="white" onClick={console.log}>
-                    + 38,74%
-                </Badge>
-            }
+            rightElements={<AmountControl />}
             subtitle="Dolor sit ipsum amet"
             title="gubergren, no sea takimata"
         >
