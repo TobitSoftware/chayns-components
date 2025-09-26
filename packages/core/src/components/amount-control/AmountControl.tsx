@@ -266,7 +266,8 @@ const AmountControl: FC<AmountControlProps> = ({
     }, [displayState, icon, iconColor]);
 
     const shouldShowRightIcon = useMemo(
-        () => shouldShowIcon && displayState === 'default' && !icon,
+        () =>
+            shouldShowIcon && (displayState === 'default' || displayState === 'maxAmount') && !icon,
         [displayState, icon, shouldShowIcon],
     );
 
