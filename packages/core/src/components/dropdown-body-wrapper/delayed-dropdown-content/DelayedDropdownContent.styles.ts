@@ -22,6 +22,8 @@ export const StyledMotionDelayedDropdownContent = styled(
 
     transform: ${({ $transform }) => `translate(${$transform.x}, ${$transform.y})`};
 
+    z-index: 15;
+
     ${({ $shouldHideContent }) =>
         $shouldHideContent
             ? css`
