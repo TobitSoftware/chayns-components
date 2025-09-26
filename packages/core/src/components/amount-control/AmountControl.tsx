@@ -55,6 +55,10 @@ export type AmountControlProps = {
      */
     onChange?: (amount: number) => void;
     /**
+     * Whether the label should be displayed even if an amount is selected.
+     */
+    shouldForceLabel?: boolean;
+    /**
      * Whether the "add"-icon should be displayed if the minAmount is reached.
      */
     shouldShowAddIconOnMinAmount?: boolean;
@@ -81,6 +85,7 @@ const AmountControl: FC<AmountControlProps> = ({
     maxAmount,
     minAmount = 0,
     onChange,
+    shouldForceLabel = false,
     shouldShowAddIconOnMinAmount = false,
     shouldShowIcon = true,
     shouldShowWideInput = false,
@@ -306,6 +311,12 @@ const AmountControl: FC<AmountControlProps> = ({
         [amountValue, displayState, handleAmountRemove, leftIcon, minAmount],
     );
 
+    let inputLabel = inputValue;
+
+    if (typeof label === 'string' && (displayState === 'default' || shouldForceLabel)) {
+        inputLabel = label;
+    }
+
     return useMemo(
         () => (
             <StyledAmountControl onClick={handleFirstAmount} $isDisabled={isDisabled}>
@@ -313,13 +324,15 @@ const AmountControl: FC<AmountControlProps> = ({
                     {shouldShowLeftIcon && iconButton}
                 </AnimatePresence>
                 <StyledInputWrapper>
-                    {displayState === 'maxAmount' || inputValue === '0' ? (
+                    {displayState === 'maxAmount' ||
+                    inputValue === '0' ||
+                    (shouldForceLabel && typeof label === 'string') ? (
                         <StyledAmountControlPseudoInput
                             onClick={handleDeleteIconClick}
                             $shouldShowWideInput={shouldShowWideInput}
                             $shouldShowRightIcon={shouldShowRightIcon}
                         >
-                            {displayState === 'default' && label ? label : inputValue}
+                            {inputLabel}
                         </StyledAmountControlPseudoInput>
                     ) : (
                         <StyledAmountControlInput
@@ -330,7 +343,7 @@ const AmountControl: FC<AmountControlProps> = ({
                             $hasFocus={hasFocus}
                             onBlur={handleInputBlur}
                             onChange={handleInputChange}
-                            value={displayState === 'default' && label ? label : inputValue}
+                            value={inputLabel}
                         />
                     )}
                 </StyledInputWrapper>
