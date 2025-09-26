@@ -207,8 +207,10 @@ ListItemsWithRightElements.args = {
                         1
                     </Badge>
                 ),
+                center: <Icon icons={['fa fa-star']} />,
             }}
-            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr consetetur"
+            subtitle="Lorem ipsum dolor sit amet, consetetur sadipscing elitr consetetur amet dolor"
         />,
         <ListItem
             images={[locationImages[1]]}
@@ -272,7 +274,6 @@ ListItemsWithRightElements.args = {
                 bottom: 'Bottom',
                 center: <Icon icons={['fa fa-star']} />,
             }}
-            subtitle="Dolor sit ipsum amet"
             title="gubergren, no sea takimata"
         >
             <ListItemContent>

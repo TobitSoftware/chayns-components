@@ -77,56 +77,11 @@ export const StyledListItemHeadTitleContent = styled.div`
     position: relative;
 `;
 
-export const StyledListItemHeadTitleElement = styled.div`
-    align-items: center;
-    display: flex;
-    flex: 0 0 auto;
-    margin-left: 8px;
-`;
-
-type StyledListItemHeadTitleTextProps = WithTheme<{
-    $shouldShowMultilineTitle: boolean;
-    $isEllipsis?: boolean;
-}>;
-
-export const StyledListItemHeadTitleText = styled.span<StyledListItemHeadTitleTextProps>`
-    font-weight: ${({ $isEllipsis }) => ($isEllipsis ? 'normal' : 'bold')};
-    white-space: ${({ $isEllipsis }) => ($isEllipsis ? 'nowrap' : 'normal')};
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    ${({ $shouldShowMultilineTitle, $isEllipsis }) =>
-        $shouldShowMultilineTitle &&
-        $isEllipsis &&
-        css`
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            text-overflow: ellipsis;
-            white-space: normal;
-        `}
-`;
-
 export const StyledListItemHeadSubtitle = styled.div`
     align-items: center;
     display: flex;
     justify-content: space-between;
     margin-top: 2px;
-`;
-
-type StyledListItemHeadSubtitleTextProps = WithTheme<{ $isOpen: boolean }>;
-
-export const StyledListItemHeadSubtitleText = styled.span<StyledListItemHeadSubtitleTextProps>`
-    font-weight: ${({ $isOpen }) => ($isOpen ? 'bold' : 'normal')};
-    white-space: ${({ $isOpen }) => ($isOpen ? 'normal' : 'nowrap')};
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    flex: 1 1 auto;
-    font-size: 85%;
-    min-width: 0;
-    opacity: 0.75;
 `;
 
 type StyledMotionListItemHeadHoverItemWrapperProps = WithTheme<unknown>;

@@ -7,25 +7,18 @@ import React, {
     SyntheticEvent,
     TouchEventHandler,
     useCallback,
-    useEffect,
     useMemo,
     useRef,
     useState,
 } from 'react';
 import type { IListItemRightElements } from '../../../../types/list';
-import { getElementClickEvent } from '../../../../utils/accordion';
 import Icon from '../../../icon/Icon';
 import ListItemIcon from './list-item-icon/ListItemIcon';
 import ListItemImage from './list-item-image/ListItemImage';
-import ListItemRightElements from './list-item-right-elements/ListItemRightElements';
 import {
     StyledListItemHeadContent,
     StyledListItemHeadLeftWrapper,
     StyledListItemHeadSubtitle,
-    StyledListItemHeadSubtitleText,
-    StyledListItemHeadTitleContent,
-    StyledListItemHeadTitleElement,
-    StyledListItemHeadTitleText,
     StyledMotionListItemHeadHoverItem,
     StyledMotionListItemHeadHoverItemWrapper,
     StyledListItemHead,
@@ -37,6 +30,9 @@ import {
     LIST_ITEM_HEAD_INDICATOR_HTML_TAG,
     LIST_ITEM_HEAD_TITLE_HTML_TAG,
 } from '../../../../constants/list';
+import ListItemTitle from './list-item-title/ListItemTitle';
+import ListItemSubtitle from './list-item-subtitle/ListItemSubtitle';
+import ListItemRightElement from './list-item-right-element/ListItemRightElement';
 
 type ListItemHeadProps = {
     careOfLocationId?: number;
@@ -97,11 +93,12 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
 
-    const titleWrapperRef = useRef<HTMLDivElement>(null);
-
     const longPressTimeoutRef = useRef<number>();
 
-    const shouldShowSubtitleRow = subtitle || typeof subtitle === 'string';
+    const shouldShowSubtitleRow =
+        subtitle ||
+        typeof subtitle === 'string' ||
+        (typeof rightElements === 'object' && rightElements && 'bottom' in rightElements);
 
     const shouldShowMultilineTitle = useMemo(() => !subtitle, [subtitle]);
 
@@ -113,16 +110,6 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         },
         [setShouldEnableTooltip],
     );
-
-    useEffect(() => {
-        const element = titleWrapperRef?.current;
-        if (!element) return undefined;
-
-        const resizeObserver = new ResizeObserver(handleShowTooltipResize);
-        resizeObserver.observe(element);
-
-        return () => resizeObserver.disconnect();
-    }, [handleShowTooltipResize]);
 
     const handleMouseEnter = useCallback(() => setShouldShowHoverItem(true), []);
 
@@ -142,31 +129,6 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const handleTouchEnd = useCallback(() => {
         clearTimeout(longPressTimeoutRef.current);
     }, []);
-
-    const shouldPreventRightElementClick = useMemo(() => {
-        if (!rightElements) return false;
-
-        if (
-            typeof rightElements === 'object' &&
-            ('bottom' in rightElements || 'center' in rightElements || 'top' in rightElements)
-        ) {
-            if (rightElements.bottom && getElementClickEvent(rightElements.bottom)) {
-                return true;
-            }
-
-            if (rightElements.center && getElementClickEvent(rightElements.center)) {
-                return true;
-            }
-
-            if (rightElements.top && getElementClickEvent(rightElements.top)) {
-                return true;
-            }
-        } else {
-            return getElementClickEvent(rightElements as ReactNode);
-        }
-
-        return false;
-    }, [rightElements]);
 
     const iconOrImageElement = useMemo(() => {
         if (icons) {
@@ -203,6 +165,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         icons,
         imageBackground,
         images,
+        onImageError,
         shouldHideImageOrIconBackground,
         shouldOpenImageOnClick,
         shouldShowRoundImageOrIcon,
@@ -262,34 +225,27 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                         }
                         layout="position"
                     >
-                        <StyledListItemHeadTitleContent>
-                            <StyledListItemHeadTitleText
-                                $isEllipsis={!isOpen}
-                                ref={titleWrapperRef}
-                                $shouldShowMultilineTitle={shouldShowMultilineTitle}
-                            >
-                                {title}
-                            </StyledListItemHeadTitleText>
-                            <StyledListItemHeadTitleElement>
-                                {titleElement}
-                            </StyledListItemHeadTitleElement>
-                        </StyledListItemHeadTitleContent>
+                        <ListItemTitle
+                            title={title}
+                            titleElement={titleElement}
+                            isOpen={isOpen}
+                            shouldShowMultilineTitle={shouldShowMultilineTitle}
+                            rightElements={rightElements}
+                            onResize={handleShowTooltipResize}
+                        />
                     </StyledListItemHeadTitle>
                     {shouldShowSubtitleRow && (
                         <StyledListItemHeadSubtitle>
-                            <StyledListItemHeadSubtitleText $isOpen={isOpen}>
-                                {subtitle}
-                            </StyledListItemHeadSubtitleText>
+                            <ListItemSubtitle
+                                subtitle={subtitle}
+                                isOpen={isOpen}
+                                rightElements={rightElements}
+                            />
                         </StyledListItemHeadSubtitle>
                     )}
                 </LayoutGroup>
             </StyledListItemHeadContent>
-            {rightElements && (
-                <ListItemRightElements
-                    rightElements={rightElements}
-                    shouldPreventRightElementClick={shouldPreventRightElementClick}
-                />
-            )}
+            <ListItemRightElement rightElements={rightElements} />
             {hoverItem && (
                 <StyledMotionListItemHeadHoverItemWrapper
                     className="beta-chayns-list-item-hover-item"
