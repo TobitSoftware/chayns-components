@@ -40,11 +40,11 @@ export type SearchBoxRef = {
 };
 
 export interface TagInputSettings {
-    onAdd: TagInputProps['onAdd'];
-    onRemove: TagInputProps['onRemove'];
-    shouldAllowMultiple: TagInputProps['shouldAllowMultiple'];
-    shouldPreventEnter: TagInputProps['shouldPreventEnter'];
-    tags: TagInputProps['tags'];
+    onAdd?: TagInputProps['onAdd'];
+    onRemove?: TagInputProps['onRemove'];
+    shouldAllowMultiple?: TagInputProps['shouldAllowMultiple'];
+    shouldPreventEnter?: TagInputProps['shouldPreventEnter'];
+    tags?: TagInputProps['tags'];
 }
 
 export type SearchBoxProps = {
