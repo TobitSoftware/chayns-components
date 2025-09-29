@@ -33,10 +33,19 @@ import {
 } from './SearchBox.styles';
 import { useUuid } from '../../hooks/uuid';
 import DropdownBodyWrapper from '../dropdown-body-wrapper/DropdownBodyWrapper';
+import TagInput, { TagInputProps } from '../tag-input/TagInput';
 
 export type SearchBoxRef = {
     clear: VoidFunction;
 };
+
+export interface TagInputSettings {
+    onAdd: TagInputProps['onAdd'];
+    onRemove: TagInputProps['onRemove'];
+    shouldAllowMultiple: TagInputProps['shouldAllowMultiple'];
+    shouldPreventEnter: TagInputProps['shouldPreventEnter'];
+    tags: TagInputProps['tags'];
+}
 
 export type SearchBoxProps = {
     /**
@@ -107,6 +116,10 @@ export type SearchBoxProps = {
      * Set an input for the search box - it is not an item of a list, just a string.
      */
     presetValue?: string;
+    /**
+     * Settings for the TagInput.
+     */
+    tagInputSettings?: TagInputSettings;
 };
 
 const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
@@ -129,6 +142,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             shouldShowToggleIcon = false,
             customFilter,
             presetValue,
+            tagInputSettings,
         },
         ref,
     ) => {
@@ -700,18 +714,33 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             () => (
                 <StyledSearchBox ref={boxRef} key={`search-box-${uuid}`}>
                     <div id={`search_box_input${uuid}`}>
-                        <Input
-                            isInvalid={isInvalid}
-                            ref={inputRef}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            onFocus={handleFocus}
-                            placeholder={placeholder}
-                            onKeyDown={onKeyDown}
-                            leftElement={leftElement}
-                            rightElement={rightElement}
-                            value={value}
-                        />
+                        {tagInputSettings ? (
+                            <TagInput
+                                tags={tagInputSettings.tags}
+                                onChange={handleChange}
+                                onAdd={tagInputSettings.onAdd}
+                                onRemove={tagInputSettings.onRemove}
+                                onFocus={handleFocus}
+                                onBlur={handleBlur}
+                                placeholder={placeholder}
+                                leftElement={leftElement}
+                                shouldAllowMultiple={tagInputSettings.shouldAllowMultiple}
+                                shouldPreventEnter={tagInputSettings.shouldPreventEnter}
+                            />
+                        ) : (
+                            <Input
+                                isInvalid={isInvalid}
+                                ref={inputRef}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                onFocus={handleFocus}
+                                placeholder={placeholder}
+                                onKeyDown={onKeyDown}
+                                leftElement={leftElement}
+                                rightElement={rightElement}
+                                value={value}
+                            />
+                        )}
                     </div>
                     {boxRef.current && (
                         <DropdownBodyWrapper
@@ -759,6 +788,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 shouldHideFilterButtons,
                 shouldShowBody,
                 shouldShowContentOnEmptyInput,
+                tagInputSettings,
                 uuid,
                 value,
             ],

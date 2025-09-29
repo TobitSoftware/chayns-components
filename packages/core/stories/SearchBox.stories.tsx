@@ -140,6 +140,8 @@ export const WithGroups = Template.bind({});
 
 export const WithDelayedItems = DelayedItemsTemplate.bind({});
 
+export const WithTagInput = DelayedItemsTemplate.bind({});
+
 WithImages.args = {
     lists: [
         {
@@ -158,6 +160,17 @@ WithImages.args = {
             ],
         },
     ],
+};
+
+WithTagInput.args = {
+    tagInputSettings: {
+        tags: [
+            {
+                id: '1',
+                text: 'Pizza',
+            },
+        ],
+    },
 };
 
 WithGroups.args = {
