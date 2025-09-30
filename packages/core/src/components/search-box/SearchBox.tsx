@@ -33,7 +33,7 @@ import {
 } from './SearchBox.styles';
 import { useUuid } from '../../hooks/uuid';
 import DropdownBodyWrapper from '../dropdown-body-wrapper/DropdownBodyWrapper';
-import TagInput, { TagInputProps } from '../tag-input/TagInput';
+import TagInput, { TagInputProps, TagInputRef } from '../tag-input/TagInput';
 
 export type SearchBoxRef = {
     clear: VoidFunction;
@@ -43,7 +43,6 @@ export interface TagInputSettings {
     onAdd?: TagInputProps['onAdd'];
     onRemove?: TagInputProps['onRemove'];
     shouldAllowMultiple?: TagInputProps['shouldAllowMultiple'];
-    shouldPreventEnter?: TagInputProps['shouldPreventEnter'];
     tags?: TagInputProps['tags'];
 }
 
@@ -164,6 +163,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement>(null);
         const inputRef = useRef<HTMLInputElement | null>(null);
+        const tagInputRef = useRef<TagInputRef>(null);
 
         const hasFocusRef = useRef<boolean>(false);
         const isAnimatingRef = useRef<boolean>(false);
@@ -520,7 +520,14 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     text: item.text.replace('<b>', '').replace('</b>', '').replace('</b', ''),
                 };
 
-                setValue(newItem.text);
+                if (tagInputSettings) {
+                    setValue('');
+                    setInputToListValue('');
+                    tagInputRef.current?.resetValue();
+                } else {
+                    setValue(newItem.text);
+                }
+
                 handleClose();
 
                 setSelectedImage(
@@ -538,7 +545,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     onSelect(newItem);
                 }
             },
-            [handleClose, onSelect, shouldShowRoundImage],
+            [handleClose, onSelect, shouldShowRoundImage, tagInputSettings],
         );
 
         const content = useMemo(() => {
@@ -555,7 +562,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     }
                 }
 
-                list.forEach(({ id, text, imageUrl }) => {
+                list.forEach(({ id, text, imageUrl }, listIndex) => {
                     items.push(
                         <SearchBoxItem
                             key={`${id}_${groupName ?? ''}`}
@@ -565,6 +572,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             shouldShowRoundImage={shouldShowRoundImage}
                             onSelect={handleSelect}
                             groupName={groupName}
+                            tabIndex={index === 0 && listIndex === 0 ? 0 : -1}
                         />,
                     );
                 });
@@ -576,6 +584,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                         id="input-value"
                         onSelect={handleSelect}
                         text={`<b>${inputToListValue}</b`}
+                        tabIndex={items.length === 0 ? 0 : -1}
                     />,
                 );
             }
@@ -596,26 +605,31 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     return;
                 }
 
+                const children = contentRef.current?.children;
+
+                if (!children) {
+                    return;
+                }
+
+                const childrenArray = Array.from(children);
+
+                const newChildren = childrenArray.find((child) =>
+                    child.id.startsWith('searchbox-content__'),
+                )?.children;
+
+                if (!(newChildren && newChildren.length > 0)) {
+                    return;
+                }
+
+                const filteredChildren = Array.from(newChildren).filter(
+                    (child) => (child as HTMLElement).dataset.isgroupname !== 'true',
+                );
+                setFilteredChildrenArray(filteredChildren);
+
                 if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                     e.preventDefault();
-                    const children = contentRef.current?.children;
-
-                    if (!children) {
-                        return;
-                    }
-
-                    const childrenArray = Array.from(children);
-
-                    const newChildren = childrenArray.find((child) =>
-                        child.id.startsWith('searchbox-content__'),
-                    )?.children;
 
                     if (newChildren && newChildren.length > 0) {
-                        const filteredChildren = Array.from(newChildren).filter(
-                            (child) => (child as HTMLElement).dataset.isgroupname !== 'true',
-                        );
-                        setFilteredChildrenArray(filteredChildren);
-
                         const newIndex =
                             focusedIndex !== null
                                 ? (focusedIndex +
@@ -633,11 +647,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
                         const newElement = filteredChildren[newIndex] as HTMLDivElement;
                         newElement.tabIndex = 0;
-                        newElement.focus();
                     }
-                } else if (e.key === 'Enter' && focusedIndex !== null) {
-                    if (filteredChildrenArray) {
-                        const element = filteredChildrenArray[focusedIndex];
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (filteredChildren) {
+                        const element = filteredChildren[focusedIndex ?? 0];
 
                         if (!element) {
                             return;
@@ -725,7 +741,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                                 placeholder={placeholder}
                                 leftElement={leftElement}
                                 shouldAllowMultiple={tagInputSettings.shouldAllowMultiple}
-                                shouldPreventEnter={tagInputSettings.shouldPreventEnter}
+                                shouldPreventEnter
+                                ref={tagInputRef}
                             />
                         ) : (
                             <Input

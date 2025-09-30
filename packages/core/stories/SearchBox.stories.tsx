@@ -1,6 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React, { ChangeEvent, useState } from 'react';
 import SearchBox from '../src/components/search-box/SearchBox';
+import { Tag } from '../src';
+import { ISearchBoxItem } from '../src/types/searchBox';
 
 const ITEMS = [
     {
@@ -132,6 +134,52 @@ const DelayedItemsTemplate: StoryFn<typeof SearchBox> = (args) => {
     );
 };
 
+const TagInputTemplate: StoryFn<typeof SearchBox> = (args) => {
+    const [tags, setTags] = useState<Tag[]>([]);
+
+    const onRemove = (id: string) => {};
+
+    const onAdd = (tag: Tag) => {
+        setTags((prevState) => [...prevState, tag]);
+    };
+
+    const onSelect = (item: ISearchBoxItem) => {
+        setTags((prevState) => [...prevState, { text: item.text, id: item.id }]);
+    };
+
+    return (
+        <>
+            <SearchBox
+                {...args}
+                onSelect={onSelect}
+                tagInputSettings={{
+                    tags,
+                    onRemove,
+                    onAdd,
+                    shouldAllowMultiple: true,
+                }}
+            />
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et sollicitudin
+                turpis. Vivamus id nibh augue. Fusce finibus lobortis porta. Nulla velit augue,
+                lobortis et scelerisque ac, venenatis non leo. Donec risus tellus, maximus in mollis
+                ac, lobortis id metus. Nam sodales dolor a mauris tempus imperdiet. Cras id
+                fermentum ipsum. Nulla condimentum dolor ac urna lobortis, vitae imperdiet elit
+                rutrum. Pellentesque elementum ligula non quam accumsan ullamcorper. Vestibulum ante
+                felis, mollis vitae odio eget, pretium gravida sem. Donec varius molestie interdum.
+                Donec dictum nisi quam, non bibendum libero dictum egestas. Vivamus iaculis mauris
+                ligula, et placerat felis gravida quis. Sed at eleifend orci, sit amet pretium
+                velit. Phasellus aliquet id libero at egestas. Donec placerat libero eros, aliquet
+                iaculis orci ultrices vitae. Nam in quam fringilla, semper neque id, venenatis urna.
+                Vivamus rutrum mauris quis dui faucibus interdum. Curabitur eget justo at erat
+                finibus accumsan. Ut quis pellentesque eros. Etiam at lacinia mauris. Praesent nec
+                sem accumsan, bibendum tellus quis, pulvinar eros. Class aptent taciti sociosqu ad
+                litora torquent per conubia nostra, per inceptos himenaeos.
+            </p>
+        </>
+    );
+};
+
 export const General = Template.bind({});
 
 export const WithImages = Template.bind({});
@@ -140,7 +188,7 @@ export const WithGroups = Template.bind({});
 
 export const WithDelayedItems = DelayedItemsTemplate.bind({});
 
-export const WithTagInput = DelayedItemsTemplate.bind({});
+export const WithTagInput = TagInputTemplate.bind({});
 
 WithImages.args = {
     lists: [

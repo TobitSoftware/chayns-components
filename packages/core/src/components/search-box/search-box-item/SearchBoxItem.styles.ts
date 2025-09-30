@@ -12,7 +12,7 @@ export const StyledSearchBoxItem = styled.div<StyledSearchBoxItemProps>`
         background: ${({ theme }: StyledSearchBoxItemProps) => theme['secondary-102']};
     }
 
-    &:focus {
+    &[tabindex='0'] {
         background: ${({ theme }: StyledSearchBoxItemProps) => theme['secondary-102']};
     }
 `;

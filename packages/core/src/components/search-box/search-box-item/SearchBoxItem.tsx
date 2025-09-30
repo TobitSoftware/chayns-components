@@ -13,6 +13,7 @@ export type SearchBoxItemProps = {
     imageUrl?: ISearchBoxItem['imageUrl'];
     shouldShowRoundImage?: boolean;
     groupName?: ISearchBoxItems['groupName'];
+    tabIndex: number;
 };
 
 const SearchBoxItem: FC<SearchBoxItemProps> = ({
@@ -22,6 +23,7 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
     shouldShowRoundImage,
     onSelect,
     groupName,
+    tabIndex,
 }) => {
     const handleClick = useCallback(() => {
         onSelect({ id, text, imageUrl }, groupName);
@@ -35,7 +37,7 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
 
     return useMemo(
         () => (
-            <StyledSearchBoxItem id={idString} onClick={handleClick}>
+            <StyledSearchBoxItem id={idString} onClick={handleClick} tabIndex={tabIndex}>
                 {imageUrl && (
                     <StyledSearchBoxItemImage
                         src={imageUrl}
@@ -45,7 +47,7 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
                 <StyledSearchBoxItemText dangerouslySetInnerHTML={{ __html: text }} />
             </StyledSearchBoxItem>
         ),
-        [handleClick, idString, imageUrl, shouldShowRoundImage, text],
+        [handleClick, idString, imageUrl, shouldShowRoundImage, text, tabIndex],
     );
 };
 
