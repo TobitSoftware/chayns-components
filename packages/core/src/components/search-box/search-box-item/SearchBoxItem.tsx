@@ -26,7 +26,7 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
     tabIndex,
 }) => {
     const handleClick = useCallback(() => {
-        onSelect({ id, text, imageUrl }, groupName);
+        onSelect({ id: id === 'input-value' ? text : id, text, imageUrl }, groupName);
     }, [onSelect, id, text, imageUrl, groupName]);
 
     let idString = `search-box-item__${id}`;

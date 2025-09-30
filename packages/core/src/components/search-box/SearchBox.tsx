@@ -673,8 +673,10 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             imageUrl = element.children[0]?.attributes.src.nodeValue as string;
                         }
 
+                        const newId = id.replace('search-box-item__', '');
+
                         handleSelect({
-                            id: id.replace('search-box-item__', ''),
+                            id: newId === 'input-value' ? textContent : newId,
                             text: textContent ?? '',
                             imageUrl,
                         });
