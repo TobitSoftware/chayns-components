@@ -460,6 +460,8 @@ const Calendar: FC<CalendarProps> = ({
                     setCurrentDate={setCurrentDate}
                     shouldShowHighlightsInMonthOverlay={shouldShowHighlightsInMonthOverlay}
                     showMonthYearPickers={showMonthYearPickers}
+                    handleLeftArrowClick={handleLeftArrowClick}
+                    handleRightArrowClick={handleRightArrowClick}
                 />
             )}
             {ShouldShowRightArrow ? (

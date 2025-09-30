@@ -32,6 +32,8 @@ export type MonthWrapperProps = {
     shouldShowHighlightsInMonthOverlay: boolean;
     showMonthYearPickers: boolean;
     customThumbColors?: CustomThumbColors;
+    handleLeftArrowClick: () => void;
+    handleRightArrowClick: () => void;
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
@@ -54,6 +56,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     disabledDates,
     setCurrentDate,
     showMonthYearPickers,
+    handleLeftArrowClick,
+    handleRightArrowClick,
 }) => {
     const [content, setContent] = useState<ReactElement[]>();
 
@@ -93,6 +97,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         setCurrentDate={setCurrentDate}
                         displayIndex={i}
                         showMonthYearPickers={showMonthYearPickers}
+                        handleLeftArrowClick={handleLeftArrowClick}
+                        handleRightArrowClick={handleRightArrowClick}
                     />,
                 );
             }
