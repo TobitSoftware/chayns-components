@@ -130,7 +130,7 @@ const NumberInput: FC<NumberInputProps> = ({
     };
 
     const onLocalBlur = () => {
-        const sanitizedValue = plainText.length === 0 ? '0' : plainText;
+        const sanitizedValue = plainText;
         let newIsInvalid = false;
         let parsedNumber = null;
 
@@ -168,7 +168,7 @@ const NumberInput: FC<NumberInputProps> = ({
             if (isTimeInput) {
                 onBlur(newStringValue, newIsInvalid);
             } else {
-                onBlur(parsedNumber === 0 ? null : parsedNumber, newIsInvalid);
+                onBlur(parsedNumber, newIsInvalid);
             }
         }
     };

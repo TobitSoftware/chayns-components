@@ -1,10 +1,14 @@
 import { DECIMAL_TEST, INTEGER_TEST, MONEY_TEST, TIME_TEST } from '../constants/numberInput';
 
 interface ParseFloatWithDecimals {
-    ({ stringValue, decimals }: { stringValue: string; decimals?: number }): number;
+    ({ stringValue, decimals }: { stringValue: string; decimals?: number }): number | null;
 }
 
 export const parseFloatWithDecimals: ParseFloatWithDecimals = ({ stringValue, decimals }) => {
+    if (stringValue === '') {
+        return null;
+    }
+
     const parsed = parseFloat(stringValue);
 
     if (decimals) {
