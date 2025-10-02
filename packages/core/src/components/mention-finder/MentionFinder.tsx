@@ -44,7 +44,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
 
     const [fullMatch, searchString] = useMemo(() => {
         // eslint-disable-next-line no-irregular-whitespace
-        const regExpMatchArray = inputValue.match(/@([^\s​]*)/);
+        const regExpMatchArray = inputValue.match(/@(?!\s)([^\s​]*)/);
 
         return [regExpMatchArray?.[0], regExpMatchArray?.[1]?.toLowerCase() ?? ''];
     }, [inputValue]);
