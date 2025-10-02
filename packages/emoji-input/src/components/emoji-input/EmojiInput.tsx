@@ -31,6 +31,8 @@ import {
     restoreSelection,
     saveSelection,
     type ReplaceTextOptions,
+    insertPseudoMarker,
+    insertCursorAtMarker,
 } from '../../utils/selection';
 import { convertHTMLToText, convertTextToHTML } from '../../utils/text';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
@@ -325,6 +327,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 if (typeof onInput === 'function') {
                     onInput(event, text);
                 }
+
+                insertCursorAtMarker(editorRef);
             },
             [handleUpdateHTML, isDisabled, onInput],
         );
@@ -578,6 +582,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         pasteText,
                         options,
                     });
+
+                    insertPseudoMarker();
 
                     const newEvent = new Event('input', { bubbles: true });
 

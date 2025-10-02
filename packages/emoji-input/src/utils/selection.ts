@@ -1,4 +1,4 @@
-import type { KeyboardEvent } from 'react';
+import type { KeyboardEvent, RefObject } from 'react';
 import { clamp } from './number';
 import { convertHTMLToText, getElementTextLength } from './text';
 
@@ -237,6 +237,34 @@ export const insertInvisibleCursorMarker = (): void => {
                 span.remove();
             }, 10);
         }
+    }
+};
+
+export const insertPseudoMarker = () => {
+    const selection = window.getSelection();
+
+    if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const marker = document.createElement('span');
+        marker.id = 'cursor-marker';
+        marker.style.display = 'inline-block';
+        marker.style.width = '0';
+        marker.style.height = '0';
+        range.insertNode(marker);
+    }
+};
+
+export const insertCursorAtMarker = (ref: RefObject<HTMLDivElement>) => {
+    const marker = ref.current?.querySelector('#cursor-marker');
+
+    if (marker) {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.setStartAfter(marker);
+        range.setEndAfter(marker);
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+        marker.remove();
     }
 };
 
