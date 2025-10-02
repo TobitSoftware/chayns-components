@@ -1,6 +1,6 @@
 import type { KeyboardEvent } from 'react';
 import { clamp } from './number';
-import { getElementTextLength } from './text';
+import { convertHTMLToText, getElementTextLength } from './text';
 
 let childIndex = -1;
 let endOffset = -1;
@@ -340,7 +340,6 @@ export const getCurrentCursorPosition = (editorElement: HTMLDivElement | null): 
     if (!editorElement) return null;
 
     const sel = window.getSelection?.();
-
     if (!sel || sel.rangeCount === 0) return null;
 
     const range = sel.getRangeAt(0);
@@ -348,14 +347,18 @@ export const getCurrentCursorPosition = (editorElement: HTMLDivElement | null): 
     if (!editorElement.contains(range.commonAncestorContainer)) return null;
 
     const pre = document.createRange();
-
     pre.selectNodeContents(editorElement);
 
     try {
         pre.setEnd(range.startContainer, range.startOffset);
 
-        return pre.toString().length;
+        const container = document.createElement('div');
+        container.appendChild(pre.cloneContents());
+
+        const bbCodeUntilCursor = convertHTMLToText(container.innerHTML);
+
+        return bbCodeUntilCursor.length;
     } catch {
-        return editorElement.textContent?.length ?? 0;
+        return convertHTMLToText(editorElement.innerHTML).length;
     }
 };
