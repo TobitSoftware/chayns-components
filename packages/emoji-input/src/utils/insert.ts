@@ -4,6 +4,7 @@ import {
     restoreSelection,
     saveSelection,
     setChildIndex,
+    type ReplaceTextOptions as IReplaceTextOptions,
 } from './selection';
 
 interface InsertTextAtCursorPositionOptions {
@@ -120,12 +121,18 @@ export interface ReplaceTextOptions {
     editorElement: HTMLDivElement;
     searchText: string;
     pasteText: string;
+    options?: IReplaceTextOptions;
 }
 
-export const replaceText = ({ editorElement, searchText, pasteText }: ReplaceTextOptions) => {
+export const replaceText = ({
+    editorElement,
+    searchText,
+    pasteText,
+    options,
+}: ReplaceTextOptions) => {
     const selection = window.getSelection();
 
-    const rangeToReplace = findAndSelectText({ editorElement, searchText });
+    const rangeToReplace = findAndSelectText({ editorElement, searchText, options });
 
     if (rangeToReplace && selection) {
         selection.removeAllRanges();

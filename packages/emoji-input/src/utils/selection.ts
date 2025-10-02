@@ -291,14 +291,20 @@ export const getCharCodeThatWillBeDeleted = (event: KeyboardEvent<HTMLDivElement
     return nextSibling?.nodeValue?.charCodeAt(0);
 };
 
+export type ReplaceTextOptions = { shouldReplaceNearCursor?: boolean };
+
 interface FindAndSelectTextOptions {
     editorElement: HTMLDivElement;
     searchText: string;
+    options?: ReplaceTextOptions;
 }
+
+type Match = { node: Node; offset: number; absIndex: number };
 
 export const findAndSelectText = ({
     editorElement,
     searchText,
+    options = { shouldReplaceNearCursor: true },
 }: FindAndSelectTextOptions): Range | null => {
     if (!editorElement.textContent?.includes(searchText)) {
         return null;
@@ -306,45 +312,67 @@ export const findAndSelectText = ({
 
     const range = document.createRange();
 
-    let startNode: Node | null = null;
-    let offset = -1;
+    const cursorPos = getCurrentCursorPosition(editorElement);
+
+    const matches: Match[] = [];
+    let absCounter = 0;
 
     const searchNodesForText = (node: Node) => {
-        if (node.nodeType === Node.TEXT_NODE) {
-            const index = node.textContent?.indexOf(searchText);
-
-            if (typeof index === 'number' && index !== -1) {
-                startNode = node;
-                offset = index;
-
-                range.setStart(node, index);
-                range.setEnd(node, index + searchText.length);
-
-                return true;
+        if (node.nodeType === Node.TEXT_NODE && node.textContent) {
+            let index = node.textContent.indexOf(searchText);
+            while (index !== -1) {
+                matches.push({
+                    node,
+                    offset: index,
+                    absIndex: absCounter + index,
+                });
+                index = node.textContent.indexOf(searchText, index + 1);
             }
+            absCounter += node.textContent.length;
         } else if (node.nodeName !== 'LC_MENTION') {
-            return Array.from(node.childNodes).some(searchNodesForText);
+            Array.from(node.childNodes).forEach(searchNodesForText);
         }
-
-        return false;
     };
 
     searchNodesForText(editorElement);
 
-    if (startNode && offset !== -1) return range;
+    if (matches.length === 0) {
+        return null;
+    }
 
-    return null;
+    let match = matches[0];
+
+    if (options?.shouldReplaceNearCursor && cursorPos !== null) {
+        match = matches.reduce((prev, curr) =>
+            Math.abs(curr.absIndex - cursorPos) < Math.abs(prev.absIndex - cursorPos) ? curr : prev,
+        );
+    }
+
+    if (!match) {
+        return null;
+    }
+
+    range.setStart(match.node, match.offset);
+    range.setEnd(match.node, match.offset + searchText.length);
+
+    return range;
 };
 
 export const getCurrentCursorPosition = (editorElement: HTMLDivElement | null): number | null => {
-    if (!editorElement) return null;
+    if (!editorElement) {
+        return null;
+    }
 
     const sel = window.getSelection?.();
-    if (!sel || sel.rangeCount === 0) return null;
+    if (!sel || sel.rangeCount === 0) {
+        return null;
+    }
 
     const range = sel.getRangeAt(0);
 
-    if (!editorElement.contains(range.commonAncestorContainer)) return null;
+    if (!editorElement.contains(range.commonAncestorContainer)) {
+        return null;
+    }
 
     const pre = document.createRange();
     pre.selectNodeContents(editorElement);

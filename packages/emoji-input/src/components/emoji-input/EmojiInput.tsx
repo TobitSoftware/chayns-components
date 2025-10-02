@@ -27,10 +27,10 @@ import { convertEmojisToUnicode, escapeHTML } from '../../utils/emoji';
 import { insertTextAtCursorPosition, replaceText } from '../../utils/insert';
 import {
     getCharCodeThatWillBeDeleted,
-    getCurrentCursorPosition,
     insertInvisibleCursorMarker,
     restoreSelection,
     saveSelection,
+    type ReplaceTextOptions,
 } from '../../utils/selection';
 import { convertHTMLToText, convertTextToHTML } from '../../utils/text';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
@@ -140,7 +140,7 @@ export type EmojiInputProps = {
 
 export type EmojiInputRef = {
     insertTextAtCursorPosition: (text: string) => void;
-    replaceText: (searchText: string, replaceText: string) => void;
+    replaceText: (searchText: string, replaceText: string, options?: ReplaceTextOptions) => void;
     startProgress: (durationInSeconds: number) => void;
     stopProgress: () => void;
     focus: () => void;
@@ -569,15 +569,23 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             }
         }, []);
 
-        const handleReplaceText = useCallback((searchText: string, pasteText: string) => {
-            if (editorRef.current) {
-                replaceText({ editorElement: editorRef.current, searchText, pasteText });
+        const handleReplaceText = useCallback(
+            (searchText: string, pasteText: string, options?: ReplaceTextOptions) => {
+                if (editorRef.current) {
+                    replaceText({
+                        editorElement: editorRef.current,
+                        searchText,
+                        pasteText,
+                        options,
+                    });
 
-                const newEvent = new Event('input', { bubbles: true });
+                    const newEvent = new Event('input', { bubbles: true });
 
-                editorRef.current.dispatchEvent(newEvent);
-            }
-        }, []);
+                    editorRef.current.dispatchEvent(newEvent);
+                }
+            },
+            [],
+        );
 
         const handleStartProgress = useCallback((duration: number) => {
             setProgressDuration(duration);
