@@ -27,6 +27,7 @@ import { convertEmojisToUnicode, escapeHTML } from '../../utils/emoji';
 import { insertTextAtCursorPosition, replaceText } from '../../utils/insert';
 import {
     getCharCodeThatWillBeDeleted,
+    getCurrentCursorPosition,
     insertInvisibleCursorMarker,
     restoreSelection,
     saveSelection,
@@ -44,6 +45,7 @@ import {
 import PrefixElement from './prefix-element/PrefixElement';
 import { loadEmojiShortList } from '../../utils/asyncEmojiData';
 import { scrollCursorIntoView } from '../../utils/scroll';
+import { useCursorPosition } from '../../hooks/cursor';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
@@ -72,6 +74,10 @@ export type EmojiInputProps = {
      * Function that is executed when the input field loses focus.
      */
     onBlur?: FocusEventHandler<HTMLDivElement>;
+    /**
+     * Function to be executed when the cursor position is changed.
+     */
+    onCursorPositionChange?: (position: number) => void;
     /**
      * Function that is executed when the input field gets the focus.
      */
@@ -163,6 +169,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             shouldHidePlaceholderOnFocus = false,
             shouldPreventEmojiPicker,
             value,
+            onCursorPositionChange,
         },
         ref,
     ) => {
@@ -187,6 +194,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const shouldDeleteOneMoreForwards = useRef(false);
 
         const valueRef = useRef(value);
+
+        useCursorPosition(editorRef, onCursorPositionChange, { isDisabled });
 
         const { browser } = getDevice();
 

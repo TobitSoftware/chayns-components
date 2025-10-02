@@ -335,3 +335,27 @@ export const findAndSelectText = ({
 
     return null;
 };
+
+export const getCurrentCursorPosition = (editorElement: HTMLDivElement | null): number | null => {
+    if (!editorElement) return null;
+
+    const sel = window.getSelection?.();
+
+    if (!sel || sel.rangeCount === 0) return null;
+
+    const range = sel.getRangeAt(0);
+
+    if (!editorElement.contains(range.commonAncestorContainer)) return null;
+
+    const pre = document.createRange();
+
+    pre.selectNodeContents(editorElement);
+
+    try {
+        pre.setEnd(range.startContainer, range.startOffset);
+
+        return pre.toString().length;
+    } catch {
+        return editorElement.textContent?.length ?? 0;
+    }
+};
