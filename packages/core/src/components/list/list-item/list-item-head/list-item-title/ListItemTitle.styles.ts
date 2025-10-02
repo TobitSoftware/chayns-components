@@ -34,7 +34,6 @@ export const StyledListItemHeadTitleText = styled.span<StyledListItemHeadTitleTe
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
-    flex: 1 1 auto;
 
     ${({ $shouldShowMultilineTitle, $isEllipsis }) =>
         $shouldShowMultilineTitle &&
