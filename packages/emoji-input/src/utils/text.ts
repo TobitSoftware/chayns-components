@@ -46,7 +46,7 @@ export const convertTextToHTML = (text: string) => {
     return result;
 };
 
-export const convertHTMLToText = (text: string) => {
+export const convertHTMLToText = (text: string, { preserveSpaces = false } = {}) => {
     let result = text;
 
     result = result
@@ -62,6 +62,12 @@ export const convertHTMLToText = (text: string) => {
                 return `[nerReplace ${prefixAttr}type="${type}" value="${value}"]${entity}[/nerReplace]`;
             },
         );
+
+    if (preserveSpaces) {
+        return result
+            .replace(/&nbsp;/g, '\u00A0') // non-breaking space
+            .replace(/\u200B/g, '​'); // zero-width space (sichtbar gemacht)
+    }
 
     // eslint-disable-next-line no-irregular-whitespace
     result = result.replace(/​/g, '');

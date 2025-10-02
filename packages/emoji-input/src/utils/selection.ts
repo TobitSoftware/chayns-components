@@ -355,7 +355,7 @@ export const getCurrentCursorPosition = (editorElement: HTMLDivElement | null): 
         const container = document.createElement('div');
         container.appendChild(pre.cloneContents());
 
-        const bbCodeUntilCursor = convertHTMLToText(container.innerHTML);
+        const bbCodeUntilCursor = convertHTMLToText(container.innerHTML, { preserveSpaces: true });
 
         return bbCodeUntilCursor.length;
     } catch {
