@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, FC, useEffect, useState } from 'react';
+import React, { ChangeEventHandler, FC, useEffect, useRef, useState } from 'react';
 import { NUMBER_CLEAR_REGEX } from '../../constants/numberInput';
 import { formateNumber, isValidString, parseFloatWithDecimals } from '../../utils/numberInput';
 import Input from '../input/Input';
@@ -88,8 +88,12 @@ const NumberInput: FC<NumberInputProps> = ({
     const [isValueInvalid, setIsValueInvalid] = useState(false);
     const localPlaceholder = placeholder ?? (isMoneyInput ? '€' : undefined);
 
+    const initialInputRef = useRef(true);
+
     const onLocalChange: ChangeEventHandler<HTMLInputElement> = (event) => {
         const newValue = event.target.value;
+
+        initialInputRef.current = false;
 
         const sanitizedValueString = newValue
             // Removes everything except numbers, commas and points
@@ -140,7 +144,11 @@ const NumberInput: FC<NumberInputProps> = ({
                 decimals: isMoneyInput ? 2 : undefined,
             });
 
-            if (parsedNumber !== 0 && (parsedNumber > maxNumber || parsedNumber < minNumber)) {
+            if (
+                parsedNumber &&
+                parsedNumber !== 0 &&
+                (parsedNumber > maxNumber || parsedNumber < minNumber)
+            ) {
                 newIsInvalid = true;
             }
 
@@ -203,7 +211,15 @@ const NumberInput: FC<NumberInputProps> = ({
 
             // checks, if a given number is invalid, if the input is not in focus
             if (!hasFocus) {
-                setIsValueInvalid(parsedNumber > maxNumber || parsedNumber < minNumber);
+                if (parsedNumber === null && initialInputRef.current) {
+                    setIsValueInvalid(false);
+                } else {
+                    setIsValueInvalid(
+                        parsedNumber === null ||
+                            parsedNumber > maxNumber ||
+                            parsedNumber < minNumber,
+                    );
+                }
             }
         }
 
