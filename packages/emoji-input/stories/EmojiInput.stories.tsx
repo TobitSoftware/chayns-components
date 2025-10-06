@@ -16,6 +16,8 @@ const Template: StoryFn<typeof EmojiInput> = ({ ...args }) => {
     const [prefix, setPrefix] = useState<string | undefined>();
     const [isDisabled, setIsDisabled] = useState(false);
 
+    const ref = useRef<EmojiInputRef>(null);
+
     const handleInput = (event: ChangeEvent<HTMLDivElement>, originalText: string) => {
         setText(originalText);
     };
@@ -44,7 +46,10 @@ const Template: StoryFn<typeof EmojiInput> = ({ ...args }) => {
             </p>
             <p
                 onClick={() =>
-                    setPrefix('[lc_mention id="CHA-YNSAI"]chayns Assistant[/lc_mention],&nbsp;')
+                    ref.current?.replaceText(
+                        '123',
+                        `[lc_mention id="MIC-HAEL1"]Michael[/lc_mention],  `,
+                    )
                 }
             >
                 [lc_mention id="CHA-YNSAI"]chayns Assistant[/lc_mention] fasse die letzten
@@ -53,8 +58,19 @@ const Template: StoryFn<typeof EmojiInput> = ({ ...args }) => {
             <EmojiInput
                 {...args}
                 isDisabled={isDisabled}
+                ref={ref}
                 onInput={handleInput}
                 onKeyDown={(event) => {
+                    if (event.key === 'Enter' && event.shiftKey) {
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        ref.current?.replaceText(
+                            '123',
+                            `[lc_mention id="MIC-HAEL1"]Michael[/lc_mention],  `,
+                        );
+                    }
+
                     if (event.key === 'Enter' && !event.shiftKey) {
                         event.preventDefault();
                         event.stopPropagation();
