@@ -23,8 +23,9 @@
     "exports": {
         ".": {
             "types": "./lib/types/index.d.ts",
+            "node": "./lib/cjs/index.js",
             "require": "./lib/cjs/index.js",
-            "import": "./lib/esm/index.js"
+            "default": "./lib/esm/index.js"
         }
     },
     "directories": {
