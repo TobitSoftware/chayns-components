@@ -15,6 +15,7 @@
         "lerna:build": "lerna run build",
         "lerna:clean": "npx lerna clean -y",
         "prepare": "husky install",
+        "preversion": "lerna exec -- npm run build:types",
         "upgrade:minor": "lerna exec -- ncu -u -t minor",
         "upgrade": "lerna exec -- ncu -u"
     },
