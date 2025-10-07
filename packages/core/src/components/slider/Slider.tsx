@@ -534,6 +534,7 @@ const Slider: FC<SliderProps> = ({
 
             elements.push(
                 <StyledHighlightedStep
+                    key={`step--${i}`}
                     $isDisabled={isStepDisabled}
                     $isFilled={i < fromValue}
                     $leftPosition={offset + stepWidth * i}
@@ -665,6 +666,7 @@ const Slider: FC<SliderProps> = ({
             </StyledSlider>
         ),
         [
+            fromInputBackground,
             fromSliderThumbContentPosition,
             fromSliderThumbPosition,
             fromValue,

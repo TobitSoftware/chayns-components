@@ -571,6 +571,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                         )}
                         {list.list.map((item) => (
                             <ComboBoxItem
+                                key={`item-${item.text}`}
                                 item={item}
                                 isSelected={
                                     selectedItem ? item.value === selectedItem.value : false
