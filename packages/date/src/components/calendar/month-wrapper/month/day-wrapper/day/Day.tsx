@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useRef } from 'react';
+import React, { CSSProperties, FC, useMemo, useRef } from 'react';
 import {
     Categories,
     CustomThumbColors,
@@ -6,7 +6,12 @@ import {
     HighlightedDateStyles,
 } from '../../../../../../types/calendar';
 import Category from './category/Category';
-import { StyledDay, StyledDayCategoryWrapper, StyledDayNumber } from './Day.styles';
+import {
+    StyledCurrentDay,
+    StyledDay,
+    StyledDayCategoryWrapper,
+    StyledDayNumber,
+} from './Day.styles';
 import { isSameDay } from '../../../../../../utils/date';
 
 export type DayProps = {
@@ -23,6 +28,7 @@ export type DayProps = {
     setHoveringDay: (date: Date | null) => void;
     shouldShowHighlightsInMonthOverlay: boolean;
     customThumbColors?: CustomThumbColors;
+    currentDateBackgroundColor?: CSSProperties['backgroundColor'];
 };
 
 const Day: FC<DayProps> = ({
@@ -39,8 +45,10 @@ const Day: FC<DayProps> = ({
     isWithinIntervalSelection,
     shouldShowHighlightsInMonthOverlay,
     setHoveringDay,
+    currentDateBackgroundColor,
 }) => {
     const dayRef = useRef<HTMLDivElement>(null);
+    const isCurrentDay = useMemo(() => isSameDay(date, new Date()), [date]);
 
     const styles: HighlightedDateStyles | undefined = useMemo(() => {
         if (!highlightedDates || (!shouldShowHighlightsInMonthOverlay && !isSameMonth)) {
@@ -75,6 +83,9 @@ const Day: FC<DayProps> = ({
             onMouseEnter={() => setHoveringDay(date)}
             onMouseLeave={() => setHoveringDay(null)}
         >
+            {isCurrentDay && currentDateBackgroundColor ? (
+                <StyledCurrentDay $backgroundColor={currentDateBackgroundColor} />
+            ) : null}
             <StyledDayNumber
                 $customThumbColors={customThumbColors}
                 $isSelected={

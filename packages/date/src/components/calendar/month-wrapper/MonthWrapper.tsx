@@ -1,6 +1,6 @@
 import { Language } from 'chayns-api';
 import type { MotionProps } from 'motion/react';
-import React, { FC, useEffect, useMemo, useState, type ReactElement } from 'react';
+import React, { FC, useEffect, useMemo, useState, type ReactElement, CSSProperties } from 'react';
 import {
     CalendarType,
     Categories,
@@ -34,6 +34,7 @@ export type MonthWrapperProps = {
     customThumbColors?: CustomThumbColors;
     handleLeftArrowClick: () => void;
     handleRightArrowClick: () => void;
+    currentDateBackgroundColor?: CSSProperties['backgroundColor'];
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
@@ -58,6 +59,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     showMonthYearPickers,
     handleLeftArrowClick,
     handleRightArrowClick,
+    currentDateBackgroundColor,
 }) => {
     const [content, setContent] = useState<ReactElement[]>();
 
@@ -99,6 +101,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         showMonthYearPickers={showMonthYearPickers}
                         handleLeftArrowClick={handleLeftArrowClick}
                         handleRightArrowClick={handleRightArrowClick}
+                        currentDateBackgroundColor={currentDateBackgroundColor}
                     />,
                 );
             }

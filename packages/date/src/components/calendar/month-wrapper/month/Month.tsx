@@ -1,4 +1,4 @@
-import React, { FC, TouchEvent, useState } from 'react';
+import React, { CSSProperties, FC, TouchEvent, useState } from 'react';
 import {
     CalendarType,
     Categories,
@@ -35,6 +35,7 @@ export type MonthProps = {
     showMonthYearPickers: boolean;
     handleLeftArrowClick: () => void;
     handleRightArrowClick: () => void;
+    currentDateBackgroundColor?: CSSProperties['backgroundColor'];
 };
 
 const minSwipeDistance = 50;
@@ -61,6 +62,7 @@ const Month: FC<MonthProps> = ({
     showMonthYearPickers,
     handleLeftArrowClick,
     handleRightArrowClick,
+    currentDateBackgroundColor,
 }) => {
     const [touchStart, setTouchStart] = useState<undefined | number>();
     const [touchEnd, setTouchEnd] = useState<undefined | number>();
@@ -121,6 +123,7 @@ const Month: FC<MonthProps> = ({
                 hoveringDay={hoveringDay}
                 setHoveringDay={setHoveringDay}
                 disabledDates={disabledDates}
+                currentDateBackgroundColor={currentDateBackgroundColor}
             />
         </StyledMonth>
     );

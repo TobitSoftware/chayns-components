@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, type ReactElement } from 'react';
+import React, { FC, useCallback, useMemo, type ReactElement, CSSProperties } from 'react';
 import {
     CalendarType,
     type Categories,
@@ -35,6 +35,7 @@ export type DayWrapperProps = {
     disabledDates: Date[];
     customThumbColors?: CustomThumbColors;
     shouldShowHighlightsInMonthOverlay: boolean;
+    currentDateBackgroundColor?: CSSProperties['backgroundColor'];
 };
 
 const DayWrapper: FC<DayWrapperProps> = ({
@@ -52,6 +53,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
     shouldShowHighlightsInMonthOverlay,
     setHoveringDay,
     disabledDates,
+    currentDateBackgroundColor,
 }) => {
     const dayOfCurrentMonth = useMemo(() => new Date(year, month - 1, 13), [month, year]);
 
@@ -161,6 +163,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
                     onClick={handleDayClick}
                     highlightedDates={highlightedDates}
                     setHoveringDay={setHoveringDay}
+                    currentDateBackgroundColor={currentDateBackgroundColor}
                 />,
             );
         });

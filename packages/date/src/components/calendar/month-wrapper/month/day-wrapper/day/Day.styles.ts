@@ -57,6 +57,7 @@ export const StyledDayNumber = styled.div<StyledDayNumberProps>`
     width: 80%;
     height: 80%;
     font-size: 90%;
+    z-index: 2;
 
     ${({
         $isSelected,
@@ -117,4 +118,21 @@ export const StyledDayCategoryWrapper = styled.div`
     width: 100%;
     position: absolute;
     bottom: 2px;
+`;
+
+type StyledCurrentDayProps = {
+    $backgroundColor: CSSProperties['backgroundColor'];
+};
+
+export const StyledCurrentDay = styled.div<StyledCurrentDayProps>`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6%;
+    width: 90%;
+    height: 90%;
+    position: absolute;
+    z-index: 1;
+    border-radius: 50%;
+    background-color: ${({ $backgroundColor }) => $backgroundColor};
 `;

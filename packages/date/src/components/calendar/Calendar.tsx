@@ -1,6 +1,6 @@
 import { ComboBox, Icon } from '@chayns-components/core';
 import { Language } from 'chayns-api';
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { CSSProperties, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
     CalendarType,
     Categories,
@@ -77,6 +77,10 @@ interface BaseProps {
      @param { start: Date, end: Date }
      */
     onShownDatesChange?: (dates: { start: Date; end: Date }) => void;
+    /**
+        When set, the current date will be highlighted in the corresponding style.
+    */
+    currentDateBackgroundColor?: CSSProperties['backgroundColor'];
 }
 
 interface SingleSelectionProps {
@@ -141,6 +145,7 @@ const Calendar: FC<CalendarProps> = ({
     disabledDates = [],
     showMonthYearPickers: showMonthYearPickersProp,
     onShownDatesChange = () => {},
+    currentDateBackgroundColor,
 }) => {
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
@@ -462,6 +467,7 @@ const Calendar: FC<CalendarProps> = ({
                     showMonthYearPickers={showMonthYearPickers}
                     handleLeftArrowClick={handleLeftArrowClick}
                     handleRightArrowClick={handleRightArrowClick}
+                    currentDateBackgroundColor={currentDateBackgroundColor}
                 />
             )}
             {ShouldShowRightArrow ? (
