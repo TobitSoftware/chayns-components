@@ -16,10 +16,10 @@ import {
     DEFAULT_TRACK_CONSTRAINTS,
     DEFAULT_VIDEO_CONSTRAINTS,
 } from '../../constants/codeScanner';
-import { loadQrCodeDetector } from '../../utils/codeScanner';
 import { checkTrackSupport } from '../../utils/support';
 import { createErrorAlertDialog } from '../../utils/errorDialog';
 import ScannerToolbar from './scanner-toolbar/ScannerToolbar';
+import { useScannerPolyfill } from '../../hooks/loadscript';
 
 type CodeScannerProps = {
     /**
@@ -95,6 +95,8 @@ const CodeScanner: FC<CodeScannerProps> = ({
     const [isHandlingCode, setIsHandlingCode] = useState(false);
     const lastCode = useRef<string>();
     const handleStopRef = useRef<() => void>();
+
+    const { loadQrCodeDetector } = useScannerPolyfill();
 
     const errorText = useMemo(() => {
         if (typeof scannerError === 'undefined') {
@@ -228,7 +230,7 @@ const CodeScanner: FC<CodeScannerProps> = ({
         return () => {
             if (handleStopRef.current) handleStopRef.current();
         };
-    }, []);
+    }, [loadQrCodeDetector]);
 
     useEffect(() => {
         handleStopRef.current = handleStopCameraAccess;
