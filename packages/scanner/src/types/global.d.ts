@@ -1,3 +1,7 @@
+interface Window {
+    BarcodeDetector: BarcodeDetector;
+}
+
 interface MediaTrackCapabilities {
     zoom: {
         min: number;

@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { loadScript } from '../utils/loadScript';
 
+const VERSION = 1;
+
 let scannerPolyfillPromise: Promise<Event | UIEvent> | undefined;
 let scannerWasmPromise: Promise<Event | UIEvent> | undefined;
 
 const loadPolyfillScript = () => {
     if (!scannerPolyfillPromise) {
-        scannerPolyfillPromise = loadScript('');
+        scannerPolyfillPromise = loadScript(
+            `https://api.chayns-static.space/polyfill/CodeScanner/v${VERSION}/barcode-detector-polyfill.js`,
+        );
     }
 
     return scannerPolyfillPromise;
@@ -14,7 +18,9 @@ const loadPolyfillScript = () => {
 
 const loadWasmScript = () => {
     if (!scannerWasmPromise) {
-        scannerWasmPromise = loadScript('');
+        scannerWasmPromise = loadScript(
+            `https://api.chayns-static.space/polyfill/CodeScanner/v${VERSION}/zbar-wasm.js`,
+        );
     }
 
     return scannerWasmPromise;
@@ -28,8 +34,8 @@ export const useScannerPolyfill = () => {
         try {
             await BarcodeDetector.getSupportedFormats();
         } catch {
-            void loadWasmScript().then(() => setWasmLoaded(true));
-            void loadPolyfillScript().then(() => setPolyfillLoaded(true));
+            await loadWasmScript().then(() => setWasmLoaded(true));
+            await loadPolyfillScript().then(() => setPolyfillLoaded(true));
             // @ts-expect-error polyfill is not defined in window
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
             window.BarcodeDetector = barcodeDetectorPolyfill.BarcodeDetectorPolyfill;
