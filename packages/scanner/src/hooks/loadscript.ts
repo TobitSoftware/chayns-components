@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { loadScript } from '../utils/loadScript';
 
 const VERSION = 1;
@@ -30,7 +30,7 @@ export const useScannerPolyfill = () => {
     const [wasmLoaded, setWasmLoaded] = useState(false);
     const [polyfillLoaded, setPolyfillLoaded] = useState(false);
 
-    const loadQrCodeDetector = async () => {
+    const loadQrCodeDetector = useCallback(async () => {
         try {
             await BarcodeDetector.getSupportedFormats();
         } catch {
@@ -40,7 +40,7 @@ export const useScannerPolyfill = () => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
             window.BarcodeDetector = barcodeDetectorPolyfill.BarcodeDetectorPolyfill;
         }
-    };
+    }, []);
 
     return { loadQrCodeDetector, loaded: polyfillLoaded && wasmLoaded };
 };
