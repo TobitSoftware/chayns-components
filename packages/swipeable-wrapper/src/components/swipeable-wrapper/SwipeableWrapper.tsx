@@ -47,6 +47,14 @@ export type SwipeableWrapperProps = {
      * Whether the swipeable functionality is disabled
      */
     isDisabled?: boolean;
+    /**
+     * Callback to be executed when the swiping is started.
+     */
+    onSwipeStart?: VoidFunction;
+    /**
+     * Callback to be executed when the swiping is ended.
+     */
+    onSwipeEnd?: VoidFunction;
 };
 
 const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
@@ -55,6 +63,8 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
     rightActions = [],
     shouldUseOpacityAnimation,
     isDisabled = false,
+    onSwipeEnd,
+    onSwipeStart,
 }) => {
     const [leftThreshold, setLeftThreshold] = useState(
         calcThreshold({
@@ -73,6 +83,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
     );
 
     const swipeableWrapperRef = useRef<HTMLDivElement | null>(null);
+    const isSwipingRef = useRef(false);
 
     const listItemXOffset = useMotionValue(0);
 
@@ -166,6 +177,14 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
 
     const handlePan = useCallback(
         (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+            if (!isSwipingRef.current) {
+                isSwipingRef.current = true;
+
+                if (typeof onSwipeStart === 'function') {
+                    onSwipeStart();
+                }
+            }
+
             const currentXOffset = listItemXOffset.get();
 
             const dampingFactor =
@@ -180,10 +199,16 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
                 listItemXOffset.set(currentXOffset + info.delta.x * dampingFactor);
             }
         },
-        [leftActions.length, listItemXOffset, rightActions.length],
+        [leftActions.length, listItemXOffset, onSwipeStart, rightActions.length],
     );
 
     const handlePanEnd = useCallback(() => {
+        if (typeof onSwipeEnd === 'function') {
+            onSwipeEnd();
+        }
+
+        isSwipingRef.current = false;
+
         const offset = listItemXOffset.get();
 
         if (offset > leftThreshold) {
@@ -229,7 +254,16 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
                     }
             }
         }
-    }, [close, leftActions, leftThreshold, listItemXOffset, open, rightActions, rightThreshold]);
+    }, [
+        close,
+        leftActions,
+        leftThreshold,
+        listItemXOffset,
+        onSwipeEnd,
+        open,
+        rightActions,
+        rightThreshold,
+    ]);
 
     const leftActionElements = useMemo(
         () =>
