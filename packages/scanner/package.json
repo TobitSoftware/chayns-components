@@ -1,0 +1,86 @@
+{
+    "name": "@chayns-components/scanner",
+    "version": "5.0.0-beta.1262",
+    "description": "A set of beautiful React components for developing your own applications with chayns.",
+    "sideEffects": false,
+    "browserslist": [
+        ">0.5%",
+        "not dead",
+        "not op_mini all",
+        "not IE 11"
+    ],
+    "keywords": [
+        "chayns",
+        "react",
+        "components"
+    ],
+    "author": "Tobit.Software",
+    "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/scanner#readme",
+    "license": "MIT",
+    "types": "lib/types/index.d.ts",
+    "main": "lib/cjs/index.js",
+    "module": "lib/esm/index.js",
+    "exports": {
+        ".": {
+            "types": "./lib/types/index.d.ts",
+            "node": "./lib/cjs/index.js",
+            "require": "./lib/cjs/index.js",
+            "default": "./lib/esm/index.js"
+        }
+    },
+    "directories": {
+        "lib": "lib",
+        "test": "__tests__"
+    },
+    "files": [
+        "lib"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TobitSoftware/chayns-components.git"
+    },
+    "scripts": {
+        "build": "npm run build:cjs && npm run build:esm && npm run build:types",
+        "build:types": "tsc",
+        "build:cjs": "cross-env NODE_ENV=cjs babel src --out-dir lib/cjs --extensions=.ts,.tsx --source-maps --ignore=src/stories",
+        "build:esm": "cross-env NODE_ENV=esm babel src --out-dir lib/esm --extensions=.ts,.tsx --source-maps --ignore=src/stories",
+        "prepublishOnly": "npm run build",
+        "watch:js": "npm run build:esm -- --watch",
+        "link": "npm link && npm run watch:js"
+    },
+    "bugs": {
+        "url": "https://github.com/TobitSoftware/chayns-components/issues"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.28.3",
+        "@babel/core": "^7.28.3",
+        "@babel/preset-env": "^7.28.3",
+        "@babel/preset-react": "^7.27.1",
+        "@babel/preset-typescript": "^7.27.1",
+        "@types/lodash.throttle": "^4.1.9",
+        "@types/react": "^18.3.24",
+        "@types/react-dom": "^18.3.7",
+        "@types/styled-components": "^5.1.34",
+        "@types/uuid": "^10.0.0",
+        "babel-loader": "^9.2.1",
+        "cross-env": "^7.0.3",
+        "lerna": "^8.2.4",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "styled-components": "^6.1.19",
+        "typescript": "^5.9.2"
+    },
+    "dependencies": {
+        "@chayns-components/core": "^5.0.0-beta.1262"
+    },
+    "peerDependencies": {
+        "chayns-api": ">=2.2.0",
+        "motion": ">=12.4.1",
+        "react": ">=18.0.0",
+        "react-dom": ">=18.0.0",
+        "styled-components": ">=5.3.11"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}
