@@ -12,6 +12,7 @@ export default {
             noCodeFound: 'Es konnte kein Code gefunden werden.',
             noPermission: 'Um einen QR-Code zu scannen, aktiviere Deine Kamera.',
         },
+        shouldTriggerForSameCode: true,
     },
 } as Meta<typeof CodeScanner>;
 

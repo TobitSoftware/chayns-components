@@ -95,6 +95,10 @@ const CodeScanner: FC<CodeScannerProps> = ({
     const [isHandlingCode, setIsHandlingCode] = useState(false);
     const lastCode = useRef<string>();
     const handleStopRef = useRef<() => void>();
+    const prevValueRef = useRef<{ value: string; timestamp: number }>({
+        value: '',
+        timestamp: 0,
+    });
 
     const { loadQrCodeDetector } = useScannerPolyfill();
 
@@ -116,13 +120,28 @@ const CodeScanner: FC<CodeScannerProps> = ({
     const handleScan = useCallback(
         (code: { format: BarcodeFormat; value: string }) => {
             if (!onScan) return;
+
+            const now = Date.now();
+
+            if (!prevValueRef.current) {
+                prevValueRef.current = { value: '', timestamp: 0 };
+            }
+
+            const { value: prevValue, timestamp: prevTimestamp } = prevValueRef.current;
+
+            if (code.value === prevValue && now - prevTimestamp < scanInterval * 3) {
+                return;
+            }
+
+            prevValueRef.current = { value: code.value, timestamp: now };
+
             const result = onScan(code);
             if (result instanceof Promise) {
                 setIsHandlingCode(true);
                 void result.finally(() => setIsHandlingCode(false));
             }
         },
-        [onScan],
+        [onScan, scanInterval],
     );
 
     const handleScanResult = useCallback(
