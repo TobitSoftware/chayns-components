@@ -47,3 +47,17 @@ export const StyledScannerToolbarButton = styled.div<ScannerToolbarButtonProps>`
         color: white;
     }
 `;
+
+export const StyledScannerToolbarPlaceholder = styled.div`
+    font-weight: bold;
+    font-size: 20px;
+
+    text-shadow:
+        rgba(0, 0, 20, 0.9) 1px 1px 2px,
+        rgba(0, 0, 20, 0.5) 0 0 4px;
+    color: #ffffff;
+
+    display: flex;
+    align-items: end;
+    margin-bottom: -10px;
+`;

@@ -32,3 +32,11 @@ export const StyledCodeScannerPreview = styled.video<StyledCodeScannerPreviewPro
         display: none;
     `}
 `;
+
+export const StyledCodeScannerIconOverlay = styled.div`
+    opacity: 0.7;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`;

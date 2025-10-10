@@ -3,6 +3,7 @@ import { addVisibilityChangeListener, removeVisibilityChangeListener } from 'cha
 import { Icon, SmallWaitCursor } from '@chayns-components/core';
 import {
     StyledCodeScanner,
+    StyledCodeScannerIconOverlay,
     StyledCodeScannerPreview,
     StyledCodeScannerTextWrapper,
 } from './CodeScanner.styles';
@@ -47,6 +48,10 @@ type CodeScannerProps = {
      */
     isZoomDisabled?: boolean;
     /**
+     * A placeholder that should be displayed inside the preview.
+     */
+    placeholder?: string;
+    /**
      * Maximum allowed zoom level for the camera.
      */
     maxZoom?: number;
@@ -58,6 +63,10 @@ type CodeScannerProps = {
      * Callback function triggered when a code is successfully scanned.
      */
     onScan?: CodeReaderOnScanCallback;
+    /**
+     * Whether a calling code icon should be displayed as an overlay.
+     */
+    shouldShowIconOverlay?: boolean;
     /**
      * If true, allows scanning the same code multiple times in a row.
      */
@@ -83,7 +92,9 @@ const CodeScanner: FC<CodeScannerProps> = ({
     isFileSelectDisabled = false,
     isTorchDisabled = false,
     isZoomDisabled = false,
+    shouldShowIconOverlay = false,
     scanInterval = 250,
+    placeholder,
     errorMessages,
 }) => {
     const [isPolyfillLoaded, setIsPolyfillLoaded] = useState(false);
@@ -323,8 +334,14 @@ const CodeScanner: FC<CodeScannerProps> = ({
                 width="100%"
                 $isVisible={!!barcodeDetector && !errorText}
             />
+            {shouldShowIconOverlay && (
+                <StyledCodeScannerIconOverlay>
+                    <Icon icons={['ts-calling-code']} color="#ffffff" size={125} />
+                </StyledCodeScannerIconOverlay>
+            )}
             {!!barcodeDetector && (
                 <ScannerToolbar
+                    placeholder={placeholder}
                     videoConstraints={videoConstraints}
                     onFileSelect={(data) => {
                         setIsScanningFile(true);

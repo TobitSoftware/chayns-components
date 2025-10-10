@@ -1,6 +1,10 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { Icon, selectFiles } from '@chayns-components/core';
-import { StyledScannerToolbar, StyledScannerToolbarButton } from './ScannerToolbar.styles';
+import {
+    StyledScannerToolbar,
+    StyledScannerToolbarButton,
+    StyledScannerToolbarPlaceholder,
+} from './ScannerToolbar.styles';
 import { checkTrackSupport } from '../../../utils/support';
 import { animateNumericValue } from '../../../utils/animate';
 import usePrevious from '../../../hooks/codeScanner';
@@ -26,6 +30,10 @@ type ScannerToolbarProps = {
      * Disables the zoom slider if set to true.
      */
     isZoomDisabled?: boolean;
+    /**
+     * A placeholder that should be displayed inside the preview.
+     */
+    placeholder?: string;
     /**
      * Maximum allowed zoom level for the camera.
      */
@@ -57,6 +65,7 @@ const ScannerToolbar: FC<ScannerToolbarProps> = ({
     minZoom: minZoomProp = 1,
     maxZoom: maxZoomProp = 3,
     isZoomDisabled = false,
+    placeholder,
     isTorchDisabled = false,
     isFileSelectDisabled = false,
 }) => {
@@ -159,6 +168,14 @@ const ScannerToolbar: FC<ScannerToolbarProps> = ({
             });
         }
     }, [isTorchActive, isTorchSupported, tracks]);
+
+    if (typeof placeholder === 'string' && placeholder.length > 0) {
+        return (
+            <StyledScannerToolbar>
+                <StyledScannerToolbarPlaceholder>{placeholder}</StyledScannerToolbarPlaceholder>
+            </StyledScannerToolbar>
+        );
+    }
 
     return (
         <StyledScannerToolbar>
