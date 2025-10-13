@@ -1,5 +1,11 @@
 module.exports = {
     rules: {
+        '@typescript-eslint/no-misused-promises': [
+            'error',
+            {
+                checksVoidReturn: false,
+            },
+        ],
         'no-void': 'off',
         // We organize imports on commit so this is not needed.
         'import/order': 'off',

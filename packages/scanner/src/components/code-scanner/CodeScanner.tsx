@@ -106,6 +106,7 @@ const CodeScanner: FC<CodeScannerProps> = ({
     const [isHandlingCode, setIsHandlingCode] = useState(false);
     const lastCode = useRef<string>();
     const handleStopRef = useRef<() => void>();
+    const isHandlingCodeRef = useRef(false);
     const prevValueRef = useRef<{ value: string; timestamp: number }>({
         value: '',
         timestamp: 0,
@@ -131,6 +132,7 @@ const CodeScanner: FC<CodeScannerProps> = ({
     const handleScan = useCallback(
         (code: { format: BarcodeFormat; value: string }) => {
             if (!onScan) return;
+            isHandlingCodeRef.current = true;
 
             const now = Date.now();
 
@@ -141,6 +143,7 @@ const CodeScanner: FC<CodeScannerProps> = ({
             const { value: prevValue, timestamp: prevTimestamp } = prevValueRef.current;
 
             if (code.value === prevValue && now - prevTimestamp < scanInterval * 3) {
+                isHandlingCodeRef.current = false;
                 return;
             }
 
@@ -149,7 +152,12 @@ const CodeScanner: FC<CodeScannerProps> = ({
             const result = onScan(code);
             if (result instanceof Promise) {
                 setIsHandlingCode(true);
-                void result.finally(() => setIsHandlingCode(false));
+                void result.finally(() => {
+                    setIsHandlingCode(false);
+                    isHandlingCodeRef.current = false;
+                });
+            } else {
+                isHandlingCodeRef.current = false;
             }
         },
         [onScan, scanInterval],
@@ -283,17 +291,23 @@ const CodeScanner: FC<CodeScannerProps> = ({
     }, [handleStopCameraAccess, handleVideoInitialization]);
 
     useEffect(() => {
-        if (!barcodeDetector || !videoRef) return undefined;
+        let lastTimeout: NodeJS.Timeout | undefined;
+        if (!barcodeDetector || !videoRef) return () => clearTimeout(lastTimeout);
 
         if (!isScanningFile && !isHandlingCode) {
-            const interval = setInterval(() => {
-                void barcodeDetector.detect(videoRef).then(handleScanResult);
-            }, scanInterval);
+            const scan = async () => {
+                if (!isHandlingCodeRef.current) {
+                    const result = await barcodeDetector.detect(videoRef);
+                    handleScanResult(result);
+                }
 
-            return () => clearInterval(interval);
+                lastTimeout = setTimeout(scan, 250);
+            };
+
+            void scan();
         }
 
-        return undefined;
+        return () => clearTimeout(lastTimeout);
     }, [barcodeDetector, handleScanResult, isHandlingCode, isScanningFile, videoRef, scanInterval]);
 
     useEffect(() => {
