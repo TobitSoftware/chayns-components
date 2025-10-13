@@ -36,6 +36,12 @@ To launch the Storybook development environment run:
 npm run storybook
 ```
 
+To create a new version of the package use run:
+
+```bash
+npm run lerna:version
+```
+
 > We are working on integrating Storybook with the chayns environment, however many APIs are not
 > available there yet. Some components that rely on the
 > [chayns-api](https://github.com/TobitSoftware/chayns-api) API might not work within Storybook.
