@@ -84,10 +84,15 @@ const getClonedElement = (content: ReactNode) => {
 
 interface UseMeasuredCloneOptions {
     content: ReactNode;
+    shouldPreventTextWrapping?: boolean;
 }
 
-export const useMeasuredClone = ({ content }: UseMeasuredCloneOptions) => {
+export const useMeasuredClone = ({
+    content,
+    shouldPreventTextWrapping = true,
+}: UseMeasuredCloneOptions) => {
     const ref = useRef<HTMLDivElement>(null);
+
     const [size, setSize] = useState({ width: 0, height: 0 });
 
     const clonedElement = getClonedElement(content);
@@ -95,8 +100,10 @@ export const useMeasuredClone = ({ content }: UseMeasuredCloneOptions) => {
     useEffect(() => {
         const measure = () => {
             if (!ref.current) return;
+
             const { offsetWidth: width, offsetHeight: height } = ref.current;
-            setSize({ width: width + 10, height });
+
+            setSize({ width: width + (shouldPreventTextWrapping ? 10 : 0), height });
         };
 
         measure();
@@ -106,7 +113,7 @@ export const useMeasuredClone = ({ content }: UseMeasuredCloneOptions) => {
         if (ref.current) observer.observe(ref.current);
 
         return () => observer.disconnect();
-    }, []);
+    }, [shouldPreventTextWrapping]);
 
     const measuredElement = (
         <div

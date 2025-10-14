@@ -105,7 +105,10 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         const uuid = useUuid();
 
-        const { height, width, measuredElement } = useMeasuredClone({ content });
+        const { height, width, measuredElement } = useMeasuredClone({
+            content,
+            shouldPreventTextWrapping: !shouldUseChildrenWidth,
+        });
 
         const popupContentRef = useRef<HTMLDivElement>(null);
         const popupRef = useRef<HTMLDivElement>(null);
