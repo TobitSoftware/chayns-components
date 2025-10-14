@@ -79,8 +79,17 @@ const AdaptiveTranslation = ({
                         opacity: ${opacity};
                         transition: opacity 0.5s ease;
                     }
+                    
                     .adaptive-translation img {
                         opacity: 1 !important;
+                        
+                        .media-wrapper {
+                            opacity: 1 !important;
+                        }
+                        
+                        .media-wrapper span {
+                            opacity: 1 !important;
+                        }    
                     }
                 `}
             </style>
