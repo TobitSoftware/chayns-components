@@ -65,34 +65,14 @@ const AdaptiveTranslation = ({
 
     return (
         <TagName
-            className={clsx('notranslate adaptive-translation', className)}
+            className={clsx('notranslate', className)}
             style={{
+                opacity,
                 transition: 'opacity 0.5s ease',
                 ...style,
             }}
         >
             {typeof children === 'function' ? children(translated) : translated}
-
-            <style>
-                {`
-                    .adaptive-translation > *:not(img) {
-                        opacity: ${opacity};
-                        transition: opacity 0.5s ease;
-                    }
-                    
-                    .adaptive-translation img {
-                        opacity: 1 !important;
-                        
-                        .media-wrapper {
-                            opacity: 1 !important;
-                        }
-                        
-                        .media-wrapper span {
-                            opacity: 1 !important;
-                        }    
-                    }
-                `}
-            </style>
         </TagName>
     );
 };
