@@ -25,7 +25,10 @@ export const useAdaptiveTranslation = (
     const options = useContext(TranslationOptionsContext);
     const toLanguage = to || options.to;
     const fromLanguage = from || options.from;
-    const shouldTranslate = useMemo(() => toLanguage !== fromLanguage, [fromLanguage, toLanguage]);
+    const shouldTranslate = useMemo(
+        () => toLanguage !== fromLanguage && originalText.length !== 0,
+        [fromLanguage, originalText.length, toLanguage],
+    );
     const [translatedText, setTranslatedText] = useState<string>(originalText);
     const [isLoading, setIsLoading] = useState(shouldTranslate);
     const [isFetching, setIsFetching] = useState(false);
