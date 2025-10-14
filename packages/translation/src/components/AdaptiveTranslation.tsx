@@ -1,13 +1,15 @@
-﻿import React, { CSSProperties } from 'react';
+﻿import React, { CSSProperties, ReactNode } from 'react';
 import clsx from 'clsx';
 import { useAdaptiveTranslation } from '../hooks/useAdaptiveTranslation';
 import { Language } from 'chayns-api';
+
+type TranslationChildren = ((text: string) => ReactNode) | string;
 
 type AdaptiveTranslationProps = {
     /**
      * The Text that should be translated.
      */
-    children: string;
+    children: TranslationChildren;
     /**
      * The className of the element.
      */
@@ -24,6 +26,10 @@ type AdaptiveTranslationProps = {
      * The HTML tag of the children.
      */
     tagName?: keyof HTMLElementTagNameMap;
+    /**
+     * The text that should be translated. Only active if the children is type of function.
+     */
+    text?: string;
     /**
      * The type of the text.
      */
@@ -42,8 +48,13 @@ const AdaptiveTranslation = ({
     style,
     className,
     textType,
+    text = '',
 }: AdaptiveTranslationProps) => {
-    const { text, isLoading, isFetching } = useAdaptiveTranslation(children, {
+    const {
+        text: translated,
+        isLoading,
+        isFetching,
+    } = useAdaptiveTranslation(typeof children === 'function' ? text : children, {
         from,
         to,
         textType,
@@ -59,7 +70,7 @@ const AdaptiveTranslation = ({
                 ...style,
             }}
         >
-            {text}
+            {typeof children === 'function' ? children(translated) : translated}
         </TagName>
     );
 };
