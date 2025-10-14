@@ -60,17 +60,30 @@ const AdaptiveTranslation = ({
         textType,
     });
 
+    // eslint-disable-next-line no-nested-ternary
+    const opacity = isLoading ? 0 : isFetching ? 0.5 : 1;
+
     return (
         <TagName
-            className={clsx('notranslate', className)}
+            className={clsx('notranslate adaptive-translation', className)}
             style={{
-                // eslint-disable-next-line no-nested-ternary
-                opacity: isLoading ? 0 : isFetching ? 0.5 : 1,
                 transition: 'opacity 0.5s ease',
                 ...style,
             }}
         >
             {typeof children === 'function' ? children(translated) : translated}
+
+            <style>
+                {`
+                    .adaptive-translation > *:not(img) {
+                        opacity: ${opacity};
+                        transition: opacity 0.5s ease;
+                    }
+                    .adaptive-translation img {
+                        opacity: 1 !important;
+                    }
+                `}
+            </style>
         </TagName>
     );
 };
