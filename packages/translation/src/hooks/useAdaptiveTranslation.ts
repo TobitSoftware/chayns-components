@@ -9,6 +9,10 @@ interface UseAdaptiveTranslationOptions {
      */
     from?: Exclude<Language, Language.Unknown>;
     /**
+     * The type of the text.
+     */
+    textType?: string;
+    /**
      * The language to which the text should be translated.
      */
     to?: Exclude<Language, Language.Unknown>;
@@ -16,7 +20,7 @@ interface UseAdaptiveTranslationOptions {
 
 export const useAdaptiveTranslation = (
     originalText: string,
-    { to, from }: UseAdaptiveTranslationOptions = {},
+    { to, from, textType }: UseAdaptiveTranslationOptions = {},
 ): { text: string; isLoading: boolean; isFetching: boolean } => {
     const options = useContext(TranslationOptionsContext);
     const toLanguage = to || options.to;
@@ -31,7 +35,7 @@ export const useAdaptiveTranslation = (
             if (shouldTranslate) {
                 setIsFetching(true);
                 void translationHandler
-                    .translateText(originalText, fromLanguage, toLanguage)
+                    .translateText(originalText, fromLanguage, toLanguage, textType)
                     .then((text) => {
                         setTranslatedText(text);
                     })
@@ -43,7 +47,7 @@ export const useAdaptiveTranslation = (
         }, 200);
 
         return () => clearTimeout(timeoutRef);
-    }, [originalText, shouldTranslate, toLanguage, fromLanguage]);
+    }, [originalText, shouldTranslate, toLanguage, fromLanguage, textType]);
 
     return useMemo(
         () => ({

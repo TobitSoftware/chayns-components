@@ -25,6 +25,10 @@ type AdaptiveTranslationProps = {
      */
     tagName?: keyof HTMLElementTagNameMap;
     /**
+     * The type of the text.
+     */
+    textType?: string;
+    /**
      * The language to which the text should be translated.
      */
     to?: Exclude<Language, Language.Unknown>;
@@ -37,8 +41,13 @@ const AdaptiveTranslation = ({
     tagName: TagName = 'span',
     style,
     className,
+    textType,
 }: AdaptiveTranslationProps) => {
-    const { text, isLoading, isFetching } = useAdaptiveTranslation(children, { from, to });
+    const { text, isLoading, isFetching } = useAdaptiveTranslation(children, {
+        from,
+        to,
+        textType,
+    });
 
     return (
         <TagName

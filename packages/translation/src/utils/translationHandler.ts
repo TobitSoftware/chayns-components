@@ -39,7 +39,8 @@ class TranslationHandler {
         let batch: TranslationBatchItem[] = [];
 
         while (this.translationQueue.length) {
-            const { text, deferred, to, from } = this.translationQueue.shift() as QueuedItem;
+            const { text, deferred, to, from, textType } =
+                this.translationQueue.shift() as QueuedItem;
             totalLength += text.length;
             batch.push({
                 text,
@@ -47,6 +48,7 @@ class TranslationHandler {
                 from,
                 id: batch.length,
                 deferred,
+                textType,
             });
 
             if (totalLength > BATCH_SIZE_LIMIT || batch.length >= MAX_ITEMS_PER_BATCH) {
@@ -66,7 +68,7 @@ class TranslationHandler {
         leading: false,
     });
 
-    translateText = (original: string, from: string, to: string) => {
+    translateText = (original: string, from: string, to: string, textType?: string) => {
         const cachedTranslation = this.cachedTranslations[from]?.[to]?.[original];
         if (typeof cachedTranslation === 'string') {
             return Promise.resolve(cachedTranslation);
@@ -79,7 +81,7 @@ class TranslationHandler {
             return existingItem.deferred.promise;
         }
         const deferred = new Deferred<string>();
-        this.translationQueue.push({ text: original, deferred, to, from });
+        this.translationQueue.push({ text: original, deferred, to, from, textType });
         void this.#throttledProcessTranslationQueue();
         if (this.translationQueue.length >= MAX_ITEMS_PER_BATCH) {
             void this.#throttledProcessTranslationQueue.flush();

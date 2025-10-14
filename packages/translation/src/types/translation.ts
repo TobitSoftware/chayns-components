@@ -4,6 +4,7 @@ interface BaseTranslation {
     text: string;
     to: string;
     from: string;
+    textType?: string;
 }
 
 export interface QueuedItem extends BaseTranslation {
