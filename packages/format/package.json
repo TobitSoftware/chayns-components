@@ -54,7 +54,7 @@
     },
     "devDependencies": {
         "@babel/cli": "^7.28.3",
-        "@babel/core": "^7.28.3",
+        "@babel/core": "^7.28.4",
         "@babel/preset-env": "^7.28.3",
         "@babel/preset-react": "^7.27.1",
         "@babel/preset-typescript": "^7.27.1",
@@ -63,7 +63,7 @@
         "babel-loader": "^9.2.1",
         "cross-env": "^7.0.3",
         "lerna": "^8.2.4",
-        "typescript": "^5.9.2",
+        "typescript": "^5.9.3",
         "vitest": "^1.6.1"
     },
     "dependencies": {
