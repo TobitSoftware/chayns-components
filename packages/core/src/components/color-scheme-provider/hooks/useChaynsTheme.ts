@@ -9,6 +9,7 @@ import { useParagraphFormat } from './useParagraphFormat';
 export type ThemeOptions = {
     colors?: Theme;
     colorMode: ColorMode;
+    iconColor?: string;
     color: string;
     secondaryColor?: string;
     designSettings?: ChaynsDesignSettings & { fontSizePx?: number };
@@ -26,6 +27,7 @@ const createTheme = ({
     designSettings,
     paragraphFormat,
     theme,
+    iconColor,
     customVariables,
 }: Omit<ThemeOptions, 'siteId'>) => {
     if (theme) {
@@ -94,6 +96,10 @@ const createTheme = ({
             break;
     }
 
+    if (iconColor) {
+        result.iconColor = iconColor;
+    }
+
     result.fontSize = (designSettings?.fontSizePx || 15) as unknown as string;
 
     return result;
@@ -107,6 +113,7 @@ export const useChaynsTheme = ({
     designSettings: designSettingsProp,
     paragraphFormat: paragraphFormatProp,
     siteId,
+    iconColor,
     theme,
     customVariables,
 }: ThemeOptions) => {
@@ -123,6 +130,7 @@ export const useChaynsTheme = ({
             designSettings,
             paragraphFormat,
             theme,
+            iconColor,
             customVariables,
         }),
     );
@@ -141,6 +149,7 @@ export const useChaynsTheme = ({
                 designSettings,
                 paragraphFormat,
                 theme,
+                iconColor,
                 customVariables,
             }),
         );

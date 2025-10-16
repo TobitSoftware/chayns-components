@@ -33,6 +33,10 @@ export type ColorSchemeProviderProps = {
      * Additional variables to extend the theme
      */
     customVariables?: Record<string, string>;
+    /**
+     * An optional color for all icons
+     */
+    iconColor?: string;
 };
 
 export interface Theme {
@@ -79,6 +83,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     secondaryColor,
     siteId,
     style = {},
+    iconColor,
     customVariables,
 }) => {
     const { color: internalColor, colorMode: internalColorMode } = useSite();
@@ -94,6 +99,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
     const contextValue = useChaynsTheme({
         color,
+        iconColor,
         colorMode,
         secondaryColor,
         siteId,

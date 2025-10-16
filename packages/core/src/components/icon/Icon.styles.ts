@@ -35,7 +35,7 @@ type StyledIconProps = WithTheme<{
 }>;
 
 export const StyledIcon = styled.i<StyledIconProps>`
-    color: ${({ $color, theme }: StyledIconProps) => $color || theme.headline};
+    color: ${({ $color, theme }: StyledIconProps) => $color || theme.iconColor || theme.headline};
     display: ${({ $isStacked }) => ($isStacked ? undefined : 'inline-flex')};
     font-size: ${({ $fontSize }) => `${$fontSize}px`};
 

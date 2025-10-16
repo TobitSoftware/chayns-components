@@ -29,7 +29,7 @@ export const StyledAccordionIcon = styled.i<StyledAccordionIconProps>`
     align-items: center;
     justify-content: center;
     display: flex;
-    color: ${({ theme }: StyledAccordionIconProps) => theme.headline};
+    color: ${({ theme }: StyledAccordionIconProps) => theme.iconColor || theme.headline};
 
     &:before {
         content: ${({ $icon }) => `"\\${$icon}"`};
