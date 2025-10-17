@@ -8,24 +8,28 @@ export type ExpandableContentProps = {
      */
     children: ReactNode;
     /**
+     * An optional start delay.
+     */
+    startDelay?: number;
+    /**
      * Whether the content is expanded.
      */
     isOpen: boolean;
 };
 
-const ExpandableContent: FC<ExpandableContentProps> = ({ children, isOpen }) =>
+const ExpandableContent: FC<ExpandableContentProps> = ({ children, isOpen, startDelay }) =>
     useMemo(
         () => (
             <AnimatePresence initial={false}>
                 <StyledMotionExpandableContent
                     animate={{ height: isOpen ? 'auto' : '0px' }}
-                    transition={{ duration: 0.2, type: 'tween' }}
+                    transition={{ duration: 0.2, type: 'tween', delay: isOpen ? startDelay : 0 }}
                 >
                     {children}
                 </StyledMotionExpandableContent>
             </AnimatePresence>
         ),
-        [children, isOpen],
+        [children, isOpen, startDelay],
     );
 
 ExpandableContent.displayName = 'ExpandableContent';

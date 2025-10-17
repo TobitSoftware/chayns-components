@@ -1,5 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { motion } from 'motion/react';
 
 export const StyledFilter = styled.div``;
 
@@ -27,7 +28,9 @@ export const StyledFilterSearch = styled.div`
     width: 100%;
 `;
 
-type StyledFilterIconProps = WithTheme<unknown>;
+type StyledFilterIconProps = WithTheme<{
+    $isOpen: boolean;
+}>;
 
 export const StyledFilterIcon = styled.div<StyledFilterIconProps>`
     cursor: pointer;
@@ -39,7 +42,28 @@ export const StyledFilterIcon = styled.div<StyledFilterIconProps>`
     align-items: center;
     justify-content: center;
 
+    ${({ $isOpen, theme }) =>
+        $isOpen &&
+        css`
+            background-color: ${theme['100']};
+        `}
+
     &:hover {
         background-color: ${({ theme }) => theme['100']};
     }
 `;
+
+type StyledMotionFilterBackgroundProps = WithTheme<{ $top: number; $left: number }>;
+
+export const StyledMotionFilterBackground = styled(motion.div)<StyledMotionFilterBackgroundProps>`
+    width: 30px;
+
+    position: absolute;
+
+    top: ${({ $top }) => $top}px;
+    left: ${({ $left }) => $left}px;
+
+    background-color: ${({ theme }) => theme['100']};
+`;
+
+export const StyledFilterContentWrapper = styled.div``;

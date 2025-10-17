@@ -1,6 +1,7 @@
 import React, {
     forwardRef,
     useCallback,
+    useEffect,
     useImperativeHandle,
     useMemo,
     useRef,
@@ -8,10 +9,12 @@ import React, {
 } from 'react';
 import {
     StyledFilter,
+    StyledFilterContentWrapper,
     StyledFilterHead,
     StyledFilterHeadline,
     StyledFilterIcon,
     StyledFilterSearch,
+    StyledMotionFilterBackground,
 } from './Filter.styles';
 import ExpandableContent from '../expandable-content/ExpandableContent';
 import Icon from '../icon/Icon';
@@ -37,6 +40,12 @@ const Filter = forwardRef<FilterRef, FilterProps>(
     ({ headline, searchConfig, sortConfig, filterButtonConfig }, ref) => {
         const [isOpen, setIsOpen] = useState(false);
         const [isSearchActive, setIsSearchActive] = useState(false);
+        const [backgroundDistance, setBackgroundDistance] = useState(0);
+        const [backgroundCoordinates, setBackgroundCoordinates] = useState({ top: 0, left: 0 });
+
+        const contentRef = useRef<HTMLDivElement | null>(null);
+        const iconRef = useRef<HTMLDivElement | null>(null);
+        const filterRef = useRef<HTMLDivElement | null>(null);
 
         const contextMenuRef = useRef<ContextMenuRef>(null);
 
@@ -108,13 +117,45 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             }
         }, [handleHide, handleShow, isOpen]);
 
+        useEffect(() => {
+            if (headline && iconRef.current && contentRef.current && filterRef.current) {
+                const iconRect = iconRef.current.getBoundingClientRect();
+                const filterRect = filterRef.current.getBoundingClientRect();
+                const contentRect = contentRef.current.getBoundingClientRect();
+
+                const relativeTop = iconRect.bottom - filterRect.top;
+                const relativeLeft = iconRect.left - filterRect.left;
+
+                setBackgroundDistance(contentRect.top - iconRect.bottom);
+                setBackgroundCoordinates({
+                    top: relativeTop,
+                    left: relativeLeft,
+                });
+            } else {
+                setBackgroundDistance(0);
+                setBackgroundCoordinates({ top: 0, left: 0 });
+            }
+        }, [headline]);
+
         const iconElement = useMemo(
             () => (
-                <StyledFilterIcon onClick={handleIconClick}>
+                <StyledFilterIcon onClick={handleIconClick} $isOpen={isOpen} ref={iconRef}>
                     <Icon icons={icons} size={18} />
                 </StyledFilterIcon>
             ),
-            [handleIconClick, icons],
+            [handleIconClick, icons, isOpen],
+        );
+
+        const backgroundElement = useMemo(
+            () => (
+                <StyledMotionFilterBackground
+                    $top={backgroundCoordinates.top}
+                    $left={backgroundCoordinates.left}
+                    animate={{ height: isOpen ? `${backgroundDistance}px` : 0 }}
+                    transition={{ duration: 0.1, delay: isOpen ? 0 : 0.2 }}
+                />
+            ),
+            [backgroundDistance, isOpen, backgroundCoordinates],
         );
 
         const sortItems: ContextMenuItem[] = useMemo(() => {
@@ -135,13 +176,17 @@ const Filter = forwardRef<FilterRef, FilterProps>(
 
         return useMemo(
             () => (
-                <StyledFilter>
+                <StyledFilter ref={filterRef}>
                     <StyledFilterHead>
                         <StyledFilterHeadline isSearchActive={isSearchActive}>
                             {headline}
                         </StyledFilterHeadline>
-                        {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) &&
-                            iconElement}
+                        {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
+                            <>
+                                {iconElement}
+                                {backgroundDistance > 0 && backgroundElement}
+                            </>
+                        )}
                         {type === FilterType.ONLY_SEARCH && searchConfig && (
                             <StyledFilterSearch>
                                 <SearchInput
@@ -162,13 +207,18 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                         )}
                     </StyledFilterHead>
                     {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
-                        <ExpandableContent isOpen={isOpen}>
-                            <FilterContent
-                                searchConfig={searchConfig}
-                                filterButtonConfig={filterButtonConfig}
-                                sortConfig={sortConfig}
-                            />
-                        </ExpandableContent>
+                        <StyledFilterContentWrapper ref={contentRef}>
+                            <ExpandableContent
+                                isOpen={isOpen}
+                                startDelay={backgroundDistance > 0 ? 0.1 : 0}
+                            >
+                                <FilterContent
+                                    searchConfig={searchConfig}
+                                    filterButtonConfig={filterButtonConfig}
+                                    sortConfig={sortConfig}
+                                />
+                            </ExpandableContent>
+                        </StyledFilterContentWrapper>
                     )}
                 </StyledFilter>
             ),
@@ -177,6 +227,8 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 headline,
                 type,
                 iconElement,
+                backgroundDistance,
+                backgroundElement,
                 searchConfig,
                 sortConfig,
                 sortItems,
