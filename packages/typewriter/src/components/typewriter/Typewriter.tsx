@@ -26,7 +26,7 @@ const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffec
 
 export type TypewriterProps = {
     /**
-     * The amount of characters that will be animated per animation cycle.
+     * The number of characters that will be animated per animation cycle.
      */
     animationSteps?: number;
     /**
@@ -94,7 +94,7 @@ export type TypewriterProps = {
      */
     shouldHideCursor?: boolean;
     /**
-     * Whether the content should remain single line.
+     * Whether the content should remain a single line.
      */
     shouldRemainSingleLine?: boolean;
     /**
@@ -210,7 +210,7 @@ const Typewriter: FC<TypewriterProps> = ({
                     ? renderToString(
                           <ChaynsProvider data={values} functions={functions} isModule>
                               <ColorSchemeProvider style={{ display: 'inline' }}>
-                                  {currentChildren}
+                                  <span className="notranslate">{currentChildren}</span>
                               </ColorSchemeProvider>
                           </ChaynsProvider>,
                       )
@@ -224,7 +224,7 @@ const Typewriter: FC<TypewriterProps> = ({
             ? renderToString(
                   <ChaynsProvider data={values} functions={functions} isModule>
                       <ColorSchemeProvider style={{ display: 'inline' }}>
-                          {sortedChildren}
+                          <span className="notranslate">{sortedChildren}</span>
                       </ColorSchemeProvider>
                   </ChaynsProvider>,
               )
@@ -345,7 +345,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
                             /**
                              * At this point, the next value for "shownCharCount" is deliberately set to
-                             * the length of the textContent in order to correctly display HTML elements
+                             * the length of the textContent to correctly display HTML elements
                              * after the last letter.
                              */
                             nextState = textContent.length;
@@ -460,6 +460,7 @@ const Typewriter: FC<TypewriterProps> = ({
                     />
                 ) : (
                     <StyledTypewriterText
+                        className="notranslate"
                         $shouldRemainSingleLine={shouldRemainSingleLine}
                         dangerouslySetInnerHTML={
                             typeof sortedChildren === 'string' ? { __html: shownText } : undefined
@@ -478,7 +479,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 )}
                 {/*
                     The following is needed because some components like the CodeHighlighter will not render correct
-                    if the element is not rendered on client before...
+                    if the element is not rendered on a client before...
                 */}
                 {!hasRenderedChildrenOnce &&
                     createPortal(
