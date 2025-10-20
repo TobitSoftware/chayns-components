@@ -17,7 +17,8 @@
         "prepare": "husky install",
         "preversion": "lerna exec -- npm run build:types",
         "upgrade:minor": "lerna exec -- ncu -u -t minor",
-        "upgrade": "lerna exec -- ncu -u"
+        "upgrade": "lerna exec -- ncu -u",
+        "docs": "npx ts-node --esm scripts/docsGen.ts"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
@@ -72,6 +73,8 @@
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "storybook": "^7.6.20",
-        "typescript": "^5.9.2"
+        "ts-morph": "^27.0.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3"
     }
 }
