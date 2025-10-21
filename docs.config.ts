@@ -55,7 +55,7 @@ export interface GenerateTypesConfig {
  * Adjust "packages" to the set of packages that should be included in the export.
  *
  * Execution:
- *   npx ts-node --esm scripts/docsGen.ts
+ *   npx ts-node --esm scripts/generate-docs.ts
  *
  * Expectations:
  * - Each package should follow the convention: <rootDir>/<pkg>/src/index.ts
