@@ -1,4 +1,4 @@
-﻿import React, { CSSProperties, ReactNode } from 'react';
+﻿import React, { CSSProperties, ReactNode, useEffect } from 'react';
 import clsx from 'clsx';
 import { useAdaptiveTranslation } from '../hooks/useAdaptiveTranslation';
 import { Language } from 'chayns-api';
@@ -38,6 +38,14 @@ type AdaptiveTranslationProps = {
      * The language to which the text should be translated.
      */
     to?: Exclude<Language, Language.Unknown>;
+    /**
+     * Function to be executed when the state of the translation is changed.
+     */
+    onStateChange?: (isLoading: boolean, isFetching: boolean) => void;
+    /**
+     * Whether the opacity change should be disabled.
+     */
+    shouldDisableOpacity?: boolean;
 };
 
 const AdaptiveTranslation = ({
@@ -49,6 +57,8 @@ const AdaptiveTranslation = ({
     className,
     textType,
     text = '',
+    onStateChange,
+    shouldDisableOpacity = false,
 }: AdaptiveTranslationProps) => {
     const {
         text: translated,
@@ -60,17 +70,27 @@ const AdaptiveTranslation = ({
         textType,
     });
 
+    useEffect(() => {
+        if (typeof onStateChange === 'function') {
+            onStateChange(isLoading, isFetching);
+        }
+    }, [isFetching, isLoading, onStateChange]);
+
     // eslint-disable-next-line no-nested-ternary
     const opacity = isLoading ? 0 : isFetching ? 0.5 : 1;
 
     return (
         <TagName
             className={clsx('notranslate', className)}
-            style={{
-                opacity,
-                transition: 'opacity 0.5s ease',
-                ...style,
-            }}
+            style={
+                shouldDisableOpacity
+                    ? style
+                    : {
+                          opacity,
+                          transition: 'opacity 0.5s ease',
+                          ...style,
+                      }
+            }
         >
             {typeof children === 'function' ? children(translated) : translated}
         </TagName>
