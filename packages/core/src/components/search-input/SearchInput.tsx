@@ -169,7 +169,6 @@ const SearchInput: FC<SearchInputProps> = ({
                                         ? handleBackIconClick
                                         : handleSearchIconClick
                                 }
-                                size={18}
                             />
                         </StyledMotionSearchInputIconWrapperContent>
                     </AnimatePresence>
@@ -202,7 +201,6 @@ const SearchInput: FC<SearchInputProps> = ({
                                                 ? handleBackIconClick
                                                 : handleSearchIconClick
                                         }
-                                        size={18}
                                     />
                                 </StyledMotionSearchInputIconWrapperContent>
                             </AnimatePresence>
