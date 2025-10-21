@@ -6,7 +6,10 @@
  * extracts props (name/type/required/description) and referenced custom types (interfaces/types/enums).
  * Recursively adds all internal dependent types referenced by those types (across subpackages).
  *
- * Notes: Formatting/normalization is tuned; adapt with care.
+ * Notes:
+ *  - This script took time to tune because ts-morph often flattens/aliases types.
+ *  - You CAN adapt/optimize it, but understand what each normalizer/guard does first.
+ *  - Use DEBUG=true to inspect where type resolution fails.
  */
 
 import fs from 'fs';
@@ -35,8 +38,13 @@ import {
 import type { GenerateTypesConfig } from '../docs.config.ts';
 
 /* -------------------------------------------------------------------------- */
-/* Bootstrapping                                                              */
+/* Bootstrapping + Debug                                                      */
 /* -------------------------------------------------------------------------- */
+
+const DEBUG = true; // ← set to false when done debugging noisy output
+function debugLog(...args: any[]) {
+    if (DEBUG) console.log('[docsGen:DEBUG]', ...args);
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -51,7 +59,7 @@ const project = new Project({
     skipAddingFilesFromTsConfig: true,
 });
 
-/* versions per subpackage */
+/* read versions per subpackage (added into filters) */
 const packageVersions: Record<string, string> = {};
 for (const pkg of config.packages) {
     const pkgJsonPath = path.resolve(config.rootDir, pkg, 'package.json');
@@ -60,14 +68,13 @@ for (const pkg of config.packages) {
             const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
             if (pkgJson.version) packageVersions[pkg] = pkgJson.version;
         } catch {
-            /* ignore */
+            /* ignore parse errors */
         }
     }
 }
 
 /**
- * Recursively load all source files from each subpackage,
- * including types/*.ts and re-exported modules from @chayns-components/* imports.
+ * Load all source files for each subpackage, including .d.ts (to see re-exports).
  */
 for (const pkg of config.packages) {
     const pkgSrc = path.resolve(config.rootDir, pkg, 'src');
@@ -79,8 +86,9 @@ for (const pkg of config.packages) {
     ]);
 }
 
-// Load referenced internal packages as well
-const addedFiles = new Set(project.getSourceFiles().map((f) => f.getFilePath()));
+/**
+ * Add referenced internal packages (imports like @chayns-components/*) eagerly.
+ */
 for (const sf of project.getSourceFiles()) {
     for (const imp of sf.getImportDeclarations()) {
         const spec = imp.getModuleSpecifierValue();
@@ -88,18 +96,17 @@ for (const sf of project.getSourceFiles()) {
             const subPkg = spec.replace('@chayns-components/', '');
             const subSrc = path.resolve(config.rootDir, subPkg, 'src');
             if (fs.existsSync(subSrc)) {
-                const files = project.addSourceFilesAtPaths([
+                project.addSourceFilesAtPaths([
                     `${subSrc}/**/*.ts`,
                     `${subSrc}/**/*.tsx`,
                     `${subSrc}/**/*.d.ts`,
                 ]);
-                files.forEach((f) => addedFiles.add(f.getFilePath()));
             }
         }
     }
 }
 
-/* add version to filter */
+/* attach version into filter entries */
 config.filters = config.filters.map((f) => {
     const version = packageVersions[f.id];
     return version ? { ...f, version } : f;
@@ -108,7 +115,7 @@ config.filters = config.filters.map((f) => {
 const output: Record<string, any> = { filter: config.filters, packages: {} };
 
 /* -------------------------------------------------------------------------- */
-/* Utilities                                                                  */
+/* Utilities + Normalization                                                  */
 /* -------------------------------------------------------------------------- */
 
 const DEBUG_MISSING_TYPES = true;
@@ -116,7 +123,7 @@ const missingTypes = new Set<string>();
 
 const PRIMS = new Set(['string', 'number', 'boolean', 'null', 'any', 'void', 'never', 'unknown']);
 const GLOBALS = new Set(['ReactNode', 'ReactElement', 'CSSProperties', 'Element', 'HTMLElement']);
-let ALREADY_EXPANDED = new Set<string>(); // ← wird pro Komponente zurückgesetzt
+let ALREADY_EXPANDED = new Set<string>(); // reset per component
 
 const handlerAliases = [
     'ChangeEventHandler',
@@ -144,23 +151,22 @@ const mapCSS = (text: string) =>
             (_m, p1: string) => `CSSProperties['${cssPropName(p1)}']`,
         );
 
-const looksLikeCssColorUnion = (text: string) =>
-    /ActiveBorder|currentcolor|ThreeDLightShadow/.test(text) && text.length > 300;
+const looksLikeCssColorUnion = (t: string) =>
+    /ActiveBorder|currentcolor|ThreeDLightShadow/.test(t) && t.length > 300;
 
-const compressCssUnions = (text: string) =>
-    looksLikeCssColorUnion(text) ? `CSSProperties['color']` : text;
+const compressCssUnions = (t: string) => (looksLikeCssColorUnion(t) ? `CSSProperties['color']` : t);
 
-const dropUndefinedAndBools = (text: string) =>
-    text
+const dropUndefinedAndBools = (t: string) =>
+    t
         .replace(/\bundefined\s*\|\s*/g, '')
         .replace(/\s*\|\s*undefined\b/g, '')
         .replace(/\bfalse\s*\|\s*true\b/g, 'boolean');
 
-const stripReactAndImports = (text: string) =>
-    text.replace(/React\./g, '').replace(/import\((?:'|").*?(?:'|")\)\./g, '');
+const stripReactAndImports = (t: string) =>
+    t.replace(/React\./g, '').replace(/import\((?:'|").*?(?:'|")\)\./g, '');
 
-const stripLegacyRef = (text: string) =>
-    text
+const stripLegacyRef = (t: string) =>
+    t
         .replace(/\bLegacyRef<(.+?)>/g, '$1')
         .replace(/\bRefObject<(.+?)>/g, '$1')
         .replace(
@@ -168,30 +174,30 @@ const stripLegacyRef = (text: string) =>
             '$1',
         );
 
-const compactSpaces = (text: string) => text.replace(/\s+/g, ' ').trim();
+const compactSpaces = (t: string) => t.replace(/\s+/g, ' ').trim();
 
-const normalizeCallbacks = (text: string) =>
-    text
+const normalizeCallbacks = (t: string) =>
+    t
         .replace(/^\(\s*\((.*?)\)\s*\)$/s, '($1)')
         .replace(/\(\(\s*([^)]+?)\)\s*=>/g, '($1) =>')
         .replace(/\(\((.*?)\)\)/g, '($1)');
 
-const collapseReactNode = (text: string) =>
-    /string/.test(text) &&
-    /number/.test(text) &&
-    /boolean/.test(text) &&
-    /null/.test(text) &&
-    /ReactElement/.test(text) &&
-    /ReactPortal/.test(text)
+const collapseReactNode = (t: string) =>
+    /string/.test(t) &&
+    /number/.test(t) &&
+    /boolean/.test(t) &&
+    /null/.test(t) &&
+    /ReactElement/.test(t) &&
+    /ReactPortal/.test(t)
         ? 'ReactNode'
-        : text;
+        : t;
 
-const finalizeText = (text: string) =>
+const finalizeText = (t: string) =>
     compactSpaces(
         stripLegacyRef(
             normalizeCallbacks(
                 collapseReactNode(
-                    stripReactAndImports(dropUndefinedAndBools(compressCssUnions(mapCSS(text)))),
+                    stripReactAndImports(dropUndefinedAndBools(compressCssUnions(mapCSS(t)))),
                 ),
             ),
         ),
@@ -206,69 +212,8 @@ const isSymbolOptional = (sym: MorphSymbol) => {
     return false;
 };
 
-/**
- * Detect if a source file belongs to an internal monorepo package.
- * Accepts any file under /packages/, including node_modules/@chayns-components.
- */
-const isInternalSourceFile = (sf: SourceFile | undefined): boolean => {
-    if (!sf) return false;
-    const filePath = sf.getFilePath();
-
-    // Mark all internal /packages/* sources as internal
-    if (filePath.includes(`${path.sep}packages${path.sep}`)) return true;
-
-    // Also treat linked @chayns-components/ subpackages as internal
-    if (filePath.includes(`${path.sep}node_modules${path.sep}@chayns-components${path.sep}`))
-        return true;
-
-    // Everything else is external
-    return false;
-};
-
-const resolveFromDeclaration = (decl: Node, bag: TypesBag): string | null => {
-    const sf = decl.getSourceFile();
-    if (!isInternalSourceFile(sf)) return null;
-
-    if (Node.isEnumMember(decl)) {
-        const parent = decl.getParent();
-        if (Node.isEnumDeclaration(parent)) {
-            const name = parent.getName();
-            if (!name) return null;
-            addType(bag, name, renderEnum(parent));
-            return name;
-        }
-        return null;
-    }
-
-    if (Node.isEnumDeclaration(decl)) {
-        const name = decl.getName();
-        if (!name) return null;
-        addType(bag, name, renderEnum(decl));
-        return name;
-    }
-
-    if (Node.isInterfaceDeclaration(decl)) {
-        const name = decl.getName();
-        if (!name) return null;
-        for (const p of decl.getProperties()) ensureCollectType(p.getType(), bag);
-        addType(bag, name, renderInterface(decl, bag));
-        return name;
-    }
-
-    if (Node.isTypeAliasDeclaration(decl)) {
-        const name = decl.getName();
-        if (!name) return null;
-        const tp = decl.getType();
-        ensureCollectType(tp, bag);
-        addType(bag, name, renderAlias(decl, bag));
-        return name;
-    }
-
-    return null;
-};
-
 /* -------------------------------------------------------------------------- */
-/* Aliases from index.ts                                                      */
+/* Internal/External classification + alias                                   */
 /* -------------------------------------------------------------------------- */
 
 const aliasMap = new Map<string, string>();
@@ -303,8 +248,19 @@ const applyAliases = (text: string) => {
     return t;
 };
 
+/** classify: internal if in /packages/ or node_modules/@chayns-components/ */
+const isInternalSourceFile = (sf: SourceFile | undefined): boolean => {
+    if (!sf) return false;
+    const filePath = sf.getFilePath();
+    const internal =
+        filePath.includes(`${path.sep}packages${path.sep}`) ||
+        filePath.includes(`${path.sep}node_modules${path.sep}@chayns-components${path.sep}`);
+    debugLog('isInternalSourceFile:', sf.getBaseName(), '→', internal ? 'internal' : 'external');
+    return internal;
+};
+
 /* -------------------------------------------------------------------------- */
-/* Candidate extraction from type text (for aliases/enums flattened by TS)    */
+/* Candidate extraction from type text                                        */
 /* -------------------------------------------------------------------------- */
 
 const BUILTIN_UTILITY = new Set([
@@ -346,14 +302,17 @@ const collectNamesFromTypeText = (text: string): string[] => {
     if (!text) return [];
     const names = new Set<string>();
 
+    // Plain identifiers
     for (const m of text.matchAll(/\b[A-Z][A-Za-z0-9_]*\b/g)) {
         const id = m[0];
         if (!shouldIgnoreName(id)) names.add(id);
     }
+    // Generic/array shapes: Type[...]
     for (const m of text.matchAll(/\b([A-Z][A-Za-z0-9_]*)\s*\[/g)) {
         const id = m[1];
         if (!shouldIgnoreName(id)) names.add(id);
     }
+    // Namespaced: Namespace.Member
     for (const m of text.matchAll(/\b([A-Z][A-Za-z0-9_]*)\.[A-Za-z0-9_]+\b/g)) {
         const id = m[1];
         if (!shouldIgnoreName(id)) names.add(id);
@@ -369,55 +328,80 @@ const collectNamesFromTypeText = (text: string): string[] => {
 type TypesBag = Map<string, { name: string; type: string }>;
 
 const addType = (bag: TypesBag, name: string, typeBody: string) => {
+    debugLog('addType →', name, '| already:', bag.has(name));
     if (!name) return;
     const display = aliasMap.get(name) ?? name;
     if (PRIMS.has(display) || GLOBALS.has(display)) return;
     if (!bag.has(display)) bag.set(display, { name: display, type: typeBody });
 };
 
-/**
- * Find a declared node (interface, type, enum) anywhere in the project.
- * Uses an internal cache to speed up lookups.
- */
+/** global declaration cache */
 const _declCache = new Map<string, InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration>();
 
-/**
- * Find any declared type, interface or enum anywhere in the monorepo project.
- * Searches all source files, including subpackages and re-exports.
- */
+/** find declaration anywhere in project (direct + re-exports + aliasMap) */
 const findDeclaredNode = (
     name: string,
 ): InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration | null => {
-    // direct matches first
-    for (const sf of project.getSourceFiles()) {
-        const i = sf.getInterface(name);
-        if (i) return i;
-        const t = sf.getTypeAlias(name);
-        if (t) return t;
-        const e = sf.getEnum(name);
-        if (e) return e;
+    debugLog('findDeclaredNode →', name);
+    if (_declCache.has(name)) {
+        const cached = _declCache.get(name) ?? null;
+        debugLog('  cache →', cached ? 'hit' : 'miss', name);
+        return cached;
     }
 
-    // look for re-exported or aliased symbols
+    let decl: InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration | null = null;
+
     for (const sf of project.getSourceFiles()) {
-        const sym = sf.getExportSymbols().find((s) => s.getName() === name);
-        const decl = sym?.getDeclarations()?.[0];
-        if (
-            decl &&
-            (Node.isInterfaceDeclaration(decl) ||
-                Node.isTypeAliasDeclaration(decl) ||
-                Node.isEnumDeclaration(decl))
-        ) {
-            return decl;
+        const i = sf.getInterface(name);
+        if (i) {
+            debugLog('✅ found interface', name, 'in', sf.getBaseName());
+            decl = i;
+            break;
+        }
+        const t = sf.getTypeAlias(name);
+        if (t) {
+            debugLog('✅ found type alias', name, 'in', sf.getBaseName());
+            decl = t;
+            break;
+        }
+        const e = sf.getEnum(name);
+        if (e) {
+            debugLog('✅ found enum', name, 'in', sf.getBaseName());
+            decl = e;
+            break;
         }
     }
 
-    // alias map fallback
-    for (const [orig, alias] of aliasMap.entries()) {
-        if (alias === name) return findDeclaredNode(orig);
+    if (!decl) {
+        for (const sf of project.getSourceFiles()) {
+            const sym = sf.getExportSymbols().find((s) => s.getName() === name);
+            const d = sym?.getDeclarations()?.[0];
+            if (
+                d &&
+                (Node.isInterfaceDeclaration(d) ||
+                    Node.isTypeAliasDeclaration(d) ||
+                    Node.isEnumDeclaration(d))
+            ) {
+                debugLog('✅ found re-exported', name, 'in', sf.getBaseName());
+                decl = d as any;
+                break;
+            }
+        }
     }
 
-    return null;
+    if (!decl) {
+        for (const [orig, alias] of aliasMap.entries()) {
+            if (alias === name) {
+                debugLog('↩️ alias', alias, '→', orig);
+                decl = findDeclaredNode(orig);
+                break;
+            }
+        }
+    }
+
+    if (!decl) debugLog('❌ not found', name);
+    _declCache.set(name, decl ?? null);
+    return decl;
 };
 
 const renderEnum = (e: EnumDeclaration) =>
@@ -440,79 +424,103 @@ const renderInterface = (i: InterfaceDeclaration, bag: TypesBag) =>
         .map((p: PropertySignature) => {
             const pt = p.getType();
             const opt = p.hasQuestionToken() ? '?' : '';
-            return `  ${p.getName()}${opt}: ${pretty(pt, bag)};`;
+            const text = pretty(pt, bag);
+            return `  ${p.getName()}${opt}: ${text};`;
         })
         .join('\n')}\n}`;
 
 const renderAlias = (t: TypeAliasDeclaration, bag: TypesBag) => pretty(t.getType(), bag);
 
-/**
- * Recursively collect all nested types referenced by a Type.
- * Traverses symbol-based links and literal text-based references.
- */
+/** resolve from a declaration node (internal only) and register into bag */
+const resolveFromDeclaration = (decl: Node, bag: TypesBag): string | null => {
+    const sf = decl.getSourceFile();
+    const internal = isInternalSourceFile(sf);
+    debugLog('resolveFromDeclaration →', decl.getKindName(), 'internal?', internal);
+    if (!internal) return null;
+
+    if (Node.isEnumMember(decl)) {
+        const parent = decl.getParent();
+        if (Node.isEnumDeclaration(parent)) {
+            const name = parent.getName();
+            if (!name) return null;
+            addType(bag, name, renderEnum(parent));
+            return name;
+        }
+        return null;
+    }
+
+    if (Node.isEnumDeclaration(decl)) {
+        const name = decl.getName();
+        if (!name) return null;
+        addType(bag, name, renderEnum(decl));
+        return name;
+    }
+
+    if (Node.isInterfaceDeclaration(decl)) {
+        const name = decl.getName();
+        if (!name) return null;
+        for (const p of decl.getProperties()) ensureCollectType(p.getType(), bag);
+        addType(bag, name, renderInterface(decl, bag));
+        return name;
+    }
+
+    if (Node.isTypeAliasDeclaration(decl)) {
+        const name = decl.getName();
+        if (!name) return null;
+        const tp = decl.getType();
+        ensureCollectType(tp, bag);
+        addType(bag, name, renderAlias(decl, bag));
+        return name;
+    }
+
+    return null;
+};
+
+/** deeply collect referenced types from a Type */
 const ensureCollectType = (t: Type, bag: TypesBag, seen = new Set<Type>()) => {
     if (!t || seen.has(t)) return;
     seen.add(t);
 
+    debugLog('ensureCollectType →', t.getText().slice(0, 120));
+
     const sym = t.getSymbol();
     const decl = sym?.getDeclarations()?.[0];
 
-    // Prefer declaration-based resolution for type references (also works for d.ts in node_modules/@chayns-components)
+    // TypeReference → prefer declaration path
     if ((t as any).isTypeReference?.()) {
+        const refName = sym?.getName();
+        debugLog('  · TypeReference', refName);
         if (decl && isInternalSourceFile(decl.getSourceFile())) {
             resolveFromDeclaration(decl, bag);
-        } else {
-            const refName = sym?.getName();
-            if (refName) resolveNamedRecursive(refName, bag);
+        } else if (refName) {
+            resolveNamedRecursive(refName, bag);
         }
         for (const a of t.getTypeArguments?.() ?? []) ensureCollectType(a, bag, seen);
         return;
     }
 
-    // Arrays
+    // Array
     if (t.isArray()) {
         const et = t.getArrayElementType();
+        debugLog('  · Array of', et?.getText());
         if (et) ensureCollectType(et, bag, seen);
         return;
     }
 
-    // Unions / Intersections
+    // Union/Intersection
     if (t.isUnion() || t.isIntersection()) {
-        const types = t.getUnionTypes?.() ?? t.getIntersectionTypes?.() ?? [];
-        // Try to resolve enum by checking enum member declarations
-        let parentEnumDecl: EnumDeclaration | null = null;
-        let allMembers = true;
-        for (const ut of types) {
-            const s = ut.getSymbol();
-            const d = s?.getDeclarations()?.[0];
-            if (!d || !Node.isEnumMember?.(d)) {
-                allMembers = false;
-                break;
-            }
-            const par = d.getParent();
-            if (!par || !Node.isEnumDeclaration(par)) {
-                allMembers = false;
-                break;
-            }
-            if (!parentEnumDecl) parentEnumDecl = par;
-            else if (parentEnumDecl !== par) {
-                allMembers = false;
-                break;
-            }
+        debugLog('  ·', t.isUnion() ? 'Union' : 'Intersection');
+        for (const ut of t.getUnionTypes?.() ?? t.getIntersectionTypes?.() ?? []) {
+            ensureCollectType(ut, bag, seen);
         }
-        if (allMembers && parentEnumDecl && isInternalSourceFile(parentEnumDecl.getSourceFile())) {
-            resolveFromDeclaration(parentEnumDecl, bag);
-            return; // rest wird im pretty() als Enum-Name dargestellt
-        }
-
-        for (const ut of types) ensureCollectType(ut, bag, seen);
         return;
     }
 
-    // Functions
+    // Callable
     const sigs = t.getCallSignatures();
     if (sigs.length > 0) {
         const s = sigs[0];
+        debugLog('  · Function signature with', s.getParameters().length, 'params');
         for (const p of s.getParameters()) {
             const d = p.getDeclarations()?.[0];
             const pt = d ? d.getType() : p.getTypeAtLocation(d ?? (p as any));
@@ -525,64 +533,73 @@ const ensureCollectType = (t: Type, bag: TypesBag, seen = new Set<Type>()) => {
     // Generics
     for (const a of t.getTypeArguments?.() ?? []) ensureCollectType(a, bag, seen);
 
-    // Textual fallback (be conservative to avoid noise)
+    // Text fallback (only resolve names we can really find)
     const text = t.getText();
     for (const n of collectNamesFromTypeText(text)) {
-        // Nur auflösen, wenn wir die Deklaration tatsächlich finden (lokal) – vermeidet Rauschen
         const found = findDeclaredNode(n);
         if (found) resolveNamedRecursive(n, bag);
     }
 };
 
-/**
- * Recursively resolve internal types (type/interface/enum) and collect them in the types bag.
- */
+/** resolve a named custom type (type/interface/enum) recursively */
 const resolveNamedRecursive = (name: string, bag: TypesBag) => {
     const display = aliasMap.get(name) ?? name;
+    debugLog('resolveNamedRecursive →', display);
+
     if (!display || PRIMS.has(display) || GLOBALS.has(display)) return;
     if (shouldIgnoreName(display)) return;
-    if (ALREADY_EXPANDED.has(display)) return;
+    if (ALREADY_EXPANDED.has(display)) {
+        debugLog('  · skip already expanded', display);
+        return;
+    }
 
     const decl = findDeclaredNode(display);
-    if (!decl) return;
+    if (!decl) {
+        debugLog('⚠️ missing declaration for', display);
+        if (DEBUG_MISSING_TYPES) missingTypes.add(display);
+        return;
+    }
 
     const sf = decl.getSourceFile();
-    if (!isInternalSourceFile(sf)) return;
+    const internal = isInternalSourceFile(sf);
+    debugLog('  · found in', sf.getFilePath(), 'internal?', internal);
+    if (!internal) return;
 
     ALREADY_EXPANDED.add(display);
     if (bag.has(display)) return;
 
-    // --- Enum ---
     if (Node.isEnumDeclaration(decl)) {
         addType(bag, display, renderEnum(decl));
+        debugLog('📦 Enum added', display);
         for (const sub of collectNamesFromTypeText(decl.getText())) {
-            if (sub !== name) resolveNamedRecursive(sub, bag);
+            if (sub !== display) resolveNamedRecursive(sub, bag);
         }
         return;
     }
 
-    // --- Interface ---
     if (Node.isInterfaceDeclaration(decl)) {
         addType(bag, display, renderInterface(decl, bag));
+        debugLog('📦 Interface added', display);
         for (const prop of decl.getProperties()) ensureCollectType(prop.getType(), bag);
         for (const sub of collectNamesFromTypeText(decl.getText())) {
-            if (sub !== name) resolveNamedRecursive(sub, bag);
+            if (sub !== display) resolveNamedRecursive(sub, bag);
         }
         return;
     }
 
-    // --- TypeAlias ---
     if (Node.isTypeAliasDeclaration(decl)) {
         const tp = decl.getType();
         addType(bag, display, renderAlias(decl, bag));
+        debugLog('📦 TypeAlias added', display);
         ensureCollectType(tp, bag);
         for (const sub of collectNamesFromTypeText(decl.getText())) {
-            if (sub !== name) resolveNamedRecursive(sub, bag);
+            if (sub !== display) resolveNamedRecursive(sub, bag);
         }
         return;
     }
 };
 
+/** collapse enum member unions to enum name if possible */
 const tryCollapseEnumUnionToName = (t: Type, bag: TypesBag): string | null => {
     if (!(t.isUnion() || t.isIntersection())) return null;
     const types = t.getUnionTypes?.() ?? t.getIntersectionTypes?.() ?? [];
@@ -641,17 +658,15 @@ const getReactHandlerAlias = (t: Type): string | null => {
     return args.length ? `${name}<${args.map((a) => pretty(a, new Map())).join(', ')}>` : name;
 };
 
-/**
- * Convert a type into a readable string while resolving all internal references.
- * Automatically collects any custom types into the types bag.
- */
+/** pretty-print with resolution & collection */
 const pretty = (t: Type, bag: TypesBag): string => {
+    debugLog('pretty →', t.getText().slice(0, 120));
     if (!t) return 'unknown';
 
     const sym = t.getSymbol();
     const name = sym?.getName();
 
-    // Exclude DOM/React/CSS/Window etc. from types
+    // external types to leave as-is (do not collect)
     const EXTERNALS = new Set([
         'Window',
         'Document',
@@ -672,21 +687,33 @@ const pretty = (t: Type, bag: TypesBag): string => {
         'WheelEventHandler',
         'ClipboardEventHandler',
         'SyntheticEvent',
+        'Promise',
+        'Array',
+        'Date',
     ]);
-    if (name && EXTERNALS.has(name)) return name;
+    if (name && EXTERNALS.has(name)) {
+        debugLog('  · external symbol', name);
+        return name;
+    }
 
-    // Recognize event handler aliases
+    // handler aliases like ChangeEventHandler<HTMLInputElement>
     const aliasHandler = getReactHandlerAlias(t);
-    if (aliasHandler) return aliasHandler;
+    if (aliasHandler) {
+        debugLog('  · handler alias', aliasHandler);
+        return aliasHandler;
+    }
 
-    // Keep keyof/typeof intact
     const rawText = t.getText(undefined, TypeFormatFlags.NoTruncation).trim();
-    if (/^(keyof|typeof)\b/.test(rawText)) return rawText;
+    if (/^(keyof|typeof)\b/.test(rawText)) {
+        debugLog('  · keep raw', rawText.slice(0, 60));
+        return rawText;
+    }
 
-    // --- TypeReference ---
+    // TypeReference
     if ((t as any).isTypeReference?.()) {
         const refSym = t.getSymbol();
         const refName = refSym?.getName();
+        debugLog('  · TypeReference', refName);
         if (refName && !EXTERNALS.has(refName)) {
             resolveNamedRecursive(refName, bag);
         }
@@ -694,48 +721,48 @@ const pretty = (t: Type, bag: TypesBag): string => {
         return aliasMap.get(refName ?? '') ?? refName ?? rawText;
     }
 
-    // --- Array ---
+    // Array
     if (t.isArray()) {
         const et = t.getArrayElementType();
         return `${pretty(et ?? t, bag)}[]`;
     }
 
-    // --- Unions / Intersections ---
+    // Unions/Intersections
     if (t.isUnion() || t.isIntersection()) {
         const collapsed = tryCollapseEnumUnionToName(t, bag);
         if (collapsed) return collapsed;
-        const types = t.isUnion() ? t.getUnionTypes() : t.getIntersectionTypes();
-        const parts = types.map((x) => {
+        const parts = (t.isUnion() ? t.getUnionTypes() : t.getIntersectionTypes()).map((x) => {
             ensureCollectType(x, bag);
             return pretty(x, bag);
         });
         return finalizeText(parts.join(t.isUnion() ? ' | ' : ' & '));
     }
 
-    // --- Functions ---
+    // Functions
     const sigs = t.getCallSignatures();
     if (sigs.length > 0) {
         const s = sigs[0];
         const params = s.getParameters().map((p) => {
             const d = p.getDeclarations()?.[0];
             const pt = d ? d.getType() : p.getTypeAtLocation(d ?? (p as any));
+            ensureCollectType(pt, bag);
             return `${p.getName()}: ${pretty(pt, bag)}`;
         });
         const ret = s.getReturnType();
-        return `(${params.join(', ')}) => ${pretty(ret, bag)}`;
+        ensureCollectType(ret, bag);
+        return `${params.length ? `(${params.join(', ')})` : '()'} => ${pretty(ret, bag)}`;
     }
 
-    // --- Named Symbols (Type/Interface/Enum) ---
+    // Named symbols
     if (name && !EXTERNALS.has(name)) {
+        debugLog('  · symbol', name);
         resolveNamedRecursive(name, bag);
         return aliasMap.get(name) ?? name;
     }
 
-    // --- Fallback (Text Parsing) ---
+    // Fallback textual
     const text = finalizeText(applyAliases(t.getText()));
-    for (const n of collectNamesFromTypeText(text)) {
-        if (!EXTERNALS.has(n)) resolveNamedRecursive(n, bag);
-    }
+    for (const n of collectNamesFromTypeText(text)) resolveNamedRecursive(n, bag);
     return text;
 };
 
@@ -753,6 +780,8 @@ const extractProps = (propsType: Type, bag: TypesBag) => {
 
             const name = s.getName();
 
+            // prefer declared type node text (keeps alias names and handler aliases),
+            // but ensure we collect referenced types via actual type.
             const actualType = decl.getType();
             ensureCollectType(actualType, bag);
 
@@ -763,8 +792,10 @@ const extractProps = (propsType: Type, bag: TypesBag) => {
 
             if (displayText === 'VoidFunction') displayText = '() => void';
 
+            // textual candidates (when TS flattens unions/aliases)
             for (const n of collectNamesFromTypeText(displayText)) resolveNamedRecursive(n, bag);
 
+            // collapse "Enum.Member | Enum.Member | ..." to "Enum"
             if (/\b\w+\.[A-Za-z0-9_]+\b(?:\s*\|\s*\w+\.[A-Za-z0-9_]+\b)+/.test(displayText)) {
                 const m = displayText.match(/\b(\w+)\.[A-Za-z0-9_]+\b/);
                 if (m) {
@@ -792,6 +823,7 @@ const extractProps = (propsType: Type, bag: TypesBag) => {
     return props;
 };
 
+/** try to infer ref type from forwardRef(...) */
 const getRefTypeFromDecl = (decl: Node): Type | null => {
     const parseCall = (call: CallExpression): Type | null => {
         if (!/forwardRef/.test(call.getExpression().getText())) return null;
@@ -818,6 +850,7 @@ const getExportDecls = (s: MorphSymbol) =>
 
 const getTypeArg0 = (t: Type): Type | null => (t.getTypeArguments?.() ?? [])[0] ?? null;
 
+/** drop &RefAttributes<R> part from P & RefAttributes<R> */
 const stripRefAttributesFromProps = (t: Type): Type => {
     if (!t.isIntersection()) return t;
     const parts = t.getIntersectionTypes() ?? [];
@@ -832,6 +865,7 @@ const stripRefAttributesFromProps = (t: Type): Type => {
     return kept[0] ?? t;
 };
 
+/** unwrap component props type from React.* wrappers */
 const unwrapComponentPropsType = (ct: Type): Type | null => {
     const nm = ct.getSymbol()?.getName() ?? '';
     if (/ForwardRefExoticComponent/.test(nm)) {
@@ -848,6 +882,7 @@ const unwrapComponentPropsType = (ct: Type): Type | null => {
     return getTypeArg0(ct);
 };
 
+/** prefer props from function parameter when available (better for generics) */
 const tryGetPropsFromFunctionParam = (decl: Node): Type | null => {
     let fn: ArrowFunction | FunctionDeclaration | null = null;
     if (Node.isVariableDeclaration(decl)) {
@@ -867,8 +902,7 @@ const tryGetPropsFromFunctionParam = (decl: Node): Type | null => {
 /* -------------------------------------------------------------------------- */
 
 const processComponent = (pkg: string, exp: MorphSymbol) => {
-    // fix: avoid cross-component suppression of types
-    ALREADY_EXPANDED = new Set<string>();
+    ALREADY_EXPANDED = new Set<string>(); // avoid cross-component pollution
 
     const decls = getExportDecls(exp);
     if (!decls.length) return null;
@@ -876,6 +910,7 @@ const processComponent = (pkg: string, exp: MorphSymbol) => {
     const compType = decls[0].getType();
     const typesBag: TypesBag = new Map();
 
+    // props type: function param first, fallback to unwrapped component type
     let propsType: Type | null = null;
     for (const d of decls) {
         propsType = tryGetPropsFromFunctionParam(d);
@@ -885,6 +920,7 @@ const processComponent = (pkg: string, exp: MorphSymbol) => {
 
     const props = propsType ? extractProps(propsType, typesBag) : [];
 
+    // forwardRef ref type
     let refType: Type | null = null;
     for (const d of decls) {
         const rt = getRefTypeFromDecl(d);
@@ -916,6 +952,16 @@ const processComponent = (pkg: string, exp: MorphSymbol) => {
 
     const displayName = exp.getName();
     const code = `import React from 'react';\nimport { ${displayName} } from '@chayns-components/${pkg}';\n\n<${displayName} {...props}/>`;
+
+    debugLog(`🧩 ${pkg}/${displayName}: typesBag=${typesBag.size}`, [...typesBag.keys()]);
+    if (typesBag.size === 0) {
+        debugLog(
+            '⚠️ No types resolved for',
+            displayName,
+            '→ props types used:',
+            props.map((p) => p.type),
+        );
+    }
 
     return { name: displayName, code, types, props };
 };
@@ -979,6 +1025,9 @@ if (DEBUG_MISSING_TYPES && missingTypes.size > 0) {
         'ClipboardEvent',
         'ChangeEvent',
         'SyntheticEvent',
+        'Promise',
+        'Array',
+        'Date',
     ]);
     const domEl = (n: string) => /^HTML[A-Za-z0-9]*Element$/.test(n);
     const missing = [...missingTypes].filter(
