@@ -251,12 +251,12 @@ const applyAliases = (text: string) => {
 /** classify: internal if in /packages/ or node_modules/@chayns-components/ */
 const isInternalSourceFile = (sf: SourceFile | undefined): boolean => {
     if (!sf) return false;
-    const filePath = sf.getFilePath();
-    const internal =
-        filePath.includes(`${path.sep}packages${path.sep}`) ||
-        filePath.includes(`${path.sep}node_modules${path.sep}@chayns-components${path.sep}`);
-    debugLog('isInternalSourceFile:', sf.getBaseName(), '→', internal ? 'internal' : 'external');
-    return internal;
+    const filePath = sf.getFilePath().replace(/\\/g, '/');
+    return (
+        /\/packages\/[^/]+\/src\//.test(filePath) ||
+        /\/packages\/core\/src\/types\//.test(filePath) ||
+        /node_modules\/@chayns-components\//.test(filePath)
+    );
 };
 
 /* -------------------------------------------------------------------------- */
