@@ -295,6 +295,7 @@ const shouldIgnoreName = (name: string) => {
     if (BUILTIN_EVENTS.has(name)) return true;
     if (BUILTIN_DOM.test(name)) return true;
     if (name === '__type') return true;
+    if (name === 'Window' || name === 'Document' || name === 'Navigator') return true;
     return false;
 };
 
@@ -485,6 +486,16 @@ const ensureCollectType = (t: Type, bag: TypesBag, seen = new Set<Type>()) => {
 
     const sym = t.getSymbol();
     const decl = sym?.getDeclarations()?.[0];
+    const name = sym?.getName?.();
+
+    if (name === '__type') {
+        const aliasSym = t.getAliasSymbol?.();
+        if (aliasSym) {
+            const aliasName = aliasSym.getName();
+            console.log('Collect alias for __type ->', aliasName);
+            resolveNamedRecursive(aliasName, bag);
+        }
+    }
 
     // TypeReference → prefer declaration path
     if ((t as any).isTypeReference?.()) {
@@ -544,57 +555,59 @@ const ensureCollectType = (t: Type, bag: TypesBag, seen = new Set<Type>()) => {
 /** resolve a named custom type (type/interface/enum) recursively */
 const resolveNamedRecursive = (name: string, bag: TypesBag) => {
     const display = aliasMap.get(name) ?? name;
-    debugLog('resolveNamedRecursive →', display);
-
     if (!display || PRIMS.has(display) || GLOBALS.has(display)) return;
     if (shouldIgnoreName(display)) return;
-    if (ALREADY_EXPANDED.has(display)) {
-        debugLog('  · skip already expanded', display);
-        return;
-    }
+    if (ALREADY_EXPANDED.has(display)) return;
 
     const decl = findDeclaredNode(display);
-    if (!decl) {
-        debugLog('⚠️ missing declaration for', display);
-        if (DEBUG_MISSING_TYPES) missingTypes.add(display);
-        return;
-    }
+    if (!decl) return;
 
     const sf = decl.getSourceFile();
-    const internal = isInternalSourceFile(sf);
-    debugLog('  · found in', sf.getFilePath(), 'internal?', internal);
-    if (!internal) return;
+    if (!isInternalSourceFile(sf)) return;
 
     ALREADY_EXPANDED.add(display);
     if (bag.has(display)) return;
 
+    // --- Enum ---
     if (Node.isEnumDeclaration(decl)) {
         addType(bag, display, renderEnum(decl));
-        debugLog('📦 Enum added', display);
-        for (const sub of collectNamesFromTypeText(decl.getText())) {
-            if (sub !== display) resolveNamedRecursive(sub, bag);
-        }
         return;
     }
 
+    // --- Interface ---
     if (Node.isInterfaceDeclaration(decl)) {
         addType(bag, display, renderInterface(decl, bag));
-        debugLog('📦 Interface added', display);
         for (const prop of decl.getProperties()) ensureCollectType(prop.getType(), bag);
-        for (const sub of collectNamesFromTypeText(decl.getText())) {
-            if (sub !== display) resolveNamedRecursive(sub, bag);
-        }
         return;
     }
 
+    // --- TypeAlias ---
     if (Node.isTypeAliasDeclaration(decl)) {
-        const tp = decl.getType();
-        addType(bag, display, renderAlias(decl, bag));
-        debugLog('📦 TypeAlias added', display);
-        ensureCollectType(tp, bag);
-        for (const sub of collectNamesFromTypeText(decl.getText())) {
-            if (sub !== display) resolveNamedRecursive(sub, bag);
+        const aliasType = decl.getType();
+        const aliasText = aliasType.getText();
+
+        // handle aliases like "type A = B;" or "__type"
+        if (/^__type$/.test(aliasText)) {
+            const resolved = aliasType.getAliasSymbol?.()?.getName();
+            if (resolved && resolved !== name) {
+                resolveNamedRecursive(resolved, bag);
+                return;
+            }
         }
+
+        // follow direct alias references
+        const targetNameMatch = aliasText.match(/\b[A-Z][A-Za-z0-9_]+\b/);
+        if (targetNameMatch && targetNameMatch[0] !== name) {
+            const next = targetNameMatch[0];
+            const found = findDeclaredNode(next);
+            if (found) {
+                resolveNamedRecursive(next, bag);
+                return;
+            }
+        }
+
+        addType(bag, display, renderAlias(decl, bag));
+        ensureCollectType(aliasType, bag);
         return;
     }
 };
@@ -666,34 +679,49 @@ const pretty = (t: Type, bag: TypesBag): string => {
     const sym = t.getSymbol();
     const name = sym?.getName();
 
+    if (name === '__type') {
+        const aliasSym = t.getAliasSymbol?.();
+        if (aliasSym) {
+            const aliasName = aliasSym.getName();
+            console.log('Resolved __type alias to:', aliasName);
+            resolveNamedRecursive(aliasName, bag);
+            return aliasMap.get(aliasName) ?? aliasName;
+        }
+        return 'unknown';
+    }
+
     // external types to leave as-is (do not collect)
-    const EXTERNALS = new Set([
-        'Window',
-        'Document',
-        'HTMLElement',
-        'HTMLDivElement',
-        'HTMLSpanElement',
-        'HTMLInputElement',
-        'ReactNode',
-        'ReactElement',
-        'ReactPortal',
-        'CSSProperties',
-        'MouseEventHandler',
-        'FocusEventHandler',
-        'ChangeEventHandler',
-        'KeyboardEventHandler',
-        'TouchEventHandler',
-        'DragEventHandler',
-        'WheelEventHandler',
-        'ClipboardEventHandler',
-        'SyntheticEvent',
-        'Promise',
-        'Array',
-        'Date',
-    ]);
-    if (name && EXTERNALS.has(name)) {
-        debugLog('  · external symbol', name);
-        return name;
+    if (name) {
+        const EXTERNALS = new Set([
+            'Window',
+            'Document',
+            'Navigator',
+            'Location',
+            'Storage',
+            'HTMLElement',
+            'HTMLDivElement',
+            'HTMLInputElement',
+            'HTMLTextAreaElement',
+            'HTMLButtonElement',
+            'HTMLImageElement',
+            'Event',
+            'UIEvent',
+            'MouseEvent',
+            'FocusEvent',
+            'KeyboardEvent',
+            'ChangeEvent',
+            'ReactNode',
+            'ReactElement',
+            'ReactPortal',
+            'CSSProperties',
+            'Promise',
+        ]);
+
+        if (EXTERNALS.has(name)) return name;
+
+        // resolve aliases and internal symbols
+        resolveNamedRecursive(name, bag);
+        return aliasMap.get(name) ?? name;
     }
 
     // handler aliases like ChangeEventHandler<HTMLInputElement>
