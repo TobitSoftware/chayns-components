@@ -24,7 +24,7 @@ export const getAccordionHeadHeight = ({
     element.style.whiteSpace = 'nowrap';
     element.style.width = `${width}px`;
 
-    element.innerHTML = title;
+    element.innerHTML = title ?? '';
 
     document.body.appendChild(element);
 
