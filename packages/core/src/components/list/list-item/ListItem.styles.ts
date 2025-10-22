@@ -73,14 +73,14 @@ export const StyledListItem = styled[LIST_ITEM_HTML_TAG]<StyledListItemProps>`
             if ($shouldForceBottomLine) {
                 return css`
                     border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
-                        rgba(${theme['headline-rgb']}, 0.5);
+                        rgba(${theme['headline-rgb']}, 1);
                 `;
             }
 
             return css`
                 &&:not(:last-child) {
                     border-bottom: ${$shouldShowSeparatorBelow ? '4px' : '1px'} solid
-                        rgba(${theme['headline-rgb']}, 0.5);
+                        rgba(${theme['headline-rgb']}, 1);
                 }
             `;
         }

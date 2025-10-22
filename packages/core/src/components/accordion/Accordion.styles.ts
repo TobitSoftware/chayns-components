@@ -60,13 +60,13 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
         if (theme.accordionLines) {
             if ($isWrapped && $shouldShowLines) {
                 return css`
-                    border-bottom-color: rgba(${theme['headline-rgb']}, 0.5);
+                    border-bottom-color: rgba(${theme['headline-rgb']}, 1);
                 `;
             }
 
             if (!$isOpen && $shouldShowLines) {
                 return css`
-                    border-bottom-color: rgba(${theme['headline-rgb']}, 0.5);
+                    border-bottom-color: rgba(${theme['headline-rgb']}, 1);
                 `;
             }
         }
