@@ -138,7 +138,7 @@ export type AccordionProps = {
     /**
      * Title of the Accordion displayed in the head
      */
-    title: string;
+    title?: string;
     /**
      * Additional elements to be displayed in the header next to the title.
      */

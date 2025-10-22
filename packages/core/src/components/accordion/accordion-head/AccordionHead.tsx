@@ -44,7 +44,7 @@ export type AccordionHeadProps = {
     searchPlaceholder?: string;
     searchValue?: string;
     shouldRotateIcon?: boolean;
-    title: string;
+    title?: string;
     titleElement?: ReactNode;
     uuid: string;
     onTitleInputChange?: ChangeEventHandler<HTMLInputElement>;
@@ -210,7 +210,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                         >
                             <StyledMotionTitleWrapper
                                 key={`accordionHeadTitleWrapperWrapper--${uuid}`}
-                                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                                style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
                                 initial={
                                     !shouldSkipAnimation
                                         ? { scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }
@@ -231,17 +231,21 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                     opacity: { duration: 0 },
                                 }}
                             >
-                                <StyledMotionTitle
-                                    $isOpen={isOpen}
-                                    $isWrapped={isWrapped}
-                                    $color={titleColor}
-                                    $hasSearch={typeof onSearchChange === 'function'}
-                                    animate={{ fontSize: isOpen && !isWrapped ? '1.3rem' : '1rem' }}
-                                    initial={shouldSkipAnimation ? false : { fontSize: '1rem' }}
-                                    transition={{ duration: shouldSkipAnimation ? 0 : 0.25 }}
-                                >
-                                    {title}
-                                </StyledMotionTitle>
+                                {title && (
+                                    <StyledMotionTitle
+                                        $isOpen={isOpen}
+                                        $isWrapped={isWrapped}
+                                        $color={titleColor}
+                                        $hasSearch={typeof onSearchChange === 'function'}
+                                        animate={{
+                                            fontSize: isOpen && !isWrapped ? '1.3rem' : '1rem',
+                                        }}
+                                        initial={shouldSkipAnimation ? false : { fontSize: '1rem' }}
+                                        transition={{ duration: shouldSkipAnimation ? 0 : 0.25 }}
+                                    >
+                                        {title}
+                                    </StyledMotionTitle>
+                                )}
 
                                 {titleElement && (
                                     <StyledMotionTitleElementWrapper

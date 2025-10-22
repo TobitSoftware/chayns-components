@@ -94,7 +94,6 @@ export const StyledMotionTitleElementWrapper = styled(motion.div)`
     align-items: center;
     display: flex;
     flex: 1 1 auto;
-    margin-left: 8px;
     min-width: 0;
 `;
 
