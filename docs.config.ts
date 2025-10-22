@@ -155,7 +155,7 @@ const config: GenerateTypesConfig = {
             icons: ['fa fa-typewriter'],
         },
     ],
-    outputFile: path.resolve(process.cwd(), 'dist/types.json'),
+    outputFile: path.resolve(process.cwd(), 'dist/docs.json'),
     // exclude: ['default'], // Example: allow consumers to hide certain export names
 };
 

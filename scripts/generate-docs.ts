@@ -1,5 +1,6 @@
 /* eslint-disable */
 // @ts-nocheck
+
 /**
  * ──────────────────────────────────────────────────────────────────────────────
  * Docs/Types Generator for a Lerna/Monorepo (ts-morph)
@@ -988,60 +989,75 @@ const processComponent = (pkg: string, exp: MorphSymbol) => {
 };
 
 /* -------------------------------------------------------------------------- */
-/* Iterate packages                                                           */
+/* Main Execution Flow                                                        */
 /* -------------------------------------------------------------------------- */
 
-for (const pkg of config.packages) {
-    const indexPath = path.resolve(config.rootDir, pkg, 'src/index.ts');
-    if (!fs.existsSync(indexPath)) continue;
+const main = async () => {
+    /* ---------------------------------------------------------------------- */
+    /* Iterate packages                                                       */
+    /* ---------------------------------------------------------------------- */
+    for (const pkg of config.packages) {
+        const indexPath = path.resolve(config.rootDir, pkg, 'src/index.ts');
+        if (!fs.existsSync(indexPath)) continue;
 
-    const sf = project.addSourceFileAtPathIfExists(indexPath);
-    if (!sf) continue;
+        const sf = project.addSourceFileAtPathIfExists(indexPath);
+        if (!sf) continue;
 
-    const raw = sf.getFullText();
-    const defaultCompMatches = [...raw.matchAll(/export\s*{\s*default\s+as\s+(\w+)/g)];
-    if (!defaultCompMatches.length) continue;
+        const raw = sf.getFullText();
+        const defaultCompMatches = [...raw.matchAll(/export\s*{\s*default\s+as\s+(\w+)/g)];
+        if (!defaultCompMatches.length) continue;
 
-    const components: any[] = [];
-    for (const [, compName] of defaultCompMatches) {
-        const symbol = sf.getExportSymbols().find((s) => s.getName() === compName);
-        if (!symbol) continue;
-        const comp = processComponent(pkg, symbol);
-        if (comp) components.push(comp);
+        const components: any[] = [];
+        for (const [, compName] of defaultCompMatches) {
+            const symbol = sf.getExportSymbols().find((s) => s.getName() === compName);
+            if (!symbol) continue;
+            const comp = processComponent(pkg, symbol);
+            if (comp) components.push(comp);
+        }
+
+        if (components.length) output.packages[pkg] = components;
+        console.log(`📦 ${pkg}: collected ${components.length} components.`);
     }
 
-    if (components.length) output.packages[pkg] = components;
-    console.log(`📦 ${pkg}: collected ${components.length} components.`);
-}
+    /* ---------------------------------------------------------------------- */
+    /* Write JSON                                                             */
+    /* ---------------------------------------------------------------------- */
+    fs.mkdirSync(path.dirname(config.outputFile), { recursive: true });
+    fs.writeFileSync(config.outputFile, JSON.stringify(output, null, 2), 'utf8');
+    console.log(`✅ Docs JSON generated at: ${config.outputFile}`);
 
-/* -------------------------------------------------------------------------- */
-/* Write JSON                                                                 */
-/* -------------------------------------------------------------------------- */
+    /* ---------------------------------------------------------------------- */
+    /* Upload after successful generation                                     */
+    /* ---------------------------------------------------------------------- */
+    await uploadDocs();
 
-fs.mkdirSync(path.dirname(config.outputFile), { recursive: true });
-fs.writeFileSync(config.outputFile, JSON.stringify(output, null, 2), 'utf8');
-console.log(`✅ Docs JSON generated at: ${config.outputFile}`);
-
-uploadDocs();
-
-/* -------------------------------------------------------------------------- */
-/* Debug: report missing internal types                                       */
-/* -------------------------------------------------------------------------- */
-
-if (DEBUG_MISSING_TYPES && missingTypes.size > 0) {
-    const domEl = (n: string) => /^HTML[A-Za-z0-9]*Element$/.test(n);
-    const missing = [...missingTypes].filter(
-        (n) =>
-            !GLOBALS.has(n) &&
-            !PRIMS.has(n) &&
-            !IGNORED_TYPES.has(n) &&
-            n !== '__type' &&
-            !domEl(n),
-    );
-    if (missing.length) {
-        console.warn(
-            '⚠️ Missing type(s) (referenced but not resolved locally):',
-            [...new Set(missing)].sort().join(', '),
+    /* ---------------------------------------------------------------------- */
+    /* Debug: report missing internal types                                   */
+    /* ---------------------------------------------------------------------- */
+    if (DEBUG_MISSING_TYPES && missingTypes.size > 0) {
+        const domEl = (n: string) => /^HTML[A-Za-z0-9]*Element$/.test(n);
+        const missing = [...missingTypes].filter(
+            (n) =>
+                !GLOBALS.has(n) &&
+                !PRIMS.has(n) &&
+                !IGNORED_TYPES.has(n) &&
+                n !== '__type' &&
+                !domEl(n),
         );
+        if (missing.length) {
+            console.warn(
+                '⚠️ Missing type(s) (referenced but not resolved locally):',
+                [...new Set(missing)].sort().join(', '),
+            );
+        }
     }
-}
+};
+
+/* -------------------------------------------------------------------------- */
+/* Execute main and handle errors                                             */
+/* -------------------------------------------------------------------------- */
+
+await main().catch((err) => {
+    console.error('❌ Docs generation failed:', err);
+    process.exit(1);
+});
