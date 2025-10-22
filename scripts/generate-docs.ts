@@ -1024,7 +1024,7 @@ const main = async () => {
     /* ---------------------------------------------------------------------- */
     fs.mkdirSync(path.dirname(config.outputFile), { recursive: true });
     fs.writeFileSync(config.outputFile, JSON.stringify(output, null, 2), 'utf8');
-    console.log(`✅ Docs JSON generated at: ${config.outputFile}`);
+    console.log(`🟢 Docs JSON generated at: ${config.outputFile}`);
 
     /* ---------------------------------------------------------------------- */
     /* Upload after successful generation                                     */
@@ -1046,7 +1046,7 @@ const main = async () => {
         );
         if (missing.length) {
             console.warn(
-                '⚠️ Missing type(s) (referenced but not resolved locally):',
+                '🟡 Missing type(s) (referenced but not resolved locally):',
                 [...new Set(missing)].sort().join(', '),
             );
         }
@@ -1058,6 +1058,6 @@ const main = async () => {
 /* -------------------------------------------------------------------------- */
 
 await main().catch((err) => {
-    console.error('❌ Docs generation failed:', err);
+    console.error('🔴 Docs generation failed:', err);
     process.exit(1);
 });

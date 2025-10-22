@@ -3,7 +3,6 @@
 
 import fs from 'fs';
 import path from 'path';
-import fetch from 'node-fetch';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -32,22 +31,42 @@ const DEFAULT_HEADERS = {
  * Retrieves temporary AWS S3 upload credentials from chayns.space.
  */
 const awsPreUpload = async (): Promise<AwsUploadCredentials | undefined> => {
-    const token = process.env.SPACE_API_TOKEN;
+    const username = process.env.API_TOKEN_KEY;
+    const password = process.env.API_TOKEN_SECRET;
 
-    if (!token) {
-        console.error('❌ Missing API token.');
+    if (!username || !password) {
+        console.error('🔴 Missing API tokens.');
         return undefined;
     }
+
+    const credentials = Buffer.from(`${username}:${password}`).toString('base64');
+
+    const tokenRes = await fetch(`https://auth.tobit.com/v2/token`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Basic ${credentials}`,
+        },
+        body: JSON.stringify({ tokenType: 2 }),
+    });
+
+    if (!tokenRes.ok) {
+        console.error('🔴 Failed to fetch API key.');
+        return undefined;
+    }
+
+    const data = await tokenRes.json();
 
     const res = await fetch(`${CHAYNS_SPACE_URL}upload`, {
         method: 'GET',
         headers: {
-            Authorization: `bearer ${token}`,
+            Authorization: `bearer ${data.token}`,
+            siteId: '77896-21884',
         },
     });
 
     if (!res.ok) {
-        console.error('❌ Failed to fetch upload credentials from chayns.space.');
+        console.error('🔴 Failed to fetch upload credentials from chayns.space.', res);
         return undefined;
     }
 
@@ -77,6 +96,7 @@ const uploadFile = async (
     mimeType = 'application/json',
 ): Promise<string | undefined> => {
     const credentials = await awsPreUpload();
+
     if (!credentials) return undefined;
 
     const sanitizedName = fileName.replace(/[^0-9a-zA-Z!\-_.*'()/]/g, '_');
@@ -86,23 +106,27 @@ const uploadFile = async (
         if (key !== 'key') form.append(key, value);
     });
 
-    const fullKey = `${credentials.key}${sanitizedName}`;
+    const fullKey = `${credentials.key}chayns-components/${sanitizedName}`;
+
+    const blob = new Blob([fileBuffer], { type: mimeType });
+    const file = new File([blob], fileName, { type: mimeType });
+
     form.append('Content-Type', mimeType);
     form.append('key', fullKey);
-    form.append('file', new Blob([fileBuffer], { type: mimeType }), sanitizedName);
+    form.append('file', file);
 
     const res = await fetch(AWS_UPLOAD_URL, {
         method: 'POST',
-        body: form as any,
+        body: form,
     });
 
     if (res.ok) {
-        console.log(`✅ Successfully uploaded file to: ${fullKey}`);
+        console.log(`🟢 Successfully uploaded file to: ${fullKey}`);
         return fullKey;
     }
 
     const text = await res.text();
-    console.error(`❌ Upload failed (${res.status}): ${text}`);
+    console.error(`🔴 Upload failed (${res.status}): ${text}`);
     return undefined;
 };
 
@@ -113,22 +137,16 @@ export const uploadDocs = async (): Promise<void> => {
     const docsPath = path.resolve(__dirname, '../dist/docs.json');
 
     if (!fs.existsSync(docsPath)) {
-        console.error(`❌ File not found: ${docsPath}`);
+        console.error(`🔴 File not found: ${docsPath}`);
         return;
     }
 
     const fileBuffer = fs.readFileSync(docsPath);
     const fileName = path.basename(docsPath);
 
-    console.log(`⚙️  Starting upload for ${fileName}...`);
+    console.log(`⚙️ Starting upload for ${fileName}...`);
 
-    const key = await uploadFile(fileBuffer, fileName, 'application/json');
-
-    if (key) {
-        console.log(`✅ Upload completed successfully. Key: ${key}`);
-    } else {
-        console.error('❌ Upload failed.');
-    }
+    await uploadFile(fileBuffer, fileName, 'application/json');
 };
 
 /**
@@ -138,7 +156,7 @@ const isDirectRun = process.argv[1] && process.argv[1].endsWith('upload-docs.ts'
 
 if (isDirectRun) {
     uploadDocs().catch((err) => {
-        console.error('❌ Unexpected error during upload:', err);
+        console.error('🔴 Unexpected error during upload:', err);
         process.exit(1);
     });
 }

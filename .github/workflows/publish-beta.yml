@@ -9,6 +9,9 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        env:
+            API_TOKEN_KEY: ${{ secrets.API_TOKEN_KEY }}
+            API_TOKEN_SECRET: ${{ secrets.API_TOKEN_SECRET }}
         steps:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
@@ -20,3 +23,6 @@ jobs:
             - run: lerna publish from-package --yes
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+            - name: Generate and upload docs
+              run: npm run docs
+
