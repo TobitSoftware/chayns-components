@@ -933,7 +933,28 @@ const tryGetPropsFromFunctionParam = (decl: Node): Type | null => {
 /* Component processing                                                       */
 /* -------------------------------------------------------------------------- */
 
-const processComponent = (pkg: string, exp: MorphSymbol) => {
+/**
+ * Try to read a .docs.tsx file for a given component.
+ * If found, the file content is returned as a code example string.
+ * Otherwise, returns undefined so the component has no code snippet.
+ */
+function getComponentDocsCode(packagePath: string, componentName: string): string | undefined {
+    try {
+        // Construct absolute path to the docs file, e.g.:
+        // root/packages/button/docs/button.docs.tsx
+        const docsPath = path.join(packagePath, 'docs', `${componentName}.docs.tsx`);
+
+        if (fs.existsSync(docsPath)) {
+            return fs.readFileSync(docsPath, 'utf8');
+        }
+    } catch (err) {
+        console.warn(`Failed to read docs for ${componentName}:`, err);
+    }
+
+    return undefined;
+}
+
+const processComponent = (pkg: string, exp: MorphSymbol, packagePath: string) => {
     ALREADY_EXPANDED = new Set<string>(); // avoid cross-component pollution
 
     const decls = getExportDecls(exp);
@@ -983,7 +1004,7 @@ const processComponent = (pkg: string, exp: MorphSymbol) => {
         .sort((a, b) => a.name.localeCompare(b.name));
 
     const displayName = exp.getName();
-    const code = `import React from 'react';\nimport { ${displayName} } from '@chayns-components/${pkg}';\n\n<${displayName} {...props}/>`;
+    const code = getComponentDocsCode(packagePath, displayName);
 
     return { name: displayName, code, types, props };
 };
@@ -997,6 +1018,8 @@ const main = async () => {
     /* Iterate packages                                                       */
     /* ---------------------------------------------------------------------- */
     for (const pkg of config.packages) {
+        const packagePath = path.resolve(config.rootDir, pkg);
+
         const indexPath = path.resolve(config.rootDir, pkg, 'src/index.ts');
         if (!fs.existsSync(indexPath)) continue;
 
@@ -1011,7 +1034,7 @@ const main = async () => {
         for (const [, compName] of defaultCompMatches) {
             const symbol = sf.getExportSymbols().find((s) => s.getName() === compName);
             if (!symbol) continue;
-            const comp = processComponent(pkg, symbol);
+            const comp = processComponent(pkg, symbol, packagePath);
             if (comp) components.push(comp);
         }
 
