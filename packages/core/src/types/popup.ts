@@ -12,7 +12,7 @@ export type PopupCoordinates = {
     y: number;
 };
 
-export type PopupRef = {
+export interface PopupRef {
     hide: VoidFunction;
     show: VoidFunction;
-};
+}
