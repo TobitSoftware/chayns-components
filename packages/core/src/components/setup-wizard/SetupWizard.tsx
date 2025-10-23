@@ -30,10 +30,10 @@ export const SetupWizardContext = React.createContext<SetupWizardContextProps>({
 
 SetupWizardContext.displayName = 'SetupWizardContext';
 
-export type SetupWizardRef = {
+export interface SetupWizardRef {
     next: (stepId?: number) => void;
     reset: () => void;
-};
+}
 
 export type SetupWizardProps = {
     /**
