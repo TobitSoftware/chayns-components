@@ -1044,7 +1044,10 @@ const main = async () => {
     for (const pkg of config.packages) {
         const packagePath = path.resolve(config.rootDir, pkg);
 
-        const indexPath = path.resolve(config.rootDir, pkg, 'src/index.ts');
+        const indexPath = path.resolve(packagePath, 'src/index.ts');
+
+        console.log(`🔍 Scanning ${pkg} at: ${indexPath}`);
+
         if (!fs.existsSync(indexPath)) continue;
 
         const sf = project.addSourceFileAtPathIfExists(indexPath);
