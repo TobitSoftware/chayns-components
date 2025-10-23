@@ -18,9 +18,12 @@ jobs:
               with:
                   node-version: '20.15.1'
                   registry-url: https://registry.npmjs.org/
-            - run: npm ci
-            - run: npm run lerna:build
-            - run: lerna publish from-package --yes
+            - name: Install dependencies
+              run: npm ci
+            - name: Build packages
+              run: npm run lerna:build
+            - name: Publish packages
+              run: lerna publish from-package --yes
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             - name: Generate and upload docs
