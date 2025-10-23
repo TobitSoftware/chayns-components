@@ -18,8 +18,7 @@
         "preversion": "lerna exec -- npm run build:types",
         "upgrade:minor": "lerna exec -- ncu -u -t minor",
         "upgrade": "lerna exec -- ncu -u",
-        "docs": "node --loader ts-node/esm scripts/generate-docs.ts",
-        "docs:local": "npx ts-node --esm scripts/generate-docs.ts"
+        "docs": "npx ts-node scripts/generate-docs.ts"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
