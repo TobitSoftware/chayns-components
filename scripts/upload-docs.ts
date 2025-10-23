@@ -1,26 +1,12 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const fs = require('fs');
+const path = require('path');
+const fetch = require('node-fetch');
 
 const CHAYNS_SPACE_URL = 'https://api.chayns.space/';
 const AWS_UPLOAD_URL = 'https://chayns-space.s3.amazonaws.com/';
-
-interface AwsUploadCredentials {
-    key: string;
-    Policy: string;
-    'x-amz-algorithm': string;
-    acl: string;
-    'x-amz-credential': string;
-    'x-amz-date': string;
-    'x-amz-meta-operation-id': string;
-    'x-amz-signature': string;
-}
 
 const DEFAULT_HEADERS = {
     'x-amz-algorithm': 'AWS4-HMAC-SHA256',
@@ -30,7 +16,7 @@ const DEFAULT_HEADERS = {
 /**
  * Retrieves temporary AWS S3 upload credentials from chayns.space.
  */
-const awsPreUpload = async (): Promise<AwsUploadCredentials | undefined> => {
+async function awsPreUpload() {
     const username = process.env.API_TOKEN_KEY;
     const password = process.env.API_TOKEN_SECRET;
 
@@ -85,16 +71,12 @@ const awsPreUpload = async (): Promise<AwsUploadCredentials | undefined> => {
         'x-amz-signature': signature,
         Policy: base64Policy,
     };
-};
+}
 
 /**
  * Uploads a single file to AWS (via chayns.space temporary credentials).
  */
-const uploadFile = async (
-    fileBuffer: Buffer,
-    fileName: string,
-    mimeType = 'application/json',
-): Promise<string | undefined> => {
+async function uploadFile(fileBuffer, fileName, mimeType = 'application/json') {
     const credentials = await awsPreUpload();
 
     if (!credentials) return undefined;
@@ -128,12 +110,12 @@ const uploadFile = async (
     const text = await res.text();
     console.error(`🔴 Upload failed (${res.status}): ${text}`);
     return undefined;
-};
+}
 
 /**
  * Loads the generated docs.json file from /dist and uploads it to AWS.
  */
-export const uploadDocs = async (): Promise<void> => {
+async function uploadDocs() {
     const docsPath = path.resolve(__dirname, '../dist/docs.json');
 
     if (!fs.existsSync(docsPath)) {
@@ -145,18 +127,14 @@ export const uploadDocs = async (): Promise<void> => {
     const fileName = path.basename(docsPath);
 
     console.log(`⚙️ Starting upload for ${fileName}...`);
-
     await uploadFile(fileBuffer, fileName, 'application/json');
-};
+}
 
-/**
- * Only execute automatically when the script is run directly (not imported).
- */
-const isDirectRun = process.argv[1] && process.argv[1].endsWith('upload-docs.ts');
-
-if (isDirectRun) {
+if (require.main === module) {
     uploadDocs().catch((err) => {
         console.error('🔴 Unexpected error during upload:', err);
         process.exit(1);
     });
 }
+
+module.exports = { uploadDocs };

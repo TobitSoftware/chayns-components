@@ -1,62 +1,19 @@
 /* eslint-disable */
 // @ts-nocheck
 
-/**
- * ──────────────────────────────────────────────────────────────────────────────
- * Docs/Types Generator for a Lerna/Monorepo (ts-morph)
- * ──────────────────────────────────────────────────────────────────────────────
- *
- * This script scans all configured Lerna packages and automatically generates
- * documentation JSON that contains:
- *   • Default component exports from `src/index.ts`
- *   • Extracted props (name, type, required, description)
- *   • Recursively resolved custom types (interfaces, type aliases, enums)
- *
- * Notes:
- *   - You can still optimize or refactor this script.
- *   - However, getting it to this state required a *lot* of fine-tuning due to
- *     complex `ts-morph` type flattening and aliasing behavior.
- *   - Proceed carefully when changing normalization or recursion logic.
- * ──────────────────────────────────────────────────────────────────────────────
- */
-
-import fs from 'fs';
-import path from 'path';
-import process from 'process';
-import { fileURLToPath, pathToFileURL } from 'url';
-import {
-    ArrowFunction,
-    CallExpression,
-    EnumDeclaration,
-    FunctionDeclaration,
-    InterfaceDeclaration,
-    JSDoc,
-    Node,
-    ParameterDeclaration,
-    Project,
-    PropertySignature,
-    SourceFile,
-    Symbol as MorphSymbol,
-    SyntaxKind,
-    Type,
-    TypeAliasDeclaration,
-    TypeFormatFlags,
-    VariableDeclaration,
-} from 'ts-morph';
-import type { GenerateTypesConfig } from '../docs.config.ts';
-import { uploadDocs } from './upload-docs.ts';
+const fs = require('fs');
+const path = require('path');
+const process = require('process');
+const { Project, Node, SyntaxKind, TypeFormatFlags } = require('ts-morph');
+const { uploadDocs } = require('./upload-docs');
 
 /* -------------------------------------------------------------------------- */
 /* Bootstrapping + Debug                                                      */
 /* -------------------------------------------------------------------------- */
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const { default: rawConfig } = await import(
-    pathToFileURL(path.resolve(__dirname, '../docs.config.ts')).href
-);
-const config = rawConfig as GenerateTypesConfig;
+const configPath = path.resolve(__dirname, '../docs.config.ts');
+const configModule = require(configPath);
+const config: GenerateTypesConfig = configModule.default || configModule;
 
 const project = new Project({
     tsConfigFilePath: path.resolve(process.cwd(), 'tsconfig.json'),
@@ -1104,7 +1061,9 @@ const main = async () => {
 /* Execute main and handle errors                                             */
 /* -------------------------------------------------------------------------- */
 
-await main().catch((err) => {
-    console.error('🔴 Docs generation failed:', err);
-    process.exit(1);
-});
+(async () => {
+    await main().catch((err) => {
+        console.error('🔴 Docs generation failed:', err);
+        process.exit(1);
+    });
+})();
