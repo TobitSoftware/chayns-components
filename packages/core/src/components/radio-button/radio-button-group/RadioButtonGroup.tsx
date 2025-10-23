@@ -33,9 +33,9 @@ export const RadioButtonGroupContext = React.createContext<IRadioButtonGroupCont
 
 RadioButtonGroupContext.displayName = 'RadioButtonGroupContext';
 
-export type RadioButtonGroupRef = {
+export interface RadioButtonGroupRef {
     updateSelectedRadioButtonId: IUpdateSelectedRadioButtonId;
-};
+}
 
 export type RadioButtonGroupProps = {
     /**
