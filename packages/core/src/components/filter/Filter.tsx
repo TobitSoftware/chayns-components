@@ -36,6 +36,7 @@ export type FilterProps = {
     sortConfig?: SortConfig;
 };
 
+//
 const Filter = forwardRef<FilterRef, FilterProps>(
     ({ headline, searchConfig, sortConfig, filterButtonConfig }, ref) => {
         const [isOpen, setIsOpen] = useState(false);
