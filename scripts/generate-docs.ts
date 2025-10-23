@@ -599,7 +599,7 @@ const resolveNamedRecursive = (name: string, bag: TypesBag) => {
     if (!decl) return;
 
     const sf = decl.getSourceFile();
-    if (!isInternalSourceFile(sf)) return;
+    if (!isInternalSourceFile(sf) && !Node.isTypeAliasDeclaration(decl)) return;
 
     ALREADY_EXPANDED.add(display);
     if (bag.has(display)) return;
@@ -622,7 +622,24 @@ const resolveNamedRecursive = (name: string, bag: TypesBag) => {
         const aliasType = decl.getType();
         const aliasText = aliasType.getText();
 
-        // handle aliases like "type A = B;" or "__type"
+        const aliasTarget = aliasType.getAliasSymbol?.();
+        if (aliasTarget) {
+            const targetName = aliasTarget.getName();
+            if (targetName && targetName !== name) {
+                // Follow through to the real type/interface behind the alias
+                resolveNamedRecursive(targetName, bag);
+            }
+        }
+
+        const aliasSym = aliasType.getAliasSymbol?.();
+        if (aliasSym) {
+            const targetName = aliasSym.getName();
+            if (targetName && targetName !== name) {
+                resolveNamedRecursive(targetName, bag);
+            }
+        }
+
+        // Handle "__type" pattern
         if (/^__type$/.test(aliasText)) {
             const resolved = aliasType.getAliasSymbol?.()?.getName();
             if (resolved && resolved !== name) {
@@ -631,19 +648,20 @@ const resolveNamedRecursive = (name: string, bag: TypesBag) => {
             }
         }
 
-        // follow direct alias references
+        // Follow direct alias references
         const targetNameMatch = aliasText.match(/\b[A-Z][A-Za-z0-9_]+\b/);
         if (targetNameMatch && targetNameMatch[0] !== name) {
             const next = targetNameMatch[0];
             const found = findDeclaredNode(next);
             if (found) {
                 resolveNamedRecursive(next, bag);
-                return;
             }
         }
 
-        addType(bag, display, renderAlias(decl, bag));
         ensureCollectType(aliasType, bag);
+
+        // Finally add this alias to the bag
+        addType(bag, display, renderAlias(decl, bag));
         return;
     }
 };
@@ -997,6 +1015,12 @@ const processComponent = (pkg: string, exp: MorphSymbol, packagePath: string) =>
 
         const sym = refType.getSymbol();
         if (sym) resolveNamedRecursive(sym.getName(), typesBag);
+
+        ensureCollectType(refType, typesBag);
+
+        for (const n of collectNamesFromTypeText(refText)) {
+            resolveNamedRecursive(n, typesBag);
+        }
     }
 
     const types = [...typesBag.values()]
