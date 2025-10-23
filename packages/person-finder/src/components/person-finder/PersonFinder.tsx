@@ -50,7 +50,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             onRemove,
             placeholder = 'Person oder Site finden',
             shouldAllowMultiple = true,
-            shouldHideResultsOnAdd = false,
+            shouldHideResultsOnAdd = !shouldAllowMultiple || false,
             shouldShowOwnUser = false,
         },
         ref,
