@@ -34,10 +34,10 @@ import {
 } from './Input.styles';
 import { ContentCardType } from '../../types/contentCard';
 
-export type InputRef = {
+export interface InputRef {
     focus: VoidFunction;
     blur: VoidFunction;
-};
+}
 
 type InputMode =
     | 'email'
