@@ -26,17 +26,34 @@ export function useCursorRepaint<T extends HTMLElement>(ref: RefObject<T>) {
         }
 
         const handleResize = () => {
+            console.debug('useCursorRepaint - handleResize');
+
             const el = ref.current;
+
+            console.debug('useCursorRepaint - handleResize', el);
+
             if (!el) return;
 
             // temporarily apply a non-visible transform to force layer repaint
             el.style.transform = 'translateY(0.1px)';
+
+            console.debug('useCursorRepaint - handleResize', el.style);
+
             requestAnimationFrame(() => {
                 el.style.transform = '';
+
+                console.debug('useCursorRepaint - handleResize, requestAnimationFrame', el.style);
             });
+
+            window.setTimeout(() => {
+                el.style.transform = '';
+
+                console.debug('useCursorRepaint - handleResize, Timeout', el.style);
+            }, 200);
         };
 
         window.addEventListener('resize', handleResize);
+
         return () => {
             window.removeEventListener('resize', handleResize);
         };
