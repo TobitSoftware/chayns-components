@@ -28,6 +28,7 @@ import {
 } from './TagInput.styles';
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
+import { useCursorRepaint } from '../../hooks/resize.ts';
 
 export type TagInputProps = {
     /**
@@ -101,6 +102,8 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
         const areaProvider = useContext(AreaContext);
 
         const inputRef = useRef<HTMLInputElement | null>(null);
+
+        useCursorRepaint<HTMLInputElement | null>(inputRef);
 
         const theme = useTheme() as Theme;
 
