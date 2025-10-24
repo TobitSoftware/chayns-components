@@ -20,7 +20,7 @@ export function useCursorRepaint<T extends HTMLElement>(ref: RefObject<T>) {
         if (
             app?.flavor !== AppFlavor.Chayns ||
             os !== 'iOS' ||
-            !['MICH-HAEL1', '516-61460'].includes(personId)
+            !['MICH-HAEL1', '516-61460'].includes(personId ?? '')
         ) {
             return () => {};
         }
