@@ -75,6 +75,7 @@
         "storybook": "^7.6.20",
         "ts-morph": "^27.0.2",
         "ts-node": "^10.9.2",
-        "typescript": "^5.9.3"
+        "typescript": "^5.9.3",
+        "form-data": "^4.0.4"
     }
 }

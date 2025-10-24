@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const fetch = require('node-fetch');
+const FormData = require('form-data');
 
 const CHAYNS_SPACE_URL = 'https://api.chayns.space/';
 const AWS_UPLOAD_URL = 'https://chayns-space.s3.amazonaws.com/';
@@ -95,11 +96,15 @@ async function uploadFile(fileBuffer, fileName, mimeType = 'application/json') {
 
     form.append('Content-Type', mimeType);
     form.append('key', fullKey);
-    form.append('file', file);
+    form.append('file', fileBuffer, {
+        filename: fileName,
+        contentType: mimeType,
+    });
 
     const res = await fetch(AWS_UPLOAD_URL, {
         method: 'POST',
         body: form,
+        headers: form.getHeaders(),
     });
 
     if (res.ok) {
