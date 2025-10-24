@@ -34,10 +34,10 @@ export type ContextMenuItem = {
     shouldShowSpacer?: boolean;
 };
 
-export type ContextMenuRef = {
+export interface ContextMenuRef {
     hide: VoidFunction;
     show: VoidFunction;
-};
+}
 
 type ContextMenuProps = {
     /**
