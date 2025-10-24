@@ -29,14 +29,13 @@ export type PersonFinderGroupProps = {
 
 const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
     entries,
-    search,
     filterKey,
     count,
     shouldShowGroupName,
     onAdd,
     onRemove,
 }) => {
-    const { loadMore, loadingState: loadingStateFromState } = usePersonFinder();
+    const { loadMore, loadingState: loadingStateFromState, search } = usePersonFinder();
     const areOnlyFriendsGiven =
         useOnlyFriends(entries) || filterKey === PersonFinderFilterTypes.UAC;
 
@@ -59,7 +58,7 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
         areOnlyFriendsGiven,
         entries,
         loadingState,
-        search,
+        search: search ?? '',
         groupName,
     });
 

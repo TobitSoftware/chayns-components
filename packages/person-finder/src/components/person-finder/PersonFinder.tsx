@@ -24,10 +24,6 @@ export type PersonFinderProps = PersonFinderWrapperProps & {
      */
     excludedEntryIds?: PersonFinderEntry['id'][];
     /**
-     * Determines the priority level for displaying friends in search results.
-     */
-    friendsPriority?: Priority;
-    /**
      * Whether the own user should be shown in the results. By default, it is not shown.
      */
     shouldShowOwnUser?: boolean;

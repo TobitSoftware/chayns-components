@@ -121,33 +121,34 @@ export const useErrorMessage = ({
     entries,
     groupName,
     areOnlyFriendsGiven,
-}: UseErrorMessageOptions) => {
-    if (search.length <= 2 && !areOnlyFriendsGiven) {
-        return (
-            <StyledPersonFinderGroupErrorMessage>
-                Gib einen Suchbegriff mit mindestens drei Zeichen ein.
-            </StyledPersonFinderGroupErrorMessage>
-        );
-    }
-
-    if (entries.length === 0) {
-        if (loadingState === LoadingState.Error && search.length) {
+}: UseErrorMessageOptions) =>
+    useMemo(() => {
+        if (search.length <= 2 && !areOnlyFriendsGiven) {
             return (
                 <StyledPersonFinderGroupErrorMessage>
-                    Es konnten keine {groupName} zu der Suche &#34;
-                    {search}&#34; gefunden werden.
+                    Gib einen Suchbegriff mit mindestens drei Zeichen ein.
                 </StyledPersonFinderGroupErrorMessage>
             );
         }
 
-        if (search.length === 0) {
-            return (
-                <StyledPersonFinderGroupErrorMessage>
-                    Gib einen Suchbegriff ein, um nach {groupName} zu suchen.
-                </StyledPersonFinderGroupErrorMessage>
-            );
-        }
-    }
+        if (entries.length === 0) {
+            if (loadingState === LoadingState.Error && search.length) {
+                return (
+                    <StyledPersonFinderGroupErrorMessage>
+                        Es konnten keine {groupName} zu der Suche &#34;
+                        {search}&#34; gefunden werden.
+                    </StyledPersonFinderGroupErrorMessage>
+                );
+            }
 
-    return null;
-};
+            if (search.length === 0) {
+                return (
+                    <StyledPersonFinderGroupErrorMessage>
+                        Gib einen Suchbegriff ein, um nach {groupName} zu suchen.
+                    </StyledPersonFinderGroupErrorMessage>
+                );
+            }
+        }
+
+        return null;
+    }, [areOnlyFriendsGiven, entries.length, groupName, loadingState, search]);

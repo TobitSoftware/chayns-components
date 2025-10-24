@@ -14,6 +14,7 @@ import React, {
     useCallback,
     useEffect,
     useImperativeHandle,
+    useMemo,
     useRef,
     useState,
 } from 'react';
@@ -22,6 +23,7 @@ import {
     PersonEntry,
     PersonFinderEntry,
     PersonFinderFilterTypes,
+    Priority,
     SiteEntry,
 } from '../../../types/personFinder';
 import { StyledPersonFinder, StyledPersonFinderLeftElement } from './PersonFinderWrapper.styles';
@@ -78,6 +80,10 @@ export type PersonFinderWrapperProps = {
      */
     shouldAllowMultiple?: boolean;
     /**
+     * Determines the priority level for displaying friends in search results.
+     */
+    friendsPriority?: Priority;
+    /**
      * Whether the dropdown should be hidden after adding an entry. By default, it is not hidden.
      */
     shouldHideResultsOnAdd?: boolean;
@@ -94,6 +100,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             onAdd,
             onDropdownHide,
             onDropdownShow,
+            friendsPriority,
             onRemove,
             placeholder,
             shouldAllowMultiple,
@@ -101,7 +108,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
         },
         ref,
     ) => {
-        const { data, updateSearch, setTags, tags } = usePersonFinder();
+        const { data, updateSearch, setTags, tags, search } = usePersonFinder();
 
         const [isFocused, setIsFocused] = useState(false);
         const [shouldShowBody, setShouldShowBody] = useState(false);
@@ -240,6 +247,19 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             }
         }, [onDropdownHide, onDropdownShow, shouldShowBody]);
 
+        const showBody = useMemo(() => {
+            if (
+                filterTypes?.length === 1 &&
+                (filterTypes.includes(PersonFinderFilterTypes.SITE) ||
+                    (filterTypes.includes(PersonFinderFilterTypes.PERSON) &&
+                        friendsPriority !== Priority.HIGH))
+            ) {
+                return shouldShowBody && !!search && search?.length > 2;
+            }
+
+            return shouldShowBody;
+        }, [filterTypes, friendsPriority, search, shouldShowBody]);
+
         return (
             <StyledPersonFinder ref={boxRef} onFocus={handleOpen} key={keyRef.current}>
                 <TagInput
@@ -261,7 +281,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
                         direction={dropdownDirection}
                         onClose={handleClose}
                         onOutsideClick={handleDropdownOutsideClick}
-                        shouldShowDropdown={shouldShowBody}
+                        shouldShowDropdown={showBody}
                     >
                         <PersonFinderBody
                             filterTypes={filterTypes}
