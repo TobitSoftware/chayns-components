@@ -28,7 +28,7 @@ import {
 } from './TagInput.styles';
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
-import { useCursorRepaint } from '../../hooks/resize.ts';
+import { useCursorRepaint } from '../../hooks/resize';
 
 export type TagInputProps = {
     /**
