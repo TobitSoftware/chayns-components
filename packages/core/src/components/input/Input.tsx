@@ -33,6 +33,7 @@ import {
     StyledMotionInputLabelWrapper,
 } from './Input.styles';
 import { ContentCardType } from '../../types/contentCard';
+import { useCursorRepaint } from '../../hooks/resize.ts';
 
 export interface InputRef {
     focus: VoidFunction;
@@ -203,6 +204,8 @@ const Input = forwardRef<InputRef, InputProps>(
 
         const inputRef = useRef<HTMLInputElement>(null);
         const placeholderRef = useRef<HTMLLabelElement>(null);
+
+        useCursorRepaint(inputRef);
 
         const placeholderSize = useElementSize(placeholderRef);
 

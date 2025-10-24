@@ -25,6 +25,7 @@ import {
     StyledTextAreaLabel,
     StyledTextAreaLabelWrapper,
 } from './TextArea.styles';
+import { useCursorRepaint } from '../../hooks/resize.ts';
 
 export type TextAreaProps = {
     /**
@@ -97,6 +98,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         const textareaRef = useRef<HTMLTextAreaElement>(null);
 
         const { browser } = getDevice();
+
+        useCursorRepaint(textareaRef);
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const shouldShowBorder = rightElement?.props?.style?.backgroundColor === undefined;
