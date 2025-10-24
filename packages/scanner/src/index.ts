@@ -4,3 +4,4 @@ export {
     DEFAULT_TRACK_CONSTRAINTS,
     DEFAULT_VIDEO_CONSTRAINTS,
 } from './constants/codeScanner';
+export { type ScannerErrorMessages } from './types/codeScanner';
