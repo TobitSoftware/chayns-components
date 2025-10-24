@@ -2,7 +2,7 @@ import { RefObject, useEffect } from 'react';
 import { AppFlavor, useDevice, useUser } from 'chayns-api';
 
 /**
- * Forces a repaint on the referenced element whenever the window resizes.
+ * Forces multiple repaints on the referenced element whenever it gains focus.
  * Useful for Safari/iOS WebView cursor misalignment issues.
  */
 export function useCursorRepaint<T extends HTMLElement>(ref: RefObject<T>) {
@@ -10,13 +10,9 @@ export function useCursorRepaint<T extends HTMLElement>(ref: RefObject<T>) {
     const { personId } = useUser();
 
     useEffect(() => {
-        console.debug('useCursorRepaint', {
-            app,
-            os,
-            personId,
-        });
+        console.debug('useCursorRepaint init', { app, os, personId });
 
-        // only do if ist the ios chayns app
+        // only run on iOS in chayns app for specific users
         if (
             app?.flavor !== AppFlavor.Chayns ||
             os !== 'iOS' ||
@@ -25,37 +21,37 @@ export function useCursorRepaint<T extends HTMLElement>(ref: RefObject<T>) {
             return () => {};
         }
 
-        const handleResize = () => {
-            console.debug('useCursorRepaint - handleResize');
-
-            const el = ref.current;
-
-            console.debug('useCursorRepaint - handleResize', el);
-
-            if (!el) return;
-
-            // temporarily apply a non-visible transform to force layer repaint
-            el.style.transform = 'translateY(0.1px)';
-
-            console.debug('useCursorRepaint - handleResize', el.style);
-
-            requestAnimationFrame(() => {
-                el.style.transform = '';
-
-                console.debug('useCursorRepaint - handleResize, requestAnimationFrame', el.style);
-            });
-
+        const triggerRepaint = (el: HTMLElement, delay: number) => {
             window.setTimeout(() => {
-                el.style.transform = '';
+                // eslint-disable-next-line no-param-reassign
+                el.style.transform = 'translateY(0.1px)';
+                console.debug(`useCursorRepaint - trigger @${delay}ms`, el.style);
 
-                console.debug('useCursorRepaint - handleResize, Timeout', el.style);
-            }, 200);
+                requestAnimationFrame(() => {
+                    // eslint-disable-next-line no-param-reassign
+                    el.style.transform = '';
+                    console.debug(`useCursorRepaint - clear @${delay}ms`, el.style);
+                });
+            }, delay);
         };
 
-        window.addEventListener('resize', handleResize);
+        const handleFocus = () => {
+            const el = ref.current;
+            if (!el) return;
+
+            console.debug('useCursorRepaint - focus triggered', el);
+
+            [200, 300, 400, 500].forEach((delay) => triggerRepaint(el, delay));
+        };
+
+        const el = ref.current;
+        if (el) el.addEventListener('focus', handleFocus);
+
+        console.debug('useCursorRepaint focus listener attached');
 
         return () => {
-            window.removeEventListener('resize', handleResize);
+            if (el) el.removeEventListener('focus', handleFocus);
+            console.debug('useCursorRepaint focus listener removed');
         };
     }, [app, os, personId, ref]);
 }
