@@ -103,7 +103,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
 
         const inputRef = useRef<HTMLInputElement | null>(null);
 
-        useCursorRepaint<HTMLInputElement | null>(inputRef);
+        useCursorRepaint(inputRef);
 
         const theme = useTheme() as Theme;
 
