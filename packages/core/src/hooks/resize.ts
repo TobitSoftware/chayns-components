@@ -24,7 +24,7 @@ export function useCursorRepaint<T extends HTMLElement>(ref: RefObject<T>) {
         const triggerRepaint = (el: HTMLElement, delay: number) => {
             window.setTimeout(() => {
                 // eslint-disable-next-line no-param-reassign
-                el.style.transform = 'translateY(0.1px)';
+                el.style.transform = 'translateZ(0px)';
                 console.debug(`useCursorRepaint - trigger @${delay}ms`, el.style);
 
                 requestAnimationFrame(() => {
