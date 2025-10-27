@@ -25,7 +25,7 @@ import {
     StyledTextAreaLabel,
     StyledTextAreaLabelWrapper,
 } from './TextArea.styles';
-import { useCursorRepaint } from '../../hooks/resize.ts';
+import { useCursorRepaint } from '../../hooks/resize';
 
 export type TextAreaProps = {
     /**

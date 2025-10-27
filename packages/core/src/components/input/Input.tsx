@@ -33,7 +33,7 @@ import {
     StyledMotionInputLabelWrapper,
 } from './Input.styles';
 import { ContentCardType } from '../../types/contentCard';
-import { useCursorRepaint } from '../../hooks/resize.ts';
+import { useCursorRepaint } from '../../hooks/resize';
 
 export interface InputRef {
     focus: VoidFunction;
