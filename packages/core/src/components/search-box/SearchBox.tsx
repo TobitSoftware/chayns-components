@@ -35,9 +35,9 @@ import { useUuid } from '../../hooks/uuid';
 import DropdownBodyWrapper from '../dropdown-body-wrapper/DropdownBodyWrapper';
 import TagInput, { TagInputProps, TagInputRef } from '../tag-input/TagInput';
 
-export type SearchBoxRef = {
+export interface SearchBoxRef {
     clear: VoidFunction;
-};
+}
 
 export interface TagInputSettings {
     onAdd?: TagInputProps['onAdd'];

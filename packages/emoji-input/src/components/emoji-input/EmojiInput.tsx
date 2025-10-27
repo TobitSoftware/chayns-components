@@ -140,14 +140,14 @@ export type EmojiInputProps = {
     value: string;
 };
 
-export type EmojiInputRef = {
+export interface EmojiInputRef {
     insertTextAtCursorPosition: (text: string) => void;
     replaceText: (searchText: string, replaceText: string, options?: ReplaceTextOptions) => void;
     startProgress: (durationInSeconds: number) => void;
     stopProgress: () => void;
     focus: () => void;
     blur: () => void;
-};
+}
 
 const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
     (
