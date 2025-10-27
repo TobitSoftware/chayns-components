@@ -73,11 +73,11 @@ export type TagInputProps = {
     tags?: Tag[];
 };
 
-export type TagInputRef = {
+export interface TagInputRef {
     blur: () => void;
     getUnsavedTagText: Tag['text'] | undefined;
     resetValue: () => void;
-};
+}
 
 const TagInput = forwardRef<TagInputRef, TagInputProps>(
     (
