@@ -7,6 +7,7 @@ import React, {
     SyntheticEvent,
     TouchEventHandler,
     useCallback,
+    useEffect,
     useMemo,
     useRef,
     useState,
@@ -94,6 +95,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
 
     const longPressTimeoutRef = useRef<number>();
+    const resizeSkipRef = useRef(true);
 
     const shouldShowSubtitleRow =
         subtitle ||
@@ -102,8 +104,18 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     const shouldShowMultilineTitle = useMemo(() => !subtitle, [subtitle]);
 
+    useEffect(() => {
+        window.setTimeout(() => {
+            resizeSkipRef.current = false;
+        }, 200);
+    }, []);
+
     const handleShowTooltipResize = useCallback(
         (entries: ResizeObserverEntry[]) => {
+            if (resizeSkipRef.current) {
+                return;
+            }
+
             const el = entries[0]?.target;
             if (!el) return;
             setShouldEnableTooltip(el.scrollWidth > el.clientWidth);
