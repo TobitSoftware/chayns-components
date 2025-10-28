@@ -254,7 +254,7 @@ const AmountControl: FC<AmountControlProps> = ({
         () => (
             <StyledAmountControl onClick={handleFirstAmount} $isDisabled={isDisabled}>
                 <AnimatePresence initial={false}>
-                    {['normal', 'maxAmount'].includes(displayState) && (
+                    {['normal'].includes(displayState) && (
                         <StyledMotionAmountControlButton
                             key="left_button"
                             initial={{ width: 0, opacity: 0, padding: 0 }}
@@ -274,7 +274,8 @@ const AmountControl: FC<AmountControlProps> = ({
                     )}
                 </AnimatePresence>
                 <StyledInputWrapper>
-                    {inputValue === '0' ||
+                    {displayState === 'maxAmount' ||
+                    inputValue === '0' ||
                     (shouldForceLabel && typeof label === 'string') ||
                     inputLabel === label ? (
                         <StyledAmountControlPseudoInput
@@ -298,32 +299,33 @@ const AmountControl: FC<AmountControlProps> = ({
                     )}
                 </StyledInputWrapper>
                 <AnimatePresence initial={false}>
-                    {!['maxAmount'].includes(displayState) && (
-                        <StyledMotionAmountControlButton
-                            key="right_button"
-                            initial={{ width: 0, opacity: 0, padding: 0 }}
-                            animate={{
-                                width: 40,
-                                opacity: 1,
-                                padding: 0,
-                            }}
-                            exit={{ width: 0, opacity: 0, padding: 0 }}
-                            transition={{ duration: 0.2, type: 'tween' }}
-                            onClick={handleAmountAdd}
-                            disabled={maxAmount ? amountValue >= maxAmount : false}
-                            $isDisabled={maxAmount ? amountValue >= maxAmount : false}
-                        >
-                            <Icon
-                                icons={
-                                    !['normal'].includes(displayState)
-                                        ? ['fa fa-shopping-cart']
-                                        : ['fa fa-plus']
-                                }
-                                size={14}
-                                color="white"
-                            />
-                        </StyledMotionAmountControlButton>
-                    )}
+                    <StyledMotionAmountControlButton
+                        key="right_button"
+                        initial={{ width: 0, opacity: 0, padding: 0 }}
+                        animate={{
+                            width: 40,
+                            opacity: 1,
+                            padding: 0,
+                        }}
+                        exit={{ width: 0, opacity: 0, padding: 0 }}
+                        transition={{ duration: 0.2, type: 'tween' }}
+                        $color={displayState === 'maxAmount' ? 'rgb(32, 198, 90)' : undefined}
+                        onClick={
+                            displayState === 'maxAmount' ? handleAmountRemove : handleAmountAdd
+                        }
+                        disabled={maxAmount ? amountValue >= maxAmount : false}
+                        $isDisabled={maxAmount ? amountValue >= maxAmount : false}
+                    >
+                        <Icon
+                            icons={
+                                !['normal'].includes(displayState) && icon
+                                    ? [displayState === 'maxAmount' ? 'fa fa-check' : icon]
+                                    : [displayState === 'maxAmount' ? 'fa fa-check' : 'fa fa-plus']
+                            }
+                            size={14}
+                            color={iconColor ?? 'white'}
+                        />
+                    </StyledMotionAmountControlButton>
                 </AnimatePresence>
             </StyledAmountControl>
         ),
@@ -337,6 +339,8 @@ const AmountControl: FC<AmountControlProps> = ({
             handleInputBlur,
             handleInputChange,
             hasFocus,
+            icon,
+            iconColor,
             inputLabel,
             inputValue,
             isDisabled,
