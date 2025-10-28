@@ -1,5 +1,5 @@
-﻿import { TRANSLATION_API_URL } from '../constants/constants';
-import { TranslationRequest } from '../types/translation';
+﻿import { TRANSLATION_API_URL } from '../../lib/types/constants/constants';
+import { TranslationRequest } from '../../lib/types/types/translation';
 
 export const fetchTranslations = async (textList: TranslationRequest[]): Promise<string[]> => {
     const response = await fetch(TRANSLATION_API_URL, {
