@@ -15,7 +15,7 @@ All contributions — from small bug fixes to major feature additions — are hi
 - [Storybook](#storybook)
 - [Pull Requests](#pull-requests)
 - [Publishing a New Version](#publishing-a-new-version)
-- [Design Guides](#design-guides)
+- [Development Guidelines](#development-guidelines)
 
 ---
 
@@ -84,13 +84,13 @@ This command handles versioning and publishing to npm.
 
 ---
 
-## Design Guides
+## Development Guidelines
 
-Please read our [Design Guides](/DESIGNGUIDES.md)  
+Please read our [Development Guidelines](DEVELOPMENT.md)  
 to understand the visual language, color system, and component design principles.
 
 ---
 
 <p align="center">
-  <sub>Maintained with ❤️</sub>
+  <sub>Maintained by the chayns-components team · Built with React, TypeScript and Linaria</sub>
 </p>
