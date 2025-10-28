@@ -1,4 +1,20 @@
-## Contributing
+<p align="center">
+    <img src="./assets/logo.png" alt="Project Logo" width="500" />
+</p>
 
-If you want to contribute to `chayns-components`, check out the [CONTRIBUTING.md](/CONTRIBUTING.md)
-file.
+<h1 align="center">Contributing Guide</h1>
+
+---
+
+## Table of Contents
+
+- [Contribution](#contribution)
+- [Design Guides](#design-guides)
+
+---
+
+## Contribution
+
+Read the [contribution](/docs/CONTRIBUTING.md) guide .
+
+## Design Guides
