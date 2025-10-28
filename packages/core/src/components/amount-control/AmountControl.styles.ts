@@ -14,6 +14,7 @@ export const StyledAmountControl = styled.div<StyledAmountControlProps>`
     border-radius: 3px;
     overflow: hidden;
     transition: opacity 0.2s ease;
+    height: 28px;
 
     ${({ $isDisabled }) =>
         $isDisabled &&
@@ -44,7 +45,7 @@ export const StyledAmountControlInput = styled.input<StyledAmountControlInputPro
     cursor: ${({ $hasFocus }) => ($hasFocus ? 'text' : 'pointer')};
 
     ${({ $displayState }) =>
-        $displayState !== 'normal' &&
+        $displayState === 'maxAmount' &&
         css`
             border-bottom-right-radius: 3px;
             border-top-right-radius: 3px;
@@ -69,7 +70,7 @@ export const StyledAmountControlPseudoInput = styled.div<StyledAmountControlPseu
     border: none;
     height: 28px;
     min-width: ${({ $shouldShowWideInput }) => ($shouldShowWideInput ? 90 : 55)}px;
-    padding: 0 8px;
+    padding: 1px 8px;
     text-align: center;
     cursor: pointer;
     user-select: none;

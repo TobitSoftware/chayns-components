@@ -64,7 +64,6 @@ export const unescapeHTML = (text: string) => {
 
 export const escapeHTML = (text: string) => {
     const escaped: { [key: string]: string } = {
-        '&': '&amp',
         '<': '&lt;',
         '>': '&gt;',
         '"': '&quot;',
@@ -74,11 +73,7 @@ export const escapeHTML = (text: string) => {
     return text.replace(/[&<>"']/g, (match) => escaped[match] ?? match);
 };
 
-export const convertEmojisToUnicode = (
-    text: string,
-    regShortnames: RegExp,
-    shortNameList: { [p: string]: string },
-): string => {
+export const convertEmojisToUnicode = (text: string, regShortnames: RegExp, shortNameList: { [p: string]: string }): string => {
     let result = text;
 
     result = result.replace(/https?:\/\/.*?(?=$|\s)/gi, (fullMatch) =>

@@ -21,7 +21,7 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
     color: ${({ theme }: StyledContentCardProps) => theme.text};
 
     &:not(:last-child) {
-        margin-bottom: 8px;
+        margin-bottom: 10px;
     }
 
     ${({ $type, theme, $shouldChangeColor }: StyledContentCardProps) => {
