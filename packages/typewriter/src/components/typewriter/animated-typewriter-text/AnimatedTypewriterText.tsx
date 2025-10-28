@@ -1,12 +1,12 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { StyledTypewriterText } from './Typewriter.styles';
+import { StyledAnimatedTypewriterText } from './AnimatedTypewriterText.styles';
 
-type AnimatedTypewriterTextProps = {
+interface AnimatedTypewriterTextProps {
     shouldHideCursor: boolean;
     shownText: string;
     textStyle?: React.CSSProperties;
     shouldRemainSingleLine: boolean;
-};
+}
 
 const AnimatedTypewriterText: FC<AnimatedTypewriterTextProps> = ({
     shouldHideCursor,
@@ -55,7 +55,7 @@ const AnimatedTypewriterText: FC<AnimatedTypewriterTextProps> = ({
 
     return useMemo(
         () => (
-            <StyledTypewriterText
+            <StyledAnimatedTypewriterText
                 ref={(ref) => updateTypewriterCursor(ref)}
                 dangerouslySetInnerHTML={{ __html: shownText }}
                 $shouldRemainSingleLine={shouldRemainSingleLine}
@@ -66,5 +66,7 @@ const AnimatedTypewriterText: FC<AnimatedTypewriterTextProps> = ({
         [shownText, shouldRemainSingleLine, textStyle, updateTypewriterCursor],
     );
 };
+
+AnimatedTypewriterText.displayName = 'AnimatedTypewriterText';
 
 export default AnimatedTypewriterText;

@@ -12,19 +12,23 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { renderToString } from 'react-dom/server';
-import { CursorType } from '../../types/cursor';
-import { TypewriterDelay, TypewriterSpeed } from '../../types/speed';
-import AnimatedTypewriterText from './AnimatedTypewriterText';
+import { CursorType, TypewriterDelay, TypewriterSpeed } from './Typewriter.types';
+import AnimatedTypewriterText from './animated-typewriter-text/AnimatedTypewriterText';
 import {
     StyledTypewriter,
     StyledTypewriterPseudoText,
     StyledTypewriterText,
 } from './Typewriter.styles';
-import { calculateAutoSpeed, getCharactersCount, getSubTextFromHTML, shuffleArray } from './utils';
+import {
+    calculateAutoSpeed,
+    getCharactersCount,
+    getSubTextFromHTML,
+    shuffleArray,
+} from './Typewriter.utils';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
-export type TypewriterProps = {
+export interface TypewriterProps {
     /**
      * The number of characters that will be animated per animation cycle.
      */
@@ -133,7 +137,7 @@ export type TypewriterProps = {
      * The style of the typewriter text element
      */
     textStyle?: React.CSSProperties;
-};
+}
 
 const Typewriter: FC<TypewriterProps> = ({
     children,

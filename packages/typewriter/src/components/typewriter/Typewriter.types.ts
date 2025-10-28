@@ -1,4 +1,8 @@
-// noinspection JSUnusedGlobalSymbols
+export enum CursorType {
+    Default = 'default',
+    Thin = 'thin',
+}
+
 export enum TypewriterDelay {
     ExtraSlow = 4000,
     Slow = 2000,
@@ -8,7 +12,6 @@ export enum TypewriterDelay {
     None = 0,
 }
 
-// noinspection JSUnusedGlobalSymbols
 export enum TypewriterSpeed {
     ExtraSlow = 40,
     Slow = 20,

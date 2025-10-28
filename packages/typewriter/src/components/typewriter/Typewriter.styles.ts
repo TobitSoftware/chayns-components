@@ -1,6 +1,6 @@
 import type { WithTheme } from '@chayns-components/core';
 import styled, { css, keyframes } from 'styled-components';
-import { CursorType } from '../../types/cursor';
+import { CursorType } from './Typewriter.types';
 import type { TypewriterProps } from './Typewriter';
 
 type StyledTypewriterProps = WithTheme<{
