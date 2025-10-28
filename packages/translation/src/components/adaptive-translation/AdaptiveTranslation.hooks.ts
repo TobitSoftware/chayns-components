@@ -1,7 +1,7 @@
-﻿import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { Language } from 'chayns-api';
-import { TranslationOptionsContext } from '../constants/translationOptionsContext';
-import translationHandler from '../utils/translationHandler';
+import { translationHandler } from './AdaptiveTranslation.utils';
+import { TranslationOptionsContext } from './AdaptiveTranslation.context';
 
 interface UseAdaptiveTranslationOptions {
     /**

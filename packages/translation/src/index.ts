@@ -1,7 +1,9 @@
-import translationHandler from './utils/translationHandler';
+// Components
+export { default as AdaptiveTranslation } from './components/adaptive-translation/AdaptiveTranslation';
+export { default as TranslationOptionsProvider } from './components/adaptive-translation/AdaptiveTranslation.context';
 
-export { useAdaptiveTranslation } from './hooks/useAdaptiveTranslation';
-export { default as AdaptiveTranslation } from './components/AdaptiveTranslation';
-export { default as TranslationOptionsProvider } from './components/TranslationOptionsProvider';
-export const translateText = (text: string, from: string, to: string) =>
-    translationHandler.translateText(text, from, to);
+// Hooks
+export { useAdaptiveTranslation } from './components/adaptive-translation/AdaptiveTranslation.hooks';
+
+// Utils
+export { translateText } from './components/adaptive-translation/AdaptiveTranslation.utils';

@@ -1,6 +1,6 @@
 ﻿import React, { CSSProperties, ReactNode, useEffect } from 'react';
 import clsx from 'clsx';
-import { useAdaptiveTranslation } from '../hooks/useAdaptiveTranslation';
+import { useAdaptiveTranslation } from './AdaptiveTranslation.hooks';
 import { Language } from 'chayns-api';
 
 type TranslationChildren = ((text: string) => ReactNode) | string;

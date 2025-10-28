@@ -1,8 +1,7 @@
-﻿import { QueuedItem, TranslationBatchItem } from '../types/translation';
-import { BATCH_SIZE_LIMIT, MAX_ITEMS_PER_BATCH } from '../constants/constants';
 import throttle from 'lodash.throttle';
-import { Deferred } from './deferred';
-import { fetchTranslations } from '../api/translation';
+import { Deferred, QueuedItem, TranslationBatchItem } from './AdaptiveTranslation.types';
+import { fetchTranslations } from '../../api/translation';
+import { BATCH_SIZE_LIMIT, MAX_ITEMS_PER_BATCH } from './AdaptiveTranslation.constants';
 
 class TranslationHandler {
     translationQueue: QueuedItem[] = [];
@@ -90,6 +89,7 @@ class TranslationHandler {
     };
 }
 
-const translationHandler = new TranslationHandler();
+export const translationHandler = new TranslationHandler();
 
-export default translationHandler;
+export const translateText = (text: string, from: string, to: string) =>
+    translationHandler.translateText(text, from, to);
