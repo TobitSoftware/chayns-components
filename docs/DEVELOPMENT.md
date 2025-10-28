@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="./assets/logo.png" alt="Project Logo" width="500" />
+    <img src="../assets/logo.png" alt="Project Logo" width="500" />
 </p>
 
 <h1 align="center">Development Guidelines</h1>
