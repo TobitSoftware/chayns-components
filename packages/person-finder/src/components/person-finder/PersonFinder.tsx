@@ -4,8 +4,8 @@ import {
     PersonFinderEntry,
     PersonFinderFilterTypes,
     Priority,
-} from '../../types/personFinder';
-import PersonFinderProvider from '../PersonFinderProvider';
+} from './PersonFinder.types';
+import PersonFinderProvider from './PersonFinder.context';
 import PersonFinderWrapper, {
     PersonFinderWrapperProps,
     PersonFinderRef,

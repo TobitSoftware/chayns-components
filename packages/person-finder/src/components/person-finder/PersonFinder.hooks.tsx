@@ -5,11 +5,11 @@ import {
     PersonFinderEntry,
     SiteEntry,
     UACEntry,
-} from '../types/personFinder';
-import { isSiteEntry } from '../utils/personFinder';
+} from './PersonFinder.types';
+import { isSiteEntry } from './PersonFinder.utils';
 import { VerificationBadge } from '@chayns-components/core';
-import { usePersonFinder } from '../components/PersonFinderProvider';
-import { StyledPersonFinderGroupErrorMessage } from '../components/person-finder/person-finder-wrapper/person-finder-body/person-finder-group/PersonFinderGroup.styles';
+import { usePersonFinder } from './PersonFinder.context';
+import { StyledPersonFinderGroupErrorMessage } from './person-finder-wrapper/person-finder-body/person-finder-group/PersonFinderGroup.styles';
 
 export const useClosestElementAbove = (containerRef: RefObject<HTMLElement>, itemClass: string) => {
     const [closestElement, setClosestElement] = useState<HTMLElement | null>(null);

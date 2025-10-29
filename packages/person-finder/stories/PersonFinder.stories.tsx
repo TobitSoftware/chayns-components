@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import PersonFinder from '../src/components/person-finder/PersonFinder';
+import PersonFinder from '../src/components/person-finder/PersonFinder.types';
 import React from 'react';
 import { PersonFinderFilterTypes } from '../src';
 

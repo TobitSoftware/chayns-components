@@ -4,17 +4,17 @@ import {
     LoadingState,
     PersonFinderEntry,
     PersonFinderFilterTypes,
-} from '../../../../../types/personFinder';
-import { getGroupName } from '../../../../../utils/personFinder';
+} from '../../../PersonFinder.types';
+import { getGroupName } from '../../../PersonFinder.utils';
 import {
     StyledPersonFinderGroup,
     StyledPersonFinderGroupButtonWrapper,
     StyledPersonFinderGroupName,
     StyledPersonFinderGroupWaitCursor,
 } from './PersonFinderGroup.styles';
-import { usePersonFinder } from '../../../../PersonFinderProvider';
+import { usePersonFinder } from '../../../PersonFinder.context';
 import PersonFinderItem from './person-finder-item/PersonFinderItem';
-import { useErrorMessage, useOnlyFriends } from '../../../../../hooks/personFinder';
+import { useErrorMessage, useOnlyFriends } from '../../../PersonFinder.hooks';
 import PersonFinderSmallItem from './person-finder-small-item/PersonFinderSmallItem';
 
 export type PersonFinderGroupProps = {

@@ -25,10 +25,10 @@ import {
     PersonFinderFilterTypes,
     Priority,
     SiteEntry,
-} from '../../../types/personFinder';
+} from '../PersonFinder.types';
 import { StyledPersonFinder, StyledPersonFinderLeftElement } from './PersonFinderWrapper.styles';
 import PersonFinderBody from './person-finder-body/PersonFinderBody';
-import { usePersonFinder } from '../../PersonFinderProvider';
+import { usePersonFinder } from '../PersonFinder.context';
 
 export type PersonFinderRef = {
     clear: () => void;

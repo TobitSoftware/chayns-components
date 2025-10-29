@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
-import Ranking from '../src/components/ranking/Ranking';
+import Ranking from '../src/components/ranking/Ranking.types';
 
 export default {
     title: 'Ranking/Ranking',

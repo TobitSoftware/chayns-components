@@ -1,7 +1,7 @@
 import React, { FC, MouseEvent } from 'react';
-import { PersonFinderEntry } from '../../../../../../types/personFinder';
-import { usePersonFinderSmallItem } from '../../../../../../hooks/personFinder';
-import { usePersonFinder } from '../../../../../PersonFinderProvider';
+import { PersonFinderEntry } from '../../../../PersonFinder.types';
+import { usePersonFinderSmallItem } from '../../../../PersonFinder.hooks';
+import { usePersonFinder } from '../../../../PersonFinder.context';
 import { StyledPersonFinderSmallItem } from './PersonFinderSmallItem.styles';
 
 export type PersonFinderSmallItemProps = {

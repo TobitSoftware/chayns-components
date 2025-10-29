@@ -23,13 +23,12 @@ import {
     Priority,
     ThrottledFunction,
     UACEntry,
-} from '../types/personFinder';
-import { getFriends } from '../api/friends/get';
-import { postFriends } from '../api/friends/post';
-import { deleteFriends } from '../api/friends/delete';
-import { filterDataByKeys, loadData } from '../utils/personFinder';
+} from './PersonFinder.types';
+import { getFriends } from '../../api/friends/get';
+import { postFriends } from '../../api/friends/post';
+import { deleteFriends } from '../../api/friends/delete';
+import { filterDataByKeys, loadData, getUACGroups } from './PersonFinder.utils';
 import { Tag } from '@chayns-components/core/lib/types/types/tagInput';
-import { getUACGroups } from '../utils/uac';
 
 const THROTTLE_INTERVAL = 500;
 

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, useCallback, useMemo } from 'react';
 import { StyledRanking, StyledRankingLoadMoreButton } from './Ranking.styles';
-import { IRankingEntry } from '../../types/ranking';
+import { IRankingEntry } from './Ranking.types';
 import { Accordion, AccordionContent, AccordionGroup, Button, Icon } from '@chayns-components/core';
 import RankingEntry from './ranking-entry/RankingEntry';
 

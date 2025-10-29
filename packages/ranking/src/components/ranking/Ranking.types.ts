@@ -5,18 +5,18 @@ export interface IRankingEntry {
     name: string;
     personId: string;
     points: number;
-    content?: RankingContent[];
+    content?: IRankingContent[];
     icons?: string[] | ReactNode;
 }
 
-export type RankingContent = RankingContentHeadline | RankingContentEntry;
+export type IRankingContent = IRankingContentHeadline | IRankingContentEntry;
 
-export interface RankingContentHeadline {
+export interface IRankingContentHeadline {
     headline: string;
     id: string;
 }
 
-export interface RankingContentEntry {
+export interface IRankingContentEntry {
     id: string;
     name: string;
     value: string;

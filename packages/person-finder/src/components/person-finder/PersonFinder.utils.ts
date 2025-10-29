@@ -1,15 +1,18 @@
 import {
     PersonEntry,
+    PersonEntryResult,
     PersonFinderData,
     PersonFinderDataMap,
     PersonFinderEntry,
     PersonFinderFilterTypes,
     SiteEntry,
-} from '../types/personFinder';
-import { getPersons } from '../api/person/get';
-import { getSites } from '../api/site/get';
-import { convertPersonEntry, convertSiteEntry } from './convert';
-import { getUser } from 'chayns-api';
+    SiteEntryResult,
+    UACEntry,
+} from './PersonFinder.types';
+import { getPersons } from '../../api/person/get';
+import { getSites } from '../../api/site/get';
+import { getAccessToken, getLanguage, getSite, getUser } from 'chayns-api';
+import { UacServiceClient } from '@chayns/uac-service';
 
 export const getGroupName = (key: string) => {
     const names: { [key: string]: string } = {
@@ -183,3 +186,38 @@ export const loadData = async ({
         };
     }, {});
 };
+
+export const client = new UacServiceClient({
+    getToken: async () => (await getAccessToken()).accessToken || '',
+    getDefaultSiteId: () => getSite().id,
+    getDefaultPersonId: () => getUser()?.personId || '',
+    getLanguage: () => getLanguage().active,
+});
+
+export const getUACGroups = async (): Promise<UACEntry[]> => {
+    const result = await client.getUserGroups({ countUsers: true });
+
+    return result.map(({ id, showName, isSystemGroup }) => ({
+        id,
+        name: showName,
+        isSystemGroup,
+    }));
+};
+
+export const convertSiteEntry = (entries: SiteEntryResult[]): SiteEntry[] =>
+    entries.map((entry) => ({
+        id: entry.siteId,
+        name: entry.name,
+        url: `https://${entry.domain}`,
+        type: PersonFinderFilterTypes.SITE,
+    }));
+
+export const convertPersonEntry = (entries: PersonEntryResult[]): PersonEntry[] =>
+    entries.map((entry) => ({
+        id: entry.personId,
+        firstName: entry.firstName,
+        lastName: entry.lastName,
+        commonSites: entry.relationCount,
+        isVerified: entry.verified,
+        type: PersonFinderFilterTypes.PERSON,
+    }));

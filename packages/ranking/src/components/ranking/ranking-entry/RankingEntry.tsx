@@ -13,7 +13,7 @@ import {
     StyledRankingEntryRightElementPoints,
 } from './RankingEntry.styles';
 import { Accordion, AccordionContent, Icon } from '@chayns-components/core';
-import { IRankingEntry, RankingContentEntry, RankingContentHeadline } from '../../../types/ranking';
+import { IRankingEntry, IRankingContentEntry, IRankingContentHeadline } from '../Ranking.types';
 
 export type RankingEntryProps = {
     onFriendAdd?: (personId: string) => void;
@@ -75,7 +75,7 @@ const RankingEntry: FC<RankingEntryProps> = ({
     const entryContent = useMemo(() => {
         if (!content) return null;
 
-        return (content as (RankingContentHeadline & RankingContentEntry)[]).map(
+        return (content as (IRankingContentHeadline & IRankingContentEntry)[]).map(
             ({ name, value, headline, id }) => {
                 if (typeof headline === 'string') {
                     return (

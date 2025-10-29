@@ -5,10 +5,10 @@ import {
     StyledPersonFinderHeaderGroupName,
 } from './PersonFinderHeader.styles';
 import { FilterButtons, FilterButtonSize } from '@chayns-components/core';
-import { usePersonFinder } from '../../../../PersonFinderProvider';
-import { capitalizeFirstLetter } from '../../../../../utils/personFinder';
+import { usePersonFinder } from '../../../PersonFinder.context';
+import { capitalizeFirstLetter } from '../../../PersonFinder.utils';
 import { IFilterButtonItem } from '@chayns-components/core/lib/types/types/filterButtons';
-import { PersonFinderFilterTypes } from '../../../../../types/personFinder';
+import { PersonFinderFilterTypes } from '../../../PersonFinder.types';
 
 export type PersonFinderHeaderProps = {
     filterTypes?: PersonFinderFilterTypes[];

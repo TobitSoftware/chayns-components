@@ -1,5 +1,5 @@
 import { getAccessToken } from 'chayns-api';
-import { SiteEntryResult } from '../../types/personFinder';
+import { SiteEntryResult } from '../../components/person-finder/PersonFinder.types';
 
 const URL =
     'https://relations.chayns.net/relations/location/?query=##search##&skip=##skip##&take=##take##&includeDomains=true';

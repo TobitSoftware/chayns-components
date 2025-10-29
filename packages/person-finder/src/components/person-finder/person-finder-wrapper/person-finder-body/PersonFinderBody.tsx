@@ -1,11 +1,11 @@
 import React, { forwardRef, UIEvent, useMemo, useRef, useState } from 'react';
 import { StyledPersonFinderBody, StyledPersonFinderBodyContent } from './PersonFinderBody.styles';
-import { PersonFinderFilterTypes } from '../../../../types/personFinder';
+import { PersonFinderFilterTypes } from '../../PersonFinder.types';
 import { BrowserName } from '@chayns-components/core';
-import { usePersonFinder } from '../../../PersonFinderProvider';
+import { usePersonFinder } from '../../PersonFinder.context';
 import { useDevice } from 'chayns-api';
-import { getGroupName } from '../../../../utils/personFinder';
-import { useClosestElementAbove } from '../../../../hooks/personFinder';
+import { getGroupName } from '../../PersonFinder.utils';
+import { useClosestElementAbove } from '../../PersonFinder.hooks';
 import PersonFinderGroup from './person-finder-group/PersonFinderGroup';
 import PersonFinderHeader from './person-finder-header/PersonFinderHeader';
 
