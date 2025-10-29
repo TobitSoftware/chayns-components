@@ -1,5 +1,5 @@
 import React, { CSSProperties, FC, useCallback, useMemo } from 'react';
-import type { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';
+import type { FilterButtonItemShape, FilterButtonSize } from '../FilterButtons.types';
 import Icon from '../../icon/Icon';
 import {
     StyledFilterButtonItem,

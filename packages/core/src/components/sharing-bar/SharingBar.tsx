@@ -1,7 +1,7 @@
 import { getSite } from 'chayns-api';
 import React, { FC, MouseEventHandler, useCallback, useRef } from 'react';
-import { SHAREPROVIDER } from '../../constants/sharingBar';
-import type { ContextMenuAlignment } from '../../types/contextMenu';
+import { SHAREPROVIDER } from './SharingBar.constants';
+import type { ContextMenuAlignment } from '../context-menu/ContextMenu.types';
 import { getIsTouch } from '../../utils/environment';
 import { copyToClipboard, shareWithApp, shareWithUrl } from '../../utils/sharingBar';
 import ContextMenu from '../context-menu/ContextMenu';

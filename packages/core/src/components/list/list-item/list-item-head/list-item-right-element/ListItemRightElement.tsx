@@ -1,5 +1,5 @@
 import React, { FC, isValidElement, useMemo } from 'react';
-import type { IListItemRightElement, IListItemRightElements } from '../../../../../types/list';
+import type { IListItemRightElement, IListItemRightElements } from '../../../List.types';
 import { StyledListItemRightElement } from './ListItemRightElement.styles';
 import { getElementClickEvent } from '../../../../../utils/accordion';
 

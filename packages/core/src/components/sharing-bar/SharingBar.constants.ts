@@ -1,4 +1,4 @@
-import type { SharingBarProvider } from '../types/sharingBar';
+import type { SharingBarProvider } from './SharingBar.types';
 
 export const SHAREOPTIONS = {
     COPY: 0,

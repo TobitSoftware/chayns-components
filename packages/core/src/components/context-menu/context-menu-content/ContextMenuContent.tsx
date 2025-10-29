@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ContextMenuAlignment } from '../../../types/contextMenu';
+import { ContextMenuAlignment } from '../ContextMenu.types';
 import Icon from '../../icon/Icon';
 import type { ContextMenuCoordinates, ContextMenuItem } from '../ContextMenu';
 import {

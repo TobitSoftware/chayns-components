@@ -16,7 +16,7 @@ import React, {
 } from 'react';
 import { useTheme } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import type { Tag } from '../../types/tagInput';
+import type { Tag } from './TagInput.types';
 import Badge from '../badge/Badge';
 import Icon from '../icon/Icon';
 import {

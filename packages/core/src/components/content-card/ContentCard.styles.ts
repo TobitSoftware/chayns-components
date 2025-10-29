@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { ContentCardType } from '../../types/contentCard';
+import { ContentCardType } from './ContentCard.types';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledContentCardProps = WithTheme<{

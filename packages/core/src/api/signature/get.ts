@@ -1,6 +1,6 @@
 import { getAccessToken } from 'chayns-api';
-import type { GetUserSignatureResult } from '../../types/signature';
-import { SIGNATURE_SERVER_URL } from '../../constants/signature';
+import type { GetUserSignatureResult } from '../../components/signature/Signature.types';
+import { SIGNATURE_SERVER_URL } from '../../components/signature/Signature.constants';
 
 export const getUserSignature = async (): Promise<string | undefined> => {
     const { accessToken } = await getAccessToken();

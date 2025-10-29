@@ -10,7 +10,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { ClampPosition } from '../../types/truncation';
+import { ClampPosition } from './Truncation.types';
 import { debounce } from '../../utils/debounce';
 import { truncateElement } from '../../utils/truncation';
 import {

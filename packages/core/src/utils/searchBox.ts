@@ -1,4 +1,4 @@
-import type { ISearchBoxItem } from '../types/searchBox';
+import type { ISearchBoxItem } from '../components/search-box/SearchBox.types';
 
 const surroundWithBTag = (text: string, startIndex: number, length: number) => {
     const before = text.substring(0, startIndex);

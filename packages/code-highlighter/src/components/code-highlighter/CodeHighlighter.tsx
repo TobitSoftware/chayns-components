@@ -8,8 +8,8 @@ import {
     CodeHighlighterLanguage,
     CodeHighlighterTheme,
     HighlightedLines,
-} from '../../types/codeHighlighter';
-import { formatLanguage, getParserForLanguage } from '../../utils/codeHighlighter';
+} from './CodeHighlighter.types';
+import { formatLanguage, getParserForLanguage } from './CodeHighlighter.utils';
 import {
     StyledCodeHighlighter,
     StyledCodeHighlighterFileName,
@@ -81,7 +81,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                 const { children } = ref.current;
 
                 const preElement = Array.from(children).find(
-                    ({ tagName }) => tagName.toLowerCase() === 'pre',
+                    ({ tagName }) => tagName.toLowerCase() === 'pre'
                 );
 
                 if (preElement) {
@@ -119,7 +119,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
             return { style };
         },
-        [highlightedLines, width],
+        [highlightedLines, width]
     );
 
     const formattedCode = useMemo(() => {
@@ -192,7 +192,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
             shouldWrapLines,
             lineWrapper,
             formattedCode,
-        ],
+        ]
     );
 };
 

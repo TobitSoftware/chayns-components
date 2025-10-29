@@ -7,7 +7,7 @@ import {
 import Input from '../../input/Input';
 import Icon from '../../icon/Icon';
 import FilterButtons from '../../filter-buttons/FilterButtons';
-import { FilterButtonConfig, SearchConfig, SortConfig } from '../../../types/filter';
+import { FilterButtonConfig, SearchConfig, SortConfig } from '../Filter.types';
 import ComboBox, { IComboBoxItem } from '../../combobox/ComboBox';
 
 export type FilterContentProps = {

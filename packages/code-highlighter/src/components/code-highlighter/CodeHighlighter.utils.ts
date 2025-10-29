@@ -1,5 +1,5 @@
 import type { Options } from 'prettier';
-import { CodeHighlighterLanguage } from '../types/codeHighlighter';
+import { CodeHighlighterLanguage } from './CodeHighlighter.types';
 
 type ParserType = 'babel-ts' | 'html' | 'css' | 'markdown' | 'graphql' | 'yaml';
 
@@ -15,7 +15,7 @@ const PARSER_MAP: ParserMap = {
 };
 
 export const getParserForLanguage = async (
-    language: CodeHighlighterLanguage = '',
+    language: CodeHighlighterLanguage = ''
 ): Promise<Options | undefined> => {
     let parser: ParserType | undefined;
 

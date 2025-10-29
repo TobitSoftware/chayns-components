@@ -14,7 +14,7 @@ import React, {
     useState,
 } from 'react';
 import { useUuid } from '../../../hooks/uuid';
-import type { IListItemRightElements } from '../../../types/list';
+import type { IListItemRightElements } from '../List.types';
 import { AccordionContext } from '../../accordion/Accordion';
 import AreaContextProvider, { AreaContext } from '../../area-provider/AreaContextProvider';
 import { ListContext } from '../List';
@@ -22,7 +22,7 @@ import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
 import { StyledListItem, StyledListItemTooltip } from './ListItem.styles';
 import Tooltip from '../../tooltip/Tooltip';
-import { LIST_ITEM_HTML_TAG } from '../../../constants/list';
+import { LIST_ITEM_HTML_TAG } from '../List.constants';
 
 export type ListItemElements = [ReactNode, ...ReactNode[]];
 

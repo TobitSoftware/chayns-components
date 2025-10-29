@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { BrowserName } from '../../types/chayns';
 import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ComboBoxProps } from './ComboBox';
-import { DropdownDirection } from '../../types/dropdown';
+import { DropdownDirection } from '../dropdown-body-wrapper/Dropdown.types';
 
 type StyledComboBoxProps = WithTheme<{
     $minWidth?: number;

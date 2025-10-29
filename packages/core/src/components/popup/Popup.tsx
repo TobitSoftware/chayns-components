@@ -11,7 +11,7 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
-import { PopupAlignment, PopupCoordinates, PopupRef } from '../../types/popup';
+import { PopupAlignment, PopupCoordinates, PopupRef } from './Popup.types';
 import AreaContextProvider from '../area-provider/AreaContextProvider';
 import PopupContentWrapper from './popup-content-wrapper/PopupContentWrapper';
 import { StyledPopup } from './Popup.styles';

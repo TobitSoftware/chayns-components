@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
-import { RadioButtonRightElementMargin } from '../../types/radioButton';
+import { RadioButtonRightElementMargin } from './RadioButton.types';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledRadioButtonProps = WithTheme<{

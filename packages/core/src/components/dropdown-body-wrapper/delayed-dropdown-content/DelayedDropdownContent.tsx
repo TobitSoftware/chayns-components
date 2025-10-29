@@ -1,10 +1,6 @@
 import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { StyledMotionDelayedDropdownContent } from './DelayedDropdownContent.styles';
-import {
-    DropdownCoordinates,
-    DropdownMeasurements,
-    DropdownTransform,
-} from '../../../types/dropdown';
+import { DropdownCoordinates, DropdownMeasurements, DropdownTransform } from '../Dropdown.types';
 
 const ANIMATION_DELAY_MS = 200;
 

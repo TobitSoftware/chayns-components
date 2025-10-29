@@ -18,17 +18,20 @@ export {
     default as ColorSchemeProvider,
     useColorScheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
-export { BadgeSize, BadgeDesign } from './types/badge';
+export { BadgeSize, BadgeDesign } from './components/badge/Badge.types';
 export type {
     ColorSchemeContextProps,
     WithTheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
 export { useContainer, ContainerAnchor } from './hooks/container';
-export { DropdownDirection, type DropdownCoordinates } from './types/dropdown';
+export {
+    DropdownDirection,
+    type DropdownCoordinates,
+} from './components/dropdown-body-wrapper/Dropdown.types';
 export { useIsMeasuredClone } from './hooks/element';
 export { useCombinedRefs } from './hooks/ref';
 export { default as Filter } from './components/filter/Filter';
-export { type SortItem } from './types/filter';
+export { type SortItem } from './components/filter/Filter.types';
 export { default as AnimatedNumber } from './components/animated-number/AnimatedNumber';
 export {
     default as FileList,
@@ -74,7 +77,7 @@ export { default as PageProvider } from './components/page-provider/PageProvider
 export { default as Popup } from './components/popup/Popup';
 export { default as PopupContent } from './components/popup/popup-content/PopupContent';
 export { default as ProgressBar } from './components/progress-bar/ProgressBar';
-export { PopupAlignment } from './types/popup';
+export { PopupAlignment } from './components/popup/Popup.types';
 export {
     default as RadioButtonGroup,
     type RadioButtonGroupRef,
@@ -97,32 +100,35 @@ export {
     SmallWaitCursorSize,
     SmallWaitCursorSpeed,
 } from './components/small-wait-cursor/SmallWaitCursor';
-export type { Tag } from './types/tagInput';
+export type { Tag } from './components/tag-input/TagInput.types';
 export { default as TagInput } from './components/tag-input/TagInput';
 export type { TagInputRef } from './components/tag-input/TagInput';
 export { default as TextArea } from './components/text-area/TextArea';
 export { default as Tooltip } from './components/tooltip/Tooltip';
 export { default as Truncation } from './components/truncation/Truncation';
-export { MentionFinderPopupAlignment } from './constants/mentionFinder';
+export { MentionFinderPopupAlignment } from './components/mention-finder/MentionFinder.types';
 export { useElementSize } from './hooks/element';
 export type { BrowserName } from './types/chayns';
-export { ContentCardType } from './types/contentCard';
-export { ContextMenuAlignment } from './types/contextMenu';
+export { ContentCardType } from './components/content-card/ContentCard.types';
+export { ContextMenuAlignment } from './components/context-menu/ContextMenu.types';
 export type { FileItem, Image, InternalFileItem, Meta, Video } from './types/file';
 export { isValidFileType } from './utils/file';
-export type { FileInputFileItem } from './types/fileInput';
-export { FilterButtonItemShape, FilterButtonSize } from './types/filterButtons';
-export type { IFilterButtonItem as FilterButtonItem } from './types/filterButtons';
-export type { IListItemRightElements } from './types/list';
-export type { PopupRef } from './types/popup';
-export type { RadioButtonItem } from './types/radioButton';
+export type { FileInputFileItem } from './components/file-input/FileInput.types';
+export {
+    FilterButtonItemShape,
+    FilterButtonSize,
+} from './components/filter-buttons/FilterButtons.types';
+export type { IFilterButtonItem as FilterButtonItem } from './components/filter-buttons/FilterButtons.types';
+export type { IListItemRightElements } from './components/list/List.types';
+export type { PopupRef } from './components/popup/Popup.types';
+export type { RadioButtonItem } from './components/radio-button/RadioButton.types';
 export type {
     ISearchBoxItem as SearchBoxItem,
     ISearchBoxItems as SearchBoxItems,
-} from './types/searchBox';
-export type { SelectButtonItem } from './types/selectButton';
-export type { SliderButtonItem } from './types/slider-button';
-export { ClampPosition } from './types/truncation';
+} from './components/search-box/SearchBox.types';
+export type { SelectButtonItem } from './components/select-button/SelectButton.types';
+export type { SliderButtonItem } from './components/slider-button/SliderButton.types';
+export { ClampPosition } from './components/truncation/Truncation.types';
 export { getIsTouch } from './utils/environment';
 export { filterFilesByMimeType, getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
 export { isTobitEmployee } from './utils/isTobitEmployee';

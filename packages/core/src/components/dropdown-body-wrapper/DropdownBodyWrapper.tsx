@@ -4,7 +4,7 @@ import {
     StyledDropdownBodyWrapperContent,
 } from './DropdownBodyWrapper.styles';
 import { createPortal } from 'react-dom';
-import { DropdownDirection, DropdownMeasurements } from '../../types/dropdown';
+import { DropdownDirection, DropdownMeasurements } from './Dropdown.types';
 import DelayedDropdownContent, {
     DelayedDropdownContentProps,
 } from './delayed-dropdown-content/DelayedDropdownContent';

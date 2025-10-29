@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import type { ISearchBoxItem, ISearchBoxItems } from '../../../types/searchBox';
+import type { ISearchBoxItem, ISearchBoxItems } from '../SearchBox.types';
 import {
     StyledSearchBoxItem,
     StyledSearchBoxItemImage,

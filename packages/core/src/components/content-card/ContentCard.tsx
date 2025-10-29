@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useContext, useMemo } from 'react';
-import { ContentCardType } from '../../types/contentCard';
+import { ContentCardType } from './ContentCard.types';
 import AreaContextProvider, { AreaContext } from '../area-provider/AreaContextProvider';
 import { StyledContentCard } from './ContentCard.styles';
 

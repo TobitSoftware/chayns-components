@@ -1,4 +1,7 @@
-import { IconStyle, type ParagraphFormat } from '../types/colorSchemeProvider';
+import {
+    IconStyle,
+    type ParagraphFormat,
+} from '../components/color-scheme-provider/ColorSchemeProvider.types';
 
 export const convertIconStyle = (iconStyle: IconStyle) => {
     switch (iconStyle) {

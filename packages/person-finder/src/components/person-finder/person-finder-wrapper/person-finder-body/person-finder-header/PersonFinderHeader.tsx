@@ -7,7 +7,7 @@ import {
 import { FilterButtons, FilterButtonSize } from '@chayns-components/core';
 import { usePersonFinder } from '../../../PersonFinder.context';
 import { capitalizeFirstLetter } from '../../../PersonFinder.utils';
-import { IFilterButtonItem } from '@chayns-components/core/lib/types/types/filterButtons';
+import { IFilterButtonItem } from 'packages/core/src/types/FilterButtons.types';
 import { PersonFinderFilterTypes } from '../../../PersonFinder.types';
 
 export type PersonFinderHeaderProps = {

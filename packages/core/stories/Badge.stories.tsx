@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Badge from '../src/components/badge/Badge';
-import { BadgeDesign } from '../src/types/badge';
+import { BadgeDesign } from '../src/components/badge/Badge.types';
 import React from 'react';
 
 export default {

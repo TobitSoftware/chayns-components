@@ -32,7 +32,7 @@ import {
     StyledMotionInputClearIcon,
     StyledMotionInputLabelWrapper,
 } from './Input.styles';
-import { ContentCardType } from '../../types/contentCard';
+import { ContentCardType } from '../content-card/ContentCard.types';
 import { useCursorRepaint } from '../../hooks/resize';
 
 export interface InputRef {

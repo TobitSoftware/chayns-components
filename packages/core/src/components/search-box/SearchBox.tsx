@@ -15,8 +15,8 @@ import React, {
     useState,
 } from 'react';
 import { useTheme } from 'styled-components';
-import type { IFilterButtonItem } from '../../types/filterButtons';
-import type { ISearchBoxItem, ISearchBoxItems } from '../../types/searchBox';
+import type { IFilterButtonItem } from '../filter-buttons/FilterButtons.types';
+import type { ISearchBoxItem, ISearchBoxItems } from './SearchBox.types';
 import { calculateContentHeight } from '../../utils/calculate';
 import { searchList } from '../../utils/searchBox';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';

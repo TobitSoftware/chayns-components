@@ -5,7 +5,7 @@ import {
     LIST_ITEM_HEAD_HTML_TAG,
     LIST_ITEM_HEAD_INDICATOR_HTML_TAG,
     LIST_ITEM_HEAD_TITLE_HTML_TAG,
-} from '../../../../constants/list';
+} from '../../List.constants';
 
 type StyledListItemHeadProps = WithTheme<{
     $isClickable: boolean;

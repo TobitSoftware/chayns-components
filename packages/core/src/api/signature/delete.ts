@@ -1,5 +1,5 @@
 import { getAccessToken } from 'chayns-api';
-import { SIGNATURE_SERVER_URL } from '../../constants/signature';
+import { SIGNATURE_SERVER_URL } from '../../components/signature/Signature.constants';
 
 export const deleteUserSignature = async () => {
     const { accessToken } = await getAccessToken();

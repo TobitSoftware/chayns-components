@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { DropdownDirection } from '../../types/dropdown';
+import { DropdownDirection } from './Dropdown.types';
 
 export const StyledDropdownBodyWrapper = styled.div``;
 

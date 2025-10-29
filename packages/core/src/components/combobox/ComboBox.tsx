@@ -37,7 +37,7 @@ import {
     StyledComboBoxTopic,
 } from './ComboBox.styles';
 import DropdownBodyWrapper from '../dropdown-body-wrapper/DropdownBodyWrapper';
-import { DropdownDirection } from '../../types/dropdown';
+import { DropdownDirection } from '../dropdown-body-wrapper/Dropdown.types';
 import { useElementSize } from '../../hooks/element';
 
 export interface ComboBoxRef {

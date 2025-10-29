@@ -1,4 +1,9 @@
-import { DECIMAL_TEST, INTEGER_TEST, MONEY_TEST, TIME_TEST } from '../constants/numberInput';
+import {
+    DECIMAL_TEST,
+    INTEGER_TEST,
+    MONEY_TEST,
+    TIME_TEST,
+} from '../components/number-input/NumberInput.constants';
 
 interface ParseFloatWithDecimals {
     ({ stringValue, decimals }: { stringValue: string; decimals?: number }): number | null;

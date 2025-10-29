@@ -1,5 +1,5 @@
 import React, { useMemo, type ReactNode } from 'react';
-import type { ContentCardType } from '../../types/contentCard';
+import type { ContentCardType } from '../content-card/ContentCard.types';
 
 interface IAreaProviderContext {
     contentCardType?: ContentCardType;

@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 import { CSSProperties } from 'react';
-import { LIST_ITEM_HTML_TAG } from '../../../constants/list';
+import { LIST_ITEM_HTML_TAG } from '../List.constants';
 
 type StyledListItemProps = WithTheme<{
     $backgroundColor?: CSSProperties['backgroundColor'];

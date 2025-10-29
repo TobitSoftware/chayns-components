@@ -28,7 +28,7 @@ import { getFriends } from '../../api/friends/get';
 import { postFriends } from '../../api/friends/post';
 import { deleteFriends } from '../../api/friends/delete';
 import { filterDataByKeys, loadData, getUACGroups } from './PersonFinder.utils';
-import { Tag } from '@chayns-components/core/lib/types/types/tagInput';
+import { Tag } from 'packages/core/src/types/TagInput.types';
 
 const THROTTLE_INTERVAL = 500;
 

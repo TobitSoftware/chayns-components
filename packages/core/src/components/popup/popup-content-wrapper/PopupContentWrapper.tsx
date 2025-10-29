@@ -1,6 +1,6 @@
 import { getDevice, useSite } from 'chayns-api';
 import React, { ReactNode, type MouseEventHandler } from 'react';
-import { PopupAlignment, PopupCoordinates } from '../../../types/popup';
+import { PopupAlignment, PopupCoordinates } from '../Popup.types';
 import {
     StyledMotionPopupContentWrapper,
     StyledPopupContentWrapperContent,

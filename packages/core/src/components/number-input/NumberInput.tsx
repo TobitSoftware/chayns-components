@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler, FC, useEffect, useRef, useState } from 'react';
-import { NUMBER_CLEAR_REGEX } from '../../constants/numberInput';
+import { NUMBER_CLEAR_REGEX } from './NumberInput.constants';
 import { formateNumber, isValidString, parseFloatWithDecimals } from '../../utils/numberInput';
 import Input from '../input/Input';
 

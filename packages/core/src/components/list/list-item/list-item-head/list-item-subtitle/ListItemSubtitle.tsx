@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useMemo } from 'react';
-import type { IListItemRightElement, IListItemRightElements } from '../../../../../types/list';
+import type { IListItemRightElement, IListItemRightElements } from '../../../List.types';
 import {
     StyledListItemHeadSubtitleText,
     StyledListItemSubtitle,

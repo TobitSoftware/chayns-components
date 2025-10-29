@@ -24,7 +24,8 @@ export const useCombinedRefs = <T>(...refs: (Ref<T> | undefined)[]): RefCallback
         [refs],
     );
 
-const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+export const useIsomorphicLayoutEffect =
+    typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export const useInitialRenderRef = (initialValue: boolean) => {
     const ref = useRef<boolean>(initialValue);

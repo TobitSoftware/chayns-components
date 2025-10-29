@@ -1,6 +1,6 @@
 import { createDialog, DialogType } from 'chayns-api';
 import React, { DragEvent, FC, useCallback, useMemo } from 'react';
-import type { ImageDialogResult } from '../../types/fileInput';
+import type { ImageDialogResult } from '../file-input/FileInput.types';
 import { isValidFileType } from '../../utils/file';
 import { selectFiles } from '../../utils/fileDialog';
 import Icon from '../icon/Icon';

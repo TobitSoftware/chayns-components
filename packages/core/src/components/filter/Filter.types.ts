@@ -1,4 +1,4 @@
-import { FilterButtonsProps } from '../components/filter-buttons/FilterButtons';
+import { FilterButtonsProps } from '../filter-buttons/FilterButtons';
 
 export interface SearchConfig {
     onSearchChange: (search: string) => void;

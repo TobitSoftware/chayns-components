@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { DropdownCoordinates, DropdownDirection } from '../types/dropdown';
+import {
+    DropdownCoordinates,
+    DropdownDirection,
+} from '../components/dropdown-body-wrapper/Dropdown.types';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 

@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
-import { ContextMenuAlignment } from '../../../types/contextMenu';
+import { ContextMenuAlignment } from '../ContextMenu.types';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledMotionContextMenuContentProps = WithTheme<{

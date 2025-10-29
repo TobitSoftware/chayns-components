@@ -1,6 +1,6 @@
 import React, { FC, isValidElement, ReactNode, useMemo, useRef, type CSSProperties } from 'react';
-import type { PopupAlignment, PopupRef } from '../../types/popup';
-import type { ITooltipItem } from '../../types/tooltip';
+import type { PopupAlignment, PopupRef } from '../popup/Popup.types';
+import type { ITooltipItem } from './Tooltip.types';
 import { isTextOnlyElement } from '../../utils/tooltip';
 import Popup from '../popup/Popup';
 import TooltipItem from './tooltip-item/TooltipItem';

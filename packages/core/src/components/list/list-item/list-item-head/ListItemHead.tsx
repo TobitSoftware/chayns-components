@@ -12,7 +12,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import type { IListItemRightElements } from '../../../../types/list';
+import type { IListItemRightElements } from '../../List.types';
 import Icon from '../../../icon/Icon';
 import ListItemIcon from './list-item-icon/ListItemIcon';
 import ListItemImage from './list-item-image/ListItemImage';
@@ -30,7 +30,7 @@ import {
     LIST_ITEM_HEAD_HTML_TAG,
     LIST_ITEM_HEAD_INDICATOR_HTML_TAG,
     LIST_ITEM_HEAD_TITLE_HTML_TAG,
-} from '../../../../constants/list';
+} from '../../List.constants';
 import ListItemTitle from './list-item-title/ListItemTitle';
 import ListItemSubtitle from './list-item-subtitle/ListItemSubtitle';
 import ListItemRightElement from './list-item-right-element/ListItemRightElement';

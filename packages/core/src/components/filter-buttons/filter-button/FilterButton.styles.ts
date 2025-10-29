@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
-import { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';
+import { FilterButtonItemShape, FilterButtonSize } from '../FilterButtons.types';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledFilterButtonItemProps = WithTheme<{

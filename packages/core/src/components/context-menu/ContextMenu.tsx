@@ -14,7 +14,7 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
-import { ContextMenuAlignment } from '../../types/contextMenu';
+import { ContextMenuAlignment } from './ContextMenu.types';
 import { getIsTouch } from '../../utils/environment';
 import Icon from '../icon/Icon';
 import ContextMenuContent from './context-menu-content/ContextMenuContent';

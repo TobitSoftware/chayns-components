@@ -3,7 +3,7 @@ import React, { type CSSProperties } from 'react';
 import { renderToString } from 'react-dom/server';
 import ColorSchemeProvider from '../components/color-scheme-provider/ColorSchemeProvider';
 import type { IComboBoxItem } from '../components/combobox/ComboBox';
-import type { SliderButtonItem } from '../types/slider-button';
+import type { SliderButtonItem } from '../components/slider-button/SliderButton.types';
 
 export const calculateContentWidth = (
     list: IComboBoxItem[],

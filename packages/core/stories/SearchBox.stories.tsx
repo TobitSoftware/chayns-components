@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import React, { ChangeEvent, useState } from 'react';
 import SearchBox from '../src/components/search-box/SearchBox';
 import { Tag } from '../src';
-import { ISearchBoxItem } from '../src/types/searchBox';
+import { ISearchBoxItem } from '../src/components/search-box/SearchBox.types';
 
 const ITEMS = [
     {

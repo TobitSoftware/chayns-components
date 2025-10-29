@@ -25,7 +25,7 @@ import {
     FilterType,
     SearchConfig,
     SortConfig,
-} from '../../types/filter';
+} from './Filter.types';
 import SearchInput from '../search-input/SearchInput';
 import ContextMenu, { ContextMenuItem, ContextMenuRef } from '../context-menu/ContextMenu';
 

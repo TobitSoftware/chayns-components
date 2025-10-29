@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
-import { DropdownCoordinates, DropdownTransform } from '../../../types/dropdown';
+import { DropdownCoordinates, DropdownTransform } from '../Dropdown.types';
 
 type StyledMotionDelayedDropdownContentProps = WithTheme<{
     $shouldHideContent: boolean;

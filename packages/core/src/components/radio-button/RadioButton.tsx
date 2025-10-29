@@ -8,7 +8,7 @@ import React, {
     useState,
     type ReactNode,
 } from 'react';
-import { RadioButtonRightElementMargin } from '../../types/radioButton';
+import { RadioButtonRightElementMargin } from './RadioButton.types';
 import { RadioButtonGroupContext } from './radio-button-group/RadioButtonGroup';
 import {
     StyledLabelWrapper,

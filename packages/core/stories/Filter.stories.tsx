@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import React, { useState } from 'react';
 import Filter from '../src/components/filter/Filter';
 import { FilterButtonSize } from '../src';
-import { SortItem } from '../src/types/filter';
+import { SortItem } from '../src/components/filter/Filter.types';
 
 export default {
     title: 'Core/Filter',

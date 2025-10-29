@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React, { ChangeEvent, useState } from 'react';
-import { DropdownDirection } from '../src/types/dropdown';
+import { DropdownDirection } from '../src/components/dropdown-body-wrapper/Dropdown.types';
 import ComboBox, { IComboBoxItem } from '../src/components/combobox/ComboBox';
 import Icon from '../src/components/icon/Icon';
 

@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 import { useElementSize } from '../../../hooks/element';
 import { useUuid } from '../../../hooks/uuid';
-import type { IFilterButtonItem } from '../../../types/filterButtons';
+import type { IFilterButtonItem } from '../../filter-buttons/FilterButtons.types';
 import { getCurrentGroupName } from '../../../utils/searchBox';
 import FilterButtons from '../../filter-buttons/FilterButtons';
 import {
