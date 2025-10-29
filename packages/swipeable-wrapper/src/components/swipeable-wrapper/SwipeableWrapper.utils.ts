@@ -1,4 +1,4 @@
-import { SWIPEABLE_ACTION_WIDTH } from '../components/swipeable-wrapper/swipeable-action/SwipeableAction';
+import { SWIPEABLE_ACTION_WIDTH } from './swipeable-action/SwipeableAction';
 
 interface CalcThresholdOptions {
     actionCount: number;

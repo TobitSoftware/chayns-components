@@ -1,30 +1,13 @@
 import { vibrate } from 'chayns-api';
 import { animate, PanInfo, useMotionValue } from 'motion/react';
-import React, {
-    CSSProperties,
-    FC,
-    ReactNode,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
-import { calcThreshold } from '../../utils/threshold';
+import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { calcThreshold } from './SwipeableWrapper.utils';
 import SwipeableAction, { SWIPEABLE_ACTION_WIDTH } from './swipeable-action/SwipeableAction';
 import {
     StyledMotionSwipeableWrapper,
     StyledSwipeableWrapperContent,
 } from './SwipeableWrapper.styles';
-
-export type SwipeableActionItem = {
-    action: VoidFunction;
-    backgroundColor: CSSProperties['backgroundColor'];
-    color: CSSProperties['color'];
-    text?: ReactNode;
-    icon: ReactNode;
-    key: string;
-};
+import { SwipeableActionItem } from './SwipeableWrapper.types';
 
 export type SwipeableWrapperProps = {
     /**

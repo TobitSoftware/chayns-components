@@ -1,6 +1,6 @@
-import { MotionValue, useMotionValueEvent, useSpring, useTransform } from 'motion/react';
 import React, { FC, useEffect } from 'react';
-import type { SwipeableActionItem } from '../SwipeableWrapper';
+import { MotionValue, useMotionValueEvent, useSpring, useTransform } from 'motion/react';
+import type { SwipeableActionItem } from '../SwipeableWrapper.types';
 import { StyledMotionSwipeableAction, StyledSwipeableActionButton } from './SwipeableAction.styles';
 
 export const SWIPEABLE_ACTION_WIDTH = 72;
@@ -57,7 +57,7 @@ const SwipeableAction: FC<SwipeableActionProps> = ({
      */
     const actionOverlayOffset = useSpring(0, {
         bounce: 0,
-    }) as MotionValue<number>;
+    });
 
     /**
      * Combines the two values above to create the correct X transform that has

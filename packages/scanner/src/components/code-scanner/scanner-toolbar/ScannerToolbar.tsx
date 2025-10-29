@@ -5,9 +5,9 @@ import {
     StyledScannerToolbarButton,
     StyledScannerToolbarPlaceholder,
 } from './ScannerToolbar.styles';
-import { checkTrackSupport } from '../../../utils/support';
+import { checkTrackSupport } from '../CodeScanner.utils';
 import { animateNumericValue } from '../../../utils/animate';
-import usePrevious from '../../../hooks/codeScanner';
+import usePrevious from '../CodeScanner.hooks';
 
 type ScannerToolbarProps = {
     /**

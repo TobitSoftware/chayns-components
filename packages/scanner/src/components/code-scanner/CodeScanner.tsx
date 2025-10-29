@@ -11,16 +11,15 @@ import {
     CodeReaderOnScanCallback,
     ScannerErrorMessages,
     ScannerErrorType,
-} from '../../types/codeScanner';
+} from './CodeScanner.types';
 import {
     ALL_FORMATS,
     DEFAULT_TRACK_CONSTRAINTS,
     DEFAULT_VIDEO_CONSTRAINTS,
-} from '../../constants/codeScanner';
-import { checkTrackSupport } from '../../utils/support';
-import { createErrorAlertDialog } from '../../utils/errorDialog';
+} from './CodeScanner.constants';
+import { checkTrackSupport, createErrorAlertDialog } from './CodeScanner.utils';
 import ScannerToolbar from './scanner-toolbar/ScannerToolbar';
-import { useScannerPolyfill } from '../../hooks/loadscript';
+import { useScannerPolyfill } from './CodeScanner.hooks';
 
 type CodeScannerProps = {
     /**

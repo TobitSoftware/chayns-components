@@ -1,5 +1,15 @@
-import { useCallback, useState } from 'react';
-import { loadScript } from '../utils/loadScript';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { loadScript } from '../../utils/script';
+
+const usePrevious = <T>(value: T): T | undefined => {
+    const ref = useRef<T>();
+    useEffect(() => {
+        ref.current = value;
+    }, [value]);
+    return ref.current;
+};
+
+export default usePrevious;
 
 const VERSION = 1;
 
