@@ -1,4 +1,4 @@
-export interface PolygonOptions {
+export interface IPolygonOptions {
     strokeColor: string;
     strokeOpacity: number;
     strokeWeight: number;
@@ -12,12 +12,12 @@ export interface PolygonOptions {
     zIndex: number;
 }
 
-export interface Position {
+export interface IPosition {
     lat: number;
     lng: number;
 }
 
 export interface IMarker {
-    position: Position;
+    position: IPosition;
     id: number;
 }

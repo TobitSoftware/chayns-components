@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react';
-import type { IMarker, Position } from '../../../../../types/positionInput';
+import type { IMarker, IPosition } from '../../../PositionInput.types';
 
 export type MarkerProps = {
     id: number;
-    position: Position;
+    position: IPosition;
     isDraggable: boolean;
     onChange: (marker: IMarker) => void;
     onRemove: (id: number) => void;

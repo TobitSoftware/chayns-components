@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import PositionInput from '../src/components/position-input/PositionInput';
+import PositionInput from '../src/components/position-input/PositionInput.constants';
 import React from 'react';
 
 export default {

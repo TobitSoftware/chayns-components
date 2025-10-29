@@ -1,6 +1,6 @@
-import type { PolygonOptions, Position } from '../types/positionInput';
+import type { IPolygonOptions, IPosition } from './PositionInput.types';
 
-export const DEFAULT_POLYGON_OPTIONS: PolygonOptions = {
+export const DEFAULT_POLYGON_OPTIONS: IPolygonOptions = {
     strokeColor: '#000000',
     strokeOpacity: 0.8,
     strokeWeight: 1,
@@ -14,7 +14,7 @@ export const DEFAULT_POLYGON_OPTIONS: PolygonOptions = {
     zIndex: 1,
 };
 
-export const DEFAULT_POSITION: Position = {
+export const DEFAULT_POSITION: IPosition = {
     lat: 52.067450969671796,
     lng: 7.017417,
 };

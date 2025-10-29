@@ -1,4 +1,5 @@
-// noinspection JSUnusedGlobalSymbols
+// Components
+export { default as Gallery } from './components/gallery/Gallery';
 
-export { default as Gallery } from './components/Gallery';
-export { GalleryViewMode } from './types/gallery';
+// Types
+export { GalleryViewMode } from './components/gallery/Gallery.types';

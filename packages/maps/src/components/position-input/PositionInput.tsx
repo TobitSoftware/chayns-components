@@ -1,7 +1,7 @@
 import { Input } from '@chayns-components/core';
 import React, { FC } from 'react';
-import { DEFAULT_POLYGON_OPTIONS, DEFAULT_POSITION } from '../../constants/positionInput';
-import type { IMarker, PolygonOptions, Position } from '../../types/positionInput';
+import { DEFAULT_POLYGON_OPTIONS, DEFAULT_POSITION } from './PositionInput.constants';
+import type { IMarker, IPolygonOptions, IPosition } from './PositionInput.types';
 import MapWrapper from './map-wrapper/MapWrapper';
 import { StyledPositionInput, StyledPositionInputSearch } from './PositionInput.styles';
 
@@ -13,7 +13,7 @@ export type PositionInputProps = {
     /**
      * The position of the center of the map on the initial render.
      */
-    initialPosition?: Position;
+    initialPosition?: IPosition;
     /**
      * Markers that should be displayed.
      */
@@ -33,7 +33,7 @@ export type PositionInputProps = {
     /**
      * Options to style the polygon.
      */
-    polygonOptions?: PolygonOptions;
+    polygonOptions?: IPolygonOptions;
     /**
      * The placeholder of the search input.
      */

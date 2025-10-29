@@ -8,8 +8,8 @@ import {
 import { createDialog, DialogType, MediaType, openMedia, OpenMediaItem } from 'chayns-api';
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { GalleryViewMode } from '../types/gallery';
-import { filterDuplicateFile, generatePreviewUrl, generateVideoThumbnail } from '../utils/file';
+import { GalleryViewMode } from './Gallery.types';
+import { filterDuplicateFile, generatePreviewUrl, generateVideoThumbnail } from './Gallery.utils';
 import AddFile from './add-file/AddFile';
 import GalleryItem from './gallery-item/GalleryItem';
 import {

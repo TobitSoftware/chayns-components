@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { GalleryViewMode } from '../types/gallery';
+import { GalleryViewMode } from './Gallery.types';
 
 export const StyledGallery = styled.div``;
 

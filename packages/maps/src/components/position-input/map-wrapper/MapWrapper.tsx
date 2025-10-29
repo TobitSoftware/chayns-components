@@ -1,16 +1,16 @@
 import React, { FC, type ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { Wrapper } from '@googlemaps/react-wrapper';
 import { StyledMapWrapper } from './MapWrapper.styles';
-import type { IMarker, PolygonOptions, Position } from '../../../types/positionInput';
+import type { IMarker, IPolygonOptions, IPosition } from '../PositionInput.types';
 import { Polygon } from '@react-google-maps/api';
 import Marker from './map/marker/Marker';
 import Map from './map/Map';
 
 export type MapWrapperProps = {
     apiToken: string;
-    polygonOptions: PolygonOptions;
+    polygonOptions: IPolygonOptions;
     initialZoom: number;
-    initialPosition: Position;
+    initialPosition: IPosition;
     markers?: IMarker[];
     onMarkerAdd?: (marker: IMarker) => void;
     onMarkerRemove?: (id: number) => void;
@@ -27,10 +27,10 @@ const MapWrapper: FC<MapWrapperProps> = ({
     onMarkerRemove,
     onMarkerChange,
 }) => {
-    const [polygonPath, setPolygonPath] = useState<Position[]>();
+    const [polygonPath, setPolygonPath] = useState<IPosition[]>();
     const [canPolyDraw, setCanPolyDraw] = useState(false);
     const [zoom, setZoom] = useState(initialZoom);
-    const [center, setCenter] = useState<Position>(initialPosition);
+    const [center, setCenter] = useState<IPosition>(initialPosition);
     const [internalMarkers, setInternalMarkers] = useState<IMarker[]>();
     const [map, setMap] = useState<google.maps.Map>();
 
@@ -79,7 +79,7 @@ const MapWrapper: FC<MapWrapperProps> = ({
             return;
         }
 
-        const path: Position[] = [
+        const path: IPosition[] = [
             {
                 lat: internalMarkers[0]?.position.lat ?? 0,
                 lng: internalMarkers[0]?.position.lng ?? 0,
@@ -132,7 +132,7 @@ const MapWrapper: FC<MapWrapperProps> = ({
         setCenter(m.getCenter()?.toJSON() ?? { lat: 0, lng: 0 });
     };
 
-    const handlePositionChange = (position: Position) => {
+    const handlePositionChange = (position: IPosition) => {
         setCenter(position);
     };
 

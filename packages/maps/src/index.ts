@@ -1,3 +1,9 @@
-// noinspection JSUnusedGlobalSymbols
+// Components
 export { default as PositionInput } from './components/position-input/PositionInput';
-export type { PolygonOptions, Position, IMarker as Marker } from './types/positionInput';
+
+// Types
+export {
+    type IPolygonOptions,
+    type IPosition,
+    type IMarker,
+} from './components/position-input/PositionInput.types';

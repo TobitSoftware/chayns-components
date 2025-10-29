@@ -1,14 +1,14 @@
 import React, { FC, type ReactElement, useEffect, useRef, useState } from 'react';
 import { StyledMap } from './Map.styles';
-import type { Position } from '../../../../types/positionInput';
-import { useDeepCompareEffectForMaps } from '../../../../hooks/positionInput';
+import type { IPosition } from '../../PositionInput.types';
+import { useDeepCompareEffectForMaps } from '../../PositionInput.hooks';
 
 export type MapProps = {
     onClick: (event: google.maps.MapMouseEvent) => void;
     onIdle: (event: google.maps.Map) => void;
-    onPositionChange: (position: Position) => void;
+    onPositionChange: (position: IPosition) => void;
     children: ReactElement;
-    center: Position;
+    center: IPosition;
     zoom: number;
     fullscreenControl: boolean;
     mapTypeControl: boolean;

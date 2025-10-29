@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { FileItem } from '@chayns-components/core';
 import React, { useState } from 'react';
-import Gallery from '../src/components/Gallery';
+import Gallery from '../src/components/gallery/Gallery';
 
 export default {
     title: 'Gallery/Gallery',
