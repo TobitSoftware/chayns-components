@@ -1,6 +1,6 @@
 import { getLanguage, Language } from 'chayns-api';
-import { UseDateInfoOptions } from '../types/dateinfo';
-import { isCurrentYear, isToday, isTomorrow, isYesterday } from './date';
+import { UseDateInfoOptions } from './DateInfo.types';
+import { isCurrentYear, isToday, isTomorrow, isYesterday } from '../../utils/date';
 
 export const getDateInfo = ({
     date,

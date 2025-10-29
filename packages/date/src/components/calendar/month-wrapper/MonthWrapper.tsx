@@ -7,8 +7,8 @@ import {
     CustomThumbColors,
     DateInterval,
     HighlightedDates,
-} from '../../../types/calendar';
-import { getMonthAndYear, getNewDate } from '../../../utils/calendar';
+} from '../Calendar.types';
+import { getMonthAndYear, getNewDate } from '../Calendar.utils';
 import Month from './month/Month';
 import { StyledMonthWrapper, StyledMotionWrapper } from './MonthWrapper.styles';
 

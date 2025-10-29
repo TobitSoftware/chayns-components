@@ -8,7 +8,7 @@ import {
     differenceInMinutes,
     getTimeTillNow,
     intervalToDuration,
-} from '../../utils/date';
+} from '../DevalueSlider.utils';
 
 export type TimerProps = {
     color: string;

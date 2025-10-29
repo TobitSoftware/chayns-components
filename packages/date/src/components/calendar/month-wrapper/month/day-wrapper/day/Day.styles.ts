@@ -1,7 +1,7 @@
 import type { WithTheme } from '@chayns-components/core';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
-import { CustomThumbColors } from '../../../../../../types/calendar';
+import { CustomThumbColors } from '../../../../Calendar.types';
 
 type StyledDayProps = WithTheme<{
     $isSameMonth: boolean;

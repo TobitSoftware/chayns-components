@@ -1,8 +1,8 @@
 import { ComboBox } from '@chayns-components/core';
 import { Language } from 'chayns-api';
 import React, { FC, useMemo, useState } from 'react';
-import { EMonth } from '../../../types/calendar';
-import { formatMonth, getYearsBetween, isDateInRange } from '../../../utils/calendar';
+import { EMonth } from '../Calendar.types';
+import { formatMonth, getYearsBetween, isDateInRange } from '../Calendar.utils';
 import { differenceInCalendarMonths } from '../../../utils/date';
 import { StyledMonthName } from '../month-wrapper/month/Month.styles';
 

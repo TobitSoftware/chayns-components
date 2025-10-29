@@ -6,8 +6,8 @@ import {
     type DateInterval,
     type EMonth,
     type HighlightedDates,
-} from '../../../../../types/calendar';
-import { findNextDate } from '../../../../../utils/calendar';
+} from '../../../Calendar.types';
+import { findNextDate } from '../../../Calendar.utils';
 import Day from './day/Day';
 import { StyledDayWrapper } from './DayWrapper.styles';
 import {

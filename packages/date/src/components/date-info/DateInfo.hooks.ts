@@ -1,7 +1,7 @@
 import { getLanguage } from 'chayns-api';
 import { useEffect, useMemo, useState } from 'react';
-import { UseDateInfoOptions } from '../types/dateinfo';
-import { getDateInfo, getTimeTillNow } from '../utils/dateInfo';
+import { UseDateInfoOptions } from './DateInfo.types';
+import { getDateInfo, getTimeTillNow } from './DateInfo.utils';
 
 export const useDateInfo = ({
     date,

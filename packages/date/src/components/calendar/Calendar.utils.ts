@@ -1,5 +1,5 @@
-import type { EMonth, IMonth } from '../types/calendar';
-import { isAfter, isBefore, startOfMonth } from './date';
+import type { EMonth, IMonth } from './Calendar.types';
+import { isAfter, isBefore, startOfMonth } from '../../utils/date';
 import { Language } from 'chayns-api';
 
 export const getMonthAndYear = (date: Date): IMonth => {

@@ -4,7 +4,7 @@ import {
     CustomThumbColors,
     HighlightedDates,
     HighlightedDateStyles,
-} from '../../../../../../types/calendar';
+} from '../../../../Calendar.types';
 import Category from './category/Category';
 import {
     StyledCurrentDay,

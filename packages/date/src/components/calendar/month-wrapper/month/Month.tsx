@@ -6,7 +6,7 @@ import {
     DateInterval,
     EMonth,
     HighlightedDates,
-} from '../../../../types/calendar';
+} from '../../Calendar.types';
 import MonthYearPickers from '../../month-year-pickers/MonthYearPickers';
 import DayWrapper from './day-wrapper/DayWrapper';
 import { StyledMonth, StyledMonthHead } from './Month.styles';

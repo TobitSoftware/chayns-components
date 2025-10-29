@@ -87,3 +87,8 @@ export const differenceInMinutes = (date1: Date, date2: Date): number => {
     const diffInMilliseconds = date1.getTime() - date2.getTime();
     return Math.floor(diffInMilliseconds / (1000 * 60)); // Millisekunden in Minuten umrechnen
 };
+
+export const sleep = (ms: number) =>
+    new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });

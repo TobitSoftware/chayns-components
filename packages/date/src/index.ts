@@ -1,25 +1,34 @@
-// Calendar
+// Components
 export { default as Calendar } from './components/calendar/Calendar';
-export type {
-    Categories,
-    HighlightedDates,
-    HighlightedDateStyles,
-    DateInterval,
-    CustomThumbColors,
-} from './types/calendar';
-export { CalendarType } from './types/calendar';
-
-// OpeningTimes
 export { default as OpeningInputs } from './components/opening-times/opening-inputs/OpeningInputs';
 export { default as OpeningTimes } from './components/opening-times/OpeningTimes';
-export type { HintTextPosition, OpeningTime, Time, Weekday } from './types/openingTimes';
-
-// DateInfo
 export { default as DateInfo } from './components/date-info/DateInfo';
-export { useDateInfo } from './hooks/useDateInfo';
-export { getDateInfo, getTimeTillNow, getFormattedTime } from './utils/dateInfo';
+
+// Types
+export {
+    HintTextPosition,
+    type OpeningTime,
+    type Time,
+    type Weekday,
+} from './components/opening-times/OpeningTimes.types';
+export {
+    CalendarType,
+    type Categories,
+    type HighlightedDates,
+    type HighlightedDateStyles,
+    type DateInterval,
+    type CustomThumbColors,
+} from './components/calendar/Calendar.types';
+
+// Hooks
+export { useDateInfo } from './components/date-info/DateInfo.hooks';
 
 // Utils
+export {
+    getDateInfo,
+    getTimeTillNow,
+    getFormattedTime,
+} from './components/date-info/DateInfo.utils';
 export {
     isToday,
     getIsDateNearToday,

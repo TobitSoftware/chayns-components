@@ -18,8 +18,8 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { useThumbIcon } from '../../hooks/design';
-import { sleep } from '../../utils/common';
+import { useThumbIcon } from '../DevalueSlider.hooks';
+import { sleep } from '../DevalueSlider.utils';
 import type { DevalueSliderProps } from '../DevalueSlider';
 import {
     Container,

@@ -7,8 +7,8 @@ import {
     CustomThumbColors,
     DateInterval,
     HighlightedDates,
-} from '../../types/calendar';
-import { getNewDate, getYearsBetween, isDateInRange } from '../../utils/calendar';
+} from './Calendar.types';
+import { getNewDate, getYearsBetween, isDateInRange } from './Calendar.utils';
 import {
     addYears,
     differenceInCalendarMonths,

@@ -3,9 +3,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import DevalueSlider, {
     DevalueSliderOnDevalueHandler,
     DevalueSliderProps,
-} from '../src/components/DevalueSlider';
-import { sleep } from '../src/utils/common';
-import { addSeconds, subHours } from '../src/utils/date';
+} from '../src/components/devalue-slider/DevalueSlider';
+import { addSeconds, sleep, subHours } from '../src/components/devalue-slider/DevalueSlider.utils';
 
 export default {
     title: 'DevalueSlider/DevalueSlider',

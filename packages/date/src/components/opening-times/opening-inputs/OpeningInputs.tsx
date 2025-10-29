@@ -1,7 +1,7 @@
 import { AnimatePresence } from 'motion/react';
 import React, { FC, useCallback, useEffect, useMemo, useState, type ReactElement } from 'react';
 import { v4 as uuidV4 } from 'uuid';
-import { OpeningTimesButtonType, type OpeningTime, type Time } from '../../../types/openingTimes';
+import { OpeningTimesButtonType, type OpeningTime, type Time } from '../OpeningTimes.types';
 import OpeningInput from './opening-input/OpeningInput';
 import { StyledOpeningInputPreview, StyledOpeningInputs } from './OpeningInputs.styles';
 

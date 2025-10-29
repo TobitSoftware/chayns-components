@@ -15,7 +15,7 @@ import {
     type OpeningTime,
     type Time,
     type Weekday,
-} from '../../types/openingTimes';
+} from './OpeningTimes.types';
 import HintText from './hint-text/HintText';
 import OpeningInputs from './opening-inputs/OpeningInputs';
 import {
