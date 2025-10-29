@@ -21,13 +21,13 @@ export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as HighlightSlider } from './components/highlight-slider/HighlightSlider';
 export { default as ContextMenu } from './components/context-menu/ContextMenu';
 export { default as ExpandableContent } from './components/expandable-content/ExpandableContent';
-export { default as FileInput, type FileInputRef } from './components/file-input/FileInput';
+export { default as FileInput } from './components/file-input/FileInput';
 export { default as FilterButton } from './components/filter-buttons/filter-button/FilterButton';
 export { default as FilterButtons } from './components/filter-buttons/FilterButtons';
 export { default as GridImage } from './components/grid-image/GridImage';
 export { default as GroupedImage } from './components/grouped-image/GroupedImage';
 export { default as Icon } from './components/icon/Icon';
-export { default as Input, InputSize } from './components/input/Input';
+export { default as Input } from './components/input/Input';
 export { default as List } from './components/list/List';
 export { default as ListItemContent } from './components/list/list-item/list-item-content/ListItemContent';
 export { default as NumberInput } from './components/number-input/NumberInput';
@@ -74,6 +74,8 @@ export { isValidFileType } from './utils/file';
 export { AreaContext } from './components/area-provider/AreaContextProvider';
 
 // Types
+export { type FileInputRef } from './components/file-input/FileInput';
+export { InputSize } from './components/input/Input';
 export { BadgeSize, BadgeDesign } from './components/badge/Badge.types';
 export {
     type ColorSchemeContextProps,
