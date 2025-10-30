@@ -11,7 +11,6 @@ import React, {
     useCallback,
     useContext,
     useEffect,
-    useImperativeHandle,
     useMemo,
     useRef,
     useState,
@@ -34,10 +33,13 @@ import {
 } from './Input.styles';
 import { ContentCardType } from '../content-card/ContentCard.types';
 import { useCursorRepaint } from '../../hooks/resize';
+import { useCustomRef } from '../../hooks/ref';
+import { BaseRef } from '../../types/base';
 
-export interface InputRef {
+export interface InputRef extends BaseRef<HTMLInputElement> {
     focus: VoidFunction;
     blur: VoidFunction;
+    test: VoidFunction;
 }
 
 type InputMode =
@@ -202,7 +204,13 @@ const Input = forwardRef<InputRef, InputProps>(
 
         const theme = useTheme() as Theme;
 
-        const inputRef = useRef<HTMLInputElement>(null);
+        const inputRef = useCustomRef<InputRef>(ref, (el) => ({
+            focus: () => el?.focus(),
+            blur: () => el?.blur(),
+            test: () => alert('TEST'),
+        }));
+
+        // const inputRef = useRef<HTMLInputElement>(null);
         const placeholderRef = useRef<HTMLLabelElement>(null);
 
         useCursorRepaint(inputRef);
@@ -222,10 +230,12 @@ const Input = forwardRef<InputRef, InputProps>(
                 setHasValue(false);
 
                 if (typeof onChange === 'function') {
-                    onChange({ target: inputRef.current } as ChangeEvent<HTMLInputElement>);
+                    onChange({
+                        target: inputRef.current,
+                    } as unknown as ChangeEvent<HTMLInputElement>);
                 }
             }
-        }, [onChange]);
+        }, [inputRef, onChange]);
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const shouldShowBorder = rightElement?.props?.style?.backgroundColor === undefined;
@@ -241,14 +251,14 @@ const Input = forwardRef<InputRef, InputProps>(
             [onChange],
         );
 
-        useImperativeHandle(
-            ref,
-            () => ({
-                focus: () => inputRef.current?.focus(),
-                blur: () => inputRef.current?.blur(),
-            }),
-            [],
-        );
+        // useImperativeHandle(
+        //     ref,
+        //     () => ({
+        //         focus: () => inputRef.current?.focus(),
+        //         blur: () => inputRef.current?.blur(),
+        //     }),
+        //     [],
+        // );
 
         useEffect(() => {
             if (typeof value === 'string') {

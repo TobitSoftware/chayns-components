@@ -1,8 +1,8 @@
 import { Typewriter } from '@chayns-components/typewriter';
 import { Meta, StoryFn } from '@storybook/react';
 import Icon from '../src/components/icon/Icon';
-import Input from '../src/components/input/Input';
-import React from 'react';
+import Input, { InputRef } from '../src/components/input/Input';
+import React, { useEffect, useRef } from 'react';
 
 export default {
     title: 'Core/Input',
@@ -12,7 +12,19 @@ export default {
     },
 } as Meta<typeof Input>;
 
-const Template: StoryFn<typeof Input> = (args) => <Input {...args} />;
+const Template: StoryFn<typeof Input> = (args) => {
+    const ref = useRef<InputRef>(null);
+
+    useEffect(() => {
+        if (ref.current) {
+            console.log('TEST', ref.current.offsetHeight);
+
+            ref.current.test();
+        }
+    }, []);
+
+    return <Input {...args} ref={ref} />;
+};
 
 export const General = Template.bind({});
 
