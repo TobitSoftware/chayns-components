@@ -135,7 +135,7 @@ const SearchInput: FC<SearchInputProps> = ({
                                 exit={{ opacity: 0, width: 0 }}
                                 initial={{ opacity: 0, width: 0 }}
                                 key="searchInputContentWrapper"
-                                transition={{ duration: 0.3 }}
+                                transition={{ duration: 0.25, type: 'tween' }}
                             >
                                 <Input
                                     onChange={onChange}
