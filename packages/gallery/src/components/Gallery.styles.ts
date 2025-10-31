@@ -1,7 +1,9 @@
 import styled, { css } from 'styled-components';
 import { GalleryViewMode } from '../types/gallery';
 
-export const StyledGallery = styled.div``;
+export const StyledGallery = styled.div`
+    width: 100%;
+`;
 
 export const StyledGalleryItemWrapper = styled.div<{
     $uploadedFileLength: number;
