@@ -108,7 +108,7 @@ const SearchInput: FC<SearchInputProps> = ({
         }
     }, [isActive]);
 
-    const width = useMemo(() => parentWidth?.width ?? widthValue, [parentWidth?.width, widthValue]);
+    const width = useMemo(() => widthValue ?? parentWidth?.width, [parentWidth?.width, widthValue]);
 
     return (
         <>
