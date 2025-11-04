@@ -37,4 +37,8 @@ export interface UseDateInfoOptions {
      * Shows the difference from the date to now. The component handles updates itself.
      */
     shouldShowDateToNowDifference?: boolean;
+    /**
+     * Whether only the time should be displayed.
+     */
+    shouldShowOnlyTime?: boolean;
 }

@@ -10,6 +10,7 @@ export const useDateInfo = ({
     shouldShowDayOfWeek,
     shouldShowTime,
     shouldUseShortText,
+    shouldShowOnlyTime,
     shouldShowYear,
     preText,
 }: UseDateInfoOptions) => {
@@ -27,6 +28,7 @@ export const useDateInfo = ({
             getDateInfo({
                 date,
                 shouldShowYear,
+                shouldShowOnlyTime,
                 shouldShowTime,
                 shouldUseShortText,
                 shouldShowDayOfWeek,
@@ -37,6 +39,7 @@ export const useDateInfo = ({
         date,
         shouldShowDateToNowDifference,
         shouldShowDayOfWeek,
+        shouldShowOnlyTime,
         shouldShowRelativeDayOfWeek,
         shouldShowTime,
         shouldShowYear,

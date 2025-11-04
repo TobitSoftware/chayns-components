@@ -7,11 +7,32 @@ export const getDateInfo = ({
     language,
     shouldShowYear,
     shouldShowTime,
+    shouldShowOnlyTime,
     shouldShowDayOfWeek,
     shouldShowRelativeDayOfWeek,
     shouldUseShortText,
 }: Omit<UseDateInfoOptions, 'shouldShowDateToNowDifference' & 'preText'>) => {
     const { active: activeLanguage } = getLanguage();
+
+    const timeParts: Intl.DateTimeFormatOptions = {};
+
+    if (shouldShowTime || shouldShowOnlyTime) {
+        timeParts.hour = '2-digit';
+        timeParts.minute = '2-digit';
+    }
+
+    let formattedTime = '';
+    if (Object.keys(timeParts).length > 0) {
+        formattedTime = `${shouldShowOnlyTime ? '' : ', '}${date.toLocaleTimeString(language ?? activeLanguage, { ...timeParts })}`;
+    }
+
+    const hourWord = getTimeString({ language: language ?? activeLanguage });
+
+    formattedTime += shouldShowTime || shouldShowOnlyTime ? ` ${hourWord}` : '';
+
+    if (shouldShowOnlyTime) {
+        return formattedTime;
+    }
 
     let dayPart = '';
 
@@ -45,22 +66,6 @@ export const getDateInfo = ({
     if (shouldShowYear && !isCurrentYear(date)) {
         dateParts.year = 'numeric';
     }
-
-    const timeParts: Intl.DateTimeFormatOptions = {};
-
-    if (shouldShowTime) {
-        timeParts.hour = '2-digit';
-        timeParts.minute = '2-digit';
-    }
-
-    let formattedTime = '';
-    if (Object.keys(timeParts).length > 0) {
-        formattedTime = `, ${date.toLocaleTimeString(language ?? activeLanguage, { ...timeParts })}`;
-    }
-
-    const hourWord = getTimeString({ language: language ?? activeLanguage });
-
-    formattedTime += shouldShowTime ? ` ${hourWord}` : '';
 
     const formattedDate = `${date.toLocaleDateString(language ?? activeLanguage, dateParts)}${formattedTime}`;
 
@@ -137,15 +142,15 @@ interface GetTimeStringProps {
 
 export const getTimeString = ({ language }: GetTimeStringProps) => {
     const map: { [key: string]: string } = {
-        nl: 'uur',
-        fr: 'heures',
+        nl: '',
+        fr: '',
         de: 'Uhr',
-        es: 'horas',
-        it: 'ore',
-        pt: 'horas',
-        pl: 'godzina',
-        tr: 'saat',
-        uk: 'година',
+        es: '',
+        it: '',
+        pt: '',
+        pl: '',
+        tr: '',
+        uk: '',
         en: '',
     };
 

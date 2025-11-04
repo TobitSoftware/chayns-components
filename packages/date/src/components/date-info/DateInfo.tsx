@@ -13,11 +13,13 @@ const DateInfo: FC<DateInfoProps> = ({
     shouldUseShortText,
     shouldShowDayOfWeek,
     shouldShowDateToNowDifference,
+    shouldShowOnlyTime,
 }) => {
     const formattedDate = useDateInfo({
         date,
         preText,
         shouldShowYear,
+        shouldShowOnlyTime,
         shouldShowTime,
         shouldUseShortText,
         shouldShowDayOfWeek,
