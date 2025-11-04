@@ -15,7 +15,7 @@ export const StyledMotionAccordionHead = styled(motion.div)<StyledMotionAccordio
 
 export const StyledMotionIconWrapper = styled(motion.div)`
     align-items: center;
-    cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};
+    cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'inherit')};
     display: flex;
     flex: 0 0 auto;
     height: 25px;
@@ -41,7 +41,7 @@ type StyledMotionContentWrapperProps = WithTheme<{ $isWrapped: boolean }>;
 
 export const StyledMotionContentWrapper = styled(motion.div)<StyledMotionContentWrapperProps>`
     align-self: flex-start;
-    cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};
+    cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'inherit')};
     display: flex;
     flex: 1 1 auto;
     height: 100%;
@@ -122,7 +122,7 @@ export const StyledMotionRightElementWrapper = styled(motion.div)`
     align-items: center;
     display: flex;
 
-    cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};
+    cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'inherit')};
 
     will-change: unset !important;
 `;
