@@ -170,6 +170,8 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         accordionHeadHeight = titleElementChildrenSize.height + 8;
     }
 
+    console.log('TEST', title, typeof title === 'string');
+
     return (
         <StyledMotionAccordionHead
             animate={{ height: accordionHeadHeight }}
@@ -210,7 +212,12 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                         >
                             <StyledMotionTitleWrapper
                                 key={`accordionHeadTitleWrapperWrapper--${uuid}`}
-                                style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '12px',
+                                    width: typeof title !== 'string' ? '100%' : undefined,
+                                }}
                                 initial={
                                     !shouldSkipAnimation
                                         ? { scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }
