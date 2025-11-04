@@ -170,8 +170,6 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         accordionHeadHeight = titleElementChildrenSize.height + 8;
     }
 
-    console.log('TEST', title, typeof title === 'string');
-
     return (
         <StyledMotionAccordionHead
             animate={{ height: accordionHeadHeight }}
