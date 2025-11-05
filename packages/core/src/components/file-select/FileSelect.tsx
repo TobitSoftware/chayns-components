@@ -13,6 +13,7 @@ import {
 
 type DialogInput = {
     upload: boolean;
+    initialView: string;
 };
 
 export type FileSelectProps = {
@@ -86,7 +87,7 @@ const FileSelect: FC<FileSelectProps> = ({
         if (isDisabled) return;
 
         const { buttonType, result } = (await createDialog<DialogInput>({
-            dialogInput: { upload: true },
+            dialogInput: { upload: true, initialView: 'pixabay' },
             type: DialogType.MODULE,
             system: {
                 url: 'https://tapp.chayns-static.space/api/dialog-image-editor/v1/remoteEntry.js',
