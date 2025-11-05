@@ -48,7 +48,7 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
 }) => {
     const [animationState, setAnimationState] = useState<AnimationType>(AnimationType.None);
 
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLDivElement>();
     const timeoutRef = useRef<number>();
 
     const measureElement = useCallback(() => {
@@ -92,10 +92,6 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
     useEffect(() => {
         if (shouldShowContent) {
             setAnimationState(AnimationType.Hidden);
-
-            window.setTimeout(() => {
-                measureElement();
-            }, 1);
         } else {
             clearTimeout(timeoutRef.current);
 
@@ -113,13 +109,21 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
         }
     }, [measureElement, shouldShowContent]);
 
+    const refCallback = useCallback(
+        (reference: HTMLDivElement | null) => {
+            ref.current = reference ?? undefined;
+            measureElement();
+        },
+        [measureElement],
+    );
+
     if (animationState === AnimationType.None) {
         return null;
     }
 
     return (
         <StyledMotionDelayedDropdownContent
-            ref={ref}
+            ref={refCallback}
             $coordinates={coordinates}
             $transform={transform}
             $shouldHideContent={animationState === AnimationType.Hidden}
