@@ -36,6 +36,10 @@ export const uploadFile = async ({
                 url: `${uploadedImage.base}/${uploadedImage.key}`,
                 id: uploadedImage.key,
                 meta: uploadedImage.meta,
+                ratio:
+                    uploadedImage.meta?.width && uploadedImage.meta?.height
+                        ? Number(uploadedImage.meta?.width) / Number(uploadedImage.meta?.height)
+                        : undefined,
             });
         }
     }

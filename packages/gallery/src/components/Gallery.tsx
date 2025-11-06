@@ -388,7 +388,9 @@ const Gallery: FC<GalleryProps> = ({
             let imageRatio = 1;
 
             if (viewMode === GalleryViewMode.GRID) {
-                if (combinedFilesLength === 2 && (index === 0 || index === 1)) {
+                if (combinedFilesLength === 1) {
+                    imageRatio = fileItems[0]?.uploadedFile?.ratio ?? 1;
+                } else if (combinedFilesLength === 2 && (index === 0 || index === 1)) {
                     imageRatio = 0.5;
                 } else if (
                     (index === 0 && combinedFilesLength > 2) ||
