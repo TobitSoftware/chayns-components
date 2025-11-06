@@ -61,6 +61,10 @@ export const StyledMotionTitleWrapper = styled(motion.div)`
     grid-template-areas: 'header';
 `;
 
+export const StyledTitleInputWrapper = styled.div`
+    width: 100%;
+`;
+
 type StyledMotionTitleProps = WithTheme<{
     $isOpen: boolean;
     $isWrapped: boolean;

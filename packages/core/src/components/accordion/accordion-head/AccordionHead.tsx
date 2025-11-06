@@ -30,6 +30,7 @@ import {
     StyledMotionTitleElementWrapper,
     StyledMotionTitleWrapper,
     StyledRightWrapper,
+    StyledTitleInputWrapper,
 } from './AccordionHead.styles';
 
 export type AccordionHeadProps = {
@@ -199,7 +200,13 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                     // eslint-disable-next-line react/jsx-no-constructed-context-values
                     <AreaContext.Provider value={{ shouldChangeColor: true }}>
                         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                        <Input {...titleInputProps} value={title} onChange={onTitleInputChange} />
+                        <StyledTitleInputWrapper>
+                            <Input
+                                {...titleInputProps}
+                                value={title}
+                                onChange={onTitleInputChange}
+                            />
+                        </StyledTitleInputWrapper>
                     </AreaContext.Provider>
                 ) : (
                     <LayoutGroup key={`accordionHeadLayoutGroup--${uuid}`}>

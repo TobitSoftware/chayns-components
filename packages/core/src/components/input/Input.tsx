@@ -34,6 +34,7 @@ import {
 } from './Input.styles';
 import { ContentCardType } from '../../types/contentCard';
 import { useCursorRepaint } from '../../hooks/resize';
+import Tooltip from '../tooltip/Tooltip';
 
 export interface InputRef {
     focus: VoidFunction;
@@ -72,6 +73,10 @@ export enum InputSize {
 }
 
 export type InputProps = {
+    /**
+     * If set and the input is disabled, the input will display a tooltip with this message.
+     */
+    disabledHint?: string;
     /**
      * An element to be displayed on the left side of the input field
      */
@@ -186,6 +191,7 @@ const Input = forwardRef<InputRef, InputProps>(
             size = InputSize.Medium,
             type = 'text',
             value,
+            disabledHint,
             shouldUseAutoFocus = false,
             isInvalid = false,
             shouldPreventPlaceholderAnimation = false,
@@ -289,92 +295,142 @@ const Input = forwardRef<InputRef, InputProps>(
             size,
         ]);
 
-        return (
-            <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
-                <StyledInputContentWrapper
-                    $shouldShowTransparentBackground={shouldShowTransparentBackground}
-                    $backgroundColor={backgroundColor}
-                    $isInvalid={isInvalid}
-                    $shouldRoundRightCorners={shouldShowBorder}
-                    $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
-                    $size={size}
-                >
-                    {leftElement && <StyledInputIconWrapper>{leftElement}</StyledInputIconWrapper>}
-                    <StyledInputContent $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}>
-                        <StyledInputField
-                            $color={color}
-                            $placeholderWidth={placeholderWidth}
-                            id={id}
-                            disabled={isDisabled}
-                            onBlur={onBlur}
-                            onChange={handleInputFieldChange}
-                            onFocus={onFocus}
-                            onKeyDown={onKeyDown}
-                            onClick={(event) => {
-                                event.preventDefault();
-                                event.stopPropagation();
-                            }}
-                            onPaste={onPaste}
-                            ref={inputRef}
-                            type={type}
-                            value={value}
-                            autoFocus={shouldUseAutoFocus}
-                            inputMode={inputMode}
-                            autoComplete={autoComplete}
-                            $isInvalid={isInvalid}
-                            $shouldShowCenteredContent={shouldShowCenteredContent}
-                        />
-                        <StyledMotionInputLabelWrapper
-                            animate={
-                                shouldPreventPlaceholderAnimation
-                                    ? {
-                                          opacity: hasValue ? 0 : 1,
-                                      }
-                                    : {
-                                          fontSize:
-                                              hasValue &&
-                                              !shouldShowOnlyBottomBorder &&
-                                              !shouldRemainPlaceholder
-                                                  ? '9px'
-                                                  : `${Number(theme.fontSize)}px`,
-                                      }
-                            }
-                            initial={false}
-                            layout
-                            ref={placeholderRef}
-                            style={{ ...labelPosition }}
-                            transition={{
-                                type: 'tween',
-                                duration: shouldPreventPlaceholderAnimation ? 0 : 0.1,
-                            }}
-                        >
-                            <StyledInputLabel $isInvalid={isInvalid}>
-                                {placeholder}
-                            </StyledInputLabel>
-                        </StyledMotionInputLabelWrapper>
-                    </StyledInputContent>
-                    {shouldShowClearIcon && (
-                        <StyledMotionInputClearIcon
+        const inputElement = useMemo(
+            () => (
+                <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
+                    <StyledInputContentWrapper
+                        $shouldShowTransparentBackground={shouldShowTransparentBackground}
+                        $backgroundColor={backgroundColor}
+                        $isInvalid={isInvalid}
+                        $shouldRoundRightCorners={shouldShowBorder}
+                        $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
+                        $size={size}
+                    >
+                        {leftElement && (
+                            <StyledInputIconWrapper>{leftElement}</StyledInputIconWrapper>
+                        )}
+                        <StyledInputContent
                             $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
-                            $size={size}
-                            animate={{ opacity: hasValue ? 1 : 0 }}
-                            initial={false}
-                            onClick={handleClearIconClick}
-                            transition={{ type: 'tween' }}
                         >
-                            <Icon
-                                icons={['fa fa-times']}
-                                color={isInvalid ? theme.wrong : undefined}
+                            <StyledInputField
+                                $color={color}
+                                $placeholderWidth={placeholderWidth}
+                                id={id}
+                                disabled={isDisabled}
+                                onBlur={onBlur}
+                                onChange={handleInputFieldChange}
+                                onFocus={onFocus}
+                                onKeyDown={onKeyDown}
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                }}
+                                onPaste={onPaste}
+                                ref={inputRef}
+                                type={type}
+                                value={value}
+                                autoFocus={shouldUseAutoFocus}
+                                inputMode={inputMode}
+                                autoComplete={autoComplete}
+                                $isInvalid={isInvalid}
+                                $shouldShowCenteredContent={shouldShowCenteredContent}
                             />
-                        </StyledMotionInputClearIcon>
+                            <StyledMotionInputLabelWrapper
+                                animate={
+                                    shouldPreventPlaceholderAnimation
+                                        ? {
+                                              opacity: hasValue ? 0 : 1,
+                                          }
+                                        : {
+                                              fontSize:
+                                                  hasValue &&
+                                                  !shouldShowOnlyBottomBorder &&
+                                                  !shouldRemainPlaceholder
+                                                      ? '9px'
+                                                      : `${Number(theme.fontSize)}px`,
+                                          }
+                                }
+                                initial={false}
+                                layout
+                                ref={placeholderRef}
+                                style={{ ...labelPosition }}
+                                transition={{
+                                    type: 'tween',
+                                    duration: shouldPreventPlaceholderAnimation ? 0 : 0.1,
+                                }}
+                            >
+                                <StyledInputLabel $isInvalid={isInvalid}>
+                                    {placeholder}
+                                </StyledInputLabel>
+                            </StyledMotionInputLabelWrapper>
+                        </StyledInputContent>
+                        {shouldShowClearIcon && (
+                            <StyledMotionInputClearIcon
+                                $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
+                                $size={size}
+                                animate={{ opacity: hasValue ? 1 : 0 }}
+                                initial={false}
+                                onClick={handleClearIconClick}
+                                transition={{ type: 'tween' }}
+                            >
+                                <Icon
+                                    icons={['fa fa-times']}
+                                    color={isInvalid ? theme.wrong : undefined}
+                                />
+                            </StyledMotionInputClearIcon>
+                        )}
+                        {rightElement && shouldShowBorder && rightElement}
+                    </StyledInputContentWrapper>
+                    {rightElement && !shouldShowBorder && (
+                        <StyledInputRightElement>{rightElement}</StyledInputRightElement>
                     )}
-                    {rightElement && shouldShowBorder && rightElement}
-                </StyledInputContentWrapper>
-                {rightElement && !shouldShowBorder && (
-                    <StyledInputRightElement>{rightElement}</StyledInputRightElement>
-                )}
-            </StyledInput>
+                </StyledInput>
+            ),
+            [
+                autoComplete,
+                backgroundColor,
+                color,
+                handleClearIconClick,
+                handleInputFieldChange,
+                hasValue,
+                id,
+                inputMode,
+                isDisabled,
+                isInvalid,
+                labelPosition,
+                leftElement,
+                onBlur,
+                onFocus,
+                onKeyDown,
+                onPaste,
+                placeholder,
+                placeholderWidth,
+                rightElement,
+                shouldPreventPlaceholderAnimation,
+                shouldRemainPlaceholder,
+                shouldShowBorder,
+                shouldShowCenteredContent,
+                shouldShowClearIcon,
+                shouldShowOnlyBottomBorder,
+                shouldShowTransparentBackground,
+                shouldUseAutoFocus,
+                size,
+                theme.fontSize,
+                theme.wrong,
+                type,
+                value,
+            ],
         );
+
+        if (isDisabled && typeof disabledHint === 'string') {
+            return (
+                <Tooltip item={{ text: disabledHint }} shouldUseFullWidth>
+                    {inputElement}
+                </Tooltip>
+            );
+        }
+
+        return inputElement;
     },
 );
 
