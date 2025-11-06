@@ -11,9 +11,15 @@ import {
     StyledFileSelectWrapper,
 } from './FileSelect.styles';
 
+enum DialogView {
+    PIXABAY = 'pixabay',
+    EDITOR = 'editor',
+}
+
 type DialogInput = {
     upload: boolean;
-    initialView: string;
+    initialView: DialogView;
+    imageArrayBuffer?: File;
 };
 
 export type FileSelectProps = {
@@ -83,11 +89,33 @@ const FileSelect: FC<FileSelectProps> = ({
         [onAdd],
     );
 
+    const handleOpenEditor = useCallback(
+        async (file: File) => {
+            const { buttonType, result } = (await createDialog<DialogInput>({
+                dialogInput: {
+                    upload: true,
+                    initialView: DialogView.EDITOR,
+                    imageArrayBuffer: file,
+                },
+                type: DialogType.MODULE,
+                system: {
+                    url: 'https://tapp.chayns-static.space/api/dialog-image-editor/v1/remoteEntry.js',
+                    scope: 'dialog_image_editor',
+                    module: './ImageEditorEntry',
+                },
+                buttons: [],
+            }).open()) as ImageDialogResult;
+
+            if (buttonType === 1 && result?.url) handleAddImages([result.url]);
+        },
+        [handleAddImages],
+    );
+
     const handleImageSelectionClick = useCallback(async () => {
         if (isDisabled) return;
 
         const { buttonType, result } = (await createDialog<DialogInput>({
-            dialogInput: { upload: true, initialView: 'pixabay' },
+            dialogInput: { upload: true, initialView: DialogView.PIXABAY },
             type: DialogType.MODULE,
             system: {
                 url: 'https://tapp.chayns-static.space/api/dialog-image-editor/v1/remoteEntry.js',
@@ -105,8 +133,14 @@ const FileSelect: FC<FileSelectProps> = ({
 
         const newFiles = await selectFiles({ multiple: true, type: fileTypes, maxFileSizeInMB });
 
+        if (newFiles.length === 1 && newFiles[0] && newFiles[0].type.startsWith('image')) {
+            void handleOpenEditor(newFiles[0]);
+
+            return;
+        }
+
         handleAddFiles(newFiles);
-    }, [fileTypes, handleAddFiles, isDisabled, maxFileSizeInMB]);
+    }, [fileTypes, handleAddFiles, handleOpenEditor, isDisabled, maxFileSizeInMB]);
 
     const handleDrop = useCallback(
         (e: DragEvent<HTMLDivElement>) => {
@@ -117,15 +151,22 @@ const FileSelect: FC<FileSelectProps> = ({
                     return false;
                 }
 
-                if (maxFileSizeInMB && file.size > maxFileSizeInMB * 1024 * 1024) {
-                    return false;
-                }
-                return true;
+                return !(maxFileSizeInMB && file.size > maxFileSizeInMB * 1024 * 1024);
             });
+
+            if (
+                draggedFiles.length === 1 &&
+                draggedFiles[0] &&
+                draggedFiles[0].type.startsWith('image')
+            ) {
+                void handleOpenEditor(draggedFiles[0]);
+
+                return;
+            }
 
             handleAddFiles(draggedFiles);
         },
-        [handleAddFiles, fileTypes, maxFileSizeInMB],
+        [handleAddFiles, fileTypes, maxFileSizeInMB, handleOpenEditor],
     );
 
     return useMemo(
