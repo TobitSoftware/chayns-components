@@ -64,7 +64,7 @@ const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
                 style={{ left: coordinates.x, top: coordinates.y, width }}
-                transition={{ type: 'tween' }}
+                transition={{ type: 'tween', duration: 0.15 }}
                 transformTemplate={({ y = '0px' }) => `
                     translateX(${percentageOffsetX}%)
                     translateY(${percentageOffsetY}%)
