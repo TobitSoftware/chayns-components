@@ -4,6 +4,12 @@ import { StyledFileInput } from './FileInput.styles';
 import FileList, { IFileItem } from '../file-list/FileList';
 import FileSelect from '../file-select/FileSelect';
 
+export const TSIMG_FILE_TYPES =
+    'image/png, image/jpg, image/jpeg, image/gif, image/webp, image/svg+xml, image/avif';
+
+export const STREAMINGSERVICE_FILE_TYPES =
+    'video/mp4, video/webm, video/avi, video/flv, video/wmv, video/mpg, video/quicktime';
+
 export type FileInputProps = {
     /**
      * Already uploaded files to display.
