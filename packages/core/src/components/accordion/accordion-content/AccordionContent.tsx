@@ -32,20 +32,15 @@ const AccordionContent: FC<AccordionContentProps> = ({
     const { browser } = getDevice();
 
     return (
-        <AccordionContext.Consumer>
-            {({ isWrapped }) => (
-                <StyledAccordionContent
-                    className="beta-chayns-accordion-content"
-                    $isWrapped={isWrapped}
-                    $browser={browser?.name as BrowserName}
-                    $maxHeight={maxHeight}
-                    onScroll={onScroll}
-                    $shouldPreventBottomSpace={shouldPreventBottomSpace}
-                >
-                    {children}
-                </StyledAccordionContent>
-            )}
-        </AccordionContext.Consumer>
+        <StyledAccordionContent
+            className="beta-chayns-accordion-content"
+            $browser={browser?.name as BrowserName}
+            $maxHeight={maxHeight}
+            onScroll={onScroll}
+            $shouldPreventBottomSpace={shouldPreventBottomSpace}
+        >
+            {children}
+        </StyledAccordionContent>
     );
 };
 
