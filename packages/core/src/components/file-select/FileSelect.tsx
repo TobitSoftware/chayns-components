@@ -22,6 +22,12 @@ type DialogInput = {
     imageArrayBuffer?: File;
 };
 
+export interface UploadedFile {
+    url: string;
+    size?: number;
+    name?: string;
+}
+
 export type FileSelectProps = {
     /**
      * An array of icons that should be displayed inside the FileInput
@@ -58,7 +64,7 @@ export type FileSelectProps = {
     /**
      * A function to be executed when files are added.
      */
-    onAdd?: (files: File[] | string[]) => void;
+    onAdd?: (files: File[] | UploadedFile[]) => void;
 };
 
 const FileSelect: FC<FileSelectProps> = ({
@@ -72,7 +78,7 @@ const FileSelect: FC<FileSelectProps> = ({
     imageSelectPlaceholder,
 }) => {
     const handleAddImages = useCallback(
-        (images: string[]) => {
+        (images: UploadedFile[]) => {
             if (typeof onAdd === 'function') {
                 onAdd(images);
             }
@@ -106,7 +112,14 @@ const FileSelect: FC<FileSelectProps> = ({
                 buttons: [],
             }).open()) as ImageDialogResult;
 
-            if (buttonType === 1 && result?.url) handleAddImages([result.url]);
+            if (buttonType === 1 && result?.url)
+                handleAddImages([
+                    {
+                        url: result.url,
+                        size: file.size,
+                        name: file.name,
+                    },
+                ]);
         },
         [handleAddImages],
     );
@@ -125,7 +138,7 @@ const FileSelect: FC<FileSelectProps> = ({
             buttons: [],
         }).open()) as ImageDialogResult;
 
-        if (buttonType === 1 && result?.url) handleAddImages([result.url]);
+        if (buttonType === 1 && result?.url) handleAddImages([{ url: result.url }]);
     }, [handleAddImages, isDisabled]);
 
     const handleFileSelectionClick = useCallback(async () => {

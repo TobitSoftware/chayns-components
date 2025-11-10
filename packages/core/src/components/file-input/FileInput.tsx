@@ -2,7 +2,7 @@ import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useState 
 import { filterDuplicateFile, filterDuplicateFileUrls, isValidFileType } from '../../utils/file';
 import { StyledFileInput } from './FileInput.styles';
 import FileList, { IFileItem } from '../file-list/FileList';
-import FileSelect from '../file-select/FileSelect';
+import FileSelect, { UploadedFile } from '../file-select/FileSelect';
 
 export const TSIMG_FILE_TYPES =
     'image/png, image/jpg, image/jpeg, image/gif, image/webp, image/svg+xml, image/avif';
@@ -50,7 +50,7 @@ export type FileInputProps = {
     /**
      * A function to be executed when files are added.
      */
-    onAdd?: (files: File[] | string[]) => void;
+    onAdd?: (files: File[] | UploadedFile[]) => void;
     /**
      * Function to be executed when the maximum amount of Files are reached.
      */
@@ -58,7 +58,7 @@ export type FileInputProps = {
     /**
      * A function to be executed when a file is removed.
      */
-    onRemove?: (file: File | IFileItem | string) => void;
+    onRemove?: (file: File | IFileItem | UploadedFile) => void;
 };
 
 export type FileInputRef = {
@@ -84,7 +84,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
         ref,
     ) => {
         const [internalFiles, setInternalFiles] = useState<File[]>([]);
-        const [internalImages, setInternalImages] = useState<string[]>([]);
+        const [internalImages, setInternalImages] = useState<UploadedFile[]>([]);
 
         const handleInputClear = () => {
             setInternalFiles([]);
@@ -100,8 +100,8 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
         );
 
         const handleAddImages = useCallback(
-            (images: string[]) => {
-                const newImages: string[] = [];
+            (images: UploadedFile[]) => {
+                const newImages: UploadedFile[] = [];
 
                 images.forEach((image) => {
                     if (!filterDuplicateFileUrls({ files: internalImages, newFile: image })) {
@@ -161,10 +161,10 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
         );
 
         const handleAdd = useCallback(
-            (newFiles: File[] | string[]) => {
+            (newFiles: File[] | UploadedFile[]) => {
                 if (Array.isArray(newFiles) && newFiles.length > 0) {
-                    if (typeof newFiles[0] === 'string') {
-                        handleAddImages(newFiles as string[]);
+                    if (newFiles[0] && 'url' in newFiles[0]) {
+                        handleAddImages(newFiles as UploadedFile[]);
                     } else {
                         handleAddFiles(newFiles as File[]);
                     }
@@ -175,7 +175,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
 
         const handleDeleteFile = useCallback(
             (id: string) => {
-                let fileToDelete: File | IFileItem | string | undefined;
+                let fileToDelete: File | IFileItem | UploadedFile | undefined;
 
                 const filteredFiles = internalFiles.filter((file) => {
                     const { name } = file;
@@ -191,11 +191,11 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
 
                 if (!fileToDelete) {
                     const filteredImages = internalImages.filter((image) => {
-                        if (image === id) {
+                        if (image.name === id) {
                             fileToDelete = image;
                         }
 
-                        return image !== id;
+                        return image.name !== id;
                     });
 
                     setInternalImages(filteredImages);
@@ -246,9 +246,9 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
 
             internalImages.forEach((image) => {
                 items.push({
-                    id: image,
-                    name: image,
-                    size: 0,
+                    id: image.name ?? image.url,
+                    name: image.name ?? image.url,
+                    size: image.size ?? 0,
                     mimeType: 'image/png',
                 });
             });
