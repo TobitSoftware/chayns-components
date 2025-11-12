@@ -34,6 +34,7 @@ import {
 import { useUuid } from '../../hooks/uuid';
 import DropdownBodyWrapper from '../dropdown-body-wrapper/DropdownBodyWrapper';
 import TagInput, { TagInputProps, TagInputRef } from '../tag-input/TagInput';
+import type { DropdownDirection } from '../../types/dropdown';
 
 export interface SearchBoxRef {
     clear: VoidFunction;
@@ -55,6 +56,10 @@ export type SearchBoxProps = {
      * An optional callback function to filter the elements to be displayed
      */
     customFilter?: (item: ISearchBoxItem) => boolean;
+    /**
+     * The direction in which the dropdown should be displayed. By default, it is displayed below the input.
+     */
+    dropdownDirection?: DropdownDirection;
     /**
      * If true, the input field is marked as invalid
      */
@@ -126,6 +131,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         {
             container,
             customFilter,
+            dropdownDirection,
             isInvalid = false,
             leftIcons,
             lists,
@@ -772,6 +778,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                         <DropdownBodyWrapper
                             anchorElement={boxRef.current}
                             container={container}
+                            direction={dropdownDirection}
                             maxHeight={300}
                             onClose={handleClose}
                             shouldShowDropdown={shouldShowDropdown}
