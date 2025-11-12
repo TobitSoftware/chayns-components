@@ -38,6 +38,7 @@ const ColorSelection = ({
             '#3f51b5',
             '#03a9f4',
             '#005eb8',
+            '#0f6d7e',
             chayns.utils.colors.get(),
         ],
         []
