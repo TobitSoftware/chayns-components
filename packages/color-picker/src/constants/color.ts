@@ -22,6 +22,7 @@ export const PRESETCOLORS: IPresetColor[] = [
     { id: '18', color: 'rgba(63,81,181,1)' },
     { id: '19', color: 'rgba(3,169,244,1)' },
     { id: '20', color: 'rgba(0,94,184,1)' },
+    { id: '21', color: 'rgba(15,109,126,1)' },
 ];
 
 export const ITEM_STORAGE_URL = 'https://cube.tobit.cloud/item-storage/api/v1.0';
