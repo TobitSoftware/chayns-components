@@ -255,7 +255,7 @@ export const hexToRgb = (hex: string): RGBA => {
         r = parseInt(result[1] ?? '0', 16);
         g = parseInt(result[2] ?? '0', 16);
         b = parseInt(result[3] ?? '0', 16);
-        a = result[4] ? parseInt(result[4], 16) / 100 : 1;
+        a = result[4] ? Math.round((parseInt(result[4], 16) / 255) * 1000) / 1000 : 1;
 
         return { r, g, b, a };
     }
@@ -275,5 +275,5 @@ export const rgbToHex = ({ r, g, b, a = 1 }: RGBA): string => {
         const hexValue = clamp(x).toString(16);
         return hexValue.length === 1 ? `0${hexValue}` : hexValue;
     };
-    return `#${hex(r)}${hex(g)}${hex(b)}${alpha <= 1 ? hex(alpha * 100) : ''}`;
+    return `#${hex(r)}${hex(g)}${hex(b)}${alpha <= 1 ? hex(alpha * 255) : ''}`;
 };
