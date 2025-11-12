@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, MouseEvent, useCallback, useMemo } from 'react';
 import type { ISearchBoxItem, ISearchBoxItems } from '../../../types/searchBox';
 import {
     StyledSearchBoxItem,
@@ -25,9 +25,15 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
     groupName,
     tabIndex,
 }) => {
-    const handleClick = useCallback(() => {
-        onSelect({ id: id === 'input-value' ? text : id, text, imageUrl }, groupName);
-    }, [onSelect, id, text, imageUrl, groupName]);
+    const handleClick = useCallback(
+        (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            onSelect({ id: id === 'input-value' ? text : id, text, imageUrl }, groupName);
+        },
+        [onSelect, id, text, imageUrl, groupName],
+    );
 
     let idString = `search-box-item__${id}`;
 

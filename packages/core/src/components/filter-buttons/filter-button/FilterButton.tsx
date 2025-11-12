@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, useCallback, useMemo } from 'react';
+import React, { CSSProperties, FC, MouseEvent, useCallback, useMemo } from 'react';
 import type { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';
 import Icon from '../../icon/Icon';
 import {
@@ -35,13 +35,19 @@ const FilterButton: FC<FilterButtonProps> = ({
     isDisabled,
     onSelect,
 }) => {
-    const handleClick = useCallback(() => {
-        if (isDisabled) {
-            return;
-        }
+    const handleClick = useCallback(
+        (event: MouseEvent) => {
+            if (isDisabled) {
+                return;
+            }
 
-        onSelect(id);
-    }, [id, isDisabled, onSelect]);
+            event.preventDefault();
+            event.stopPropagation();
+
+            onSelect(id);
+        },
+        [id, isDisabled, onSelect],
+    );
 
     return useMemo(
         () => (

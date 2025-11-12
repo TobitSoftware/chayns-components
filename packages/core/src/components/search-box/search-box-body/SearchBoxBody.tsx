@@ -1,5 +1,6 @@
 import React, {
     forwardRef,
+    MouseEvent,
     UIEvent,
     useCallback,
     useEffect,
@@ -66,6 +67,11 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
             }
         }, [uuid, children, selectedGroups]);
 
+        const handlePreventDefault = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         const handleScroll = useCallback(
             (event: UIEvent) => {
                 const { scrollTop } = event.target as HTMLDivElement;
@@ -84,7 +90,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
 
         return useMemo(
             () => (
-                <StyledSearchBoxBody ref={ref}>
+                <StyledSearchBoxBody onClick={handlePreventDefault} ref={ref}>
                     {filterButtons && filterButtons?.length > 1 && (
                         <StyledSearchBoxBodyHead
                             ref={headRef}
