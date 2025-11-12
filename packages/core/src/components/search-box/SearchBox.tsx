@@ -1,3 +1,4 @@
+import { useDevice } from 'chayns-api';
 import React, {
     ChangeEvent,
     ChangeEventHandler,
@@ -179,8 +180,10 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         const theme = useTheme() as Theme;
 
+        const { isTouch } = useDevice();
+
         /**
-         * Checks if Lists are smaller then 1
+         * Checks if there are multiple groups in the lists
          */
         useEffect(() => {
             setHasMultipleGroups(lists.length > 1);
@@ -330,7 +333,8 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         }, [handleOpen, matchingListsItems.length]);
 
         /**
-         * This function sets the items on focus if shouldShowContentOnEmptyInput
+         * This function handles the focus event of the input and opens the dropdown if the input
+         * should show content on an empty input
          */
         const handleFocus = useCallback(() => {
             hasFocusRef.current = true;
@@ -515,6 +519,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             },
             [onBlur],
         );
+
+        const handleDropdownOutsideClick = useCallback(() => {
+            tagInputRef.current?.blur();
+
+            return hasFocusRef.current && isTouch;
+        }, [isTouch]);
 
         /**
          * This function handles the item selection
@@ -781,6 +791,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             direction={dropdownDirection}
                             maxHeight={300}
                             onClose={handleClose}
+                            onOutsideClick={handleDropdownOutsideClick}
                             shouldShowDropdown={shouldShowDropdown}
                         >
                             <SearchBoxBody
@@ -801,11 +812,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             [
                 container,
                 content,
+                dropdownDirection,
                 filterButtons,
                 groups,
                 handleBlur,
                 handleChange,
                 handleClose,
+                handleDropdownOutsideClick,
                 handleFocus,
                 height,
                 isInvalid,
