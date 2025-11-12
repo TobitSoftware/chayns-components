@@ -52,6 +52,10 @@ export type SearchBoxProps = {
      */
     container?: Element;
     /**
+     * An optional callback function to filter the elements to be displayed
+     */
+    customFilter?: (item: ISearchBoxItem) => boolean;
+    /**
      * If true, the input field is marked as invalid
      */
     isInvalid?: boolean;
@@ -63,10 +67,6 @@ export type SearchBoxProps = {
      * List of groups with items that can be searched. It is possible to give only one list; if multiple lists are provided, the 'group name' parameter becomes mandatory.
      */
     lists: ISearchBoxItems[];
-    /**
-     * The placeholder that should be displayed.
-     */
-    placeholder?: string;
     /**
      * Function to be executed when the input lost focus.
      */
@@ -83,6 +83,14 @@ export type SearchBoxProps = {
      * Function to be executed when an item is selected.
      */
     onSelect?: (item: ISearchBoxItem) => void;
+    /**
+     * The placeholder that should be displayed.
+     */
+    placeholder?: string;
+    /**
+     * Set an input for the search box - it is not an item of a list, just a string.
+     */
+    presetValue?: string;
     /**
      * Control the selected item. If you use this prop, make sure to update it when the user selects an item.
      */
@@ -107,14 +115,6 @@ export type SearchBoxProps = {
      * Whether the icon to open and close the list should be displayed.
      */
     shouldShowToggleIcon?: boolean;
-    /**
-     * An optional callback function to filter the elements to be displayed
-     */
-    customFilter?: (item: ISearchBoxItem) => boolean;
-    /**
-     * Set an input for the search box - it is not an item of a list, just a string.
-     */
-    presetValue?: string;
     /**
      * Settings for the TagInput.
      */
@@ -614,7 +614,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 const childrenArray = Array.from(children);
 
                 const newChildren = childrenArray.find((child) =>
-                    child.id.startsWith('searchbox-content__'),
+                    child.id.startsWith('searchBoxContent__'),
                 )?.children;
 
                 if (!(newChildren && newChildren.length > 0)) {
@@ -624,6 +624,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 const filteredChildren = Array.from(newChildren).filter(
                     (child) => (child as HTMLElement).dataset.isgroupname !== 'true',
                 );
+
                 setFilteredChildrenArray(filteredChildren);
 
                 if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
@@ -646,6 +647,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                         setFocusedIndex(newIndex);
 
                         const newElement = filteredChildren[newIndex] as HTMLDivElement;
+
                         newElement.tabIndex = 0;
                     }
                 } else if (e.key === 'Enter') {
@@ -728,34 +730,39 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             }
         }, [presetValue]);
 
+        const shouldShowDropdown =
+            shouldShowBody &&
+            matchingListsItems.length !== 0 &&
+            (value.trim() !== '' || shouldShowContentOnEmptyInput);
+
         return useMemo(
             () => (
                 <StyledSearchBox ref={boxRef} key={`search-box-${uuid}`}>
                     <div id={`search_box_input${uuid}`}>
                         {tagInputSettings ? (
                             <TagInput
-                                tags={tagInputSettings.tags}
-                                onChange={handleChange}
-                                onAdd={tagInputSettings.onAdd}
-                                onRemove={tagInputSettings.onRemove}
-                                onFocus={handleFocus}
-                                onBlur={handleBlur}
-                                placeholder={placeholder}
                                 leftElement={leftElement}
+                                onAdd={tagInputSettings.onAdd}
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                onFocus={handleFocus}
+                                onRemove={tagInputSettings.onRemove}
+                                placeholder={placeholder}
+                                ref={tagInputRef}
                                 shouldAllowMultiple={tagInputSettings.shouldAllowMultiple}
                                 shouldPreventEnter
-                                ref={tagInputRef}
+                                tags={tagInputSettings.tags}
                             />
                         ) : (
                             <Input
                                 isInvalid={isInvalid}
-                                ref={inputRef}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                onFocus={handleFocus}
-                                placeholder={placeholder}
-                                onKeyDown={onKeyDown}
                                 leftElement={leftElement}
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                onFocus={handleFocus}
+                                onKeyDown={onKeyDown}
+                                placeholder={placeholder}
+                                ref={inputRef}
                                 rightElement={rightElement}
                                 value={value}
                             />
@@ -763,23 +770,19 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     </div>
                     {boxRef.current && (
                         <DropdownBodyWrapper
-                            shouldShowDropdown={
-                                shouldShowBody &&
-                                matchingListsItems.length !== 0 &&
-                                (value.trim() !== '' || shouldShowContentOnEmptyInput)
-                            }
-                            onClose={handleClose}
                             anchorElement={boxRef.current}
-                            maxHeight={300}
                             container={container}
+                            maxHeight={300}
+                            onClose={handleClose}
+                            shouldShowDropdown={shouldShowDropdown}
                         >
                             <SearchBoxBody
-                                key={`search-box-body-${uuid}`}
                                 filterButtons={filterButtons}
-                                selectedGroups={groups}
                                 height={height}
-                                ref={contentRef}
+                                key={`search-box-body-${uuid}`}
                                 onGroupSelect={handleFilterButtonsGroupSelect}
+                                ref={contentRef}
+                                selectedGroups={groups}
                                 shouldHideFilterButtons={shouldHideFilterButtons}
                             >
                                 {content}
@@ -800,13 +803,11 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 height,
                 isInvalid,
                 leftElement,
-                matchingListsItems.length,
                 onKeyDown,
                 placeholder,
                 rightElement,
                 shouldHideFilterButtons,
-                shouldShowBody,
-                shouldShowContentOnEmptyInput,
+                shouldShowDropdown,
                 tagInputSettings,
                 uuid,
                 value,

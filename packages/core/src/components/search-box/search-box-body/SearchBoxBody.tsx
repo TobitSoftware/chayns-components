@@ -53,7 +53,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
         );
 
         useEffect(() => {
-            const element = document.getElementById(`searchbox-content__${uuid}`);
+            const element = document.getElementById(`searchBoxContent__${uuid}`);
 
             if (
                 element &&
@@ -108,7 +108,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                         $height={height}
                         $headHeight={headHeight}
                         key="content"
-                        id={`searchbox-content__${uuid}`}
+                        id={`searchBoxContent__${uuid}`}
                         $browser={(browser as { name: BrowserName })?.name}
                         tabIndex={0}
                         onScroll={handleScroll}
