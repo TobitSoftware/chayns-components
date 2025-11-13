@@ -35,6 +35,7 @@ export const StyledMentionFinderItemImage = styled.img<StyledMentionFinderItemIm
         rgba(${({ theme }: StyledMentionFinderItemImageProps) => theme['009-rgb']}, 0.08) inset;
     flex: 0 0 auto;
     height: 40px;
+    object-fit: cover;
     overflow: hidden;
     transition: border-radius 0.3s ease;
     width: 40px;
