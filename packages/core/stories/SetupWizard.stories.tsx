@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
 import Button from '../src/components/button/Button';
-import Input from '../src/components/input/Input';
+import OldInput from '../src/components/old-input/OldInput';
 import RadioButtonGroup from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '../src/components/radio-button/RadioButton';
 import SetupWizardItem from '../src/components/setup-wizard/setup-wizard-item/SetupWizardItem';
@@ -44,7 +44,7 @@ const Template: StoryFn<typeof SetupWizard> = ({ ...args }) => {
             </SetupWizardItem>
             <SetupWizardItem id={1} step={2} title="Dein Name">
                 <h3>Teile uns deinen Namen mit</h3>
-                <Input placeholder="Namen eingeben" />
+                <OldInput placeholder="Namen eingeben" />
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10 }}>
                     <Button
                         onClick={() => {
@@ -64,7 +64,7 @@ const Template: StoryFn<typeof SetupWizard> = ({ ...args }) => {
                     <RadioButton id="3" label="Salat" />
                 </RadioButtonGroup>
                 <h5>Dein Essen ist nicht dabei? Kein Problem, schreibe es uns einfach.</h5>
-                <Input placeholder="Essen eingeben" />
+                <OldInput placeholder="Essen eingeben" />
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10 }}>
                     <Button
                         onClick={() => {
@@ -123,7 +123,7 @@ const InsideAccordionTemplate: StoryFn<typeof SetupWizard> = ({ ...args }) => {
                     </SetupWizardItem>
                     <SetupWizardItem id={1} step={2} title="Dein Name">
                         <h3>Teile uns deinen Namen mit</h3>
-                        <Input placeholder="Namen eingeben" />
+                        <OldInput placeholder="Namen eingeben" />
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10 }}>
                             <Button
                                 onClick={() => {
@@ -143,7 +143,7 @@ const InsideAccordionTemplate: StoryFn<typeof SetupWizard> = ({ ...args }) => {
                             <RadioButton id="3" label="Salat" />
                         </RadioButtonGroup>
                         <h5>Dein Essen ist nicht dabei? Kein Problem, schreibe es uns einfach.</h5>
-                        <Input placeholder="Essen eingeben" />
+                        <OldInput placeholder="Essen eingeben" />
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10 }}>
                             <Button
                                 onClick={() => {

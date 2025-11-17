@@ -22,21 +22,21 @@ import { AreaContext } from '../area-provider/AreaContextProvider';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import {
-    StyledInput,
-    StyledInputContent,
-    StyledInputContentWrapper,
-    StyledInputField,
-    StyledInputIconWrapper,
-    StyledInputLabel,
-    StyledInputRightElement,
-    StyledMotionInputClearIcon,
-    StyledMotionInputLabelWrapper,
-} from './Input.styles';
+    StyledOldInput,
+    StyledOldInputContent,
+    StyledOldInputContentWrapper,
+    StyledOldInputField,
+    StyledOldInputIconWrapper,
+    StyledOldInputLabel,
+    StyledOldInputRightElement,
+    StyledMotionOldInputClearIcon,
+    StyledMotionOldInputLabelWrapper,
+} from './OldInput.styles';
 import { ContentCardType } from '../../types/contentCard';
 import { useCursorRepaint } from '../../hooks/resize';
 import Tooltip from '../tooltip/Tooltip';
 
-export interface InputRef {
+export interface OldInputRef {
     focus: VoidFunction;
     blur: VoidFunction;
 }
@@ -67,54 +67,54 @@ type AutoComplete =
     | 'country'
     | undefined;
 
-export enum InputSize {
+export enum OldInputSize {
     Small = 'small',
     Medium = 'medium',
 }
 
-export type InputProps = {
+export type OldInputProps = {
     /**
-     * If set and the input is disabled, the input will display a tooltip with this message.
+     * If set and the old-input is disabled, the old-input will display a tooltip with this message.
      */
     disabledHint?: string;
     /**
-     * An element to be displayed on the left side of the input field
+     * An element to be displayed on the left side of the old-input field
      */
     leftElement?: ReactNode;
     /**
-     * The id of the input
+     * The id of the old-input
      */
     id?: string;
     /**
-     * Defines the input mode of the input
+     * Defines the old-input mode of the old-input
      */
     inputMode?: InputMode;
     /**
-     * Defines the auto Complete of the input
+     * Defines the auto Complete of the old-input
      */
     autoComplete?: AutoComplete;
     /**
-     * Disables the input so that it cannot be changed anymore
+     * Disables the old-input so that it cannot be changed anymore
      */
     isDisabled?: boolean;
     /**
-     * If true, the input field is marked as invalid
+     * If true, the old-input field is marked as invalid
      */
     isInvalid?: boolean;
     /**
-     * Function that is executed when the input field loses focus
+     * Function that is executed when the old-input field loses focus
      */
     onBlur?: FocusEventHandler<HTMLInputElement>;
     /**
-     * Function that is executed when the text of the input changes
+     * Function that is executed when the text of the old-input changes
      */
     onChange?: ChangeEventHandler<HTMLInputElement>;
     /**
-     * Function that is executed when the input field is focused
+     * Function that is executed when the old-input field is focused
      */
     onFocus?: FocusEventHandler<HTMLInputElement>;
     /**
-     * Function that is executed when content is pasted into the input field
+     * Function that is executed when content is pasted into the old-input field
      */
     onPaste?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
     /**
@@ -122,11 +122,11 @@ export type InputProps = {
      */
     onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
     /**
-     * Placeholder for the input field
+     * Placeholder for the old-input field
      */
     placeholder?: ReactNode;
     /**
-     * An element that should be displayed on the right side of the Input.
+     * An element that should be displayed on the right side of the OldInput.
      */
     rightElement?: ReactElement;
     /**
@@ -138,11 +138,11 @@ export type InputProps = {
      */
     shouldRemainPlaceholder?: boolean;
     /**
-     * Whether the content should be displayed centered inside the input.
+     * Whether the content should be displayed centered inside the old-input.
      */
     shouldShowCenteredContent?: boolean;
     /**
-     * If true, a clear icon is displayed at the end of the input field
+     * If true, a clear icon is displayed at the end of the old-input field
      */
     shouldShowClearIcon?: boolean;
     /**
@@ -154,24 +154,24 @@ export type InputProps = {
      */
     shouldShowTransparentBackground?: boolean;
     /**
-     * If true, the input field is focused when the component is mounted
+     * If true, the old-input field is focused when the component is mounted
      */
     shouldUseAutoFocus?: boolean;
     /**
-     * The size of the input field
+     * The size of the old-input field
      */
-    size?: InputSize;
+    size?: OldInputSize;
     /**
-     * Input type set for an input element (e.g. 'text', 'number' or 'password')
+     * OldInput type set for an old-input element (e.g. 'text', 'number' or 'password')
      */
     type?: HTMLInputTypeAttribute;
     /**
-     * Value if the input field should be controlled
+     * Value if the old-input field should be controlled
      */
     value?: string;
 };
 
-const Input = forwardRef<InputRef, InputProps>(
+const OldInput = forwardRef<OldInputRef, OldInputProps>(
     (
         {
             leftElement,
@@ -188,7 +188,7 @@ const Input = forwardRef<InputRef, InputProps>(
             shouldRemainPlaceholder = false,
             shouldShowClearIcon = false,
             shouldShowCenteredContent = false,
-            size = InputSize.Medium,
+            size = OldInputSize.Medium,
             type = 'text',
             value,
             disabledHint,
@@ -283,7 +283,7 @@ const Input = forwardRef<InputRef, InputProps>(
             if (hasValue && !shouldRemainPlaceholder && !shouldPreventPlaceholderAnimation) {
                 return shouldShowOnlyBottomBorder
                     ? { right: 3, top: -1.5 }
-                    : { bottom: size === InputSize.Small ? -4 : -10, right: -6 };
+                    : { bottom: size === OldInputSize.Small ? -4 : -10, right: -6 };
             }
 
             return { left: -1 };
@@ -297,8 +297,8 @@ const Input = forwardRef<InputRef, InputProps>(
 
         const inputElement = useMemo(
             () => (
-                <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
-                    <StyledInputContentWrapper
+                <StyledOldInput className="beta-chayns-input" $isDisabled={isDisabled}>
+                    <StyledOldInputContentWrapper
                         $shouldShowTransparentBackground={shouldShowTransparentBackground}
                         $backgroundColor={backgroundColor}
                         $isInvalid={isInvalid}
@@ -307,12 +307,12 @@ const Input = forwardRef<InputRef, InputProps>(
                         $size={size}
                     >
                         {leftElement && (
-                            <StyledInputIconWrapper>{leftElement}</StyledInputIconWrapper>
+                            <StyledOldInputIconWrapper>{leftElement}</StyledOldInputIconWrapper>
                         )}
-                        <StyledInputContent
+                        <StyledOldInputContent
                             $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                         >
-                            <StyledInputField
+                            <StyledOldInputField
                                 $color={color}
                                 $placeholderWidth={placeholderWidth}
                                 id={id}
@@ -335,7 +335,7 @@ const Input = forwardRef<InputRef, InputProps>(
                                 $isInvalid={isInvalid}
                                 $shouldShowCenteredContent={shouldShowCenteredContent}
                             />
-                            <StyledMotionInputLabelWrapper
+                            <StyledMotionOldInputLabelWrapper
                                 animate={
                                     shouldPreventPlaceholderAnimation
                                         ? {
@@ -359,13 +359,13 @@ const Input = forwardRef<InputRef, InputProps>(
                                     duration: shouldPreventPlaceholderAnimation ? 0 : 0.1,
                                 }}
                             >
-                                <StyledInputLabel $isInvalid={isInvalid}>
+                                <StyledOldInputLabel $isInvalid={isInvalid}>
                                     {placeholder}
-                                </StyledInputLabel>
-                            </StyledMotionInputLabelWrapper>
-                        </StyledInputContent>
+                                </StyledOldInputLabel>
+                            </StyledMotionOldInputLabelWrapper>
+                        </StyledOldInputContent>
                         {shouldShowClearIcon && (
-                            <StyledMotionInputClearIcon
+                            <StyledMotionOldInputClearIcon
                                 $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                                 $size={size}
                                 animate={{ opacity: hasValue ? 1 : 0 }}
@@ -377,14 +377,14 @@ const Input = forwardRef<InputRef, InputProps>(
                                     icons={['fa fa-times']}
                                     color={isInvalid ? theme.wrong : undefined}
                                 />
-                            </StyledMotionInputClearIcon>
+                            </StyledMotionOldInputClearIcon>
                         )}
                         {rightElement && shouldShowBorder && rightElement}
-                    </StyledInputContentWrapper>
+                    </StyledOldInputContentWrapper>
                     {rightElement && !shouldShowBorder && (
-                        <StyledInputRightElement>{rightElement}</StyledInputRightElement>
+                        <StyledOldInputRightElement>{rightElement}</StyledOldInputRightElement>
                     )}
-                </StyledInput>
+                </StyledOldInput>
             ),
             [
                 autoComplete,
@@ -434,6 +434,6 @@ const Input = forwardRef<InputRef, InputProps>(
     },
 );
 
-Input.displayName = 'Input';
+OldInput.displayName = 'OldInput';
 
-export default Input;
+export default OldInput;

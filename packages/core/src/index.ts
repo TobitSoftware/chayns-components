@@ -64,7 +64,7 @@ export { default as FilterButtons } from './components/filter-buttons/FilterButt
 export { default as GridImage } from './components/grid-image/GridImage';
 export { default as GroupedImage } from './components/grouped-image/GroupedImage';
 export { default as Icon } from './components/icon/Icon';
-export { default as Input, InputSize } from './components/input/Input';
+export { default as Input, OldInputSize } from './components/old-input/OldInput';
 export { default as List } from './components/list/List';
 export { default as ListItemContent } from './components/list/list-item/list-item-content/ListItemContent';
 export {

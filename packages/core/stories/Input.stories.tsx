@@ -1,18 +1,18 @@
 import { Typewriter } from '@chayns-components/typewriter';
 import { Meta, StoryFn } from '@storybook/react';
 import Icon from '../src/components/icon/Icon';
-import Input from '../src/components/input/Input';
+import OldInput from '../src/components/old-input/OldInput';
 import React from 'react';
 
 export default {
-    title: 'Core/Input',
-    component: Input,
+    title: 'Core/OldInput',
+    component: OldInput,
     args: {
         placeholder: 'Try me out',
     },
-} as Meta<typeof Input>;
+} as Meta<typeof OldInput>;
 
-const Template: StoryFn<typeof Input> = (args) => <Input {...args} />;
+const Template: StoryFn<typeof OldInput> = (args) => <OldInput {...args} />;
 
 export const General = Template.bind({});
 

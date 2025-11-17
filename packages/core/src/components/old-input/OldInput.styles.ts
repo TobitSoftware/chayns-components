@@ -1,32 +1,32 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import type { InputSize } from './Input';
+import type { OldInputSize } from './OldInput';
 import { CSSProperties } from 'react';
 
-type StyledInputProps = WithTheme<{ $isDisabled?: boolean }>;
+type StyledOldInputProps = WithTheme<{ $isDisabled?: boolean }>;
 
-export const StyledInput = styled.div<StyledInputProps>`
+export const StyledOldInput = styled.div<StyledOldInputProps>`
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     display: flex;
     width: 100%;
 `;
 
-type StyledInputContentWrapperProps = WithTheme<{
+type StyledOldInputContentWrapperProps = WithTheme<{
     $backgroundColor?: CSSProperties['backgroundColor'];
     $shouldRoundRightCorners: boolean;
     $shouldShowOnlyBottomBorder?: boolean;
     $isInvalid?: boolean;
-    $size: InputSize;
+    $size: OldInputSize;
     $shouldShowTransparentBackground: boolean;
 }>;
 
-export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
+export const StyledOldInputContentWrapper = styled.div<StyledOldInputContentWrapperProps>`
     align-items: center;
-    background-color: ${({ theme, $backgroundColor }: StyledInputContentWrapperProps) =>
+    background-color: ${({ theme, $backgroundColor }: StyledOldInputContentWrapperProps) =>
         $backgroundColor ?? theme['100']};
     border: 1px solid transparent;
-    color: ${({ theme }: StyledInputContentWrapperProps) => theme['006']};
+    color: ${({ theme }: StyledOldInputContentWrapperProps) => theme['006']};
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -93,9 +93,9 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
     }}
 `;
 
-type StyledInputContentProps = WithTheme<{ $shouldShowOnlyBottomBorder?: boolean }>;
+type StyledOldInputContentProps = WithTheme<{ $shouldShowOnlyBottomBorder?: boolean }>;
 
-export const StyledInputContent = styled.div<StyledInputContentProps>`
+export const StyledOldInputContent = styled.div<StyledOldInputContentProps>`
     display: flex;
     flex: 1 1 auto;
     min-width: 0;
@@ -104,17 +104,17 @@ export const StyledInputContent = styled.div<StyledInputContentProps>`
     position: relative;
 `;
 
-type StyledInputFieldProps = WithTheme<{
+type StyledOldInputFieldProps = WithTheme<{
     $color?: CSSProperties['color'];
     $isInvalid?: boolean;
     $placeholderWidth: number;
     $shouldShowCenteredContent: boolean;
 }>;
 
-export const StyledInputField = styled.input<StyledInputFieldProps>`
+export const StyledOldInputField = styled.input<StyledOldInputFieldProps>`
     background: none;
     border: none;
-    color: ${({ theme, $color, $isInvalid }: StyledInputFieldProps) =>
+    color: ${({ theme, $color, $isInvalid }: StyledOldInputFieldProps) =>
         $color ?? ($isInvalid ? theme.wrong : theme.text)};
     padding: 0;
     width: ${({ $placeholderWidth }) => `calc(100% - ${$placeholderWidth}px)`};
@@ -127,7 +127,7 @@ export const StyledInputField = styled.input<StyledInputFieldProps>`
         `}
 `;
 
-export const StyledMotionInputLabelWrapper = styled(motion.label)`
+export const StyledMotionOldInputLabelWrapper = styled(motion.label)`
     align-items: center;
     display: flex;
     flex: 0 0 auto;
@@ -139,29 +139,25 @@ export const StyledMotionInputLabelWrapper = styled(motion.label)`
     max-width: 100%;
 `;
 
-export const StyledMotionInputElement = styled(motion.div)`
-    display: flex;
-`;
+type StyledOldInputLabelProps = WithTheme<{ $isInvalid?: boolean }>;
 
-type StyledInputLabelProps = WithTheme<{ $isInvalid?: boolean }>;
-
-export const StyledInputLabel = styled.label<StyledInputLabelProps>`
+export const StyledOldInputLabel = styled.label<StyledOldInputLabelProps>`
     line-height: 1.3;
     pointer-events: none;
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: ${({ theme, $isInvalid }: StyledInputLabelProps) =>
+    color: ${({ theme, $isInvalid }: StyledOldInputLabelProps) =>
         $isInvalid ? theme.wrong : `rgba(${theme['text-rgb'] ?? ''}, 0.45)`};
 `;
 
-type StyledMotionInputClearIconProps = WithTheme<{
+type StyledMotionOldInputClearIconProps = WithTheme<{
     $shouldShowOnlyBottomBorder?: boolean;
-    $size: InputSize;
+    $size: OldInputSize;
 }>;
 
-export const StyledMotionInputClearIcon = styled(motion.div)<StyledMotionInputClearIconProps>`
+export const StyledMotionOldInputClearIcon = styled(motion.div)<StyledMotionOldInputClearIconProps>`
     align-items: center;
     border-left: ${({ $shouldShowOnlyBottomBorder }) =>
         $shouldShowOnlyBottomBorder ? 'none' : '1px solid rgba(160, 160, 160, 0.3)'};
@@ -173,7 +169,7 @@ export const StyledMotionInputClearIcon = styled(motion.div)<StyledMotionInputCl
     width: ${({ $size }) => ($size === 'medium' ? '40px' : '30px')};
 `;
 
-export const StyledInputIconWrapper = styled.div`
+export const StyledOldInputIconWrapper = styled.div`
     align-items: baseline;
     display: flex;
     flex: 0 0 auto;
@@ -181,7 +177,7 @@ export const StyledInputIconWrapper = styled.div`
     margin-left: 10px;
 `;
 
-export const StyledInputRightElement = styled.div`
+export const StyledOldInputRightElement = styled.div`
     border-bottom-right-radius: 3px;
     border-top-right-radius: 3px;
     overflow: hidden;

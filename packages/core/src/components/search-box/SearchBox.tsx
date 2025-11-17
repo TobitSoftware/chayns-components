@@ -22,7 +22,7 @@ import { calculateContentHeight } from '../../utils/calculate';
 import { searchList } from '../../utils/searchBox';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
-import Input from '../input/Input';
+import OldInput from '../old-input/OldInput';
 import GroupName from './group-name/GroupName';
 import SearchBoxBody from './search-box-body/SearchBoxBody';
 import SearchBoxItem from './search-box-item/SearchBoxItem';
@@ -770,7 +770,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                                 tags={tagInputSettings.tags}
                             />
                         ) : (
-                            <Input
+                            <OldInput
                                 isInvalid={isInvalid}
                                 leftElement={leftElement}
                                 onBlur={handleBlur}

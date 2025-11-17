@@ -16,7 +16,7 @@ import React, {
 } from 'react';
 import { BrowserName } from '../../types/chayns';
 import { AreaContext } from '../area-provider/AreaContextProvider';
-import { StyledInputRightElement } from '../input/Input.styles';
+import { StyledOldInputRightElement } from '../old-input/OldInput.styles';
 import {
     StyledTextArea,
     StyledTextAreaContent,
@@ -166,7 +166,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                         {rightElement && shouldShowBorder && rightElement}
                     </StyledTextAreaContentWrapper>
                     {rightElement && !shouldShowBorder && (
-                        <StyledInputRightElement>{rightElement}</StyledInputRightElement>
+                        <StyledOldInputRightElement>{rightElement}</StyledOldInputRightElement>
                     )}
                 </StyledTextArea>
             ),

@@ -5,7 +5,7 @@ import RadioButtonGroup, {
 } from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '../src/components/radio-button/RadioButton';
 import Button from '../src/components/button/Button';
-import Input from '../src/components/input/Input';
+import OldInput from '../src/components/old-input/OldInput';
 
 export default {
     title: 'Core/RadioButton',
@@ -144,7 +144,7 @@ WithRightElement.args = {
             </p>
             <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                 <div style={{ width: '80%' }}>
-                    <Input placeholder="Tischnummer" />
+                    <OldInput placeholder="Tischnummer" />
                 </div>
                 <Button onClick={() => {}}>Scannen</Button>
             </div>

@@ -4,7 +4,7 @@ import {
     StyledFilterSort,
     StyledFilterSortText,
 } from './FilterContent.styles';
-import Input from '../../input/Input';
+import OldInput from '../../old-input/OldInput';
 import Icon from '../../icon/Icon';
 import FilterButtons from '../../filter-buttons/FilterButtons';
 import { FilterButtonConfig, SearchConfig, SortConfig } from '../../../types/filter';
@@ -40,7 +40,7 @@ const FilterContent: FC<FilterContentProps> = ({
         () => (
             <StyledFilterContent>
                 {searchConfig && (
-                    <Input
+                    <OldInput
                         onChange={(ev) => searchConfig.onSearchChange(ev.target.value)}
                         placeholder="Suche"
                         value={searchConfig.searchValue}

@@ -10,7 +10,7 @@ import React, {
     useState,
 } from 'react';
 import Icon from '../icon/Icon';
-import Input, { InputRef, InputSize } from '../input/Input';
+import OldInput, { OldInputRef, OldInputSize } from '../old-input/OldInput';
 import {
     StyledMotionSearchInputContentWrapper,
     StyledMotionSearchInputIconWrapper,
@@ -73,7 +73,7 @@ const SearchInput: FC<SearchInputProps> = ({
     onKeyDown,
     placeholder,
     shouldUseAbsolutePositioning = false,
-    size = InputSize.Medium,
+    size = OldInputSize.Medium,
     value,
     width: widthValue,
 }) => {
@@ -81,7 +81,7 @@ const SearchInput: FC<SearchInputProps> = ({
         isActive ?? (typeof value === 'string' && value.trim() !== ''),
     );
 
-    const inputRef = useRef<InputRef>(null);
+    const inputRef = useRef<OldInputRef>(null);
     const pseudoRef = useRef<HTMLDivElement>(null);
 
     const parentWidth = useElementSize(pseudoRef);
@@ -137,7 +137,7 @@ const SearchInput: FC<SearchInputProps> = ({
                                 key="searchInputContentWrapper"
                                 transition={{ duration: 0.25, type: 'tween' }}
                             >
-                                <Input
+                                <OldInput
                                     onChange={onChange}
                                     onKeyDown={onKeyDown}
                                     placeholder={placeholder}
@@ -215,7 +215,7 @@ const SearchInput: FC<SearchInputProps> = ({
                                     key="searchInputContentWrapper"
                                     transition={{ duration: 0.3 }}
                                 >
-                                    <Input
+                                    <OldInput
                                         key="input"
                                         leftElement={
                                             <Icon color={theme.text} icons={['far fa-search']} />
