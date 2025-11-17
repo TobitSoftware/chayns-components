@@ -56,6 +56,7 @@ const Input = forwardRef<unknown, InputProps>(
                     <StyledInputField
                         $isInvalid={isInvalid}
                         autoFocus={shouldUseAutoFocus}
+                        disabled={isDisabled}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         onFocus={handleFocus}
