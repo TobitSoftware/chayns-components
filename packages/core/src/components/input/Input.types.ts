@@ -12,6 +12,9 @@ export enum InputDesign {
     Rounded = 'rounded',
 }
 
+/**
+ * Props for the Input component
+ */
 export type InputProps = {
     /**
      * Design variant of the input field.
