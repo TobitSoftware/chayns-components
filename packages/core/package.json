@@ -72,7 +72,7 @@
     },
     "dependencies": {
         "@chayns/colors": "^2.0.0",
-        "@chayns/uac-service": "~0.0.61",
+        "@chayns/uac-service": "~0.0.62",
         "clsx": "^2.1.1",
         "uuid": "^10.0.0"
     },

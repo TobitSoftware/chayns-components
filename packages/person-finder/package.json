@@ -72,7 +72,7 @@
     },
     "dependencies": {
         "@chayns-components/core": "^5.0.0-beta.1319",
-        "@chayns/uac-service": "~0.0.61",
+        "@chayns/uac-service": "~0.0.62",
         "lodash.throttle": "^4.1.1",
         "uuid": "^10.0.0"
     },
