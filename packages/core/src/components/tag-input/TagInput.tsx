@@ -1,7 +1,6 @@
 import React, {
     forwardRef,
     useCallback,
-    useEffect,
     useMemo,
     useState,
     type ChangeEvent,
@@ -38,7 +37,7 @@ export type TagInputProps = {
     /**
      * Function to be executed when a tag is added.
      */
-    onAdd?: (tag: Tag) => void;
+    onAdd?: (tag: Tag) => Promise<boolean> | boolean | void;
     /**
      * Function to be executed when the input is blurred.
      */
@@ -95,7 +94,6 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
         },
         ref,
     ) => {
-        const [internalTags, setInternalTags] = useState<Tag[]>();
         const [currentValue, setCurrentValue] = useState('');
         const [selectedId, setSelectedId] = useState<Tag['id']>();
 
@@ -106,12 +104,6 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
         useCursorRepaint(inputRef);
 
         const theme = useTheme() as Theme;
-
-        useEffect(() => {
-            if (tags) {
-                setInternalTags(shouldAllowMultiple ? tags : tags.slice(0, 1));
-            }
-        }, [shouldAllowMultiple, tags]);
 
         const handleResetValue = () => {
             setCurrentValue('');
@@ -140,18 +132,27 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                             return '';
                         }
 
-                        setInternalTags((prevTags) => {
-                            if (!shouldAllowMultiple && (prevTags?.length ?? 0) > 0)
-                                return prevTags;
+                        if (!shouldAllowMultiple && (tags?.length ?? 0) > 0) return '';
 
-                            const newTag = { id: uuidv4(), text: prevValue };
+                        const newTag = { id: uuidv4(), text: prevValue };
 
-                            if (typeof onAdd === 'function') {
-                                onAdd(newTag);
+                        if (typeof onAdd === 'function') {
+                            const onAddResult = onAdd(newTag);
+
+                            if (typeof onAddResult === 'boolean' && !onAddResult) {
+                                return prevValue;
                             }
 
-                            return prevTags ? [...prevTags, newTag] : [newTag];
-                        });
+                            if (onAddResult instanceof Promise) {
+                                void onAddResult.then((shouldAddTag) => {
+                                    if (!shouldAddTag) {
+                                        return prevValue;
+                                    }
+
+                                    return '';
+                                });
+                            }
+                        }
 
                         return '';
                     });
@@ -159,48 +160,42 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
 
                 if (event.key === 'Backspace' && currentValue === '') {
                     if (!selectedId) {
-                        if (!internalTags) {
+                        if (!tags) {
                             return;
                         }
 
-                        const newSelectedId = internalTags[internalTags.length - 1]?.id;
+                        const newSelectedId = tags[tags.length - 1]?.id;
 
                         setSelectedId(newSelectedId);
 
                         return;
                     }
 
-                    setInternalTags((prevState) => {
-                        if (!prevState) {
-                            return prevState;
-                        }
+                    if (!tags) {
+                        return;
+                    }
 
-                        const removedId = prevState[prevState.length - 1]?.id;
+                    const removedId = tags[tags.length - 1]?.id;
 
-                        if (!removedId) {
-                            return prevState;
-                        }
+                    if (!removedId) {
+                        return;
+                    }
 
-                        const updatedTags = (prevState ?? []).filter((tag) => tag.id !== removedId);
+                    if (typeof onRemove === 'function') {
+                        onRemove(removedId);
+                    }
 
-                        if (typeof onRemove === 'function') {
-                            onRemove(removedId);
-                        }
-
-                        setSelectedId(undefined);
-
-                        return updatedTags;
-                    });
+                    setSelectedId(undefined);
                 }
             },
             [
                 currentValue,
-                internalTags,
                 onAdd,
                 onRemove,
                 selectedId,
                 shouldAllowMultiple,
                 shouldPreventEnter,
+                tags,
             ],
         );
 
@@ -221,15 +216,9 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
 
         const handleIconClick = useCallback(
             (id: string) => {
-                setInternalTags((prevState) => {
-                    const updatedTags = (prevState ?? []).filter((tag) => tag.id !== id);
-
-                    if (typeof onRemove === 'function') {
-                        onRemove(id);
-                    }
-
-                    return updatedTags;
-                });
+                if (typeof onRemove === 'function') {
+                    onRemove(id);
+                }
             },
             [onRemove],
         );
@@ -237,41 +226,45 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
         const content = useMemo(() => {
             const items: ReactElement[] = [];
 
-            if (!internalTags) {
+            if (!tags) {
                 return items;
             }
 
-            internalTags.forEach(({ text, id, rightElement }) => {
-                items.push(
-                    <Badge
-                        key={`tag-input-${id}`}
-                        backgroundColor={
-                            id === selectedId ? ((theme['206'] as string) ?? undefined) : undefined
-                        }
-                    >
-                        <StyledTagInputTagWrapper>
-                            <StyledTagInputTagWrapperText>{text}</StyledTagInputTagWrapperText>
-                            {rightElement}
-                            <Icon
-                                icons={['ts-wrong']}
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    event.stopPropagation();
+            (shouldAllowMultiple ? tags : tags.slice(0, 1)).forEach(
+                ({ text, id, rightElement }) => {
+                    items.push(
+                        <Badge
+                            key={`tag-input-${id}`}
+                            backgroundColor={
+                                id === selectedId
+                                    ? ((theme['206'] as string) ?? undefined)
+                                    : undefined
+                            }
+                        >
+                            <StyledTagInputTagWrapper>
+                                <StyledTagInputTagWrapperText>{text}</StyledTagInputTagWrapperText>
+                                {rightElement}
+                                <Icon
+                                    icons={['ts-wrong']}
+                                    onClick={(event) => {
+                                        event.preventDefault();
+                                        event.stopPropagation();
 
-                                    handleIconClick(id);
-                                }}
-                            />
-                        </StyledTagInputTagWrapper>
-                    </Badge>,
-                );
-            });
+                                        handleIconClick(id);
+                                    }}
+                                />
+                            </StyledTagInputTagWrapper>
+                        </Badge>,
+                    );
+                },
+            );
 
             return items;
-        }, [handleIconClick, internalTags, selectedId, theme]);
+        }, [tags, shouldAllowMultiple, selectedId, theme, handleIconClick]);
 
         const shouldShowInput = useMemo(
-            () => shouldAllowMultiple || (internalTags?.length ?? 0) < 1,
-            [internalTags?.length, shouldAllowMultiple],
+            () => shouldAllowMultiple || (tags?.length ?? 0) < 1,
+            [tags?.length, shouldAllowMultiple],
         );
 
         return useMemo(
