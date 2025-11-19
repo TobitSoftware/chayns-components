@@ -71,6 +71,7 @@ export {
     default as ListItem,
     type ListItemElements,
     type ListItemProps,
+    type ListItemRef,
 } from './components/list/list-item/ListItem';
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
 export type { MentionMember } from './components/mention-finder/MentionFinder';
