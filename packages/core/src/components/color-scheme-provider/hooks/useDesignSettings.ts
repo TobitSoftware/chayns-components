@@ -1,11 +1,10 @@
-import { ChaynsDesignSettings, useStyleSettings } from 'chayns-api';
-import { useEffect, useState } from 'react';
+import { ChaynsDesignSettings, ColorMode, useStyleSettings } from 'chayns-api';
+import { useEffect, useMemo, useState } from 'react';
 import { getDesignSettings } from '../../../api/theme/get';
-import { ThemeOptions } from './useChaynsTheme';
 
 interface UseDesignSettingsOptions {
-    color?: ThemeOptions['color'];
-    colorMode?: ThemeOptions['colorMode'];
+    color?: string;
+    colorMode?: ColorMode;
     designSettings?: ChaynsDesignSettings;
     siteId?: string;
 }
@@ -16,11 +15,17 @@ export const useDesignSettings = ({
     designSettings,
     siteId,
 }: UseDesignSettingsOptions) => {
-    const [value, setValue] = useState<ChaynsDesignSettings | undefined>(undefined);
-
     const styleSettings = useStyleSettings();
 
+    const [value, setValue] = useState<ChaynsDesignSettings | undefined>(
+        designSettings ?? styleSettings?.designSettings,
+    );
+
     const shouldLoad = !designSettings && !styleSettings?.designSettings;
+
+    useEffect(() => {
+        setValue(designSettings ?? styleSettings?.designSettings);
+    }, [designSettings, styleSettings?.designSettings]);
 
     useEffect(() => {
         if (shouldLoad) {
@@ -30,9 +35,8 @@ export const useDesignSettings = ({
         }
     }, [shouldLoad, siteId]);
 
-    return {
-        ...(designSettings ?? styleSettings?.designSettings ?? value),
-        color,
-        colorMode,
-    } as ChaynsDesignSettings | undefined;
+    return useMemo(
+        () => ({ ...value, color, colorMode }) as ChaynsDesignSettings | undefined,
+        [color, colorMode, value],
+    );
 };
