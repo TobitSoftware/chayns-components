@@ -117,7 +117,13 @@ export const useChaynsTheme = ({
     theme,
     customVariables,
 }: ThemeOptions) => {
-    const designSettings = useDesignSettings(siteId, designSettingsProp);
+    const designSettings = useDesignSettings({
+        color,
+        colorMode,
+        designSettings: designSettingsProp,
+        siteId,
+    });
+
     const paragraphFormat = useParagraphFormat(siteId, paragraphFormatProp);
     const isMountedRef = useRef<boolean>(false);
 
@@ -162,6 +168,7 @@ export const useChaynsTheme = ({
         secondaryColor,
         theme,
         customVariables,
+        iconColor,
     ]);
 
     return useMemo(
