@@ -2,13 +2,14 @@ import { AnimatePresence, motion } from 'motion/react';
 import React, {
     CSSProperties,
     FC,
+    forwardRef,
     MouseEventHandler,
     ReactNode,
-    SyntheticEvent,
     TouchEventHandler,
     useCallback,
     useContext,
     useEffect,
+    useImperativeHandle,
     useMemo,
     useRef,
     useState,
@@ -169,7 +170,6 @@ export type ListItemProps = {
      * Additional elements to be displayed in the header next to the title.
      */
     titleElement?: ReactNode;
-
     /**
      * Whether the ListItem Animation should be disabled.
      */
@@ -178,237 +178,255 @@ export type ListItemProps = {
      * Optional Element to display in the right corner of the image
      */
     cornerElement?: ReactNode;
-    /**
-     * Optional handler for image load errors.
-     */
-    onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
 };
 
-const ListItem: FC<ListItemProps> = ({
-    backgroundColor,
-    careOfLocationId,
-    children,
-    cornerImage,
-    hoverItem,
-    icons,
-    imageBackground,
-    images,
-    isDefaultOpen,
-    isOpen,
-    isTitleGreyed,
-    leftElements,
-    onClick,
-    onClose,
-    onLongPress,
-    onOpen,
-    rightElements,
-    shouldShowTooltipOnTitleOverflow = false,
-    shouldForceBackground = false,
-    shouldForceBottomLine = false,
-    shouldForceHover = false,
-    shouldHideBottomLine = false,
-    shouldOpenImageOnClick = false,
-    shouldHideImageOrIconBackground,
-    shouldHideIndicator = false,
-    shouldPreventLayoutAnimation = false,
-    shouldRenderClosed = false,
-    shouldShowRoundImageOrIcon,
-    shouldShowSeparatorBelow = false,
-    subtitle,
-    title,
-    titleElement,
-    shouldDisableAnimation = false,
-    cornerElement,
-    onImageError,
-}) => {
-    const {
-        incrementExpandableItemCount,
-        isAnyItemExpandable,
-        isWrapped,
-        openItemUuid,
-        updateOpenItemUuid,
-    } = useContext(ListContext);
+export interface ListItemRef {
+    titleWidth: number;
+}
 
-    const { isWrapped: isParentAccordionWrapped } = useContext(AccordionContext);
-
-    const areaProvider = useContext(AreaContext);
-
-    const isInitialRenderRef = useRef(true);
-
-    const listItemRef = useRef<HTMLDivElement>(null);
-
-    const uuid = useUuid();
-
-    const isExpandable = children !== undefined;
-    const isItemOpen = isOpen ?? openItemUuid === uuid;
-
-    const onCloseRef = useRef(onClose);
-    const onOpenRef = useRef(onOpen);
-
-    const [shouldEnableTooltip, setShouldEnableTooltip] = useState(false);
-
-    useEffect(() => {
-        onCloseRef.current = onClose;
-        onOpenRef.current = onOpen;
-    }, [isOpen, onClose, onOpen]);
-
-    useEffect(() => {
-        if (isInitialRenderRef.current) {
-            isInitialRenderRef.current = false;
-        } else if (isItemOpen) {
-            if (typeof onOpenRef.current === 'function') {
-                onOpenRef.current();
-            }
-        } else if (typeof onCloseRef.current === 'function') {
-            onCloseRef.current();
-        }
-    }, [isItemOpen]);
-
-    const handleHeadClick = useCallback<MouseEventHandler<HTMLDivElement>>(
-        (event) => {
-            if (isExpandable) {
-                updateOpenItemUuid(uuid);
-            }
-
-            if (typeof onClick === 'function') {
-                onClick(event);
-            }
-        },
-        [isExpandable, onClick, updateOpenItemUuid, uuid],
-    );
-
-    useEffect(() => {
-        if (isExpandable && !shouldHideIndicator) {
-            // The incrementExpandableItemCount function returns a cleanup
-            // function to decrement expandableItemCount if component unmounts
-            return incrementExpandableItemCount();
-        }
-
-        return undefined;
-    }, [incrementExpandableItemCount, isExpandable, shouldHideIndicator]);
-
-    useEffect(() => {
-        if (isDefaultOpen) {
-            updateOpenItemUuid(uuid, { shouldOnlyOpen: true });
-        }
-    }, [isDefaultOpen, updateOpenItemUuid, uuid]);
-
-    const isClickable = typeof onClick === 'function' || isExpandable;
-
-    const headContent = useMemo(
-        () => (
-            <ListItemHead
-                hoverItem={hoverItem}
-                careOfLocationId={careOfLocationId}
-                cornerElement={cornerElement}
-                cornerImage={cornerImage}
-                icons={icons}
-                imageBackground={imageBackground}
-                images={images}
-                isAnyItemExpandable={isAnyItemExpandable}
-                isExpandable={isExpandable}
-                isOpen={isItemOpen}
-                isTitleGreyed={isTitleGreyed}
-                leftElements={leftElements}
-                onClick={isClickable ? handleHeadClick : undefined}
-                onLongPress={onLongPress}
-                shouldForceHover={shouldForceHover}
-                rightElements={rightElements}
-                shouldHideImageOrIconBackground={shouldHideImageOrIconBackground}
-                shouldHideIndicator={shouldHideIndicator}
-                shouldOpenImageOnClick={shouldOpenImageOnClick}
-                shouldShowRoundImageOrIcon={shouldShowRoundImageOrIcon}
-                subtitle={subtitle}
-                title={title}
-                titleElement={titleElement}
-                setShouldEnableTooltip={setShouldEnableTooltip}
-                shouldDisableAnimation={shouldDisableAnimation}
-                onImageError={onImageError}
-            />
-        ),
-        [
-            hoverItem,
+const ListItem = forwardRef<ListItemRef, ListItemProps>(
+    (
+        {
+            backgroundColor,
             careOfLocationId,
-            cornerElement,
+            children,
             cornerImage,
+            hoverItem,
             icons,
             imageBackground,
             images,
-            isAnyItemExpandable,
-            isExpandable,
-            isItemOpen,
+            isDefaultOpen,
+            isOpen,
             isTitleGreyed,
             leftElements,
-            isClickable,
-            handleHeadClick,
+            onClick,
+            onClose,
             onLongPress,
-            shouldForceHover,
+            onOpen,
             rightElements,
+            shouldShowTooltipOnTitleOverflow = false,
+            shouldForceBackground = false,
+            shouldForceBottomLine = false,
+            shouldForceHover = false,
+            shouldHideBottomLine = false,
+            shouldOpenImageOnClick = false,
             shouldHideImageOrIconBackground,
-            shouldHideIndicator,
-            shouldOpenImageOnClick,
+            shouldHideIndicator = false,
+            shouldPreventLayoutAnimation = false,
+            shouldRenderClosed = false,
             shouldShowRoundImageOrIcon,
+            shouldShowSeparatorBelow = false,
             subtitle,
             title,
             titleElement,
-            shouldDisableAnimation,
-            onImageError,
-        ],
-    );
+            shouldDisableAnimation = false,
+            cornerElement,
+        },
+        ref,
+    ) => {
+        const {
+            incrementExpandableItemCount,
+            isAnyItemExpandable,
+            isWrapped,
+            openItemUuid,
+            updateOpenItemUuid,
+        } = useContext(ListContext);
 
-    return (
-        <StyledListItem
-            as={shouldDisableAnimation ? undefined : motion[LIST_ITEM_HTML_TAG]}
-            animate={shouldDisableAnimation ? undefined : { height: 'auto', opacity: 1 }}
-            className="beta-chayns-list-item"
-            exit={shouldDisableAnimation ? undefined : { height: 0, opacity: 0 }}
-            initial={shouldDisableAnimation ? undefined : { height: 0, opacity: 0 }}
-            key={`list-item-${uuid}`}
-            ref={listItemRef}
-            layout={shouldPreventLayoutAnimation || shouldDisableAnimation ? undefined : 'position'}
-            $backgroundColor={backgroundColor}
-            $isClickable={isClickable}
-            $isInAccordion={
-                typeof isParentAccordionWrapped === 'boolean' &&
-                !areaProvider.shouldDisableListItemPadding
-            }
-            $isOpen={isItemOpen}
-            $isWrapped={isWrapped}
-            $shouldChangeColor={areaProvider.shouldChangeColor}
-            $shouldForceBackground={shouldForceBackground}
-            $shouldForceBottomLine={shouldForceBottomLine}
-            $shouldHideBottomLine={shouldHideBottomLine}
-            $shouldHideIndicator={shouldHideIndicator}
-            $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
-        >
-            <Tooltip
-                shouldUseFullWidth
-                isDisabled={!shouldShowTooltipOnTitleOverflow || !shouldEnableTooltip}
-                item={
-                    <StyledListItemTooltip
-                        style={{ cursor: 'default' }}
-                        key={`list-item-tooltip-${uuid}`}
-                    >
-                        {title}
-                    </StyledListItemTooltip>
+        const { isWrapped: isParentAccordionWrapped } = useContext(AccordionContext);
+
+        const areaProvider = useContext(AreaContext);
+
+        const isInitialRenderRef = useRef(true);
+
+        const listItemRef = useRef<HTMLDivElement>(null);
+
+        const uuid = useUuid();
+
+        const isExpandable = children !== undefined;
+        const isItemOpen = isOpen ?? openItemUuid === uuid;
+
+        const onCloseRef = useRef(onClose);
+        const onOpenRef = useRef(onOpen);
+
+        const [shouldEnableTooltip, setShouldEnableTooltip] = useState(false);
+        const [titleWidth, setTitleWidth] = useState(0);
+
+        useEffect(() => {
+            onCloseRef.current = onClose;
+            onOpenRef.current = onOpen;
+        }, [isOpen, onClose, onOpen]);
+
+        useEffect(() => {
+            if (isInitialRenderRef.current) {
+                isInitialRenderRef.current = false;
+            } else if (isItemOpen) {
+                if (typeof onOpenRef.current === 'function') {
+                    onOpenRef.current();
                 }
+            } else if (typeof onCloseRef.current === 'function') {
+                onCloseRef.current();
+            }
+        }, [isItemOpen]);
+
+        const handleHeadClick = useCallback<MouseEventHandler<HTMLDivElement>>(
+            (event) => {
+                if (isExpandable) {
+                    updateOpenItemUuid(uuid);
+                }
+
+                if (typeof onClick === 'function') {
+                    onClick(event);
+                }
+            },
+            [isExpandable, onClick, updateOpenItemUuid, uuid],
+        );
+
+        useEffect(() => {
+            if (isExpandable && !shouldHideIndicator) {
+                // The incrementExpandableItemCount function returns a cleanup
+                // function to decrement expandableItemCount if component unmounts
+                return incrementExpandableItemCount();
+            }
+
+            return undefined;
+        }, [incrementExpandableItemCount, isExpandable, shouldHideIndicator]);
+
+        useEffect(() => {
+            if (isDefaultOpen) {
+                updateOpenItemUuid(uuid, { shouldOnlyOpen: true });
+            }
+        }, [isDefaultOpen, updateOpenItemUuid, uuid]);
+
+        const isClickable = typeof onClick === 'function' || isExpandable;
+
+        useImperativeHandle(
+            ref,
+            () => ({
+                titleWidth,
+            }),
+            [titleWidth],
+        );
+
+        const handleTitleWidthChange = (width: number) => {
+            setTitleWidth(width);
+        };
+
+        const headContent = useMemo(
+            () => (
+                <ListItemHead
+                    hoverItem={hoverItem}
+                    careOfLocationId={careOfLocationId}
+                    cornerElement={cornerElement}
+                    cornerImage={cornerImage}
+                    icons={icons}
+                    imageBackground={imageBackground}
+                    images={images}
+                    isAnyItemExpandable={isAnyItemExpandable}
+                    isExpandable={isExpandable}
+                    isOpen={isItemOpen}
+                    isTitleGreyed={isTitleGreyed}
+                    leftElements={leftElements}
+                    onClick={isClickable ? handleHeadClick : undefined}
+                    onLongPress={onLongPress}
+                    shouldForceHover={shouldForceHover}
+                    rightElements={rightElements}
+                    shouldHideImageOrIconBackground={shouldHideImageOrIconBackground}
+                    shouldHideIndicator={shouldHideIndicator}
+                    shouldOpenImageOnClick={shouldOpenImageOnClick}
+                    shouldShowRoundImageOrIcon={shouldShowRoundImageOrIcon}
+                    subtitle={subtitle}
+                    title={title}
+                    onTitleWidthChange={handleTitleWidthChange}
+                    titleElement={titleElement}
+                    setShouldEnableTooltip={setShouldEnableTooltip}
+                    shouldDisableAnimation={shouldDisableAnimation}
+                />
+            ),
+            [
+                hoverItem,
+                careOfLocationId,
+                cornerElement,
+                cornerImage,
+                icons,
+                imageBackground,
+                images,
+                isAnyItemExpandable,
+                isExpandable,
+                isItemOpen,
+                isTitleGreyed,
+                leftElements,
+                isClickable,
+                handleHeadClick,
+                onLongPress,
+                shouldForceHover,
+                rightElements,
+                shouldHideImageOrIconBackground,
+                shouldHideIndicator,
+                shouldOpenImageOnClick,
+                shouldShowRoundImageOrIcon,
+                subtitle,
+                title,
+                titleElement,
+                shouldDisableAnimation,
+            ],
+        );
+
+        return (
+            <StyledListItem
+                as={shouldDisableAnimation ? undefined : motion[LIST_ITEM_HTML_TAG]}
+                animate={shouldDisableAnimation ? undefined : { height: 'auto', opacity: 1 }}
+                className="beta-chayns-list-item"
+                exit={shouldDisableAnimation ? undefined : { height: 0, opacity: 0 }}
+                initial={shouldDisableAnimation ? undefined : { height: 0, opacity: 0 }}
+                key={`list-item-${uuid}`}
+                ref={listItemRef}
+                layout={
+                    shouldPreventLayoutAnimation || shouldDisableAnimation ? undefined : 'position'
+                }
+                $backgroundColor={backgroundColor}
+                $isClickable={isClickable}
+                $isInAccordion={
+                    typeof isParentAccordionWrapped === 'boolean' &&
+                    !areaProvider.shouldDisableListItemPadding
+                }
+                $isOpen={isItemOpen}
+                $isWrapped={isWrapped}
+                $shouldChangeColor={areaProvider.shouldChangeColor}
+                $shouldForceBackground={shouldForceBackground}
+                $shouldForceBottomLine={shouldForceBottomLine}
+                $shouldHideBottomLine={shouldHideBottomLine}
+                $shouldHideIndicator={shouldHideIndicator}
+                $shouldShowSeparatorBelow={shouldShowSeparatorBelow}
             >
-                {headContent}
-            </Tooltip>
-            <AnimatePresence initial={false}>
-                {isExpandable && (isItemOpen || shouldRenderClosed) && (
-                    <ListItemBody
-                        id={uuid}
-                        key={`listItemBody-${uuid}`}
-                        shouldHideBody={shouldRenderClosed && !isItemOpen}
-                    >
-                        <AreaContextProvider>{children}</AreaContextProvider>
-                    </ListItemBody>
-                )}
-            </AnimatePresence>
-        </StyledListItem>
-    );
-};
+                <Tooltip
+                    shouldUseFullWidth
+                    isDisabled={!shouldShowTooltipOnTitleOverflow || !shouldEnableTooltip}
+                    item={
+                        <StyledListItemTooltip
+                            style={{ cursor: 'default' }}
+                            key={`list-item-tooltip-${uuid}`}
+                        >
+                            {title}
+                        </StyledListItemTooltip>
+                    }
+                >
+                    {headContent}
+                </Tooltip>
+                <AnimatePresence initial={false}>
+                    {isExpandable && (isItemOpen || shouldRenderClosed) && (
+                        <ListItemBody
+                            id={uuid}
+                            key={`listItemBody-${uuid}`}
+                            shouldHideBody={shouldRenderClosed && !isItemOpen}
+                        >
+                            <AreaContextProvider>{children}</AreaContextProvider>
+                        </ListItemBody>
+                    )}
+                </AnimatePresence>
+            </StyledListItem>
+        );
+    },
+);
 
 ListItem.displayName = 'ListItem';
 

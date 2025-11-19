@@ -61,7 +61,7 @@ type ListItemHeadProps = {
     setShouldEnableTooltip: (value: boolean) => void;
     shouldDisableAnimation?: boolean;
     cornerElement?: ReactNode;
-    onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
+    onTitleWidthChange: (width: number) => void;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -90,7 +90,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     setShouldEnableTooltip,
     shouldDisableAnimation = false,
     cornerElement,
-    onImageError,
+    onTitleWidthChange,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
 
@@ -112,6 +112,8 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     const handleShowTooltipResize = useCallback(
         (entries: ResizeObserverEntry[]) => {
+            onTitleWidthChange(entries[0]?.target.clientWidth ?? 0);
+
             if (resizeSkipRef.current) {
                 return;
             }
@@ -120,7 +122,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             if (!el) return;
             setShouldEnableTooltip(el.scrollWidth > el.clientWidth);
         },
-        [setShouldEnableTooltip],
+        [onTitleWidthChange, setShouldEnableTooltip],
     );
 
     const handleMouseEnter = useCallback(() => setShouldShowHoverItem(true), []);
@@ -164,7 +166,6 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     shouldOpenImageOnClick={shouldOpenImageOnClick}
                     shouldHideBackground={!!shouldHideImageOrIconBackground}
                     shouldShowRoundImage={!!shouldShowRoundImageOrIcon}
-                    onImageError={onImageError}
                 />
             );
         }
@@ -177,7 +178,6 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         icons,
         imageBackground,
         images,
-        onImageError,
         shouldHideImageOrIconBackground,
         shouldOpenImageOnClick,
         shouldShowRoundImageOrIcon,
