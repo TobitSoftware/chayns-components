@@ -8,16 +8,16 @@ type StyledGroupedImageProps = WithTheme<{
 
 export const StyledGroupedImage = styled.div<StyledGroupedImageProps>`
     flex: 0 0 auto;
-    height: ${({ $height }) => $height};
+    height: ${({ $height }) => $height}px;
     position: relative;
-    width: ${({ $height }) => $height};
+    width: ${({ $height }) => $height}px;
 `;
 
 export enum ImageSize {
     Full = '100%',
-    Small = '75%',
+    Small = '100%',
     Grouped = '80%',
-    GroupedSmall = '65%',
+    GroupedSmall = '80%',
 }
 
 type StyledImageProps = WithTheme<{
@@ -26,25 +26,47 @@ type StyledImageProps = WithTheme<{
     $isSecondImage?: boolean;
     $shouldPreventBackground?: boolean;
     $shouldShowRoundImage?: boolean;
+    $hasCornerImage: boolean;
+    $hasMultipleImages: boolean;
+    $uuid: string;
 }>;
 
-export const StyledGroupImageElement = styled.img<StyledImageProps>`
+export const StyledGroupImageElement = styled.div<StyledImageProps>`
     aspect-ratio: 1;
     border-radius: ${({ $shouldShowRoundImage }) => ($shouldShowRoundImage ? '50%' : '0')};
     height: ${({ $imageSize }) => $imageSize};
-    object-fit: cover;
     position: absolute;
+    overflow: hidden;
 
-    ${({ $imageSize, $isSecondImage }) =>
+    ${({ $isSecondImage }) =>
         $isSecondImage
             ? css`
-                  bottom: ${$imageSize === ImageSize.GroupedSmall ? '15%' : 0};
-                  right: ${$imageSize === ImageSize.GroupedSmall ? '15%' : 0};
+                  bottom: 0;
+                  right: 0;
               `
             : css`
                   top: 0;
                   left: 0;
               `}
+
+    ${({ $isSecondImage, $hasMultipleImages, $hasCornerImage, $uuid }) => {
+        if (
+            ($isSecondImage && $hasCornerImage) ||
+            (!$isSecondImage && !$hasMultipleImages && $hasCornerImage)
+        ) {
+            return css`
+                clip-path: url(${`#care-of-mask--${$uuid}`});
+            `;
+        }
+
+        if (!$isSecondImage && $hasMultipleImages) {
+            return css`
+                clip-path: url(${`#second-image-mask--${$uuid}`});
+            `;
+        }
+
+        return '';
+    }}
 
     ${({ $background, $shouldPreventBackground, theme }) =>
         !$shouldPreventBackground &&
@@ -62,7 +84,7 @@ type StyledCornerImageProps = WithTheme<{
 export const StyledCornerImage = styled.img<StyledCornerImageProps>`
     aspect-ratio: 1;
     bottom: 0;
-    height: 50%;
+    height: 35%;
     position: absolute;
     right: 0;
 
