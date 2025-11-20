@@ -29,6 +29,7 @@ import SearchBoxItem from './search-box-item/SearchBoxItem';
 import { StyledSearchBoxItemImage } from './search-box-item/SearchBoxItem.styles';
 import {
     StyledSearchBox,
+    StyledSearchBoxHintText,
     StyledSearchBoxIcon,
     StyledSearchBoxLeftWrapper,
 } from './SearchBox.styles';
@@ -125,6 +126,10 @@ export type SearchBoxProps = {
      * Settings for the TagInput.
      */
     tagInputSettings?: TagInputSettings;
+    /**
+     * A text that should be displayed if no results are found.
+     */
+    hintText?: string;
 };
 
 const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
@@ -142,6 +147,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             onSelect,
             placeholder,
             presetValue,
+            hintText,
             selectedId,
             shouldAddInputToList = true,
             shouldHideFilterButtons = false,
@@ -327,10 +333,14 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         }, [shouldShowBody]);
 
         useEffect(() => {
-            if (matchingListsItems.length !== 0 && !isAnimatingRef.current && hasFocusRef.current) {
+            if (
+                (matchingListsItems.length !== 0 || hintText) &&
+                !isAnimatingRef.current &&
+                hasFocusRef.current
+            ) {
                 handleOpen();
             }
-        }, [handleOpen, matchingListsItems.length]);
+        }, [handleOpen, hintText, matchingListsItems.length]);
 
         /**
          * This function handles the focus event of the input and opens the dropdown if the input
@@ -372,17 +382,18 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
                 setMatchingListsItems(filteredMatchingListItems);
 
-                if (filteredMatchingListItems.length !== 0) {
+                if (filteredMatchingListItems.length !== 0 || hintText) {
                     handleOpen();
                 }
             }
         }, [
-            activeList,
-            handleOpen,
-            customFilter,
-            shouldAddInputToList,
             shouldShowContentOnEmptyInput,
+            activeList,
+            shouldAddInputToList,
+            hintText,
             value,
+            customFilter,
+            handleOpen,
         ]);
 
         /**
@@ -565,6 +576,14 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         );
 
         const content = useMemo(() => {
+            if (hintText && matchingListsItems.length === 0) {
+                return (
+                    <StyledSearchBoxHintText>
+                        {hintText.replace('##value##', value)}
+                    </StyledSearchBoxHintText>
+                );
+            }
+
             const items: ReactElement[] = [];
 
             matchingListsItems.forEach(({ groupName, list }, index) => {
@@ -607,9 +626,11 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
             return items;
         }, [
+            hintText,
             matchingListsItems,
             shouldAddInputToList,
             inputToListValue,
+            value,
             hasMultipleGroups,
             shouldShowRoundImage,
             handleSelect,
@@ -748,7 +769,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         const shouldShowDropdown =
             shouldShowBody &&
-            matchingListsItems.length !== 0 &&
+            (matchingListsItems.length !== 0 || !!hintText) &&
             (value.trim() !== '' || shouldShowContentOnEmptyInput);
 
         return useMemo(
