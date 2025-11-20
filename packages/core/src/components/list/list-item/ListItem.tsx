@@ -182,6 +182,7 @@ export type ListItemProps = {
 
 export interface ListItemRef {
     titleWidth: number;
+    titleMaxWidth: number;
 }
 
 const ListItem = forwardRef<ListItemRef, ListItemProps>(
@@ -250,6 +251,7 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
 
         const [shouldEnableTooltip, setShouldEnableTooltip] = useState(false);
         const [titleWidth, setTitleWidth] = useState(0);
+        const [titleMaxWidth, setTitleMaxWidth] = useState(0);
 
         useEffect(() => {
             onCloseRef.current = onClose;
@@ -303,12 +305,14 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             ref,
             () => ({
                 titleWidth,
+                titleMaxWidth,
             }),
-            [titleWidth],
+            [titleMaxWidth, titleWidth],
         );
 
-        const handleTitleWidthChange = (width: number) => {
+        const handleTitleWidthChange = (width: number, maxWidth: number) => {
             setTitleWidth(width);
+            setTitleMaxWidth(maxWidth);
         };
 
         const headContent = useMemo(

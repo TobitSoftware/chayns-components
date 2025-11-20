@@ -4,7 +4,6 @@ import React, {
     FC,
     MouseEventHandler,
     ReactNode,
-    SyntheticEvent,
     TouchEventHandler,
     useCallback,
     useEffect,
@@ -61,7 +60,7 @@ type ListItemHeadProps = {
     setShouldEnableTooltip: (value: boolean) => void;
     shouldDisableAnimation?: boolean;
     cornerElement?: ReactNode;
-    onTitleWidthChange: (width: number) => void;
+    onTitleWidthChange: (titleWidth: number, titleMaxWidth: number) => void;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -93,6 +92,8 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     onTitleWidthChange,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
+    const [titleMaxWidth, setTitleMaxWidth] = useState(0);
+    const [titleWidth, setTitleWidth] = useState(0);
 
     const longPressTimeoutRef = useRef<number>();
     const resizeSkipRef = useRef(true);
@@ -110,9 +111,13 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         }, 200);
     }, []);
 
+    useEffect(() => {
+        onTitleWidthChange(titleWidth, titleMaxWidth);
+    }, [onTitleWidthChange, titleMaxWidth, titleWidth]);
+
     const handleShowTooltipResize = useCallback(
         (entries: ResizeObserverEntry[]) => {
-            onTitleWidthChange(entries[0]?.target.clientWidth ?? 0);
+            setTitleWidth(entries[0]?.target.clientWidth ?? 0);
 
             if (resizeSkipRef.current) {
                 return;
@@ -122,7 +127,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             if (!el) return;
             setShouldEnableTooltip(el.scrollWidth > el.clientWidth);
         },
-        [onTitleWidthChange, setShouldEnableTooltip],
+        [setShouldEnableTooltip],
     );
 
     const handleMouseEnter = useCallback(() => setShouldShowHoverItem(true), []);
@@ -143,6 +148,10 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const handleTouchEnd = useCallback(() => {
         clearTimeout(longPressTimeoutRef.current);
     }, []);
+
+    const handleTitleWidthChange = (width: number) => {
+        setTitleMaxWidth(width);
+    };
 
     const iconOrImageElement = useMemo(() => {
         if (icons) {
@@ -243,6 +252,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                             isOpen={isOpen}
                             shouldShowMultilineTitle={shouldShowMultilineTitle}
                             rightElements={rightElements}
+                            onTitleWidthChange={handleTitleWidthChange}
                             onResize={handleShowTooltipResize}
                         />
                     </StyledListItemHeadTitle>
