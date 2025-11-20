@@ -7,6 +7,7 @@ import React, {
     useMemo,
     useState,
     type ReactNode,
+    useRef,
 } from 'react';
 import { RadioButtonRightElementMargin } from '../../types/radioButton';
 import { RadioButtonGroupContext } from './radio-button-group/RadioButtonGroup';
@@ -20,6 +21,7 @@ import {
     StyledRadioButtonPseudoCheckBox,
     StyledRadioButtonWrapper,
 } from './RadioButton.styles';
+import { getHeightOfSingleTextLine } from '../../utils/calculate';
 
 export type RadioButtonProps = {
     /**
@@ -46,6 +48,10 @@ export type RadioButtonProps = {
      * Whether the rightElement should only be displayed when the RadioButton is checked
      */
     shouldShowRightElementOnlyOnChecked?: boolean;
+    /**
+     * Whether the RadioButton should be displayed centered to the label or at the top
+     */
+    shouldShowCentered?: boolean;
 };
 
 const RadioButton: FC<RadioButtonProps> = ({
@@ -54,6 +60,7 @@ const RadioButton: FC<RadioButtonProps> = ({
     label,
     id,
     rightElement,
+    shouldShowCentered = true,
     isDisabled = false,
 }) => {
     const {
@@ -66,12 +73,28 @@ const RadioButton: FC<RadioButtonProps> = ({
 
     const [internalIsChecked, setInternalIsChecked] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const [radioButtonTop, setRadioButtonTop] = useState<number | undefined>(undefined);
+
+    const radioButtonBoxRef = useRef<HTMLDivElement>(null);
+    const radioButtonRootRef = useRef<HTMLDivElement>(null);
 
     const isInGroup = typeof updateSelectedRadioButtonId === 'function';
 
     const isMarked = isInGroup ? selectedRadioButtonId === id : internalIsChecked;
 
     const uncheckable = radioButtonsCanBeUnchecked;
+
+    useEffect(() => {
+        if (radioButtonRootRef.current && !shouldShowCentered) {
+            const singleLineHeight = getHeightOfSingleTextLine({
+                container: radioButtonRootRef.current,
+            });
+
+            const boxHeight = radioButtonBoxRef.current?.getBoundingClientRect().height ?? 0;
+
+            setRadioButtonTop((singleLineHeight - boxHeight) / 2);
+        }
+    }, [shouldShowCentered]);
 
     const handleClick = useCallback(() => {
         if (isDisabled) {
@@ -160,11 +183,16 @@ const RadioButton: FC<RadioButtonProps> = ({
                 $isDisabled={isDisabled}
                 $radioButtonRightElementMargin={radioButtonRightElementMargin}
             >
-                <StyledRadioButtonWrapper>
+                <StyledRadioButtonWrapper ref={radioButtonRootRef}>
                     <StyledRadioButtonPseudoCheckBox
                         $isDisabled={isDisabled}
                         $isChecked={isMarked}
+                        ref={radioButtonBoxRef}
                         onClick={handleClick}
+                        style={{
+                            top: shouldShowCentered ? '50%' : radioButtonTop,
+                            transform: shouldShowCentered ? 'translateY(-50%)' : undefined,
+                        }}
                     >
                         <StyledRadioButtonCheckBoxMark
                             onMouseEnter={handleMouseEnter}
@@ -223,7 +251,9 @@ const RadioButton: FC<RadioButtonProps> = ({
             isMarked,
             label,
             radioButtonRightElementMargin,
+            radioButtonTop,
             rightElement,
+            shouldShowCentered,
             shouldShowRightElement,
         ],
     );
