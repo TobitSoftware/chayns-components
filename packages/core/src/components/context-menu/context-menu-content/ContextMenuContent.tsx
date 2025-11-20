@@ -88,7 +88,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
             () =>
                 items.map(({ onClick, key, text, icons, shouldShowSpacer }, index) => {
                     const item = (
-                        <StyledContextMenuContentItem>
+                        <StyledContextMenuContentItem key={`context-menu-item-${key}`}>
                             <StyledContextMenuContentItemWrapper
                                 key={key}
                                 onClick={(event) => {
@@ -112,10 +112,10 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
 
                     if (shouldSeparateLastItem && index + 1 === items.length) {
                         return (
-                            <>
+                            <React.Fragment key={`context-menu-item-${key}`}>
                                 <StyledContextMenuContentItemBorder />
                                 {item}
-                            </>
+                            </React.Fragment>
                         );
                     }
 
