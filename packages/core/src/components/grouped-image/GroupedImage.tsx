@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, MouseEventHandler, ReactNode } from 'react';
+import React, { CSSProperties, FC, MouseEventHandler, ReactNode, SyntheticEvent } from 'react';
 import {
     StyledCornerElement,
     StyledCornerImage,
@@ -9,16 +9,44 @@ import CareOfClipPath from './clip-paths/CareOfClipPath';
 import { useUuid } from '../../hooks/uuid';
 import SecondImageClipPath from './clip-paths/SecondImageClipPath';
 
-type GroupedImageProps = {
+interface GroupedImageProps {
+    /**
+     * Optional image to display in the bottom right corner of the grouped image.
+     */
     cornerImage?: string;
+    /**
+     * Height of the grouped image container.
+     */
     height?: number;
+    /**
+     * Background for the single images.
+     */
     imageBackground?: CSSProperties['background'];
+    /**
+     * Array of image URLs to display in the grouped image. If only one image is provided, it will be displayed as a full image.
+     */
     images: string[];
+    /**
+     * Optional click handler for the grouped image.
+     */
     onClick?: MouseEventHandler<HTMLDivElement>;
+    /**
+     * Whether to prevent the background of the images from being set.
+     */
     shouldPreventBackground?: boolean;
+    /**
+     * Whether to show the images in a round shape.
+     */
     shouldShowRoundImage?: boolean;
+    /**
+     * Optional Element to display in the right corner of the image
+     */
     cornerElement?: ReactNode;
-};
+    /**
+     * Optional handler for image load errors.
+     */
+    onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
+}
 
 const GroupedImage: FC<GroupedImageProps> = ({
     cornerImage,
@@ -29,6 +57,7 @@ const GroupedImage: FC<GroupedImageProps> = ({
     shouldPreventBackground = false,
     shouldShowRoundImage = false,
     cornerElement,
+    onImageError,
 }) => {
     const hasCornerImage = Boolean(cornerImage);
     const hasCornerElement = Boolean(cornerElement);
@@ -54,7 +83,15 @@ const GroupedImage: FC<GroupedImageProps> = ({
                 xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="xMidYMid slice"
             >
-                <image href={src} width="40" height="40" />
+                <foreignObject width="40" height="40">
+                    <img
+                        alt={`image--${index}`}
+                        src={src}
+                        onError={(event) =>
+                            typeof onImageError === 'function' && onImageError(event, index)
+                        }
+                    />
+                </foreignObject>
             </svg>
         </StyledGroupImageElement>
     ));

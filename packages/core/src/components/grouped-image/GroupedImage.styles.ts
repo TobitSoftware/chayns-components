@@ -83,6 +83,12 @@ export const StyledGroupImageElement = styled.div<StyledImageProps>`
             background: ${$background || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
             box-shadow: 0 0 0 1px rgba(${theme['009-rgb']}, 0.08) inset;
         `}
+    
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 `;
 
 type StyledCornerImageProps = WithTheme<{

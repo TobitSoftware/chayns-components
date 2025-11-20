@@ -4,6 +4,7 @@ import React, {
     FC,
     MouseEventHandler,
     ReactNode,
+    SyntheticEvent,
     TouchEventHandler,
     useCallback,
     useEffect,
@@ -61,6 +62,7 @@ type ListItemHeadProps = {
     shouldDisableAnimation?: boolean;
     cornerElement?: ReactNode;
     onTitleWidthChange: (titleWidth: number, titleMaxWidth: number) => void;
+    onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -90,6 +92,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     shouldDisableAnimation = false,
     cornerElement,
     onTitleWidthChange,
+    onImageError,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
     const [titleMaxWidth, setTitleMaxWidth] = useState(0);
@@ -172,6 +175,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     careOfLocationId={careOfLocationId}
                     cornerImage={cornerImage}
                     images={images}
+                    onImageError={onImageError}
                     shouldOpenImageOnClick={shouldOpenImageOnClick}
                     shouldHideBackground={!!shouldHideImageOrIconBackground}
                     shouldShowRoundImage={!!shouldShowRoundImageOrIcon}
@@ -187,6 +191,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         icons,
         imageBackground,
         images,
+        onImageError,
         shouldHideImageOrIconBackground,
         shouldOpenImageOnClick,
         shouldShowRoundImageOrIcon,

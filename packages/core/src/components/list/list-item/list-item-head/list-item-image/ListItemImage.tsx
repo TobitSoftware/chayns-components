@@ -17,6 +17,7 @@ type ListItemImageProps = {
     shouldShowRoundImage: boolean;
     shouldOpenImageOnClick: boolean;
     cornerElement?: ReactNode;
+    onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
 };
 
 const ListItemImage: React.FC<ListItemImageProps> = ({
@@ -28,6 +29,7 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
     shouldShowRoundImage,
     shouldOpenImageOnClick,
     cornerElement,
+    onImageError,
 }) => {
     const handleImageClick = useCallback<MouseEventHandler<HTMLDivElement>>(
         (event) => {
@@ -61,6 +63,7 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
                 cornerImage={cornerImage ?? careOfImage}
                 imageBackground={imageBackground}
                 images={images}
+                onImageError={onImageError}
                 onClick={handleImageClick}
                 shouldPreventBackground={shouldHideBackground}
                 shouldShowRoundImage={shouldShowRoundImage}

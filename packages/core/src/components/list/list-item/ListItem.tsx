@@ -5,6 +5,7 @@ import React, {
     forwardRef,
     MouseEventHandler,
     ReactNode,
+    SyntheticEvent,
     TouchEventHandler,
     useCallback,
     useContext,
@@ -178,6 +179,10 @@ export type ListItemProps = {
      * Optional Element to display in the right corner of the image
      */
     cornerElement?: ReactNode;
+    /**
+     * Optional handler for image load errors.
+     */
+    onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
 };
 
 export interface ListItemRef {
@@ -219,6 +224,7 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             shouldShowSeparatorBelow = false,
             subtitle,
             title,
+            onImageError,
             titleElement,
             shouldDisableAnimation = false,
             cornerElement,
@@ -344,9 +350,11 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
                     titleElement={titleElement}
                     setShouldEnableTooltip={setShouldEnableTooltip}
                     shouldDisableAnimation={shouldDisableAnimation}
+                    onImageError={onImageError}
                 />
             ),
             [
+                onImageError,
                 hoverItem,
                 careOfLocationId,
                 cornerElement,
