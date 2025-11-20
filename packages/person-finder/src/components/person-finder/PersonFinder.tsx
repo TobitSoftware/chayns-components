@@ -4,6 +4,7 @@ import {
     PersonFinderEntry,
     PersonFinderFilterTypes,
     Priority,
+    UACFilter,
 } from '../../types/personFinder';
 import PersonFinderProvider from '../PersonFinderProvider';
 import PersonFinderWrapper, {
@@ -11,6 +12,7 @@ import PersonFinderWrapper, {
     PersonFinderRef,
 } from './person-finder-wrapper/PersonFinderWrapper';
 import { AreaProvider } from '@chayns-components/core';
+import { FilterType } from '@chayns-components/core/lib/types/types/filter';
 
 const DEFAULT_FILTER_TYPES = [PersonFinderFilterTypes.PERSON, PersonFinderFilterTypes.SITE];
 
@@ -27,6 +29,10 @@ export type PersonFinderProps = PersonFinderWrapperProps & {
      * Whether the own user should be shown in the results. By default, it is not shown.
      */
     shouldShowOwnUser?: boolean;
+    /**
+     * Optional filter to search member of uac group.
+     */
+    uacFilter?: UACFilter[];
 };
 
 const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
@@ -36,7 +42,8 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             dropdownDirection,
             defaultEntries,
             excludedEntryIds,
-            filterTypes = DEFAULT_FILTER_TYPES,
+            uacFilter,
+            filterTypes = uacFilter ? [PersonFinderFilterTypes.PERSON] : DEFAULT_FILTER_TYPES,
             friendsPriority = Priority.HIGH,
             leftElement,
             maxEntries,
@@ -65,6 +72,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                 filterTypes={filterTypes}
                 excludedEntryIds={excludedEntryIds}
                 shouldShowOwnUser={shouldShowOwnUser}
+                uacFilter={uacFilter}
             >
                 <AreaProvider shouldChangeColor={false} shouldDisableListItemPadding>
                     <div className="beta-chayns-person-finder" ref={personFinderRef}>

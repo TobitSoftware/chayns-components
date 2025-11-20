@@ -15,6 +15,12 @@ export const General = Template.bind({});
 
 export const UACGroups = Template.bind({});
 
+export const WithUACFilter = Template.bind({});
+
 UACGroups.args = {
     filterTypes: [PersonFinderFilterTypes.UAC],
+};
+
+WithUACFilter.args = {
+    uacFilter: [{ groupId: -1 }],
 };

@@ -20,6 +20,11 @@ export type PersonFinderDataMap = {
     [K in PersonFinderFilterTypes]?: PersonFinderData;
 };
 
+export interface UACFilter {
+    groupId: number;
+    siteId?: string;
+}
+
 export enum LoadingState {
     None = 'none',
     Pending = 'pending',

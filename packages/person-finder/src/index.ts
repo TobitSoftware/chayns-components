@@ -7,4 +7,6 @@ export {
     type DefaultEntry,
     type SiteEntry,
     type PersonFinderEntry,
+    type UACFilter,
+    type UACEntry,
 } from './types/personFinder';
