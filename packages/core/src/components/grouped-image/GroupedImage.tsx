@@ -1,6 +1,5 @@
-import React, { CSSProperties, FC, MouseEventHandler, ReactNode, useMemo } from 'react';
+import React, { CSSProperties, FC, MouseEventHandler, ReactNode } from 'react';
 import {
-    ImageSize,
     StyledCornerElement,
     StyledCornerImage,
     StyledGroupedImage,
@@ -36,18 +35,9 @@ const GroupedImage: FC<GroupedImageProps> = ({
     const hasMultipleImages = images.length > 1;
     const uuid = useUuid();
 
-    const imageSize = useMemo(() => {
-        if (hasCornerImage) {
-            return hasMultipleImages ? ImageSize.GroupedSmall : ImageSize.Small;
-        }
-
-        return hasMultipleImages ? ImageSize.Grouped : ImageSize.Full;
-    }, [hasCornerImage, hasMultipleImages]);
-
     const imageElements = images.slice(0, 2).map((src, index) => (
         <StyledGroupImageElement
             $background={imageBackground}
-            $imageSize={imageSize}
             $isSecondImage={index === 1}
             $hasCornerImage={hasCornerImage}
             $hasMultipleImages={hasMultipleImages}
@@ -73,14 +63,14 @@ const GroupedImage: FC<GroupedImageProps> = ({
         <StyledGroupedImage onClick={onClick} $height={height}>
             {hasCornerImage && (
                 <CareOfClipPath
-                    imageHeight={!hasMultipleImages ? height : height * 0.8}
-                    containerHeight={height}
+                    height={height}
                     uuid={uuid}
+                    imageFactors={hasMultipleImages ? [0.76, 0.8] : [1]}
                 />
             )}
             {hasMultipleImages && (
                 <SecondImageClipPath
-                    containerHeight={height}
+                    height={height}
                     uuid={uuid}
                     shouldShowRoundImage={shouldShowRoundImage}
                 />
@@ -92,6 +82,7 @@ const GroupedImage: FC<GroupedImageProps> = ({
                 <StyledCornerImage
                     $background={imageBackground}
                     $shouldPreventBackground={shouldPreventBackground}
+                    $hasMultipleImages={hasMultipleImages}
                     src={cornerImage}
                     key="corner-image"
                 />

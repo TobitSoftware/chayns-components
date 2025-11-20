@@ -2,18 +2,15 @@ import React, { useMemo } from 'react';
 import { createCareOfClipPath } from '../../../utils/groupedImage';
 
 const CareOfClipPath = ({
-    imageHeight,
-    containerHeight,
+    imageFactors,
+    height,
     uuid,
 }: {
-    imageHeight: number;
-    containerHeight: number;
+    imageFactors: number[];
+    height: number;
     uuid: string;
 }) => {
-    const d = useMemo(
-        () => createCareOfClipPath({ imageHeight, containerHeight }),
-        [containerHeight, imageHeight],
-    );
+    const d = useMemo(() => createCareOfClipPath({ height, imageFactors }), [height, imageFactors]);
 
     return (
         <svg width="0" height="0" style={{ position: 'absolute' }}>

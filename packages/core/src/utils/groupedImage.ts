@@ -1,26 +1,24 @@
 const GAP = 3;
 
 interface CreateCareOfClipPathOptions {
-    imageHeight: number;
-    containerHeight: number;
+    imageFactors: number[];
+    height: number;
 }
 
-export const createCareOfClipPath = ({
-    imageHeight,
-    containerHeight,
-}: CreateCareOfClipPathOptions) => {
-    const iconSize = containerHeight * 0.35;
+export const createCareOfClipPath = ({ imageFactors, height }: CreateCareOfClipPathOptions) => {
+    const hasMultipleImages = imageFactors.length > 1;
     const radius = 3;
 
-    const cutStart =
-        containerHeight -
-        (imageHeight === containerHeight ? 0 : containerHeight - imageHeight) -
-        iconSize -
-        GAP;
-    const normalizedCut = cutStart / imageHeight;
-    const normalizedRadius = radius / containerHeight;
+    const careOfSize = height * (hasMultipleImages ? 0.28 : 0.38);
 
-    const endY = imageHeight === containerHeight ? 0.65 : 0.55;
+    const imageHeight = height * (hasMultipleImages && imageFactors[1] ? imageFactors[1] : 1);
+
+    const cutStart = height - (hasMultipleImages ? height - imageHeight : 0) - careOfSize - GAP;
+
+    const normalizedCut = cutStart / imageHeight;
+    const normalizedRadius = radius / height;
+
+    const endY = 0.63;
 
     return `
         M0,0
@@ -35,20 +33,20 @@ export const createCareOfClipPath = ({
 };
 
 interface CreateSecondImageClipPathOptions {
-    containerHeight: number;
+    height: number;
     shouldShowRoundImage: boolean;
 }
 
 export const createSecondImageClipPath = ({
-    containerHeight,
+    height,
     shouldShowRoundImage,
 }: CreateSecondImageClipPathOptions) => {
-    const imageHeight = containerHeight * 0.8;
-    const imageScale = imageHeight / containerHeight;
+    const imageHeight = height * 0.8;
+    const imageScale = imageHeight / height;
 
     const startContainer = 0.2;
 
-    const gapNormContainer = GAP / containerHeight;
+    const gapNormContainer = GAP / height;
 
     const totalStartContainer = startContainer - (shouldShowRoundImage ? 0 : gapNormContainer);
 
