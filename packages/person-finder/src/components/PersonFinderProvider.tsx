@@ -418,15 +418,6 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         if (uacFilter) {
             void getUsersByGroups(uacFilter).then((users) => {
                 setUacUsers(users);
-
-                setData({
-                    person: {
-                        entries: users,
-                        searchString: '',
-                        skip: users.length,
-                        count: users.length,
-                    },
-                });
             });
 
             return;
