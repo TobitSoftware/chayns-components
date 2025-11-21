@@ -27,7 +27,7 @@ interface PageProviderProps extends ColorSchemeProviderProps {
      * @default false
      * @optional
      */
-    shouldReduceUsableHeightByCoverHeight: boolean;
+    shouldReduceUsableHeightByCoverHeight?: boolean;
     /**
      * Controls whether padding should be removed from the page
      * @description
