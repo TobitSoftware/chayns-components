@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 import React, {
     CSSProperties,
-    FC,
     forwardRef,
     MouseEventHandler,
     ReactNode,
@@ -27,6 +26,11 @@ import Tooltip from '../../tooltip/Tooltip';
 import { LIST_ITEM_HTML_TAG } from '../../../constants/list';
 
 export type ListItemElements = [ReactNode, ...ReactNode[]];
+
+export interface ListItemSize {
+    titleWidth: number;
+    titleMaxWidth: number;
+}
 
 export type ListItemProps = {
     /**
@@ -183,12 +187,13 @@ export type ListItemProps = {
      * Optional handler for image load errors.
      */
     onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
+    /**
+     * Function to be executed if the size are changed.
+     */
+    onSizeChange?: (sizes: ListItemSize) => void;
 };
 
-export interface ListItemRef {
-    titleWidth: number;
-    titleMaxWidth: number;
-}
+export type ListItemRef = ListItemSize;
 
 const ListItem = forwardRef<ListItemRef, ListItemProps>(
     (
@@ -225,6 +230,7 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             subtitle,
             title,
             onImageError,
+            onSizeChange,
             titleElement,
             shouldDisableAnimation = false,
             cornerElement,
@@ -306,6 +312,15 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
         }, [isDefaultOpen, updateOpenItemUuid, uuid]);
 
         const isClickable = typeof onClick === 'function' || isExpandable;
+
+        useEffect(() => {
+            if (typeof onSizeChange === 'function') {
+                onSizeChange({
+                    titleWidth,
+                    titleMaxWidth,
+                });
+            }
+        }, [onSizeChange, titleMaxWidth, titleWidth]);
 
         useImperativeHandle(
             ref,
