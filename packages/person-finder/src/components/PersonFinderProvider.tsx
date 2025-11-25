@@ -359,6 +359,10 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             if (
                 entry.firstName.toLowerCase().includes(search.toLowerCase()) ||
                 entry.lastName.toLowerCase().includes(search.toLowerCase()) ||
+                `${entry.firstName} ${entry.lastName}`
+                    .toLowerCase()
+                    .trim()
+                    .includes(search.toLowerCase().trim()) ||
                 entry.id.toLowerCase().includes(search.toLowerCase())
             ) {
                 searchedUsers.push(entry);
