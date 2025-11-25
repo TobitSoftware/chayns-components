@@ -459,7 +459,10 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
     const providerValue = useMemo<IPersonFinderContext>(
         () => ({
-            data: filterDataByKeys(data, activeFilter, { excludedEntryIds, shouldShowOwnUser }),
+            data: filterDataByKeys(data, activeFilter, {
+                excludedEntryIds,
+                shouldShowOwnUser: uacFilter ? false : shouldShowOwnUser,
+            }),
             updateData,
             activeFilter,
             updateActiveFilter,
@@ -486,6 +489,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             search,
             shouldShowOwnUser,
             tags,
+            uacFilter,
             updateActiveFilter,
             updateData,
             updateLoadingState,
