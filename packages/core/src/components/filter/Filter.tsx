@@ -34,11 +34,11 @@ export type FilterProps = {
     searchConfig?: SearchConfig;
     filterButtonConfig?: FilterButtonConfig;
     sortConfig?: SortConfig;
+    onActiveChange: (isActive: boolean) => void;
 };
 
-//
 const Filter = forwardRef<FilterRef, FilterProps>(
-    ({ headline, searchConfig, sortConfig, filterButtonConfig }, ref) => {
+    ({ headline, searchConfig, sortConfig, filterButtonConfig, onActiveChange }, ref) => {
         const [isOpen, setIsOpen] = useState(false);
         const [isSearchActive, setIsSearchActive] = useState(false);
         const [backgroundDistance, setBackgroundDistance] = useState(0);
@@ -76,6 +76,12 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                     return ['fa fa-search'];
             }
         }, [type]);
+
+        useEffect(() => {
+            if (typeof onActiveChange === 'function') {
+                onActiveChange(isOpen);
+            }
+        }, [isOpen, onActiveChange]);
 
         const handleHide = useCallback(() => {
             setIsOpen(false);
