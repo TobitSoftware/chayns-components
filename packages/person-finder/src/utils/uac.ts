@@ -21,10 +21,10 @@ export const getUACGroups = async (): Promise<UACEntry[]> => {
 
 export const getUsersByGroups = async (uacFilter: UACFilter[]): Promise<PersonEntry[]> => {
     const groupResults = await Promise.all(
-        uacFilter.map(async ({ groupId, siteId }) => {
+        uacFilter.map(async ({ groupId }) => {
             const users = await client.getGroupMembers({
                 groupId,
-                siteId: siteId ?? getSite().id,
+                siteId: getSite().id,
             });
 
             return users.map(({ personId, firstname, lastname }) => ({

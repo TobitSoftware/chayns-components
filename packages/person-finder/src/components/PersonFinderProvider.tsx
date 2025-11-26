@@ -91,6 +91,7 @@ type PersonFinderProviderProps = {
     excludedEntryIds?: PersonFinderEntry['id'][];
     shouldShowOwnUser?: boolean;
     uacFilter?: UACFilter[];
+    entries?: PersonEntry[];
 };
 
 const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
@@ -101,6 +102,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     excludedEntryIds,
     shouldShowOwnUser = false,
     uacFilter,
+    entries,
 }) => {
     const [data, setData] = useState<IPersonFinderContext['data']>();
     const [friends, setFriends] = useState<PersonEntry[]>();
@@ -323,9 +325,9 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
                 if (tmpData && tmpData[key]) {
                     // Add all Types that are not searched by a request
-                    const entries = tmpData[key].entries as UACEntry[];
+                    const uacEntries = tmpData[key].entries as UACEntry[];
 
-                    const filteredEntries = entries.filter(({ name }) =>
+                    const filteredEntries = uacEntries.filter(({ name }) =>
                         name.toLowerCase().includes(search.toLowerCase()),
                     );
 
@@ -355,7 +357,9 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
         const searchedUsers: PersonEntry[] = [];
 
-        uacUsers?.forEach((entry) => {
+        const entriesToSearch = entries ?? uacUsers;
+
+        entriesToSearch?.forEach((entry) => {
             if (
                 entry.firstName.toLowerCase().includes(search.toLowerCase()) ||
                 entry.lastName.toLowerCase().includes(search.toLowerCase()) ||
@@ -380,14 +384,14 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             PersonFinderFilterTypes.PERSON,
             searchedUsers.length === 0 ? LoadingState.Error : LoadingState.Success,
         );
-    }, [search, uacUsers, updateData, updateLoadingState]);
+    }, [entries, search, uacUsers, updateData, updateLoadingState]);
 
     useEffect(() => {
         if (!search) return;
 
         const active = activeFilter ?? filterTypes;
 
-        if (uacFilter) {
+        if (uacFilter || entries) {
             searchLocal();
         } else if (active?.includes(PersonFinderFilterTypes.UAC)) {
             searchData({ filter: [PersonFinderFilterTypes.UAC] });
@@ -408,6 +412,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         searchData,
         uacFilter,
         searchLocal,
+        entries,
     ]);
 
     useEffect(
@@ -419,6 +424,10 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
     // load initial data
     useEffect(() => {
+        if (entries) {
+            return;
+        }
+
         if (uacFilter) {
             void getUsersByGroups(uacFilter).then((users) => {
                 setUacUsers(users);
@@ -455,7 +464,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 },
             });
         }
-    }, [filterTypes, friends, friendsPriority, search, uacFilter]);
+    }, [entries, filterTypes, friends, friendsPriority, search, uacFilter]);
 
     const providerValue = useMemo<IPersonFinderContext>(
         () => ({

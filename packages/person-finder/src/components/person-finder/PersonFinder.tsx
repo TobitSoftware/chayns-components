@@ -1,6 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import {
     DefaultEntry,
+    PersonEntry,
     PersonFinderEntry,
     PersonFinderFilterTypes,
     Priority,
@@ -12,7 +13,6 @@ import PersonFinderWrapper, {
     PersonFinderRef,
 } from './person-finder-wrapper/PersonFinderWrapper';
 import { AreaProvider } from '@chayns-components/core';
-import { FilterType } from '@chayns-components/core/lib/types/types/filter';
 
 const DEFAULT_FILTER_TYPES = [PersonFinderFilterTypes.PERSON, PersonFinderFilterTypes.SITE];
 
@@ -30,9 +30,13 @@ export type PersonFinderProps = PersonFinderWrapperProps & {
      */
     shouldShowOwnUser?: boolean;
     /**
-     * Optional filter to search member of uac group.
+     * Optional filter to search member of uac group. Only works with groups of the current Site and if the user is manager.
      */
     uacFilter?: UACFilter[];
+    /**
+     * A list of entries that should be searched.
+     */
+    entries?: PersonEntry[];
 };
 
 const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
@@ -43,7 +47,10 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             defaultEntries,
             excludedEntryIds,
             uacFilter,
-            filterTypes = uacFilter ? [PersonFinderFilterTypes.PERSON] : DEFAULT_FILTER_TYPES,
+            entries,
+            filterTypes = uacFilter || entries
+                ? [PersonFinderFilterTypes.PERSON]
+                : DEFAULT_FILTER_TYPES,
             friendsPriority = Priority.HIGH,
             leftElement,
             maxEntries,
@@ -73,6 +80,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                 excludedEntryIds={excludedEntryIds}
                 shouldShowOwnUser={shouldShowOwnUser}
                 uacFilter={uacFilter}
+                entries={entries}
             >
                 <AreaProvider shouldChangeColor={false} shouldDisableListItemPadding>
                     <div className="beta-chayns-person-finder" ref={personFinderRef}>

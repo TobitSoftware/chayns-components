@@ -22,7 +22,6 @@ export type PersonFinderDataMap = {
 
 export interface UACFilter {
     groupId: number;
-    siteId?: string;
 }
 
 export enum LoadingState {
