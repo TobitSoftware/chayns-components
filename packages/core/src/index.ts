@@ -28,7 +28,14 @@ export { DropdownDirection, type DropdownCoordinates } from './types/dropdown';
 export { useIsMeasuredClone } from './hooks/element';
 export { useCombinedRefs } from './hooks/ref';
 export { default as Filter } from './components/filter/Filter';
-export { type SortItem } from './types/filter';
+export {
+    type SortItem,
+    type SearchConfig,
+    type SortConfig,
+    type CheckboxConfig,
+    type FilterButtonConfig,
+    type FilterRef,
+} from './types/filter';
 export { default as AnimatedNumber } from './components/animated-number/AnimatedNumber';
 export {
     default as FileList,

@@ -23,6 +23,7 @@ import ExpandableContent from '../expandable-content/ExpandableContent';
 import Icon from '../icon/Icon';
 import FilterContent from './filter-content/FIlterContent';
 import {
+    CheckboxConfig,
     FilterButtonConfig,
     FilterRef,
     FilterType,
@@ -31,17 +32,22 @@ import {
 } from '../../types/filter';
 import SearchInput from '../search-input/SearchInput';
 import ContextMenu, { ContextMenuItem, ContextMenuRef } from '../context-menu/ContextMenu';
+import Checkbox from '../checkbox/Checkbox';
 
 export type FilterProps = {
     headline: ReactNode;
     searchConfig?: SearchConfig;
     filterButtonConfig?: FilterButtonConfig;
     sortConfig?: SortConfig;
+    checkboxConfig?: CheckboxConfig;
     onActiveChange?: (isActive: boolean) => void;
 };
 
 const Filter = forwardRef<FilterRef, FilterProps>(
-    ({ headline, searchConfig, sortConfig, filterButtonConfig, onActiveChange }, ref) => {
+    (
+        { headline, searchConfig, sortConfig, filterButtonConfig, checkboxConfig, onActiveChange },
+        ref,
+    ) => {
         const [isOpen, setIsOpen] = useState(false);
         const [isSearchActive, setIsSearchActive] = useState(false);
         const [backgroundDistance, setBackgroundDistance] = useState(0);
@@ -54,20 +60,24 @@ const Filter = forwardRef<FilterRef, FilterProps>(
         const contextMenuRef = useRef<ContextMenuRef>(null);
 
         const type = useMemo(() => {
-            if (filterButtonConfig && !searchConfig && !sortConfig) {
+            if (filterButtonConfig && !searchConfig && !sortConfig && !checkboxConfig) {
                 return FilterType.ONLY_FILTER;
             }
 
-            if (!filterButtonConfig && !searchConfig && sortConfig) {
+            if (!filterButtonConfig && !searchConfig && sortConfig && !checkboxConfig) {
                 return FilterType.ONLY_SORT;
             }
 
-            if (!filterButtonConfig && searchConfig && !sortConfig) {
+            if (!filterButtonConfig && searchConfig && !sortConfig && !checkboxConfig) {
                 return FilterType.ONLY_SEARCH;
             }
 
+            if (!filterButtonConfig && !searchConfig && !sortConfig && checkboxConfig) {
+                return FilterType.ONLY_CHECKBOX;
+            }
+
             return FilterType.MULTIPLE;
-        }, [filterButtonConfig, searchConfig, sortConfig]);
+        }, [checkboxConfig, filterButtonConfig, searchConfig, sortConfig]);
 
         const icons = useMemo(() => {
             switch (type) {
@@ -221,6 +231,10 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                                 {iconElement}
                             </ContextMenu>
                         )}
+                        {type === FilterType.ONLY_CHECKBOX && checkboxConfig && (
+                            // eslint-disable-next-line react/jsx-props-no-spreading
+                            <Checkbox {...checkboxConfig} />
+                        )}
                     </StyledFilterHead>
                     {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
                         <StyledFilterContentWrapper ref={contentRef}>
@@ -232,6 +246,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                                     searchConfig={searchConfig}
                                     filterButtonConfig={filterButtonConfig}
                                     sortConfig={sortConfig}
+                                    checkboxConfig={checkboxConfig}
                                 />
                             </ExpandableContent>
                         </StyledFilterContentWrapper>

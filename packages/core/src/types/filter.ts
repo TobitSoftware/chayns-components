@@ -1,4 +1,5 @@
 import { FilterButtonsProps } from '../components/filter-buttons/FilterButtons';
+import { CheckboxProps } from '../components/checkbox/Checkbox';
 
 export interface SearchConfig {
     onSearchChange: (search: string) => void;
@@ -16,6 +17,8 @@ export interface SortConfig {
     items: SortItem[];
 }
 
+export type CheckboxConfig = CheckboxProps;
+
 export type FilterButtonConfig = FilterButtonsProps;
 
 export type FilterRef = {
@@ -27,5 +30,6 @@ export enum FilterType {
     ONLY_SEARCH,
     ONLY_FILTER,
     ONLY_SORT,
+    ONLY_CHECKBOX,
     MULTIPLE,
 }

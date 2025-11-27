@@ -8,19 +8,27 @@ import {
 import Input from '../../input/Input';
 import Icon from '../../icon/Icon';
 import FilterButtons from '../../filter-buttons/FilterButtons';
-import { FilterButtonConfig, SearchConfig, SortConfig } from '../../../types/filter';
+import {
+    CheckboxConfig,
+    FilterButtonConfig,
+    SearchConfig,
+    SortConfig,
+} from '../../../types/filter';
 import ComboBox, { IComboBoxItem } from '../../combobox/ComboBox';
+import Checkbox from '../../checkbox/Checkbox';
 
 export type FilterContentProps = {
     searchConfig?: SearchConfig;
     filterButtonConfig?: FilterButtonConfig;
     sortConfig?: SortConfig;
+    checkboxConfig?: CheckboxConfig;
 };
 
 const FilterContent: FC<FilterContentProps> = ({
     searchConfig,
     sortConfig,
     filterButtonConfig,
+    checkboxConfig,
 }) => {
     const sortTextRef = useRef<HTMLDivElement>(null);
 
@@ -84,9 +92,20 @@ const FilterContent: FC<FilterContentProps> = ({
                         </StyledFilterComboboxWrapper>
                     </StyledFilterSort>
                 )}
+                {checkboxConfig && (
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    <Checkbox {...checkboxConfig} />
+                )}
             </StyledFilterContent>
         ),
-        [filterButtonConfig, handleSelectSortItem, searchConfig, sortConfig, sortTextWidth],
+        [
+            checkboxConfig,
+            filterButtonConfig,
+            handleSelectSortItem,
+            searchConfig,
+            sortConfig,
+            sortTextWidth,
+        ],
     );
 };
 
