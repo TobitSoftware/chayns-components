@@ -1,5 +1,7 @@
 import React, {
     forwardRef,
+    isValidElement,
+    ReactNode,
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -12,6 +14,7 @@ import {
     StyledFilterContentWrapper,
     StyledFilterHead,
     StyledFilterHeadline,
+    StyledFilterHeadlineElement,
     StyledFilterIcon,
     StyledFilterSearch,
     StyledMotionFilterBackground,
@@ -30,11 +33,11 @@ import SearchInput from '../search-input/SearchInput';
 import ContextMenu, { ContextMenuItem, ContextMenuRef } from '../context-menu/ContextMenu';
 
 export type FilterProps = {
-    headline: string;
+    headline: ReactNode;
     searchConfig?: SearchConfig;
     filterButtonConfig?: FilterButtonConfig;
     sortConfig?: SortConfig;
-    onActiveChange: (isActive: boolean) => void;
+    onActiveChange?: (isActive: boolean) => void;
 };
 
 const Filter = forwardRef<FilterRef, FilterProps>(
@@ -185,9 +188,15 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             () => (
                 <StyledFilter ref={filterRef}>
                     <StyledFilterHead>
-                        <StyledFilterHeadline isSearchActive={isSearchActive}>
-                            {headline}
-                        </StyledFilterHeadline>
+                        {!isValidElement(headline) ? (
+                            <StyledFilterHeadline $isSearchActive={isSearchActive}>
+                                {headline}
+                            </StyledFilterHeadline>
+                        ) : (
+                            <StyledFilterHeadlineElement $isSearchActive={isSearchActive}>
+                                {headline}
+                            </StyledFilterHeadlineElement>
+                        )}
                         {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
                             <>
                                 {iconElement}

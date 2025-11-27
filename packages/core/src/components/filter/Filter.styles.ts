@@ -13,12 +13,18 @@ export const StyledFilterHead = styled.div`
     position: relative;
 `;
 
-type StyledFilterHeadlineProps = WithTheme<{ isSearchActive: boolean }>;
+type StyledFilterHeadlineProps = WithTheme<{ $isSearchActive: boolean }>;
 
 export const StyledFilterHeadline = styled.h1<StyledFilterHeadlineProps>`
     margin: 0;
 
-    opacity: ${({ isSearchActive }) => (isSearchActive ? 0 : 1)};
+    opacity: ${({ $isSearchActive }) => ($isSearchActive ? 0 : 1)};
+
+    transition: opacity 0.3s;
+`;
+
+export const StyledFilterHeadlineElement = styled.div<StyledFilterHeadlineProps>`
+    opacity: ${({ $isSearchActive }) => ($isSearchActive ? 0 : 1)};
 
     transition: opacity 0.3s;
 `;

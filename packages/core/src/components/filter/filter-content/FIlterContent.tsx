@@ -1,5 +1,6 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+    StyledFilterComboboxWrapper,
     StyledFilterContent,
     StyledFilterSort,
     StyledFilterSortText,
@@ -21,6 +22,10 @@ const FilterContent: FC<FilterContentProps> = ({
     sortConfig,
     filterButtonConfig,
 }) => {
+    const sortTextRef = useRef<HTMLDivElement>(null);
+
+    const [sortTextWidth, setSortTextWidth] = useState(0);
+
     const handleSelectSortItem = useCallback(
         (item: IComboBoxItem | undefined) => {
             if (!item) {
@@ -35,6 +40,12 @@ const FilterContent: FC<FilterContentProps> = ({
         },
         [sortConfig],
     );
+
+    useEffect(() => {
+        if (sortTextRef.current) {
+            setSortTextWidth(sortTextRef.current.clientWidth + 20);
+        }
+    }, []);
 
     return useMemo(
         () => (
@@ -52,28 +63,30 @@ const FilterContent: FC<FilterContentProps> = ({
                 {filterButtonConfig && <FilterButtons {...filterButtonConfig} />}
                 {sortConfig && (
                     <StyledFilterSort>
-                        <StyledFilterSortText>Sortierung</StyledFilterSortText>
-                        <ComboBox
-                            lists={[
-                                {
-                                    list: sortConfig.items.map(({ text, id }) => ({
-                                        text,
-                                        value: id,
-                                    })),
-                                },
-                            ]}
-                            placeholder=""
-                            selectedItem={{
-                                text: sortConfig.selectedItem.text,
-                                value: sortConfig.selectedItem.id,
-                            }}
-                            onSelect={handleSelectSortItem}
-                        />
+                        <StyledFilterSortText ref={sortTextRef}>Sortierung</StyledFilterSortText>
+                        <StyledFilterComboboxWrapper $textWidth={sortTextWidth}>
+                            <ComboBox
+                                lists={[
+                                    {
+                                        list: sortConfig.items.map(({ text, id }) => ({
+                                            text,
+                                            value: id,
+                                        })),
+                                    },
+                                ]}
+                                placeholder=""
+                                selectedItem={{
+                                    text: sortConfig.selectedItem.text,
+                                    value: sortConfig.selectedItem.id,
+                                }}
+                                onSelect={handleSelectSortItem}
+                            />
+                        </StyledFilterComboboxWrapper>
                     </StyledFilterSort>
                 )}
             </StyledFilterContent>
         ),
-        [filterButtonConfig, handleSelectSortItem, searchConfig, sortConfig],
+        [filterButtonConfig, handleSelectSortItem, searchConfig, sortConfig, sortTextWidth],
     );
 };
 
