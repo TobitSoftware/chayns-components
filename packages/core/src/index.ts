@@ -136,7 +136,7 @@ export type {
 export type { SelectButtonItem } from './types/selectButton';
 export type { SliderButtonItem } from './types/slider-button';
 export { ClampPosition } from './types/truncation';
-export { getIsTouch } from './utils/environment';
+export { useIsTouch } from './utils/environment';
 export { filterFilesByMimeType, getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
 export { isTobitEmployee } from './utils/isTobitEmployee';
 export { getUsableHeight } from './utils/pageProvider';

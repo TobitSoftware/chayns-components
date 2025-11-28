@@ -16,7 +16,7 @@ import React, {
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
 import { ContextMenuAlignment } from '../../types/contextMenu';
-import { getIsTouch } from '../../utils/environment';
+import { useIsTouch } from '../../utils/environment';
 import Icon from '../icon/Icon';
 import ContextMenuContent from './context-menu-content/ContextMenuContent';
 import { StyledContextMenu } from './ContextMenu.styles';
@@ -140,7 +140,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         const contextMenuContentRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<HTMLSpanElement>(null);
 
-        const isTouch = getIsTouch();
+        const isTouch = useIsTouch();
 
         useEffect(() => {
             if (contextMenuRef.current && !container) {

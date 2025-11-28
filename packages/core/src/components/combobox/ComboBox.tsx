@@ -18,7 +18,7 @@ import React, {
 } from 'react';
 import { BrowserName } from '../../types/chayns';
 import { calculateContentWidth } from '../../utils/calculate';
-import { getIsTouch } from '../../utils/environment';
+import { useIsTouch } from '../../utils/environment';
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import Icon from '../icon/Icon';
 import ComboBoxItem from './combobox-item/ComboBoxItem';
@@ -201,7 +201,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
         const functions = useFunctions();
         const values = useValues();
 
-        const isTouch = getIsTouch();
+        const isTouch = useIsTouch();
 
         const { browser } = useDevice();
 
