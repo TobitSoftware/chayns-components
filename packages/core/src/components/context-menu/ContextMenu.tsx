@@ -2,6 +2,7 @@ import { createDialog, DialogType } from 'chayns-api';
 import { AnimatePresence } from 'motion/react';
 import React, {
     forwardRef,
+    isValidElement,
     MouseEvent,
     MouseEventHandler,
     ReactNode,
@@ -26,7 +27,7 @@ export type ContextMenuCoordinates = {
 };
 
 export type ContextMenuItem = {
-    icons: string[];
+    icons: string[] | ReactNode;
     key: string;
     onClick: (event?: MouseEvent<HTMLDivElement>) => Promise<void> | void;
     isSelected?: boolean;
@@ -64,7 +65,7 @@ type ContextMenuProps = {
      */
     headline?: string;
     /**
-     * The items that will be displayed in the content of the `ContextMenu`.
+     * The items that will be displayed in the content of the `ContextMenu`. Custom icon elements only works on desktop.
      */
     items: ContextMenuItem[];
     /**
@@ -170,7 +171,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                         name: text,
                         id: index,
                         isSelected,
-                        icon: icons[0],
+                        icon: isValidElement(icons) ? undefined : (icons as string)[0],
                     })),
                 }).open()) as SelectDialogResult;
 

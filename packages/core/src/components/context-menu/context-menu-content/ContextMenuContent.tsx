@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { isValidElement, useMemo } from 'react';
 import { ContextMenuAlignment } from '../../../types/contextMenu';
 import Icon from '../../icon/Icon';
 import type { ContextMenuCoordinates, ContextMenuItem } from '../ContextMenu';
@@ -99,9 +99,13 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                                 }}
                                 $shouldHidePopupArrow={shouldHidePopupArrow}
                             >
-                                <StyledContextMenuContentItemIconWrapper>
-                                    <Icon icons={icons} />
-                                </StyledContextMenuContentItemIconWrapper>
+                                {isValidElement(icons) ? (
+                                    icons
+                                ) : (
+                                    <StyledContextMenuContentItemIconWrapper>
+                                        <Icon icons={icons as string[]} />
+                                    </StyledContextMenuContentItemIconWrapper>
+                                )}
                                 <StyledContextMenuContentItemText>
                                     {text}
                                 </StyledContextMenuContentItemText>
