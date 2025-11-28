@@ -41,11 +41,20 @@ export type FilterProps = {
     sortConfig?: SortConfig;
     checkboxConfig?: CheckboxConfig;
     onActiveChange?: (isActive: boolean) => void;
+    shouldShowRoundedHoverEffect?: boolean;
 };
 
 const Filter = forwardRef<FilterRef, FilterProps>(
     (
-        { headline, searchConfig, sortConfig, filterButtonConfig, checkboxConfig, onActiveChange },
+        {
+            headline,
+            searchConfig,
+            sortConfig,
+            shouldShowRoundedHoverEffect = false,
+            filterButtonConfig,
+            checkboxConfig,
+            onActiveChange,
+        },
         ref,
     ) => {
         const [isOpen, setIsOpen] = useState(false);
@@ -159,11 +168,16 @@ const Filter = forwardRef<FilterRef, FilterProps>(
 
         const iconElement = useMemo(
             () => (
-                <StyledFilterIcon onClick={handleIconClick} $isOpen={isOpen} ref={iconRef}>
+                <StyledFilterIcon
+                    onClick={handleIconClick}
+                    $isOpen={isOpen}
+                    ref={iconRef}
+                    $shouldShowRoundedHoverEffect={shouldShowRoundedHoverEffect}
+                >
                     <Icon icons={icons} size={18} />
                 </StyledFilterIcon>
             ),
-            [handleIconClick, icons, isOpen],
+            [handleIconClick, icons, isOpen, shouldShowRoundedHoverEffect],
         );
 
         const backgroundElement = useMemo(
@@ -254,8 +268,8 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 </StyledFilter>
             ),
             [
-                isSearchActive,
                 headline,
+                isSearchActive,
                 type,
                 iconElement,
                 backgroundDistance,
@@ -263,6 +277,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 searchConfig,
                 sortConfig,
                 sortItems,
+                checkboxConfig,
                 isOpen,
                 filterButtonConfig,
             ],
