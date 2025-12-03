@@ -8,6 +8,8 @@ export const StyledCheckbox = styled.div`
     position: relative;
     width: 100%;
     min-height: 20px;
+
+    border: 1px solid red;
 `;
 
 export const StyledCheckboxInput = styled.input`
@@ -27,7 +29,7 @@ export const StyledCheckboxBoxWrapper = styled.div<StyledCheckboxBoxWrapperProps
     ${({ $shouldShowAsSwitch }) =>
         $shouldShowAsSwitch &&
         css`
-            right: 0;
+            right: 42px;
         `}
 `;
 
@@ -119,7 +121,14 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
     cursor: ${({ $shouldChangeOnLabelClick }) =>
         !$shouldChangeOnLabelClick ? 'default' : 'pointer'};
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
-    padding-right: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '48px' : '20px')};
     transition: opacity 0.2s ease;
     user-select: none;
+    ${({ $shouldShowAsSwitch }) =>
+        $shouldShowAsSwitch
+            ? css`
+                  padding-right: 48px;
+              `
+            : css`
+                  padding-left: 20px;
+              `}
 `;
