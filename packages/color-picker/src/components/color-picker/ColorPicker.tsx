@@ -57,6 +57,14 @@ interface ColorPickerProps {
      * Whether presetColors should be got and uploaded to the site storage.
      */
     shouldUseSiteColors?: boolean;
+    /**
+     * Whether the color area should be displayed.
+     */
+    shouldHideColorArea?: boolean;
+    /**
+     * Whether the default preset colors should be hidden.
+     */
+    shouldHideDefaultPresetColors?: boolean;
 }
 
 const ColorPicker = ({
@@ -64,6 +72,8 @@ const ColorPicker = ({
     onPresetColorAdd,
     onPresetColorRemove,
     onSelect,
+    shouldHideColorArea = false,
+    shouldHideDefaultPresetColors = false,
     presetColors,
     selectedColor = 'rgba(0, 94, 184, 1)',
     shouldShowAsPopup = true,
@@ -80,6 +90,7 @@ const ColorPicker = ({
                 onPresetColorAdd={onPresetColorAdd}
                 onPresetColorRemove={onPresetColorRemove}
                 presetColors={presetColors}
+                shouldHideDefaultPresetColors={shouldHideDefaultPresetColors}
                 shouldShowAsPopup={shouldShowAsPopup}
                 shouldShowMoreOptions={shouldShowMoreOptions}
                 shouldShowPresetColors={shouldShowPresetColors}
@@ -87,6 +98,7 @@ const ColorPicker = ({
                 shouldShowRoundPreviewColor={shouldShowRoundPreviewColor}
                 shouldShowTransparencySlider={shouldShowTransparencySlider}
                 shouldUseSiteColors={shouldUseSiteColors}
+                shouldHideColorArea={shouldHideColorArea}
             >
                 {children}
             </ColorPickerWrapper>

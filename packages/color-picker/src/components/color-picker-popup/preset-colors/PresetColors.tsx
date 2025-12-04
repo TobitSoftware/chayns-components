@@ -16,6 +16,7 @@ interface PresetColorsProps {
     onPresetColorAdd?: (presetColor: IPresetColor) => void;
     onPresetColorRemove?: (presetColorId: IPresetColor['id']) => void;
     shouldUseSiteColors: boolean;
+    shouldHideDefaultPresetColors: boolean;
 }
 
 const PresetColors = ({
@@ -23,6 +24,7 @@ const PresetColors = ({
     onPresetColorRemove,
     onPresetColorAdd,
     shouldUseSiteColors,
+    shouldHideDefaultPresetColors,
 }: PresetColorsProps) => {
     const { selectedColor } = useContext(ColorPickerContext);
 
@@ -95,8 +97,12 @@ const PresetColors = ({
             };
         });
 
+        if (shouldHideDefaultPresetColors) {
+            return tmp;
+        }
+
         return [...PRESETCOLORS, ...(siteColors ?? []), ...tmp];
-    }, [presetColors, siteColors]);
+    }, [presetColors, shouldHideDefaultPresetColors, siteColors]);
 
     const content = useMemo(() => {
         const items: ReactElement[] = [];
@@ -144,12 +150,14 @@ const PresetColors = ({
     return (
         <StyledPresetColors>
             {content}
-            <PresetButton
-                id={currentPresetColor?.id}
-                isCustom={currentPresetColor?.isCustom}
-                onAdd={handleAddColor}
-                onRemove={handleRemoveColor}
-            />
+            {!shouldHideDefaultPresetColors && (
+                <PresetButton
+                    id={currentPresetColor?.id}
+                    isCustom={currentPresetColor?.isCustom}
+                    onAdd={handleAddColor}
+                    onRemove={handleRemoveColor}
+                />
+            )}
         </StyledPresetColors>
     );
 };

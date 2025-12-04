@@ -23,6 +23,8 @@ interface ColorPickerWrapperProps {
     shouldShowRoundPreviewColor: boolean;
     shouldShowTransparencySlider: boolean;
     shouldUseSiteColors: boolean;
+    shouldHideColorArea: boolean;
+    shouldHideDefaultPresetColors: boolean;
 }
 
 const ColorPickerWrapper = ({
@@ -32,9 +34,11 @@ const ColorPickerWrapper = ({
     presetColors,
     shouldShowAsPopup,
     shouldShowMoreOptions,
+    shouldHideDefaultPresetColors,
     shouldShowPresetColors,
     shouldShowPreviewColorString,
     shouldShowRoundPreviewColor,
+    shouldHideColorArea,
     shouldShowTransparencySlider,
     shouldUseSiteColors,
 }: ColorPickerWrapperProps) => {
@@ -43,6 +47,8 @@ const ColorPickerWrapper = ({
     const content = useMemo(
         () => (
             <ColorPickerPopup
+                shouldHideDefaultPresetColors={shouldHideDefaultPresetColors}
+                shouldHideColorArea={shouldHideColorArea}
                 shouldShowPresetColors={shouldShowPresetColors}
                 onPresetColorRemove={onPresetColorRemove}
                 onPresetColorAdd={onPresetColorAdd}
@@ -56,6 +62,8 @@ const ColorPickerWrapper = ({
             onPresetColorAdd,
             onPresetColorRemove,
             presetColors,
+            shouldHideColorArea,
+            shouldHideDefaultPresetColors,
             shouldShowMoreOptions,
             shouldShowPresetColors,
             shouldShowTransparencySlider,
