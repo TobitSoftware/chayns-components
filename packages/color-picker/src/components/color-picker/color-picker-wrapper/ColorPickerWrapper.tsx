@@ -1,4 +1,4 @@
-import { Popup } from '@chayns-components/core';
+import { Popup, PopupAlignment } from '@chayns-components/core';
 import React, { ReactNode, useContext, useMemo } from 'react';
 import type { IPresetColor } from '../../../types/colorPicker';
 import ColorPickerPopup from '../../color-picker-popup/ColorPickerPopup';
@@ -25,6 +25,7 @@ interface ColorPickerWrapperProps {
     shouldUseSiteColors: boolean;
     shouldHideColorArea: boolean;
     shouldHideDefaultPresetColors: boolean;
+    alignment?: PopupAlignment;
 }
 
 const ColorPickerWrapper = ({
@@ -41,6 +42,7 @@ const ColorPickerWrapper = ({
     shouldHideColorArea,
     shouldShowTransparencySlider,
     shouldUseSiteColors,
+    alignment,
 }: ColorPickerWrapperProps) => {
     const { selectedColor } = useContext(ColorPickerContext);
 
@@ -74,7 +76,7 @@ const ColorPickerWrapper = ({
     return (
         <StyledColorPickerWrapper>
             {shouldShowAsPopup ? (
-                <Popup content={content}>
+                <Popup content={content} alignment={alignment}>
                     {children ?? (
                         <StyledColorPickerWrapperInfo>
                             <StyledColorPickerWrapperInfoColorWrapper

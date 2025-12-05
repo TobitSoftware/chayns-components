@@ -3,6 +3,7 @@ import type { IPresetColor } from '../../types/colorPicker';
 import ColorPickerProvider from '../ColorPickerProvider';
 import ColorPickerWrapper from './color-picker-wrapper/ColorPickerWrapper';
 import { StyledColorPicker } from './ColorPicker.styles';
+import { PopupAlignment } from '@chayns-components/core';
 
 interface ColorPickerProps {
     /**
@@ -65,6 +66,10 @@ interface ColorPickerProps {
      * Whether the default preset colors should be hidden.
      */
     shouldHideDefaultPresetColors?: boolean;
+    /**
+     * The alignment of the popup
+     */
+    alignment?: PopupAlignment;
 }
 
 const ColorPicker = ({
@@ -83,10 +88,12 @@ const ColorPicker = ({
     shouldShowRoundPreviewColor = true,
     shouldShowTransparencySlider = false,
     shouldUseSiteColors = false,
+    alignment,
 }: ColorPickerProps) => (
     <ColorPickerProvider selectedColor={selectedColor} onSelect={onSelect}>
         <StyledColorPicker>
             <ColorPickerWrapper
+                alignment={alignment}
                 onPresetColorAdd={onPresetColorAdd}
                 onPresetColorRemove={onPresetColorRemove}
                 presetColors={presetColors}
