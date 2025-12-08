@@ -108,13 +108,28 @@ const renderer: RendererObject = {
         return checked ? '[x]' : '[ ]';
     },
     // Replaces the link renderer to prevent opening links in the same tab. Therefore, the target
-    // attribute is set to "_blank".
-    link({ href, text, title }: Tokens.Link): string {
-        if (title) {
-            return `<a href="${href}" rel="noopener noreferrer" target="_blank" title="${title}">${text}</a>`;
+    // attribute is set to "_blank". The function is copied from marked.js and slightly modified:
+    // https://github.com/markedjs/marked/blob/15c77deb9e099041d5e70e3b7b17e50ddc35ec2a/src/Renderer.ts#L160
+    link({ href, title, tokens }: Tokens.Link): string {
+        const text = this.parser.parseInline(tokens);
+
+        let cleanHref;
+
+        try {
+            cleanHref = encodeURI(href).replace(/%25/g, '%');
+        } catch {
+            return text;
         }
 
-        return `<a href="${href}" rel="noopener noreferrer" target="_blank">${text}</a>`;
+        let result = `<a href="${cleanHref}" rel="noopener noreferrer" target="_blank"`;
+
+        if (title) {
+            result += ` title="${title}"`;
+        }
+
+        result += `>${text}</a>`;
+
+        return result;
     },
     // Ensures that the numbering of ordered lists is preserved.
     listitem(item: Tokens.ListItem) {
@@ -155,7 +170,7 @@ const postprocess = (html: string): string => {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 marked.use({ tokenizer, renderer, hooks: { postprocess } });
 
-// Parses markdown following the GitHub flavored Markdown specification. The tokenizer and renderer
+// Parses Markdown following the GitHub flavored Markdown specification. The tokenizer and renderer
 // are slightly modified to prevent HTML escaping in code block and inline code.
 export const parseMarkdown = (text: string, parseBBCode: boolean) =>
     marked.parse(text, {
