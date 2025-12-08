@@ -130,7 +130,7 @@ const renderer: RendererObject = {
         if (value) {
             let itemBody = '';
 
-            itemBody += this.parser.parse(item.tokens, item.loose);
+            itemBody += this.parser.parse(item.tokens);
 
             // Sets the value attribute of the list item to the number of the list item.
             return `<li value="${value}">${itemBody}</li>\n`;
