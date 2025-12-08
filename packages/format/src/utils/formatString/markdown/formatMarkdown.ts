@@ -105,6 +105,9 @@ const renderer = {
     checkbox({ checked }: Tokens.Checkbox) {
         return checked ? '[x]' : '[ ]';
     },
+    link(href: string, title: string, text: string): string {
+        return `<a href="${href}" rel="noopener noreferrer" target="_blank" title="${title}">${text}</a>`;
+    },
     // Ensures that the numbering of ordered lists is preserved.
     listitem: function (item: Tokens.ListItem) {
         if (item.task) {
