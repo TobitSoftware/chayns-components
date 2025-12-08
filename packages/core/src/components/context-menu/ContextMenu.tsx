@@ -93,6 +93,10 @@ type ContextMenuProps = {
      */
     shouldShowHoverEffect?: boolean;
     /**
+     * Whether the click should be disabled.
+     */
+    shouldDisableClick?: boolean;
+    /**
      * The z-index of the popup.
      */
     zIndex?: number;
@@ -114,6 +118,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             items,
             headline,
             onHide,
+            shouldDisableClick = false,
             onShow,
             shouldCloseOnPopupClick = true,
             shouldSeparateLastItem = false,
@@ -219,12 +224,16 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
         const handleClick = useCallback<MouseEventHandler<HTMLDivElement>>(
             (event) => {
+                if (shouldDisableClick) {
+                    return;
+                }
+
                 event.preventDefault();
                 event.stopPropagation();
 
                 void handleShow();
             },
-            [handleShow],
+            [handleShow, shouldDisableClick],
         );
 
         const handleDocumentClick = useCallback<EventListener>(
