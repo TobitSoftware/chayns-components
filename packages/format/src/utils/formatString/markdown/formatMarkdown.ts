@@ -131,29 +131,6 @@ const renderer: RendererObject = {
 
         return result;
     },
-    // Ensures that the numbering of ordered lists is preserved.
-    listitem(item: Tokens.ListItem) {
-        if (item.task) {
-            return false;
-        }
-
-        const match = item.raw.trim().match(/^\d{1,9}[.)]/);
-
-        // Removes the trailing dot or parenthesis from the match.
-        const value = match ? match[0].slice(0, match[0].length - 1) : '';
-
-        if (value) {
-            let itemBody = '';
-
-            itemBody += this.parser.parse(item.tokens);
-
-            // Sets the value attribute of the list item to the number of the list item.
-            return `<li value="${value}">${itemBody}</li>\n`;
-        }
-
-        // Ensures that the default listitem renderer from marked js is used.
-        return false;
-    },
 };
 
 const postprocess = (html: string): string => {
