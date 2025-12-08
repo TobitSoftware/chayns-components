@@ -17,7 +17,7 @@ interface FormatStringResult {
     tables: TableObject[];
 }
 
-// This function takes a string and returns formatted html as a string.
+// This function takes a string and returns formatted HTML as a string.
 export const formatStringToHtml = (
     string: string,
     options?: FormatStringOptions,
@@ -38,8 +38,9 @@ export const formatStringToHtml = (
 
     let formattedString = string;
 
-    // Needs to get the tables before escaping html and parsing bb-code, so the original content can be extracted.
+    // Needs to get the tables before escaping HTML and parsing bb-code, so the original content can be extracted.
     const tables: TableObject[] = [];
+
     if (parseMarkdownOption) {
         try {
             tables.push(...getMarkdownTables(formattedString));
@@ -54,7 +55,8 @@ export const formatStringToHtml = (
     // Escape HTML entities.
     formattedString = escapeHtmlInText(formattedString);
 
-    // Escape BB-Code, to prevent conflicts between markdown and bb-code. Specifically [b]test[/b]() would be a problem, since markdown interprets parts of this as a link.
+    // Escape BB-Code to prevent conflicts between Markdown and BB-code. Specifically [b]test[/b]()
+    // would be a problem, since Markdown interprets parts of this as a link.
 
     // Parses markdown to HTML.
     if (parseMarkdownOption) {
