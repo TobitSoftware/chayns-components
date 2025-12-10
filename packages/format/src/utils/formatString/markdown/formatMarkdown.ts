@@ -100,12 +100,15 @@ const renderer: RendererObject = {
 
         return `<pre><code class="language-${langString}">${code}</code></pre>\n`;
     },
+    codespan({ text }: Tokens.Codespan): string {
+        return `<code>${text}</code>`;
+    },
     // Replaces the checkbox input elements with Markdown checkboxes. This is the easiest way to
     // prevent the formatting of Markdown checkboxes in lists. This can modify the input string
     // slightly, since the capitalization of the checkbox can be lost. If a user types '- [X]', it
     // will be replaced with '- [x]'.
-    checkbox({ checked }: Tokens.Checkbox) {
-        return checked ? '[x]' : '[ ]';
+    checkbox({ raw }: Tokens.Checkbox) {
+        return raw.toLowerCase();
     },
     // Replaces the link renderer to prevent opening links in the same tab. Therefore, the target
     // attribute is set to "_blank". The function is copied from marked.js and slightly modified:
