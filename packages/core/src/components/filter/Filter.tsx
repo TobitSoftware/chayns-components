@@ -293,6 +293,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 headline,
                 isSearchActive,
                 type,
+                rightIcons,
                 iconElement,
                 backgroundDistance,
                 backgroundElement,
@@ -302,6 +303,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 checkboxConfig,
                 isOpen,
                 filterButtonConfig,
+                shouldShowRoundedHoverEffect,
             ],
         );
     },

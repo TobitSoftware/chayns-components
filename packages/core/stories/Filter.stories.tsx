@@ -40,16 +40,6 @@ const Template: StoryFn<typeof Filter> = ({ ...args }) => {
                       }
                     : undefined
             }
-            rightIcons={[
-                {
-                    icons: ['fa fa-sun'],
-                    onClick: () => alert('clicked'),
-                },
-                {
-                    icons: ['fa fa-house'],
-                    onClick: () => alert('clicked'),
-                },
-            ]}
         />
     );
 };

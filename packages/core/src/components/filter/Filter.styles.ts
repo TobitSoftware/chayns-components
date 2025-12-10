@@ -29,6 +29,11 @@ export const StyledFilterHeadlineElement = styled.div<StyledFilterHeadlineProps>
     transition: opacity 0.3s;
 `;
 
+export const StyledFilterIconWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
 export const StyledFilterSearch = styled.div`
     position: absolute;
     width: 100%;
