@@ -40,6 +40,7 @@ export interface FilterRightIcon {
     onClick: VoidFunction;
 }
 
+//
 export type FilterProps = {
     headline: ReactNode;
     searchConfig?: SearchConfig;
