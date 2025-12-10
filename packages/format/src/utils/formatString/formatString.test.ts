@@ -116,7 +116,9 @@ describe('HTML Formatter Function', () => {
 
             test('should format links correctly', () => {
                 const result = formatStringToHtml('[Link](https://example.com)');
-                expect(result.html).toEqual('<p><a href="https://example.com">Link</a></p>');
+                expect(result.html).toEqual(
+                    '<p><a href="https://example.com" rel="noopener noreferrer" target="_blank">Link</a></p>',
+                );
                 expect(result.tables).toEqual([]);
             });
 
