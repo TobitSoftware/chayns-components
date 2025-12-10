@@ -16,6 +16,7 @@ import {
     StyledFilterHeadline,
     StyledFilterHeadlineElement,
     StyledFilterIcon,
+    StyledFilterIconWrapper,
     StyledFilterSearch,
     StyledMotionFilterBackground,
 } from './Filter.styles';
@@ -34,6 +35,11 @@ import SearchInput from '../search-input/SearchInput';
 import ContextMenu, { ContextMenuItem, ContextMenuRef } from '../context-menu/ContextMenu';
 import Checkbox from '../checkbox/Checkbox';
 
+export interface FilterRightIcon {
+    icons: string[];
+    onClick: VoidFunction;
+}
+
 export type FilterProps = {
     headline: ReactNode;
     searchConfig?: SearchConfig;
@@ -42,6 +48,7 @@ export type FilterProps = {
     checkboxConfig?: CheckboxConfig;
     onActiveChange?: (isActive: boolean) => void;
     shouldShowRoundedHoverEffect?: boolean;
+    rightIcons?: FilterRightIcon[];
 };
 
 const Filter = forwardRef<FilterRef, FilterProps>(
@@ -54,6 +61,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             filterButtonConfig,
             checkboxConfig,
             onActiveChange,
+            rightIcons,
         },
         ref,
     ) => {
@@ -223,7 +231,21 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                         )}
                         {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
                             <>
-                                {iconElement}
+                                <StyledFilterIconWrapper>
+                                    {rightIcons &&
+                                        rightIcons.map(({ icons: rIcons, onClick }) => (
+                                            <StyledFilterIcon
+                                                onClick={onClick}
+                                                $isOpen={false}
+                                                $shouldShowRoundedHoverEffect={
+                                                    shouldShowRoundedHoverEffect
+                                                }
+                                            >
+                                                <Icon icons={rIcons} size={18} />
+                                            </StyledFilterIcon>
+                                        ))}
+                                    {iconElement}
+                                </StyledFilterIconWrapper>
                                 {backgroundDistance > 0 && backgroundElement}
                             </>
                         )}
