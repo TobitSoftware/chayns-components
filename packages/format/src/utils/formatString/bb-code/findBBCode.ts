@@ -32,14 +32,17 @@ export function findFirstBBCode(inputString: string): BBCodeMatch | null {
             content === undefined ||
             openingTag === undefined ||
             closingTag === undefined
-        )
+        ) {
             return null;
+        }
 
         const parameters: Record<string, string> = {};
 
+        const correctedParams = params.replaceAll('&quot;', '"');
+
         let match: RegExpExecArray | null = null;
         // eslint-disable-next-line no-cond-assign
-        while ((match = PARAMETER_REGEX.exec(params))) {
+        while ((match = PARAMETER_REGEX.exec(correctedParams))) {
             const [, key, value] = match;
 
             if (value) {

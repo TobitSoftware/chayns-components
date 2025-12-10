@@ -58,7 +58,7 @@ export const formatStringToHtml = (
     // Escape BB-Code to prevent conflicts between Markdown and BB-code. Specifically [b]test[/b]()
     // would be a problem, since Markdown interprets parts of this as a link.
 
-    // Parses markdown to HTML.
+    // Parses Markdown to HTML.
     if (parseMarkdownOption) {
         try {
             if (parseBBCodeOption) {
