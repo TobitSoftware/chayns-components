@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { isValidElement, useMemo } from 'react';
 import { ContextMenuAlignment } from '../../../types/contextMenu';
 import Icon from '../../icon/Icon';
 import type { ContextMenuCoordinates, ContextMenuItem } from '../ContextMenu';
@@ -88,7 +88,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
             () =>
                 items.map(({ onClick, key, text, icons, shouldShowSpacer }, index) => {
                     const item = (
-                        <StyledContextMenuContentItem>
+                        <StyledContextMenuContentItem key={`context-menu-item-${key}`}>
                             <StyledContextMenuContentItemWrapper
                                 key={key}
                                 onClick={(event) => {
@@ -99,9 +99,13 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                                 }}
                                 $shouldHidePopupArrow={shouldHidePopupArrow}
                             >
-                                <StyledContextMenuContentItemIconWrapper>
-                                    <Icon icons={icons} />
-                                </StyledContextMenuContentItemIconWrapper>
+                                {isValidElement(icons) ? (
+                                    icons
+                                ) : (
+                                    <StyledContextMenuContentItemIconWrapper>
+                                        <Icon icons={icons as string[]} />
+                                    </StyledContextMenuContentItemIconWrapper>
+                                )}
                                 <StyledContextMenuContentItemText>
                                     {text}
                                 </StyledContextMenuContentItemText>
@@ -112,10 +116,10 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
 
                     if (shouldSeparateLastItem && index + 1 === items.length) {
                         return (
-                            <>
+                            <React.Fragment key={`context-menu-item-${key}`}>
                                 <StyledContextMenuContentItemBorder />
                                 {item}
-                            </>
+                            </React.Fragment>
                         );
                     }
 

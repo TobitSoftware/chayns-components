@@ -1,4 +1,4 @@
-import { ColorSchemeProvider } from '@chayns-components/core';
+import { ColorSchemeProvider, useColorScheme } from '@chayns-components/core';
 import { ChaynsProvider, useFunctions, useValues } from 'chayns-api';
 import React, {
     FC,
@@ -172,6 +172,8 @@ const Typewriter: FC<TypewriterProps> = ({
     const functions = useFunctions();
     const values = useValues();
 
+    const colorScheme = useColorScheme();
+
     useIsomorphicLayoutEffect(() => {
         if (children) {
             setHasRenderedChildrenOnce(false);
@@ -209,7 +211,11 @@ const Typewriter: FC<TypewriterProps> = ({
                 return React.isValidElement(currentChildren)
                     ? renderToString(
                           <ChaynsProvider data={values} functions={functions} isModule>
-                              <ColorSchemeProvider style={{ display: 'inline' }}>
+                              <ColorSchemeProvider
+                                  color={colorScheme?.designSettings?.color}
+                                  colorMode={colorScheme?.designSettings?.colorMode}
+                                  style={{ display: 'inline' }}
+                              >
                                   <span className="notranslate">{currentChildren}</span>
                               </ColorSchemeProvider>
                           </ChaynsProvider>,
@@ -223,13 +229,25 @@ const Typewriter: FC<TypewriterProps> = ({
         return React.isValidElement(sortedChildren)
             ? renderToString(
                   <ChaynsProvider data={values} functions={functions} isModule>
-                      <ColorSchemeProvider style={{ display: 'inline' }}>
+                      <ColorSchemeProvider
+                          color={colorScheme?.designSettings?.color}
+                          colorMode={colorScheme?.designSettings?.colorMode}
+                          style={{ display: 'inline' }}
+                      >
                           <span className="notranslate">{sortedChildren}</span>
                       </ColorSchemeProvider>
                   </ChaynsProvider>,
               )
             : (sortedChildren as string);
-    }, [areMultipleChildrenGiven, currentChildrenIndex, functions, sortedChildren, values]);
+    }, [
+        areMultipleChildrenGiven,
+        colorScheme?.designSettings?.color,
+        colorScheme?.designSettings?.colorMode,
+        currentChildrenIndex,
+        functions,
+        sortedChildren,
+        values,
+    ]);
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 
@@ -421,7 +439,11 @@ const Typewriter: FC<TypewriterProps> = ({
             const pseudoText = React.isValidElement(pseudoChildren)
                 ? renderToString(
                       <ChaynsProvider data={values} functions={functions} isModule>
-                          <ColorSchemeProvider style={{ display: 'inline' }}>
+                          <ColorSchemeProvider
+                              color={colorScheme?.designSettings?.color}
+                              colorMode={colorScheme?.designSettings?.colorMode}
+                              style={{ display: 'inline' }}
+                          >
                               {pseudoChildren}
                           </ColorSchemeProvider>
                       </ChaynsProvider>,
@@ -440,7 +462,16 @@ const Typewriter: FC<TypewriterProps> = ({
         }
 
         return textContent || '&#8203;';
-    }, [functions, pseudoChildren, shouldUseAnimationHeight, shownCharCount, textContent, values]);
+    }, [
+        colorScheme?.designSettings?.color,
+        colorScheme?.designSettings?.colorMode,
+        functions,
+        pseudoChildren,
+        shouldUseAnimationHeight,
+        shownCharCount,
+        textContent,
+        values,
+    ]);
 
     return useMemo(
         () => (

@@ -72,8 +72,6 @@ export const StyledRadioButtonPseudoCheckBox = styled.div<StyledRadioButtonPseud
     height: 15px;
     position: absolute;
     border-radius: 100%;
-    top: 50%;
-    transform: translateY(-50%);
     cursor: ${({ $isDisabled }: StyledRadioButtonPseudoCheckBoxProps) =>
         $isDisabled ? 'default !important' : 'pointer !important'};
 `;

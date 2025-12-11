@@ -18,17 +18,24 @@ export const getUsableHeight = async () => {
     return usableHeight;
 };
 
-export const useUsableHeight = () => {
+interface UseUsableHeightOptions {
+    shouldReduceByCoverHeight?: boolean;
+}
+
+export const useUsableHeight = ({ shouldReduceByCoverHeight }: UseUsableHeightOptions = {}) => {
     let usableHeight;
 
-    const { bottomBarHeight, offsetTop, windowHeight } = useWindowMetrics();
+    const { bottomBarHeight, offsetTop, topBarHeight, windowHeight } = useWindowMetrics();
+
     usableHeight = windowHeight;
 
     if (bottomBarHeight) {
         usableHeight -= bottomBarHeight;
     }
 
-    if (offsetTop) {
+    if (!shouldReduceByCoverHeight && topBarHeight) {
+        usableHeight -= topBarHeight;
+    } else if (shouldReduceByCoverHeight && offsetTop) {
         usableHeight -= offsetTop;
     }
 

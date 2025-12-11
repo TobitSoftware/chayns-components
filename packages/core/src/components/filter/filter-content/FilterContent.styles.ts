@@ -16,8 +16,20 @@ export const StyledFilterContent = styled.div<StyledFilterContentProps>`
 export const StyledFilterSort = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 20px;
 `;
 
-export const StyledFilterSortText = styled.div``;
+export const StyledFilterSortText = styled.div`
+    flex: 0 0 auto;
+`;
+
+type StyledFilterComboboxWrapperProps = WithTheme<{
+    $textWidth: number;
+}>;
+
+export const StyledFilterComboboxWrapper = styled.div<StyledFilterComboboxWrapperProps>`
+    display: flex;
+    justify-content: end;
+    
+    width: ${({ $textWidth }) => `calc(100% - ${$textWidth}px)`}}
+`;

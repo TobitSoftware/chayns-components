@@ -63,10 +63,10 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
                 cornerImage={cornerImage ?? careOfImage}
                 imageBackground={imageBackground}
                 images={images}
+                onImageError={onImageError}
                 onClick={handleImageClick}
                 shouldPreventBackground={shouldHideBackground}
                 shouldShowRoundImage={shouldShowRoundImage}
-                onImageError={onImageError}
             />
         );
     }

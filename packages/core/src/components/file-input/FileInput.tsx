@@ -59,6 +59,10 @@ export type FileInputProps = {
      * A function to be executed when a file is removed.
      */
     onRemove?: (file: File | IFileItem | UploadedFile) => void;
+    /**
+     * Whether the image upload should be prevented.
+     */
+    shouldPreventImageUpload?: boolean;
 };
 
 export type FileInputRef = {
@@ -80,6 +84,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             onAdd,
             fileSelectionPlaceholder = 'Dateien hochladen',
             imageSelectPlaceholder,
+            shouldPreventImageUpload = false,
         },
         ref,
     ) => {
@@ -264,6 +269,8 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             () => (
                 <StyledFileInput>
                     <FileSelect
+                        shouldPreventImageUpload={shouldPreventImageUpload}
+                        maxFiles={maxFiles}
                         fileTypes={fileTypes}
                         fileSelectionIcons={fileSelectionIcons}
                         fileSelectionPlaceholder={fileSelectionPlaceholder}
@@ -277,6 +284,8 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
                 </StyledFileInput>
             ),
             [
+                shouldPreventImageUpload,
+                maxFiles,
                 fileTypes,
                 fileSelectionIcons,
                 fileSelectionPlaceholder,

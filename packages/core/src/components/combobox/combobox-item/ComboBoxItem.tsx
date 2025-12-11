@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { getIsTouch } from '../../../utils/environment';
+import { useIsTouch } from '../../../utils/environment';
 import Icon from '../../icon/Icon';
 import type { ComboBoxProps, IComboBoxItem } from '../ComboBox';
 import {
@@ -48,7 +48,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
         }
     }, [icons, imageUrl, isDisabled, onSelect, suffixElement, text, value]);
 
-    const isTouch = getIsTouch();
+    const isTouch = useIsTouch();
 
     return useMemo(
         () => (

@@ -52,11 +52,16 @@ export const OnlyFilterButtons = Template.bind({});
 
 export const OnlySort = Template.bind({});
 
+export const OnlyCheckbox = Template.bind({});
+
 General.args = {
     headline: '',
     searchConfig: {
         searchValue: '',
         onSearchChange: () => {},
+    },
+    checkboxConfig: {
+        children: 'Checkbox Label',
     },
     filterButtonConfig: {
         items: [
@@ -157,5 +162,12 @@ OnlySort.args = {
         ],
         selectedItem: { text: 'alphanumerisch', id: 'alphanumerisch' },
         onSortChange: () => {},
+    },
+};
+
+OnlyCheckbox.args = {
+    headline: 'Checkbox',
+    checkboxConfig: {
+        children: 'Checkbox Label',
     },
 };

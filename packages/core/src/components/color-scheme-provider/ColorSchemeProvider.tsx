@@ -86,12 +86,16 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     iconColor,
     customVariables,
 }) => {
+    const context = useContext(ColorSchemeContext);
+
     const { color: internalColor, colorMode: internalColorMode } = useSite();
 
-    const color = colorProp ?? internalColor;
-    const colorMode = colorModeProp ?? internalColorMode;
+    const color = colorProp ?? context?.designSettings?.color ?? internalColor;
+    const colorMode = colorModeProp ?? context?.designSettings?.colorMode ?? internalColorMode;
+
     const overrideParagraphFormat =
         (color && color !== internalColor) || colorMode !== internalColorMode;
+
     const paragraphFormat = useMemo(
         () => (overrideParagraphFormat ? [] : undefined),
         [overrideParagraphFormat],

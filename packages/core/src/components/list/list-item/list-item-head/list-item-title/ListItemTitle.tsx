@@ -16,6 +16,7 @@ type ListItemTitleProps = {
     shouldShowMultilineTitle: boolean;
     isOpen: boolean;
     onResize?: (entries: ResizeObserverEntry[]) => void;
+    onTitleWidthChange: (width: number) => void;
 };
 
 const ListItemTitle: FC<ListItemTitleProps> = ({
@@ -25,8 +26,12 @@ const ListItemTitle: FC<ListItemTitleProps> = ({
     shouldShowMultilineTitle,
     isOpen,
     onResize,
+    onTitleWidthChange,
 }) => {
     const titleWrapperRef = useRef<HTMLDivElement>(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const elementWrapperRef = useRef<HTMLDivElement>(null);
+    const topElementWrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const element = titleWrapperRef?.current;
@@ -37,6 +42,26 @@ const ListItemTitle: FC<ListItemTitleProps> = ({
 
         return () => resizeObserver.disconnect();
     }, [onResize]);
+
+    useEffect(() => {
+        if (wrapperRef.current && elementWrapperRef.current) {
+            const fullWidth = wrapperRef.current.clientWidth;
+            const rightElementWidth = elementWrapperRef.current.clientWidth;
+            const topElementWidth = topElementWrapperRef.current?.clientWidth;
+
+            let width = fullWidth;
+
+            if (rightElementWidth > 0) {
+                width -= rightElementWidth + 8;
+            }
+
+            if (topElementWidth) {
+                width -= topElementWidth + 12;
+            }
+
+            onTitleWidthChange(width);
+        }
+    }, [onTitleWidthChange]);
 
     const handlePreventClick = (event: React.MouseEvent) => {
         event.stopPropagation();
@@ -60,7 +85,7 @@ const ListItemTitle: FC<ListItemTitleProps> = ({
     }, [topElement]);
 
     return (
-        <StyledListItemTitle>
+        <StyledListItemTitle ref={wrapperRef}>
             <StyledListItemTitleLeftWrapper>
                 <StyledListItemHeadTitleText
                     $isEllipsis={!isOpen}
@@ -69,10 +94,13 @@ const ListItemTitle: FC<ListItemTitleProps> = ({
                 >
                     {title}
                 </StyledListItemHeadTitleText>
-                <StyledListItemHeadTitleElement>{titleElement}</StyledListItemHeadTitleElement>
+                <StyledListItemHeadTitleElement ref={elementWrapperRef}>
+                    {titleElement}
+                </StyledListItemHeadTitleElement>
             </StyledListItemTitleLeftWrapper>
             {topElement && (
                 <StyledListItemTopRightElement
+                    ref={topElementWrapperRef}
                     onClick={shouldPreventRightElementClick ? handlePreventClick : undefined}
                 >
                     {topElement}

@@ -103,7 +103,9 @@ const Checkbox: FC<CheckboxProps> = ({
                 onChange={handleChange}
                 type="checkbox"
             />
+
             <StyledCheckboxBoxWrapper
+                $shouldShowAsSwitch={shouldShowAsSwitch}
                 style={{
                     top: shouldShowCentered ? '50%' : checkboxTop,
                     transform: shouldShowCentered ? 'translateY(-50%)' : undefined,

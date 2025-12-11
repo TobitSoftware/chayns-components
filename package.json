@@ -49,10 +49,10 @@
     ],
     "devDependencies": {
         "@babel/cli": "^7.28.3",
-        "@babel/core": "^7.28.3",
-        "@babel/preset-env": "^7.28.3",
-        "@babel/preset-react": "^7.27.1",
-        "@babel/preset-typescript": "^7.27.1",
+        "@babel/core": "^7.28.5",
+        "@babel/preset-env": "^7.28.5",
+        "@babel/preset-react": "^7.28.5",
+        "@babel/preset-typescript": "^7.28.5",
         "@chayns-toolkit/eslint-config": "^2.0.2",
         "@storybook/addon-actions": "^7.6.20",
         "@storybook/addon-essentials": "^7.6.20",
@@ -66,8 +66,8 @@
         "eslint": "^8.57.1",
         "eslint-plugin-storybook": "^0.12.0",
         "husky": "^8.0.3",
-        "lerna": "8.2.4",
-        "motion": "^12.23.12",
+        "lerna": "^9.0.3",
+        "motion": "^12.23.24",
         "organize-imports-cli": "^0.10.0",
         "prettier": "^3.6.2",
         "react": "^18.3.1",
@@ -76,6 +76,6 @@
         "ts-morph": "^27.0.2",
         "ts-node": "^10.9.2",
         "typescript": "^5.9.3",
-        "form-data": "^4.0.4"
+        "form-data": "^4.0.5"
     }
 }

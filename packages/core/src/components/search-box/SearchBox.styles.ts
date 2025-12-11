@@ -66,3 +66,9 @@ export const StyledSearchBoxLeftWrapper = styled.div`
     align-items: center;
     gap: 8px;
 `;
+
+export const StyledSearchBoxHintText = styled.div`
+    text-align: center;
+    opacity: 0.8;
+    padding: 6px;
+`;

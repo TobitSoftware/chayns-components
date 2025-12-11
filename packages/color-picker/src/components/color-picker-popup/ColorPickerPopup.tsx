@@ -14,6 +14,8 @@ interface ColorPickerPopupProps {
     shouldShowTransparencySlider: boolean;
     shouldShowMoreOptions: boolean;
     shouldUseSiteColors: boolean;
+    shouldHideColorArea: boolean;
+    shouldHideDefaultPresetColors: boolean;
 }
 
 const ColorPickerPopup = ({
@@ -22,14 +24,19 @@ const ColorPickerPopup = ({
     onPresetColorAdd,
     shouldShowPresetColors,
     shouldShowTransparencySlider,
+    shouldHideDefaultPresetColors,
     shouldUseSiteColors,
     shouldShowMoreOptions,
+    shouldHideColorArea,
 }: ColorPickerPopupProps) => (
     <StyledColorPickerPopup>
-        <ColorArea />
-        <Sliders shouldShowTransparencySlider={shouldShowTransparencySlider} />
+        {!shouldHideColorArea && <ColorArea />}
+        {!shouldHideColorArea && (
+            <Sliders shouldShowTransparencySlider={shouldShowTransparencySlider} />
+        )}
         {shouldShowPresetColors && (
             <PresetColors
+                shouldHideDefaultPresetColors={shouldHideDefaultPresetColors}
                 presetColors={presetColors}
                 shouldUseSiteColors={shouldUseSiteColors}
                 onPresetColorAdd={onPresetColorAdd}

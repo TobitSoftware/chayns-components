@@ -23,6 +23,12 @@ export const StyledCheckboxBoxWrapper = styled.div<StyledCheckboxBoxWrapperProps
     flex-shrink: 0;
     height: 16px;
     position: absolute;
+
+    ${({ $shouldShowAsSwitch }) =>
+        $shouldShowAsSwitch &&
+        css`
+            right: 42px;
+        `}
 `;
 
 type StyledCheckboxBoxProps = WithTheme<{
@@ -113,7 +119,14 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
     cursor: ${({ $shouldChangeOnLabelClick }) =>
         !$shouldChangeOnLabelClick ? 'default' : 'pointer'};
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
-    padding-left: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '48px' : '20px')};
     transition: opacity 0.2s ease;
     user-select: none;
+    ${({ $shouldShowAsSwitch }) =>
+        $shouldShowAsSwitch
+            ? css`
+                  padding-right: 48px;
+              `
+            : css`
+                  padding-left: 20px;
+              `}
 `;

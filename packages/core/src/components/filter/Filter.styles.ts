@@ -13,14 +13,25 @@ export const StyledFilterHead = styled.div`
     position: relative;
 `;
 
-type StyledFilterHeadlineProps = WithTheme<{ isSearchActive: boolean }>;
+type StyledFilterHeadlineProps = WithTheme<{ $isSearchActive: boolean }>;
 
 export const StyledFilterHeadline = styled.h1<StyledFilterHeadlineProps>`
     margin: 0;
 
-    opacity: ${({ isSearchActive }) => (isSearchActive ? 0 : 1)};
+    opacity: ${({ $isSearchActive }) => ($isSearchActive ? 0 : 1)};
 
     transition: opacity 0.3s;
+`;
+
+export const StyledFilterHeadlineElement = styled.div<StyledFilterHeadlineProps>`
+    opacity: ${({ $isSearchActive }) => ($isSearchActive ? 0 : 1)};
+
+    transition: opacity 0.3s;
+`;
+
+export const StyledFilterIconWrapper = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 export const StyledFilterSearch = styled.div`
@@ -30,17 +41,29 @@ export const StyledFilterSearch = styled.div`
 
 type StyledFilterIconProps = WithTheme<{
     $isOpen: boolean;
+    $shouldShowRoundedHoverEffect: boolean;
 }>;
 
 export const StyledFilterIcon = styled.div<StyledFilterIconProps>`
     cursor: pointer;
 
-    width: 30px;
-    height: 30px;
+    aspect-ratio: 1;
+
+    height: ${({ $shouldShowRoundedHoverEffect }) => ($shouldShowRoundedHoverEffect ? 42 : 30)}px;
+    border-radius: ${({ $shouldShowRoundedHoverEffect }) =>
+        $shouldShowRoundedHoverEffect ? 3 : 0}px;
 
     display: flex;
     align-items: center;
     justify-content: center;
+
+    ${({ $shouldShowRoundedHoverEffect, $isOpen }) =>
+        $shouldShowRoundedHoverEffect &&
+        $isOpen &&
+        css`
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        `}
 
     ${({ $isOpen, theme }) =>
         $isOpen &&

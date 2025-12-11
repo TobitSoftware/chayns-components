@@ -5,7 +5,16 @@ import {
     type FileItem,
     type InternalFileItem,
 } from '@chayns-components/core';
-import { createDialog, DialogType, MediaType, openMedia, OpenMediaItem } from 'chayns-api';
+import {
+    createDialog,
+    DialogType,
+    MediaType,
+    openImage,
+    OpenImageItem,
+    openMedia,
+    OpenMediaItem,
+    openVideo,
+} from 'chayns-api';
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { GalleryViewMode } from '../types/gallery';
@@ -324,19 +333,47 @@ const Gallery: FC<GalleryProps> = ({
      */
     const openFiles = useCallback(
         (file: InternalFileItem) => {
-            const startIndex = fileItems.findIndex((item) => item.id === file.id);
+            let startIndex = 0;
 
-            const items: OpenMediaItem[] = fileItems.map((item) => ({
-                url: item.uploadedFile?.url.replace('_0.mp4', '.mp4') ?? '',
-                mediaType:
-                    item.uploadedFile && 'thumbnailUrl' in item.uploadedFile
-                        ? MediaType.VIDEO
-                        : MediaType.IMAGE,
-            }));
+            try {
+                startIndex = fileItems.findIndex((item) => item.id === file.id);
 
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            void openMedia({ items, startIndex });
+                const items: OpenMediaItem[] = fileItems.map((item) => ({
+                    url: item.uploadedFile?.url.replace('_0.mp4', '.mp4') ?? '',
+                    mediaType:
+                        item.uploadedFile && 'thumbnailUrl' in item.uploadedFile
+                            ? MediaType.VIDEO
+                            : MediaType.IMAGE,
+                }));
+
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                void openMedia({ items, startIndex });
+            } catch (_) {
+                if (file.uploadedFile && 'thumbnailUrl' in file.uploadedFile) {
+                    void openVideo({ url: file.uploadedFile.url });
+                } else {
+                    const imageFiles: OpenImageItem[] = [];
+
+                    fileItems.forEach(({ uploadedFile }) => {
+                        if (uploadedFile && !('thumbnailUrl' in uploadedFile)) {
+                            imageFiles.push({ url: uploadedFile.url });
+                        }
+                    });
+
+                    startIndex = imageFiles.findIndex(
+                        (item) => item.url === file.uploadedFile?.url,
+                    );
+
+                    const startFile = imageFiles.shift();
+
+                    if (!startFile) {
+                        return;
+                    }
+
+                    void openImage({ items: [startFile, ...imageFiles], startIndex });
+                }
+            }
         },
         [fileItems],
     );

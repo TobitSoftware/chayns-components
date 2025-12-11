@@ -8,43 +8,74 @@ type StyledGroupedImageProps = WithTheme<{
 
 export const StyledGroupedImage = styled.div<StyledGroupedImageProps>`
     flex: 0 0 auto;
-    height: ${({ $height }) => $height};
+    height: ${({ $height }) => $height}px;
     position: relative;
-    width: ${({ $height }) => $height};
+    width: ${({ $height }) => $height}px;
 `;
-
-export enum ImageSize {
-    Full = '100%',
-    Small = '75%',
-    Grouped = '80%',
-    GroupedSmall = '65%',
-}
 
 type StyledImageProps = WithTheme<{
     $background?: CSSProperties['background'];
-    $imageSize: ImageSize;
     $isSecondImage?: boolean;
     $shouldPreventBackground?: boolean;
     $shouldShowRoundImage?: boolean;
+    $hasCornerImage: boolean;
+    $hasMultipleImages: boolean;
+    $uuid: string;
 }>;
 
-export const StyledGroupImageElement = styled.img<StyledImageProps>`
+export const StyledGroupImageElement = styled.div<StyledImageProps>`
     aspect-ratio: 1;
     border-radius: ${({ $shouldShowRoundImage }) => ($shouldShowRoundImage ? '50%' : '0')};
-    height: ${({ $imageSize }) => $imageSize};
-    object-fit: cover;
     position: absolute;
+    overflow: hidden;
 
-    ${({ $imageSize, $isSecondImage }) =>
+    ${({ $hasMultipleImages, $isSecondImage }) => {
+        if (!$hasMultipleImages) {
+            return css`
+                height: 100%;
+            `;
+        }
+
+        if ($isSecondImage) {
+            return css`
+                height: 80%;
+            `;
+        }
+
+        return css`
+            height: 76%;
+        `;
+    }}
+
+    ${({ $isSecondImage }) =>
         $isSecondImage
             ? css`
-                  bottom: ${$imageSize === ImageSize.GroupedSmall ? '15%' : 0};
-                  right: ${$imageSize === ImageSize.GroupedSmall ? '15%' : 0};
+                  bottom: 0;
+                  right: 0;
               `
             : css`
                   top: 0;
                   left: 0;
               `}
+
+    ${({ $isSecondImage, $hasMultipleImages, $hasCornerImage, $uuid }) => {
+        if (
+            ($isSecondImage && $hasCornerImage) ||
+            (!$isSecondImage && !$hasMultipleImages && $hasCornerImage)
+        ) {
+            return css`
+                clip-path: url(${`#care-of-mask--${$uuid}`});
+            `;
+        }
+
+        if (!$isSecondImage && $hasMultipleImages) {
+            return css`
+                clip-path: url(${`#second-image-mask--${$uuid}`});
+            `;
+        }
+
+        return '';
+    }}
 
     ${({ $background, $shouldPreventBackground, theme }) =>
         !$shouldPreventBackground &&
@@ -52,17 +83,24 @@ export const StyledGroupImageElement = styled.img<StyledImageProps>`
             background: ${$background || `rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.1)`};
             box-shadow: 0 0 0 1px rgba(${theme['009-rgb']}, 0.08) inset;
         `}
+    
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 `;
 
 type StyledCornerImageProps = WithTheme<{
     $background?: CSSProperties['background'];
     $shouldPreventBackground?: boolean;
+    $hasMultipleImages: boolean;
 }>;
 
 export const StyledCornerImage = styled.img<StyledCornerImageProps>`
     aspect-ratio: 1;
     bottom: 0;
-    height: 50%;
+    height: ${({ $hasMultipleImages }) => ($hasMultipleImages ? '28%' : '38%')};
     position: absolute;
     right: 0;
 

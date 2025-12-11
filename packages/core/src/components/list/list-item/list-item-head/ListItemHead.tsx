@@ -61,6 +61,7 @@ type ListItemHeadProps = {
     setShouldEnableTooltip: (value: boolean) => void;
     shouldDisableAnimation?: boolean;
     cornerElement?: ReactNode;
+    onTitleWidthChange: (titleWidth: number, titleMaxWidth: number) => void;
     onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
 };
 
@@ -90,9 +91,12 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     setShouldEnableTooltip,
     shouldDisableAnimation = false,
     cornerElement,
+    onTitleWidthChange,
     onImageError,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
+    const [titleMaxWidth, setTitleMaxWidth] = useState(0);
+    const [titleWidth, setTitleWidth] = useState(0);
 
     const longPressTimeoutRef = useRef<number>();
     const resizeSkipRef = useRef(true);
@@ -110,8 +114,14 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         }, 200);
     }, []);
 
+    useEffect(() => {
+        onTitleWidthChange(titleWidth, titleMaxWidth);
+    }, [onTitleWidthChange, titleMaxWidth, titleWidth]);
+
     const handleShowTooltipResize = useCallback(
         (entries: ResizeObserverEntry[]) => {
+            setTitleWidth(entries[0]?.target.clientWidth ?? 0);
+
             if (resizeSkipRef.current) {
                 return;
             }
@@ -142,6 +152,10 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         clearTimeout(longPressTimeoutRef.current);
     }, []);
 
+    const handleTitleWidthChange = (width: number) => {
+        setTitleMaxWidth(width);
+    };
+
     const iconOrImageElement = useMemo(() => {
         if (icons) {
             return (
@@ -161,10 +175,10 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     careOfLocationId={careOfLocationId}
                     cornerImage={cornerImage}
                     images={images}
+                    onImageError={onImageError}
                     shouldOpenImageOnClick={shouldOpenImageOnClick}
                     shouldHideBackground={!!shouldHideImageOrIconBackground}
                     shouldShowRoundImage={!!shouldShowRoundImageOrIcon}
-                    onImageError={onImageError}
                 />
             );
         }
@@ -243,6 +257,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                             isOpen={isOpen}
                             shouldShowMultilineTitle={shouldShowMultilineTitle}
                             rightElements={rightElements}
+                            onTitleWidthChange={handleTitleWidthChange}
                             onResize={handleShowTooltipResize}
                         />
                     </StyledListItemHeadTitle>

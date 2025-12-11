@@ -7,13 +7,45 @@ import ColorSchemeProvider, {
 } from '../color-scheme-provider/ColorSchemeProvider';
 import { StyledPageProvider } from './PageProvider.styles';
 
+/**
+ * Props for the PageProvider component.
+ * @description
+ * This interface defines the props that can be passed to the PageProvider component
+ * for controlling the layout and styling behavior.
+ * @example
+ * <PageProvider shouldRemovePadding={true}>
+ *   {children}
+ * </PageProvider>
+ */
 interface PageProviderProps extends ColorSchemeProviderProps {
     /**
-     * Whether the padding should be removed.
+     * Controls whether the usable height should be reduced by the cover height
+     * @description
+     * When true, the usable height will be reduced by the cover image height. This is useful
+     * when the page should not be scrollable due to the cover image. The property has no effect
+     * when `shouldUseUsableHeight` is false.
+     * @default false
+     * @optional
+     */
+    shouldReduceUsableHeightByCoverHeight?: boolean;
+    /**
+     * Controls whether padding should be removed from the page
+     * @description
+     * When true, the padding around the page content will be removed. This is useful when the
+     * page should not have any padding, for example, when it is embedded in a pagemaker page.
+     * @default false
+     * @optional
      */
     shouldRemovePadding?: boolean;
     /**
-     * Whether the usable height should be used.
+     * Controls whether the component should use the calculated usable height
+     * @description
+     * When true, the page will cover the entire usable height of the screen. This means that
+     * the viewport is not scrollable and the page takes up the full height not required by the
+     * title or bottom bar. Optionally, the height of the cover image can be reduced by setting
+     * `shouldReduceUsableHeightByCoverHeight` to true.
+     * @default false
+     * @optional
      */
     shouldUseUsableHeight?: boolean;
 }
@@ -31,14 +63,17 @@ const PageProvider: FC<PageProviderProps> = ({
     secondaryColor,
     siteId,
     style = {},
-    shouldRemovePadding,
-    shouldUseUsableHeight,
+    shouldReduceUsableHeightByCoverHeight = false,
+    shouldRemovePadding = false,
+    shouldUseUsableHeight = false,
     iconColor,
     customVariables,
 }) => {
     const { runtimeEnvironment } = useEnvironment();
 
-    const usableHeight = useUsableHeight();
+    const usableHeight = useUsableHeight({
+        shouldReduceByCoverHeight: shouldReduceUsableHeightByCoverHeight,
+    });
 
     const shouldUsePadding =
         !shouldRemovePadding &&

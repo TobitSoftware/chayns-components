@@ -1,9 +1,11 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import {
     DefaultEntry,
+    PersonEntry,
     PersonFinderEntry,
     PersonFinderFilterTypes,
     Priority,
+    UACFilter,
 } from '../../types/personFinder';
 import PersonFinderProvider from '../PersonFinderProvider';
 import PersonFinderWrapper, {
@@ -27,6 +29,14 @@ export type PersonFinderProps = PersonFinderWrapperProps & {
      * Whether the own user should be shown in the results. By default, it is not shown.
      */
     shouldShowOwnUser?: boolean;
+    /**
+     * Optional filter to search member of uac group. Only works with groups of the current Site and if the user is manager.
+     */
+    uacFilter?: UACFilter[];
+    /**
+     * A list of entries that should be searched.
+     */
+    entries?: PersonEntry[];
 };
 
 const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
@@ -36,7 +46,11 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             dropdownDirection,
             defaultEntries,
             excludedEntryIds,
-            filterTypes = DEFAULT_FILTER_TYPES,
+            uacFilter,
+            entries,
+            filterTypes = uacFilter || entries
+                ? [PersonFinderFilterTypes.PERSON]
+                : DEFAULT_FILTER_TYPES,
             friendsPriority = Priority.HIGH,
             leftElement,
             maxEntries,
@@ -65,6 +79,8 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                 filterTypes={filterTypes}
                 excludedEntryIds={excludedEntryIds}
                 shouldShowOwnUser={shouldShowOwnUser}
+                uacFilter={uacFilter}
+                entries={entries}
             >
                 <AreaProvider shouldChangeColor={false} shouldDisableListItemPadding>
                     <div className="beta-chayns-person-finder" ref={personFinderRef}>

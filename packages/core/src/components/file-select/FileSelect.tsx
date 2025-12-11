@@ -65,6 +65,10 @@ export type FileSelectProps = {
      * A function to be executed when files are added.
      */
     onAdd?: (files: File[] | UploadedFile[]) => void;
+    /**
+     * Whether the image upload should be prevented.
+     */
+    shouldPreventImageUpload?: boolean;
 };
 
 const FileSelect: FC<FileSelectProps> = ({
@@ -76,6 +80,7 @@ const FileSelect: FC<FileSelectProps> = ({
     onAdd,
     fileSelectionPlaceholder = 'Dateien hochladen',
     imageSelectPlaceholder,
+    shouldPreventImageUpload = false,
 }) => {
     const handleAddImages = useCallback(
         (images: UploadedFile[]) => {
@@ -146,14 +151,26 @@ const FileSelect: FC<FileSelectProps> = ({
 
         const newFiles = await selectFiles({ multiple: true, type: fileTypes, maxFileSizeInMB });
 
-        if (newFiles.length === 1 && newFiles[0] && newFiles[0].type.startsWith('image')) {
+        if (
+            newFiles.length === 1 &&
+            newFiles[0] &&
+            newFiles[0].type.startsWith('image') &&
+            !shouldPreventImageUpload
+        ) {
             void handleOpenEditor(newFiles[0]);
 
             return;
         }
 
         handleAddFiles(newFiles);
-    }, [fileTypes, handleAddFiles, handleOpenEditor, isDisabled, maxFileSizeInMB]);
+    }, [
+        fileTypes,
+        handleAddFiles,
+        handleOpenEditor,
+        isDisabled,
+        maxFileSizeInMB,
+        shouldPreventImageUpload,
+    ]);
 
     const handleDrop = useCallback(
         (e: DragEvent<HTMLDivElement>) => {
@@ -170,7 +187,8 @@ const FileSelect: FC<FileSelectProps> = ({
             if (
                 draggedFiles.length === 1 &&
                 draggedFiles[0] &&
-                draggedFiles[0].type.startsWith('image')
+                draggedFiles[0].type.startsWith('image') &&
+                !shouldPreventImageUpload
             ) {
                 void handleOpenEditor(draggedFiles[0]);
 
@@ -179,7 +197,7 @@ const FileSelect: FC<FileSelectProps> = ({
 
             handleAddFiles(draggedFiles);
         },
-        [handleAddFiles, fileTypes, maxFileSizeInMB, handleOpenEditor],
+        [shouldPreventImageUpload, handleAddFiles, fileTypes, maxFileSizeInMB, handleOpenEditor],
     );
 
     return useMemo(

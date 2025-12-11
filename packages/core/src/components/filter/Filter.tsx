@@ -1,5 +1,7 @@
 import React, {
     forwardRef,
+    isValidElement,
+    ReactNode,
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -12,7 +14,9 @@ import {
     StyledFilterContentWrapper,
     StyledFilterHead,
     StyledFilterHeadline,
+    StyledFilterHeadlineElement,
     StyledFilterIcon,
+    StyledFilterIconWrapper,
     StyledFilterSearch,
     StyledMotionFilterBackground,
 } from './Filter.styles';
@@ -20,6 +24,7 @@ import ExpandableContent from '../expandable-content/ExpandableContent';
 import Icon from '../icon/Icon';
 import FilterContent from './filter-content/FIlterContent';
 import {
+    CheckboxConfig,
     FilterButtonConfig,
     FilterRef,
     FilterType,
@@ -28,17 +33,39 @@ import {
 } from '../../types/filter';
 import SearchInput from '../search-input/SearchInput';
 import ContextMenu, { ContextMenuItem, ContextMenuRef } from '../context-menu/ContextMenu';
+import Checkbox from '../checkbox/Checkbox';
 
+export interface FilterRightIcon {
+    icons: string[];
+    onClick: VoidFunction;
+}
+
+//
 export type FilterProps = {
-    headline: string;
+    headline: ReactNode;
     searchConfig?: SearchConfig;
     filterButtonConfig?: FilterButtonConfig;
     sortConfig?: SortConfig;
+    checkboxConfig?: CheckboxConfig;
+    onActiveChange?: (isActive: boolean) => void;
+    shouldShowRoundedHoverEffect?: boolean;
+    rightIcons?: FilterRightIcon[];
 };
 
-//
 const Filter = forwardRef<FilterRef, FilterProps>(
-    ({ headline, searchConfig, sortConfig, filterButtonConfig }, ref) => {
+    (
+        {
+            headline,
+            searchConfig,
+            sortConfig,
+            shouldShowRoundedHoverEffect = false,
+            filterButtonConfig,
+            checkboxConfig,
+            onActiveChange,
+            rightIcons,
+        },
+        ref,
+    ) => {
         const [isOpen, setIsOpen] = useState(false);
         const [isSearchActive, setIsSearchActive] = useState(false);
         const [backgroundDistance, setBackgroundDistance] = useState(0);
@@ -51,20 +78,24 @@ const Filter = forwardRef<FilterRef, FilterProps>(
         const contextMenuRef = useRef<ContextMenuRef>(null);
 
         const type = useMemo(() => {
-            if (filterButtonConfig && !searchConfig && !sortConfig) {
+            if (filterButtonConfig && !searchConfig && !sortConfig && !checkboxConfig) {
                 return FilterType.ONLY_FILTER;
             }
 
-            if (!filterButtonConfig && !searchConfig && sortConfig) {
+            if (!filterButtonConfig && !searchConfig && sortConfig && !checkboxConfig) {
                 return FilterType.ONLY_SORT;
             }
 
-            if (!filterButtonConfig && searchConfig && !sortConfig) {
+            if (!filterButtonConfig && searchConfig && !sortConfig && !checkboxConfig) {
                 return FilterType.ONLY_SEARCH;
             }
 
+            if (!filterButtonConfig && !searchConfig && !sortConfig && checkboxConfig) {
+                return FilterType.ONLY_CHECKBOX;
+            }
+
             return FilterType.MULTIPLE;
-        }, [filterButtonConfig, searchConfig, sortConfig]);
+        }, [checkboxConfig, filterButtonConfig, searchConfig, sortConfig]);
 
         const icons = useMemo(() => {
             switch (type) {
@@ -76,6 +107,12 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                     return ['fa fa-search'];
             }
         }, [type]);
+
+        useEffect(() => {
+            if (typeof onActiveChange === 'function') {
+                onActiveChange(isOpen);
+            }
+        }, [isOpen, onActiveChange]);
 
         const handleHide = useCallback(() => {
             setIsOpen(false);
@@ -140,11 +177,16 @@ const Filter = forwardRef<FilterRef, FilterProps>(
 
         const iconElement = useMemo(
             () => (
-                <StyledFilterIcon onClick={handleIconClick} $isOpen={isOpen} ref={iconRef}>
+                <StyledFilterIcon
+                    onClick={handleIconClick}
+                    $isOpen={isOpen}
+                    ref={iconRef}
+                    $shouldShowRoundedHoverEffect={shouldShowRoundedHoverEffect}
+                >
                     <Icon icons={icons} size={18} />
                 </StyledFilterIcon>
             ),
-            [handleIconClick, icons, isOpen],
+            [handleIconClick, icons, isOpen, shouldShowRoundedHoverEffect],
         );
 
         const backgroundElement = useMemo(
@@ -179,12 +221,32 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             () => (
                 <StyledFilter ref={filterRef}>
                     <StyledFilterHead>
-                        <StyledFilterHeadline isSearchActive={isSearchActive}>
-                            {headline}
-                        </StyledFilterHeadline>
+                        {!isValidElement(headline) ? (
+                            <StyledFilterHeadline $isSearchActive={isSearchActive}>
+                                {headline}
+                            </StyledFilterHeadline>
+                        ) : (
+                            <StyledFilterHeadlineElement $isSearchActive={isSearchActive}>
+                                {headline}
+                            </StyledFilterHeadlineElement>
+                        )}
                         {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
                             <>
-                                {iconElement}
+                                <StyledFilterIconWrapper>
+                                    {rightIcons &&
+                                        rightIcons.map(({ icons: rIcons, onClick }) => (
+                                            <StyledFilterIcon
+                                                onClick={onClick}
+                                                $isOpen={false}
+                                                $shouldShowRoundedHoverEffect={
+                                                    shouldShowRoundedHoverEffect
+                                                }
+                                            >
+                                                <Icon icons={rIcons} size={18} />
+                                            </StyledFilterIcon>
+                                        ))}
+                                    {iconElement}
+                                </StyledFilterIconWrapper>
                                 {backgroundDistance > 0 && backgroundElement}
                             </>
                         )}
@@ -206,6 +268,10 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                                 {iconElement}
                             </ContextMenu>
                         )}
+                        {type === FilterType.ONLY_CHECKBOX && checkboxConfig && (
+                            // eslint-disable-next-line react/jsx-props-no-spreading
+                            <Checkbox {...checkboxConfig} />
+                        )}
                     </StyledFilterHead>
                     {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
                         <StyledFilterContentWrapper ref={contentRef}>
@@ -217,6 +283,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                                     searchConfig={searchConfig}
                                     filterButtonConfig={filterButtonConfig}
                                     sortConfig={sortConfig}
+                                    checkboxConfig={checkboxConfig}
                                 />
                             </ExpandableContent>
                         </StyledFilterContentWrapper>
@@ -224,17 +291,20 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 </StyledFilter>
             ),
             [
-                isSearchActive,
                 headline,
+                isSearchActive,
                 type,
+                rightIcons,
                 iconElement,
                 backgroundDistance,
                 backgroundElement,
                 searchConfig,
                 sortConfig,
                 sortItems,
+                checkboxConfig,
                 isOpen,
                 filterButtonConfig,
+                shouldShowRoundedHoverEffect,
             ],
         );
     },

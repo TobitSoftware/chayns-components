@@ -57,6 +57,8 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     transition: background-color 0.2s ease-in-out;
 
+    min-height: 42px;
+
     ${({ theme, $shouldShowTransparentBackground, $shouldChangeColor }) => {
         if ($shouldShowTransparentBackground) {
             if (theme.colorMode === 'dark') {

@@ -1,4 +1,4 @@
-import { AreaContext, BrowserName, getIsTouch } from '@chayns-components/core';
+import { AreaContext, BrowserName, useIsTouch } from '@chayns-components/core';
 import { getDevice } from 'chayns-api';
 import { AnimatePresence } from 'motion/react';
 import React, {
@@ -175,7 +175,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         },
         ref,
     ) => {
-        const [isTouch] = useState(getIsTouch());
+        const isTouch = useIsTouch();
         const [plainTextValue, setPlainTextValue] = useState(value);
         const [hasFocus, setHasFocus] = useState(false);
         const [progressDuration, setProgressDuration] = useState(0);

@@ -27,8 +27,15 @@ export { useContainer, ContainerAnchor } from './hooks/container';
 export { DropdownDirection, type DropdownCoordinates } from './types/dropdown';
 export { useIsMeasuredClone } from './hooks/element';
 export { useCombinedRefs } from './hooks/ref';
-export { default as Filter } from './components/filter/Filter';
-export { type SortItem } from './types/filter';
+export { default as Filter, type FilterRightIcon } from './components/filter/Filter';
+export {
+    type SortItem,
+    type SearchConfig,
+    type SortConfig,
+    type CheckboxConfig,
+    type FilterButtonConfig,
+    type FilterRef,
+} from './types/filter';
 export { default as AnimatedNumber } from './components/animated-number/AnimatedNumber';
 export {
     default as FileList,
@@ -74,6 +81,7 @@ export {
     default as ListItem,
     type ListItemElements,
     type ListItemProps,
+    type ListItemRef,
 } from './components/list/list-item/ListItem';
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
 export type { MentionMember } from './components/mention-finder/MentionFinder';
@@ -131,7 +139,7 @@ export type {
 export type { SelectButtonItem } from './types/selectButton';
 export type { SliderButtonItem } from './types/slider-button';
 export { ClampPosition } from './types/truncation';
-export { getIsTouch } from './utils/environment';
+export { useIsTouch } from './utils/environment';
 export { filterFilesByMimeType, getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
 export { isTobitEmployee } from './utils/isTobitEmployee';
 export { getUsableHeight } from './utils/pageProvider';

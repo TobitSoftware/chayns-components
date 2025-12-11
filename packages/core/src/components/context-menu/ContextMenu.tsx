@@ -2,6 +2,7 @@ import { createDialog, DialogType } from 'chayns-api';
 import { AnimatePresence } from 'motion/react';
 import React, {
     forwardRef,
+    isValidElement,
     MouseEvent,
     MouseEventHandler,
     ReactNode,
@@ -15,7 +16,7 @@ import React, {
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
 import { ContextMenuAlignment } from '../../types/contextMenu';
-import { getIsTouch } from '../../utils/environment';
+import { useIsTouch } from '../../utils/environment';
 import Icon from '../icon/Icon';
 import ContextMenuContent from './context-menu-content/ContextMenuContent';
 import { StyledContextMenu } from './ContextMenu.styles';
@@ -26,7 +27,7 @@ export type ContextMenuCoordinates = {
 };
 
 export type ContextMenuItem = {
-    icons: string[];
+    icons: string[] | ReactNode;
     key: string;
     onClick: (event?: MouseEvent<HTMLDivElement>) => Promise<void> | void;
     isSelected?: boolean;
@@ -64,7 +65,7 @@ type ContextMenuProps = {
      */
     headline?: string;
     /**
-     * The items that will be displayed in the content of the `ContextMenu`.
+     * The items that will be displayed in the content of the `ContextMenu`. Custom icon elements only works on desktop.
      */
     items: ContextMenuItem[];
     /**
@@ -92,6 +93,10 @@ type ContextMenuProps = {
      */
     shouldShowHoverEffect?: boolean;
     /**
+     * Whether the click should be disabled.
+     */
+    shouldDisableClick?: boolean;
+    /**
      * The z-index of the popup.
      */
     zIndex?: number;
@@ -113,6 +118,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             items,
             headline,
             onHide,
+            shouldDisableClick = false,
             onShow,
             shouldCloseOnPopupClick = true,
             shouldSeparateLastItem = false,
@@ -139,7 +145,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         const contextMenuContentRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<HTMLSpanElement>(null);
 
-        const isTouch = getIsTouch();
+        const isTouch = useIsTouch();
 
         useEffect(() => {
             if (contextMenuRef.current && !container) {
@@ -170,7 +176,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                         name: text,
                         id: index,
                         isSelected,
-                        icon: icons[0],
+                        icon: isValidElement(icons) ? undefined : (icons as string)[0],
                     })),
                 }).open()) as SelectDialogResult;
 
@@ -218,12 +224,16 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
         const handleClick = useCallback<MouseEventHandler<HTMLDivElement>>(
             (event) => {
+                if (shouldDisableClick) {
+                    return;
+                }
+
                 event.preventDefault();
                 event.stopPropagation();
 
                 void handleShow();
             },
-            [handleShow],
+            [handleShow, shouldDisableClick],
         );
 
         const handleDocumentClick = useCallback<EventListener>(

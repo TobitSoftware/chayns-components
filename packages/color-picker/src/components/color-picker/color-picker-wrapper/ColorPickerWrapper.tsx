@@ -1,4 +1,4 @@
-import { Popup } from '@chayns-components/core';
+import { Popup, PopupAlignment } from '@chayns-components/core';
 import React, { ReactNode, useContext, useMemo } from 'react';
 import type { IPresetColor } from '../../../types/colorPicker';
 import ColorPickerPopup from '../../color-picker-popup/ColorPickerPopup';
@@ -23,6 +23,9 @@ interface ColorPickerWrapperProps {
     shouldShowRoundPreviewColor: boolean;
     shouldShowTransparencySlider: boolean;
     shouldUseSiteColors: boolean;
+    shouldHideColorArea: boolean;
+    shouldHideDefaultPresetColors: boolean;
+    alignment?: PopupAlignment;
 }
 
 const ColorPickerWrapper = ({
@@ -32,17 +35,22 @@ const ColorPickerWrapper = ({
     presetColors,
     shouldShowAsPopup,
     shouldShowMoreOptions,
+    shouldHideDefaultPresetColors,
     shouldShowPresetColors,
     shouldShowPreviewColorString,
     shouldShowRoundPreviewColor,
+    shouldHideColorArea,
     shouldShowTransparencySlider,
     shouldUseSiteColors,
+    alignment,
 }: ColorPickerWrapperProps) => {
     const { selectedColor } = useContext(ColorPickerContext);
 
     const content = useMemo(
         () => (
             <ColorPickerPopup
+                shouldHideDefaultPresetColors={shouldHideDefaultPresetColors}
+                shouldHideColorArea={shouldHideColorArea}
                 shouldShowPresetColors={shouldShowPresetColors}
                 onPresetColorRemove={onPresetColorRemove}
                 onPresetColorAdd={onPresetColorAdd}
@@ -56,6 +64,8 @@ const ColorPickerWrapper = ({
             onPresetColorAdd,
             onPresetColorRemove,
             presetColors,
+            shouldHideColorArea,
+            shouldHideDefaultPresetColors,
             shouldShowMoreOptions,
             shouldShowPresetColors,
             shouldShowTransparencySlider,
@@ -66,7 +76,7 @@ const ColorPickerWrapper = ({
     return (
         <StyledColorPickerWrapper>
             {shouldShowAsPopup ? (
-                <Popup content={content}>
+                <Popup content={content} alignment={alignment}>
                     {children ?? (
                         <StyledColorPickerWrapperInfo>
                             <StyledColorPickerWrapperInfoColorWrapper

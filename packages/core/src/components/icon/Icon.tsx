@@ -5,39 +5,93 @@ import { StyledIcon, StyledIconWrapper } from './Icon.styles';
 
 export type IconProps = {
     /**
-     * Additional class names for the root element
+     * Additional class name for the icon wrapper element.
+     * @description
+     * This class name is applied to the wrapper element that contains the icon. It can be used to
+     * style the icon wrapper element.
+     * @example
+     * <Icon className="my-custom-class" icons={['fa-user']} />
+     * optional
      */
     className?: string;
     /**
-     * The color of the icon
+     * The color of the icon.
+     * @description
+     * This property can be used to set the color of the icon. The color is only used for icons that
+     * don't have a predefined color (e.g., 'fa-inverse' icons will always be white). If no color is
+     * specified, the icon color of the theme or the text color will be used.
+     * @example
+     * <Icon color="red" icons={['fa-user']} />
+     * @optional
      */
     color?: string;
     /**
-     * The FontAwesome or tobit icons to render. Multiple icons are stacked.
+     * The icon(s) to be displayed.
+     * @description
+     * This property can be used to set the icon(s) to be displayed. The icon(s) must be specified as
+     * an array of strings. Each string must be a valid icon name.
+     * @example
+     * <Icon icons={['fa-user']} />
+     * <Icon icons={['fa fa-circle fa-stack-2x', 'fa fa-french-fries fa-inverse']} />
      */
     icons: string[];
     /**
-     * Disables the icon so that it cannot be clicked anymore
+     * Whether the icon should be disabled.
+     * @description
+     * This property can be used to disable the icon. When the icon is disabled, it will not be
+     * clickable, and it will not emit any events.
+     * @example
+     * <Icon icons={['fa-user']} isDisabled />
+     * @optional
      */
     isDisabled?: boolean;
     /**
-     * Function to be executed when the icon was clicked
+     * Function to be executed when the icon is clicked.
+     * @description
+     * This function is executed when the icon is clicked. It can be used to handle the click event.
+     * @example
+     * <Icon icons={['fa-user']} onClick={() => console.log('Icon clicked')} />
+     * @optional
      */
     onClick?: MouseEventHandler<HTMLSpanElement>;
     /**
-     * Function to be executed when the icon was double-clicked
+     * Function to be executed when the icon is double-clicked.
+     * @description
+     * This function is executed when the icon is double-clicked. It can be used to handle the
+     * double-click event.
+     * @example
+     * <Icon icons={['fa-user']} onDoubleClick={() => console.log('Icon double-clicked')} />
+     * @optional
      */
     onDoubleClick?: MouseEventHandler<HTMLSpanElement>;
     /**
-     * Function to be executed when a mouse button is pressed on the icon
+     * Function to be executed when the icon is pressed.
+     * @description
+     * This function is executed when the icon is pressed. It can be used to handle the mouse down event.
+     * @example
+     * <Icon icons={['fa-user']} onMouseDown={() => console.log('Icon pressed')} />
+     * @optional
      */
     onMouseDown?: MouseEventHandler<HTMLSpanElement>;
     /**
-     * Size of the icon in pixel
+     * The size of the icon.
+     * @description
+     * This property can be used to set the size of the icon. The size must be specified as a number
+     * in pixels.
+     * @default 15
+     * @example
+     * <Icon icons={['fa-user']} size={20} />
+     * @optional
      */
     size?: number;
     /**
-     * Stops event propagation on click
+     * Stops event propagation on click.
+     * @description
+     * This property can be used to prevent the icon from propagating the click event to its parent
+     * elements.
+     * @example
+     * <Icon icons={['fa-user']} shouldStopPropagation />
+     * @optional
      */
     shouldStopPropagation?: boolean;
 };

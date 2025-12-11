@@ -1,5 +1,6 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+    StyledFilterComboboxWrapper,
     StyledFilterContent,
     StyledFilterSort,
     StyledFilterSortText,
@@ -7,20 +8,32 @@ import {
 import OldInput from '../../old-input/OldInput';
 import Icon from '../../icon/Icon';
 import FilterButtons from '../../filter-buttons/FilterButtons';
-import { FilterButtonConfig, SearchConfig, SortConfig } from '../../../types/filter';
+import {
+    CheckboxConfig,
+    FilterButtonConfig,
+    SearchConfig,
+    SortConfig,
+} from '../../../types/filter';
 import ComboBox, { IComboBoxItem } from '../../combobox/ComboBox';
+import Checkbox from '../../checkbox/Checkbox';
 
 export type FilterContentProps = {
     searchConfig?: SearchConfig;
     filterButtonConfig?: FilterButtonConfig;
     sortConfig?: SortConfig;
+    checkboxConfig?: CheckboxConfig;
 };
 
 const FilterContent: FC<FilterContentProps> = ({
     searchConfig,
     sortConfig,
     filterButtonConfig,
+    checkboxConfig,
 }) => {
+    const sortTextRef = useRef<HTMLDivElement>(null);
+
+    const [sortTextWidth, setSortTextWidth] = useState(0);
+
     const handleSelectSortItem = useCallback(
         (item: IComboBoxItem | undefined) => {
             if (!item) {
@@ -35,6 +48,12 @@ const FilterContent: FC<FilterContentProps> = ({
         },
         [sortConfig],
     );
+
+    useEffect(() => {
+        if (sortTextRef.current) {
+            setSortTextWidth(sortTextRef.current.clientWidth + 20);
+        }
+    }, []);
 
     return useMemo(
         () => (
@@ -52,28 +71,41 @@ const FilterContent: FC<FilterContentProps> = ({
                 {filterButtonConfig && <FilterButtons {...filterButtonConfig} />}
                 {sortConfig && (
                     <StyledFilterSort>
-                        <StyledFilterSortText>Sortierung</StyledFilterSortText>
-                        <ComboBox
-                            lists={[
-                                {
-                                    list: sortConfig.items.map(({ text, id }) => ({
-                                        text,
-                                        value: id,
-                                    })),
-                                },
-                            ]}
-                            placeholder=""
-                            selectedItem={{
-                                text: sortConfig.selectedItem.text,
-                                value: sortConfig.selectedItem.id,
-                            }}
-                            onSelect={handleSelectSortItem}
-                        />
+                        <StyledFilterSortText ref={sortTextRef}>Sortierung</StyledFilterSortText>
+                        <StyledFilterComboboxWrapper $textWidth={sortTextWidth}>
+                            <ComboBox
+                                lists={[
+                                    {
+                                        list: sortConfig.items.map(({ text, id }) => ({
+                                            text,
+                                            value: id,
+                                        })),
+                                    },
+                                ]}
+                                placeholder=""
+                                selectedItem={{
+                                    text: sortConfig.selectedItem.text,
+                                    value: sortConfig.selectedItem.id,
+                                }}
+                                onSelect={handleSelectSortItem}
+                            />
+                        </StyledFilterComboboxWrapper>
                     </StyledFilterSort>
+                )}
+                {checkboxConfig && (
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    <Checkbox {...checkboxConfig} />
                 )}
             </StyledFilterContent>
         ),
-        [filterButtonConfig, handleSelectSortItem, searchConfig, sortConfig],
+        [
+            checkboxConfig,
+            filterButtonConfig,
+            handleSelectSortItem,
+            searchConfig,
+            sortConfig,
+            sortTextWidth,
+        ],
     );
 };
 
