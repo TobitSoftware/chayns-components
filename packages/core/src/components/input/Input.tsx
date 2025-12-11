@@ -10,11 +10,13 @@ const Input = forwardRef<unknown, InputProps>(
         inputType = 'text',
         isDisabled = false,
         isInvalid = false,
+        leftElement,
         onBlur,
         onChange,
         onFocus,
         placeholder = '',
         placeholderMode = InputPlaceholderMode.Default,
+        rightElement,
         shouldUseAutoFocus = false,
         value,
     }) => {
@@ -52,6 +54,7 @@ const Input = forwardRef<unknown, InputProps>(
 
         return (
             <StyledInput $design={design} $isDisabled={isDisabled} $isFocused={isFocused}>
+                {leftElement}
                 <StyledInputContentWrapper>
                     <StyledInputField
                         $isInvalid={isInvalid}
@@ -73,6 +76,7 @@ const Input = forwardRef<unknown, InputProps>(
                         />
                     )}
                 </StyledInputContentWrapper>
+                {rightElement}
             </StyledInput>
         );
     },

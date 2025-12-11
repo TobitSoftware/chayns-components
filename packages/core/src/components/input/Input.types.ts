@@ -71,6 +71,18 @@ export type InputProps = {
      */
     isInvalid?: boolean;
     /**
+     * An element to be displayed on the left side of the input field.
+     * @description
+     * The `leftElement` prop allows you to add an element to the left side of the input field. It
+     * can be used to display icons, buttons, or any other content that is relevant to the input's
+     * purpose. This prop is optional and can be used to add additional context or information to
+     * the input field.
+     * @example
+     * <Input leftElement={<Icon icons={['fa-search']} />} />
+     * @optional
+     */
+    leftElement?: React.ReactNode;
+    /**
      * Callback function triggered when the input field loses focus.
      * @description
      * The `onBlur` prop is a function called when the input field loses focus, allowing you to
@@ -131,6 +143,18 @@ export type InputProps = {
      * @optional
      */
     placeholderMode?: InputPlaceholderMode;
+    /**
+     * An element to be displayed on the right side of the input field.
+     * @description
+     * The `rightElement` prop allows you to add an element to the right side of the input field. It
+     * can be used to display icons, buttons, or any other content that is relevant to the input's
+     * purpose. This prop is optional and can be used to add additional context or information to
+     * the input field.
+     * @example
+     * <Input rightElement={<Icon icons={['fa-paper-plane']} />} />
+     * @optional
+     */
+    rightElement?: React.ReactNode;
     /**
      * Whether the input should be automatically focused when the component mounts.
      * @description
