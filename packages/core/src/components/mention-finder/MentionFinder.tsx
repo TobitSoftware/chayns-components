@@ -55,6 +55,10 @@ export type MentionFinderProps = {
      * Threshold in pixels to drag to close the popup
      */
     dragCloseThresholdInPx?: number;
+    /**
+     * Selector for the container to render the overlay into (defaults to closest dialog, thread, page provider or tapp)
+     */
+    overlayContainerSelector?: string;
 };
 
 const DRAG_CLOSE_THRESHOLD_IN_PX = 60;
@@ -81,6 +85,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
     popupAlignment,
     enableDragHandle = false,
     dragCloseThresholdInPx = DRAG_CLOSE_THRESHOLD_IN_PX,
+    overlayContainerSelector,
 }) => {
     const [activeMember, setActiveMember] = useState(members[0]);
     const [focusedIndex, setFocusedIndex] = useState(0);
@@ -461,7 +466,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
         }
 
         const container = popupRef.current?.closest(
-            '.chayns-threads .dialog-inner, .page-provider, .tapp',
+            overlayContainerSelector ?? '.dialog-inner, .chayns-threads, .page-provider, .tapp',
         );
 
         if (container) {
@@ -472,7 +477,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
         if (typeof document !== 'undefined') {
             setOverlayContainer(document.body);
         }
-    }, [enableDragHandle, shouldRenderPopup]);
+    }, [enableDragHandle, overlayContainerSelector, shouldRenderPopup]);
 
     const overlayPortal =
         overlayContainer && enableDragHandle

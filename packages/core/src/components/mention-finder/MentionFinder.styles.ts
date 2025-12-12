@@ -179,6 +179,6 @@ export const StyledMentionFinderOverlay = styled(motion.div)`
     inset: 0;
     opacity: 0;
     pointer-events: all;
-    position: fixed;
+    position: absolute;
     z-index: 1;
 `;
