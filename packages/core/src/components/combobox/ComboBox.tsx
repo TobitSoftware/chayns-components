@@ -2,7 +2,6 @@ import { useDevice, useFunctions, useValues } from 'chayns-api';
 import React, {
     ChangeEventHandler,
     type CSSProperties,
-    FC,
     FocusEventHandler,
     forwardRef,
     Fragment,
@@ -639,18 +638,22 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                             </StyledComboBoxPlaceholder>
                         </StyledComboBoxPrefixAndPlaceholderWrapper>
                         {shouldShowClearIcon && internalSelectedItem && (
-                            <StyledComboBoxClearIconWrapper onClick={handleClear}>
+                            <StyledComboBoxClearIconWrapper
+                                $isDisabled={isDisabled}
+                                onClick={handleClear}
+                            >
                                 <Icon icons={['fa fa-times']} />
                             </StyledComboBoxClearIconWrapper>
                         )}
                         {!shouldDisableActions && (
                             <StyledComboBoxIconWrapper
+                                $isDisabled={isDisabled}
                                 $shouldShowBorderLeft={
                                     shouldShowClearIcon === true &&
                                     internalSelectedItem !== undefined
                                 }
                             >
-                                <Icon icons={['fa fa-chevron-down']} />
+                                <Icon icons={['fa fa-chevron-down']} isDisabled={isDisabled} />
                             </StyledComboBoxIconWrapper>
                         )}
                     </StyledComboBoxHeader>

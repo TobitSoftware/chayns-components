@@ -177,9 +177,11 @@ export const StyledComboBoxPlaceholderImage = styled.img<StyledComboBoxPlacehold
         `}
 `;
 
-export const StyledComboBoxClearIconWrapper = styled.div`
+type StyledComboBoxClearIconWrapperProps = { $isDisabled: boolean };
+
+export const StyledComboBoxClearIconWrapper = styled.div<StyledComboBoxClearIconWrapperProps>`
     align-items: center;
-    cursor: pointer;
+    cursor: ${({ $isDisabled }) => (!$isDisabled ? 'pointer' : 'default')};
     display: flex;
     flex: 0 0 auto;
     height: 40px;
@@ -187,13 +189,13 @@ export const StyledComboBoxClearIconWrapper = styled.div`
     width: 40px;
 `;
 
-type StyledComboBoxIconWrapperProps = { $shouldShowBorderLeft: boolean };
+type StyledComboBoxIconWrapperProps = { $shouldShowBorderLeft: boolean; $isDisabled: boolean };
 
 export const StyledComboBoxIconWrapper = styled.div<StyledComboBoxIconWrapperProps>`
     align-items: center;
     border-left: ${({ $shouldShowBorderLeft }) =>
         $shouldShowBorderLeft ? '1px solid rgba(160, 160, 160, 0.3)' : 'none'};
-    cursor: pointer;
+    cursor: ${({ $isDisabled }) => (!$isDisabled ? 'pointer' : 'default')};
     display: flex;
     flex: 0 0 auto;
     height: 40px;
