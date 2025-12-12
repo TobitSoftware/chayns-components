@@ -15,50 +15,6 @@ export default {
                         text: 'Margherita',
                         value: 1,
                     },
-                    {
-                        text: 'Thunfisch',
-                        value: 2,
-                    },
-                    {
-                        text: 'Salami',
-                        value: 3,
-                    },
-                    {
-                        text: 'Schinken',
-                        value: 4,
-                    },
-                    {
-                        text: 'Champignons',
-                        value: 5,
-                    },
-                    {
-                        isDisabled: true,
-                        text: 'Paprika',
-                        value: 6,
-                    },
-                    {
-                        text: 'Oliven',
-                        value: 7,
-                    },
-                    {
-                        isDisabled: true,
-                        text: 'Zwiebeln',
-                        value: 8,
-                    },
-                    {
-                        isDisabled: true,
-                        text: 'Peperoni',
-                        value: 9,
-                    },
-                    {
-                        isDisabled: true,
-                        text: 'Ananas',
-                        value: 10,
-                    },
-                    {
-                        text: 'Spinat',
-                        value: 11,
-                    },
                 ],
             },
         ],

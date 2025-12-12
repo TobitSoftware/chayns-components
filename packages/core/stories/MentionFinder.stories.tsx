@@ -69,3 +69,9 @@ const Template: StoryFn<typeof MentionFinder> = (args) => (
 );
 
 export const General = Template.bind({});
+
+export const TopAlignedWithDrag = Template.bind({});
+TopAlignedWithDrag.args = {
+    popupAlignment: MentionFinderPopupAlignment.Bottom,
+    enableDragHandle: true,
+};

@@ -151,6 +151,10 @@ export type AccordionProps = {
      * The title color.
      */
     titleColor?: CSSProperties['color'];
+    /**
+     * Whether the accordion should be indexed.
+     */
+    shouldIndex?: boolean;
 };
 
 const Accordion: FC<AccordionProps> = ({
@@ -182,6 +186,7 @@ const Accordion: FC<AccordionProps> = ({
     titleInputProps,
     shouldSkipAnimation: shouldSkipAnimationProp = false,
     titleColor,
+    shouldIndex = false,
     onBodyAnimationComplete,
 }) => {
     const {
@@ -311,12 +316,19 @@ const Accordion: FC<AccordionProps> = ({
             exit={{ height: 0, opacity: 0 }}
             initial={initialAnimation}
             $isOpen={isOpen}
+            tabIndex={shouldIndex ? 0 : -1}
             $shouldShowLines={!isLastAccordion || !isWrapped}
             $isParentWrapped={isParentWrapped}
             $isWrapped={isWrapped}
             $shouldForceBackground={shouldForceBackground}
             $shouldHideBackground={shouldHideBackground}
             $shouldHideBottomLine={shouldHideBottomLine}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleHeadClick();
+                }
+            }}
             onMouseEnter={onHoverStart}
             onMouseLeave={onHoverEnd}
             transition={{ duration: shouldSkipAnimation ? 0 : 0.25 }}

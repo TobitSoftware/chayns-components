@@ -30,11 +30,20 @@ export type SearchBoxBodyProps = {
     height: number;
     onGroupSelect?: (keys: string[]) => void;
     shouldHideFilterButtons?: boolean;
+    shouldShow: boolean;
 };
 
 const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
     (
-        { filterButtons, selectedGroups, height, children, onGroupSelect, shouldHideFilterButtons },
+        {
+            filterButtons,
+            selectedGroups,
+            height,
+            children,
+            shouldShow,
+            onGroupSelect,
+            shouldHideFilterButtons,
+        },
         ref,
     ) => {
         const [hasScrolled, setHasScrolled] = useState(false);
@@ -90,7 +99,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
 
         return useMemo(
             () => (
-                <StyledSearchBoxBody onClick={handlePreventDefault} ref={ref}>
+                <StyledSearchBoxBody onClick={handlePreventDefault} ref={ref} inert={!shouldShow}>
                     {filterButtons && filterButtons?.length > 1 && (
                         <StyledSearchBoxBodyHead
                             ref={headRef}
@@ -136,6 +145,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                 ref,
                 selectedGroups,
                 shouldHideFilterButtons,
+                shouldShow,
                 uuid,
             ],
         );

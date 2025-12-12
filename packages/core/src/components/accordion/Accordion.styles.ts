@@ -90,7 +90,8 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
         !$isWrapped &&
         !$shouldHideBackground &&
         css`
-            &:hover {
+            &:hover,
+            &:focus-visible {
                 background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
             }
         `};

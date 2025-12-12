@@ -159,6 +159,17 @@ const SearchInput: FC<SearchInputProps> = ({
                                     ? 'search-input-backIcon'
                                     : 'search-input-searchIcon'
                             }
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    if (isSearchInputActive) {
+                                        handleBackIconClick();
+                                    } else {
+                                        handleSearchIconClick();
+                                    }
+                                }
+                            }}
                         >
                             <Icon
                                 key="icon"
@@ -187,6 +198,17 @@ const SearchInput: FC<SearchInputProps> = ({
                                             ? 'search-input-backIcon'
                                             : 'search-input-searchIcon'
                                     }
+                                    tabIndex={0}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            if (isSearchInputActive) {
+                                                handleBackIconClick();
+                                            } else {
+                                                handleSearchIconClick();
+                                            }
+                                        }
+                                    }}
                                 >
                                     <Icon
                                         key="icon"
