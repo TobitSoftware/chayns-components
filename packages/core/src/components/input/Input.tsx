@@ -1,5 +1,17 @@
-import React, { FocusEvent, forwardRef, useCallback, useRef, useState } from 'react';
-import { StyledInput, StyledInputContentWrapper, StyledInputField } from './Input.styles';
+import React, {
+    FocusEvent,
+    forwardRef,
+    isValidElement,
+    useCallback,
+    useRef,
+    useState,
+} from 'react';
+import {
+    StyledInput,
+    StyledInputAnimationElementWrapper,
+    StyledInputContentWrapper,
+    StyledInputField,
+} from './Input.styles';
 import { InputDesign, type InputProps } from './Input.types';
 import { InputPlaceholderMode } from './input-placeholder/InputPlaceholder.types';
 import InputPlaceholder from './input-placeholder/InputPlaceholder';
@@ -52,10 +64,16 @@ const Input = forwardRef<unknown, InputProps>(
             [onFocus],
         );
 
+        const hasLeftElement = isValidElement(leftElement);
+        const hasRightElement = isValidElement(rightElement);
+
         return (
             <StyledInput $design={design} $isDisabled={isDisabled} $isFocused={isFocused}>
                 {leftElement}
-                <StyledInputContentWrapper>
+                <StyledInputContentWrapper
+                    $hasLeftElement={hasLeftElement}
+                    $hasRightElement={hasRightElement}
+                >
                     <StyledInputField
                         $isInvalid={isInvalid}
                         autoFocus={shouldUseAutoFocus}
@@ -69,6 +87,8 @@ const Input = forwardRef<unknown, InputProps>(
                     />
                     {placeholder && (
                         <InputPlaceholder
+                            hasLeftElement={hasLeftElement}
+                            hasRightElement={hasRightElement}
                             hasValue={hasValue}
                             isInvalid={isInvalid}
                             placeholder={placeholder}

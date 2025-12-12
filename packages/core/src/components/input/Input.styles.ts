@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import { CSSProperties } from 'react';
 import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
@@ -20,7 +21,7 @@ export const StyledInput = styled.div<StyledInputProps>`
     font-size: 18px;
     min-height: 52px;
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
-    padding: 2px ${({ $design }) => ($design === InputDesign.Rounded ? '18px' : '12px')};
+    padding: 2px;
     transition:
         border-color 0.2s ease,
         box-shadow 0.2s ease,
@@ -28,10 +29,21 @@ export const StyledInput = styled.div<StyledInputProps>`
     width: 100%;
 `;
 
-export const StyledInputContentWrapper = styled.div`
+export const StyledInputAnimationElementWrapper = styled(motion.div)`
+    position: absolute;
+`;
+
+type StyledInputContentWrapperProps = WithTheme<{
+    $hasLeftElement?: boolean;
+    $hasRightElement?: boolean;
+}>;
+
+export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
     align-items: center;
     display: flex;
     flex: 1 1 auto;
+    padding: 0 ${({ $hasRightElement }) => ($hasRightElement ? 6 : 12)}px 0
+        ${({ $hasLeftElement }) => ($hasLeftElement ? 6 : 12)}px;
     position: relative;
     width: 100%;
 `;

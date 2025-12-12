@@ -14,6 +14,16 @@ export enum InputPlaceholderMode {
  */
 export type InputPlaceholderProps = {
     /**
+     * Whether the input has a left element
+     * @description Affects the position of the placeholder element.
+     */
+    hasLeftElement: boolean;
+    /**
+     * Whether the input has a right element
+     * @description Affects the position of the placeholder element.
+     */
+    hasRightElement: boolean;
+    /**
      * Whether the input has a value
      * @description Controls visibility and positioning of placeholder.
      * @example

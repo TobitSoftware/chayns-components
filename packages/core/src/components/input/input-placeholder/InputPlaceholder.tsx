@@ -3,6 +3,8 @@ import { StyledMotionInputPlaceholder } from './InputPlaceholder.styles';
 import { InputPlaceholderMode, type InputPlaceholderProps } from './InputPlaceholder.types';
 
 const InputPlaceholder: FC<InputPlaceholderProps> = ({
+    hasLeftElement,
+    hasRightElement,
     hasValue,
     isInvalid,
     placeholder,
@@ -10,11 +12,11 @@ const InputPlaceholder: FC<InputPlaceholderProps> = ({
 }) => {
     const labelPosition = useMemo(() => {
         if (hasValue && placeholderMode === InputPlaceholderMode.Floating) {
-            return { bottom: 0, right: -6 };
+            return { bottom: 0, right: hasRightElement ? 6 : 12 };
         }
 
-        return { left: 0 };
-    }, [hasValue, placeholderMode]);
+        return { left: hasLeftElement ? 6 : 12 };
+    }, [hasLeftElement, hasRightElement, hasValue, placeholderMode]);
 
     return (
         <StyledMotionInputPlaceholder
