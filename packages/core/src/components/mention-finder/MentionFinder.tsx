@@ -125,7 +125,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
 
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
-            if (event.key === 'ArrowUp' || (event.key === 'ArrowDown' && fullMatch)) {
+            if ((event.key === 'ArrowUp' || event.key === 'ArrowDown') && fullMatch) {
                 event.preventDefault();
 
                 const children = listRef.current?.children;
