@@ -131,7 +131,7 @@ export const StyledMotionMentionFinderPopup = styled(motion.div)<StyledMentionFi
     }}
 `;
 
-export const StyledMentionFinderItemList = styled.div<WithTheme<unknown>>`
+export const StyledMentionFinderItemList = styled.div<WithTheme<StyledMentionFinderPopupProps>>`
     flex: 1 1 auto;
     max-height: inherit;
     overflow-y: auto;
