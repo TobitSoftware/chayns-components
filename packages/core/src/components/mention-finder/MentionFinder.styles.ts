@@ -86,6 +86,9 @@ export const StyledMotionMentionFinderPopup = styled(motion.div)<StyledMentionFi
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 0;
     border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+
     ${({ $isDragging, $popupAlignment }) => {
         if (!$isDragging)
             return css`
