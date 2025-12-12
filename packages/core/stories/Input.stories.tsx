@@ -19,9 +19,20 @@ const Template: StoryFn<typeof Input> = (args) => <Input {...args} />;
 
 export const General = Template.bind({});
 
+export const WithAnimationElement = Template.bind({});
+
 export const WithButton = Template.bind({});
 
 export const WithLeftAndRightElement = Template.bind({});
+
+WithAnimationElement.args = {
+    animationElement: (
+        <Icon color="var(--chayns-color--primary)" icons={['ts-sidekick']} size={20} />
+    ),
+    design: InputDesign.Rounded,
+    shouldShowExpandAnimation: true,
+    placeholder: 'Deine Frage',
+};
 
 WithButton.args = {
     rightElement: <Button onClick={() => {}}>Weiter</Button>,
@@ -30,6 +41,9 @@ WithButton.args = {
 };
 
 WithLeftAndRightElement.args = {
+    animationElement: (
+        <Icon color="var(--chayns-color--primary)" icons={['ts-sidekick']} size={20} />
+    ),
     design: InputDesign.Rounded,
     leftElement: (
         <div
@@ -61,4 +75,5 @@ WithLeftAndRightElement.args = {
             <Icon color="white" icons={['fa fa-paper-plane']} size={20} />
         </div>
     ),
+    shouldShowExpandAnimation: true,
 };

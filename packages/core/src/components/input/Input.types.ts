@@ -2,6 +2,21 @@ import React, { FocusEvent, HTMLInputTypeAttribute } from 'react';
 import { InputPlaceholderMode } from './input-placeholder/InputPlaceholder.types';
 
 /**
+ * Defines the possible states of the input expanding animation.
+ * @enum {string}
+ */
+export enum InputAnimationState {
+    /** No animation used. The input will appear at its full size. */
+    None = 'none',
+    /** The input is waiting for the expanding animation to start. */
+    Idle = 'idle',
+    /** The input is currently expanding. */
+    Expanding = 'expanding',
+    /** The input has finished expanding. */
+    Expanded = 'expanded',
+}
+
+/**
  * Defines the visual design variants available for Input components.
  * @enum {string}
  */
@@ -16,6 +31,20 @@ export enum InputDesign {
  * Props for the Input component
  */
 export type InputProps = {
+    /**
+     * An element to be displayed while the input expanding is animated.
+     * @description
+     * The `animationElement` prop allows you to specify a React element that will be displayed
+     * during the input field's expanding animation. This can be useful for providing visual
+     * feedback to users while the input is transitioning to its expanded state. The element can be
+     * any valid React component or HTML element, such as a spinner, icon, or custom animation. This
+     * element will only be used if the `shouldShowExpandAnimation` prop is set to `true`. If not
+     * provided, the input will not display any animation element.
+     * @example
+     * <Input animationElement={<Icon icons={['ts-sidekick']} />} />
+     * @optional
+     */
+    animationElement?: React.ReactElement;
     /**
      * Design variant of the input field.
      * @description
@@ -155,6 +184,20 @@ export type InputProps = {
      * @optional
      */
     rightElement?: React.ReactNode;
+    /**
+     * Whether to expand the input animated on the first render.
+     * @description
+     * This prop determines if the input field should expand with an animation effect when it is
+     * first rendered. If set to `true`, the input will smoothly transition from a smaller size to
+     * its full size upon initial display, providing a visually appealing effect. This can enhance
+     * the user experience by drawing attention to the input field. By default, this prop is set to
+     * `false`, meaning the input will appear at its full size without any animation.
+     * @default false
+     * @example
+     * <Input shouldExpandOnFirstRender />
+     * @optional
+     */
+    shouldShowExpandAnimation?: boolean;
     /**
      * Whether the input should be automatically focused when the component mounts.
      * @description

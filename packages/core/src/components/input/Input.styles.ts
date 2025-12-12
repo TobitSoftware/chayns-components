@@ -2,9 +2,10 @@ import { motion } from 'motion/react';
 import { CSSProperties } from 'react';
 import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { InputDesign } from './Input.types';
+import { InputAnimationState, InputDesign } from './Input.types';
 
 type StyledInputProps = WithTheme<{
+    $animationState: InputAnimationState;
     $design: InputDesign;
     $isDisabled: boolean;
     $isFocused: boolean;
@@ -21,16 +22,31 @@ export const StyledInput = styled.div<StyledInputProps>`
     font-size: 18px;
     min-height: 52px;
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
-    padding: 2px;
+    position: relative;
     transition:
         border-color 0.2s ease,
         box-shadow 0.2s ease,
-        opacity 0.2s ease;
+        opacity 0.2s ease,
+        width 0.5s ease;
+    width: ${({ $animationState }) =>
+        $animationState === InputAnimationState.Idle ? '52px' : '100%'};
+`;
+
+export const StyledMotionInputWrapper = styled(motion.div)`
+    display: flex;
+    min-height: 48px;
+    padding: 2px;
     width: 100%;
 `;
 
-export const StyledInputAnimationElementWrapper = styled(motion.div)`
+export const StyledMotionInputAnimationElementWrapper = styled(motion.div)`
+    align-items: center;
+    display: flex;
+    height: 48px;
+    justify-content: center;
     position: absolute;
+    right: 0;
+    width: 48px;
 `;
 
 type StyledInputContentWrapperProps = WithTheme<{
@@ -61,6 +77,6 @@ export const StyledInputField = styled.input<StyledInputFieldProps>`
     flex: 1 1 auto;
     height: 100%;
     line-height: 1em;
-    padding: 0;
+    padding: 0 0 1px 0;
     width: 100%;
 `;
