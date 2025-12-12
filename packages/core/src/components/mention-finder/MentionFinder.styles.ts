@@ -131,7 +131,9 @@ export const StyledMotionMentionFinderPopup = styled(motion.div)<StyledMentionFi
     }}
 `;
 
-export const StyledMentionFinderItemList = styled.div<WithTheme<StyledMentionFinderPopupProps>>`
+type StyledMentionFinderItemListProps = WithTheme<unknown>;
+
+export const StyledMentionFinderItemList = styled.div<WithTheme<StyledMentionFinderItemListProps>>`
     flex: 1 1 auto;
     max-height: inherit;
     overflow-y: auto;
@@ -152,7 +154,7 @@ export const StyledMentionFinderItemList = styled.div<WithTheme<StyledMentionFin
 
     &::-webkit-scrollbar-thumb {
         background-color: rgba(
-            ${({ theme }: StyledMentionFinderPopupProps) => theme['text-rgb']},
+            ${({ theme }: StyledMentionFinderItemListProps) => theme['text-rgb']},
             0.15
         );
         border-radius: 20px;
@@ -162,7 +164,7 @@ export const StyledMentionFinderItemList = styled.div<WithTheme<StyledMentionFin
     // only supported in Firefox:
     * {
         scrollbar-color: rgba(
-                ${({ theme }: StyledMentionFinderPopupProps) => theme['text-rgb']},
+                ${({ theme }: StyledMentionFinderItemListProps) => theme['text-rgb']},
                 0.15
             )
             transparent;
