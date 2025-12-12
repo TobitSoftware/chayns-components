@@ -818,6 +818,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             <SearchBoxBody
                                 filterButtons={filterButtons}
                                 height={height}
+                                shouldShow={shouldShowDropdown}
                                 key={`search-box-body-${uuid}`}
                                 onGroupSelect={handleFilterButtonsGroupSelect}
                                 ref={contentRef}
