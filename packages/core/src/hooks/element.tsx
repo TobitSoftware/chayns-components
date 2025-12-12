@@ -128,6 +128,7 @@ export const useMeasuredClone = ({
                 width: 'auto',
                 visibility: 'hidden',
             }}
+            inert
         >
             {clonedElement}
         </div>
