@@ -21,6 +21,8 @@ type ContextMenuContentProps = {
     headline?: string;
     zIndex: number;
     shouldSeparateLastItem: boolean;
+    focusedIndex: number;
+    onKeySelect: (index: number) => void;
 };
 
 const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentProps>(
@@ -32,6 +34,8 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
             zIndex,
             shouldHidePopupArrow,
             headline,
+            onKeySelect,
+            focusedIndex,
             shouldSeparateLastItem,
         },
         ref,
@@ -87,17 +91,29 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
         const content = useMemo(
             () =>
                 items.map(({ onClick, key, text, icons, shouldShowSpacer }, index) => {
+                    const isFocused = index === focusedIndex;
+
                     const item = (
-                        <StyledContextMenuContentItem key={`context-menu-item-${key}`}>
+                        <StyledContextMenuContentItem
+                            key={`context-menu-item-${key}`}
+                            data-index={index}
+                        >
                             <StyledContextMenuContentItemWrapper
                                 key={key}
                                 onClick={(event) => {
                                     event.preventDefault();
                                     event.stopPropagation();
-
                                     void onClick(event);
                                 }}
+                                tabIndex={0}
                                 $shouldHidePopupArrow={shouldHidePopupArrow}
+                                $isFocused={isFocused}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        onKeySelect(index);
+                                    }
+                                }}
                             >
                                 {isValidElement(icons) ? (
                                     icons
@@ -110,6 +126,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                                     {text}
                                 </StyledContextMenuContentItemText>
                             </StyledContextMenuContentItemWrapper>
+
                             {shouldShowSpacer && <StyledContextMenuContentItemSpacer />}
                         </StyledContextMenuContentItem>
                     );
@@ -125,7 +142,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
 
                     return item;
                 }),
-            [items, shouldHidePopupArrow, shouldSeparateLastItem],
+            [items, focusedIndex, shouldHidePopupArrow, shouldSeparateLastItem, onKeySelect],
         );
 
         return (

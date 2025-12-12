@@ -117,6 +117,7 @@ export const StyledContextMenuContentItemSpacer = styled.div<StyledContextMenuCo
 
 type StyledContextMenuContentItemWrapperProps = WithTheme<{
     $shouldHidePopupArrow: boolean;
+    $isFocused: boolean;
 }>;
 
 export const StyledContextMenuContentItemWrapper = styled.div<StyledContextMenuContentItemWrapperProps>`
@@ -126,6 +127,12 @@ export const StyledContextMenuContentItemWrapper = styled.div<StyledContextMenuC
     transition: background-color 0.3s ease;
     border-radius: ${({ $shouldHidePopupArrow }) => ($shouldHidePopupArrow ? '3px' : 0)};
     margin: ${({ $shouldHidePopupArrow }) => ($shouldHidePopupArrow ? '3px' : 0)};
+
+    ${({ $isFocused, theme }) =>
+        $isFocused &&
+        css`
+            background-color: ${theme['secondary-103']};
+        `}
 
     &:hover {
         background-color: ${({ theme }: StyledContextMenuContentItemWrapperProps) =>

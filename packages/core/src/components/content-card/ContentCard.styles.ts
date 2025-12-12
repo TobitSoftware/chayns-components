@@ -27,7 +27,10 @@ export const StyledContentCard = styled.div<StyledContentCardProps>`
     ${({ $type, theme, $shouldChangeColor }: StyledContentCardProps) => {
         if ($type === ContentCardType.Default && $shouldChangeColor) {
             return css`
-                background-color: rgba(${theme['000-rgb']}, ${theme.cardBackgroundOpacity});
+                background-color: rgba(
+                    ${theme.colorMode === 'classic' ? theme['101-rgb'] : theme['000-rgb']},
+                    ${theme.cardBackgroundOpacity}
+                );
             `;
         }
 

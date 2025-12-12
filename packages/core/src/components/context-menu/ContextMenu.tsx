@@ -132,6 +132,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             y: 0,
         });
         const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
+        const [focusedIndex, setFocusedIndex] = useState<number>(0);
 
         const [internalAlignment, setInternalAlignment] = useState<ContextMenuAlignment>(
             ContextMenuAlignment.TopLeft,
@@ -146,6 +147,12 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         const contextMenuRef = useRef<HTMLSpanElement>(null);
 
         const isTouch = useIsTouch();
+
+        useEffect(() => {
+            if (isContentShown) {
+                setFocusedIndex(0);
+            }
+        }, [isContentShown]);
 
         useEffect(() => {
             if (contextMenuRef.current && !container) {
@@ -166,6 +173,42 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         const handleHide = useCallback(() => {
             setIsContentShown(false);
         }, []);
+
+        useEffect(() => {
+            if (!isContentShown) return () => {};
+
+            const handleKey = (e: KeyboardEvent) => {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    setFocusedIndex((prev) => Math.min(prev + 1, items.length - 1));
+                }
+
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setFocusedIndex((prev) => Math.max(prev - 1, 0));
+                }
+
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const item = items[focusedIndex];
+                    if (item) {
+                        void item.onClick();
+
+                        if (shouldCloseOnPopupClick) {
+                            handleHide();
+                        }
+                    }
+                }
+
+                if (e.key === 'Escape') {
+                    handleHide();
+                }
+            };
+
+            document.addEventListener('keydown', handleKey);
+
+            return () => document.removeEventListener('keydown', handleKey);
+        }, [isContentShown, items, focusedIndex, handleHide, shouldCloseOnPopupClick]);
 
         const handleShow = useCallback(async () => {
             if (isTouch) {
@@ -296,6 +339,14 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                                 key={`contextMenu_${uuid}`}
                                 alignment={alignment ?? internalAlignment}
                                 ref={contextMenuContentRef}
+                                focusedIndex={focusedIndex}
+                                onKeySelect={(index) => {
+                                    const item = items[index];
+                                    if (item) {
+                                        void item.onClick();
+                                        handleHide();
+                                    }
+                                }}
                             />
                         )}
                     </AnimatePresence>,
@@ -315,6 +366,8 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             shouldHidePopupArrow,
             headline,
             shouldSeparateLastItem,
+            focusedIndex,
+            handleHide,
         ]);
 
         return (
