@@ -1,4 +1,5 @@
 import React, {
+    Children,
     cloneElement,
     HTMLAttributes,
     isValidElement,
@@ -54,8 +55,31 @@ export const useElementSize = (
     return size;
 };
 
+const cloneWithTabIndex = (node: ReactNode): ReactNode => {
+    if (!isValidElement(node)) return node;
+
+    const element = node as ReactElement;
+
+    const tmpChildren = (element.props as { children: ReactNode[] }).children;
+
+    const children = tmpChildren ? Children.map(tmpChildren, cloneWithTabIndex) : tmpChildren;
+
+    if ((element.type as unknown as { displayName: string }).displayName === 'Button') {
+        return (
+            // eslint-disable-next-line react/button-has-type
+            <button tabIndex={-1}>{children}</button>
+        );
+    }
+
+    return cloneElement(element, {
+        ...element.props,
+        tabIndex: -1,
+        children,
+    });
+};
+
 const getClonedElement = (content: ReactNode) => {
-    const preventEvents: Partial<HTMLAttributes<any>> = {
+    const preventEvents: Partial<HTMLAttributes<never>> = {
         onClick: (e) => e.stopPropagation(),
         onMouseDown: (e) => e.stopPropagation(),
         onMouseUp: (e) => e.stopPropagation(),
@@ -65,18 +89,21 @@ const getClonedElement = (content: ReactNode) => {
         onBlur: (e) => e.stopPropagation(),
     };
 
-    const props = {
-        ...preventEvents,
-        'data-measured-clone': true,
-    };
-
-    if (isValidElement(content)) {
-        return cloneElement(content as unknown as ReactElement, props);
+    if (typeof content === 'string') {
+        return (
+            <span tabIndex={-1} data-measured-clone>
+                {content}
+            </span>
+        );
     }
 
-    if (typeof content === 'string') {
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        return <span {...props}>{content}</span>;
+    if (isValidElement(content)) {
+        return cloneWithTabIndex(
+            cloneElement(content, {
+                ...preventEvents,
+                'data-measured-clone': true,
+            }),
+        );
     }
 
     return content;
@@ -123,12 +150,14 @@ export const useMeasuredClone = ({
                 position: 'fixed',
                 opacity: 0,
                 pointerEvents: 'none',
+                userSelect: 'none',
                 zIndex: -1,
                 height: 'auto',
                 width: 'auto',
                 visibility: 'hidden',
             }}
             inert
+            tabIndex={-1}
         >
             {clonedElement}
         </div>
