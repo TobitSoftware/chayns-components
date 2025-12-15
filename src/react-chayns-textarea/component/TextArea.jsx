@@ -4,7 +4,7 @@
 
 import classnames from 'clsx';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 const DEFAULT_STYLE = {
     width: '100%',
@@ -37,12 +37,14 @@ const TextArea = ({
     ...props
 }) => {
     const ref = useRef(null);
-    const [offset, setOffset] = useState(0);
+    const offsetRef = useRef(0);
 
     const grow = useCallback(() => {
         ref.current.style.height = '0px';
-        ref.current.style.height = `${ref.current.scrollHeight + offset}px`;
-    }, [offset]);
+        ref.current.style.height = `${
+            ref.current.scrollHeight + offsetRef.current
+        }px`;
+    }, []);
 
     // update in value prop
     useEffect(() => {
@@ -72,7 +74,7 @@ const TextArea = ({
                 }
 
                 if (autogrow) {
-                    setOffset(node.offsetHeight - node.clientHeight);
+                    offsetRef.current = node.offsetHeight - node.clientHeight;
 
                     grow();
                 }
