@@ -3,8 +3,10 @@ import React, {
     ChangeEventHandler,
     CSSProperties,
     FC,
+    forwardRef,
     useCallback,
     useEffect,
+    useImperativeHandle,
     useMemo,
     useRef,
     useState,
@@ -65,183 +67,95 @@ export type SearchInputProps = {
     width?: number;
 };
 
-const SearchInput: FC<SearchInputProps> = ({
-    iconColor,
-    isActive,
-    onActiveChange,
-    onChange,
-    onKeyDown,
-    placeholder,
-    shouldUseAbsolutePositioning = false,
-    size = InputSize.Medium,
-    value,
-    width: widthValue,
-}) => {
-    const [isSearchInputActive, setIsSearchInputActive] = useState(
-        isActive ?? (typeof value === 'string' && value.trim() !== ''),
-    );
+const SearchInput = forwardRef<InputRef, SearchInputProps>(
+    (
+        {
+            iconColor,
+            isActive,
+            onActiveChange,
+            onChange,
+            onKeyDown,
+            placeholder,
+            shouldUseAbsolutePositioning = false,
+            size = InputSize.Medium,
+            value,
+            width: widthValue,
+        },
+        ref,
+    ) => {
+        const [isSearchInputActive, setIsSearchInputActive] = useState(
+            isActive ?? (typeof value === 'string' && value.trim() !== ''),
+        );
 
-    const inputRef = useRef<InputRef>(null);
-    const pseudoRef = useRef<HTMLDivElement>(null);
+        const inputRef = useRef<InputRef>(null);
+        const pseudoRef = useRef<HTMLDivElement>(null);
 
-    const parentWidth = useElementSize(pseudoRef);
+        const parentWidth = useElementSize(pseudoRef);
 
-    const theme = useTheme() as Theme;
+        const theme = useTheme() as Theme;
 
-    const handleBackIconClick = useCallback(() => setIsSearchInputActive(false), []);
+        const handleBackIconClick = useCallback(() => setIsSearchInputActive(false), []);
 
-    const handleSearchIconClick = useCallback(() => setIsSearchInputActive(true), []);
+        const handleSearchIconClick = useCallback(() => setIsSearchInputActive(true), []);
 
-    useEffect(() => {
-        if (typeof onActiveChange === 'function') {
-            onActiveChange(isSearchInputActive);
-        }
+        useEffect(() => {
+            if (typeof onActiveChange === 'function') {
+                onActiveChange(isSearchInputActive);
+            }
 
-        if (isSearchInputActive) {
-            inputRef.current?.focus();
-        }
-    }, [isSearchInputActive, onActiveChange]);
+            if (isSearchInputActive) {
+                inputRef.current?.focus();
+            }
+        }, [isSearchInputActive, onActiveChange]);
 
-    useEffect(() => {
-        if (typeof isActive === 'boolean') {
-            setIsSearchInputActive(isActive);
-        }
-    }, [isActive]);
+        useEffect(() => {
+            if (typeof isActive === 'boolean') {
+                setIsSearchInputActive(isActive);
+            }
+        }, [isActive]);
 
-    const width = useMemo(() => widthValue ?? parentWidth?.width, [parentWidth?.width, widthValue]);
+        useImperativeHandle(
+            ref,
+            () => ({
+                focus: () => inputRef.current?.focus(),
+                blur: () => inputRef.current?.blur(),
+            }),
+            [],
+        );
 
-    return (
-        <>
-            <StyledSearchInput
-                className="beta-chayns-search-input"
-                $size={size}
-                $shouldUseAbsolutePositioning={shouldUseAbsolutePositioning}
-                onClick={() => {
-                    if (shouldUseAbsolutePositioning) {
-                        if (isSearchInputActive) {
-                            handleBackIconClick();
-                        } else {
-                            handleSearchIconClick();
-                        }
-                    }
-                }}
-            >
-                {shouldUseAbsolutePositioning ? (
-                    <AnimatePresence initial={false}>
-                        {isSearchInputActive && (
-                            <StyledMotionSearchInputContentWrapper
-                                $shouldUseAbsolutePositioning={shouldUseAbsolutePositioning}
-                                animate={{ opacity: 1, width }}
-                                exit={{ opacity: 0, width: 0 }}
-                                initial={{ opacity: 0, width: 0 }}
-                                key="searchInputContentWrapper"
-                                transition={{ duration: 0.25, type: 'tween' }}
-                            >
-                                <Input
-                                    onChange={onChange}
-                                    onKeyDown={onKeyDown}
-                                    placeholder={placeholder}
-                                    ref={inputRef}
-                                    shouldShowClearIcon
-                                    size={size}
-                                    value={value}
-                                />
-                            </StyledMotionSearchInputContentWrapper>
-                        )}
-                        <StyledMotionSearchInputIconWrapperContent
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0, position: 'absolute' }}
-                            initial={{ opacity: 0 }}
-                            key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
-                            transition={{ duration: 0.3 }}
-                            id={
-                                isSearchInputActive
-                                    ? 'search-input-backIcon'
-                                    : 'search-input-searchIcon'
+        const width = useMemo(
+            () => widthValue ?? parentWidth?.width,
+            [parentWidth?.width, widthValue],
+        );
+
+        return (
+            <>
+                <StyledSearchInput
+                    className="beta-chayns-search-input"
+                    $size={size}
+                    $shouldUseAbsolutePositioning={shouldUseAbsolutePositioning}
+                    onClick={() => {
+                        if (shouldUseAbsolutePositioning) {
+                            if (isSearchInputActive) {
+                                handleBackIconClick();
+                            } else {
+                                handleSearchIconClick();
                             }
-                            tabIndex={0}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    e.preventDefault();
-                                    if (isSearchInputActive) {
-                                        handleBackIconClick();
-                                    } else {
-                                        handleSearchIconClick();
-                                    }
-                                }
-                            }}
-                        >
-                            <Icon
-                                key="icon"
-                                color={iconColor}
-                                icons={isSearchInputActive ? ['fa fa-xmark'] : ['fa fa-search']}
-                                onClick={
-                                    isSearchInputActive
-                                        ? handleBackIconClick
-                                        : handleSearchIconClick
-                                }
-                            />
-                        </StyledMotionSearchInputIconWrapperContent>
-                    </AnimatePresence>
-                ) : (
-                    <>
-                        <StyledMotionSearchInputIconWrapper>
-                            <AnimatePresence initial={false}>
-                                <StyledMotionSearchInputIconWrapperContent
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0, position: 'absolute' }}
-                                    initial={{ opacity: 0 }}
-                                    key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
-                                    transition={{ duration: 0.3 }}
-                                    id={
-                                        isSearchInputActive
-                                            ? 'search-input-backIcon'
-                                            : 'search-input-searchIcon'
-                                    }
-                                    tabIndex={0}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            e.preventDefault();
-                                            if (isSearchInputActive) {
-                                                handleBackIconClick();
-                                            } else {
-                                                handleSearchIconClick();
-                                            }
-                                        }
-                                    }}
-                                >
-                                    <Icon
-                                        key="icon"
-                                        color={iconColor}
-                                        icons={
-                                            isSearchInputActive
-                                                ? ['fa fa-arrow-left']
-                                                : ['fa fa-search']
-                                        }
-                                        onClick={
-                                            isSearchInputActive
-                                                ? handleBackIconClick
-                                                : handleSearchIconClick
-                                        }
-                                    />
-                                </StyledMotionSearchInputIconWrapperContent>
-                            </AnimatePresence>
-                        </StyledMotionSearchInputIconWrapper>
+                        }
+                    }}
+                >
+                    {shouldUseAbsolutePositioning ? (
                         <AnimatePresence initial={false}>
                             {isSearchInputActive && (
                                 <StyledMotionSearchInputContentWrapper
                                     $shouldUseAbsolutePositioning={shouldUseAbsolutePositioning}
-                                    animate={{ opacity: 1, width: '100%' }}
+                                    animate={{ opacity: 1, width }}
                                     exit={{ opacity: 0, width: 0 }}
                                     initial={{ opacity: 0, width: 0 }}
                                     key="searchInputContentWrapper"
-                                    transition={{ duration: 0.3 }}
+                                    transition={{ duration: 0.25, type: 'tween' }}
                                 >
                                     <Input
-                                        key="input"
-                                        leftElement={
-                                            <Icon color={theme.text} icons={['far fa-search']} />
-                                        }
                                         onChange={onChange}
                                         onKeyDown={onKeyDown}
                                         placeholder={placeholder}
@@ -252,14 +166,122 @@ const SearchInput: FC<SearchInputProps> = ({
                                     />
                                 </StyledMotionSearchInputContentWrapper>
                             )}
+                            <StyledMotionSearchInputIconWrapperContent
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0, position: 'absolute' }}
+                                initial={{ opacity: 0 }}
+                                key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
+                                transition={{ duration: 0.3 }}
+                                id={
+                                    isSearchInputActive
+                                        ? 'search-input-backIcon'
+                                        : 'search-input-searchIcon'
+                                }
+                                tabIndex={0}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        if (isSearchInputActive) {
+                                            handleBackIconClick();
+                                        } else {
+                                            handleSearchIconClick();
+                                        }
+                                    }
+                                }}
+                            >
+                                <Icon
+                                    key="icon"
+                                    color={iconColor}
+                                    icons={isSearchInputActive ? ['fa fa-xmark'] : ['fa fa-search']}
+                                    onClick={
+                                        isSearchInputActive
+                                            ? handleBackIconClick
+                                            : handleSearchIconClick
+                                    }
+                                />
+                            </StyledMotionSearchInputIconWrapperContent>
                         </AnimatePresence>
-                    </>
-                )}
-            </StyledSearchInput>
-            <StyledSearchInputPseudoElement ref={pseudoRef} />
-        </>
-    );
-};
+                    ) : (
+                        <>
+                            <StyledMotionSearchInputIconWrapper>
+                                <AnimatePresence initial={false}>
+                                    <StyledMotionSearchInputIconWrapperContent
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0, position: 'absolute' }}
+                                        initial={{ opacity: 0 }}
+                                        key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
+                                        transition={{ duration: 0.3 }}
+                                        id={
+                                            isSearchInputActive
+                                                ? 'search-input-backIcon'
+                                                : 'search-input-searchIcon'
+                                        }
+                                        tabIndex={0}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                if (isSearchInputActive) {
+                                                    handleBackIconClick();
+                                                } else {
+                                                    handleSearchIconClick();
+                                                }
+                                            }
+                                        }}
+                                    >
+                                        <Icon
+                                            key="icon"
+                                            color={iconColor}
+                                            icons={
+                                                isSearchInputActive
+                                                    ? ['fa fa-arrow-left']
+                                                    : ['fa fa-search']
+                                            }
+                                            onClick={
+                                                isSearchInputActive
+                                                    ? handleBackIconClick
+                                                    : handleSearchIconClick
+                                            }
+                                        />
+                                    </StyledMotionSearchInputIconWrapperContent>
+                                </AnimatePresence>
+                            </StyledMotionSearchInputIconWrapper>
+                            <AnimatePresence initial={false}>
+                                {isSearchInputActive && (
+                                    <StyledMotionSearchInputContentWrapper
+                                        $shouldUseAbsolutePositioning={shouldUseAbsolutePositioning}
+                                        animate={{ opacity: 1, width: '100%' }}
+                                        exit={{ opacity: 0, width: 0 }}
+                                        initial={{ opacity: 0, width: 0 }}
+                                        key="searchInputContentWrapper"
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <Input
+                                            key="input"
+                                            leftElement={
+                                                <Icon
+                                                    color={theme.text}
+                                                    icons={['far fa-search']}
+                                                />
+                                            }
+                                            onChange={onChange}
+                                            onKeyDown={onKeyDown}
+                                            placeholder={placeholder}
+                                            ref={inputRef}
+                                            shouldShowClearIcon
+                                            size={size}
+                                            value={value}
+                                        />
+                                    </StyledMotionSearchInputContentWrapper>
+                                )}
+                            </AnimatePresence>
+                        </>
+                    )}
+                </StyledSearchInput>
+                <StyledSearchInputPseudoElement ref={pseudoRef} />
+            </>
+        );
+    },
+);
 
 SearchInput.displayName = 'SearchInput';
 

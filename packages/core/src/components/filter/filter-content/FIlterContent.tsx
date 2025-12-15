@@ -5,7 +5,7 @@ import {
     StyledFilterSort,
     StyledFilterSortText,
 } from './FilterContent.styles';
-import Input from '../../input/Input';
+import Input, { InputRef } from '../../input/Input';
 import Icon from '../../icon/Icon';
 import FilterButtons from '../../filter-buttons/FilterButtons';
 import {
@@ -22,6 +22,7 @@ export type FilterContentProps = {
     filterButtonConfig?: FilterButtonConfig;
     sortConfig?: SortConfig;
     checkboxConfig?: CheckboxConfig;
+    shouldAutoFocus: boolean;
 };
 
 const FilterContent: FC<FilterContentProps> = ({
@@ -29,8 +30,10 @@ const FilterContent: FC<FilterContentProps> = ({
     sortConfig,
     filterButtonConfig,
     checkboxConfig,
+    shouldAutoFocus,
 }) => {
     const sortTextRef = useRef<HTMLDivElement>(null);
+    const searchRef = useRef<InputRef>(null);
 
     const [sortTextWidth, setSortTextWidth] = useState(0);
 
@@ -55,11 +58,18 @@ const FilterContent: FC<FilterContentProps> = ({
         }
     }, []);
 
+    useEffect(() => {
+        if (shouldAutoFocus) {
+            searchRef.current?.focus();
+        }
+    }, [shouldAutoFocus]);
+
     return useMemo(
         () => (
             <StyledFilterContent>
                 {searchConfig && (
                     <Input
+                        ref={searchRef}
                         onChange={(ev) => searchConfig.onSearchChange(ev.target.value)}
                         placeholder="Suche"
                         value={searchConfig.searchValue}

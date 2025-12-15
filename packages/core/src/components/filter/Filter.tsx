@@ -34,6 +34,7 @@ import {
 import SearchInput from '../search-input/SearchInput';
 import ContextMenu, { ContextMenuItem, ContextMenuRef } from '../context-menu/ContextMenu';
 import Checkbox from '../checkbox/Checkbox';
+import { InputRef } from '../input/Input';
 
 export interface FilterRightIcon {
     icons: string[];
@@ -50,6 +51,7 @@ export type FilterProps = {
     onActiveChange?: (isActive: boolean) => void;
     shouldShowRoundedHoverEffect?: boolean;
     rightIcons?: FilterRightIcon[];
+    shouldAutoFocus?: boolean;
 };
 
 const Filter = forwardRef<FilterRef, FilterProps>(
@@ -58,6 +60,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             headline,
             searchConfig,
             sortConfig,
+            shouldAutoFocus = false,
             shouldShowRoundedHoverEffect = false,
             filterButtonConfig,
             checkboxConfig,
@@ -68,12 +71,14 @@ const Filter = forwardRef<FilterRef, FilterProps>(
     ) => {
         const [isOpen, setIsOpen] = useState(false);
         const [isSearchActive, setIsSearchActive] = useState(false);
+        const [shouldFocus, setShouldFocus] = useState(false);
         const [backgroundDistance, setBackgroundDistance] = useState(0);
         const [backgroundCoordinates, setBackgroundCoordinates] = useState({ top: 0, left: 0 });
 
         const contentRef = useRef<HTMLDivElement | null>(null);
         const iconRef = useRef<HTMLDivElement | null>(null);
         const filterRef = useRef<HTMLDivElement | null>(null);
+        const searchRef = useRef<InputRef | null>(null);
 
         const contextMenuRef = useRef<ContextMenuRef>(null);
 
@@ -126,8 +131,22 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             }
         }, [type]);
 
+        useEffect(() => {
+            if (shouldFocus) {
+                searchRef.current?.focus();
+
+                window.setTimeout(() => {
+                    setShouldFocus(false);
+                }, 200);
+            }
+        }, [shouldFocus]);
+
         const handleShow = useCallback(() => {
             setIsOpen(true);
+
+            if (shouldAutoFocus) {
+                setShouldFocus(true);
+            }
 
             if (type === FilterType.ONLY_SORT && contextMenuRef.current) {
                 contextMenuRef.current.hide();
@@ -136,7 +155,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             if (type === FilterType.ONLY_SEARCH) {
                 setIsSearchActive(true);
             }
-        }, [type]);
+        }, [shouldAutoFocus, type]);
 
         useImperativeHandle(
             ref,
@@ -257,6 +276,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                                         setIsSearchActive(isActive);
                                         setIsOpen(isActive);
                                     }}
+                                    ref={searchRef}
                                     isActive={isSearchActive}
                                     value={searchConfig.searchValue}
                                     onChange={(ev) => searchConfig.onSearchChange(ev.target.value)}
@@ -280,6 +300,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                                 startDelay={backgroundDistance > 0 ? 0.1 : 0}
                             >
                                 <FilterContent
+                                    shouldAutoFocus={shouldFocus}
                                     searchConfig={searchConfig}
                                     filterButtonConfig={filterButtonConfig}
                                     sortConfig={sortConfig}
@@ -303,6 +324,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 sortItems,
                 checkboxConfig,
                 isOpen,
+                shouldFocus,
                 filterButtonConfig,
                 shouldShowRoundedHoverEffect,
             ],
