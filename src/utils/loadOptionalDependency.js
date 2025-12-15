@@ -8,13 +8,7 @@ export default function loadOptionalDependency(
     cssArray,
     returnPromise = true
 ) {
-    let emojione = null;
-    try {
-        // eslint-disable-next-line global-require,import/no-dynamic-require
-        emojione = require(module);
-    } catch (ex) {
-        emojione = window[windowModule];
-    }
+    const emojione = window[windowModule];
 
     if (emojione) {
         if (returnPromise) {
@@ -37,7 +31,7 @@ export default function loadOptionalDependency(
     }
 
     if (returnPromise) {
-        return Promise.all(loadArray);
+        return Promise.all(loadArray).then(() => window[windowModule]);
     }
 
     return emojione;
