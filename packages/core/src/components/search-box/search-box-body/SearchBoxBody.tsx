@@ -99,7 +99,11 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
 
         return useMemo(
             () => (
-                <StyledSearchBoxBody onClick={handlePreventDefault} ref={ref} inert={!shouldShow}>
+                <StyledSearchBoxBody
+                    onClick={handlePreventDefault}
+                    ref={ref}
+                    inert={!shouldShow ? 'true' : 'false'}
+                >
                     {filterButtons && filterButtons?.length > 1 && (
                         <StyledSearchBoxBodyHead
                             ref={headRef}

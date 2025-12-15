@@ -156,7 +156,7 @@ export const useMeasuredClone = ({
                 width: 'auto',
                 visibility: 'hidden',
             }}
-            inert
+            inert="true"
             tabIndex={-1}
         >
             {clonedElement}
