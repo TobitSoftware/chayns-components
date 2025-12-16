@@ -125,7 +125,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
 
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
-            if ((event.key === 'ArrowUp' || event.key === 'ArrowDown') && fullMatch) {
+            if ((event.key === 'ArrowUp' || event.key === 'ArrowDown') && shouldRenderPopup) {
                 event.preventDefault();
 
                 const children = listRef.current?.children;
@@ -154,7 +154,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
                     newElement.tabIndex = 0;
                     newElement.focus();
                 }
-            } else if (event.key === 'Enter' && fullMatch) {
+            } else if (event.key === 'Enter' && shouldRenderPopup) {
                 event.preventDefault();
                 event.stopPropagation();
 
