@@ -133,7 +133,7 @@ const DelayedDropdownContent: FC<DelayedDropdownContentProps> = ({
                     : 0,
             }}
             transition={{ duration: ANIMATION_DELAY_MS / 1000, type: 'tween' }}
-            inert={!shouldShowContent ? 'true' : 'false'}
+            inert={!shouldShowContent ? 'true' : undefined}
         >
             {children}
         </StyledMotionDelayedDropdownContent>

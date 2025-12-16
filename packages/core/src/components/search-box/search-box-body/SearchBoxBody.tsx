@@ -102,7 +102,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                 <StyledSearchBoxBody
                     onClick={handlePreventDefault}
                     ref={ref}
-                    inert={!shouldShow ? 'true' : 'false'}
+                    inert={!shouldShow ? 'true' : undefined}
                 >
                     {filterButtons && filterButtons?.length > 1 && (
                         <StyledSearchBoxBodyHead
