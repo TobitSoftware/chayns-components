@@ -324,7 +324,13 @@ const Accordion: FC<AccordionProps> = ({
             $shouldHideBackground={shouldHideBackground}
             $shouldHideBottomLine={shouldHideBottomLine}
             onKeyDown={(e) => {
-                if (e.key === 'Enter') {
+                console.log('TEST', e.target);
+
+                if (
+                    e.key === 'Enter' &&
+                    (e.target as HTMLDivElement).className.includes('beta-chayns-accordion') &&
+                    shouldIndex
+                ) {
                     e.preventDefault();
                     handleHeadClick();
                 }
