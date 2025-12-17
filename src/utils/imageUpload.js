@@ -63,8 +63,24 @@ export default async function imageUpload(file, options, _personId, _siteId) {
         body.append('File', file);
     }
 
+    const objectURL = URL.createObjectURL(file);
+    const img = new Image();
+    await new Promise((resolve) => {
+        img.onload = () => {
+            URL.revokeObjectURL(img.src);
+            resolve();
+        };
+        img.onerror = () => {
+            URL.revokeObjectURL(img.src);
+            resolve();
+        };
+        img.src = objectURL;
+    });
+
     const url =
-        file.size > 10 * 1024 * 1024
+        file.size > 10 * 1024 * 1024 ||
+        img.naturalWidth > 4096 ||
+        img.naturalHeight > 4096
             ? `${IMAGE_RESIZER_API_URL}/${owner}`
             : `${IMAGE_SERVICE_API_V3_URL}/${owner}`;
 
@@ -93,5 +109,8 @@ export default async function imageUpload(file, options, _personId, _siteId) {
         }
     }
 
-    throw new ImageUploadError(requestId, `Uploading the image failed with status code ${response.status}.`);
+    throw new ImageUploadError(
+        requestId,
+        `Uploading the image failed with status code ${response.status}.`
+    );
 }
