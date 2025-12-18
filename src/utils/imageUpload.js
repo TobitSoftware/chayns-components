@@ -79,6 +79,7 @@ export default async function imageUpload(file, options, _personId, _siteId) {
 
     const url =
         file.size > 10 * 1024 * 1024 ||
+        file.type === 'image/avif' ||
         img.naturalWidth > 4096 ||
         img.naturalHeight > 4096
             ? `${IMAGE_RESIZER_API_URL}/${owner}`
