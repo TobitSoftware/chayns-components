@@ -48,6 +48,10 @@ export type PersonFinderWrapperProps = {
      */
     filterTypes?: PersonFinderFilterTypes[];
     /**
+     * Determines the priority level for displaying friends in search results.
+     */
+    friendsPriority?: Priority;
+    /**
      * An element that should be displayed on the left side of the input.
      */
     leftElement?: ReactElement;
@@ -80,13 +84,21 @@ export type PersonFinderWrapperProps = {
      */
     shouldAllowMultiple?: boolean;
     /**
-     * Determines the priority level for displaying friends in search results.
-     */
-    friendsPriority?: Priority;
-    /**
      * Whether the dropdown should be hidden after adding an entry. By default, it is not hidden.
      */
     shouldHideResultsOnAdd?: boolean;
+    /**
+     * Whether the `PersonFinder` should be rendered inline without a dropdown.
+     * @description
+     * If set to `true`, the `PersonFinder` will display the results below the input field, without
+     * using a dropdown. This is useful for scenarios where the `PersonFinder` is part of a larger
+     * form and should always be visible.
+     * @default false
+     * @example
+     * <PersonFinder shouldRenderInline />
+     * @optional
+     */
+    shouldRenderInline?: boolean;
 };
 
 const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps>(
@@ -95,16 +107,17 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             container,
             dropdownDirection,
             filterTypes,
+            friendsPriority,
             leftElement: leftElementProp,
             maxEntries = Infinity,
             onAdd,
             onDropdownHide,
             onDropdownShow,
-            friendsPriority,
             onRemove,
             placeholder,
             shouldAllowMultiple,
             shouldHideResultsOnAdd,
+            shouldRenderInline,
         },
         ref,
     ) => {
@@ -260,6 +273,49 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             return shouldShowBody;
         }, [filterTypes, friendsPriority, search, shouldShowBody]);
 
+        const content = useMemo(() => {
+            const body = (
+                <PersonFinderBody
+                    filterTypes={filterTypes}
+                    onAdd={handleAdd}
+                    onRemove={handleRemove}
+                    ref={contentRef}
+                    shouldRenderInline={shouldRenderInline}
+                />
+            );
+
+            if (shouldRenderInline) {
+                return body;
+            }
+
+            if (boxRef.current) {
+                return (
+                    <DropdownBodyWrapper
+                        anchorElement={boxRef.current}
+                        container={container}
+                        direction={dropdownDirection}
+                        onClose={handleClose}
+                        onOutsideClick={handleDropdownOutsideClick}
+                        shouldShowDropdown={showBody}
+                    >
+                        {body}
+                    </DropdownBodyWrapper>
+                );
+            }
+
+            return null;
+        }, [
+            container,
+            dropdownDirection,
+            filterTypes,
+            handleAdd,
+            handleClose,
+            handleDropdownOutsideClick,
+            handleRemove,
+            shouldRenderInline,
+            showBody,
+        ]);
+
         return (
             <StyledPersonFinder ref={boxRef} onFocus={handleOpen} key={keyRef.current}>
                 <TagInput
@@ -274,23 +330,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
                     shouldPreventEnter
                     tags={tags}
                 />
-                {boxRef.current && (
-                    <DropdownBodyWrapper
-                        anchorElement={boxRef.current}
-                        container={container}
-                        direction={dropdownDirection}
-                        onClose={handleClose}
-                        onOutsideClick={handleDropdownOutsideClick}
-                        shouldShowDropdown={showBody}
-                    >
-                        <PersonFinderBody
-                            filterTypes={filterTypes}
-                            onAdd={handleAdd}
-                            onRemove={handleRemove}
-                            ref={contentRef}
-                        />
-                    </DropdownBodyWrapper>
-                )}
+                {content}
             </StyledPersonFinder>
         );
     },

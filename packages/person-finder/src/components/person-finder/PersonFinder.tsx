@@ -62,6 +62,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             shouldAllowMultiple = true,
             shouldHideResultsOnAdd = !shouldAllowMultiple || false,
             shouldShowOwnUser = false,
+            shouldRenderInline = false,
         },
         ref,
     ) => {
@@ -98,6 +99,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                             placeholder={placeholder}
                             shouldAllowMultiple={shouldAllowMultiple}
                             shouldHideResultsOnAdd={shouldHideResultsOnAdd}
+                            shouldRenderInline={shouldRenderInline}
                         />
                     </div>
                 </AreaProvider>

@@ -13,10 +13,11 @@ export type PersonFinderBodyProps = {
     onAdd: (id: string) => void;
     onRemove: (id: string) => void;
     filterTypes?: PersonFinderFilterTypes[];
+    shouldRenderInline?: boolean;
 };
 
 const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
-    ({ onAdd, filterTypes, onRemove }, ref) => {
+    ({ onAdd, filterTypes, onRemove, shouldRenderInline }, ref) => {
         const { activeFilter, data } = usePersonFinder();
 
         const { browser } = useDevice();
@@ -59,11 +60,11 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
         return (
             <StyledPersonFinderBody ref={ref}>
                 <PersonFinderHeader
-                    filterTypes={filterTypes}
-                    isScrollTop={isScrollTop}
-                    shouldShowGroupNames={shouldShowGroupNames}
                     currentGroupName={currentGroupName}
                     defaultGroupName={defaultGroupName}
+                    filterTypes={filterTypes}
+                    shouldShowGroupNames={shouldShowGroupNames}
+                    shouldShowShadow={!isScrollTop && !shouldRenderInline}
                 />
                 <StyledPersonFinderBodyContent
                     ref={contentRef}

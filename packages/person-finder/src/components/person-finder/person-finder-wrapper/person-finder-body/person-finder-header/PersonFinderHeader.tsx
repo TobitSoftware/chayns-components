@@ -14,16 +14,16 @@ export type PersonFinderHeaderProps = {
     filterTypes?: PersonFinderFilterTypes[];
     currentGroupName?: string | null;
     defaultGroupName?: string;
-    isScrollTop: boolean;
     shouldShowGroupNames: boolean;
+    shouldShowShadow: boolean;
 };
 
 const PersonFinderHeader: FC<PersonFinderHeaderProps> = ({
     filterTypes,
     currentGroupName,
     defaultGroupName,
-    isScrollTop,
     shouldShowGroupNames,
+    shouldShowShadow,
 }) => {
     const { activeFilter, updateActiveFilter } = usePersonFinder();
 
@@ -52,7 +52,10 @@ const PersonFinderHeader: FC<PersonFinderHeaderProps> = ({
     };
 
     return (
-        <StyledPersonFinderHeader $isScrollTop={isScrollTop} onClick={handlePreventDefault}>
+        <StyledPersonFinderHeader
+            $shouldShowShadow={shouldShowShadow}
+            onClick={handlePreventDefault}
+        >
             <StyledPersonFinderHeaderFilter>
                 <FilterButtons
                     size={FilterButtonSize.Small}

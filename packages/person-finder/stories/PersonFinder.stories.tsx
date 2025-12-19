@@ -13,11 +13,17 @@ const Template: StoryFn<typeof PersonFinder> = ({ ...args }) => <PersonFinder {.
 
 export const General = Template.bind({});
 
+export const RenderedInline = Template.bind({});
+
 export const UACGroups = Template.bind({});
 
 export const WithUACFilter = Template.bind({});
 
 export const WithOwnEntries = Template.bind({});
+
+RenderedInline.args = {
+    shouldRenderInline: true,
+};
 
 UACGroups.args = {
     filterTypes: [PersonFinderFilterTypes.UAC],
