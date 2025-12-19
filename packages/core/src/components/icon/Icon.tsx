@@ -11,7 +11,7 @@ export type IconProps = {
      * style the icon wrapper element.
      * @example
      * <Icon className="my-custom-class" icons={['fa-user']} />
-     * optional
+     * @optional
      */
     className?: string;
     /**
