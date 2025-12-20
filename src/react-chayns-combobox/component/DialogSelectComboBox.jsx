@@ -9,7 +9,6 @@ import React, {
     useState,
 } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { CSSTransition } from 'react-transition-group';
 import { useTransitionState } from 'react-transition-state';
 import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
