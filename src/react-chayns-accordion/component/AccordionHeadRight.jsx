@@ -1,24 +1,50 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { CSSTransition } from 'react-transition-group';
+import { useTransitionState } from 'react-transition-state';
+import { mapStatusToClass } from '../../utils/mapStatusToClass';
 import AccordionSearch from './AccordionSearch';
 
 const OPEN = 2;
 const CLOSE = 1;
 
-export default class AccordionHeadRight extends PureComponent {
-    renderOpen(openChildren) {
-        const {
-            onSearch,
-            onSearchEnter,
-            searchPlaceholder,
-            searchValue,
-            state,
-        } = this.props;
+const AccordionHeadRight = ({
+    right,
+    onSearch,
+    onSearchEnter,
+    searchPlaceholder,
+    searchValue,
+    state,
+}) => {
+    const rightHasState = right && !!(right.open || right.close);
+    const openChildren = rightHasState ? right.open : null;
+    const closeChildren = rightHasState ? right.close : right;
 
-        if (openChildren) {
-            return openChildren;
-        }
+    const [{ status: closeStatus, isMounted: closeMounted }, toggleClose] =
+        useTransitionState({
+            timeout: 500,
+            mountOnEnter: true,
+            unmountOnExit: true,
+            preEnter: true,
+            initialEntered: state === CLOSE,
+        });
+
+    const [{ status: openStatus, isMounted: openMounted }, toggleOpen] =
+        useTransitionState({
+            timeout: 500,
+            mountOnEnter: true,
+            unmountOnExit: true,
+            preEnter: true,
+            initialEntered: state === OPEN,
+        });
+
+    // Trigger transitions
+    useEffect(() => {
+        toggleClose(state === CLOSE);
+        toggleOpen(state === OPEN);
+    }, [state, toggleClose, toggleOpen]);
+
+    const renderOpen = () => {
+        if (openChildren) return openChildren;
 
         if (onSearch || onSearchEnter) {
             return (
@@ -33,49 +59,43 @@ export default class AccordionHeadRight extends PureComponent {
         }
 
         return null;
+    };
+
+    if (!(right || onSearch || onSearchEnter)) {
+        return null;
     }
 
-    render() {
-        const { right, onSearch, onSearchEnter, state } = this.props;
+    if (!(onSearch || onSearchEnter || rightHasState)) {
+        return <div className="accordion__head__right">{closeChildren}</div>;
+    }
 
-        if (!(right || onSearch || onSearchEnter)) {
-            return null;
-        }
-
-        const rightHasState = right && !!(right.open || right.close);
-        const openChildren = rightHasState ? right.open : null;
-        const closeChildren = rightHasState ? right.close : right;
-
-        if (!(onSearch || onSearchEnter || rightHasState)) {
-            return (
-                <div className="accordion__head__right">{closeChildren}</div>
-            );
-        }
-
-        return (
-            <div className="accordion__head__right">
-                <CSSTransition
+    return (
+        <div className="accordion__head__right">
+            {closeMounted && (
+                <div
                     key="closed"
-                    classNames="right--background"
-                    timeout={520}
-                    in={state === CLOSE}
-                    unmountOnExit
+                    className={mapStatusToClass(
+                        closeStatus,
+                        'right--background'
+                    )}
                 >
-                    <div>{closeChildren}</div>
-                </CSSTransition>
-                <CSSTransition
+                    {closeChildren}
+                </div>
+            )}
+            {openMounted && (
+                <div
                     key="open"
-                    classNames="right--foreground"
-                    timeout={500}
-                    in={state === OPEN}
-                    unmountOnExit
+                    className={mapStatusToClass(
+                        openStatus,
+                        'right--foreground'
+                    )}
                 >
-                    <div>{this.renderOpen(openChildren)}</div>
-                </CSSTransition>
-            </div>
-        );
-    }
-}
+                    {renderOpen()}
+                </div>
+            )}
+        </div>
+    );
+};
 
 AccordionHeadRight.propTypes = {
     right: PropTypes.oneOfType([
@@ -102,3 +122,5 @@ AccordionHeadRight.defaultProps = {
 };
 
 AccordionHeadRight.displayName = 'AccordionHeadRight';
+
+export default AccordionHeadRight;
