@@ -117,7 +117,7 @@ AccordionHeadRight.defaultProps = {
     onSearch: null,
     onSearchEnter: null,
     searchPlaceholder: '',
-    searchValue: null,
+    searchValue: undefined,
     state: null,
 };
 
