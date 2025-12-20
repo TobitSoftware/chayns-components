@@ -6,7 +6,7 @@ export class TestComponent extends Component {
         this.state = { value: 0 };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         setTimeout(() => {
             this.setState({ value: 1 });
         }, 100);

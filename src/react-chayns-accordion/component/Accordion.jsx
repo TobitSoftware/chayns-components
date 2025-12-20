@@ -596,7 +596,7 @@ Accordion.defaultProps = {
     onSearch: null,
     onSearchEnter: null,
     searchPlaceholder: '',
-    searchValue: null,
+    searchValue: undefined,
     removeContentClosed: false,
     onClick: null,
     disabled: false,

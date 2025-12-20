@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import TextString from '../src/react-chayns-textstring/component/TextString';
 /* eslint-disable-next-line import/no-unresolved */
 import ExampleList from './ExampleList';
@@ -12,7 +13,13 @@ async function bootstrap() {
     // load textString library "TextStringTest" in dutch
     await TextString.loadLibrary('TextStringTest', 'langRes', 'nl');
 
-    ReactDom.render(<ExampleList />, document.querySelector('#app'));
+    const $root = document.getElementById('app');
+    if (typeof createRoot === 'function') {
+        const root = createRoot($root);
+        root.render(<ExampleList />);
+    } else {
+        ReactDOM.render(<ExampleList />, $root);
+    }
 }
 
 bootstrap();

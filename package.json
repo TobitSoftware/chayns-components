@@ -29,7 +29,6 @@
     "scripts": {
         "build": "gulp build",
         "build-examples": "node ./examples/utils/generateReactList && chayns-toolkit build",
-        "build-storybook": "build-storybook",
         "clean": "gulp clean",
         "dev": "node ./examples/utils/generateReactList && chayns-toolkit dev",
         "format": "prettier . --ignore-path .gitignore --write",
@@ -37,14 +36,13 @@
         "lint": "eslint ./src --ext js,jsx",
         "lint-staged": "lint-staged --allow-empty",
         "prepare": "husky install",
-        "prepublishOnly": "npm run lint & npm run build",
-        "storybook": "start-storybook -p 6006"
+        "prepublishOnly": "npm run build"
     },
     "dependencies": {
         "@babel/runtime": "^7.20.13",
         "@chayns/colors": "^1.0.4",
-        "@chayns/uac-service": "~0.0.53",
-        "abortcontroller-polyfill": "^1.7.5",
+        "@chayns/uac-service": "~0.0.62",
+        "abortcontroller-polyfill": "^1.7.8",
         "boxen": "^4.2.0",
         "chalk": "^4.1.2",
         "clsx": "^1.2.1",
@@ -53,8 +51,7 @@
         "lodash.isequal": "^4.5.0",
         "lodash.throttle": "^4.1.1",
         "prop-types": "^15.8.1",
-        "react-resize-detector": "^6.7.8",
-        "react-transition-group": "4.4.5"
+        "react-transition-state": "^2.3.1"
     },
     "devDependencies": {
         "@babel/core": "^7.20.12",
@@ -71,13 +68,6 @@
         "@rollup/plugin-commonjs": "^16.0.0",
         "@rollup/plugin-node-resolve": "^10.0.0",
         "@rollup/plugin-replace": "^2.4.2",
-        "@storybook/addon-actions": "^6.5.16",
-        "@storybook/addon-essentials": "^6.5.16",
-        "@storybook/addon-links": "^6.5.16",
-        "@storybook/addons": "^6.5.16",
-        "@storybook/preset-scss": "^1.0.3",
-        "@storybook/react": "^6.5.16",
-        "@storybook/theming": "^6.5.16",
         "@types/googlemaps": "^3.40.3",
         "acorn": "^8.8.2",
         "acorn-walk": "^8.2.0",
@@ -106,7 +96,7 @@
         "html-webpack-plugin": "^5.5.0",
         "husky": "^7.0.4",
         "lint-staged": "^10.5.4",
-        "node-sass": "^8.0.0",
+        "node-sass": "^9.0.0",
         "param-case": "^3.0.4",
         "postcss": "^8.4.21",
         "postcss-preset-env": "^7.8.3",
@@ -122,15 +112,12 @@
         "webpack": "^5.75.0"
     },
     "peerDependencies": {
-        "react": ">=16.8.0 < 19.0.0",
-        "react-dom": ">=16.8.0 < 19.0.0"
-    },
-    "optionalDependencies": {
-        "emojione": "^3.1.7"
+        "react": "^16.8.0 || ^17 || ^18 || ^19",
+        "react-dom": "^16.8.0 || ^17 || ^18 || ^19"
     },
     "overrides": {
         "sass-loader": {
-            "node-sass": "^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0"
+            "node-sass": "^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0"
         }
     }
 }

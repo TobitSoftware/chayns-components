@@ -19,6 +19,10 @@ module.exports = {
             })
         );
 
+        config.resolve.fallback = {
+            'react-dom/client': false,
+        };
+
         return config;
     },
 };

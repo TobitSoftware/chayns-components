@@ -9,11 +9,12 @@ import React, {
     useState,
 } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { CSSTransition } from 'react-transition-group';
+import { useTransitionState } from 'react-transition-state';
 import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 import isDescendant from '../../utils/isDescendant';
+import { mapStatusToClass } from '../../utils/mapStatusToClass';
 import ComboBoxItem from './ComboBoxItem';
 
 const DialogSelectComboBox = ({
@@ -42,6 +43,17 @@ const DialogSelectComboBox = ({
 
     const overlayRef = useRef(null);
     const buttonRef = useRef(null);
+
+    const [{ status, isMounted }, toggle] = useTransitionState({
+        timeout: 200,
+        mountOnEnter: true,
+        unmountOnExit: true,
+        preEnter: true,
+    });
+
+    useEffect(() => {
+        toggle(!!(position && showOverlay));
+    }, [position, showOverlay, toggle]);
 
     const onHide = useCallback((e) => {
         if (
@@ -90,7 +102,7 @@ const DialogSelectComboBox = ({
         };
         // check if font awesome is loaded and resize again
         // required cause calculated width might be wrong before font is loaded
-        if (!document.fonts.check('15px "Font Awesome 6 Pro"')) {
+        if (!document.fonts.check('15px "Font Awesome 7 Pro"')) {
             document.fonts.addEventListener('loadingdone', () => {
                 resize();
             });
@@ -223,17 +235,13 @@ const DialogSelectComboBox = ({
             <Icon className="cc__combo-box__icon" icon="fa fa-chevron-down" />
         </Button>,
         <TappPortal parent={parent} key="combobox-portal">
-            <CSSTransition
-                in={!!(position && showOverlay)}
-                timeout={200}
-                mountOnEnter
-                classNames="fade"
-            >
+            {isMounted && (
                 <div
                     ref={overlayRef}
                     className={classNames(
                         'cc__combo-box__overlay scrollbar chayns__background-color--101 chayns__border-color--104',
-                        className
+                        className,
+                        mapStatusToClass(status, 'fade')
                     )}
                     style={{
                         top: position.bottom,
@@ -252,7 +260,7 @@ const DialogSelectComboBox = ({
                         />
                     ))}
                 </div>
-            </CSSTransition>
+            )}
         </TappPortal>,
     ];
 };

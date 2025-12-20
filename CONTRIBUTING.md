@@ -5,7 +5,6 @@ We are open to and grateful for any contributions made by the community.
 ## Overview
 
 -   [Local Development](#local-development)
--   [Storybook](#storybook)
 -   [Pull Requests](#pull-requests)
 -   [Publishing a New Version](#publishing-a-new-version)
 
@@ -35,26 +34,6 @@ npm run dev
 If you want to test your changes in another project, use
 [`npm link`](https://docs.npmjs.com/cli/v6/commands/npm-link) or
 [`yarn link`](https://classic.yarnpkg.com/en/docs/cli/link/).
-
-## Storybook
-
-If you prefer to work within [Storybook](https://storybook.js.org/), we have
-that set up aswell.
-
-To launch the Storybook development environment run:
-
-```bash
-# Yarn
-yarn storybook
-
-# NPM
-npm run storybook
-```
-
-> We are working on integrating Storybook with the chayns environment, however
-> many APIs are not available there yet. Some components that rely on the
-> [chayns-js](https://github.com/TobitSoftware/chayns-js) API might not work
-> within Storybook.
 
 ## Pull Requests
 

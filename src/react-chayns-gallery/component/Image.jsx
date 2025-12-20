@@ -2,6 +2,7 @@
 import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
+import isEqual from 'lodash.isequal';
 import SmallWaitCursor from '../../react-chayns-smallwaitcursor/component/SmallWaitCursor';
 import { isString } from '../../utils/is';
 import { isServer } from '../../utils/isServer';
@@ -29,7 +30,12 @@ export default class Image extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps !== this.props) {
+        const { image, styleLandscape, stylePortrait } = this.props;
+        if (
+            prevProps.image !== image ||
+            !isEqual(prevProps.styleLandscape, styleLandscape) ||
+            !isEqual(prevProps.stylePortrait, stylePortrait)
+        ) {
             this.init();
         }
     }

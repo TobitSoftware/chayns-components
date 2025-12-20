@@ -3,7 +3,7 @@ import isEqual from 'lodash.isequal';
 import throttle from 'lodash.throttle';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import { getMemberCount } from '../utils/member';
 import ChosenMember from './content/ChosenMember';
 import ReceiverSearchPopup from './content/ReceiverSearchPopup';
@@ -124,10 +124,6 @@ export default class ReceiverInput extends Component {
         );
     }
 
-    componentDidUpdate() {
-        this.addReceiverPopupToDiv();
-    }
-
     componentWillUnmount() {
         this.removePopupRootDiv();
 
@@ -137,67 +133,28 @@ export default class ReceiverInput extends Component {
     addPopupRootDiv = () => {
         const { fontSize, fontFamily } = this.props;
 
-        const givenPopupRootDiv = document.getElementById('receiverPopupRoot');
-
-        if (!givenPopupRootDiv) {
-            const popupRootDiv = document.createElement('div');
-
-            popupRootDiv.id = 'receiverPopupRoot';
-
-            if (fontSize) {
-                popupRootDiv.style.fontSize = fontSize;
-            }
-
-            if (fontFamily) {
-                popupRootDiv.style.fontFamily = fontFamily;
-            }
-
-            document.body.appendChild(popupRootDiv);
+        if (this.popupRootDiv) {
+            return;
         }
+        const popupRootDiv = document.createElement('div');
+
+        popupRootDiv.id = 'receiverPopupRoot';
+
+        if (fontSize) {
+            popupRootDiv.style.fontSize = fontSize;
+        }
+
+        if (fontFamily) {
+            popupRootDiv.style.fontFamily = fontFamily;
+        }
+        document.body.appendChild(popupRootDiv);
+        this.popupRootDiv = popupRootDiv;
     };
 
     removePopupRootDiv = () => {
-        const givenPopupRootDiv = document.getElementById('receiverPopupRoot');
-
-        if (givenPopupRootDiv) {
-            document.body.removeChild(givenPopupRootDiv);
+        if (this.popupRootDiv) {
+            this.popupRootDiv.remove();
         }
-    };
-
-    addReceiverPopupToDiv = () => {
-        const {
-            showIdInPopup,
-            locationMode,
-            onlyPersons,
-            onlySites,
-        } = this.props;
-
-        const {
-            chosenReceivers,
-            foundReceivers,
-            popupPosition,
-            popupWidth,
-            showPopup,
-        } = this.state;
-
-        this.addPopupRootDiv();
-
-        ReactDOM.render(
-            <ReceiverSearchPopup
-                updateReceiverSearchString={this.updateReceiverSearchString}
-                updateChosenReceivers={this.updateChosenReceivers}
-                chosenReceivers={chosenReceivers}
-                foundReceivers={foundReceivers}
-                showIdInPopup={showIdInPopup}
-                onlyPersons={onlyPersons}
-                isLocation={locationMode}
-                position={popupPosition}
-                onlySites={onlySites}
-                width={popupWidth}
-                show={showPopup}
-            />,
-            document.getElementById('receiverPopupRoot')
-        );
     };
 
     searchForReceivers = (event) => {
@@ -382,16 +339,16 @@ export default class ReceiverInput extends Component {
 
                     if (locationsResult.state === 0 && !onlyPersons) {
                         if (chosenSender) {
-                            locationsResult.values = result.locations.Value.filter(
-                                (l) =>
+                            locationsResult.values =
+                                result.locations.Value.filter((l) =>
                                     chosenSender && !canFindOwn
                                         ? l.locationID !==
                                           parseInt(chosenSender.locationId, 10)
                                         : true
-                            );
+                                );
                         } else {
-                            locationsResult.values = result.locations.Value.filter(
-                                (l) =>
+                            locationsResult.values =
+                                result.locations.Value.filter((l) =>
                                     locationMode && !canFindOwn
                                         ? l.locationID !==
                                           parseInt(
@@ -399,7 +356,7 @@ export default class ReceiverInput extends Component {
                                               10
                                           )
                                         : true
-                            );
+                                );
                         }
 
                         if (locationsResult.values.length < 1) {
@@ -464,6 +421,7 @@ export default class ReceiverInput extends Component {
     );
 
     render() {
+        this.addPopupRootDiv();
         const {
             showIdInSelection,
             groupNameEnabled,
@@ -471,9 +429,21 @@ export default class ReceiverInput extends Component {
             placeholder,
             disabled,
             pureMode,
+            showIdInPopup,
+            locationMode,
+            onlyPersons,
+            onlySites,
         } = this.props;
 
-        const { chosenReceivers, groupName, receiverSearchString } = this.state;
+        const {
+            chosenReceivers,
+            groupName,
+            receiverSearchString,
+            foundReceivers,
+            popupPosition,
+            popupWidth,
+            showPopup,
+        } = this.state;
 
         const knownPersonsSelected =
             chosenReceivers.filter((cr) => cr.groupId === 0).length > 0;
@@ -518,36 +488,56 @@ export default class ReceiverInput extends Component {
         });
 
         return (
-            <div className="receiver-input-box">
-                <div className={receiverInputClasses}>
-                    {receivers}
-                    <div className={inputBoxClasses}>
+            <>
+                <div className="receiver-input-box">
+                    <div className={receiverInputClasses}>
+                        {receivers}
+                        <div className={inputBoxClasses}>
+                            <input
+                                disabled={disabled || maxReceiverCountGiven}
+                                className="input receiver-input-field"
+                                onChange={this.searchForReceivers}
+                                onFocus={this.showReceiverPopup}
+                                value={receiverSearchString}
+                                placeholder={placeholder}
+                                type="text"
+                            />
+                        </div>
+                    </div>
+                    <div className={groupNameInputClasses}>
                         <input
-                            disabled={disabled || maxReceiverCountGiven}
-                            className="input receiver-input-field"
-                            onChange={this.searchForReceivers}
-                            onFocus={this.showReceiverPopup}
-                            value={receiverSearchString}
-                            placeholder={placeholder}
+                            disabled={
+                                disabled ||
+                                !groupNameEnabled ||
+                                !moreThanOneReceiverChosen
+                            }
+                            placeholder="Gruppenname (optional)"
+                            onChange={this.changeGroupName}
+                            value={groupName}
+                            className="input"
                             type="text"
                         />
                     </div>
                 </div>
-                <div className={groupNameInputClasses}>
-                    <input
-                        disabled={
-                            disabled ||
-                            !groupNameEnabled ||
-                            !moreThanOneReceiverChosen
+                {createPortal(
+                    <ReceiverSearchPopup
+                        updateReceiverSearchString={
+                            this.updateReceiverSearchString
                         }
-                        placeholder="Gruppenname (optional)"
-                        onChange={this.changeGroupName}
-                        value={groupName}
-                        className="input"
-                        type="text"
-                    />
-                </div>
-            </div>
+                        updateChosenReceivers={this.updateChosenReceivers}
+                        chosenReceivers={chosenReceivers}
+                        foundReceivers={foundReceivers}
+                        showIdInPopup={showIdInPopup}
+                        onlyPersons={onlyPersons}
+                        isLocation={locationMode}
+                        position={popupPosition}
+                        onlySites={onlySites}
+                        width={popupWidth}
+                        show={showPopup}
+                    />,
+                    this.popupRootDiv
+                )}
+            </>
         );
     }
 }

@@ -5,7 +5,6 @@
 import classnames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ReactResizeDetector from 'react-resize-detector/build/withPolyfill';
 import ScrollViewHelper from './ScrollViewHelper';
 
 /**
@@ -31,10 +30,21 @@ export default class ScrollView extends Component {
         if (contentWidth === 0) {
             this.setContentWidth();
         }
+        if (typeof ResizeObserver !== 'undefined') {
+            this.observer = new ResizeObserver(this.handleRefreshScrollView);
+
+            if (this.children) {
+                this.observer.observe(this.children);
+            }
+        }
     }
 
     componentDidUpdate() {
         this.handleRefreshScrollView();
+    }
+
+    componentWillUnmount() {
+        this.observer?.disconnect();
     }
 
     setContentWidth() {
@@ -119,10 +129,6 @@ export default class ScrollView extends Component {
                             }}
                         >
                             {children}
-                            <ReactResizeDetector
-                                handleHeight
-                                onResize={this.handleRefreshScrollView}
-                            />
                         </div>
                     </div>
                 </div>
