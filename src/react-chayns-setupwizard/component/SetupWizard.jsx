@@ -34,20 +34,8 @@ class SetupWizard extends Component {
         this.resetToStep = this.resetToStep.bind(this);
         this.ready = this.ready.bind(this);
         this.notComplete = this.notComplete.bind(this);
-        this.allRequiredStepsCompleted = this.allRequiredStepsCompleted.bind(
-            this
-        );
-    }
-
-    getChildContext() {
-        return {
-            stepComplete: this.stepComplete,
-            stepEnabled: this.stepEnabled,
-            previousStep: this.previousStep,
-            nextStep: this.nextStep,
-            toStep: this.toStep,
-            resetToStep: this.resetToStep,
-        };
+        this.allRequiredStepsCompleted =
+            this.allRequiredStepsCompleted.bind(this);
     }
 
     componentDidMount() {
@@ -420,17 +408,6 @@ SetupWizard.defaultProps = {
     operationMode: SetupWizard.operationMode.DEFAULT,
 };
 
-SetupWizard.childContextTypes = {
-    stepComplete: PropTypes.func,
-    stepEnabled: PropTypes.func,
-    previousStep: PropTypes.func,
-    nextStep: PropTypes.func,
-    toStep: PropTypes.func,
-    resetToStep: PropTypes.func,
-};
-
 SetupWizard.displayName = 'SetupWizard';
-
-SetupWizard.contextType = SetupWizardContext;
 
 export default SetupWizard;

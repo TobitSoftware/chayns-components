@@ -124,8 +124,6 @@ export default class SelectList extends Component {
 
 SelectList.maxId = 0;
 
-SelectList.contextType = SelectListContext;
-
 SelectList.propTypes = {
     /**
      * A callback that is invoked when the selected item changes.
