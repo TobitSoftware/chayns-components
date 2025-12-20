@@ -2,10 +2,11 @@
  * @component
  */
 
-import classnames from 'clsx';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import React, { useMemo } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import React, { useEffect, useMemo } from 'react';
+import { useTransitionState } from 'react-transition-state';
+import { mapStatusToClass } from '../../utils/mapStatusToClass';
 import AutoProgressBar from './AutoProgressBar';
 import { isNumber } from '../../utils/is';
 
@@ -14,32 +15,59 @@ import { isNumber } from '../../utils/is';
  * indeterminate state like a loading spinner.
  */
 const ProgressBar = ({ children = null, value, ready = false }) => {
+    const [
+        { status: progressStatus, isMounted: progressMounted },
+        toggleProgress,
+    ] = useTransitionState({
+        timeout: 300,
+        mountOnEnter: true,
+        unmountOnExit: true,
+        preEnter: true,
+    });
+
+    const [{ status: textStatus }, toggleText] = useTransitionState({
+        timeout: 300,
+        mountOnEnter: true,
+        unmountOnExit: true,
+        preEnter: true,
+    });
+
     const className = useMemo(
         () =>
-            classnames('cc__progress-bar', {
+            clsx('cc__progress-bar', {
                 'cc__progress-bar--determinate': isNumber(value),
                 'cc__progress-bar--indeterminate': !isNumber(value),
             }),
         [value]
     );
 
+    useEffect(() => {
+        toggleProgress(!ready);
+        toggleText(ready);
+    }, [ready, toggleProgress, toggleText]);
+
     return (
         <div className={className}>
-            <CSSTransition
-                timeout={300}
-                classNames="cc__progress-bar--animation-1"
-                in={!ready}
-                unmountOnExit
+            {progressMounted && (
+                <AutoProgressBar
+                    value={value}
+                    className={mapStatusToClass(
+                        progressStatus,
+                        'cc__progress-bar--animation-1'
+                    )}
+                />
+            )}
+            <div
+                className={clsx(
+                    'cc__progress-bar__text',
+                    mapStatusToClass(
+                        textStatus,
+                        'cc__progress-bar--animation-2'
+                    )
+                )}
             >
-                <AutoProgressBar value={value} />
-            </CSSTransition>
-            <CSSTransition
-                timeout={300}
-                classNames="cc__progress-bar--animation-2"
-                in={ready}
-            >
-                <div className="cc__progress-bar__text">{children}</div>
-            </CSSTransition>
+                {children}
+            </div>
         </div>
     );
 };
