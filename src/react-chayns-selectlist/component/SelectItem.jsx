@@ -3,10 +3,12 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import React, { useContext, useEffect } from 'react';
+import { useTransitionState } from 'react-transition-state';
+import clsx from 'clsx';
 import RadioButton from '../../react-chayns-radiobutton/component/RadioButton';
 import Tooltip from '../../react-chayns-tooltip/component/Tooltip';
+import { mapStatusToClass } from '../../utils/mapStatusToClass';
 import SelectListContext from './selectListContext';
 
 /**
@@ -34,6 +36,17 @@ const SelectListItem = ({
 
     const checked = id === selectListSelectedId;
 
+    const [{ status, isMounted }, toggle] = useTransitionState({
+        timeout: 500,
+        mountOnEnter: true,
+        unmountOnExit: true,
+        preEnter: true,
+    });
+
+    useEffect(() => {
+        toggle(checked);
+    }, [checked, toggle]);
+
     return (
         <div key={id} className={className}>
             {tooltipProps ? (
@@ -60,20 +73,15 @@ const SelectListItem = ({
                     {name}
                 </RadioButton>
             )}
-            {children && (
-                <TransitionGroup>
-                    {checked && (
-                        <CSSTransition
-                            key="children"
-                            classNames="react-fade"
-                            timeout={{ enter: 500, exit: 500 }}
-                        >
-                            <div className="selectlist__selectitem">
-                                {children}
-                            </div>
-                        </CSSTransition>
+            {children && isMounted && (
+                <div
+                    className={clsx(
+                        'selectlist__selectitem',
+                        mapStatusToClass(status, 'react-fade')
                     )}
-                </TransitionGroup>
+                >
+                    {children}
+                </div>
             )}
         </div>
     );
