@@ -10,7 +10,6 @@ import React, {
     useContext,
     useEffect,
     useImperativeHandle,
-    useMemo,
     useRef,
     useState,
 } from 'react';
@@ -336,68 +335,6 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             setTitleMaxWidth(maxWidth);
         }, []);
 
-        const headContent = useMemo(
-            () => (
-                <ListItemHead
-                    hoverItem={hoverItem}
-                    careOfLocationId={careOfLocationId}
-                    cornerElement={cornerElement}
-                    cornerImage={cornerImage}
-                    icons={icons}
-                    imageBackground={imageBackground}
-                    images={images}
-                    isAnyItemExpandable={isAnyItemExpandable}
-                    isExpandable={isExpandable}
-                    isOpen={isItemOpen}
-                    isTitleGreyed={isTitleGreyed}
-                    leftElements={leftElements}
-                    onClick={isClickable ? handleHeadClick : undefined}
-                    onLongPress={onLongPress}
-                    shouldForceHover={shouldForceHover}
-                    rightElements={rightElements}
-                    shouldHideImageOrIconBackground={shouldHideImageOrIconBackground}
-                    shouldHideIndicator={shouldHideIndicator}
-                    shouldOpenImageOnClick={shouldOpenImageOnClick}
-                    shouldShowRoundImageOrIcon={shouldShowRoundImageOrIcon}
-                    subtitle={subtitle}
-                    title={title}
-                    onTitleWidthChange={handleTitleWidthChange}
-                    titleElement={titleElement}
-                    setShouldEnableTooltip={setShouldEnableTooltip}
-                    shouldDisableAnimation={shouldDisableAnimation}
-                    onImageError={onImageError}
-                />
-            ),
-            [
-                onImageError,
-                hoverItem,
-                careOfLocationId,
-                cornerElement,
-                cornerImage,
-                icons,
-                imageBackground,
-                images,
-                isAnyItemExpandable,
-                isExpandable,
-                isItemOpen,
-                isTitleGreyed,
-                leftElements,
-                isClickable,
-                handleHeadClick,
-                onLongPress,
-                shouldForceHover,
-                rightElements,
-                shouldHideImageOrIconBackground,
-                shouldHideIndicator,
-                shouldOpenImageOnClick,
-                shouldShowRoundImageOrIcon,
-                subtitle,
-                title,
-                titleElement,
-                shouldDisableAnimation,
-            ],
-        );
-
         return (
             <StyledListItem
                 as={shouldDisableAnimation ? undefined : motion[LIST_ITEM_HTML_TAG]}
@@ -437,7 +374,35 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
                         </StyledListItemTooltip>
                     }
                 >
-                    {headContent}
+                    <ListItemHead
+                        hoverItem={hoverItem}
+                        careOfLocationId={careOfLocationId}
+                        cornerElement={cornerElement}
+                        cornerImage={cornerImage}
+                        icons={icons}
+                        imageBackground={imageBackground}
+                        images={images}
+                        isAnyItemExpandable={isAnyItemExpandable}
+                        isExpandable={isExpandable}
+                        isOpen={isItemOpen}
+                        isTitleGreyed={isTitleGreyed}
+                        leftElements={leftElements}
+                        onClick={isClickable ? handleHeadClick : undefined}
+                        onLongPress={onLongPress}
+                        shouldForceHover={shouldForceHover}
+                        rightElements={rightElements}
+                        shouldHideImageOrIconBackground={shouldHideImageOrIconBackground}
+                        shouldHideIndicator={shouldHideIndicator}
+                        shouldOpenImageOnClick={shouldOpenImageOnClick}
+                        shouldShowRoundImageOrIcon={shouldShowRoundImageOrIcon}
+                        subtitle={subtitle}
+                        title={title}
+                        onTitleWidthChange={handleTitleWidthChange}
+                        titleElement={titleElement}
+                        setShouldEnableTooltip={setShouldEnableTooltip}
+                        shouldDisableAnimation={shouldDisableAnimation}
+                        onImageError={onImageError}
+                    />
                 </Tooltip>
                 <AnimatePresence initial={false}>
                     {isExpandable && (isItemOpen || shouldRenderClosed) && (
