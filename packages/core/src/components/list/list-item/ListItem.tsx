@@ -331,10 +331,10 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             [titleMaxWidth, titleWidth],
         );
 
-        const handleTitleWidthChange = (width: number, maxWidth: number) => {
+        const handleTitleWidthChange = useCallback((width: number, maxWidth: number) => {
             setTitleWidth(width);
             setTitleMaxWidth(maxWidth);
-        };
+        }, []);
 
         const headContent = useMemo(
             () => (
