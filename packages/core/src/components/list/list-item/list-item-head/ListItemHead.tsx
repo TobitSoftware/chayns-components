@@ -152,9 +152,9 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         clearTimeout(longPressTimeoutRef.current);
     }, []);
 
-    const handleTitleWidthChange = (width: number) => {
+    const handleTitleWidthChange = useCallback((width: number) => {
         setTitleMaxWidth(width);
-    };
+    }, []);
 
     const iconOrImageElement = useMemo(() => {
         if (icons) {
