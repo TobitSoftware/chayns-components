@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components';
 import { BrowserName, WithTheme } from '@chayns-components/core';
 
-export const StyledPersonFinderBody = styled.div`
+export const StyledPersonFinderBody = styled.div<{ $shouldRenderInline?: boolean }>`
     display: flex;
     flex-direction: column;
-    height: 300px;
+    height: ${({ $shouldRenderInline }) => ($shouldRenderInline ? 'auto' : '300px')};
 `;
 
 type StyledPersonFinderBodyContentProps = WithTheme<{ $browser: BrowserName }>;

@@ -58,7 +58,7 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
         );
 
         return (
-            <StyledPersonFinderBody ref={ref}>
+            <StyledPersonFinderBody ref={ref} $shouldRenderInline={shouldRenderInline}>
                 <PersonFinderHeader
                     currentGroupName={currentGroupName}
                     defaultGroupName={defaultGroupName}
