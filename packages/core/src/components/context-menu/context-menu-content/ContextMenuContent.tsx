@@ -132,7 +132,6 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                                     {text}
                                 </StyledContextMenuContentItemText>
                             </StyledContextMenuContentItemWrapper>
-
                             {shouldShowSpacer && <StyledContextMenuContentItemSpacer />}
                         </StyledContextMenuContentItem>
                     );

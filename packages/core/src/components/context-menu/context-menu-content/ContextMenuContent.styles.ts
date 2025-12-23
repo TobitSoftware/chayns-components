@@ -101,18 +101,9 @@ export const StyledContextMenuContentItem = styled.div``;
 type StyledContextMenuContentItemSpacerProps = WithTheme<unknown>;
 
 export const StyledContextMenuContentItemSpacer = styled.div<StyledContextMenuContentItemSpacerProps>`
-    position: relative;
-    margin-bottom: 10px;
-
-    &:before {
-        position: absolute;
-        bottom: -5px;
-        height: 1px;
-        background-color: ${({ theme }) => theme['003']};
-        width: 100%;
-        left: 0;
-        content: '';
-    }
+    background-color: ${({ theme }) => theme['003']};
+    height: 1px;
+    width: 100%;
 `;
 
 type StyledContextMenuContentItemWrapperProps = WithTheme<{
