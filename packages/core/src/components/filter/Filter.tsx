@@ -32,9 +32,10 @@ import {
     SortConfig,
 } from '../../types/filter';
 import SearchInput from '../search-input/SearchInput';
-import ContextMenu, { ContextMenuItem, ContextMenuRef } from '../context-menu/ContextMenu';
+import ContextMenu from '../context-menu/ContextMenu';
 import Checkbox from '../checkbox/Checkbox';
 import { InputRef } from '../input/Input';
+import type { ContextMenuItem, ContextMenuRef } from '../context-menu/ContextMenu.types';
 
 export interface FilterRightIcon {
     icons: string[];

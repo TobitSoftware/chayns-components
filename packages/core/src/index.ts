@@ -53,12 +53,14 @@ export {
 export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as HighlightSlider } from './components/highlight-slider/HighlightSlider';
 export type { HighlightSliderItemColors as HighlightSliderColors } from './components/highlight-slider/highlight-slider-item/HighlightSliderItem';
+export { default as ContextMenu } from './components/context-menu/ContextMenu';
 export {
-    default as ContextMenu,
+    ContextMenuAlignment,
     type ContextMenuCoordinates,
     type ContextMenuItem,
+    type ContextMenuProps,
     type ContextMenuRef,
-} from './components/context-menu/ContextMenu';
+} from './components/context-menu/ContextMenu.types';
 export { default as ExpandableContent } from './components/expandable-content/ExpandableContent';
 export {
     default as FileInput,
@@ -120,7 +122,6 @@ export { MentionFinderPopupAlignment } from './constants/mentionFinder';
 export { useElementSize } from './hooks/element';
 export type { BrowserName } from './types/chayns';
 export { ContentCardType } from './types/contentCard';
-export { ContextMenuAlignment } from './types/contextMenu';
 export type { FileItem, Image, InternalFileItem, Meta, Video } from './types/file';
 export { isValidFileType } from './utils/file';
 export type { FileInputFileItem } from './types/fileInput';
