@@ -112,9 +112,11 @@ type StyledContextMenuContentItemWrapperProps = WithTheme<{
 }>;
 
 export const StyledContextMenuContentItemWrapper = styled.div<StyledContextMenuContentItemWrapperProps>`
+    align-items: center;
     cursor: pointer;
     display: flex;
-    padding: 5px 8px 5px 5px;
+    gap: 6px;
+    padding: 5px 8px;
     transition: background-color 0.3s ease;
     border-radius: ${({ $shouldHidePopupArrow }) => ($shouldHidePopupArrow ? '3px' : 0)};
     margin: ${({ $shouldHidePopupArrow }) => ($shouldHidePopupArrow ? '3px' : 0)};
@@ -132,8 +134,9 @@ export const StyledContextMenuContentItemWrapper = styled.div<StyledContextMenuC
 `;
 
 export const StyledContextMenuContentItemIconWrapper = styled.div`
+    display: flex;
     flex: 0 0 auto;
-    margin: 0 8px 0 3px;
+    justify-content: center;
     width: 20px;
 `;
 
