@@ -10,6 +10,7 @@ type StyledButtonProps = WithTheme<{
     $shouldShowTextAsRobotoMedium: boolean;
     $shouldShowAsSelectButton: boolean;
     $shouldShowWaitCursor?: boolean;
+    $effectiveButtonDesign: number;
 }>;
 
 export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
@@ -23,7 +24,12 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
 
     align-items: center;
 
-    ${({ $isSecondary, $shouldShowAsSelectButton, theme }: StyledButtonProps) => {
+    ${({
+        $isSecondary,
+        $shouldShowAsSelectButton,
+        $effectiveButtonDesign,
+        theme,
+    }: StyledButtonProps) => {
         if ($isSecondary || $shouldShowAsSelectButton) {
             return css`
                 color: ${theme.text};
@@ -31,14 +37,19 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
         }
 
         return css`
-            color: ${theme.buttonDesign === '2'
+            color: ${$effectiveButtonDesign === 2
                 ? (theme.buttonColor ?? theme.buttonBackgroundColor ?? 'white')
                 : (theme.buttonColor ?? 'white')};
         `;
     }}
 
-    ${({ theme, $isSecondary, $shouldShowAsSelectButton }: StyledButtonProps) => {
-        if (theme.buttonDesign === '2' && !$shouldShowAsSelectButton) {
+    ${({
+        theme,
+        $isSecondary,
+        $shouldShowAsSelectButton,
+        $effectiveButtonDesign,
+    }: StyledButtonProps) => {
+        if ($effectiveButtonDesign === 2 && !$shouldShowAsSelectButton) {
             return css`
                 border: 1px solid ${$isSecondary ? theme['202'] : theme.buttonBackgroundColor};
                 box-shadow: none;

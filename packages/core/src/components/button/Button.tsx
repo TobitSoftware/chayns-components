@@ -53,6 +53,10 @@ export type ButtonProps = {
      * Stops event propagation on click
      */
     shouldStopPropagation?: boolean;
+    /**
+     * Optional button design override
+     */
+    buttonDesign?: number;
 };
 
 const Button: FC<ButtonProps> = ({
@@ -66,6 +70,7 @@ const Button: FC<ButtonProps> = ({
     shouldStopPropagation,
     shouldShowAsSelectButton = false,
     shouldShowTextAsRobotoMedium = true,
+    buttonDesign,
 }) => {
     const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
         if (shouldStopPropagation) {
@@ -79,19 +84,21 @@ const Button: FC<ButtonProps> = ({
 
     const theme = useTheme() as Theme;
 
+    const effectiveButtonDesign = (buttonDesign ?? theme.buttonDesign) as number;
+
     const iconColor = useMemo(() => {
         if (isSecondary) {
             return theme.text;
         }
 
-        return theme.buttonDesign === '2'
+        return effectiveButtonDesign === 2
             ? (theme.buttonColor ?? theme.buttonBackgroundColor ?? 'white')
             : (theme.buttonColor ?? 'white');
     }, [
         isSecondary,
         theme.buttonBackgroundColor,
         theme.buttonColor,
-        theme.buttonDesign,
+        effectiveButtonDesign,
         theme.text,
     ]);
 
@@ -104,15 +111,15 @@ const Button: FC<ButtonProps> = ({
             color = theme.buttonBackgroundColor ?? theme['408'];
         }
 
-        if (theme.buttonDesign === '2') {
+        if (effectiveButtonDesign === 2) {
             color = `rgba(${theme['102-rgb'] ?? ''}, 0)`;
         }
 
         return color;
-    }, [isSecondary, shouldShowAsSelectButton, theme]);
+    }, [isSecondary, shouldShowAsSelectButton, theme, effectiveButtonDesign]);
 
     const tapStyles = useMemo(() => {
-        if (theme.buttonDesign === '2') {
+        if (effectiveButtonDesign === 2) {
             return {
                 backgroundColor:
                     isSecondary || shouldShowAsSelectButton
@@ -122,15 +129,15 @@ const Button: FC<ButtonProps> = ({
         }
 
         return { opacity: 0.6 };
-    }, [isSecondary, shouldShowAsSelectButton, theme]);
+    }, [isSecondary, shouldShowAsSelectButton, theme, effectiveButtonDesign]);
 
     const hoverStyles = useMemo(() => {
-        if (theme.buttonDesign === '2') {
+        if (effectiveButtonDesign === 2) {
             return { backgroundColor: `rgba(${theme['102-rgb'] ?? ''}, 0.5)` };
         }
 
         return { opacity: 1 };
-    }, [theme]);
+    }, [theme, effectiveButtonDesign]);
 
     return (
         <StyledMotionButton
@@ -143,6 +150,7 @@ const Button: FC<ButtonProps> = ({
             $hasChildren={!!children}
             $hasIcon={typeof icon === 'string' && icon !== ''}
             $isSecondary={isSecondary}
+            $effectiveButtonDesign={effectiveButtonDesign}
             onClick={handleClick}
             style={{ visibility: !backgroundColor ? 'hidden' : 'visible', backgroundColor }}
             initial={{ opacity: 0.5 }}
