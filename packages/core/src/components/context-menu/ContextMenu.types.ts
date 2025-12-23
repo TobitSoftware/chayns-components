@@ -1,5 +1,8 @@
 import type { MouseEvent, ReactNode } from 'react';
 
+/**
+ * Enum representing the possible alignments for the context menu.
+ */
 export enum ContextMenuAlignment {
     TopLeft,
     BottomLeft,
@@ -9,79 +12,140 @@ export enum ContextMenuAlignment {
     BottomCenter,
 }
 
+/**
+ * Type representing the coordinates for positioning the context menu.
+ */
 export type ContextMenuCoordinates = {
+    /** The x-coordinate. */
     x: number;
+    /** The y-coordinate. */
     y: number;
 };
 
+/**
+ * Type representing an item in the context menu.
+ */
 export type ContextMenuItem = {
+    /** Optional icons for the item. Can be strings or React nodes. */
     icons?: string[] | ReactNode;
-    key: string;
-    onClick: (event?: MouseEvent<HTMLDivElement>) => Promise<void> | void;
+    /** Whether the item is selected. */
     isSelected?: boolean;
-    text: string;
+    /** Unique key for the item. */
+    key: string;
+    /** Function called when the item is clicked. */
+    onClick: (event?: MouseEvent<HTMLDivElement>) => Promise<void> | void;
+    /** Whether to show a spacer after the item. */
     shouldShowSpacer?: boolean;
+    /** The text displayed for the item. */
+    text: string;
 };
 
+/**
+ * Props for the ContextMenu component.
+ */
 export type ContextMenuProps = {
     /**
-     * Optional custom alignment used instead of calculating it using the
-     * alignment within the page. The available alignment can be taken from the
-     * ContextMenuAlignment enum.
+     * Context menu alignment
+     * @description Optional custom alignment used instead of calculating it using the alignment
+     * within the page. The available alignments can be taken from the ContextMenuAlignment enum.
+     * @example alignment={ContextMenuAlignment.TopLeft}
+     * @optional
      */
     alignment?: ContextMenuAlignment;
     /**
-     * The element over which the content of the `ContextMenu` should be displayed. The default is an ellipsis icon.
+     * Children element
+     * @description The element over which the content of the ContextMenu should be displayed.
+     * @example children={<Icon icons={['fa fa-paper-clip']} />
+     * @default <Icon icons={['ts-ellipsis_v']} size={18} />
+     * @optional
      */
     children?: ReactNode;
     /**
-     * The element where the content of the `ContextMenu` should be rendered via React Portal.
+     * Container element
+     * @description The element where the content of the ContextMenu should be rendered via React Portal.
+     * @example container={document.body}
+     * @optional
      */
     container?: Element;
     /**
-     * Optional own coordinates to be used instead of calculating the alignment
-     * based on the alignment of the children.
+     * Custom coordinates
+     * @description Optional own coordinates to be used instead of calculating the alignment based
+     * on the alignment of the children.
+     * @example coordinates={{ x: 100, y: 200 }}
+     * @optional
      */
     coordinates?: ContextMenuCoordinates;
     /**
-     * The headline of the contextmenu.
+     * Context menu headline
+     * @description The headline of the context menu. If not provided, no headline will be displayed.
+     * @example headline="Options"
+     * @optional
      */
     headline?: string;
     /**
-     * The items that will be displayed in the content of the `ContextMenu`. Custom icon elements only works on desktop.
+     * Menu items
+     * @description The items that will be displayed in the content of the ContextMenu. Custom icon
+     * elements only will be displayed on desktop devices.
+     * @example items={[{ key: '1', text: 'Option 1', onClick: () => {} }]}
      */
     items: ContextMenuItem[];
     /**
-     * Function to be executed when the content of the Context menu has been hidden.
+     * Hide callback function
+     * @description Function to be executed when the content of the Context menu has been hidden.
+     * @example onHide={() => console.log('Menu hidden')}
+     * @optional
      */
     onHide?: VoidFunction;
     /**
-     * Function to be executed when the content of the Context menu has been shown.
+     * Show callback function
+     * @description Function to be executed when the content of the Context menu has been shown.
+     * @example onShow={() => console.log('Menu shown')}
+     * @optional
      */
     onShow?: VoidFunction;
     /**
-     * Whether the popup should be closed if its clicked.
+     * Close on popup click flag
+     * @description Whether the popup should be closed if it is clicked.
+     * @example shouldCloseOnPopupClick={true}
+     * @optional
      */
     shouldCloseOnPopupClick?: boolean;
     /**
-     * Whether the arrow of the popup should be hidden.
-     */
-    shouldHidePopupArrow?: boolean;
-    /**
-     * Whether the hover effect should be shown.
-     */
-    shouldShowHoverEffect?: boolean;
-    /**
-     * Whether the click should be disabled.
+     * Disable click flag
+     * @description Whether the click should be disabled.
+     * @example shouldDisableClick={false}
+     * @optional
      */
     shouldDisableClick?: boolean;
     /**
-     * The z-index of the popup.
+     * Hide popup arrow flag
+     * @description Whether the arrow of the popup should be hidden.
+     * @example shouldHidePopupArrow={false}
+     * @optional
+     */
+    shouldHidePopupArrow?: boolean;
+    /**
+     * Show hover effect flag
+     * @description Whether the hover effect should be shown.
+     * @example shouldShowHoverEffect={true}
+     * @optional
+     */
+    shouldShowHoverEffect?: boolean;
+    /**
+     * Z-index value
+     * @description The z-index of the popup.
+     * @example zIndex={100}
+     * @optional
      */
     zIndex?: number;
 };
 
+/**
+ * Ref interface for the ContextMenu component.
+ */
 export interface ContextMenuRef {
+    /** Hides the context menu. */
     hide: VoidFunction;
+    /** Shows the context menu. */
     show: VoidFunction;
 }
