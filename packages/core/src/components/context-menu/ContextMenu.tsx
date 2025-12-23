@@ -27,7 +27,7 @@ export type ContextMenuCoordinates = {
 };
 
 export type ContextMenuItem = {
-    icons: string[] | ReactNode;
+    icons?: string[] | ReactNode;
     key: string;
     onClick: (event?: MouseEvent<HTMLDivElement>) => Promise<void> | void;
     isSelected?: boolean;

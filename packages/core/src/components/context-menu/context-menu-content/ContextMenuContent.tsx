@@ -90,6 +90,18 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                 items.map(({ onClick, key, text, icons, shouldShowSpacer }, index) => {
                     const isFocused = index === focusedIndex;
 
+                    let iconElement = null;
+
+                    if (isValidElement(icons)) {
+                        iconElement = icons;
+                    } else if (Array.isArray(icons) && icons.length > 0) {
+                        iconElement = (
+                            <StyledContextMenuContentItemIconWrapper>
+                                <Icon icons={icons} />
+                            </StyledContextMenuContentItemIconWrapper>
+                        );
+                    }
+
                     return (
                         <StyledContextMenuContentItem
                             key={`context-menu-item-${key}`}
@@ -112,13 +124,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                                     }
                                 }}
                             >
-                                {isValidElement(icons) ? (
-                                    icons
-                                ) : (
-                                    <StyledContextMenuContentItemIconWrapper>
-                                        <Icon icons={icons as string[]} />
-                                    </StyledContextMenuContentItemIconWrapper>
-                                )}
+                                {iconElement}
                                 <StyledContextMenuContentItemText>
                                     {text}
                                 </StyledContextMenuContentItemText>
