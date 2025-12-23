@@ -50,13 +50,12 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             y: 0,
         });
 
-        const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
-        const [focusedIndex, setFocusedIndex] = useState<number>(getDefaultFocusedIndex(items));
-
         const [internalAlignment, setInternalAlignment] = useState<ContextMenuAlignment>(
             ContextMenuAlignment.TopLeft,
         );
 
+        const [newContainer, setNewContainer] = useState(container ?? null);
+        const [focusedIndex, setFocusedIndex] = useState(getDefaultFocusedIndex(items));
         const [isContentShown, setIsContentShown] = useState(false);
         const [portal, setPortal] = useState<ReactPortal>();
 
