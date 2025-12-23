@@ -106,28 +106,28 @@ export type ContextMenuProps = {
     /**
      * Close on popup click flag
      * @description Whether the popup should be closed if it is clicked.
-     * @example shouldCloseOnPopupClick={true}
+     * @default true
      * @optional
      */
     shouldCloseOnPopupClick?: boolean;
     /**
      * Disable click flag
      * @description Whether the click should be disabled.
-     * @example shouldDisableClick={false}
+     * @default false
      * @optional
      */
     shouldDisableClick?: boolean;
     /**
      * Hide popup arrow flag
      * @description Whether the arrow of the popup should be hidden.
-     * @example shouldHidePopupArrow={false}
+     * @default false
      * @optional
      */
     shouldHidePopupArrow?: boolean;
     /**
      * Show hover effect flag
      * @description Whether the hover effect should be shown.
-     * @example shouldShowHoverEffect={true}
+     * @default false
      * @optional
      */
     shouldShowHoverEffect?: boolean;
@@ -135,6 +135,7 @@ export type ContextMenuProps = {
      * Z-index value
      * @description The z-index of the popup.
      * @example zIndex={100}
+     * @default 20
      * @optional
      */
     zIndex?: number;
