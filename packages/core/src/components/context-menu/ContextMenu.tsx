@@ -85,10 +85,6 @@ type ContextMenuProps = {
      */
     shouldHidePopupArrow?: boolean;
     /**
-     * Whether the last item should be separated.
-     */
-    shouldSeparateLastItem?: boolean;
-    /**
      * Whether the hover effect should be shown.
      */
     shouldShowHoverEffect?: boolean;
@@ -121,7 +117,6 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             shouldDisableClick = false,
             onShow,
             shouldCloseOnPopupClick = true,
-            shouldSeparateLastItem = false,
             shouldShowHoverEffect = false,
             zIndex = 20,
         },
@@ -332,7 +327,6 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                             <ContextMenuContent
                                 coordinates={coordinates ?? internalCoordinates}
                                 items={items}
-                                shouldSeparateLastItem={shouldSeparateLastItem}
                                 zIndex={zIndex}
                                 headline={headline}
                                 shouldHidePopupArrow={shouldHidePopupArrow}
@@ -365,7 +359,6 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             zIndex,
             shouldHidePopupArrow,
             headline,
-            shouldSeparateLastItem,
             focusedIndex,
             handleHide,
         ]);

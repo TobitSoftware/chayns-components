@@ -5,7 +5,6 @@ import type { ContextMenuCoordinates, ContextMenuItem } from '../ContextMenu';
 import {
     StyledContextMenuContentHeadline,
     StyledContextMenuContentItem,
-    StyledContextMenuContentItemBorder,
     StyledContextMenuContentItemIconWrapper,
     StyledContextMenuContentItemSpacer,
     StyledContextMenuContentItemText,
@@ -20,7 +19,6 @@ type ContextMenuContentProps = {
     shouldHidePopupArrow: boolean;
     headline?: string;
     zIndex: number;
-    shouldSeparateLastItem: boolean;
     focusedIndex: number;
     onKeySelect: (index: number) => void;
 };
@@ -36,7 +34,6 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
             headline,
             onKeySelect,
             focusedIndex,
-            shouldSeparateLastItem,
         },
         ref,
     ) => {
@@ -93,7 +90,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                 items.map(({ onClick, key, text, icons, shouldShowSpacer }, index) => {
                     const isFocused = index === focusedIndex;
 
-                    const item = (
+                    return (
                         <StyledContextMenuContentItem
                             key={`context-menu-item-${key}`}
                             data-index={index}
@@ -130,19 +127,8 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                             {shouldShowSpacer && <StyledContextMenuContentItemSpacer />}
                         </StyledContextMenuContentItem>
                     );
-
-                    if (shouldSeparateLastItem && index + 1 === items.length) {
-                        return (
-                            <React.Fragment key={`context-menu-item-${key}`}>
-                                <StyledContextMenuContentItemBorder />
-                                {item}
-                            </React.Fragment>
-                        );
-                    }
-
-                    return item;
                 }),
-            [items, focusedIndex, shouldHidePopupArrow, shouldSeparateLastItem, onKeySelect],
+            [items, focusedIndex, shouldHidePopupArrow, onKeySelect],
         );
 
         return (
