@@ -1,7 +1,5 @@
 import React, { isValidElement, useMemo } from 'react';
-import { ContextMenuAlignment } from '../../../types/contextMenu';
 import Icon from '../../icon/Icon';
-import type { ContextMenuCoordinates, ContextMenuItem } from '../ContextMenu';
 import {
     StyledContextMenuContentHeadline,
     StyledContextMenuContentItem,
@@ -11,6 +9,11 @@ import {
     StyledContextMenuContentItemWrapper,
     StyledMotionContextMenuContent,
 } from './ContextMenuContent.styles';
+import {
+    ContextMenuAlignment,
+    type ContextMenuCoordinates,
+    type ContextMenuItem,
+} from '../ContextMenu.types';
 
 type ContextMenuContentProps = {
     alignment: ContextMenuAlignment;
