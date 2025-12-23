@@ -24,6 +24,7 @@ import {
     type ContextMenuRef,
 } from './ContextMenu.types';
 import { SelectDialogResult } from '../../types/general';
+import { getDefaultFocusedIndex } from './ContextMenu.utils';
 
 const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
     (
@@ -48,8 +49,9 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             x: 0,
             y: 0,
         });
+
         const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
-        const [focusedIndex, setFocusedIndex] = useState<number>(0);
+        const [focusedIndex, setFocusedIndex] = useState<number>(getDefaultFocusedIndex(items));
 
         const [internalAlignment, setInternalAlignment] = useState<ContextMenuAlignment>(
             ContextMenuAlignment.TopLeft,
@@ -67,9 +69,9 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
         useEffect(() => {
             if (isContentShown) {
-                setFocusedIndex(0);
+                setFocusedIndex(getDefaultFocusedIndex(items));
             }
-        }, [isContentShown]);
+        }, [isContentShown, items]);
 
         useEffect(() => {
             if (contextMenuRef.current && !container) {
