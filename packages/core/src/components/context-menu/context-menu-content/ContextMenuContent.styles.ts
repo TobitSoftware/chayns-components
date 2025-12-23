@@ -146,14 +146,6 @@ export const StyledContextMenuContentItemIconWrapper = styled.div`
     width: 20px;
 `;
 
-type StyledContextMenuContentItemBorderProps = WithTheme<unknown>;
-
-export const StyledContextMenuContentItemBorder = styled.div<StyledContextMenuContentItemBorderProps>`
-    width: 100%;
-    border-top: ${({ theme }: StyledContextMenuContentItemBorderProps) =>
-        `1px solid rgba(${theme['text-rgb'] ?? '34, 34, 34'}, 0.2)`};
-`;
-
 export const StyledContextMenuContentHeadline = styled.div`
     width: 100%;
     margin: 3px 6px;
