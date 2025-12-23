@@ -7,29 +7,6 @@ import React from 'react';
 export default {
     title: 'Core/ContextMenu',
     component: ContextMenu,
-    args: {
-        items: [
-            {
-                icons: ['fa fa-pencil'],
-                key: 'rename',
-                onClick: () => alert('Option "Umbenennen" wurde geklickt...'),
-                text: 'Umbenennen',
-            },
-            {
-                icons: ['fa fa-eye'],
-                key: 'show',
-                onClick: () => alert('Option "Einblenden" wurde geklickt...'),
-                text: 'Einblenden',
-                shouldShowSpacer: true,
-            },
-            {
-                icons: ['fa fa-trash'],
-                key: 'delete',
-                onClick: () => alert('Option "Löschen" wurde geklickt...'),
-                text: 'Löschen',
-            },
-        ],
-    },
 } as Meta<typeof ContextMenu>;
 
 const Template: StoryFn<typeof ContextMenu> = ({ children, ...args }) => (
@@ -54,3 +31,74 @@ const Template: StoryFn<typeof ContextMenu> = ({ children, ...args }) => (
 );
 
 export const General = Template.bind({});
+
+export const WithSpacer = Template.bind({});
+
+export const WithoutIcons = Template.bind({});
+
+General.args = {
+    items: [
+        {
+            icons: ['fa fa-pencil'],
+            key: 'rename',
+            onClick: () => alert('Option "Umbenennen" wurde geklickt...'),
+            text: 'Umbenennen',
+        },
+        {
+            icons: ['fa fa-eye'],
+            key: 'show',
+            onClick: () => alert('Option "Einblenden" wurde geklickt...'),
+            text: 'Einblenden',
+        },
+        {
+            icons: ['fa fa-trash'],
+            key: 'delete',
+            onClick: () => alert('Option "Löschen" wurde geklickt...'),
+            text: 'Löschen',
+        },
+    ],
+};
+
+WithSpacer.args = {
+    items: [
+        {
+            icons: ['fa fa-pencil'],
+            key: 'rename',
+            onClick: () => alert('Option "Umbenennen" wurde geklickt...'),
+            text: 'Umbenennen',
+        },
+        {
+            icons: ['fa fa-eye'],
+            key: 'show',
+            onClick: () => alert('Option "Einblenden" wurde geklickt...'),
+            text: 'Einblenden',
+            shouldShowSpacer: true,
+        },
+        {
+            icons: ['fa fa-trash'],
+            key: 'delete',
+            onClick: () => alert('Option "Löschen" wurde geklickt...'),
+            text: 'Löschen',
+        },
+    ],
+};
+
+WithoutIcons.args = {
+    items: [
+        {
+            key: 'rename',
+            onClick: () => alert('Option "Umbenennen" wurde geklickt...'),
+            text: 'Umbenennen',
+        },
+        {
+            key: 'show',
+            onClick: () => alert('Option "Einblenden" wurde geklickt...'),
+            text: 'Einblenden',
+        },
+        {
+            key: 'delete',
+            onClick: () => alert('Option "Löschen" wurde geklickt...'),
+            text: 'Löschen',
+        },
+    ],
+};
