@@ -137,7 +137,9 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                         name: text,
                         id: index,
                         isSelected,
-                        icon: isValidElement(icons) ? undefined : (icons as string)[0],
+                        icon: isValidElement(icons)
+                            ? undefined
+                            : (icons as string[] | undefined)?.[0],
                     })),
                 }).open()) as SelectDialogResult;
 
