@@ -96,14 +96,16 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             if (!isContentShown) return () => {};
 
             const handleKey = (e: KeyboardEvent) => {
+                if (items.length === 0) return;
+
                 if (e.key === 'ArrowDown') {
                     e.preventDefault();
-                    setFocusedIndex((prev) => Math.min(prev + 1, items.length - 1));
+                    setFocusedIndex((prev) => (prev >= items.length - 1 ? 0 : prev + 1));
                 }
 
                 if (e.key === 'ArrowUp') {
                     e.preventDefault();
-                    setFocusedIndex((prev) => Math.max(prev - 1, 0));
+                    setFocusedIndex((prev) => (prev <= 0 ? items.length - 1 : prev - 1));
                 }
 
                 if (e.key === 'Enter') {
