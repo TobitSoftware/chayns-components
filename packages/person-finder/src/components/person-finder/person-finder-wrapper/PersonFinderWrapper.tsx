@@ -267,10 +267,10 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
                     (filterTypes.includes(PersonFinderFilterTypes.PERSON) &&
                         friendsPriority !== Priority.HIGH))
             ) {
-                return (shouldShowBody || isFocused) && !!search && search?.length > 2;
+                return shouldShowBody && isFocused && !!search && search?.length > 2;
             }
 
-            return shouldShowBody || isFocused;
+            return shouldShowBody && isFocused;
         }, [filterTypes, friendsPriority, search, shouldShowBody, isFocused]);
 
         const content = useMemo(() => {
