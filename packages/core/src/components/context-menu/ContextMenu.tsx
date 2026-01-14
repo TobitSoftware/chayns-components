@@ -58,6 +58,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         const [focusedIndex, setFocusedIndex] = useState(getDefaultFocusedIndex(items));
         const [isContentShown, setIsContentShown] = useState(false);
         const [portal, setPortal] = useState<ReactPortal>();
+        const [isHovered, setIsHovered] = useState(false);
 
         const uuid = useUuid();
 
@@ -96,7 +97,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             if (!isContentShown) return () => {};
 
             const handleKey = (e: KeyboardEvent) => {
-                if (items.length === 0) return;
+                if (items.length === 0 || isHovered) return;
 
                 if (e.key === 'ArrowDown') {
                     e.preventDefault();
@@ -128,7 +129,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             document.addEventListener('keydown', handleKey);
 
             return () => document.removeEventListener('keydown', handleKey);
-        }, [isContentShown, items, focusedIndex, handleHide, shouldCloseOnPopupClick]);
+        }, [isContentShown, items, focusedIndex, handleHide, shouldCloseOnPopupClick, isHovered]);
 
         const handleShow = useCallback(async () => {
             if (isTouch) {
@@ -267,6 +268,13 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                                         void item.onClick();
                                         handleHide();
                                     }
+                                }}
+                                onMouseEnter={() => {
+                                    setIsHovered(true);
+                                    setFocusedIndex(-1);
+                                }}
+                                onMouseLeave={() => {
+                                    setIsHovered(false);
                                 }}
                             />
                         )}

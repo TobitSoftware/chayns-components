@@ -24,6 +24,8 @@ type ContextMenuContentProps = {
     zIndex: number;
     focusedIndex: number;
     onKeySelect: (index: number) => void;
+    onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
+    onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentProps>(
@@ -37,6 +39,8 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
             headline,
             onKeySelect,
             focusedIndex,
+            onMouseEnter,
+            onMouseLeave,
         },
         ref,
     ) => {
@@ -157,6 +161,8 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                     translateY(${anchorOffsetY}px)
                     translateY(${y})
                 `}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
             >
                 {headline && (
                     <StyledContextMenuContentHeadline>{headline}</StyledContextMenuContentHeadline>
