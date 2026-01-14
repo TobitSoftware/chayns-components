@@ -192,6 +192,7 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                                 <Icon
                                     key="icon"
                                     color={iconColor}
+                                    tabIndex={-1}
                                     icons={isSearchInputActive ? ['fa fa-xmark'] : ['fa fa-search']}
                                     onClick={
                                         isSearchInputActive
@@ -231,6 +232,7 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                                         <Icon
                                             key="icon"
                                             color={iconColor}
+                                            tabIndex={-1}
                                             icons={
                                                 isSearchInputActive
                                                     ? ['fa fa-arrow-left']
