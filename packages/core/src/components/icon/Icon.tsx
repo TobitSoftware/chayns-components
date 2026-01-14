@@ -94,6 +94,10 @@ export type IconProps = {
      * @optional
      */
     shouldStopPropagation?: boolean;
+    /**
+     * Optional tab index for the icon.
+     */
+    tabIndex?: number;
 };
 
 const Icon: FC<IconProps> = ({
@@ -104,6 +108,7 @@ const Icon: FC<IconProps> = ({
     onClick,
     onDoubleClick,
     onMouseDown,
+    tabIndex,
     size = 15,
     shouldStopPropagation,
 }) => {
@@ -147,6 +152,7 @@ const Icon: FC<IconProps> = ({
 
     return (
         <StyledIconWrapper
+            tabIndex={tabIndex}
             className={wrapperClasses}
             $isDisabled={isDisabled}
             onClick={typeof onClick === 'function' && !isDisabled ? handleClick : undefined}
