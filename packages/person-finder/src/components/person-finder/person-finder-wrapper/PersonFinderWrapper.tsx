@@ -261,17 +261,19 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
         }, [onDropdownHide, onDropdownShow, shouldShowBody]);
 
         const showBody = useMemo(() => {
+            const extraMobileCheck = isTouch ? isFocused : true;
+
             if (
                 filterTypes?.length === 1 &&
                 (filterTypes.includes(PersonFinderFilterTypes.SITE) ||
                     (filterTypes.includes(PersonFinderFilterTypes.PERSON) &&
                         friendsPriority !== Priority.HIGH))
             ) {
-                return shouldShowBody && isFocused && !!search && search?.length > 2;
+                return shouldShowBody && extraMobileCheck && !!search && search?.length > 2;
             }
 
-            return shouldShowBody && isFocused;
-        }, [filterTypes, friendsPriority, search, shouldShowBody, isFocused]);
+            return shouldShowBody && extraMobileCheck;
+        }, [filterTypes, friendsPriority, isFocused, isTouch, search, shouldShowBody]);
 
         const content = useMemo(() => {
             const body = (
