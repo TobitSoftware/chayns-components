@@ -153,6 +153,10 @@ export type ComboBoxProps = {
      * If true, the dropdown will use the maximum width of the items.
      */
     shouldDropDownUseMaxItemWidth?: boolean;
+    /**
+     * Optional min width for the prefix element.
+     */
+    prefixMinWidth?: number;
 };
 
 const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
@@ -172,6 +176,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             shouldShowClearIcon,
             shouldShowRoundImage,
             onInputFocus,
+            prefixMinWidth,
             shouldUseFullWidth = false,
             onInputChange,
             shouldUseCurrentItemWidth = false,
@@ -606,7 +611,11 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                         $shouldShowBigImage={shouldShowBigImage}
                     >
                         <StyledComboBoxPrefixAndPlaceholderWrapper>
-                            {prefix && <StyledComboBoxPrefix>{prefix}</StyledComboBoxPrefix>}
+                            {prefix && (
+                                <StyledComboBoxPrefix $prefixMinWidth={prefixMinWidth}>
+                                    {prefix}
+                                </StyledComboBoxPrefix>
+                            )}
                             <StyledComboBoxPlaceholder
                                 $shouldReduceOpacity={!selectedItem && !internalSelectedItem}
                             >
@@ -696,6 +705,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                 shouldChangeColor,
                 shouldShowBigImage,
                 prefix,
+                prefixMinWidth,
                 selectedItem,
                 internalSelectedItem,
                 placeholderImageUrl,

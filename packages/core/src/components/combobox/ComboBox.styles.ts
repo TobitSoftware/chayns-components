@@ -146,9 +146,13 @@ export const StyledComboBoxPrefixAndPlaceholderWrapper = styled.div`
     padding: 4px 10px;
 `;
 
-export const StyledComboBoxPrefix = styled.div`
+type StyledComboBoxPrefixProps = {
+    $prefixMinWidth?: number;
+};
+
+export const StyledComboBoxPrefix = styled.div<StyledComboBoxPrefixProps>`
     flex: 0 0 auto;
-    min-width: 32px;
+    min-width: ${({ $prefixMinWidth }) => $prefixMinWidth ?? 0}px;
     padding-right: 5px;
 `;
 
