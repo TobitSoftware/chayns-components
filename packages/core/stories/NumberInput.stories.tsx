@@ -9,7 +9,7 @@ export default {
 } as Meta<typeof NumberInput>;
 
 const Template: StoryFn<typeof NumberInput> = (args) => {
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState<number>();
 
     return <NumberInput {...args} value={value} onChange={(newValue) => setValue(newValue)} />;
 };
