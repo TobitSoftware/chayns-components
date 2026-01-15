@@ -173,9 +173,14 @@ const NumberInputOld: FC<NumberInputProps> = ({
     };
 
     const onLocalFocus = () => {
-        // formattedValue will be a number string with german number format (e.g. 1.000,00)
-        // It will remove all dots, so that the user can type in the number
-        setPlainText(formattedValue.replaceAll('.', '').replace('€', '').replaceAll(' ', ''));
+        if (isTimeInput) {
+            // formattedValue kann z.B. "8" oder "13:24" sein
+            let digits = formattedValue.replace(/\D/g, '');
+            digits = digits.padStart(4, '0');
+            setPlainText(digits);
+        } else {
+            setPlainText(formattedValue.replaceAll('.', '').replace('€', '').replaceAll(' ', ''));
+        }
 
         // This will update the external state
         if (typeof onChange === 'function' && shouldTriggerChangeOnFormat) {

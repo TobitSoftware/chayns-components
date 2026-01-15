@@ -84,7 +84,8 @@ export {
 } from './components/list/list-item/ListItem';
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
 export type { MentionMember } from './components/mention-finder/MentionFinder';
-export { default as NumberInput } from './components/number-input/NumberInputOld';
+export { default as NumberInput } from './components/number-input/NumberInput';
+export { NumberInputType } from './components/number-input/NumberInput.utils';
 export { default as PageProvider } from './components/page-provider/PageProvider';
 export { default as Popup } from './components/popup/Popup';
 export { default as PopupContent } from './components/popup/popup-content/PopupContent';
