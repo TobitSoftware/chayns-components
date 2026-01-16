@@ -238,18 +238,24 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
         const contentHeight = useMemo(() => {
             const flatItems = lists.flatMap((list) => list.list);
 
-            let result = flatItems.length * 36;
+            let height = flatItems.reduce((value, item) => {
+                const isBigItem =
+                    shouldShowBigImage ||
+                    (typeof item.subtext === 'string' && item.subtext.trim() !== '');
+
+                return value + (isBigItem ? 56 : 38);
+            }, 0);
 
             if (lists.length > 1) {
-                result += lists.length * 36;
+                height += lists.length * 38;
             }
 
-            if (maxHeight < result) {
-                result = maxHeight;
+            if (maxHeight < height) {
+                height = maxHeight;
             }
 
-            return result;
-        }, [lists, maxHeight]);
+            return height;
+        }, [lists, maxHeight, shouldShowBigImage]);
 
         const handleInputFocus: FocusEventHandler<HTMLInputElement> = useCallback(
             (event) => {
