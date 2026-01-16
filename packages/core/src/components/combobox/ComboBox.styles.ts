@@ -264,15 +264,16 @@ type StyledComboBoxTopicProps = WithTheme<unknown>;
 
 export const StyledComboBoxTopic = styled.div`
     align-items: center;
+    background-color: ${({ theme }: StyledComboBoxTopicProps) => theme['secondary-102']};
     color: rgba(${({ theme }: StyledComboBoxTopicProps) => theme['text-rgb']}, 0.65);
+    cursor: default;
+    display: flex;
+    flex: 0 0 auto;
+    font-weight: bold;
+    min-height: 38px;
+    line-height: normal;
+    padding: 8px 10px;
     position: sticky;
     top: 0;
-    border: black 5px;
-    cursor: default;
-    font-weight: bold;
-    display: flex;
-    gap: 10px;
     z-index: 10;
-    padding: 4px 10px;
-    background-color: ${({ theme }: StyledComboBoxTopicProps) => theme['secondary-101']};
 `;
