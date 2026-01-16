@@ -15,6 +15,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { CSSPropertiesWithVars } from 'styled-components/dist/types';
 import { BrowserName } from '../../types/chayns';
 import { calculateContentWidth } from '../../utils/calculate';
 import { useIsTouch } from '../../utils/environment';
@@ -52,7 +53,7 @@ export interface IComboBoxItems {
 
 export interface ComboBoxTextStyles {
     tagName?: keyof ReactHTML;
-    styles?: CSSProperties;
+    styles?: CSSPropertiesWithVars;
 }
 
 export interface IComboBoxItem {

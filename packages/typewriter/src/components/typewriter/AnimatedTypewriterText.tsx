@@ -1,10 +1,11 @@
 import React, { FC, useCallback, useMemo } from 'react';
+import { CSSPropertiesWithVars } from 'styled-components/dist/types';
 import { StyledTypewriterText } from './Typewriter.styles';
 
 type AnimatedTypewriterTextProps = {
     shouldHideCursor: boolean;
     shownText: string;
-    textStyle?: React.CSSProperties;
+    textStyle?: CSSPropertiesWithVars;
     shouldRemainSingleLine: boolean;
 };
 

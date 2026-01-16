@@ -12,6 +12,7 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { renderToString } from 'react-dom/server';
+import { CSSPropertiesWithVars } from 'styled-components/dist/types';
 import { CursorType } from '../../types/cursor';
 import { TypewriterDelay, TypewriterSpeed } from '../../types/speed';
 import AnimatedTypewriterText from './AnimatedTypewriterText';
@@ -132,7 +133,7 @@ export type TypewriterProps = {
     /**
      * The style of the typewriter text element
      */
-    textStyle?: React.CSSProperties;
+    textStyle?: CSSPropertiesWithVars;
 };
 
 const Typewriter: FC<TypewriterProps> = ({
