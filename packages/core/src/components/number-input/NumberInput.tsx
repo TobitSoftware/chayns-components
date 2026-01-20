@@ -7,6 +7,7 @@ import {
     isValidNumberInput,
     NumberInputType,
 } from './NumberInput.utils';
+import { useLanguage } from 'chayns-api';
 
 export interface NumberInputProps {
     /**
@@ -68,6 +69,8 @@ const NumberInput: FC<NumberInputProps> = ({
     type = NumberInputType.Integer,
     placeholder,
 }) => {
+    const { active } = useLanguage();
+
     const [isFocused, setIsFocused] = useState(false);
     const [inputValue, setInputValue] = useState<string | undefined>(undefined);
 
@@ -75,28 +78,33 @@ const NumberInput: FC<NumberInputProps> = ({
         if (isFocused && inputValue !== undefined) {
             return inputValue;
         }
+
         if (value === undefined || value === null || Number.isNaN(value)) {
             return '';
         }
+
         switch (type) {
             case NumberInputType.Decimal:
-                return formatDecimal(value);
+                return formatDecimal(value, activeLanguage);
             case NumberInputType.Time:
                 return formatTime(value);
             case NumberInputType.Money:
-                return formatMoney(value);
+                return formatMoney(value, activeLanguage);
             default:
                 return value?.toString() ?? '';
         }
-    }, [isFocused, inputValue, type, value]);
+    }, [isFocused, inputValue, type, value, activeLanguage]);
 
     const handleFocus = (event: FocusEvent<HTMLInputElement>) => {
         setIsFocused(true);
+
         if (type === NumberInputType.Time) {
             let padded = '';
+
             if (value !== undefined && value !== null && !Number.isNaN(value)) {
                 padded = value.toString().padStart(4, '0');
             }
+
             setInputValue(padded);
         } else {
             setInputValue(
@@ -105,8 +113,10 @@ const NumberInput: FC<NumberInputProps> = ({
                     : '',
             );
         }
-        const isValueInvalid = !isValidNumberInput(value, type, minValue, maxValue);
+
         if (typeof onFocus === 'function') {
+            const isValueInvalid = !isValidNumberInput(value, type, minValue, maxValue);
+
             onFocus(event, isValueInvalid);
         }
     };
@@ -114,24 +124,33 @@ const NumberInput: FC<NumberInputProps> = ({
     const handleBlur = (event: FocusEvent<HTMLInputElement>) => {
         setIsFocused(false);
         setInputValue(undefined);
-        const isValueInvalid = !isValidNumberInput(value, type, minValue, maxValue);
+
         if (typeof onBlur === 'function') {
+            const isValueInvalid = !isValidNumberInput(value, type, minValue, maxValue);
+
             onBlur(event, isValueInvalid);
         }
     };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const inputVal = event.target.value;
-        setInputValue(inputVal);
         let numericValue: number | undefined;
+
+        setInputValue(inputVal);
+
         if (type === NumberInputType.Time) {
             const digits = inputVal.replace(/\D/g, '');
+
             numericValue = digits ? parseInt(digits, 10) : undefined;
+        } else if (type === NumberInputType.Decimal || type === NumberInputType.Money) {
+            numericValue = parseLocaleNumber(inputVal, activeLanguage);
         } else {
             numericValue = parseFloat(inputVal.replace(',', '.'));
         }
-        const isValueInvalid = !isValidNumberInput(numericValue, type, minValue, maxValue);
+
         if (typeof onChange === 'function') {
+            const isValueInvalid = !isValidNumberInput(numericValue, type, minValue, maxValue);
+
             onChange(numericValue ?? NaN, isValueInvalid);
         }
     };
