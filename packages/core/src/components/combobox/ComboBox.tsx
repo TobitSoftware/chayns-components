@@ -54,6 +54,7 @@ export interface IComboBoxItems {
 export interface ComboBoxTextStyles {
     tagName?: keyof ReactHTML;
     styles?: CSSPropertiesWithVars;
+    className?: string;
 }
 
 export interface IComboBoxItem {

@@ -76,6 +76,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
                         <StyledComboBoxItemContentHeaderWrapper
                             as={textStyles?.tagName}
                             style={textStyles?.styles}
+                            className={textStyles?.className}
                         >
                             <StyledComboBoxItemContentHeaderWrapperText>
                                 {text}
@@ -113,6 +114,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
             text,
             textStyles?.styles,
             textStyles?.tagName,
+            textStyles?.className,
         ],
     );
 };
