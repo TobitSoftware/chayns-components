@@ -20,25 +20,40 @@ export enum SmallWaitCursorSpeed {
 
 export type SmallWaitCursorProps = {
     /**
-     * Specifies whether the wait cursor should be displayed with a background.
+     * @description The color of the inner circle of the wait cursor.
+     * @optional
+     * @default undefined
+     * @example <SmallWaitCursor color="#FF0000" />
+     */
+    color?: string;
+    /**
+     * @description Specifies whether the wait cursor should be displayed with a background.
+     * @optional
+     * @default false
+     * @example <SmallWaitCursor shouldHideBackground />
      */
     shouldHideBackground?: boolean;
     /**
-     * Specifies whether the wait cursor should be displayed.
+     * @description Specifies whether the wait cursor should be displayed.
+     * @optional
+     * @default false
+     * @example <SmallWaitCursor shouldHideWaitCursor />
      */
     shouldHideWaitCursor?: boolean;
     /**
-     * The size of the wait cursor in pixels. Use the SmallWaitCursorSize enum for this prop.
+     * @description The size of the wait cursor in pixels. Use the SmallWaitCursorSize enum for this prop or a custom value in pixels.
+     * @optional
+     * @default SmallWaitCursorSize.Medium
+     * @example <SmallWaitCursor size={SmallWaitCursorSize.Small} />
      */
     size?: SmallWaitCursorSize | number;
     /**
-     * The speed of the animation in seconds. Use the SmallWaitCursorSpeed enum for this prop.
+     * @description The speed of the animation in seconds. Use the SmallWaitCursorSpeed enum for this prop.
+     * @optional
+     * @default SmallWaitCursorSpeed.Medium
+     * @example <SmallWaitCursor speed={SmallWaitCursorSpeed.Fast} />
      */
     speed?: SmallWaitCursorSpeed;
-    /**
-     * The color of the inner circle of the wait cursor.
-     */
-    color?: string;
 };
 
 const SmallWaitCursor: FC<SmallWaitCursorProps> = ({
