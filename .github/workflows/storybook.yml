@@ -1,0 +1,52 @@
+name: Publish Storybook (v5)
+
+on:
+  schedule:
+    # 03:00 CET ≈ 02:00 UTC
+    - cron: '0 2 * * *'
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
+jobs:
+  storybook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve latest v5 tag
+        id: tag
+        run: |
+          git fetch --tags
+
+          TAG=$(git tag --list "v5.*" --sort=-version:refname | head -n 1)
+
+          if [ -z "$TAG" ]; then
+            echo "No v5 tag found — aborting"
+            exit 1
+          fi
+
+          echo "Using tag: $TAG"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Checkout release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.tag.outputs.tag }}
+
+      - uses: ./.github/actions/lerna-build
+
+      - name: Build Storybook
+        run: npm run storybook:build
+
+      - name: Upload Storybook
+        uses: ./.github/actions/aws-upload-storybook
+        with:
+          source: storybook-static
+          directory: chayns-components
+          version: 5

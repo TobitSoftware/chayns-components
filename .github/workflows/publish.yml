@@ -1,0 +1,28 @@
+name: Publish to NPM (v5)
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v5.[0-9]+.[0-9]+-beta.[0-9]+'
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    env:
+      API_TOKEN_KEY: ${{ secrets.API_TOKEN_KEY }}
+      API_TOKEN_SECRET: ${{ secrets.API_TOKEN_SECRET }}
+
+    steps:
+      - uses: ./.github/actions/lerna-build
+
+      - name: Publish packages
+        run: npx lerna publish from-package --yes
+
+      - name: Generate and upload docs
+        run: npm run docs

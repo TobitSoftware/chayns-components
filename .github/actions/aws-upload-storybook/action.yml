@@ -1,0 +1,23 @@
+name: Upload Storybook to S3
+description: Upload storybook build folder to AWS S3
+
+inputs:
+  source:
+    required: true
+    description: Local storybook folder
+
+  directory:
+    required: true
+    description: S3 directory
+
+  version:
+    required: true
+    description: Major package version
+
+runs:
+  using: composite
+  steps:
+    - name: Upload to S3
+      run: |
+        aws s3 sync ${{ inputs.source }} ${{ inputs.destination }} --delete
+      shell: bash
