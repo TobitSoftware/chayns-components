@@ -17,7 +17,46 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Upload to S3
+
+    # Upload to AWS S3
+    - name: Upload to AWS S3
       run: |
-        aws s3 sync ${{ inputs.source }} ${{ inputs.destination }} --delete
+        aws s3 sync \
+          "${{ inputs.source }}" \
+          "s3://${{ vars.S3_BUCKET_NAME }}/${{ inputs.directory }}/v${{ inputs.version }}" \
+          --delete \
+          --exclude "*.map"
+      shell: bash
+
+    # Create cache marker file
+    - name: Create invalidate cache marker
+      run: |
+        touch .invalidatecache
+        aws s3 cp .invalidatecache \
+          "s3://${{ vars.S3_BUCKET_NAME }}/${{ inputs.directory }}/v${{ inputs.version }}/.invalidatecache"
+      shell: bash
+
+    # Upload to Cloudflare R2
+    - name: Upload to Cloudflare R2
+      env:
+        AWS_ACCESS_KEY_ID: ${{secrets.CF_ACCESS_KEY_ID}}
+        AWS_DEFAULT_REGION: auto
+        AWS_SECRET_ACCESS_KEY: ${{secrets.CF_SECRET_ACCESS_KEY}}
+      run: |
+        aws s3 sync \
+          "${{ inputs.source }}" \
+          "s3://${{ vars.CF_BUCKET_NAME }}/${{ inputs.directory }}/v${{ inputs.version }}" \
+          --delete \
+          --exclude "*.map" \
+          --endpoint-url "https://${{ secrets.CF_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+      shell: bash
+
+    # Cloudflare Cache Purge
+    - name: Purge Cloudflare cache
+      run: |
+        curl -X POST \
+          "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_SPACE_ZONE_ID }}/purge_cache" \
+          -H "Authorization: Bearer ${{ secrets.CF_CACHE_RESET_SECRET }}" \
+          -H "Content-Type: application/json" \
+          --data "{\"prefixes\":[\"${{ vars.CF_URL_PREFIX }}/${{ inputs.directory }}/v${{ inputs.version }}\"]}"
       shell: bash

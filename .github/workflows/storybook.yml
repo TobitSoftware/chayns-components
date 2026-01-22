@@ -48,5 +48,5 @@ jobs:
         uses: ./.github/actions/aws-upload-storybook
         with:
           source: storybook-static
-          directory: chayns-components
+          directory: chayns-components/storybook
           version: 5
