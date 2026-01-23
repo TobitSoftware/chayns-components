@@ -17,7 +17,7 @@ import React, {
 } from 'react';
 import { CSSPropertiesWithVars } from 'styled-components/dist/types';
 import { BrowserName } from '../../types/chayns';
-import { calculateContentWidth } from '../../utils/calculate';
+import { calculateMaxComboBoxItemWidth } from '../../utils/calculate';
 import { useIsTouch } from '../../utils/environment';
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import Icon from '../icon/Icon';
@@ -406,20 +406,23 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
         useEffect(() => {
             const allItems = lists.flatMap((list) => list.list);
 
-            let baseWidth = calculateContentWidth(
-                [
+            let maxItemWidth = calculateMaxComboBoxItemWidth({
+                list: [
                     ...allItems,
                     { text: placeholder, value: 'placeholder' },
                     ...(selectedItem ? [selectedItem] : []),
                 ],
                 functions,
+                shouldShowBigImage,
                 values,
-            );
+            });
 
             if (shouldDropDownUseMaxItemWidth) {
-                baseWidth += 20 + 2; // 20px padding left and right and 2px border
-                setBodyMinWidth(baseWidth);
-                setMinWidth(baseWidth);
+                maxItemWidth += 20 + 2 + 1; // 20px padding (left and right), 2px border, 1px puffer for rounding errors
+
+                setBodyMinWidth(maxItemWidth);
+                setMinWidth(maxItemWidth);
+
                 return;
             }
 
@@ -436,14 +439,17 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             let prefixWidth = 0;
 
             if (prefix) {
-                const prefixTextWidth =
-                    calculateContentWidth([{ text: prefix, value: 'prefix' }], functions, values) +
-                    5;
+                const prefixTextWidth = calculateMaxComboBoxItemWidth({
+                    list: [{ text: prefix, value: 'prefix' }],
+                    functions,
+                    values,
+                });
 
-                prefixWidth = Math.max(prefixTextWidth, 32);
+                prefixWidth = Math.max(prefixTextWidth + 5, 32);
             }
 
-            const calculatedWidth = baseWidth + paddingWidth + imageWidth + iconWidth + prefixWidth;
+            const calculatedWidth =
+                maxItemWidth + paddingWidth + imageWidth + iconWidth + prefixWidth;
 
             let tmpMinWidth = calculatedWidth;
             let tmpBodyMinWidth = calculatedWidth;
@@ -457,12 +463,15 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             }
             // Current item width settings
             else if (shouldUseCurrentItemWidth && internalSelectedItem) {
+                const internalSelectedItemWidth = calculateMaxComboBoxItemWidth({
+                    list: [internalSelectedItem],
+                    functions,
+                    shouldShowBigImage,
+                    values,
+                });
+
                 const itemWidth =
-                    calculateContentWidth([internalSelectedItem], functions, values) +
-                    paddingWidth +
-                    imageWidth +
-                    iconWidth +
-                    prefixWidth;
+                    internalSelectedItemWidth + paddingWidth + imageWidth + iconWidth + prefixWidth;
 
                 tmpMinWidth = itemWidth;
 
@@ -481,16 +490,17 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             setMinWidth(tmpMinWidth);
             setBodyMinWidth(shouldUseCurrentItemWidth ? tmpMinWidth : tmpBodyMinWidth);
         }, [
+            functions,
+            internalSelectedItem,
             lists,
             placeholder,
-            shouldUseFullWidth,
-            shouldUseCurrentItemWidth,
-            internalSelectedItem,
             prefix,
             selectedItem,
-            functions,
-            values,
             shouldDropDownUseMaxItemWidth,
+            shouldShowBigImage,
+            shouldUseCurrentItemWidth,
+            shouldUseFullWidth,
+            values,
         ]);
 
         /**
