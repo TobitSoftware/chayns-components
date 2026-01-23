@@ -3,6 +3,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { DropdownDirection } from '../src/types/dropdown';
 import ComboBox, { IComboBoxItem } from '../src/components/combobox/ComboBox';
 import Icon from '../src/components/icon/Icon';
+import { Badge } from '@chayns-components/core';
 
 export default {
     title: 'Core/ComboBox',
@@ -53,6 +54,34 @@ const Template: StoryFn<typeof ComboBox> = (args) => (
     </>
 );
 
+const CustomTemplate: StoryFn<typeof ComboBox> = (args) => (
+    <>
+        <p>
+            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+            diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+            gubergren, no sea takimata sanctus est.
+        </p>
+        <div
+            style={{
+                alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: '1rem',
+                marginTop: '1rem',
+            }}
+        >
+            <span>Auswahlbereich</span>
+            <ComboBox {...args} />
+        </div>
+        <p>
+            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+            diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+            voluptua.
+        </p>
+    </>
+);
+
 const WithInputTemplate: StoryFn<typeof ComboBox> = (args) => {
     const [value, setValue] = useState('');
 
@@ -84,6 +113,8 @@ const WithInputTemplate: StoryFn<typeof ComboBox> = (args) => {
 
 export const General = Template.bind({});
 
+export const Custom = CustomTemplate.bind({});
+
 export const OwnWidth = Template.bind({});
 
 export const WithPrefix = Template.bind({});
@@ -103,6 +134,54 @@ export const WithBigImage = Template.bind({});
 export const WithInput = WithInputTemplate.bind({});
 
 export const WithTextStyle = Template.bind({});
+
+Custom.args = {
+    lists: [
+        {
+            list: [
+                {
+                    icons: ['fa fa-users'],
+                    imageUrl: 'https://picsum.photos/200',
+                    rightElement: <Badge>7</Badge>,
+                    text: 'Allgemein',
+                    value: 1,
+                },
+                {
+                    icons: ['fa fa-user'],
+                    imageUrl: 'https://picsum.photos/200',
+                    rightElement: <Badge>33</Badge>,
+                    text: 'Persönlich',
+                    value: 2,
+                },
+                {
+                    icons: ['fa fa-hashtag-lock'],
+                    imageUrl: 'https://picsum.photos/200',
+                    rightElement: <Badge>1</Badge>,
+                    text: 'Die Doppelnull-Crew',
+                    value: 3,
+                },
+                {
+                    icons: ['fa fa-question-circle'],
+                    imageUrl: 'https://picsum.photos/200',
+                    rightElement: <Badge>12</Badge>,
+                    text: 'Bereich mit Hilfe & FAQ',
+                    value: 4,
+                },
+                {
+                    icons: ['fa fa-sign-out-alt'],
+                    imageUrl: 'https://picsum.photos/200',
+                    rightElement: <Badge>10</Badge>,
+                    text: 'Abmelden',
+                    value: 5,
+                },
+            ],
+        },
+    ],
+    placeholder: 'Auswählen',
+    shouldDropDownUseMaxItemWidth: true,
+    shouldShowTransparentBackground: true,
+    shouldUseCurrentItemWidth: true,
+};
 
 OwnWidth.args = {
     bodyWidth: 300,
