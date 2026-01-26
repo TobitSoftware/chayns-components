@@ -80,6 +80,7 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     const isInChaynsWalletRef = useRef(false);
 
     const [measuredContentHeight, setMeasuredContentHeight] = useState<number>(0);
+    const [measuredContentWidth, setMeasuredContentWidth] = useState<number>(0);
     const [portal, setPortal] = useState<ReactPortal>();
 
     const ref = useRef<HTMLDivElement>(null);
@@ -89,11 +90,11 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     const container = useContainer({ anchorElement, container: containerProp });
 
     const { transform, width, coordinates } = useDropdown({
-        direction,
-        bodyWidth,
-        contentHeight,
-        container,
         anchorElement,
+        container,
+        contentHeight,
+        contentWidth: bodyWidth ?? measuredContentWidth,
+        direction,
         shouldShowDropdown,
     });
 
@@ -136,6 +137,8 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
             if (isInChaynsWalletRef.current) {
                 setMeasuredContentHeight(measurements.height);
             }
+
+            setMeasuredContentWidth(measurements.width);
 
             if (typeof onMeasure === 'function') {
                 onMeasure(measurements);
