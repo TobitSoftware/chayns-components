@@ -62,6 +62,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             shouldAllowMultiple = true,
             shouldHideResultsOnAdd = !shouldAllowMultiple || false,
             shouldShowOwnUser = false,
+            shouldDisableRemove = false,
             shouldRenderInline = false,
         },
         ref,
@@ -92,6 +93,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                             filterTypes={filterTypes}
                             maxEntries={maxEntries}
                             onAdd={onAdd}
+                            shouldDisableRemove={shouldDisableRemove}
                             onDropdownHide={onDropdownHide}
                             onDropdownShow={onDropdownShow}
                             leftElement={leftElement}
