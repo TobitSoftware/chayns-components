@@ -1,6 +1,6 @@
 {
-    "name": "@chayns-components/core",
-    "version": "5.0.0-beta.1386",
+    "name": "@chayns-components/navigation",
+    "version": "1.0.0",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -15,7 +15,7 @@
         "components"
     ],
     "author": "Tobit.Software",
-    "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/core#readme",
+    "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/navigation#readme",
     "license": "MIT",
     "types": "lib/types/index.d.ts",
     "main": "lib/cjs/index.js",
@@ -60,9 +60,7 @@
         "@types/react": "^18.3.27",
         "@types/react-dom": "^18.3.7",
         "@types/styled-components": "^5.1.36",
-        "@types/uuid": "^10.0.0",
         "babel-loader": "^9.2.1",
-        "chayns-api": "^2.6.2",
         "cross-env": "^7.0.3",
         "lerna": "^8.2.4",
         "react": "^18.3.1",
@@ -71,10 +69,7 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@chayns/colors": "^2.0.2",
-        "@chayns/uac-service": "~0.0.62",
-        "clsx": "^2.1.1",
-        "uuid": "^10.0.0"
+        "@chayns-components/core": "^5.0.0-beta.1386"
     },
     "peerDependencies": {
         "chayns-api": ">=2.2.0",
