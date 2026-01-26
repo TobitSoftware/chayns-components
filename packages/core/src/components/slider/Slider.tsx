@@ -149,18 +149,6 @@ export type SliderProps = {
      */
     step?: number;
     /**
-     * The step size for the slider.
-     * @description
-     * The `steps` prop defines the increment by which the slider value changes when the user interacts with it.
-     * It is used to control the granularity of the slider's movement. For example, if `step` is set to 1, the slider will move in increments of 1.
-     * @default 1
-     * @example
-     * <Slider steps={5} />
-     * @optional
-     * @deprecated Use `step` instead. This prop will be removed in future versions.
-     */
-    steps?: number;
-    /**
      * A function to format the thumb label.
      * @description
      * The `thumbLabelFormatter` prop is a function that formats the value displayed on the thumb label.
@@ -194,8 +182,7 @@ const Slider: FC<SliderProps> = ({
     onSelect,
     shouldHighlightSteps = false,
     shouldShowThumbLabel = false,
-    steps = 1,
-    step = steps ?? 1,
+    step = 1,
     thumbLabelFormatter,
     value,
 }) => {
