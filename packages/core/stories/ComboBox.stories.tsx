@@ -136,6 +136,7 @@ export const WithInput = WithInputTemplate.bind({});
 export const WithTextStyle = Template.bind({});
 
 Custom.args = {
+    direction: DropdownDirection.BOTTOM_LEFT,
     lists: [
         {
             list: [
