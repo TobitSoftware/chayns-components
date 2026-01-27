@@ -7,14 +7,27 @@ import {
     DynamicToolbarLayout,
 } from '../src/components/dynamic-toolbar/DynamicToolbar.types';
 
-const TOOLBAR_ITEMS: DynamicToolbarItem[] = [
-    { id: 'chat', icons: ['far fa-comment'], label: 'Chat', badgeCount: 4 },
-    { id: 'customers', icons: ['far fa-users'], label: 'Kunden' },
-    { id: 'files', icons: ['far fa-folder-open'], label: 'Dateien' },
-    { id: 'notifications', icons: ['far fa-bell'], label: 'Benachrichtigungen', badgeCount: 28 },
-    { id: 'tasks', icons: ['far fa-check-circle'], label: 'Aufgaben' },
-    { id: 'announcements', icons: ['far fa-bullhorn'], label: 'Ankündigungen', isDisabled: true },
-    { id: 'settings', icons: ['far fa-cog'], label: 'Einstellungen' },
+const BASIC_TOOLBAR_ITEMS: DynamicToolbarItem[] = [
+    { id: 'sidekick', icons: ['ts-sidekick'], label: 'Sidekick', hasRightSeparator: true },
+    { id: 'chat', icons: ['ts-chat'], label: 'Chat' },
+    { id: 'witness', icons: ['fa fa-microphone'], label: 'Gespräche', badgeCount: 7 },
+    { id: 'frontline', icons: ['fa fa-user-question'], label: 'Anfragen' },
+    { id: 'notifications', icons: ['fa fa-bell'], label: 'Benachrichtigungen', badgeCount: 28 },
+    { id: 'tasks', icons: ['fa fa-check-circle'], label: 'Aufgaben' },
+    { id: 'settings', icons: ['fa fa-cog'], label: 'Einstellungen' },
+];
+
+const SCANNER_TOOLBAR_ITEMS: DynamicToolbarItem[] = [
+    { id: 'chayns', icons: ['ts-chayns'], label: 'chayns' },
+    { id: 'chat', icons: ['ts-chat'], label: 'Chat', badgeCount: 19 },
+    { id: 'sidekick', icons: ['ts-sidekick-chat'], label: 'Sidekick' },
+    { id: 'cards', icons: ['fa fa-rectangle-history'], label: 'Cards' },
+    { id: 'id', icons: ['ts-fingerprint'], label: 'ID' },
+    { id: 'money', icons: ['fa fa-euro-sign'], label: 'Geld', badgeCount: 5 },
+    { id: 'space', icons: ['ts-space'], label: 'Space', isDisabled: true },
+    { id: 'pages', icons: ['fa fa-list'], label: 'Pages' },
+    { id: 'settings', icons: ['fa fa-cog'], label: 'Einstellungen' },
+    { id: 'map', icons: ['fa fa-circle-location-arrow'], label: 'Map' },
 ];
 
 export default {
@@ -38,7 +51,7 @@ export default {
     },
     args: {
         activeItemId: 'chat',
-        items: TOOLBAR_ITEMS,
+        items: BASIC_TOOLBAR_ITEMS,
         layout: DynamicToolbarLayout.Floating,
         onItemSelect: action('onItemSelect'),
     },
@@ -71,19 +84,23 @@ const Template: StoryFn<typeof DynamicToolbar> = (args) => {
     );
 };
 
-export const FloatingLayout = Template.bind({});
+export const FloatingBasicLayout = Template.bind({});
 
-export const FlushLayout = Template.bind({});
+export const FloatingScannerLayout = Template.bind({});
 
-FlushLayout.args = {
-    layout: DynamicToolbarLayout.Flush,
-    activeItemId: 'files',
+export const FlushBasicLayout = Template.bind({});
+
+export const FlushScannerLayout = Template.bind({});
+
+FloatingScannerLayout.args = {
+    items: SCANNER_TOOLBAR_ITEMS,
 };
 
-FlushLayout.parameters = {
-    docs: {
-        description: {
-            story: 'Die FLUSH-Variante dockt bündig am unteren Viewportrand an und blendet keine zusätzlichen Aktionen aus.',
-        },
-    },
+FlushBasicLayout.args = {
+    layout: DynamicToolbarLayout.Flush,
+};
+
+FlushScannerLayout.args = {
+    layout: DynamicToolbarLayout.Flush,
+    items: SCANNER_TOOLBAR_ITEMS,
 };
