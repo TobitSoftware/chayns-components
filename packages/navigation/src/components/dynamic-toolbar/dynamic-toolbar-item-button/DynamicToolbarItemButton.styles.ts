@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 type StyledDynamicToolbarItemButtonProps = WithTheme<{
     $isDisabled: boolean;
+    $hasRightSeparator?: boolean;
 }>;
 
 export const StyledDynamicToolbarItemButton = styled.button<StyledDynamicToolbarItemButtonProps>`
@@ -13,14 +14,25 @@ export const StyledDynamicToolbarItemButton = styled.button<StyledDynamicToolbar
     border-radius: 4px;
     cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
     display: flex;
-    flex: 1 1 auto;
+    flex: 1 1 0;
     justify-content: center;
     min-height: 40px;
-    min-width: 0;
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     padding: 8px;
     position: relative;
     transition: opacity 0.2s ease;
+
+    &::after {
+        background: white;
+        bottom: 6px;
+        content: '';
+        display: ${({ $hasRightSeparator }) => ($hasRightSeparator ? 'block' : 'none')};
+        opacity: 0.6;
+        position: absolute;
+        right: -4px;
+        top: 6px;
+        width: 2px;
+    }
 `;
 
 export const StyledMotionDynamicToolbarItemButtonBackground = styled(motion.div)`

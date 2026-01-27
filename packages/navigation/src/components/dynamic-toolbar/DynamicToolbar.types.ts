@@ -17,6 +17,8 @@ export type DynamicToolbarItem = {
     isDisabled?: boolean;
     // Marks the action as temporarily unavailable.
     label: string;
+    // Optional visual separator to highlight contextual groups.
+    hasRightSeparator?: boolean;
 };
 
 export type DynamicToolbarProps = {

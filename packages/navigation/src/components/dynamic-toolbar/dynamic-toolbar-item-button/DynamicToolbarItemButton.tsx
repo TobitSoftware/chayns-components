@@ -45,6 +45,7 @@ const DynamicToolbarItemButton: FC<DynamicToolbarItemButtonProps> = ({
             type="button"
             disabled={item.isDisabled}
             $isDisabled={Boolean(item.isDisabled)}
+            $hasRightSeparator={item.hasRightSeparator}
             onClick={handleClick}
         >
             <Icon color="white" icons={item.icons} size={22} />

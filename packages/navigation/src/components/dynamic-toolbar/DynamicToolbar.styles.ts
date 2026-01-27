@@ -23,6 +23,7 @@ export const StyledDynamicToolbarContent = styled.div<StyledDynamicToolbarConten
     background-color: ${({ theme }) => theme.primary};
     border-radius: 8px;
     display: flex;
+    gap: 6px;
     height: 52px;
     padding: 6px;
     width: 80vw;
