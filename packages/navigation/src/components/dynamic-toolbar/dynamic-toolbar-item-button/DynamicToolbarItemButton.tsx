@@ -4,6 +4,8 @@ import type { DynamicToolbarItem } from '../DynamicToolbar.types';
 import {
     StyledDynamicToolbarItemButton,
     StyledMotionDynamicToolbarItemButtonBackground,
+    StyledDynamicToolbarItemIconWrapper,
+    StyledDynamicToolbarItemBadge,
 } from './DynamicToolbarItemButton.styles';
 
 export type DynamicToolbarItemButtonProps = {
@@ -48,7 +50,14 @@ const DynamicToolbarItemButton: FC<DynamicToolbarItemButtonProps> = ({
             $hasRightSeparator={item.hasRightSeparator}
             onClick={handleClick}
         >
-            <Icon color="white" icons={item.icons} size={22} />
+            <StyledDynamicToolbarItemIconWrapper>
+                <Icon color="white" icons={item.icons} size={22} />
+                {badgeDisplayValue && (
+                    <StyledDynamicToolbarItemBadge>
+                        {badgeDisplayValue}
+                    </StyledDynamicToolbarItemBadge>
+                )}
+            </StyledDynamicToolbarItemIconWrapper>
             {isActive && (
                 <StyledMotionDynamicToolbarItemButtonBackground layoutId="toolbarItemBackground" />
             )}

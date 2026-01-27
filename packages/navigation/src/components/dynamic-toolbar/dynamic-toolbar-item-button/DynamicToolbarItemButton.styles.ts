@@ -35,6 +35,30 @@ export const StyledDynamicToolbarItemButton = styled.button<StyledDynamicToolbar
     }
 `;
 
+export const StyledDynamicToolbarItemIconWrapper = styled.span`
+    display: inline-flex;
+    position: relative;
+`;
+
+export const StyledDynamicToolbarItemBadge = styled.span`
+    align-items: center;
+    background-color: #e53935;
+    border-radius: 9px;
+    color: #fff;
+    display: flex;
+    font-size: 0.75rem;
+    font-weight: bold;
+    height: 18px;
+    justify-content: center;
+    line-height: 1;
+    min-width: 18px;
+    padding: 0 0.35rem;
+    position: absolute;
+    right: -8px;
+    top: -8px;
+    z-index: 1;
+`;
+
 export const StyledMotionDynamicToolbarItemButtonBackground = styled(motion.div)`
     background: rgba(0, 0, 0, 0.15);
     border-radius: 4px;
