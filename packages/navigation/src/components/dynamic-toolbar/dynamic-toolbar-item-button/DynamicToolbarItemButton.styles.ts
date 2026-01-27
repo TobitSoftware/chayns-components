@@ -1,8 +1,8 @@
 import { WithTheme } from '@chayns-components/core';
-import styled, { css } from 'styled-components';
+import { motion } from 'motion/react';
+import styled from 'styled-components';
 
 type StyledDynamicToolbarItemButtonProps = WithTheme<{
-    $isActive: boolean;
     $isDisabled: boolean;
 }>;
 
@@ -20,13 +20,16 @@ export const StyledDynamicToolbarItemButton = styled.button<StyledDynamicToolbar
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     padding: 8px;
     position: relative;
-    transition:
-        background 0.2s ease,
-        opacity 0.2s ease;
+    transition: opacity 0.2s ease;
+`;
 
-    ${({ $isActive }) =>
-        $isActive &&
-        css`
-            background: rgba(0, 0, 0, 0.15);
-        `}
+export const StyledMotionDynamicToolbarItemButtonBackground = styled(motion.div)`
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 0;
 `;

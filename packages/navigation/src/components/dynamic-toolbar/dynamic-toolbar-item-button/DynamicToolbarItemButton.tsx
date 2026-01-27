@@ -1,7 +1,10 @@
 import React, { FC, useCallback } from 'react';
 import { Icon } from '@chayns-components/core';
 import type { DynamicToolbarItem } from '../DynamicToolbar.types';
-import { StyledDynamicToolbarItemButton } from './DynamicToolbarItemButton.styles';
+import {
+    StyledDynamicToolbarItemButton,
+    StyledMotionDynamicToolbarItemButtonBackground,
+} from './DynamicToolbarItemButton.styles';
 
 export type DynamicToolbarItemButtonProps = {
     /**
@@ -41,11 +44,13 @@ const DynamicToolbarItemButton: FC<DynamicToolbarItemButtonProps> = ({
         <StyledDynamicToolbarItemButton
             type="button"
             disabled={item.isDisabled}
-            $isActive={isActive}
             $isDisabled={Boolean(item.isDisabled)}
             onClick={handleClick}
         >
             <Icon color="white" icons={item.icons} size={22} />
+            {isActive && (
+                <StyledMotionDynamicToolbarItemButtonBackground layoutId="toolbarItemBackground" />
+            )}
         </StyledDynamicToolbarItemButton>
     );
 };
