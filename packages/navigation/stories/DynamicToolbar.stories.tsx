@@ -37,7 +37,7 @@ export default {
         docs: {
             description: {
                 component:
-                    'Die DynamicToolbar blendet Aktionen je nach Breite automatisch aus, gruppiert sie im Overflow-Menü und lässt sich zwischen Floating- und Flush-Layout umschalten.',
+                    'Die DynamicToolbar blendet Aktionen je nach Breite automatisch aus, gruppiert sie im Overflow-Menü und lässt sich zwischen Floating- und Area-Layout umschalten.',
             },
         },
     },
@@ -97,10 +97,10 @@ FloatingScannerLayout.args = {
 };
 
 FlushBasicLayout.args = {
-    layout: DynamicToolbarLayout.Flush,
+    layout: DynamicToolbarLayout.Area,
 };
 
 FlushScannerLayout.args = {
-    layout: DynamicToolbarLayout.Flush,
+    layout: DynamicToolbarLayout.Area,
     items: SCANNER_TOOLBAR_ITEMS,
 };

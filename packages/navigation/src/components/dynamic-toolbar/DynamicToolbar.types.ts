@@ -1,9 +1,9 @@
 import type { IconProps } from '@chayns-components/core';
 
 export enum DynamicToolbarLayout {
+    Area = 'area',
     Hidden = 'hidden',
     Floating = 'floating',
-    Flush = 'flush',
 }
 
 export type DynamicToolbarItem = {

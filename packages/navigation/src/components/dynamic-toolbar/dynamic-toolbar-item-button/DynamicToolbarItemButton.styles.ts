@@ -16,7 +16,7 @@ export const StyledDynamicToolbarItemButton = styled.button<StyledDynamicToolbar
     display: flex;
     flex: 1 1 0;
     justify-content: center;
-    min-height: 40px;
+    height: 40px;
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     padding: 8px;
     position: relative;

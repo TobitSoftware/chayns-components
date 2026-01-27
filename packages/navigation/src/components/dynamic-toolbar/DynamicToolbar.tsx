@@ -1,9 +1,18 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { StyledDynamicToolbarContent, StyledMotionDynamicToolbar } from './DynamicToolbar.styles';
-import type { DynamicToolbarItem, DynamicToolbarProps } from './DynamicToolbar.types';
-import { DynamicToolbarLayout } from './DynamicToolbar.types';
+import {
+    StyledDynamicToolbarBackground,
+    StyledDynamicToolbarContent,
+    StyledDynamicToolbarOverflowTrigger,
+    StyledMotionDynamicToolbar,
+} from './DynamicToolbar.styles';
+import {
+    DynamicToolbarItem,
+    DynamicToolbarLayout,
+    DynamicToolbarProps,
+} from './DynamicToolbar.types';
 import { AnimatePresence } from 'motion/react';
 import DynamicToolbarItemButton from './dynamic-toolbar-item-button/DynamicToolbarItemButton';
+import { Icon } from '@chayns-components/core';
 
 const BADGE_MAX_VALUE = 99;
 const MIN_ITEM_WIDTH = 64;
@@ -151,10 +160,21 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
                     className={className}
                     exit={{ y: '100%' }}
                     initial={{ y: '100%' }}
+                    transition={{ duration: 0.2, type: 'tween' }}
                 >
-                    <StyledDynamicToolbarContent $layout={layout}>
+                    <StyledDynamicToolbarBackground $layout={layout} />
+                    <StyledDynamicToolbarContent>
                         {renderedVisibleItems}
                     </StyledDynamicToolbarContent>
+                    {overflowItems.length > 0 && (
+                        <StyledDynamicToolbarOverflowTrigger>
+                            <Icon
+                                color={layout === DynamicToolbarLayout.Area ? 'white' : undefined}
+                                icons={['fa fa-ellipsis-vertical']}
+                                size={22}
+                            />
+                        </StyledDynamicToolbarOverflowTrigger>
+                    )}
                 </StyledMotionDynamicToolbar>
             )}
         </AnimatePresence>
