@@ -1,10 +1,5 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Icon } from '@chayns-components/core';
-import {
-    StyledDynamicToolbarContent,
-    StyledDynamicToolbarOverflowTrigger,
-    StyledMotionDynamicToolbar,
-} from './DynamicToolbar.styles';
+import { StyledDynamicToolbarContent, StyledMotionDynamicToolbar } from './DynamicToolbar.styles';
 import type { DynamicToolbarItem, DynamicToolbarProps } from './DynamicToolbar.types';
 import { DynamicToolbarLayout } from './DynamicToolbar.types';
 import { AnimatePresence } from 'motion/react';
@@ -13,6 +8,7 @@ import DynamicToolbarItemButton from './dynamic-toolbar-item-button/DynamicToolb
 const BADGE_MAX_VALUE = 99;
 const MIN_ITEM_WIDTH = 64;
 const SCROLL_HIDE_DELTA = 20;
+const VIEWPORT_WIDTH_RATIO = 0.8;
 
 const DynamicToolbar: FC<DynamicToolbarProps> = ({
     activeItemId,
@@ -23,11 +19,10 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
 }) => {
     const [isAutoHidden, setIsAutoHidden] = useState(false);
     const [isOverflowTrayOpen, setIsOverflowTrayOpen] = useState(false);
-    const [toolbarWidth, setToolbarWidth] = useState<number>();
+    const [availableWidth, setAvailableWidth] = useState<number>();
 
     const previousScrollYRef = useRef(0);
     const scrollAnimationFrame = useRef<number>();
-    const toolbarRef = useRef<HTMLDivElement>(null);
 
     const isHidden =
         (layout === DynamicToolbarLayout.Floating && isAutoHidden) ||
@@ -38,6 +33,10 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
         if (typeof window === 'undefined') {
             return undefined;
         }
+
+        const updateAvailableWidth = () => {
+            setAvailableWidth(window.innerWidth * VIEWPORT_WIDTH_RATIO);
+        };
 
         const handleScroll = () => {
             if (scrollAnimationFrame.current) {
@@ -55,7 +54,6 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
 
                 if (isScrollingDown && hasReachedHideThreshold) {
                     previousScrollYRef.current = currentScrollY;
-
                     setIsAutoHidden(true);
                     setIsOverflowTrayOpen(false);
 
@@ -64,7 +62,6 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
 
                 if (!isScrollingDown && hasReachedHideThreshold) {
                     previousScrollYRef.current = currentScrollY;
-
                     setIsAutoHidden(false);
 
                     return;
@@ -74,53 +71,18 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
             });
         };
 
+        updateAvailableWidth();
+
+        window.addEventListener('resize', updateAvailableWidth);
         window.addEventListener('scroll', handleScroll, { passive: true });
 
         return () => {
+            window.removeEventListener('resize', updateAvailableWidth);
+            window.removeEventListener('scroll', handleScroll);
+
             if (scrollAnimationFrame.current) {
                 window.cancelAnimationFrame(scrollAnimationFrame.current);
             }
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
-    useEffect(() => {
-        if (typeof window === 'undefined') {
-            return undefined;
-        }
-
-        const element = toolbarRef.current;
-
-        if (!element) {
-            return undefined;
-        }
-
-        setToolbarWidth(element.clientWidth);
-
-        if (typeof ResizeObserver !== 'undefined') {
-            const observer = new ResizeObserver((entries) => {
-                const entry = entries[0];
-
-                if (entry) {
-                    setToolbarWidth(entry.contentRect.width);
-                }
-            });
-
-            observer.observe(element);
-
-            return () => {
-                observer.disconnect();
-            };
-        }
-
-        const handleResize = () => {
-            setToolbarWidth(element.clientWidth);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
         };
     }, []);
 
@@ -142,11 +104,12 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
     );
 
     const { visibleItems, overflowItems } = useMemo(() => {
-        if (!toolbarWidth) {
+        // Derive how many items fit into the toolbar before overflowing.
+        if (!availableWidth) {
             return { visibleItems: items, overflowItems: [] };
         }
 
-        const totalSlots = Math.max(1, Math.floor(toolbarWidth / MIN_ITEM_WIDTH));
+        const totalSlots = Math.max(1, Math.floor(availableWidth / MIN_ITEM_WIDTH));
 
         if (items.length <= totalSlots) {
             return { visibleItems: items, overflowItems: [] };
@@ -158,7 +121,7 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
             visibleItems: items.slice(0, visibleCount),
             overflowItems: items.slice(visibleCount),
         };
-    }, [items, toolbarWidth]);
+    }, [availableWidth, items]);
 
     useEffect(() => {
         if (overflowItems.length === 0 && isOverflowTrayOpen) {
@@ -180,14 +143,15 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
         [activeItemId, handleItemSelection, visibleItems],
     );
 
-    const shouldRenderOverflowTrigger = overflowItems.length > 0;
-
-    if (isHidden) return null;
-
     return (
         <AnimatePresence initial={false}>
             {!isHidden && (
-                <StyledMotionDynamicToolbar ref={toolbarRef} className={className}>
+                <StyledMotionDynamicToolbar
+                    animate={{ y: 0 }}
+                    className={className}
+                    exit={{ y: '100%' }}
+                    initial={{ y: '100%' }}
+                >
                     <StyledDynamicToolbarContent $layout={layout}>
                         {renderedVisibleItems}
                     </StyledDynamicToolbarContent>

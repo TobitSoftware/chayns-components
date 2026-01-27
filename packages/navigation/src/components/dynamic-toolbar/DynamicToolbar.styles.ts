@@ -25,7 +25,7 @@ export const StyledDynamicToolbarContent = styled.div<StyledDynamicToolbarConten
     display: flex;
     height: 52px;
     padding: 6px;
-    width: 80%;
+    width: 80vw;
 `;
 
 export const StyledDynamicToolbarOverflowTrigger = styled.button`
