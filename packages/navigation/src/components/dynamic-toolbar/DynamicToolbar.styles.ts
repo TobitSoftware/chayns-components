@@ -1,6 +1,6 @@
+import { WithTheme } from '@chayns-components/core';
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
-import { WithTheme } from '@chayns-components/core';
 import { DynamicToolbarLayout } from './DynamicToolbar.types';
 import {
     DYNAMIC_TOOLBAR_CONTENT_HEIGHT_PX,

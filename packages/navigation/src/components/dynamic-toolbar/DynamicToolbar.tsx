@@ -1,6 +1,6 @@
-import { Icon } from '@chayns-components/core';
-import { AnimatePresence } from 'motion/react';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AnimatePresence } from 'motion/react';
+import { Icon } from '@chayns-components/core';
 import DynamicToolbarItemButton from './dynamic-toolbar-item-button/DynamicToolbarItemButton';
 import DynamicToolbarOverflowTray from './dynamic-toolbar-overflow-tray/DynamicToolbarOverflowTray';
 import {
@@ -55,6 +55,7 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
             setAvailableWidth(window.innerWidth * DYNAMIC_TOOLBAR_VIEWPORT_WIDTH_RATIO);
         };
 
+        // Toggle the floating toolbar visibility while tracking the last scroll position.
         const handleScroll = () => {
             if (scrollAnimationFrame.current) {
                 return;

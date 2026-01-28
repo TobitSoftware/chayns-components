@@ -32,6 +32,9 @@ export type DynamicToolbarItemButtonProps = {
     onSelect: (item: DynamicToolbarItem) => void;
 };
 
+/**
+ * Renders a single toolbar entry and optionally shows a badge or label depending on the context.
+ */
 const DynamicToolbarItemButton: FC<DynamicToolbarItemButtonProps> = ({
     badgeMaxValue,
     isActive,
@@ -77,6 +80,9 @@ const DynamicToolbarItemButton: FC<DynamicToolbarItemButtonProps> = ({
     );
 };
 
+/**
+ * Converts the raw badge count into the compact value displayed next to the icon.
+ */
 const formatBadgeValue = (value: number, maxValue: number): string => {
     if (value > maxValue) {
         return `${maxValue}+`;

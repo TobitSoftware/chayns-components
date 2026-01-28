@@ -1,3 +1,4 @@
+// Shared constants keep toolbar layout/math identical across components and stories.
 export const DYNAMIC_TOOLBAR_BADGE_MAX_VALUE = 99;
 export const DYNAMIC_TOOLBAR_MIN_ITEM_WIDTH = 64;
 export const DYNAMIC_TOOLBAR_SCROLL_HIDE_DELTA = 20;
