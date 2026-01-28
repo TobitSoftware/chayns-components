@@ -4,6 +4,8 @@ import DynamicToolbarItemButton from '../dynamic-toolbar-item-button/DynamicTool
 import {
     StyledDynamicToolbarOverflowTrayItems,
     StyledMotionDynamicToolbarOverflowTray,
+    StyledMotionDynamicToolbarOverflowTraySpacer,
+    StyledMotionDynamicToolbarOverflowTrayWrapper,
 } from './DynamicToolbarOverflowTray.styles';
 
 const BADGE_MAX_VALUE = 99;
@@ -12,12 +14,14 @@ export type DynamicToolbarOverflowTrayProps = {
     activeItemId?: string | null;
     handleItemSelection: (item: DynamicToolbarItem) => void;
     items: DynamicToolbarItem[];
+    isOpen: boolean;
 };
 
 const DynamicToolbarOverflowTray: FC<DynamicToolbarOverflowTrayProps> = ({
     activeItemId,
     handleItemSelection,
     items,
+    isOpen,
 }) => {
     const trayItems = useMemo(
         () =>
@@ -31,20 +35,22 @@ const DynamicToolbarOverflowTray: FC<DynamicToolbarOverflowTrayProps> = ({
                     onSelect={handleItemSelection}
                 />
             )),
-        [],
+        [items, activeItemId, handleItemSelection],
     );
 
     return (
-        <StyledMotionDynamicToolbarOverflowTray
-            animate={{ height: 300 }}
-            exit={{ height: 52 }}
-            initial={{ height: 52 }}
-            transition={{ duration: 0.2, type: 'tween' }}
-        >
-            <StyledDynamicToolbarOverflowTrayItems>
-                {trayItems}
-            </StyledDynamicToolbarOverflowTrayItems>
-        </StyledMotionDynamicToolbarOverflowTray>
+        <StyledMotionDynamicToolbarOverflowTrayWrapper>
+            <StyledMotionDynamicToolbarOverflowTray
+                animate={{ y: isOpen ? 0 : '100%' }}
+                initial={false}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+            >
+                <StyledDynamicToolbarOverflowTrayItems>
+                    {trayItems}
+                </StyledDynamicToolbarOverflowTrayItems>
+                <StyledMotionDynamicToolbarOverflowTraySpacer />
+            </StyledMotionDynamicToolbarOverflowTray>
+        </StyledMotionDynamicToolbarOverflowTrayWrapper>
     );
 };
 

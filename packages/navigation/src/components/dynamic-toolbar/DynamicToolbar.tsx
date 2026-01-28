@@ -168,16 +168,13 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
                     key="dynamic-toolbar"
                     transition={{ duration: 0.2, type: 'tween' }}
                 >
-                    <AnimatePresence initial={false}>
-                        {isOverflowTrayOpen && (
-                            <DynamicToolbarOverflowTray
-                                activeItemId={activeItemId}
-                                handleItemSelection={handleItemSelection}
-                                items={overflowItems}
-                                key="overflow-tray"
-                            />
-                        )}
-                    </AnimatePresence>
+                    <DynamicToolbarOverflowTray
+                        activeItemId={activeItemId}
+                        handleItemSelection={handleItemSelection}
+                        items={overflowItems}
+                        isOpen={isOverflowTrayOpen}
+                        key="overflow-tray"
+                    />
                     <StyledDynamicToolbarBackground $layout={layout} />
                     <StyledDynamicToolbarContent>
                         {renderedVisibleItems}

@@ -9,11 +9,6 @@ export const StyledMotionDynamicToolbarOverflowTray = styled(
 )<StyledMotionDynamicToolbarOverflowTrayProps>`
     background-color: ${({ theme }) => theme['100']};
     border-radius: 8px;
-    bottom: 33px;
-    overflow: hidden;
-    padding-bottom: 52px;
-    position: fixed;
-    width: 80vw;
 `;
 
 export const StyledDynamicToolbarOverflowTrayItems = styled.div`
@@ -21,4 +16,15 @@ export const StyledDynamicToolbarOverflowTrayItems = styled.div`
     flex-wrap: wrap;
     gap: 6px;
     padding: 6px;
+`;
+
+export const StyledMotionDynamicToolbarOverflowTrayWrapper = styled.div`
+    position: fixed;
+    bottom: 33px;
+    width: 80vw;
+    overflow: hidden;
+`;
+
+export const StyledMotionDynamicToolbarOverflowTraySpacer = styled.div`
+    height: 52px;
 `;
