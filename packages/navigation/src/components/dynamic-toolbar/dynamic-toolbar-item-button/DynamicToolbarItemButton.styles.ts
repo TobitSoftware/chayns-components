@@ -19,7 +19,6 @@ export const StyledDynamicToolbarItemButton = styled.button<StyledDynamicToolbar
     justify-content: space-between;
     height: ${({ $isInOverflowTray }) => ($isInOverflowTray ? '56px' : '40px')};
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
-    overflow: hidden;
     padding: 8px;
     min-width: 0;
     position: relative;
