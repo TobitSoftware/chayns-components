@@ -10,11 +10,10 @@ export const StyledMotionDynamicToolbarOverflowTray = styled(
     background-color: ${({ theme }) => theme['100']};
     border-radius: 8px;
     bottom: 33px;
-    left: 10vw;
     overflow: hidden;
     padding-bottom: 52px;
     position: fixed;
-    right: 10vw;
+    width: 80vw;
 `;
 
 export const StyledDynamicToolbarOverflowTrayItems = styled.div`
