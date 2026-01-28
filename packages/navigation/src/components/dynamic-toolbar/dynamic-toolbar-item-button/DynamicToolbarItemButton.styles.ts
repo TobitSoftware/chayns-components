@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 type StyledDynamicToolbarItemButtonProps = WithTheme<{
     $isDisabled: boolean;
+    $isInOverflowTray?: boolean;
     $hasRightSeparator?: boolean;
 }>;
 
@@ -11,14 +12,16 @@ export const StyledDynamicToolbarItemButton = styled.button<StyledDynamicToolbar
     align-items: center;
     background: transparent;
     border: none;
-    border-radius: 4px;
     cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
     display: flex;
     flex: 1 1 0;
-    justify-content: center;
-    height: 40px;
+    flex-direction: column;
+    justify-content: space-between;
+    height: ${({ $isInOverflowTray }) => ($isInOverflowTray ? '56px' : '40px')};
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
+    overflow: hidden;
     padding: 8px;
+    min-width: 0;
     position: relative;
     transition: opacity 0.2s ease;
 
@@ -36,7 +39,6 @@ export const StyledDynamicToolbarItemButton = styled.button<StyledDynamicToolbar
 `;
 
 export const StyledDynamicToolbarItemIconWrapper = styled.span`
-    display: inline-flex;
     position: relative;
 `;
 
@@ -50,11 +52,11 @@ export const StyledDynamicToolbarItemBadge = styled.span`
     font-weight: bold;
     height: 18px;
     justify-content: center;
+    left: 50%;
     line-height: 1;
     min-width: 18px;
     padding: 0 0.35rem;
     position: absolute;
-    right: -8px;
     top: -8px;
     z-index: 1;
 `;
@@ -67,5 +69,9 @@ export const StyledMotionDynamicToolbarItemButtonBackground = styled(motion.div)
     position: absolute;
     right: 0;
     top: 0;
-    z-index: 0;
+`;
+
+export const StyledDynamicToolbarItemLabel = styled.span`
+    font-size: 0.75rem;
+    width: 100%;
 `;

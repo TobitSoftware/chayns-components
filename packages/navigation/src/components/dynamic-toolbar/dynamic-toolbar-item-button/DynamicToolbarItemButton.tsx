@@ -6,6 +6,7 @@ import {
     StyledMotionDynamicToolbarItemButtonBackground,
     StyledDynamicToolbarItemIconWrapper,
     StyledDynamicToolbarItemBadge,
+    StyledDynamicToolbarItemLabel,
 } from './DynamicToolbarItemButton.styles';
 
 export type DynamicToolbarItemButtonProps = {
@@ -52,6 +53,7 @@ const DynamicToolbarItemButton: FC<DynamicToolbarItemButtonProps> = ({
             type="button"
             disabled={item.isDisabled}
             $isDisabled={Boolean(item.isDisabled)}
+            $isInOverflowTray={isInOverflowTray}
             $hasRightSeparator={item.hasRightSeparator}
             onClick={handleClick}
         >
@@ -65,6 +67,11 @@ const DynamicToolbarItemButton: FC<DynamicToolbarItemButtonProps> = ({
             </StyledDynamicToolbarItemIconWrapper>
             {isActive && (
                 <StyledMotionDynamicToolbarItemButtonBackground layoutId="toolbarItemBackground" />
+            )}
+            {isInOverflowTray && (
+                <StyledDynamicToolbarItemLabel className="ellipsis">
+                    {item.label}
+                </StyledDynamicToolbarItemLabel>
             )}
         </StyledDynamicToolbarItemButton>
     );
