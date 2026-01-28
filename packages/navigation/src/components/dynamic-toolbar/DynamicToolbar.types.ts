@@ -7,15 +7,15 @@ export enum DynamicToolbarLayout {
 }
 
 export type DynamicToolbarItem = {
-    // Unique identifier that drives selection state and callbacks.
+    // Optional badge count that highlights pending conversations.
     badgeCount?: number;
     // Icon names that are forwarded to the shared Icon component.
     icons: IconProps['icons'];
-    // Human-readable label for accessibility announcements.
+    // Unique identifier that drives selection state and callbacks.
     id: string;
-    // Optional badge count that highlights pending conversations.
-    isDisabled?: boolean;
     // Marks the action as temporarily unavailable.
+    isDisabled?: boolean;
+    // Human-readable label for accessibility announcements.
     label: string;
     // Optional visual separator to highlight contextual groups.
     hasRightSeparator?: boolean;
