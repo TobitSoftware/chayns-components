@@ -1,4 +1,8 @@
+import { Icon } from '@chayns-components/core';
+import { AnimatePresence } from 'motion/react';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import DynamicToolbarItemButton from './dynamic-toolbar-item-button/DynamicToolbarItemButton';
+import DynamicToolbarOverflowTray from './dynamic-toolbar-overflow-tray/DynamicToolbarOverflowTray';
 import {
     StyledDynamicToolbarBackground,
     StyledDynamicToolbarContent,
@@ -10,9 +14,6 @@ import {
     DynamicToolbarLayout,
     DynamicToolbarProps,
 } from './DynamicToolbar.types';
-import { AnimatePresence } from 'motion/react';
-import DynamicToolbarItemButton from './dynamic-toolbar-item-button/DynamicToolbarItemButton';
-import { Icon } from '@chayns-components/core';
 
 const BADGE_MAX_VALUE = 99;
 const MIN_ITEM_WIDTH = 64;
@@ -37,6 +38,10 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
         (layout === DynamicToolbarLayout.Floating && isAutoHidden) ||
         layout === DynamicToolbarLayout.Hidden ||
         items.length === 0;
+
+    const handleToggleOverflowTrayVisibility = useCallback(() => {
+        setIsOverflowTrayOpen((prevState) => !prevState);
+    }, []);
 
     useEffect(() => {
         if (typeof window === 'undefined') {
@@ -160,14 +165,27 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
                     className={className}
                     exit={{ y: '100%' }}
                     initial={{ y: '100%' }}
+                    key="dynamic-toolbar"
                     transition={{ duration: 0.2, type: 'tween' }}
                 >
+                    <AnimatePresence initial={false}>
+                        {isOverflowTrayOpen && (
+                            <DynamicToolbarOverflowTray
+                                activeItemId={activeItemId}
+                                handleItemSelection={handleItemSelection}
+                                items={overflowItems}
+                                key="overflow-tray"
+                            />
+                        )}
+                    </AnimatePresence>
                     <StyledDynamicToolbarBackground $layout={layout} />
                     <StyledDynamicToolbarContent>
                         {renderedVisibleItems}
                     </StyledDynamicToolbarContent>
                     {overflowItems.length > 0 && (
-                        <StyledDynamicToolbarOverflowTrigger>
+                        <StyledDynamicToolbarOverflowTrigger
+                            onClick={handleToggleOverflowTrayVisibility}
+                        >
                             <Icon
                                 color={layout === DynamicToolbarLayout.Area ? 'white' : undefined}
                                 icons={['fa fa-ellipsis-vertical']}

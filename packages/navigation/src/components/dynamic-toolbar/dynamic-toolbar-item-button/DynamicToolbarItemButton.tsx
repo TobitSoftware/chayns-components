@@ -10,19 +10,23 @@ import {
 
 export type DynamicToolbarItemButtonProps = {
     /**
-     * @description Maximum badge value before switching to the `max+` format.
+     * Maximum badge value before switching to the `max+` format.
      */
     badgeMaxValue: number;
     /**
-     * @description Indicates whether the corresponding item is currently active.
+     * Indicates whether the corresponding item is currently active.
      */
     isActive: boolean;
     /**
-     * @description Item configuration that should be rendered.
+     * Indicates whether the corresponding item is rendered within an overflow tray.
+     */
+    isInOverflowTray?: boolean;
+    /**
+     * Item configuration that should be rendered.
      */
     item: DynamicToolbarItem;
     /**
-     * @description Callback triggered when the user selects the toolbar entry.
+     * Callback triggered when the user selects the toolbar entry.
      */
     onSelect: (item: DynamicToolbarItem) => void;
 };
@@ -30,6 +34,7 @@ export type DynamicToolbarItemButtonProps = {
 const DynamicToolbarItemButton: FC<DynamicToolbarItemButtonProps> = ({
     badgeMaxValue,
     isActive,
+    isInOverflowTray = false,
     item,
     onSelect,
 }) => {
@@ -51,7 +56,7 @@ const DynamicToolbarItemButton: FC<DynamicToolbarItemButtonProps> = ({
             onClick={handleClick}
         >
             <StyledDynamicToolbarItemIconWrapper>
-                <Icon color="white" icons={item.icons} size={22} />
+                <Icon color={isInOverflowTray ? undefined : 'white'} icons={item.icons} size={22} />
                 {badgeDisplayValue && (
                     <StyledDynamicToolbarItemBadge>
                         {badgeDisplayValue}
