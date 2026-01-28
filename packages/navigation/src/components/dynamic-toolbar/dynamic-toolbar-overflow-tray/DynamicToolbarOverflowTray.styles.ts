@@ -1,6 +1,11 @@
 import { motion } from 'motion/react';
 import styled from 'styled-components';
 import { WithTheme } from '@chayns-components/core';
+import {
+    DYNAMIC_TOOLBAR_CONTENT_HEIGHT_PX,
+    DYNAMIC_TOOLBAR_CONTENT_PADDING_PX,
+    DYNAMIC_TOOLBAR_CONTENT_WIDTH_VW,
+} from '../DynamicToolbar.constants';
 
 type StyledMotionDynamicToolbarOverflowTrayProps = WithTheme<{}>;
 
@@ -14,17 +19,17 @@ export const StyledMotionDynamicToolbarOverflowTray = styled(
 export const StyledDynamicToolbarOverflowTrayItems = styled.div`
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    padding: 6px;
+    gap: ${DYNAMIC_TOOLBAR_CONTENT_PADDING_PX}px;
+    padding: ${DYNAMIC_TOOLBAR_CONTENT_PADDING_PX}px;
 `;
 
 export const StyledMotionDynamicToolbarOverflowTrayWrapper = styled.div`
     position: fixed;
     bottom: 33px;
-    width: 80vw;
+    width: ${DYNAMIC_TOOLBAR_CONTENT_WIDTH_VW}vw;
     overflow: hidden;
 `;
 
 export const StyledMotionDynamicToolbarOverflowTraySpacer = styled.div`
-    height: 52px;
+    height: ${DYNAMIC_TOOLBAR_CONTENT_HEIGHT_PX}px;
 `;

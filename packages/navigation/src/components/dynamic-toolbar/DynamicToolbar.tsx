@@ -10,15 +10,14 @@ import {
     StyledMotionDynamicToolbar,
 } from './DynamicToolbar.styles';
 import {
-    DynamicToolbarItem,
-    DynamicToolbarLayout,
-    DynamicToolbarProps,
-} from './DynamicToolbar.types';
-
-const BADGE_MAX_VALUE = 99;
-const MIN_ITEM_WIDTH = 64;
-const SCROLL_HIDE_DELTA = 20;
-const VIEWPORT_WIDTH_RATIO = 0.8;
+    DYNAMIC_TOOLBAR_BADGE_MAX_VALUE,
+    DYNAMIC_TOOLBAR_BASE_CLASS,
+    DYNAMIC_TOOLBAR_MIN_ITEM_WIDTH,
+    DYNAMIC_TOOLBAR_SCROLL_HIDE_DELTA,
+    DYNAMIC_TOOLBAR_VIEWPORT_WIDTH_RATIO,
+} from './DynamicToolbar.constants';
+import type { DynamicToolbarItem, DynamicToolbarProps } from './DynamicToolbar.types';
+import { DynamicToolbarLayout } from './DynamicToolbar.types';
 
 const DynamicToolbar: FC<DynamicToolbarProps> = ({
     activeItemId,
@@ -33,6 +32,10 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
 
     const previousScrollYRef = useRef(0);
     const scrollAnimationFrame = useRef<number>();
+
+    const toolbarClassName = className
+        ? `${DYNAMIC_TOOLBAR_BASE_CLASS} ${className}`
+        : DYNAMIC_TOOLBAR_BASE_CLASS;
 
     const isHidden =
         (layout === DynamicToolbarLayout.Floating && isAutoHidden) ||
@@ -49,7 +52,7 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
         }
 
         const updateAvailableWidth = () => {
-            setAvailableWidth(window.innerWidth * VIEWPORT_WIDTH_RATIO);
+            setAvailableWidth(window.innerWidth * DYNAMIC_TOOLBAR_VIEWPORT_WIDTH_RATIO);
         };
 
         const handleScroll = () => {
@@ -64,7 +67,7 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
                 const previousScrollY = previousScrollYRef.current;
                 const isScrollingDown = currentScrollY > previousScrollY;
                 const hasReachedHideThreshold =
-                    Math.abs(currentScrollY - previousScrollY) > SCROLL_HIDE_DELTA;
+                    Math.abs(currentScrollY - previousScrollY) > DYNAMIC_TOOLBAR_SCROLL_HIDE_DELTA;
 
                 if (isScrollingDown && hasReachedHideThreshold) {
                     previousScrollYRef.current = currentScrollY;
@@ -123,7 +126,7 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
             return { visibleItems: items, overflowItems: [] };
         }
 
-        const totalSlots = Math.max(1, Math.floor(availableWidth / MIN_ITEM_WIDTH));
+        const totalSlots = Math.max(1, Math.floor(availableWidth / DYNAMIC_TOOLBAR_MIN_ITEM_WIDTH));
 
         if (items.length <= totalSlots) {
             return { visibleItems: items, overflowItems: [] };
@@ -147,7 +150,7 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
         () =>
             visibleItems.map((item) => (
                 <DynamicToolbarItemButton
-                    badgeMaxValue={BADGE_MAX_VALUE}
+                    badgeMaxValue={DYNAMIC_TOOLBAR_BADGE_MAX_VALUE}
                     isActive={item.id === activeItemId}
                     item={item}
                     key={item.id}
@@ -162,7 +165,7 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
             {!isHidden && (
                 <StyledMotionDynamicToolbar
                     animate={{ y: 0 }}
-                    className={className}
+                    className={toolbarClassName}
                     exit={{ y: '100%' }}
                     initial={{ y: '100%' }}
                     key="dynamic-toolbar"

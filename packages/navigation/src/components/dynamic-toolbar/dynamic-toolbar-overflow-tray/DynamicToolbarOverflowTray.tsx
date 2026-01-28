@@ -1,5 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import type { DynamicToolbarItem } from '../DynamicToolbar.types';
+import { DYNAMIC_TOOLBAR_BADGE_MAX_VALUE } from '../DynamicToolbar.constants';
 import DynamicToolbarItemButton from '../dynamic-toolbar-item-button/DynamicToolbarItemButton';
 import {
     StyledDynamicToolbarOverflowTrayItems,
@@ -7,8 +8,6 @@ import {
     StyledMotionDynamicToolbarOverflowTraySpacer,
     StyledMotionDynamicToolbarOverflowTrayWrapper,
 } from './DynamicToolbarOverflowTray.styles';
-
-const BADGE_MAX_VALUE = 99;
 
 export type DynamicToolbarOverflowTrayProps = {
     activeItemId?: string | null;
@@ -27,7 +26,7 @@ const DynamicToolbarOverflowTray: FC<DynamicToolbarOverflowTrayProps> = ({
         () =>
             items.map((item) => (
                 <DynamicToolbarItemButton
-                    badgeMaxValue={BADGE_MAX_VALUE}
+                    badgeMaxValue={DYNAMIC_TOOLBAR_BADGE_MAX_VALUE}
                     isActive={item.id === activeItemId}
                     isInOverflowTray
                     item={item}
