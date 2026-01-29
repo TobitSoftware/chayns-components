@@ -207,15 +207,75 @@ const Slider: FC<SliderProps> = ({
 
     const updateFromValue = useCallback((nextValue: number) => {
         previousFromValueRef.current = nextValue;
-
         setFromValue(nextValue);
     }, []);
 
     const updateToValue = useCallback((nextValue: number) => {
         previousToValueRef.current = nextValue;
-
         setToValue(nextValue);
     }, []);
+
+    const normalizeIntervalValue = useCallback(
+        (nextValue: number) => {
+            let newValue = Number(nextValue);
+
+            if (newValue > maxValue || newValue > maxValue - (maxValue % step)) {
+                newValue = maxValue;
+            } else if (newValue < minValue) {
+                newValue = minValue;
+            } else {
+                newValue = Math.round(newValue / step) * step;
+            }
+
+            return newValue;
+        },
+        [maxValue, minValue, step],
+    );
+
+    const applyIntervalThumbChange = useCallback(
+        (thumb: 'from' | 'to', rawValue: number) => {
+            if (!fromSliderRef.current || !toSliderRef.current) {
+                return;
+            }
+
+            const newValue = normalizeIntervalValue(rawValue);
+            const isFromThumb = thumb === 'from';
+            const previousValue = isFromThumb
+                ? previousFromValueRef.current
+                : previousToValueRef.current;
+            const hasChanged = newValue !== previousValue;
+
+            if (isFromThumb) {
+                updateFromValue(newValue);
+            } else {
+                updateToValue(newValue);
+            }
+
+            const from = Number(fromSliderRef.current.value);
+            const to = Number(toSliderRef.current.value);
+
+            if (hasChanged && typeof onChange === 'function') {
+                onChange(undefined, {
+                    minValue: isFromThumb ? newValue : from,
+                    maxValue: isFromThumb ? to : newValue,
+                });
+            }
+
+            fillSlider({
+                toSlider: toSliderRef.current,
+                fromSlider: fromSliderRef.current,
+                ...(isFromThumb ? { fromValue: newValue } : { toValue: newValue }),
+                theme,
+            });
+
+            if (isFromThumb) {
+                fromSliderRef.current.value = String(newValue > to ? to : newValue);
+            } else {
+                toSliderRef.current.value = String(from <= newValue ? newValue : from);
+            }
+        },
+        [normalizeIntervalValue, onChange, theme, updateFromValue, updateToValue],
+    );
 
     useEffect(() => {
         if (shouldShowThumbLabel) {
@@ -266,42 +326,9 @@ const Slider: FC<SliderProps> = ({
 
     const handleControlFromSlider = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
-            if (!fromSliderRef.current || !toSliderRef.current) {
-                return;
-            }
-
-            let newValue = Number(event.target.value);
-
-            if (newValue > maxValue || newValue > maxValue - (maxValue % step)) {
-                newValue = maxValue;
-            } else if (newValue < minValue) {
-                newValue = minValue;
-            } else {
-                newValue = Math.round(newValue / step) * step;
-            }
-
-            const to = Number(toSliderRef.current.value);
-
-            if (typeof onChange === 'function' && newValue !== previousFromValueRef.current) {
-                onChange(undefined, { maxValue: to, minValue: newValue });
-            }
-
-            updateFromValue(newValue);
-
-            fillSlider({
-                toSlider: toSliderRef.current,
-                fromSlider: fromSliderRef.current,
-                fromValue: newValue,
-                theme,
-            });
-
-            if (newValue > to) {
-                fromSliderRef.current.value = String(to);
-            } else {
-                fromSliderRef.current.value = String(newValue);
-            }
+            applyIntervalThumbChange('from', Number(event.target.value));
         },
-        [maxValue, minValue, onChange, step, theme, updateFromValue],
+        [applyIntervalThumbChange],
     );
 
     const handleControlToSlider = useCallback(
@@ -310,42 +337,9 @@ const Slider: FC<SliderProps> = ({
                 return;
             }
 
-            if (!fromSliderRef.current || !toSliderRef.current) {
-                return;
-            }
-
-            let newValue = Number(event.target.value);
-
-            if (newValue > maxValue || newValue > maxValue - (maxValue % step)) {
-                newValue = maxValue;
-            } else if (newValue < minValue) {
-                newValue = minValue;
-            } else {
-                newValue = Math.round(newValue / step) * step;
-            }
-
-            const from = Number(fromSliderRef.current.value);
-
-            if (typeof onChange === 'function' && newValue !== previousToValueRef.current) {
-                onChange(undefined, { maxValue: newValue, minValue: from });
-            }
-
-            updateToValue(newValue);
-
-            fillSlider({
-                toSlider: toSliderRef.current,
-                fromSlider: fromSliderRef.current,
-                toValue: newValue,
-                theme,
-            });
-
-            if (from <= newValue) {
-                toSliderRef.current.value = String(newValue);
-            } else {
-                toSliderRef.current.value = String(from);
-            }
+            applyIntervalThumbChange('to', Number(event.target.value));
         },
-        [isDisabled, maxValue, minValue, onChange, step, theme, updateToValue],
+        [applyIntervalThumbChange, isDisabled],
     );
 
     useEffect(() => {
