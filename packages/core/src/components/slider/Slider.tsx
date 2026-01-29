@@ -191,6 +191,8 @@ const Slider: FC<SliderProps> = ({
     const [thumbWidth, setThumbWidth] = useState(20);
     const [isBigSlider, setIsBigSlider] = useState(false);
 
+    const previousFromValueRef = useRef(fromValue);
+    const previousToValueRef = useRef(toValue);
     const fromSliderRef = useRef<HTMLInputElement>(null);
     const toSliderRef = useRef<HTMLInputElement>(null);
     const fromSliderThumbRef = useRef<HTMLDivElement>(null);
@@ -202,6 +204,18 @@ const Slider: FC<SliderProps> = ({
     const sliderWrapperSize = useElementSize(sliderWrapperRef);
 
     const theme = useTheme() as Theme;
+
+    const updateFromValue = useCallback((nextValue: number) => {
+        previousFromValueRef.current = nextValue;
+
+        setFromValue(nextValue);
+    }, []);
+
+    const updateToValue = useCallback((nextValue: number) => {
+        previousToValueRef.current = nextValue;
+
+        setToValue(nextValue);
+    }, []);
 
     useEffect(() => {
         if (shouldShowThumbLabel) {
@@ -220,19 +234,19 @@ const Slider: FC<SliderProps> = ({
             (typeof minEnabledValue !== 'number' || value >= minEnabledValue) &&
             (typeof maxEnabledValue !== 'number' || value <= maxEnabledValue)
         ) {
-            setFromValue(value);
+            updateFromValue(value);
         }
-    }, [maxEnabledValue, maxValue, minEnabledValue, minValue, value]);
+    }, [maxEnabledValue, maxValue, minEnabledValue, minValue, updateFromValue, value]);
 
     useEffect(() => {
         if (fromValue > toValue) {
-            setFromValue(toValue);
+            updateFromValue(toValue);
         }
 
         if (toValue < fromValue) {
-            setToValue(fromValue);
+            updateToValue(fromValue);
         }
-    }, [fromValue, toValue]);
+    }, [fromValue, toValue, updateFromValue, updateToValue]);
 
     const handleMouseUp = useCallback(() => {
         if (isDisabled) {
@@ -266,13 +280,13 @@ const Slider: FC<SliderProps> = ({
                 newValue = Math.round(newValue / step) * step;
             }
 
-            setFromValue(newValue);
-
             const to = Number(toSliderRef.current.value);
 
-            if (typeof onChange === 'function') {
+            if (typeof onChange === 'function' && newValue !== previousFromValueRef.current) {
                 onChange(undefined, { maxValue: to, minValue: newValue });
             }
+
+            updateFromValue(newValue);
 
             fillSlider({
                 toSlider: toSliderRef.current,
@@ -287,7 +301,7 @@ const Slider: FC<SliderProps> = ({
                 fromSliderRef.current.value = String(newValue);
             }
         },
-        [maxValue, minValue, onChange, step, theme],
+        [maxValue, minValue, onChange, step, theme, updateFromValue],
     );
 
     const handleControlToSlider = useCallback(
@@ -310,13 +324,13 @@ const Slider: FC<SliderProps> = ({
                 newValue = Math.round(newValue / step) * step;
             }
 
-            setToValue(newValue);
-
             const from = Number(fromSliderRef.current.value);
 
-            if (typeof onChange === 'function') {
+            if (typeof onChange === 'function' && newValue !== previousToValueRef.current) {
                 onChange(undefined, { maxValue: newValue, minValue: from });
             }
+
+            updateToValue(newValue);
 
             fillSlider({
                 toSlider: toSliderRef.current,
@@ -331,7 +345,7 @@ const Slider: FC<SliderProps> = ({
                 toSliderRef.current.value = String(from);
             }
         },
-        [isDisabled, maxValue, minValue, onChange, step, theme],
+        [isDisabled, maxValue, minValue, onChange, step, theme, updateToValue],
     );
 
     useEffect(() => {
@@ -339,8 +353,8 @@ const Slider: FC<SliderProps> = ({
             return;
         }
 
-        setFromValue(interval.minValue);
-        setToValue(interval.maxValue);
+        updateFromValue(interval.minValue);
+        updateToValue(interval.maxValue);
 
         fromSliderRef.current.value = String(interval.minValue);
         toSliderRef.current.value = String(interval.maxValue);
@@ -392,9 +406,11 @@ const Slider: FC<SliderProps> = ({
             else if (newValue > effectiveMax - (effectiveMax % step)) newValue = effectiveMax;
             else newValue = Math.round(newValue / step) * step;
 
-            setFromValue(newValue);
+            if (typeof onChange === 'function' && newValue !== previousFromValueRef.current) {
+                onChange(newValue);
+            }
 
-            if (typeof onChange === 'function') onChange(newValue);
+            updateFromValue(newValue);
         },
         [
             handleControlFromSlider,
@@ -406,6 +422,7 @@ const Slider: FC<SliderProps> = ({
             minValue,
             onChange,
             step,
+            updateFromValue,
         ],
     );
 
