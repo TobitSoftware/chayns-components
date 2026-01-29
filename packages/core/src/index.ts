@@ -18,7 +18,7 @@ export {
     default as ColorSchemeProvider,
     useColorScheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
-export { BadgeSize, BadgeDesign } from './types/badge';
+export { BadgeSize, BadgeDesign } from './components/badge/Badge.types';
 export type {
     ColorSchemeContextProps,
     WithTheme,
