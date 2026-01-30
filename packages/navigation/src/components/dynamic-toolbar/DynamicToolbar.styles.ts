@@ -20,6 +20,7 @@ export const StyledMotionDynamicToolbar = styled(motion.div)`
     left: 0;
     position: fixed;
     width: 100%;
+    z-index: 100;
 `;
 
 export const StyledDynamicToolbarContent = styled.div`
@@ -75,4 +76,5 @@ export const StyledDynamicToolbarOverflowTrigger = styled.button`
             ${DYNAMIC_TOOLBAR_OVERFLOW_TRIGGER_OFFSET_PX}px
     );
     width: ${DYNAMIC_TOOLBAR_OVERFLOW_TRIGGER_WIDTH_PX}px;
+    z-index: 100;
 `;
