@@ -68,6 +68,7 @@ export const StyledMotionDynamicToolbarItemButtonBackground = styled(motion.div)
     position: absolute;
     right: 0;
     top: 0;
+    pointer-events: none;
 `;
 
 export const StyledDynamicToolbarItemLabel = styled.span`

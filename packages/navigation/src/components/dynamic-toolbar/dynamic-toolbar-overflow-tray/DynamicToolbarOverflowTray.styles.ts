@@ -28,7 +28,6 @@ export const StyledMotionDynamicToolbarOverflowTrayWrapper = styled.div`
     bottom: 33px;
     width: ${DYNAMIC_TOOLBAR_CONTENT_WIDTH_VW}vw;
     overflow: hidden;
-    z-index: 80;
 `;
 
 export const StyledMotionDynamicToolbarOverflowTraySpacer = styled.div`
