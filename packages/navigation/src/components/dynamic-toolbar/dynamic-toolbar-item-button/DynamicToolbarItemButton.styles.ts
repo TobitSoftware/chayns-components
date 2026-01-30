@@ -16,10 +16,10 @@ export const StyledDynamicToolbarItemButton = styled.button<StyledDynamicToolbar
     display: flex;
     flex: 1 1 0;
     flex-direction: column;
-    justify-content: space-between;
-    height: ${({ $isInOverflowTray }) => ($isInOverflowTray ? '56px' : '40px')};
+    justify-content: ${({ $isInOverflowTray }) => ($isInOverflowTray ? 'space-between' : 'center')};
+    height: ${({ $isInOverflowTray }) => ($isInOverflowTray ? '60px' : '44px')};
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
-    padding: 8px;
+    padding: 4px;
     min-width: 0;
     position: relative;
     transition: opacity 0.2s ease;

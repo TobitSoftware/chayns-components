@@ -61,7 +61,7 @@ const DynamicToolbarItemButton: FC<DynamicToolbarItemButtonProps> = ({
             onClick={handleClick}
         >
             <StyledDynamicToolbarItemIconWrapper>
-                <Icon color={isInOverflowTray ? undefined : 'white'} icons={item.icons} size={22} />
+                <Icon color={isInOverflowTray ? undefined : 'white'} icons={item.icons} size={30} />
                 {badgeDisplayValue && (
                     <StyledDynamicToolbarItemBadge>
                         {badgeDisplayValue}
