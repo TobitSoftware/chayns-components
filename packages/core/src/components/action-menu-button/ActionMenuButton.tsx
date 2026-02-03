@@ -1,14 +1,14 @@
 import React, { FC, MouseEvent, useRef } from 'react';
 import ContextMenu from '../context-menu/ContextMenu';
-import type { ContextMenuRef } from '../context-menu/ContextMenu.types';
+import { ContextMenuAlignment, ContextMenuRef } from '../context-menu/ContextMenu.types';
 import Icon from '../icon/Icon';
 import { ActionMenuButtonProps } from './ActionMenuButton.types';
 import {
+    StyledMotionActionMenuButton,
     StyledActionMenuButtonAction,
-    StyledActionMenuButton,
-    StyledActionMenuButtonMenu,
     StyledActionMenuButtonActionIcon,
     StyledActionMenuButtonActionLabel,
+    StyledActionMenuButtonMenu,
 } from './ActionMenuButton.styles';
 
 /**
@@ -17,6 +17,7 @@ import {
 const ActionMenuButton: FC<ActionMenuButtonProps> = ({
     contextMenuItems,
     icon,
+    isCollapsed = false,
     isDisabled,
     label,
     onClick,
@@ -42,12 +43,25 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
         contextMenuRef.current?.show();
     };
 
+    let buttonWidth = shouldUseFullWidth ? '100%' : 'auto';
+    let menuOpacity = isDisabled ? 0.5 : 1;
+
+    if (isCollapsed) {
+        buttonWidth = '42px';
+        menuOpacity = 0;
+    }
+
     return (
-        <StyledActionMenuButton $shouldUseFullWidth={shouldUseFullWidth}>
+        <StyledMotionActionMenuButton
+            animate={{ width: buttonWidth }}
+            $shouldUseFullWidth={shouldUseFullWidth}
+            transition={{ duration: 0.25, type: 'tween' }}
+        >
             <StyledActionMenuButtonAction
                 onClick={isDisabled ? undefined : handleActionClick}
                 type="button"
                 $hasIcon={typeof icon === 'string'}
+                $isCollapsed={isCollapsed}
                 $isDisabled={isDisabled}
                 $isSplit={hasDropdown}
             >
@@ -61,11 +75,14 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
             {hasDropdown && (
                 <StyledActionMenuButtonMenu
                     onClick={isDisabled ? undefined : handleMenuClick}
+                    style={{ opacity: menuOpacity }}
                     type="button"
+                    $isCollapsed={isCollapsed}
                     $isDisabled={isDisabled}
                     $isSplit
                 >
                     <ContextMenu
+                        alignment={ContextMenuAlignment.BottomRight}
                         items={contextMenuItems}
                         shouldDisableClick={isDisabled}
                         ref={contextMenuRef}
@@ -74,7 +91,7 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
                     </ContextMenu>
                 </StyledActionMenuButtonMenu>
             )}
-        </StyledActionMenuButton>
+        </StyledMotionActionMenuButton>
     );
 };
 

@@ -39,4 +39,11 @@ export type ActionMenuButtonProps = {
      * @default false
      */
     shouldUseFullWidth?: boolean;
+    /**
+     * Whether the button is collapsed.
+     * @description If true, the button displays only the icon in a circular shape.
+     * @optional
+     * @default false
+     */
+    isCollapsed?: boolean;
 };
