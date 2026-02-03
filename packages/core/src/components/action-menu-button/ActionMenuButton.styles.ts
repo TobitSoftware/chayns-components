@@ -6,7 +6,7 @@ type StyledActionMenuButtonProps = WithTheme<{
 }>;
 
 export const StyledActionMenuButton = styled.div<StyledActionMenuButtonProps>`
-    display: flex;
+    display: inline-flex;
     gap: 2px;
     height: 42px;
     width: ${({ $shouldUseFullWidth }) => ($shouldUseFullWidth ? '100%' : 'auto')};
