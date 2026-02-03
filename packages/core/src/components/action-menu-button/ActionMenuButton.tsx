@@ -7,6 +7,8 @@ import {
     StyledActionMenuButtonAction,
     StyledActionMenuButton,
     StyledActionMenuButtonMenu,
+    StyledActionMenuButtonActionIcon,
+    StyledActionMenuButtonActionLabel,
 } from './ActionMenuButton.styles';
 
 /**
@@ -27,12 +29,6 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
     const handleActionClick = (event: MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
 
-        console.debug('ActionMenuButton: handleActionClick called', {
-            isDisabled,
-            hasDropdown,
-            typeofOnClick: typeof onClick,
-        });
-
         if (typeof onClick === 'function') {
             onClick(event);
         } else if (hasDropdown) {
@@ -51,11 +47,16 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
             <StyledActionMenuButtonAction
                 onClick={isDisabled ? undefined : handleActionClick}
                 type="button"
+                $hasIcon={typeof icon === 'string'}
                 $isDisabled={isDisabled}
                 $isSplit={hasDropdown}
             >
-                {typeof icon === 'string' && <Icon color="white" icons={[icon]} size={18} />}
-                {label}
+                {typeof icon === 'string' && (
+                    <StyledActionMenuButtonActionIcon>
+                        <Icon color="white" icons={[icon]} size={20} />
+                    </StyledActionMenuButtonActionIcon>
+                )}
+                <StyledActionMenuButtonActionLabel>{label}</StyledActionMenuButtonActionLabel>
             </StyledActionMenuButtonAction>
             {hasDropdown && (
                 <StyledActionMenuButtonMenu
@@ -69,7 +70,7 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
                         shouldDisableClick={isDisabled}
                         ref={contextMenuRef}
                     >
-                        <Icon color="white" icons={['fa fa-angle-down']} size={18} />
+                        <Icon color="white" icons={['fa fa-angle-down']} size={14} />
                     </ContextMenu>
                 </StyledActionMenuButtonMenu>
             )}

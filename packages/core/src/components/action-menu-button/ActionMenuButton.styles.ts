@@ -7,33 +7,34 @@ type StyledActionMenuButtonProps = WithTheme<{
 
 export const StyledActionMenuButton = styled.div<StyledActionMenuButtonProps>`
     display: inline-flex;
-    gap: 2px;
+    gap: 1px;
     height: 42px;
     width: ${({ $shouldUseFullWidth }) => ($shouldUseFullWidth ? '100%' : 'auto')};
 `;
 
 type StyledActionMenuButtonActionProps = WithTheme<{
+    $hasIcon: boolean;
     $isDisabled?: boolean;
     $isSplit?: boolean;
 }>;
 
 export const StyledActionMenuButtonAction = styled.button<StyledActionMenuButtonActionProps>`
     align-items: center;
-    background-color: rgba(30, 30, 30, 0.2);
+    background-color: rgba(30, 30, 30, 0.25);
     border-bottom-left-radius: 21px;
     border-top-left-radius: 21px;
     color: ${({ theme }) => theme.buttonColor ?? 'white'};
     cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
     display: flex;
     flex: 1 1 0;
-    gap: 10px;
+    gap: 5px;
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
-    padding: 0 12px;
+    padding: ${({ $hasIcon }) => ($hasIcon ? '0 16px 0 0' : '0 16px')};
     transition: background-color 0.2s ease;
 
     &:hover {
         background-color: ${({ $isDisabled }) =>
-            $isDisabled ? 'rgba(30, 30, 30, 0.2)' : 'rgba(30, 30, 30, 0.25)'};
+            $isDisabled ? 'rgba(30, 30, 30, 0.25)' : 'rgba(30, 30, 30, 0.35)'};
     }
 
     ${({ $isSplit }) =>
@@ -44,6 +45,16 @@ export const StyledActionMenuButtonAction = styled.button<StyledActionMenuButton
         `}
 `;
 
+export const StyledActionMenuButtonActionIcon = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 42px;
+`;
+
+export const StyledActionMenuButtonActionLabel = styled.span`
+    flex: 1 1 auto;
+`;
+
 type StyledActionMenuButtonMenuProps = WithTheme<{
     $isDisabled?: boolean;
     $isSplit?: boolean;
@@ -51,7 +62,7 @@ type StyledActionMenuButtonMenuProps = WithTheme<{
 
 export const StyledActionMenuButtonMenu = styled.button<StyledActionMenuButtonMenuProps>`
     align-items: center;
-    background-color: rgba(30, 30, 30, 0.2);
+    background-color: rgba(30, 30, 30, 0.25);
     border-bottom-right-radius: 21px;
     border-top-right-radius: 21px;
     color: ${({ theme }) => theme.buttonColor ?? 'white'};
@@ -59,11 +70,11 @@ export const StyledActionMenuButtonMenu = styled.button<StyledActionMenuButtonMe
     display: flex;
     flex: 0 0 auto;
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
-    padding: 0 2px 0 0;
+    padding: 0 1px 0 0;
     transition: background-color 0.2s ease;
 
     &:hover {
         background-color: ${({ $isDisabled }) =>
-            $isDisabled ? 'rgba(30, 30, 30, 0.2)' : 'rgba(30, 30, 30, 0.25)'};
+            $isDisabled ? 'rgba(30, 30, 30, 0.25)' : 'rgba(30, 30, 30, 0.35)'};
     }
 `;
