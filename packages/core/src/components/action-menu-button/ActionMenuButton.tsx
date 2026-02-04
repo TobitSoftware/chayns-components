@@ -6,11 +6,11 @@ import { ContextMenuAlignment, ContextMenuRef } from '../context-menu/ContextMen
 import Icon from '../icon/Icon';
 import { ActionMenuButtonProps } from './ActionMenuButton.types';
 import {
-    StyledMotionActionMenuButton,
     StyledActionMenuButtonAction,
     StyledActionMenuButtonActionIcon,
     StyledActionMenuButtonActionLabel,
     StyledActionMenuButtonMenu,
+    StyledMotionActionMenuButton,
 } from './ActionMenuButton.styles';
 
 /**
@@ -100,7 +100,11 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
                     $isSplit
                 >
                     <ContextMenu
-                        alignment={ContextMenuAlignment.BottomRight}
+                        alignment={
+                            isCollapsed
+                                ? ContextMenuAlignment.BottomRight
+                                : ContextMenuAlignment.BottomLeft
+                        }
                         items={contextMenuItems}
                         shouldDisableClick={isDisabled}
                         ref={contextMenuRef}
