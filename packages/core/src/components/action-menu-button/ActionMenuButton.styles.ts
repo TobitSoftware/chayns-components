@@ -61,6 +61,7 @@ export const StyledActionMenuButtonActionIcon = styled.div`
 export const StyledActionMenuButtonActionLabel = styled.span`
     flex: 1 1 auto;
     overflow: hidden;
+    text-align: left;
     text-overflow: ellipsis;
     white-space: nowrap;
 `;
