@@ -1,4 +1,6 @@
+import { MotionNodeAnimationOptions } from 'motion';
 import React, { FC, MouseEvent, useRef } from 'react';
+import { CSSPropertiesWithVars } from 'styled-components/dist/types';
 import ContextMenu from '../context-menu/ContextMenu';
 import { ContextMenuAlignment, ContextMenuRef } from '../context-menu/ContextMenu.types';
 import Icon from '../icon/Icon';
@@ -22,6 +24,7 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
     label,
     onClick,
     shouldUseFullWidth = false,
+    width,
 }) => {
     const contextMenuRef = useRef<ContextMenuRef>(null);
 
@@ -43,19 +46,34 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
         contextMenuRef.current?.show();
     };
 
-    let buttonWidth = shouldUseFullWidth ? '100%' : 'auto';
+    let animate: MotionNodeAnimationOptions['animate'] | undefined;
+    let style: CSSPropertiesWithVars | undefined;
+
+    if (typeof width === 'number') {
+        style = { width: `${width}px` };
+    } else if (typeof width !== 'undefined') {
+        // @ts-expect-error: MotionValue styles are not yet supported in styled-components type CSSPropertiesWithVars
+        style = { width };
+    } else {
+        animate = { width: shouldUseFullWidth ? '100%' : 'auto' };
+
+        if (isCollapsed) {
+            animate.width = 42;
+        }
+    }
+
     let menuOpacity = isDisabled ? 0.5 : 1;
 
     if (isCollapsed) {
-        buttonWidth = '42px';
         menuOpacity = 0;
     }
 
     return (
         <StyledMotionActionMenuButton
-            animate={{ width: buttonWidth }}
-            $shouldUseFullWidth={shouldUseFullWidth}
+            animate={animate}
             transition={{ duration: 0.25, type: 'tween' }}
+            style={style}
+            $shouldUseFullWidth={shouldUseFullWidth}
         >
             <StyledActionMenuButtonAction
                 onClick={isDisabled ? undefined : handleActionClick}

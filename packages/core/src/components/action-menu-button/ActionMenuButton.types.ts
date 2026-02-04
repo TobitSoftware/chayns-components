@@ -1,4 +1,5 @@
 import type { MouseEventHandler, ReactNode } from 'react';
+import type { MotionValue } from 'framer-motion';
 import type { ContextMenuItem } from '../context-menu/ContextMenu.types';
 
 export type ActionMenuButtonProps = {
@@ -46,4 +47,10 @@ export type ActionMenuButtonProps = {
      * @default false
      */
     isCollapsed?: boolean;
+    /**
+     * Optional width for the button.
+     * @description Can be a MotionValue<number> or a number (in pixels). Overrides shouldUseFullWidth and isCollapsed for width.
+     * @optional
+     */
+    width?: MotionValue<number> | number;
 };
