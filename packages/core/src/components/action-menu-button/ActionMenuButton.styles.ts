@@ -18,6 +18,7 @@ type StyledActionMenuButtonActionProps = WithTheme<{
     $isCollapsed?: boolean;
     $isDisabled?: boolean;
     $isSplit?: boolean;
+    $color?: string;
 }>;
 
 export const StyledActionMenuButtonAction = styled.button<StyledActionMenuButtonActionProps>`
@@ -25,7 +26,7 @@ export const StyledActionMenuButtonAction = styled.button<StyledActionMenuButton
     background-color: rgba(30, 30, 30, 0.25);
     border-bottom-left-radius: 21px;
     border-top-left-radius: 21px;
-    color: ${({ theme }) => theme.buttonColor ?? 'white'};
+    color: ${({ $color, theme }) => $color ?? theme.buttonColor ?? 'white'};
     cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
     display: flex;
     flex: 1 1 0;
@@ -70,6 +71,7 @@ type StyledActionMenuButtonMenuProps = WithTheme<{
     $isCollapsed?: boolean;
     $isDisabled?: boolean;
     $isSplit?: boolean;
+    $color?: string;
 }>;
 
 export const StyledActionMenuButtonMenu = styled.button<StyledActionMenuButtonMenuProps>`
@@ -77,7 +79,7 @@ export const StyledActionMenuButtonMenu = styled.button<StyledActionMenuButtonMe
     background-color: rgba(30, 30, 30, 0.25);
     border-bottom-right-radius: 21px;
     border-top-right-radius: 21px;
-    color: ${({ theme }) => theme.buttonColor ?? 'white'};
+    color: ${({ $color, theme }) => $color ?? theme.buttonColor ?? 'white'};
     cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
     display: flex;
     flex: 0 0 auto;

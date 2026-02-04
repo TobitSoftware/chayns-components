@@ -25,6 +25,7 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
     onClick,
     shouldUseFullWidth = false,
     width,
+    color = 'white',
 }) => {
     const contextMenuRef = useRef<ContextMenuRef>(null);
 
@@ -82,10 +83,11 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
                 $isCollapsed={isCollapsed}
                 $isDisabled={isDisabled}
                 $isSplit={hasDropdown}
+                $color={color}
             >
                 {typeof icon === 'string' && (
                     <StyledActionMenuButtonActionIcon>
-                        <Icon color="white" icons={[icon]} size={20} />
+                        <Icon color={color} icons={[icon]} size={20} />
                     </StyledActionMenuButtonActionIcon>
                 )}
                 <StyledActionMenuButtonActionLabel>{label}</StyledActionMenuButtonActionLabel>
@@ -98,6 +100,7 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
                     $isCollapsed={isCollapsed}
                     $isDisabled={isDisabled}
                     $isSplit
+                    $color={color}
                 >
                     <ContextMenu
                         alignment={
@@ -109,7 +112,7 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
                         shouldDisableClick={isDisabled}
                         ref={contextMenuRef}
                     >
-                        <Icon color="white" icons={['fa fa-angle-down']} size={14} />
+                        <Icon color={color} icons={['fa fa-angle-down']} size={14} />
                     </ContextMenu>
                 </StyledActionMenuButtonMenu>
             )}
