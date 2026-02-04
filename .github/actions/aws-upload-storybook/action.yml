@@ -1,5 +1,5 @@
-name: Upload Storybook to S3
-description: Upload storybook build folder to AWS S3
+name: Upload Storybook to S3 + Cloudflare
+description: Upload Storybook to AWS S3 and Cloudflare R2 with cache purge
 
 inputs:
   source:
@@ -14,49 +14,65 @@ inputs:
     required: true
     description: Major package version
 
+  env:
+    required: true
+    description: staging | production
+
+  s3_bucket:
+    required: true
+    description: S3 Bucket name
+
+  cf_bucket:
+    required: true
+    description: Cloudflare R2 Bucket name
+
+  cf_url_prefix:
+    required: true
+    description: Cloudflare URL prefix
+
 runs:
   using: composite
   steps:
 
-    # Upload to AWS S3
+    # ---------- AWS S3 ----------
     - name: Upload to AWS S3
+      shell: bash
       run: |
         aws s3 sync \
           "${{ inputs.source }}" \
-          "s3://${{ vars.S3_BUCKET_NAME }}/${{ inputs.directory }}/v${{ inputs.version }}" \
+          "s3://${{ inputs.s3_bucket }}/${{ inputs.directory }}/v${{ inputs.version }}" \
           --delete \
           --exclude "*.map"
-      shell: bash
 
-    # Create cache marker file
+    # ---------- Cache Marker ----------
     - name: Create invalidate cache marker
+      shell: bash
       run: |
         touch .invalidatecache
         aws s3 cp .invalidatecache \
-          "s3://${{ vars.S3_BUCKET_NAME }}/${{ inputs.directory }}/v${{ inputs.version }}/.invalidatecache"
-      shell: bash
+          "s3://${{ inputs.s3_bucket }}/${{ inputs.directory }}/v${{ inputs.version }}/.invalidatecache"
 
-    # Upload to Cloudflare R2
+    # ---------- Cloudflare R2 ----------
     - name: Upload to Cloudflare R2
+      shell: bash
       env:
-        AWS_ACCESS_KEY_ID: ${{secrets.CF_ACCESS_KEY_ID}}
-        AWS_DEFAULT_REGION: auto
-        AWS_SECRET_ACCESS_KEY: ${{secrets.CF_SECRET_ACCESS_KEY}}
+        AWS_ACCESS_KEY_ID: ${{ env.CF_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ env.CF_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: eu-central-1
       run: |
         aws s3 sync \
           "${{ inputs.source }}" \
-          "s3://${{ vars.CF_BUCKET_NAME }}/${{ inputs.directory }}/v${{ inputs.version }}" \
+          "s3://${{ inputs.cf_bucket }}/${{ inputs.directory }}/v${{ inputs.version }}" \
           --delete \
           --exclude "*.map" \
-          --endpoint-url "https://${{ secrets.CF_ACCOUNT_ID }}.r2.cloudflarestorage.com"
-      shell: bash
+          --endpoint-url "https://${{ env.CF_ACCOUNT_ID }}.r2.cloudflarestorage.com"
 
-    # Cloudflare Cache Purge
+    # ---------- Cache Purge ----------
     - name: Purge Cloudflare cache
+      shell: bash
       run: |
         curl -X POST \
-          "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_SPACE_ZONE_ID }}/purge_cache" \
-          -H "Authorization: Bearer ${{ secrets.CF_CACHE_RESET_SECRET }}" \
+          "https://api.cloudflare.com/client/v4/zones/${{ env.CF_SPACE_ZONE_ID }}/purge_cache" \
+          -H "Authorization: Bearer ${{ env.CF_CACHE_RESET_SECRET }}" \
           -H "Content-Type: application/json" \
-          --data "{\"prefixes\":[\"${{ vars.CF_URL_PREFIX }}/${{ inputs.directory }}/v${{ inputs.version }}\"]}"
-      shell: bash
+          --data "{\"prefixes\":[\"${{ inputs.cf_url_prefix }}/${{ inputs.directory }}/v${{ inputs.version }}\"]}"

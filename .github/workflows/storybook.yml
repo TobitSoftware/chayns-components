@@ -1,9 +1,10 @@
 name: Publish Storybook (v5)
 
 on:
-  schedule:
-    # 03:00 CET ≈ 02:00 UTC
-    - cron: '0 2 * * *'
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v5.[0-9]+.[0-9]+-beta.[0-9]+'
 
 permissions:
   id-token: write  # Required for OIDC
@@ -14,39 +15,48 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Resolve latest v5 tag
-        id: tag
-        run: |
-          git fetch --tags
-
-          TAG=$(git tag --list "v5.*" --sort=-version:refname | head -n 1)
-
-          if [ -z "$TAG" ]; then
-            echo "No v5 tag found — aborting"
-            exit 1
-          fi
-
-          echo "Using tag: $TAG"
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-
-      - name: Checkout release tag
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.tag.outputs.tag }}
 
       - uses: ./.github/actions/lerna-build
 
       - name: Build Storybook
         run: npm run storybook:build
 
-      - name: Upload Storybook
+      - name: Upload Storybook STAGING
         uses: ./.github/actions/aws-upload-storybook
         with:
           source: storybook-static
           directory: chayns-components/storybook
           version: 5
+          env: staging
+
+          s3_bucket: ${{ vars.STAGING_S3_BUCKET_NAME }}
+          cf_bucket: ${{ vars.STAGING_CF_BUCKET_NAME }}
+          cf_url_prefix: ${{ vars.STAGING_CF_URL_PREFIX }}
+
+        env:
+          CF_ACCESS_KEY_ID: ${{ secrets.CF_ACCESS_KEY_ID }}
+          CF_SECRET_ACCESS_KEY: ${{ secrets.CF_SECRET_ACCESS_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_SPACE_ZONE_ID: ${{ secrets.CF_SPACE_ZONE_ID }}
+          CF_CACHE_RESET_SECRET: ${{ secrets.CF_CACHE_RESET_SECRET }}
+
+      - name: Upload Storybook PROD
+        uses: ./.github/actions/aws-upload-storybook
+        with:
+          source: storybook-static
+          directory: chayns-components/storybook
+          version: 5
+          env: production
+
+          s3_bucket: ${{ vars.PRODUCTION_S3_BUCKET_NAME }}
+          cf_bucket: ${{ vars.PRODUCTION_CF_BUCKET_NAME }}
+          cf_url_prefix: ${{ vars.PRODUCTION_CF_URL_PREFIX }}
+
+        env:
+          CF_ACCESS_KEY_ID: ${{ secrets.CF_ACCESS_KEY_ID }}
+          CF_SECRET_ACCESS_KEY: ${{ secrets.CF_SECRET_ACCESS_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_SPACE_ZONE_ID: ${{ secrets.CF_SPACE_ZONE_ID }}
+          CF_CACHE_RESET_SECRET: ${{ secrets.CF_CACHE_RESET_SECRET }}
+
+
