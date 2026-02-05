@@ -13,18 +13,17 @@ import React, {
     useState,
 } from 'react';
 import type { IListItemRightElements } from '../../../../types/list';
-import Icon from '../../../icon/Icon';
 import ListItemIcon from './list-item-icon/ListItemIcon';
 import ListItemImage from './list-item-image/ListItemImage';
 import {
+    StyledListItemHead,
     StyledListItemHeadContent,
+    StyledListItemHeadIndicator,
     StyledListItemHeadLeftWrapper,
     StyledListItemHeadSubtitle,
+    StyledListItemHeadTitle,
     StyledMotionListItemHeadHoverItem,
     StyledMotionListItemHeadHoverItemWrapper,
-    StyledListItemHead,
-    StyledListItemHeadIndicator,
-    StyledListItemHeadTitle,
 } from './ListItemHead.styles';
 import {
     LIST_ITEM_HEAD_HTML_TAG,
@@ -34,6 +33,10 @@ import {
 import ListItemTitle from './list-item-title/ListItemTitle';
 import ListItemSubtitle from './list-item-subtitle/ListItemSubtitle';
 import ListItemRightElement from './list-item-right-element/ListItemRightElement';
+import { useTheme } from 'styled-components';
+import type { Theme } from '../../../color-scheme-provider/ColorSchemeProvider';
+import { StyledUnicodeIcon } from '../../../icon/Icon.styles';
+import { getIsExpandableIcon } from '../../../../utils/icon';
 
 type ListItemHeadProps = {
     careOfLocationId?: number;
@@ -100,6 +103,8 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     const longPressTimeoutRef = useRef<number>();
     const resizeSkipRef = useRef(true);
+
+    const theme = useTheme() as Theme;
 
     const shouldShowSubtitleRow =
         subtitle ||
@@ -197,6 +202,12 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         shouldShowRoundImageOrIcon,
     ]);
 
+    const expandIcon = useMemo(() => {
+        const internalIcon = getIsExpandableIcon(theme.accordionIcon);
+        const internalIconStyle = theme?.iconStyle ? theme.iconStyle : 'fa-regular';
+        return <StyledUnicodeIcon $icon={internalIcon} className={internalIconStyle} />;
+    }, [theme.accordionIcon, theme.iconStyle]);
+
     return (
         <StyledListItemHead
             as={shouldDisableAnimation ? undefined : motion[LIST_ITEM_HEAD_HTML_TAG]}
@@ -230,9 +241,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                         initial={shouldDisableAnimation ? undefined : false}
                         transition={shouldDisableAnimation ? undefined : { type: 'tween' }}
                     >
-                        {isExpandable && !shouldHideIndicator && (
-                            <Icon icons={['fa fa-chevron-right']} />
-                        )}
+                        {isExpandable && !shouldHideIndicator && expandIcon}
                     </StyledListItemHeadIndicator>
                 )}
                 {leftElements}

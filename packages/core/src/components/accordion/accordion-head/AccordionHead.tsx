@@ -2,6 +2,7 @@ import { AnimatePresence, LayoutGroup } from 'motion/react';
 import React, {
     ChangeEvent,
     ChangeEventHandler,
+    type CSSProperties,
     FC,
     MouseEventHandler,
     ReactNode,
@@ -9,7 +10,6 @@ import React, {
     useMemo,
     useRef,
     useState,
-    type CSSProperties,
 } from 'react';
 import { useTheme } from 'styled-components';
 import { useElementSize } from '../../../hooks/element';
@@ -17,10 +17,9 @@ import { getAccordionHeadHeight, getElementClickEvent } from '../../../utils/acc
 import { AreaContext } from '../../area-provider/AreaContextProvider';
 import type { Theme } from '../../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../../icon/Icon';
-import Input, { InputSize, type InputProps } from '../../input/Input';
+import Input, { type InputProps, InputSize } from '../../input/Input';
 import SearchInput from '../../search-input/SearchInput';
 import {
-    StyledAccordionIcon,
     StyledMotionAccordionHead,
     StyledMotionContentWrapper,
     StyledMotionIconWrapper,
@@ -32,6 +31,8 @@ import {
     StyledRightWrapper,
     StyledTitleInputWrapper,
 } from './AccordionHead.styles';
+import { StyledUnicodeIcon } from '../../icon/Icon.styles';
+import { getIsExpandableIcon } from '../../../utils/icon';
 
 export type AccordionHeadProps = {
     icon?: string;
@@ -144,24 +145,16 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             return (
                 <Icon
                     icons={[isFixed ? 'fa fa-horizontal-rule' : (icon ?? 'fa fa-chevron-right')]}
+                    color={theme.iconColor || theme.headline}
                 />
             );
         }
 
-        let internalIcon = 'f105';
-
-        if (
-            theme?.accordionIcon &&
-            (theme.accordionIcon as unknown as number) !== 110 &&
-            (theme.accordionIcon as unknown as number) !== 1110100
-        ) {
-            internalIcon = (theme.accordionIcon as unknown as number).toString(16);
-        }
-
+        const internalIcon = getIsExpandableIcon(theme.accordionIcon);
         const internalIconStyle = theme?.iconStyle ? theme.iconStyle : 'fa-regular';
 
-        return <StyledAccordionIcon className={internalIconStyle} $icon={internalIcon} />;
-    }, [icon, theme, isFixed]);
+        return <StyledUnicodeIcon className={internalIconStyle} $icon={internalIcon} />;
+    }, [icon, isFixed, theme.accordionIcon, theme.headline, theme.iconColor, theme.iconStyle]);
 
     let accordionHeadHeight = isOpen ? headHeight.open : headHeight.closed;
 
@@ -199,9 +192,9 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 {typeof onTitleInputChange === 'function' ? (
                     // eslint-disable-next-line react/jsx-no-constructed-context-values
                     <AreaContext.Provider value={{ shouldChangeColor: true }}>
-                        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                         <StyledTitleInputWrapper>
                             <Input
+                                /* eslint-disable-next-line react/jsx-props-no-spreading */
                                 {...titleInputProps}
                                 value={title}
                                 onChange={onTitleInputChange}

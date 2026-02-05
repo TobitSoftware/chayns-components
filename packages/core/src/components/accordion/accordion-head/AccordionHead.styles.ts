@@ -23,20 +23,6 @@ export const StyledMotionIconWrapper = styled(motion.div)`
     width: 25px;
 `;
 
-type StyledAccordionIconProps = WithTheme<{ $icon: string }>;
-
-export const StyledAccordionIcon = styled.i<StyledAccordionIconProps>`
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    color: ${({ theme }: StyledAccordionIconProps) => theme.iconColor || theme.headline};
-
-    &:before {
-        content: ${({ $icon }) => `"\\${$icon}"`};
-        font-family: 'Font Awesome 6 Pro', Fontawesome !important;
-    }
-`;
-
 type StyledMotionContentWrapperProps = WithTheme<{ $isWrapped: boolean }>;
 
 export const StyledMotionContentWrapper = styled(motion.div)<StyledMotionContentWrapperProps>`
