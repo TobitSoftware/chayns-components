@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { motion } from 'motion/react';
 
 type StyledIconWrapperProps = {
     $isDisabled?: boolean;
@@ -45,4 +46,18 @@ export const StyledIcon = styled.i<StyledIconProps>`
             top: 50%;
             transform: translateY(-50%);
         `}
+`;
+
+type StyledUnicodeIconProps = WithTheme<{ $icon: string }>;
+
+export const StyledUnicodeIcon = styled.i<StyledUnicodeIconProps>`
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    color: ${({ theme }: StyledUnicodeIconProps) => theme.iconColor || theme.headline};
+
+    &:before {
+        content: ${({ $icon }) => `"\\${$icon}"`};
+        font-family: 'Font Awesome 6 Pro', Fontawesome !important;
+    }
 `;
