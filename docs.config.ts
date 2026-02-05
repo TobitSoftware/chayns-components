@@ -74,7 +74,6 @@ const config: GenerateTypesConfig = {
         'format',
         'gallery',
         'maps',
-        'navigation',
         'person-finder',
         'ranking',
         'scanner',
@@ -119,11 +118,6 @@ const config: GenerateTypesConfig = {
             id: 'maps',
             name: 'Maps',
             icons: ['fa fa-location-dot'],
-        },
-        {
-            id: 'navigation',
-            name: 'Navigation',
-            icons: ['fa fa-compass'],
         },
         {
             id: 'person-finder',

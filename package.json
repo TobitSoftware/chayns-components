@@ -9,7 +9,7 @@
     "sideEffects": false,
     "scripts": {
         "storybook": "storybook dev -p 6006",
-        "storybook:locale": "storybook dev --https --ssl-cert //fs1/ssl/tobitag.crt --ssl-key //fs1/ssl/tobitag.key -h W-MGesenhues.tobit.ag -p 6007",
+        "storybook:locale": "storybook dev --https --ssl-cert //fs1/ssl/tobitag.crt --ssl-key //fs1/ssl/tobitag.key -h W-MGesenhues.tobit.ag -p 6006",
         "build:storybook": "storybook build",
         "lerna:version": "lerna version --no-push",
         "lerna:build": "lerna run build",

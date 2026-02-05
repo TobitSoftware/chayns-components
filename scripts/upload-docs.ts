@@ -8,7 +8,6 @@ const FormData = require('form-data');
 
 const CHAYNS_SPACE_URL = 'https://api.chayns.space/';
 const AWS_UPLOAD_URL = 'https://chayns-space.s3.amazonaws.com/';
-const VERSION = '5';
 
 const DEFAULT_HEADERS = {
     'x-amz-algorithm': 'AWS4-HMAC-SHA256',
@@ -90,7 +89,7 @@ async function uploadFile(fileBuffer, fileName, mimeType = 'application/json') {
         if (key !== 'key') form.append(key, value);
     });
 
-    const fullKey = `${credentials.key}chayns-components/v${VERSION}/${sanitizedName}`;
+    const fullKey = `${credentials.key}chayns-components/${sanitizedName}`;
 
     const blob = new Blob([fileBuffer], { type: mimeType });
     const file = new File([blob], fileName, { type: mimeType });
