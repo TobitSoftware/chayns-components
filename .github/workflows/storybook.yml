@@ -1,0 +1,75 @@
+name: Publish Storybook (v5)
+
+on:
+  repository_dispatch:
+    types: [storybook-publish]
+  workflow_dispatch:
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
+jobs:
+  storybook:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Wait for publish
+        run: sleep 300
+
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.client_payload.ref }}
+
+      - uses: ./.github/actions/lerna-build
+
+      - name: Build Storybook
+        run: npm run storybook:build
+
+      - name: Upload Storybook STAGING
+        uses: ./.github/actions/aws-upload-storybook
+        with:
+          source: storybook-static
+          directory: chayns-components/storybook
+          version: 5
+          env: staging
+
+          s3_bucket: ${{ vars.STAGING_S3_BUCKET_NAME }}
+          cf_bucket: ${{ vars.STAGING_CF_BUCKET_NAME }}
+          cf_url_prefix: ${{ vars.STAGING_CF_URL_PREFIX }}
+
+        env:
+          CF_ACCESS_KEY_ID: ${{ secrets.CF_ACCESS_KEY_ID }}
+          CF_SECRET_ACCESS_KEY: ${{ secrets.CF_SECRET_ACCESS_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_SPACE_ZONE_ID: ${{ secrets.CF_SPACE_ZONE_ID }}
+          CF_CACHE_RESET_SECRET: ${{ secrets.CF_CACHE_RESET_SECRET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-central-1
+
+      - name: Upload Storybook PROD
+        uses: ./.github/actions/aws-upload-storybook
+        with:
+          source: storybook-static
+          directory: chayns-components/storybook
+          version: 5
+          env: production
+
+          s3_bucket: ${{ vars.PRODUCTION_S3_BUCKET_NAME }}
+          cf_bucket: ${{ vars.PRODUCTION_CF_BUCKET_NAME }}
+          cf_url_prefix: ${{ vars.PRODUCTION_CF_URL_PREFIX }}
+
+        env:
+          CF_ACCESS_KEY_ID: ${{ secrets.CF_ACCESS_KEY_ID }}
+          CF_SECRET_ACCESS_KEY: ${{ secrets.CF_SECRET_ACCESS_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_SPACE_ZONE_ID: ${{ secrets.CF_SPACE_ZONE_ID }}
+          CF_CACHE_RESET_SECRET: ${{ secrets.CF_CACHE_RESET_SECRET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-central-1
+
+
