@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import React, { FC, MouseEventHandler } from 'react';
 import { getStackSizeFactor } from '../../utils/icon';
 import { StyledIcon, StyledIconWrapper } from './Icon.styles';
+import { useTheme } from 'styled-components';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export type IconProps = {
     /**
@@ -112,6 +114,8 @@ const Icon: FC<IconProps> = ({
     size = 15,
     shouldStopPropagation,
 }) => {
+    const theme = useTheme() as Theme;
+
     const handleClick: MouseEventHandler<HTMLSpanElement> = (event) => {
         if (shouldStopPropagation) {
             event.stopPropagation();
@@ -166,14 +170,13 @@ const Icon: FC<IconProps> = ({
             {icons.map((icon) => {
                 const stackSizeFactor = getStackSizeFactor(icon);
 
-                // const isIconStyleGiven =
-                //     /fa[srltd]|fa-(?:regular|solid|thin|light|duotone|sharp)/.test(icon);
-                //
-                // const iconStyle = isIconStyleGiven
-                //     ? undefined
-                //     : (theme?.iconStyle as string) ?? 'fa-regular';
+                const hasExplicitFaPrefix = icon?.startsWith('fa ');
 
-                const iconClasses = clsx(icon, {
+                const iconStyle = hasExplicitFaPrefix
+                    ? ((theme?.iconStyle as string) ?? 'fa-regular')
+                    : undefined;
+
+                const iconClasses = clsx(iconStyle, icon, {
                     'fa-stack-1x': shouldUseStackedIcon && stackSizeFactor === undefined,
                 });
 
