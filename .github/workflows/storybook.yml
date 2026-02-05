@@ -1,10 +1,9 @@
 name: Publish Storybook (v5)
 
 on:
+  repository_dispatch:
+    types: [storybook-publish]
   workflow_dispatch:
-  push:
-    tags:
-      - 'v5.[0-9]+.[0-9]+-beta.[0-9]+'
 
 permissions:
   id-token: write  # Required for OIDC
@@ -15,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Wait for publish
+        run: sleep 300
 
       - uses: ./.github/actions/lerna-build
 

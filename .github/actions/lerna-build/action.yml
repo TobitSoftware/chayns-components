@@ -16,6 +16,10 @@ runs:
       run: npm install -g npm@latest
       shell: bash
 
+    - name: Clear npm cache
+      run: npm cache clean --force
+      shell: bash
+
     - name: Install dependencies
       run: npm ci
       shell: bash
