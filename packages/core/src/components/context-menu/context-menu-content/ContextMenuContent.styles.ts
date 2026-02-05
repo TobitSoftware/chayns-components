@@ -17,6 +17,7 @@ export const StyledMotionContextMenuContent = styled(
     border-radius: ${({ $shouldHidePopupArrow }) => ($shouldHidePopupArrow ? '6px' : '3px')};
     box-shadow: 1px 3px 8px rgb(0 0 0 / 30%);
     color: ${({ theme }: StyledMotionContextMenuContentProps) => theme.text};
+    max-width: 500px;
     pointer-events: all;
     position: absolute;
     z-index: ${({ $zIndex }) => $zIndex};
@@ -113,13 +114,14 @@ type StyledContextMenuContentItemWrapperProps = WithTheme<{
 
 export const StyledContextMenuContentItemWrapper = styled.div<StyledContextMenuContentItemWrapperProps>`
     align-items: center;
+    border-radius: ${({ $shouldHidePopupArrow }) => ($shouldHidePopupArrow ? '3px' : 0)};
     cursor: pointer;
     display: flex;
     gap: 6px;
+    margin: ${({ $shouldHidePopupArrow }) => ($shouldHidePopupArrow ? '3px' : 0)};
+    overflow: hidden;
     padding: 5px 8px;
     transition: background-color 0.3s ease;
-    border-radius: ${({ $shouldHidePopupArrow }) => ($shouldHidePopupArrow ? '3px' : 0)};
-    margin: ${({ $shouldHidePopupArrow }) => ($shouldHidePopupArrow ? '3px' : 0)};
 
     ${({ $isFocused, theme }) =>
         $isFocused &&
@@ -148,6 +150,8 @@ export const StyledContextMenuContentHeadline = styled.div`
 `;
 
 export const StyledContextMenuContentItemText = styled.div`
-    flex: 0 0 auto;
+    flex: 0 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
 `;
