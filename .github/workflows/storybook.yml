@@ -1,9 +1,11 @@
 name: Publish Storybook (v5)
 
 on:
-  repository_dispatch:
-    types: [storybook-publish]
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -14,13 +16,10 @@ jobs:
 
     steps:
 
-      - name: Wait for publish
-        run: sleep 300
-
       - name: Checkout branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.client_payload.ref }}
+          ref: ${{ inputs.ref }}
 
       - name: Build storybook
         uses: ./.github/actions/lerna-build
