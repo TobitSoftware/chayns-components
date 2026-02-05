@@ -8,7 +8,7 @@ on:
 
 permissions:
   id-token: write  # Required for OIDC
-  contents: read
+  contents: write
 
 jobs:
   publish:
@@ -36,6 +36,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          repository: TobitSoftware/chayns-components
           event-type: storybook-publish
-          client-payload: '{"ref": "${GITHUB_REF}"}'
+          client-payload: '{"ref": "${{ github.ref }}"}'
 
