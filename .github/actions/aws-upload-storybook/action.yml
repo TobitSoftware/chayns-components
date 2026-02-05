@@ -75,4 +75,4 @@ runs:
           "https://api.cloudflare.com/client/v4/zones/${{ env.CF_SPACE_ZONE_ID }}/purge_cache" \
           -H "Authorization: Bearer ${{ env.CF_CACHE_RESET_SECRET }}" \
           -H "Content-Type: application/json" \
-          --data "{\"prefixes\":[\"${{ inputs.cf_url_prefix }}/${{ inputs.directory }}/v${{ inputs.version }}\"]}"
+          --data "{\"prefixes\":[\"${{ inputs.cf_url_prefix }}.chayns-static.space/${{ inputs.directory }}/v${{ inputs.version }}\"]}"

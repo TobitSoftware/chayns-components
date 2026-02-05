@@ -31,12 +31,9 @@ jobs:
       - name: Generate and upload docs
         run: npm run docs
 
-      - name: Trigger Storybook Workflow
-        if: success()
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: TobitSoftware/chayns-components
-          event-type: storybook-publish
-          client-payload: '{"ref": "${{ github.ref }}"}'
-
+  deploy:
+    needs: publish
+    uses: ./.github/workflows/storybook.yml
+    with:
+      ref: ${{ github.ref }}
+    secrets: inherit
