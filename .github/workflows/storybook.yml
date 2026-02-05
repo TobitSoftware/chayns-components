@@ -18,6 +18,11 @@ jobs:
       - name: Wait for publish
         run: sleep 300
 
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.client_payload.ref }}
+
       - uses: ./.github/actions/lerna-build
 
       - name: Build Storybook

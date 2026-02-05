@@ -33,4 +33,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           event-type: storybook-publish
+          client-payload: '{"ref": "${GITHUB_REF}"}'
 
