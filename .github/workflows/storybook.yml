@@ -23,8 +23,7 @@ jobs:
         with:
           ref: ${{ github.event.client_payload.ref }}
 
-      - name: Build storybook
-        uses: ./.github/actions/lerna-build
+      - uses: ./.github/actions/lerna-build
 
       - name: Build Storybook
         run: npm run storybook:build
