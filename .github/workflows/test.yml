@@ -25,3 +25,4 @@ jobs:
     uses: ./.github/workflows/storybook.yml
     with:
       ref: ${{ github.ref }}
+    secrets: inherit

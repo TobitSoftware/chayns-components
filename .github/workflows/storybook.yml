@@ -21,7 +21,7 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
-      - name: Build storybook
+      - name: Setup Node
         uses: ./.github/actions/lerna-build
 
       - name: Build Storybook
