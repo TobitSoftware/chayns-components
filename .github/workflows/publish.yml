@@ -22,10 +22,11 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v4
 
-      - uses: ./.github/actions/lerna-build
+      - name: Build packages
+        uses: ./.github/actions/lerna-build
 
       - name: Publish packages
-        run: npx lerna publish from-package --yes
+        run: lerna publish from-package --yes
 
       - name: Generate and upload docs
         run: npm run docs
