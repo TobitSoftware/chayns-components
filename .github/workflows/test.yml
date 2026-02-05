@@ -1,0 +1,32 @@
+name: Test Storybook Dispatch
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'test.*'
+
+permissions:
+  contents: write
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Debug info
+        run: |
+          echo "ref: ${{ github.ref }}"
+          echo "sha: ${{ github.sha }}"
+          echo "event: ${{ github.event_name }}"
+
+      - name: Trigger Storybook Workflow
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: TobitSoftware/chayns-components
+          event-type: storybook-publish
+          client-payload: '{"ref": "${{ github.ref }}"}'
