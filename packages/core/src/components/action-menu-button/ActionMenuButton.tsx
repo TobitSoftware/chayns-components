@@ -25,7 +25,7 @@ const ActionMenuButton: FC<ActionMenuButtonProps> = ({
     onClick,
     shouldUseFullWidth = false,
     width,
-    color = 'white',
+    color,
 }) => {
     const contextMenuRef = useRef<ContextMenuRef>(null);
 

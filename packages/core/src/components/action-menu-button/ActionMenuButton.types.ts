@@ -57,7 +57,6 @@ export type ActionMenuButtonProps = {
      * Color for the text and icons in the button.
      * @description Specifies the color used for the button label and icons.
      * @optional
-     * @default 'white'
      */
     color?: string;
 };
