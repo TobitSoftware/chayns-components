@@ -145,6 +145,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             return (
                 <Icon
                     icons={[isFixed ? 'fa fa-horizontal-rule' : (icon ?? 'fa fa-chevron-right')]}
+                    color={theme.iconColor || theme.headline}
                 />
             );
         }
@@ -191,9 +192,9 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 {typeof onTitleInputChange === 'function' ? (
                     // eslint-disable-next-line react/jsx-no-constructed-context-values
                     <AreaContext.Provider value={{ shouldChangeColor: true }}>
-                        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                         <StyledTitleInputWrapper>
                             <Input
+                                /* eslint-disable-next-line react/jsx-props-no-spreading */
                                 {...titleInputProps}
                                 value={title}
                                 onChange={onTitleInputChange}
