@@ -1,6 +1,10 @@
 import styled, { keyframes } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import type { SmallWaitCursorSize, SmallWaitCursorSpeed } from './SmallWaitCursor';
+import type {
+    SmallWaitCursorProps,
+    SmallWaitCursorSize,
+    SmallWaitCursorSpeed,
+} from './SmallWaitCursor';
 
 type StyledSmallWaitCursorProps = WithTheme<{
     $shouldShowWaitCursor: boolean;
@@ -29,25 +33,21 @@ export const StyledSmallWaitCursorBackground = styled.div<StyledSmallWaitCursorB
 `;
 
 type StyledSmallWaitCursorWaitCursorProps = WithTheme<{
+    $color: SmallWaitCursorProps['color'];
+    $shouldHideBackground: SmallWaitCursorProps['shouldHideBackground'];
     $size: SmallWaitCursorSize | number;
     $speed: SmallWaitCursorSpeed;
-    $shouldHideBackground: boolean;
-    $color?: string;
 }>;
 
 const spin = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 `;
 
 export const StyledSmallWaitCursorWaitCursor = styled.div<StyledSmallWaitCursorWaitCursorProps>`
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: ${({ $shouldHideBackground }) => ($shouldHideBackground ? 0 : 5)}px;
+    left: ${({ $shouldHideBackground }) => ($shouldHideBackground ? 0 : 5)}px;
     z-index: 2;
     border-style: solid;
     border-width: 3px;
@@ -62,8 +62,10 @@ export const StyledSmallWaitCursorWaitCursor = styled.div<StyledSmallWaitCursorW
 
         return theme.colorMode === 'dark' && $shouldHideBackground ? theme.headline : theme.primary;
     }};
-    height: ${({ $size }) => `${$size - 10}px`};
-    width: ${({ $size }) => `${$size - 10}px`};
+    height: ${({ $shouldHideBackground, $size }) =>
+        $shouldHideBackground ? '100%' : `${$size - 10}px`};
+    width: ${({ $shouldHideBackground, $size }) =>
+        $shouldHideBackground ? '100%' : `${$size - 10}px`};
     border-radius: 50%;
     display: inline-block;
     border-top: 3px solid transparent;

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { AnimatePresence } from 'motion/react';
-import React, { FC, MouseEventHandler, ReactNode, useMemo } from 'react';
+import React, { FC, MouseEventHandler, useMemo } from 'react';
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
@@ -10,54 +10,8 @@ import {
     StyledMotionChildrenWrapper,
     StyledMotionWaitCursorWrapper,
 } from './Button.styles';
+import type { ButtonProps } from './Button.types';
 import WaitCursor from './wait-cursor/WaitCursor';
-
-export type ButtonProps = {
-    /**
-     * The label of the button
-     */
-    children?: ReactNode;
-    /**
-     * Additional class names for the button element
-     */
-    className?: string;
-    /**
-     * An icon that is displayed on the left-hand side of the button text
-     */
-    icon?: string;
-    /**
-     * Whether the button is disabled and cannot be clicked anymore.
-     */
-    isDisabled?: boolean;
-    /**
-     * Displays the button in the secondary style
-     */
-    isSecondary?: boolean;
-    /**
-     * Function to be executed when the button is clicked
-     */
-    onClick: MouseEventHandler<HTMLButtonElement>;
-    /**
-     * Whether the button should be displayed as a selectButton.
-     */
-    shouldShowAsSelectButton?: boolean;
-    /**
-     * Whether the text should be 'Roboto Medium'
-     */
-    shouldShowTextAsRobotoMedium?: boolean;
-    /**
-     * Shows a wait cursor instead of button text
-     */
-    shouldShowWaitCursor?: boolean;
-    /**
-     * Stops event propagation on click
-     */
-    shouldStopPropagation?: boolean;
-    /**
-     * Optional button design override
-     */
-    buttonDesign?: number;
-};
 
 const Button: FC<ButtonProps> = ({
     children,

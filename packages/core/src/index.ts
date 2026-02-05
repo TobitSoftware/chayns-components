@@ -5,6 +5,7 @@ export { default as AccordionContent } from './components/accordion/accordion-co
 export { default as AccordionGroup } from './components/accordion/accordion-group/AccordionGroup';
 export { default as AccordionIntro } from './components/accordion/accordion-intro/AccordionIntro';
 export { default as AccordionItem } from './components/accordion/accordion-item/AccordionItem';
+export { default as ActionMenuButton } from './components/action-menu-button/ActionMenuButton';
 export { default as AmountControl } from './components/amount-control/AmountControl';
 export { default as VerificationBadge } from './components/verification-badge/VerificationBadge';
 export {
@@ -18,7 +19,7 @@ export {
     default as ColorSchemeProvider,
     useColorScheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
-export { BadgeSize, BadgeDesign } from './types/badge';
+export { BadgeSize, BadgeDesign } from './components/badge/Badge.types';
 export type {
     ColorSchemeContextProps,
     WithTheme,
@@ -72,7 +73,7 @@ export { default as FilterButton } from './components/filter-buttons/filter-butt
 export { default as FilterButtons } from './components/filter-buttons/FilterButtons';
 export { default as GridImage } from './components/grid-image/GridImage';
 export { default as GroupedImage } from './components/grouped-image/GroupedImage';
-export { default as Icon } from './components/icon/Icon';
+export { default as Icon, type IconProps } from './components/icon/Icon';
 export { default as Input, InputSize } from './components/input/Input';
 export { default as List } from './components/list/List';
 export { default as ListItemContent } from './components/list/list-item/list-item-content/ListItemContent';

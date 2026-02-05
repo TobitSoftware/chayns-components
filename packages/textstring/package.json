@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/textstring",
-    "version": "5.0.0-beta.1384",
+    "version": "5.0.0-beta.1401",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -53,8 +53,8 @@
     },
     "devDependencies": {
         "@babel/cli": "^7.28.6",
-        "@babel/core": "^7.28.6",
-        "@babel/preset-env": "^7.28.6",
+        "@babel/core": "^7.29.0",
+        "@babel/preset-env": "^7.29.0",
         "@babel/preset-react": "^7.28.5",
         "@babel/preset-typescript": "^7.28.5",
         "@types/react": "^18.3.27",
@@ -70,7 +70,7 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.1384"
+        "@chayns-components/core": "^5.0.0-beta.1401"
     },
     "peerDependencies": {
         "chayns-api": ">=2.2.0",

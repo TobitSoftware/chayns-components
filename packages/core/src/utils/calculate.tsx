@@ -5,14 +5,22 @@ import ColorSchemeProvider from '../components/color-scheme-provider/ColorScheme
 import type { IComboBoxItem } from '../components/combobox/ComboBox';
 import type { SliderButtonItem } from '../types/slider-button';
 
-export const calculateContentWidth = (
-    list: IComboBoxItem[],
-    functions: ChaynsReactFunctions,
-    values: ChaynsReactValues,
-) => {
+interface CalculateMaxComboBoxItemWidthOptions {
+    functions: ChaynsReactFunctions;
+    list: IComboBoxItem[];
+    shouldShowBigImage?: boolean;
+    values: ChaynsReactValues;
+}
+
+export const calculateMaxComboBoxItemWidth = ({
+    functions,
+    list,
+    shouldShowBigImage,
+    values,
+}: CalculateMaxComboBoxItemWidthOptions) => {
     const length: number[] = [];
 
-    list.forEach(({ suffixElement, text, textStyles }) => {
+    list.forEach(({ icons, imageUrl, rightElement, subtext, suffixElement, text, textStyles }) => {
         const tagName = textStyles?.tagName ?? 'div';
         const styles = textStyles?.styles;
 
@@ -33,6 +41,16 @@ export const calculateContentWidth = (
 
         div.innerText = text;
 
+        if (rightElement) {
+            // ColorSchemeProvider is used to prevent missing scheme context error.
+            // Due to the fact that the element is never rendered visible, the values are irrelevant.
+            div.innerHTML += renderToString(
+                <ChaynsProvider data={values} functions={functions} isModule>
+                    <ColorSchemeProvider>{rightElement}</ColorSchemeProvider>
+                </ChaynsProvider>,
+            );
+        }
+
         if (suffixElement) {
             // ColorSchemeProvider is used to prevent missing scheme context error.
             // Due to the fact that the element is never rendered visible, the values are irrelevant.
@@ -43,7 +61,20 @@ export const calculateContentWidth = (
             );
         }
 
-        length.push(div.offsetWidth);
+        let width = div.offsetWidth;
+
+        if (icons && icons.length > 0) {
+            width += 20 + 10; // icon width + gap
+        }
+
+        if (imageUrl) {
+            width +=
+                (shouldShowBigImage || (typeof subtext === 'string' && subtext.trim() !== '')
+                    ? 40
+                    : 22) + 10; // image width + gap
+        }
+
+        length.push(width);
 
         document.body.removeChild(div);
     });

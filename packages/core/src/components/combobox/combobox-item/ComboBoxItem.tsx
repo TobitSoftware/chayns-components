@@ -10,6 +10,7 @@ import {
     StyledComboBoxItemContentHeaderWrapper,
     StyledComboBoxItemContentHeaderWrapperText,
     StyledComboBoxItemContentSubtext,
+    StyledComboBoxItemIconsWrapper,
     StyledComboBoxItemImage,
 } from './ComboBoxItem.styles';
 
@@ -70,7 +71,11 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
                         $shouldShowRoundImage={shouldShowRoundImage}
                     />
                 )}
-                {icons && <Icon icons={icons} />}
+                {icons && (
+                    <StyledComboBoxItemIconsWrapper>
+                        <Icon icons={icons} />
+                    </StyledComboBoxItemIconsWrapper>
+                )}
                 <StyledComboBoxItemContent>
                     <StyledComboBoxItemContentHeader $text={text} $subtext={subtext}>
                         <StyledComboBoxItemContentHeaderWrapper

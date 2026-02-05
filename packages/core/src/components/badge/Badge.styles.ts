@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { BadgeDesign } from '../../types/badge';
+import { BadgeDesign } from './Badge.types';
 
 type StyledBadgeProps = WithTheme<{
     $cursor: CSSProperties['cursor'];

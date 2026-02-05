@@ -64,6 +64,15 @@ export const StyledComboBoxItemImage = styled.img<StyledComboBoxItemImageProps>`
     width: ${({ $shouldShowBigImage }) => ($shouldShowBigImage ? '40px' : '22px')};
 `;
 
+export const StyledComboBoxItemIconsWrapper = styled.div`
+    align-items: center;
+    display: flex;
+    flex: 0 0 auto;
+    height: 100%;
+    justify-content: center;
+    width: 20px;
+`;
+
 export const StyledComboBoxItemContent = styled.div`
     display: flex;
     flex: 1 1 auto;

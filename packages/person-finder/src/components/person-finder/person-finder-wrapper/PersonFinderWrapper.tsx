@@ -99,6 +99,10 @@ export type PersonFinderWrapperProps = {
      * @optional
      */
     shouldRenderInline?: boolean;
+    /**
+     * Whether the remove action should be disabled.
+     */
+    shouldDisableRemove?: boolean;
 };
 
 const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps>(
@@ -113,6 +117,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             onAdd,
             onDropdownHide,
             onDropdownShow,
+            shouldDisableRemove,
             onRemove,
             placeholder,
             shouldAllowMultiple,
@@ -149,7 +154,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
 
         const handleRemove = useCallback(
             (id: string) => {
-                if (typeof setTags !== 'function') {
+                if (typeof setTags !== 'function' || shouldDisableRemove) {
                     return;
                 }
 
@@ -159,7 +164,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
                     onRemove(id);
                 }
             },
-            [onRemove, setTags],
+            [onRemove, setTags, shouldDisableRemove],
         );
 
         const handleClose = useCallback(() => {
@@ -171,14 +176,14 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
         }, []);
 
         const handleClear = useCallback(() => {
-            if (typeof setTags !== 'function') {
+            if (typeof setTags !== 'function' || shouldDisableRemove) {
                 return;
             }
 
             tagInputRef.current?.resetValue();
 
             setTags([]);
-        }, [setTags]);
+        }, [setTags, shouldDisableRemove]);
 
         const handleDropdownOutsideClick = useCallback(() => {
             tagInputRef.current?.blur();

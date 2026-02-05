@@ -36,15 +36,15 @@ export const useDropdownListener = ({
 interface UseDropdownAlignmentOptions {
     direction: DropdownDirection;
     shouldUseTopAlignment: boolean;
-    bodyWidth?: number;
+    contentWidth: number;
     anchorElement: Element;
 }
 
 export const useDropdownAlignment = ({
+    anchorElement,
+    contentWidth,
     direction,
     shouldUseTopAlignment,
-    anchorElement,
-    bodyWidth,
 }: UseDropdownAlignmentOptions) => {
     const [translateX, setTranslateX] = useState<string>('0px');
     const [translateY, setTranslateY] = useState<string>('0px');
@@ -55,16 +55,15 @@ export const useDropdownAlignment = ({
                 DropdownDirection.BOTTOM_LEFT,
                 DropdownDirection.TOP_LEFT,
                 DropdownDirection.LEFT,
-            ].includes(direction) &&
-            typeof bodyWidth === 'number'
+            ].includes(direction)
         ) {
-            const difference = anchorElement.clientWidth - bodyWidth;
+            const difference = anchorElement.clientWidth - contentWidth;
 
             setTranslateX(`${difference}px`);
         } else {
             setTranslateX('0px');
         }
-    }, [anchorElement.clientWidth, bodyWidth, direction]);
+    }, [anchorElement.clientWidth, contentWidth, direction]);
 
     useEffect(() => {
         const useTopAlignment =
@@ -166,18 +165,18 @@ export const useDropdownPosition = ({
 
 interface UseDropdownOptions {
     anchorElement: Element;
-    bodyWidth?: number;
     container?: Element;
     contentHeight?: number;
+    contentWidth: number;
     direction: DropdownDirection;
     shouldShowDropdown: boolean;
 }
 
 export const useDropdown = ({
     anchorElement,
-    bodyWidth,
     container,
     contentHeight,
+    contentWidth,
     direction,
     shouldShowDropdown,
 }: UseDropdownOptions) => {
@@ -190,10 +189,10 @@ export const useDropdown = ({
     });
 
     const transform = useDropdownAlignment({
-        shouldUseTopAlignment,
-        bodyWidth,
         anchorElement,
+        contentWidth,
         direction,
+        shouldUseTopAlignment,
     });
 
     const width = anchorElement.clientWidth;
