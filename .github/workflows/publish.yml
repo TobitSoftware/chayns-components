@@ -19,6 +19,9 @@ jobs:
       API_TOKEN_SECRET: ${{ secrets.API_TOKEN_SECRET }}
 
     steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
       - uses: ./.github/actions/lerna-build
 
       - name: Publish packages
