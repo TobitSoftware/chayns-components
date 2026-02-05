@@ -1,6 +1,6 @@
-## Contributing
-
-<h1 align="center">@chayns-components</h1>
+<p align="center">
+    <img src="assets/logo.png" alt="Project Logo" width="500" />
+</p>
 
 <p align="center">
 A modular React monorepo providing reusable components, utilities, and hooks for building chayns-based web applications.
@@ -49,7 +49,7 @@ packages/
 Each package includes:
 
 - `src/` – TypeScript source files
-- `docs/` – Generated documentation
+- `docs/` – Small code examples
 - `lib/` – Compiled output
 - `stories/` – Storybook files for component previews
 - `package.json` – Metadata and Lerna configuration
@@ -60,7 +60,7 @@ Each package includes:
 
 - **React** – UI library for component-based development
 - **TypeScript** – Static type system for reliability
-- **Linaria** – Scoped CSS and theming
+- **styled-components** – Scoped CSS and theming
 - **Lerna** – Monorepo management and versioning
 - **ESLint + Prettier** – Code style enforcement
 - **Storybook** – Component documentation and preview
@@ -129,5 +129,5 @@ This project is licensed under the [MIT License](./LICENSE).
 ---
 
 <p align="center">
-  <sub>Maintained by the chayns-components team · Built with React, TypeScript and Linaria</sub>
+  <sub>Maintained by the chayns-components team · Built with React, TypeScript and styled-components</sub>
 </p>

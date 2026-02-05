@@ -85,16 +85,10 @@ Global or cross-package utilities are stored in `@chayns-components/core`.
 
 ## 5. Styling & Theming
 
-- Use **linaria** for all styles.
+- Use **styled-components** for all styles.
 - Never hardcode colors — use theme tokens from the ColorSchemeProvider.
 - Use the `WithTheme` type to access theme variables.
 - Keep styles modular and colocated with their component.
-
-Example:
-
-```tsx
-comming soon
-```
 
 ---
 
@@ -132,5 +126,5 @@ comming soon
 ---
 
 <p align="center">
-  <sub>Maintained by the chayns-components team · Built with React, TypeScript and Linaria</sub>
+  <sub>Maintained by the chayns-components team · Built with React, TypeScript and styled-components</sub>
 </p>

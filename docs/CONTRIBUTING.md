@@ -48,12 +48,6 @@ Start the Storybook environment with:
 npm run storybook
 ```
 
-Create a new package version with:
-
-```bash
-npm run lerna:version
-```
-
 > **Note:** We are working on integrating Storybook with the chayns environment.  
 > Some components relying on the [chayns-api](https://github.com/TobitSoftware/chayns-api) may not
 > fully function within Storybook yet.
@@ -94,5 +88,5 @@ to understand the visual language, color system, and component design principles
 ---
 
 <p align="center">
-  <sub>Maintained by the chayns-components team · Built with React, TypeScript and Linaria</sub>
+  <sub>Maintained by the chayns-components team · Built with React, TypeScript and styled-components</sub>
 </p>
