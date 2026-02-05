@@ -1,0 +1,29 @@
+name: Lerna Build Base
+description: Setup Node, install deps and build packages
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20.19.6'
+        registry-url: https://registry.npmjs.org/
+        cache: npm
+    # Ensure npm 11.5.1 or later is installed
+    - name: Update npm
+      run: npm install -g npm@latest
+      shell: bash
+
+    - name: Clear npm cache
+      run: npm cache clean --force
+      shell: bash
+
+    - name: Install dependencies
+      run: npm ci
+      shell: bash
+
+    - name: Build packages
+      run: npm run lerna:build
+      shell: bash
