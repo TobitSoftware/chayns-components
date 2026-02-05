@@ -39,6 +39,9 @@ jobs:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_SPACE_ZONE_ID: ${{ secrets.CF_SPACE_ZONE_ID }}
           CF_CACHE_RESET_SECRET: ${{ secrets.CF_CACHE_RESET_SECRET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-central-1
 
       - name: Upload Storybook PROD
         uses: ./.github/actions/aws-upload-storybook
@@ -58,5 +61,8 @@ jobs:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_SPACE_ZONE_ID: ${{ secrets.CF_SPACE_ZONE_ID }}
           CF_CACHE_RESET_SECRET: ${{ secrets.CF_CACHE_RESET_SECRET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-central-1
 
 
