@@ -66,7 +66,7 @@ export type MultiActionButtonAction = {
     /**
      * Click handler for the action.
      */
-    onClick?: (info: MultiActionButtonActionEvent) => void;
+    onClick: (info: MultiActionButtonActionEvent) => void;
     /**
      * Whether the action is disabled.
      */

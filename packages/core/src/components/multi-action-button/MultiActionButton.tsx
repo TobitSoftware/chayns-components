@@ -31,14 +31,17 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     const [isSecondaryExtended, setIsSecondaryExtended] = useState(false);
     const [isSecondaryHovered, setIsSecondaryHovered] = useState(false);
     const [isExtendedFromClick, setIsExtendedFromClick] = useState(false);
-    const [isSecondaryHidden, setIsSecondaryHidden] = useState(isCollapsed);
-    const collapseTimerRef = useRef<number | null>(null);
+
     const timeoutRef = useRef<number | null>(null);
 
     const isTouch = useIsTouch();
+
     const hasSecondaryAction = Boolean(secondaryAction);
+
     const theme = useTheme() as Theme;
+
     const defaultColor = theme?.text ?? '#fff';
+
     // Ensure the extended state resets after the timeout window (click-only).
     const resetTimeout = useCallback(() => {
         if (timeoutRef.current) {
@@ -51,43 +54,26 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
         }, extendedTimeoutMs);
     }, [extendedTimeoutMs]);
 
-    // Trigger an extend (click path) and schedule auto-reset.
+    // Trigger an extent (click path) and schedule auto-reset.
     const extendSecondaryByClick = useCallback(() => {
         setIsSecondaryExtended(true);
         setIsExtendedFromClick(true);
         resetTimeout();
     }, [resetTimeout]);
 
-    useEffect(() => {
-        return () => {
+    useEffect(
+        () => () => {
             if (timeoutRef.current) {
                 window.clearTimeout(timeoutRef.current);
             }
-            if (collapseTimerRef.current) {
-                window.clearTimeout(collapseTimerRef.current);
-            }
-        };
-    }, []);
+        },
+        [],
+    );
 
     useEffect(() => {
         if (isCollapsed) {
             setIsSecondaryExtended(false);
             setIsExtendedFromClick(false);
-        }
-    }, [isCollapsed]);
-
-    useEffect(() => {
-        if (collapseTimerRef.current) {
-            window.clearTimeout(collapseTimerRef.current);
-        }
-
-        if (isCollapsed) {
-            setIsSecondaryHidden(false);
-            collapseTimerRef.current = window.setTimeout(() => {
-                setIsSecondaryHidden(true);
-            }, 200);
-        } else {
-            setIsSecondaryHidden(false);
         }
     }, [isCollapsed]);
 
@@ -99,12 +85,12 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
 
             const payload: MultiActionButtonActionEvent = {
                 action: 'primary',
-                isExtended: isSecondaryExtended,
+                isExtended: !isSecondaryExtended,
                 isTouch,
                 event,
             };
 
-            primaryAction.onClick?.(payload);
+            primaryAction.onClick(payload);
         },
         [isDisabled, primaryAction, isSecondaryExtended, isTouch],
     );
@@ -115,18 +101,25 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                 return;
             }
 
-            extendSecondaryByClick();
-
             const payload: MultiActionButtonActionEvent = {
                 action: 'secondary',
-                isExtended: true,
+                isExtended: isSecondaryExtended,
                 isTouch,
                 event,
             };
 
-            secondaryAction.onClick?.(payload);
+            secondaryAction.onClick(payload);
+
+            extendSecondaryByClick();
         },
-        [extendSecondaryByClick, isCollapsed, isDisabled, isTouch, secondaryAction],
+        [
+            extendSecondaryByClick,
+            isCollapsed,
+            isDisabled,
+            isSecondaryExtended,
+            isTouch,
+            secondaryAction,
+        ],
     );
 
     const handleSecondaryMouseEnter = useCallback(() => {
@@ -163,12 +156,12 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     return (
         <StyledMultiActionButton
             className={clsx('beta-chayns-multi-action', className)}
-            style={{ width: isCollapsed ? 42 : width ?? '100%' }}
+            style={{ width: isCollapsed ? 42 : (width ?? '100%') }}
         >
             <StyledActionButton
                 disabled={isDisabled || primaryAction.isDisabled}
-                $isPrimary={hasSecondaryAction && !(isCollapsed && isSecondaryHidden)}
-                $isCollapsed={isCollapsed && isSecondaryHidden}
+                $isPrimary={hasSecondaryAction}
+                $isCollapsed={isCollapsed}
                 $isShrunk={hasSecondaryAction && isSecondaryExtended}
                 $isSolo={!hasSecondaryAction && !isCollapsed}
                 $statusType={primaryAction.status?.type}
@@ -177,9 +170,13 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                 type="button"
             >
                 <StyledActionContent>
-                    <StyledIconSlot $isPrimary={hasSecondaryAction}>
+                    <StyledIconSlot>
                         {typeof primaryAction.icon === 'string' ? (
-                            <Icon icons={[primaryAction.icon]} color={primaryAction.color ?? defaultColor} size={18} />
+                            <Icon
+                                icons={[primaryAction.icon]}
+                                color={primaryAction.color ?? defaultColor}
+                                size={18}
+                            />
                         ) : (
                             primaryAction.icon
                         )}
@@ -191,10 +188,17 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                                 exit={{ opacity: 0, width: 0 }}
                                 initial={{ opacity: 0, width: 0 }}
                                 key="primary-label"
-                                style={{ overflow: 'hidden' }}
+                                style={{
+                                    flex: '1 1 auto',
+                                    minWidth: 0,
+                                    overflow: 'hidden',
+                                    textAlign: 'left',
+                                }}
                                 transition={{ duration: 0.2 }}
                             >
-                                <StyledPrimaryLabel style={{ color: primaryAction.color ?? defaultColor }}>
+                                <StyledPrimaryLabel
+                                    style={{ color: primaryAction.color ?? defaultColor }}
+                                >
                                     {primaryAction.label}
                                 </StyledPrimaryLabel>
                             </motion.span>
@@ -216,7 +220,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                     type="button"
                 >
                     <StyledActionContent>
-                        <StyledIconSlot $isSecondary>
+                        <StyledIconSlot>
                             {typeof secondaryAction.icon === 'string' ? (
                                 <Icon
                                     icons={[secondaryAction.icon]}
@@ -234,7 +238,12 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                                     exit={{ opacity: 0, width: 0 }}
                                     initial={{ opacity: 0, width: 0 }}
                                     key="secondary-label"
-                                    style={{ overflow: 'hidden' }}
+                                    style={{
+                                        flex: '1 1 auto',
+                                        minWidth: 0,
+                                        overflow: 'hidden',
+                                        textAlign: 'left',
+                                    }}
                                     transition={{ duration: 0.2 }}
                                 >
                                     <StyledSecondaryLabel

@@ -48,8 +48,10 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
     min-height: 42px;
     padding: 0;
     position: relative;
+    overflow: hidden;
     transition:
         background-color 0.2s ease,
+        border-radius 0.2s ease,
         color 0.2s ease,
         flex-grow 0.2s ease,
         opacity 0.2s ease,
@@ -124,6 +126,14 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
             border-top-right-radius: 0;
         `}
 
+    ${({ $isPrimary, $isCollapsed }) =>
+        $isPrimary &&
+        $isCollapsed &&
+        css`
+            border-bottom-right-radius: 21px;
+            border-top-right-radius: 21px;
+        `}
+
     ${({ $isSecondary }) =>
         $isSecondary &&
         css`
@@ -173,35 +183,26 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
 export const StyledActionContent = styled.span`
     align-items: center;
     display: inline-flex;
+    flex: 1 1 auto;
+    min-width: 0;
     position: relative;
     z-index: 1;
 `;
 
-export const StyledIconSlot = styled.span<{
-    $isPrimary?: boolean;
-    $isSecondary?: boolean;
-}>`
+export const StyledIconSlot = styled.span`
     align-items: center;
     display: inline-flex;
+    flex: 0 0 auto;
     height: 42px;
     justify-content: center;
     width: 42px;
-
-    ${({ $isPrimary }) =>
-        $isPrimary &&
-        css`
-            transform: translateX(2px);
-        `}
-
-    ${({ $isSecondary }) =>
-        $isSecondary &&
-        css`
-            transform: translateX(-2px);
-        `}
 `;
 
 export const StyledSecondaryLabel = styled.span`
-    display: inline-flex;
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
     overflow: hidden;
     padding-right: 12px;
     text-overflow: ellipsis;
