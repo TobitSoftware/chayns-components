@@ -42,7 +42,7 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
     border-radius: 21px;
     cursor: pointer;
     display: inline-flex;
-    flex: 0 0 auto;
+    flex: 1 1 auto;
     height: 42px;
     line-height: 22px;
     min-height: 42px;
@@ -176,7 +176,7 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
     }
 
     &:hover:not(:disabled) {
-        filter: brightness(1.05);
+        filter: brightness(0.8);
     }
 `;
 
@@ -184,6 +184,7 @@ export const StyledActionContent = styled.span`
     align-items: center;
     display: inline-flex;
     flex: 1 1 auto;
+    gap: 6px;
     min-width: 0;
     position: relative;
     z-index: 1;

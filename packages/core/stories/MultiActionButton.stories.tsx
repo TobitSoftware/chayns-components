@@ -25,7 +25,14 @@ const Template: StoryFn<typeof MultiActionButton> = (args) => <MultiActionButton
 
 export const Default = Template.bind({});
 
+export const OnlyPrimary = Template.bind({});
+
+OnlyPrimary.args = {
+    secondaryAction: undefined,
+};
+
 export const PulsingSecondary = Template.bind({});
+
 PulsingSecondary.args = {
     secondaryAction: {
         icon: 'fa fa-microphone',
