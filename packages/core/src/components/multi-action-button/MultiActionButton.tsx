@@ -24,7 +24,6 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     primaryAction,
     secondaryAction,
     extendedTimeoutMs = 2000,
-    shouldShowSecondaryLabelOnHover = true,
     width,
     isCollapsed = false,
 }) => {
@@ -43,6 +42,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     const defaultColor = theme?.text ?? '#fff';
 
     // Ensure the extended state resets after the timeout window (click-only).
+    // Reset the auto-collapse timeout after click-based extension.
     const resetTimeout = useCallback(() => {
         if (timeoutRef.current) {
             window.clearTimeout(timeoutRef.current);
@@ -54,22 +54,23 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
         }, extendedTimeoutMs);
     }, [extendedTimeoutMs]);
 
-    // Trigger an extent (click path) and schedule auto-reset.
+    // Extend the secondary action due to a click.
     const extendSecondaryByClick = useCallback(() => {
         setIsSecondaryExtended(true);
         setIsExtendedFromClick(true);
         resetTimeout();
     }, [resetTimeout]);
 
-    useEffect(
-        () => () => {
+    // Cleanup timers on unmount.
+    useEffect(() => {
+        return () => {
             if (timeoutRef.current) {
                 window.clearTimeout(timeoutRef.current);
             }
-        },
-        [],
-    );
+        };
+    }, []);
 
+    // Collapsing the whole button should also clear any secondary expansion.
     useEffect(() => {
         if (isCollapsed) {
             setIsSecondaryExtended(false);
@@ -77,6 +78,8 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
         }
     }, [isCollapsed]);
 
+    // Primary action click handler.
+    // Primary action click handler.
     const handlePrimaryClick = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => {
             if (isDisabled || primaryAction.isDisabled) {
@@ -85,16 +88,17 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
 
             const payload: MultiActionButtonActionEvent = {
                 action: 'primary',
-                isExtended: !isSecondaryExtended,
+                isExtended: isSecondaryExtended,
                 isTouch,
                 event,
             };
 
-            primaryAction.onClick(payload);
+            primaryAction.onClick?.(payload);
         },
         [isDisabled, primaryAction, isSecondaryExtended, isTouch],
     );
 
+    // Secondary action click handler.
     const handleSecondaryClick = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => {
             if (!secondaryAction || isCollapsed || isDisabled || secondaryAction.isDisabled) {
@@ -108,7 +112,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                 event,
             };
 
-            secondaryAction.onClick(payload);
+            secondaryAction.onClick?.(payload);
 
             extendSecondaryByClick();
         },
@@ -122,6 +126,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
         ],
     );
 
+    // Hovering the secondary action should extend it immediately on desktop.
     const handleSecondaryMouseEnter = useCallback(() => {
         if (
             !secondaryAction ||
@@ -139,6 +144,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
         }
     }, [isCollapsed, isDisabled, isExtendedFromClick, isTouch, secondaryAction]);
 
+    // Leaving the secondary action should collapse it immediately on desktop.
     const handleSecondaryMouseLeave = useCallback(() => {
         if (isTouch) {
             return;
@@ -150,8 +156,8 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
         }
     }, [isCollapsed, isExtendedFromClick, isTouch]);
 
-    const shouldShowSecondaryLabel =
-        isSecondaryExtended || (!isTouch && shouldShowSecondaryLabelOnHover && isSecondaryHovered);
+    // Secondary label is shown whenever the button is extended or hovered on desktop.
+    const shouldShowSecondaryLabel = isSecondaryExtended || (!isTouch && isSecondaryHovered);
 
     return (
         <StyledMultiActionButton
@@ -184,9 +190,9 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                     <AnimatePresence initial={false}>
                         {(!hasSecondaryAction || !isSecondaryExtended) && !isCollapsed && (
                             <motion.span
-                                animate={{ opacity: 1, width: 'auto' }}
-                                exit={{ opacity: 0, width: 0 }}
-                                initial={{ opacity: 0, width: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                initial={{ opacity: 0 }}
                                 key="primary-label"
                                 style={{
                                     flex: '1 1 auto',
@@ -234,9 +240,9 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                         <AnimatePresence initial={false}>
                             {shouldShowSecondaryLabel && secondaryAction.label && (
                                 <motion.span
-                                    animate={{ opacity: 1, width: 'auto' }}
-                                    exit={{ opacity: 0, width: 0 }}
-                                    initial={{ opacity: 0, width: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    initial={{ opacity: 0 }}
                                     key="secondary-label"
                                     style={{
                                         flex: '1 1 auto',
