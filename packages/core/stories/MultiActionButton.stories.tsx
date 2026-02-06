@@ -32,7 +32,7 @@ PulsingSecondary.args = {
         label: 'Mitschnitt starten',
         status: {
             type: MultiActionButtonStatusType.Pulse,
-            pulseColor: 'rgba(255, 0, 0, 0.6)',
+            pulseColor: 'rgba(255, 0, 0, 1)',
         },
     },
 };

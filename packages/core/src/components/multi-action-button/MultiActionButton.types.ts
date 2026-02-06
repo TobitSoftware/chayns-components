@@ -1,4 +1,5 @@
 import type { MouseEvent, ReactNode } from 'react';
+import type { MotionValue } from 'motion/react';
 
 /**
  * Supported status types for the multi action button.
@@ -106,4 +107,12 @@ export type MultiActionButtonProps = {
      * @default true
      */
     shouldShowSecondaryLabelOnHover?: boolean;
+    /**
+     * Optional width override for the whole button.
+     */
+    width?: number | MotionValue<number>;
+    /**
+     * Whether the button is collapsed to a single icon.
+     */
+    isCollapsed?: boolean;
 };

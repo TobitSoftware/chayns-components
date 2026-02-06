@@ -1,35 +1,38 @@
 import styled, { css, keyframes } from 'styled-components';
+import { motion } from 'motion/react';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import { MultiActionButtonStatusType } from './MultiActionButton.types';
 
 type StyledActionButtonProps = WithTheme<{
     $isExpanded?: boolean;
     $isCollapsed?: boolean;
+    $isShrunk?: boolean;
     $isPrimary?: boolean;
     $isSecondary?: boolean;
     $isSolo?: boolean;
+    $isHidden?: boolean;
     $statusType?: MultiActionButtonStatusType;
     $pulseColor?: string;
 }>;
 
 const pulse = keyframes`
     0% {
-        opacity: 0.1;
+        opacity: 0.25;
     }
     50% {
         opacity: 0.5;
     }
     100% {
-        opacity: 0.1;
+        opacity: 0.25;
     }
 `;
 
-export const StyledMultiActionButton = styled.div`
+export const StyledMultiActionButton = styled(motion.div)`
     align-items: stretch;
     background: transparent;
-    column-gap: 2px;
     display: inline-flex;
     position: relative;
+    transition: width 0.2s ease;
     width: 100%;
 `;
 
@@ -51,6 +54,7 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
         flex-grow 0.2s ease,
         opacity 0.2s ease,
         width 0.2s ease,
+        margin-left 0.2s ease,
         padding 0.2s ease;
     user-select: none;
     white-space: nowrap;
@@ -81,6 +85,14 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
             min-width: 0;
         `}
 
+    ${({ $isShrunk }) =>
+        $isShrunk &&
+        css`
+            flex: 0 0 auto;
+            padding: 0;
+            width: 42px;
+        `}
+
     ${({ $isSecondary, $isExpanded }) =>
         $isSecondary &&
         !$isExpanded &&
@@ -88,6 +100,21 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
             flex: 0 0 auto;
             padding: 0;
             width: 42px;
+        `}
+
+    ${({ $isSecondary }) =>
+        $isSecondary &&
+        css`
+            margin-left: 2px;
+        `}
+
+    ${({ $isHidden }) =>
+        $isHidden &&
+        css`
+            margin-left: 0;
+            opacity: 0;
+            pointer-events: none;
+            width: 0;
         `}
 
     ${({ $isPrimary }) =>
@@ -110,6 +137,12 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
             border-radius: 21px;
         `}
 
+    ${({ $isCollapsed }) =>
+        $isCollapsed &&
+        css`
+            border-radius: 21px;
+        `}
+
     ${({ $statusType, $pulseColor }) =>
         $statusType === MultiActionButtonStatusType.Pulse &&
         css`
@@ -117,7 +150,7 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
 
             &::before {
                 animation: ${pulse} 1.6s ease-in-out infinite;
-                background: ${$pulseColor || 'rgba(255, 0, 0, 0.6)'};
+                background: ${$pulseColor || 'rgba(255, 0, 0, 0.85)'};
                 border-radius: 3px;
                 content: '';
                 inset: 0;
@@ -152,18 +185,18 @@ export const StyledIconSlot = styled.span<{
     display: inline-flex;
     height: 42px;
     justify-content: center;
-    width: 44px;
+    width: 42px;
 
     ${({ $isPrimary }) =>
         $isPrimary &&
         css`
-            padding-left: 2px;
+            transform: translateX(2px);
         `}
 
     ${({ $isSecondary }) =>
         $isSecondary &&
         css`
-            padding-right: 2px;
+            transform: translateX(-2px);
         `}
 `;
 
