@@ -137,11 +137,11 @@ export type {
 } from './types/searchBox';
 export type { SelectButtonItem } from './types/selectButton';
 export type { SliderButtonItem } from './types/slider-button';
-export type {
-    MultiActionButtonAction,
-    MultiActionButtonActionEvent,
-    MultiActionButtonActionStatus,
-    MultiActionButtonProps,
+export {
+    type MultiActionButtonAction,
+    type MultiActionButtonActionEvent,
+    type MultiActionButtonActionStatus,
+    type MultiActionButtonProps,
     MultiActionButtonStatusType,
 } from './components/multi-action-button/MultiActionButton.types';
 export { ClampPosition } from './types/truncation';

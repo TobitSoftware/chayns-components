@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 import MultiActionButton from '../src/components/multi-action-button/MultiActionButton';
-import { MultiActionButtonStatusType } from '../src/components/multi-action-button/MultiActionButton.types';
+import { MultiActionButtonStatusType } from '../src';
 
 export default {
     title: 'Core/MultiActionButton',
