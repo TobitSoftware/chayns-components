@@ -58,6 +58,5 @@ export const StyledUnicodeIcon = styled.i<StyledUnicodeIconProps>`
 
     &:before {
         content: ${({ $icon }) => `"\\${$icon}"`};
-        font-family: 'Font Awesome 6 Pro', Fontawesome !important;
     }
 `;
