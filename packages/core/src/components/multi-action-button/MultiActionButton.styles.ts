@@ -176,7 +176,7 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
     }
 
     &:hover:not(:disabled) {
-        filter: brightness(0.8);
+        background-color: rgba(0, 0, 0, 0.35);
     }
 `;
 
