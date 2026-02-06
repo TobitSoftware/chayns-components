@@ -62,13 +62,14 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     }, [resetTimeout]);
 
     // Cleanup timers on unmount.
-    useEffect(() => {
-        return () => {
+    useEffect(
+        () => () => {
             if (timeoutRef.current) {
                 window.clearTimeout(timeoutRef.current);
             }
-        };
-    }, []);
+        },
+        [],
+    );
 
     // Collapsing the whole button should also clear any secondary expansion.
     useEffect(() => {
