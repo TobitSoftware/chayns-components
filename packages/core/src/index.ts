@@ -84,6 +84,7 @@ export {
 } from './components/list/list-item/ListItem';
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
 export type { MentionMember } from './components/mention-finder/MentionFinder';
+export { default as MultiActionButton } from './components/multi-action-button/MultiActionButton';
 export { default as NumberInput } from './components/number-input/NumberInput';
 export { default as PageProvider } from './components/page-provider/PageProvider';
 export { default as Popup } from './components/popup/Popup';
@@ -136,6 +137,13 @@ export type {
 } from './types/searchBox';
 export type { SelectButtonItem } from './types/selectButton';
 export type { SliderButtonItem } from './types/slider-button';
+export type {
+    MultiActionButtonAction,
+    MultiActionButtonActionEvent,
+    MultiActionButtonActionStatus,
+    MultiActionButtonProps,
+    MultiActionButtonStatusType,
+} from './components/multi-action-button/MultiActionButton.types';
 export { ClampPosition } from './types/truncation';
 export { useIsTouch } from './utils/environment';
 export { filterFilesByMimeType, getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
