@@ -191,9 +191,9 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                     <AnimatePresence initial={false}>
                         {(!hasSecondaryAction || !isSecondaryExtended) && !isCollapsed && (
                             <motion.span
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1, width: 'auto' }}
+                                exit={{ opacity: 0, width: 0 }}
+                                initial={{ opacity: 0, width: 0 }}
                                 key="primary-label"
                                 style={{
                                     flex: '1 1 auto',
@@ -201,7 +201,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                                     overflow: 'hidden',
                                     textAlign: 'left',
                                 }}
-                                transition={{ duration: 0.2 }}
+                                transition={{ duration: 0.3 }}
                             >
                                 <StyledPrimaryLabel
                                     style={{ color: primaryAction.color ?? defaultColor }}
@@ -241,9 +241,9 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                         <AnimatePresence initial={false}>
                             {shouldShowSecondaryLabel && secondaryAction.label && (
                                 <motion.span
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1, width: 'auto' }}
+                                    exit={{ opacity: 0, width: 0 }}
+                                    initial={{ opacity: 0, width: 0 }}
                                     key="secondary-label"
                                     style={{
                                         flex: '1 1 auto',
@@ -251,7 +251,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                                         overflow: 'hidden',
                                         textAlign: 'left',
                                     }}
-                                    transition={{ duration: 0.2 }}
+                                    transition={{ duration: 0.3 }}
                                 >
                                     <StyledSecondaryLabel
                                         style={{ color: secondaryAction.color ?? defaultColor }}
