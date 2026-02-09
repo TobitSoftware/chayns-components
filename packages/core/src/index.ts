@@ -141,6 +141,7 @@ export {
     type MultiActionButtonAction,
     type MultiActionButtonActionEvent,
     type MultiActionButtonActionStatus,
+    MultiActionButtonHeight,
     type MultiActionButtonProps,
     MultiActionButtonStatusType,
 } from './components/multi-action-button/MultiActionButton.types';
