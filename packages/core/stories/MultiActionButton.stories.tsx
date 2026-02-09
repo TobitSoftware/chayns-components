@@ -9,7 +9,6 @@ export default {
     args: {
         isDisabled: false,
         extendedTimeoutMs: 2000,
-        shouldShowSecondaryLabelOnHover: true,
         primaryAction: {
             icon: 'fa fa-pen',
             label: 'Chatten',
