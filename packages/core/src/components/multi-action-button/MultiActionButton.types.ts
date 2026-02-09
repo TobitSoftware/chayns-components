@@ -14,6 +14,20 @@ export enum MultiActionButtonStatusType {
 }
 
 /**
+ * Supported heights for the multi action button.
+ */
+export enum MultiActionButtonHeight {
+    /**
+     * Medium height (42px).
+     */
+    Medium = 42,
+    /**
+     * Large height (52px).
+     */
+    Large = 52,
+}
+
+/**
  * Minimal status configuration for an action.
  */
 export type MultiActionButtonActionStatus = {
@@ -152,6 +166,13 @@ export type MultiActionButtonProps = {
      * @optional
      */
     secondaryAction?: MultiActionButtonAction;
+    /**
+     * Height of the button.
+     * @description Controls the height of the button. Use values from MultiActionButtonHeight enum or custom number.
+     * @default 42
+     * @optional
+     */
+    height?: number;
     /**
      * Whether the button should take the full width of its parent.
      * @description When true, the control stretches to 100% width unless `width` is provided.

@@ -3,12 +3,11 @@ import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 
 import { useIsTouch } from '../../utils/environment';
 import ActionButton from './action-button/ActionButton';
 import { StyledMultiActionButton } from './MultiActionButton.styles';
+import { MultiActionButtonHeight } from './MultiActionButton.types';
 import type {
     MultiActionButtonActionEvent,
     MultiActionButtonProps,
 } from './MultiActionButton.types';
-
-const COLLAPSED_SIZE = 42;
 
 /**
  * Multi-action button with optional secondary action that can expand on hover/click.
@@ -22,6 +21,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     primaryAction,
     secondaryAction,
     shouldUseFullWidth,
+    height = MultiActionButtonHeight.Medium,
     width,
 }) => {
     const [isExtendedByClick, setIsExtendedByClick] = useState(false);
@@ -37,7 +37,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
 
     const defaultTextColor = '#fff';
     const resolvedWidth = isCollapsed
-        ? COLLAPSED_SIZE
+        ? height
         : (width ?? (shouldUseFullWidth ? '100%' : 'fit-content'));
 
     /**
@@ -188,6 +188,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                 onClick={handlePrimaryClick}
                 showLabel={!isCollapsed && (!hasSecondaryAction || !isSecondaryExpanded)}
                 shouldUseContentWidth={shouldUseContentWidth}
+                height={height}
             />
             {secondaryAction && (
                 <ActionButton
@@ -204,6 +205,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                     onMouseLeave={handleSecondaryMouseLeave}
                     showLabel={isSecondaryLabelVisible}
                     shouldUseContentWidth={shouldUseContentWidth}
+                    height={height}
                 />
             )}
         </StyledMultiActionButton>

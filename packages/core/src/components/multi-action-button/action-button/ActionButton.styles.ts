@@ -3,9 +3,6 @@ import styled, { css, keyframes } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 import { MultiActionButtonStatusType } from '../MultiActionButton.types';
 
-const ACTION_RADIUS = 21;
-const ACTION_SIZE = 42;
-
 type StyledActionButtonProps = WithTheme<{
     $backgroundColor?: string;
     $isCollapsed?: boolean;
@@ -16,6 +13,7 @@ type StyledActionButtonProps = WithTheme<{
     $isShrunk?: boolean;
     $isSolo?: boolean;
     $pulseColors?: [string, string];
+    $height: number;
     $statusType?: MultiActionButtonStatusType;
     $shouldUseContentWidth?: boolean;
 }>;
@@ -35,13 +33,13 @@ const pulse = (color1: string, color2: string) => keyframes`
 export const StyledActionButton = styled.button<StyledActionButtonProps>`
     align-items: center;
     border: none;
-    border-radius: ${ACTION_RADIUS}px;
+    border-radius: ${({ $height }) => $height / 2}px;
     cursor: pointer;
     display: inline-flex;
     flex: 1 1 auto;
-    height: ${ACTION_SIZE}px;
+    height: ${({ $height }) => $height}px;
     line-height: 22px;
-    min-height: ${ACTION_SIZE}px;
+    min-height: ${({ $height }) => $height}px;
     overflow: hidden;
     padding: 0;
     position: relative;
@@ -78,12 +76,12 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
         `}
 
     /* Collapsed state clamps to a fixed icon size. */
-    ${({ $isCollapsed }) =>
-        $isCollapsed &&
+    ${(props) =>
+        props.$isCollapsed &&
         css`
             flex: 0 0 auto;
             padding: 0;
-            width: ${ACTION_SIZE}px;
+            width: ${props.$height}px;
         `}
 
     /* Primary action stretches unless content-driven. */
@@ -97,24 +95,24 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
         `}
 
     /* Shrink the primary action to icon size when secondary is expanded. */
-    ${({ $isShrunk, $shouldUseContentWidth }) =>
-        $isShrunk &&
-        !$shouldUseContentWidth &&
+    ${(props) =>
+        props.$isShrunk &&
+        !props.$shouldUseContentWidth &&
         css`
             flex: 0 0 auto;
             padding: 0;
-            width: ${ACTION_SIZE}px;
+            width: ${props.$height}px;
         `}
 
     /* Keep secondary icon-only when collapsed and not expanded. */
-    ${({ $isSecondary, $isExpanded, $shouldUseContentWidth }) =>
-        $isSecondary &&
-        !$isExpanded &&
-        !$shouldUseContentWidth &&
+    ${(props) =>
+        props.$isSecondary &&
+        !props.$isExpanded &&
+        !props.$shouldUseContentWidth &&
         css`
             flex: 0 0 auto;
             padding: 0;
-            width: ${ACTION_SIZE}px;
+            width: ${props.$height}px;
         `}
 
     ${({ $isSecondary }) =>
@@ -141,12 +139,12 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
             border-top-right-radius: 0;
         `}
 
-    ${({ $isPrimary, $isCollapsed }) =>
-        $isPrimary &&
-        $isCollapsed &&
+    ${(props) =>
+        props.$isPrimary &&
+        props.$isCollapsed &&
         css`
-            border-bottom-right-radius: ${ACTION_RADIUS}px;
-            border-top-right-radius: ${ACTION_RADIUS}px;
+            border-bottom-right-radius: ${props.$height / 2}px;
+            border-top-right-radius: ${props.$height / 2}px;
         `}
 
     ${({ $isSecondary }) =>
@@ -156,16 +154,16 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
             border-top-left-radius: 0;
         `}
 
-    ${({ $isSolo }) =>
-        $isSolo &&
+    ${(props) =>
+        props.$isSolo &&
         css`
-            border-radius: ${ACTION_RADIUS}px;
+            border-radius: ${props.$height / 2}px;
         `}
 
-    ${({ $isCollapsed }) =>
-        $isCollapsed &&
+    ${(props) =>
+        props.$isCollapsed &&
         css`
-            border-radius: ${ACTION_RADIUS}px;
+            border-radius: ${props.$height / 2}px;
         `}
 
     /* Optional pulse overlay used by status. */
@@ -206,13 +204,13 @@ export const StyledActionContent = styled.span`
     z-index: 1;
 `;
 
-export const StyledIconSlot = styled.span`
+export const StyledIconSlot = styled.span<{ $height: number }>`
     align-items: center;
     display: inline-flex;
     flex: 0 0 auto;
-    height: ${ACTION_SIZE}px;
+    height: ${({ $height }) => $height}px;
     justify-content: center;
-    width: ${ACTION_SIZE}px;
+    width: ${({ $height }) => $height}px;
 `;
 
 export const StyledLabelWrapper = styled(motion.span)`

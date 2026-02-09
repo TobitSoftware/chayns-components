@@ -29,6 +29,7 @@ export type ActionButtonProps = {
     onMouseLeave?: () => void;
     showLabel: boolean;
     shouldUseContentWidth: boolean;
+    height: number;
 };
 
 /**
@@ -51,6 +52,7 @@ const ActionButton: FC<ActionButtonProps> = ({
     onMouseLeave,
     showLabel,
     shouldUseContentWidth,
+    height,
 }) => {
     const isPrimary = actionType === 'primary';
     const isSecondary = actionType === 'secondary';
@@ -69,6 +71,7 @@ const ActionButton: FC<ActionButtonProps> = ({
             $isShrunk={isPrimary ? isShrunk : undefined}
             $isSolo={isPrimary ? isSolo : undefined}
             $pulseColors={action.status?.pulseColors}
+            $height={height}
             $statusType={action.status?.type}
             $shouldUseContentWidth={shouldUseContentWidth}
             onClick={onClick}
@@ -77,7 +80,7 @@ const ActionButton: FC<ActionButtonProps> = ({
             type="button"
         >
             <StyledActionContent>
-                <StyledIconSlot>
+                <StyledIconSlot $height={height}>
                     {typeof action.icon === 'string' ? (
                         <Icon icons={[action.icon]} color={actionColor} size={18} />
                     ) : (
