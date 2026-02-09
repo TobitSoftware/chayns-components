@@ -1,8 +1,6 @@
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'motion/react';
 import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { useTheme } from 'styled-components';
-import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import { useIsTouch } from '../../utils/environment';
 import {
@@ -25,6 +23,8 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     secondaryAction,
     extendedTimeoutMs = 2000,
     width,
+    backgroundColor,
+    shouldUseFullWidth,
     isCollapsed = false,
 }) => {
     const [isSecondaryExtended, setIsSecondaryExtended] = useState(false);
@@ -37,9 +37,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
 
     const hasSecondaryAction = Boolean(secondaryAction);
 
-    const theme = useTheme() as Theme;
-
-    const defaultColor = theme?.text ?? '#fff';
+    const defaultColor = '#fff';
 
     // Ensure the extended state resets after the timeout window (click-only).
     // Reset the auto-collapse timeout after click-based extension.
@@ -160,10 +158,13 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     // Secondary label is shown whenever the button is extended or hovered on desktop.
     const shouldShowSecondaryLabel = isSecondaryExtended || (!isTouch && isSecondaryHovered);
 
+    const resolvedWidth = isCollapsed ? 42 : width ?? (shouldUseFullWidth ? '100%' : 'fit-content');
+    const shouldUseContentWidth = !width && !shouldUseFullWidth;
+
     return (
         <StyledMultiActionButton
             className={clsx('beta-chayns-multi-action', className)}
-            style={{ width: isCollapsed ? 42 : (width ?? '100%') }}
+            style={{ width: resolvedWidth, maxWidth: '100%' }}
         >
             <StyledActionButton
                 disabled={isDisabled || primaryAction.isDisabled}
@@ -173,6 +174,8 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                 $isSolo={!hasSecondaryAction && !isCollapsed}
                 $statusType={primaryAction.status?.type}
                 $pulseColor={primaryAction.status?.pulseColor}
+                $backgroundColor={backgroundColor}
+                $useContentWidth={shouldUseContentWidth}
                 onClick={handlePrimaryClick}
                 type="button"
             >
@@ -221,6 +224,8 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                     $isHidden={isCollapsed}
                     $statusType={secondaryAction.status?.type}
                     $pulseColor={secondaryAction.status?.pulseColor}
+                    $backgroundColor={backgroundColor}
+                    $useContentWidth={shouldUseContentWidth}
                     onClick={handleSecondaryClick}
                     onMouseEnter={handleSecondaryMouseEnter}
                     onMouseLeave={handleSecondaryMouseLeave}

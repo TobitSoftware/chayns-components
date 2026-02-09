@@ -148,6 +148,18 @@ export type MultiActionButtonProps = {
      */
     width?: number | MotionValue<number>;
     /**
+     * Optional background color for both actions.
+     * @description Overrides the default background color for the action buttons.
+     * @optional
+     */
+    backgroundColor?: string;
+    /**
+     * Whether the button should take the full width of its parent.
+     * @description When true, the control stretches to 100% width unless `width` is provided.
+     * @optional
+     */
+    shouldUseFullWidth?: boolean;
+    /**
      * Whether the button is collapsed to a single icon.
      * @description When collapsed, only the primary icon is shown and the overall width shrinks to a circle.
      * Use this to provide compact states or toolbar modes.

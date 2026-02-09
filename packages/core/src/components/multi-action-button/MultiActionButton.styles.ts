@@ -13,6 +13,8 @@ type StyledActionButtonProps = WithTheme<{
     $isHidden?: boolean;
     $statusType?: MultiActionButtonStatusType;
     $pulseColor?: string;
+    $backgroundColor?: string;
+    $useContentWidth?: boolean;
 }>;
 
 const pulse = keyframes`
@@ -33,7 +35,8 @@ export const StyledMultiActionButton = styled(motion.div)`
     display: inline-flex;
     position: relative;
     transition: width 0.2s ease;
-    width: 100%;
+    width: fit-content;
+    max-width: 100%;
 `;
 
 export const StyledActionButton = styled.button<StyledActionButtonProps>`
@@ -61,8 +64,15 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
     user-select: none;
     white-space: nowrap;
 
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: ${({ $backgroundColor, theme }) =>
+        $backgroundColor || theme?.primary || '#000'};
     color: #fff;
+
+    ${({ $useContentWidth }) =>
+        $useContentWidth &&
+        css`
+            flex: 0 1 auto;
+        `}
 
     ${({ $isExpanded }) =>
         $isExpanded &&
@@ -176,7 +186,8 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
     }
 
     &:hover:not(:disabled) {
-        background-color: rgba(0, 0, 0, 0.35);
+        background-color: ${({ $backgroundColor, theme }) =>
+            `color-mix(in srgb, ${$backgroundColor || theme?.primary || '#000'} 85%, black)`};
     }
 `;
 

@@ -21,6 +21,7 @@ const Component: FC = () => {
                     pulseColor: 'rgba(255, 0, 0, 0.6)',
                 },
             }}
+            backgroundColor="#0b6b3a"
         />
     );
 };

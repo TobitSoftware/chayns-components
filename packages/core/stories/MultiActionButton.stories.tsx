@@ -25,6 +25,37 @@ const Template: StoryFn<typeof MultiActionButton> = (args) => <MultiActionButton
 
 export const Default = Template.bind({});
 
+export const WidthOverride = Template.bind({});
+
+WidthOverride.args = {
+    width: 260,
+};
+
+export const FullWidth = Template.bind({});
+
+FullWidth.args = {
+    shouldUseFullWidth: true,
+};
+
+export const LongLabels = Template.bind({});
+
+LongLabels.args = {
+    primaryAction: {
+        icon: 'fa fa-pen',
+        label: 'Ein langes Label für den Test der Ellipsis',
+    },
+    secondaryAction: {
+        icon: 'fa fa-microphone',
+        label: 'Ein noch viel längeres Label das mit Sicherheit gekürzt werden muss!',
+    },
+};
+
+export const CustomBackground = Template.bind({});
+
+CustomBackground.args = {
+    backgroundColor: '#0f6d7e',
+};
+
 export const OnlyPrimary = Template.bind({});
 
 OnlyPrimary.args = {
