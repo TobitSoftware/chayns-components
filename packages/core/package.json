@@ -62,12 +62,12 @@
         "@types/styled-components": "^5.1.36",
         "@types/uuid": "^10.0.0",
         "babel-loader": "^9.2.1",
-        "chayns-api": "^2.6.3",
+        "chayns-api": "^2.6.5",
         "cross-env": "^7.0.3",
         "lerna": "^8.2.4",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "styled-components": "^6.3.8",
+        "styled-components": "^6.3.9",
         "typescript": "^5.9.3"
     },
     "dependencies": {
