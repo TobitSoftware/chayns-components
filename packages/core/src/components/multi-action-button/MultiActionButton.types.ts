@@ -18,19 +18,19 @@ export enum MultiActionButtonStatusType {
  */
 export type MultiActionButtonActionStatus = {
     /**
-     * Status type to apply.
-     * @description Selects the visual emphasis type applied to the action. The component currently
-     * supports a pulsing overlay, and additional types may be added later.
-     * @optional
-     */
-    type?: MultiActionButtonStatusType;
-    /**
      * Optional pulse color override.
      * @description Controls the overlay color used by the pulse animation. Provide a semi-transparent
      * color to avoid overpowering the action content.
      * @optional
      */
     pulseColor?: string;
+    /**
+     * Status type to apply.
+     * @description Selects the visual emphasis type applied to the action. The component currently
+     * supports a pulsing overlay, and additional types may be added later.
+     * @optional
+     */
+    type?: MultiActionButtonStatusType;
 };
 
 /**
@@ -44,6 +44,11 @@ export type MultiActionButtonActionEvent = {
      */
     action: 'primary' | 'secondary';
     /**
+     * Original click event.
+     * @description Useful to access modifier keys, prevent default, or stop propagation.
+     */
+    event: MouseEvent<HTMLButtonElement>;
+    /**
      * Whether the secondary action is currently extended.
      * @description Useful for flows that need to distinguish between a collapsed and expanded
      * secondary action, especially on touch devices.
@@ -54,11 +59,6 @@ export type MultiActionButtonActionEvent = {
      * @description Derived from pointer capabilities and used to decide between hover and click behavior.
      */
     isTouch: boolean;
-    /**
-     * Original click event.
-     * @description Useful to access modifier keys, prevent default, or stop propagation.
-     */
-    event: MouseEvent<HTMLButtonElement>;
 };
 
 /**
@@ -66,11 +66,23 @@ export type MultiActionButtonActionEvent = {
  */
 export type MultiActionButtonAction = {
     /**
+     * Optional color for the icon and label.
+     * @description Overrides the default text/icon color. If omitted, the current theme text color is used.
+     * @optional
+     */
+    color?: string;
+    /**
      * The icon for the action.
      * @description Can be a FontAwesome class string (e.g., 'fa fa-microphone') or a custom ReactNode.
      * The icon is always rendered inside a fixed-size slot to keep alignment stable.
      */
     icon: string | ReactNode;
+    /**
+     * Whether the action is disabled.
+     * @description Disabled actions do not respond to hover or click and are visually dimmed.
+     * @optional
+     */
+    isDisabled?: boolean;
     /**
      * The optional label for the action.
      * @description The label is shown next to the icon and will be truncated with ellipsis when
@@ -79,24 +91,12 @@ export type MultiActionButtonAction = {
      */
     label?: ReactNode;
     /**
-     * Optional color for the icon and label.
-     * @description Overrides the default text/icon color. If omitted, the current theme text color is used.
-     * @optional
-     */
-    color?: string;
-    /**
      * Click handler for the action.
      * @description Receives a payload that includes the action type, extension state, and device info.
      * This allows external logic to decide whether the click should trigger an action immediately.
      * @optional
      */
     onClick?: (info: MultiActionButtonActionEvent) => void;
-    /**
-     * Whether the action is disabled.
-     * @description Disabled actions do not respond to hover or click and are visually dimmed.
-     * @optional
-     */
-    isDisabled?: boolean;
     /**
      * Status effect configuration for the action.
      * @description Controls optional visual emphasis like pulsing, without changing layout or sizing.
@@ -110,11 +110,32 @@ export type MultiActionButtonAction = {
  */
 export type MultiActionButtonProps = {
     /**
+     * Optional background color for both actions.
+     * @description Overrides the default background color for the action buttons.
+     * @optional
+     */
+    backgroundColor?: string;
+    /**
      * Additional class name for the wrapper element.
      * @description Useful for custom styling or testing hooks.
      * @optional
      */
     className?: string;
+    /**
+     * Auto-reset timeout for the extended state (ms).
+     * @description Applies only when the secondary action is clicked (not when hovered). After the timeout,
+     * the secondary action collapses automatically.
+     * @default 2000
+     * @optional
+     */
+    extendedTimeoutMs?: number;
+    /**
+     * Whether the button is collapsed to a single icon.
+     * @description When collapsed, only the primary icon is shown and the overall width shrinks to a circle.
+     * Use this to provide compact states or toolbar modes.
+     * @optional
+     */
+    isCollapsed?: boolean;
     /**
      * Whether the whole control is disabled.
      * @description Disables interactions for both actions, including hover expansion and clicks.
@@ -133,37 +154,16 @@ export type MultiActionButtonProps = {
      */
     secondaryAction?: MultiActionButtonAction;
     /**
-     * Auto-reset timeout for the extended state (ms).
-     * @description Applies only when the secondary action is clicked (not when hovered). After the timeout,
-     * the secondary action collapses automatically.
-     * @default 2000
-     * @optional
-     */
-    extendedTimeoutMs?: number;
-    /**
-     * Optional width override for the whole button.
-     * @description Can be a fixed number or a MotionValue for external animations. When omitted,
-     * the button stretches to the full width of its parent.
-     * @optional
-     */
-    width?: number | MotionValue<number>;
-    /**
-     * Optional background color for both actions.
-     * @description Overrides the default background color for the action buttons.
-     * @optional
-     */
-    backgroundColor?: string;
-    /**
      * Whether the button should take the full width of its parent.
      * @description When true, the control stretches to 100% width unless `width` is provided.
      * @optional
      */
     shouldUseFullWidth?: boolean;
     /**
-     * Whether the button is collapsed to a single icon.
-     * @description When collapsed, only the primary icon is shown and the overall width shrinks to a circle.
-     * Use this to provide compact states or toolbar modes.
+     * Optional width override for the whole button.
+     * @description Can be a fixed number or a MotionValue for external animations. When omitted,
+     * the width is driven by the content unless `shouldUseFullWidth` is true.
      * @optional
      */
-    isCollapsed?: boolean;
+    width?: number | MotionValue<number>;
 };

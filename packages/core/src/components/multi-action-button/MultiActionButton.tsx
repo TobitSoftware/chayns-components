@@ -1,85 +1,93 @@
 import clsx from 'clsx';
-import { AnimatePresence, motion } from 'motion/react';
 import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
-import Icon from '../icon/Icon';
 import { useIsTouch } from '../../utils/environment';
-import {
-    StyledActionButton,
-    StyledActionContent,
-    StyledIconSlot,
-    StyledLabelWrapper,
-    StyledMultiActionButton,
-    StyledPrimaryLabel,
-    StyledSecondaryLabel,
-} from './MultiActionButton.styles';
+import ActionButton from './action-button/ActionButton';
+import { StyledMultiActionButton } from './MultiActionButton.styles';
 import type {
     MultiActionButtonActionEvent,
     MultiActionButtonProps,
 } from './MultiActionButton.types';
 
+const COLLAPSED_SIZE = 42;
+
+/**
+ * Multi-action button with optional secondary action that can expand on hover/click.
+ */
 const MultiActionButton: FC<MultiActionButtonProps> = ({
+    backgroundColor,
     className,
-    isDisabled,
+    extendedTimeoutMs = 2000,
+    isCollapsed = false,
+    isDisabled = false,
     primaryAction,
     secondaryAction,
-    extendedTimeoutMs = 2000,
-    width,
-    backgroundColor,
     shouldUseFullWidth,
-    isCollapsed = false,
+    width,
 }) => {
-    const [isSecondaryExtended, setIsSecondaryExtended] = useState(false);
+    const [isExtendedByClick, setIsExtendedByClick] = useState(false);
+    const [isSecondaryExpanded, setIsSecondaryExpanded] = useState(false);
     const [isSecondaryHovered, setIsSecondaryHovered] = useState(false);
-    const [isExtendedFromClick, setIsExtendedFromClick] = useState(false);
 
-    const timeoutRef = useRef<number | null>(null);
+    const autoCollapseTimeoutRef = useRef<number | null>(null);
 
     const isTouch = useIsTouch();
 
     const hasSecondaryAction = Boolean(secondaryAction);
+    const shouldUseContentWidth = !width && !shouldUseFullWidth;
 
-    const defaultColor = '#fff';
+    const defaultTextColor = '#fff';
+    const resolvedWidth = isCollapsed
+        ? COLLAPSED_SIZE
+        : (width ?? (shouldUseFullWidth ? '100%' : 'fit-content'));
 
-    // Ensure the extended state resets after the timeout window (click-only).
-    // Reset the auto-collapse timeout after click-based extension.
-    const resetTimeout = useCallback(() => {
-        if (timeoutRef.current) {
-            window.clearTimeout(timeoutRef.current);
+    /**
+     * Clears and restarts the auto-collapse timer used after click-triggered expansion.
+     */
+    const resetAutoCollapseTimeout = useCallback(() => {
+        if (autoCollapseTimeoutRef.current) {
+            window.clearTimeout(autoCollapseTimeoutRef.current);
         }
 
-        timeoutRef.current = window.setTimeout(() => {
-            setIsSecondaryExtended(false);
-            setIsExtendedFromClick(false);
+        autoCollapseTimeoutRef.current = window.setTimeout(() => {
+            setIsSecondaryExpanded(false);
+            setIsExtendedByClick(false);
         }, extendedTimeoutMs);
     }, [extendedTimeoutMs]);
 
-    // Extend the secondary action due to a click.
-    const extendSecondaryByClick = useCallback(() => {
-        setIsSecondaryExtended(true);
-        setIsExtendedFromClick(true);
-        resetTimeout();
-    }, [resetTimeout]);
+    /**
+     * Expands the secondary action and remembers that it originated from a click.
+     */
+    const expandSecondaryByClick = useCallback(() => {
+        setIsSecondaryExpanded(true);
+        setIsExtendedByClick(true);
+        resetAutoCollapseTimeout();
+    }, [resetAutoCollapseTimeout]);
 
-    // Cleanup timers on unmount.
+    /**
+     * Cleanup timers on unmount.
+     */
     useEffect(
         () => () => {
-            if (timeoutRef.current) {
-                window.clearTimeout(timeoutRef.current);
+            if (autoCollapseTimeoutRef.current) {
+                window.clearTimeout(autoCollapseTimeoutRef.current);
             }
         },
         [],
     );
 
-    // Collapsing the whole button should also clear any secondary expansion.
+    /**
+     * Collapsing the control should also reset any temporary expansion state.
+     */
     useEffect(() => {
         if (isCollapsed) {
-            setIsSecondaryExtended(false);
-            setIsExtendedFromClick(false);
+            setIsSecondaryExpanded(false);
+            setIsExtendedByClick(false);
         }
     }, [isCollapsed]);
 
-    // Primary action click handler.
-    // Primary action click handler.
+    /**
+     * Handler for the primary action button.
+     */
     const handlePrimaryClick = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => {
             if (isDisabled || primaryAction.isDisabled) {
@@ -88,17 +96,19 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
 
             const payload: MultiActionButtonActionEvent = {
                 action: 'primary',
-                isExtended: isSecondaryExtended,
-                isTouch,
                 event,
+                isExtended: isSecondaryExpanded,
+                isTouch,
             };
 
             primaryAction.onClick?.(payload);
         },
-        [isDisabled, primaryAction, isSecondaryExtended, isTouch],
+        [isDisabled, isSecondaryExpanded, isTouch, primaryAction],
     );
 
-    // Secondary action click handler.
+    /**
+     * Handler for the secondary action button.
+     */
     const handleSecondaryClick = useCallback(
         (event: MouseEvent<HTMLButtonElement>) => {
             if (!secondaryAction || isCollapsed || isDisabled || secondaryAction.isDisabled) {
@@ -107,26 +117,27 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
 
             const payload: MultiActionButtonActionEvent = {
                 action: 'secondary',
-                isExtended: isSecondaryExtended,
-                isTouch,
                 event,
+                isExtended: isSecondaryExpanded,
+                isTouch,
             };
 
             secondaryAction.onClick?.(payload);
-
-            extendSecondaryByClick();
+            expandSecondaryByClick();
         },
         [
-            extendSecondaryByClick,
+            expandSecondaryByClick,
             isCollapsed,
             isDisabled,
-            isSecondaryExtended,
+            isSecondaryExpanded,
             isTouch,
             secondaryAction,
         ],
     );
 
-    // Hovering the secondary action should extend it immediately on desktop.
+    /**
+     * Desktop hover behavior keeps the secondary action expanded while hovered.
+     */
     const handleSecondaryMouseEnter = useCallback(() => {
         if (
             !secondaryAction ||
@@ -139,126 +150,61 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
         }
 
         setIsSecondaryHovered(true);
-        if (!isExtendedFromClick) {
-            setIsSecondaryExtended(true);
+        if (!isExtendedByClick) {
+            setIsSecondaryExpanded(true);
         }
-    }, [isCollapsed, isDisabled, isExtendedFromClick, isTouch, secondaryAction]);
+    }, [isCollapsed, isDisabled, isExtendedByClick, isTouch, secondaryAction]);
 
-    // Leaving the secondary action should collapse it immediately on desktop.
     const handleSecondaryMouseLeave = useCallback(() => {
         if (isTouch) {
             return;
         }
 
         setIsSecondaryHovered(false);
-        if (!isExtendedFromClick && !isCollapsed) {
-            setIsSecondaryExtended(false);
+        if (!isExtendedByClick && !isCollapsed) {
+            setIsSecondaryExpanded(false);
         }
-    }, [isCollapsed, isExtendedFromClick, isTouch]);
+    }, [isCollapsed, isExtendedByClick, isTouch]);
 
-    // Secondary label is shown whenever the button is extended or hovered on desktop.
-    const shouldShowSecondaryLabel = isSecondaryExtended || (!isTouch && isSecondaryHovered);
-
-    const resolvedWidth = isCollapsed
-        ? 42
-        : (width ?? (shouldUseFullWidth ? '100%' : 'fit-content'));
-    const shouldUseContentWidth = !width && !shouldUseFullWidth;
+    /**
+     * Secondary label is visible when expanded or when hovered (desktop only).
+     */
+    const isSecondaryLabelVisible = isSecondaryExpanded || (!isTouch && isSecondaryHovered);
 
     return (
         <StyledMultiActionButton
             className={clsx('beta-chayns-multi-action', className)}
-            style={{ width: resolvedWidth, maxWidth: '100%' }}
+            style={{ maxWidth: '100%', width: resolvedWidth }}
         >
-            <StyledActionButton
-                disabled={isDisabled || primaryAction.isDisabled}
-                $isPrimary={hasSecondaryAction}
-                $isCollapsed={isCollapsed}
-                $isShrunk={hasSecondaryAction && isSecondaryExtended}
-                $isSolo={!hasSecondaryAction && !isCollapsed}
-                $statusType={primaryAction.status?.type}
-                $pulseColor={primaryAction.status?.pulseColor}
-                $backgroundColor={backgroundColor}
-                $useContentWidth={shouldUseContentWidth}
+            <ActionButton
+                action={primaryAction}
+                actionType="primary"
+                backgroundColor={backgroundColor}
+                defaultColor={defaultTextColor}
+                isCollapsed={isCollapsed}
+                isDisabled={isDisabled}
+                isShrunk={hasSecondaryAction && isSecondaryExpanded}
+                isSolo={!hasSecondaryAction && !isCollapsed}
                 onClick={handlePrimaryClick}
-                type="button"
-            >
-                <StyledActionContent>
-                    <StyledIconSlot>
-                        {typeof primaryAction.icon === 'string' ? (
-                            <Icon
-                                icons={[primaryAction.icon]}
-                                color={primaryAction.color ?? defaultColor}
-                                size={18}
-                            />
-                        ) : (
-                            primaryAction.icon
-                        )}
-                    </StyledIconSlot>
-                    <AnimatePresence initial={false}>
-                        {(!hasSecondaryAction || !isSecondaryExtended) && !isCollapsed && (
-                            <StyledLabelWrapper
-                                animate={{ opacity: 1, width: 'auto', marginLeft: 6 }}
-                                exit={{ opacity: 0, width: 0, marginLeft: 0 }}
-                                initial={{ opacity: 0, width: 0, marginLeft: 0 }}
-                                key="primary-label"
-                                transition={{ duration: 0.3 }}
-                            >
-                                <StyledPrimaryLabel
-                                    style={{ color: primaryAction.color ?? defaultColor }}
-                                >
-                                    {primaryAction.label}
-                                </StyledPrimaryLabel>
-                            </StyledLabelWrapper>
-                        )}
-                    </AnimatePresence>
-                </StyledActionContent>
-            </StyledActionButton>
+                showLabel={!isCollapsed && (!hasSecondaryAction || !isSecondaryExpanded)}
+                shouldUseContentWidth={shouldUseContentWidth}
+            />
             {secondaryAction && (
-                <StyledActionButton
-                    disabled={isDisabled || secondaryAction.isDisabled}
-                    $isSecondary
-                    $isExpanded={isSecondaryExtended}
-                    $isHidden={isCollapsed}
-                    $statusType={secondaryAction.status?.type}
-                    $pulseColor={secondaryAction.status?.pulseColor}
-                    $backgroundColor={backgroundColor}
-                    $useContentWidth={shouldUseContentWidth}
+                <ActionButton
+                    action={secondaryAction}
+                    actionType="secondary"
+                    backgroundColor={backgroundColor}
+                    defaultColor={defaultTextColor}
+                    isCollapsed={isCollapsed}
+                    isDisabled={isDisabled}
+                    isExpanded={isSecondaryExpanded}
+                    isHidden={isCollapsed}
                     onClick={handleSecondaryClick}
                     onMouseEnter={handleSecondaryMouseEnter}
                     onMouseLeave={handleSecondaryMouseLeave}
-                    type="button"
-                >
-                    <StyledActionContent>
-                        <StyledIconSlot>
-                            {typeof secondaryAction.icon === 'string' ? (
-                                <Icon
-                                    icons={[secondaryAction.icon]}
-                                    color={secondaryAction.color ?? defaultColor}
-                                    size={18}
-                                />
-                            ) : (
-                                secondaryAction.icon
-                            )}
-                        </StyledIconSlot>
-                        <AnimatePresence initial={false}>
-                            {shouldShowSecondaryLabel && secondaryAction.label && (
-                                <StyledLabelWrapper
-                                    animate={{ opacity: 1, width: 'auto', marginLeft: 6 }}
-                                    exit={{ opacity: 0, width: 0, marginLeft: 0 }}
-                                    initial={{ opacity: 0, width: 0, marginLeft: 0 }}
-                                    key="secondary-label"
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    <StyledSecondaryLabel
-                                        style={{ color: secondaryAction.color ?? defaultColor }}
-                                    >
-                                        {secondaryAction.label}
-                                    </StyledSecondaryLabel>
-                                </StyledLabelWrapper>
-                            )}
-                        </AnimatePresence>
-                    </StyledActionContent>
-                </StyledActionButton>
+                    showLabel={isSecondaryLabelVisible}
+                    shouldUseContentWidth={shouldUseContentWidth}
+                />
             )}
         </StyledMultiActionButton>
     );
