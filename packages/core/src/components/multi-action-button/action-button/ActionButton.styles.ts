@@ -15,20 +15,20 @@ type StyledActionButtonProps = WithTheme<{
     $isSecondary?: boolean;
     $isShrunk?: boolean;
     $isSolo?: boolean;
-    $pulseColor?: string;
+    $pulseColors?: [string, string];
     $statusType?: MultiActionButtonStatusType;
     $shouldUseContentWidth?: boolean;
 }>;
 
-const pulse = keyframes`
+const pulse = (color1: string, color2: string) => keyframes`
     0% {
-        opacity: 0.25;
+        background: ${color1};
     }
     50% {
-        opacity: 0.5;
+        background: ${color2};
     }
     100% {
-        opacity: 0.25;
+        background: ${color1};
     }
 `;
 
@@ -169,18 +169,17 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
         `}
 
     /* Optional pulse overlay used by status. */
-    ${({ $statusType, $pulseColor }) =>
+    ${({ $statusType, $pulseColors }) =>
         $statusType === MultiActionButtonStatusType.Pulse &&
         css`
             overflow: hidden;
 
             &::before {
-                animation: ${pulse} 1.6s ease-in-out infinite;
-                background: ${$pulseColor || 'rgba(255, 0, 0, 0.85)'};
+                animation: ${pulse($pulseColors?.[0] || '#A50000', $pulseColors?.[1] || '#630000')}
+                    1.6s ease-in-out infinite;
                 border-radius: 3px;
                 content: '';
                 inset: 0;
-                opacity: 0.1;
                 pointer-events: none;
                 position: absolute;
             }

@@ -18,12 +18,11 @@ export enum MultiActionButtonStatusType {
  */
 export type MultiActionButtonActionStatus = {
     /**
-     * Optional pulse color override.
-     * @description Controls the overlay color used by the pulse animation. Provide a semi-transparent
-     * color to avoid overpowering the action content.
+     * Optional pulse colors for the animation.
+     * @description Defines the two colors for the pulsing background animation. If not provided, defaults to ['#A50000', '#630000'].
      * @optional
      */
-    pulseColor?: string;
+    pulseColors?: [string, string];
     /**
      * Status type to apply.
      * @description Selects the visual emphasis type applied to the action. The component currently
