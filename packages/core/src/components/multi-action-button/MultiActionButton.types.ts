@@ -22,9 +22,9 @@ export enum MultiActionButtonHeight {
      */
     Medium = 42,
     /**
-     * Large height (52px).
+     * Large height (48px).
      */
-    Large = 52,
+    Large = 48,
 }
 
 /**

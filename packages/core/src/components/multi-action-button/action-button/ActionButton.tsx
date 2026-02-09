@@ -83,7 +83,7 @@ const ActionButton: FC<ActionButtonProps> = ({
             <StyledActionContent>
                 <StyledIconSlot $height={height}>
                     {typeof action.icon === 'string' ? (
-                        <Icon icons={[action.icon]} color={actionColor} size={18} />
+                        <Icon icons={[action.icon]} color={actionColor} size={height - 24} />
                     ) : (
                         action.icon
                     )}
