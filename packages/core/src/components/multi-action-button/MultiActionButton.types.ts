@@ -124,7 +124,10 @@ export type MultiActionButtonAction = {
 export type MultiActionButtonProps = {
     /**
      * Optional background color for both actions.
-     * @description Overrides the default background color for the action buttons.
+     * @description Overrides the default background color for the action buttons. This is useful
+     * when the button is used on different backgrounds or when a specific brand color is needed.
+     * If omitted, the primary color from the theme is used.
+     * @default theme.primary
      * @optional
      */
     backgroundColor?: string;
@@ -138,20 +141,29 @@ export type MultiActionButtonProps = {
      * Auto-reset timeout for the extended state (ms).
      * @description Applies only when the secondary action is clicked (not when hovered). After the timeout,
      * the secondary action collapses automatically.
-     * @default 2000
+     * @default 3000
      * @optional
      */
     extendedTimeoutMs?: number;
     /**
+     * Height of the button.
+     * @description Controls the height of the button. Use values from MultiActionButtonHeight enum or custom number.
+     * @default MultiActionButtonHeight.Medium
+     * @optional
+     */
+    height?: number;
+    /**
      * Whether the button is collapsed to a single icon.
      * @description When collapsed, only the primary icon is shown and the overall width shrinks to a circle.
      * Use this to provide compact states or toolbar modes.
+     * @default false
      * @optional
      */
     isCollapsed?: boolean;
     /**
      * Whether the whole control is disabled.
      * @description Disables interactions for both actions, including hover expansion and clicks.
+     * @default false
      * @optional
      */
     isDisabled?: boolean;
@@ -166,13 +178,6 @@ export type MultiActionButtonProps = {
      * @optional
      */
     secondaryAction?: MultiActionButtonAction;
-    /**
-     * Height of the button.
-     * @description Controls the height of the button. Use values from MultiActionButtonHeight enum or custom number.
-     * @default 42
-     * @optional
-     */
-    height?: number;
     /**
      * Whether the button should take the full width of its parent.
      * @description When true, the control stretches to 100% width unless `width` is provided.

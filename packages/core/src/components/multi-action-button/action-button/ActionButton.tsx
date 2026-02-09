@@ -9,8 +9,6 @@ import {
     StyledSecondaryLabel,
 } from './ActionButton.styles';
 import type { MultiActionButtonAction } from '../MultiActionButton.types';
-import { useTheme } from 'styled-components';
-import type { Theme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 const LABEL_GAP = 6;
 const LABEL_TRANSITION = { duration: 0.3 };
@@ -54,11 +52,9 @@ const ActionButton: FC<ActionButtonProps> = ({
     shouldUseContentWidth,
     height,
 }) => {
-    const theme = useTheme() as Theme;
-
     const isPrimary = actionType === 'primary';
     const isSecondary = actionType === 'secondary';
-    const actionColor = action.color ?? theme.text;
+    const actionColor = action.color ?? '#FFFFFF';
 
     return (
         <StyledActionButton

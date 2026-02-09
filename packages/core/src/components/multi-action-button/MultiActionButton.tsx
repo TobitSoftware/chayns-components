@@ -15,13 +15,13 @@ import type {
 const MultiActionButton: FC<MultiActionButtonProps> = ({
     backgroundColor,
     className,
-    extendedTimeoutMs = 2000,
+    extendedTimeoutMs = 3000,
+    height = MultiActionButtonHeight.Medium,
     isCollapsed = false,
     isDisabled = false,
     primaryAction,
     secondaryAction,
     shouldUseFullWidth,
-    height = MultiActionButtonHeight.Medium,
     width,
 }) => {
     const [isExtendedByClick, setIsExtendedByClick] = useState(false);
