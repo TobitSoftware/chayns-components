@@ -102,7 +102,7 @@ export type MultiActionButtonAction = {
      * there is not enough horizontal space.
      * @optional
      */
-    label?: ReactNode;
+    label: ReactNode;
     /**
      * Click handler for the action.
      * @description Receives a payload that includes the action type, extension state, and device info.
@@ -159,7 +159,7 @@ export type MultiActionButtonProps = {
      * Primary action configuration.
      * @description Required action shown on the left side (or as the only action when no secondary is provided).
      */
-    primaryAction: MultiActionButtonAction & { label: ReactNode };
+    primaryAction: MultiActionButtonAction;
     /**
      * Secondary action configuration.
      * @description Optional action shown on the right side. When present, it can expand on hover or click.

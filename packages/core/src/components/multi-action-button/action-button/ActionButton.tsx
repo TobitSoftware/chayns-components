@@ -9,6 +9,8 @@ import {
     StyledSecondaryLabel,
 } from './ActionButton.styles';
 import type { MultiActionButtonAction } from '../MultiActionButton.types';
+import { useTheme } from 'styled-components';
+import type { Theme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 const LABEL_GAP = 6;
 const LABEL_TRANSITION = { duration: 0.3 };
@@ -17,7 +19,6 @@ export type ActionButtonProps = {
     action: MultiActionButtonAction;
     actionType: 'primary' | 'secondary';
     backgroundColor?: string;
-    defaultColor: string;
     isCollapsed: boolean;
     isDisabled: boolean;
     isExpanded?: boolean;
@@ -40,7 +41,6 @@ const ActionButton: FC<ActionButtonProps> = ({
     action,
     actionType,
     backgroundColor,
-    defaultColor,
     isCollapsed,
     isDisabled,
     isExpanded,
@@ -54,10 +54,11 @@ const ActionButton: FC<ActionButtonProps> = ({
     shouldUseContentWidth,
     height,
 }) => {
+    const theme = useTheme() as Theme;
+
     const isPrimary = actionType === 'primary';
     const isSecondary = actionType === 'secondary';
-    const actionColor = action.color ?? defaultColor;
-    const shouldRenderLabel = Boolean(action.label) && showLabel;
+    const actionColor = action.color ?? theme.text;
 
     return (
         <StyledActionButton
@@ -89,7 +90,7 @@ const ActionButton: FC<ActionButtonProps> = ({
                 </StyledIconSlot>
                 <AnimatePresence initial={false}>
                     {/* Animate width and margin to avoid layout jumps when labels mount/unmount. */}
-                    {shouldRenderLabel && (
+                    {showLabel && (
                         <StyledLabelWrapper
                             animate={{ opacity: 1, width: 'auto', marginLeft: LABEL_GAP }}
                             exit={{ opacity: 0, width: 0, marginLeft: 0 }}

@@ -35,7 +35,6 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     const hasSecondaryAction = Boolean(secondaryAction);
     const shouldUseContentWidth = !width && !shouldUseFullWidth;
 
-    const defaultTextColor = '#fff';
     const resolvedWidth = isCollapsed
         ? height
         : (width ?? (shouldUseFullWidth ? '100%' : 'fit-content'));
@@ -180,7 +179,6 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                 action={primaryAction}
                 actionType="primary"
                 backgroundColor={backgroundColor}
-                defaultColor={defaultTextColor}
                 isCollapsed={isCollapsed}
                 isDisabled={isDisabled}
                 isShrunk={hasSecondaryAction && isSecondaryExpanded}
@@ -195,7 +193,6 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                     action={secondaryAction}
                     actionType="secondary"
                     backgroundColor={backgroundColor}
-                    defaultColor={defaultTextColor}
                     isCollapsed={isCollapsed}
                     isDisabled={isDisabled}
                     isExpanded={isSecondaryExpanded}
