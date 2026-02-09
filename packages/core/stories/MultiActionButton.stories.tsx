@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 import MultiActionButton from '../src/components/multi-action-button/MultiActionButton';
-import { MultiActionButtonStatusType } from '../src';
+import { MultiActionButtonStatusType, MultiActionButtonHeight } from '../src';
 
 export default {
     title: 'Core/MultiActionButton',
@@ -69,7 +69,26 @@ PulsingSecondary.args = {
         label: 'Mitschnitt starten',
         status: {
             type: MultiActionButtonStatusType.Pulse,
-            pulseColor: 'rgba(255, 0, 0, 1)',
+            pulseColors: ['#A50000', '#630000'],
         },
     },
+};
+
+export const PulsingSecondaryCustomColors = Template.bind({});
+
+PulsingSecondaryCustomColors.args = {
+    secondaryAction: {
+        icon: 'fa fa-microphone',
+        label: 'Mitschnitt starten',
+        status: {
+            type: MultiActionButtonStatusType.Pulse,
+            pulseColors: ['#00A500', '#006300'],
+        },
+    },
+};
+
+export const LargeSize = Template.bind({});
+
+LargeSize.args = {
+    height: MultiActionButtonHeight.Large,
 };
