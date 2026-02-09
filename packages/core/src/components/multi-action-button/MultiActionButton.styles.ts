@@ -74,8 +74,9 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
             flex: 0 1 auto;
         `}
 
-    ${({ $isExpanded }) =>
+    ${({ $isExpanded, $useContentWidth }) =>
         $isExpanded &&
+        !$useContentWidth &&
         css`
             flex: 1 1 auto;
             min-width: 0;
@@ -89,25 +90,28 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
             width: 42px;
         `}
 
-    ${({ $isPrimary, $isCollapsed }) =>
+    ${({ $isPrimary, $isCollapsed, $useContentWidth }) =>
         $isPrimary &&
         !$isCollapsed &&
+        !$useContentWidth &&
         css`
             flex: 1 1 auto;
             min-width: 0;
         `}
 
-    ${({ $isShrunk }) =>
+    ${({ $isShrunk, $useContentWidth }) =>
         $isShrunk &&
+        !$useContentWidth &&
         css`
             flex: 0 0 auto;
             padding: 0;
             width: 42px;
         `}
 
-    ${({ $isSecondary, $isExpanded }) =>
+    ${({ $isSecondary, $isExpanded, $useContentWidth }) =>
         $isSecondary &&
         !$isExpanded &&
+        !$useContentWidth &&
         css`
             flex: 0 0 auto;
             padding: 0;
@@ -195,7 +199,7 @@ export const StyledActionContent = styled.span`
     align-items: center;
     display: inline-flex;
     flex: 1 1 auto;
-    gap: 6px;
+    gap: 0;
     min-width: 0;
     position: relative;
     z-index: 1;
@@ -210,13 +214,21 @@ export const StyledIconSlot = styled.span`
     width: 42px;
 `;
 
+export const StyledLabelWrapper = styled(motion.span)`
+    display: inline-flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-align: left;
+`;
+
 export const StyledSecondaryLabel = styled.span`
     display: block;
     flex: 1 1 auto;
     min-width: 0;
     max-width: 100%;
     overflow: hidden;
-    padding-right: 12px;
+    padding-right: 18px;
     text-overflow: ellipsis;
     white-space: nowrap;
 `;

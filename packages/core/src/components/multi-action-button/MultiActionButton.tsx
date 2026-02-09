@@ -7,6 +7,7 @@ import {
     StyledActionButton,
     StyledActionContent,
     StyledIconSlot,
+    StyledLabelWrapper,
     StyledMultiActionButton,
     StyledPrimaryLabel,
     StyledSecondaryLabel,
@@ -158,7 +159,9 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     // Secondary label is shown whenever the button is extended or hovered on desktop.
     const shouldShowSecondaryLabel = isSecondaryExtended || (!isTouch && isSecondaryHovered);
 
-    const resolvedWidth = isCollapsed ? 42 : width ?? (shouldUseFullWidth ? '100%' : 'fit-content');
+    const resolvedWidth = isCollapsed
+        ? 42
+        : (width ?? (shouldUseFullWidth ? '100%' : 'fit-content'));
     const shouldUseContentWidth = !width && !shouldUseFullWidth;
 
     return (
@@ -193,17 +196,11 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                     </StyledIconSlot>
                     <AnimatePresence initial={false}>
                         {(!hasSecondaryAction || !isSecondaryExtended) && !isCollapsed && (
-                            <motion.span
-                                animate={{ opacity: 1, width: 'auto' }}
-                                exit={{ opacity: 0, width: 0 }}
-                                initial={{ opacity: 0, width: 0 }}
+                            <StyledLabelWrapper
+                                animate={{ opacity: 1, width: 'auto', marginLeft: 6 }}
+                                exit={{ opacity: 0, width: 0, marginLeft: 0 }}
+                                initial={{ opacity: 0, width: 0, marginLeft: 0 }}
                                 key="primary-label"
-                                style={{
-                                    flex: '1 1 auto',
-                                    minWidth: 0,
-                                    overflow: 'hidden',
-                                    textAlign: 'left',
-                                }}
                                 transition={{ duration: 0.3 }}
                             >
                                 <StyledPrimaryLabel
@@ -211,7 +208,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                                 >
                                     {primaryAction.label}
                                 </StyledPrimaryLabel>
-                            </motion.span>
+                            </StyledLabelWrapper>
                         )}
                     </AnimatePresence>
                 </StyledActionContent>
@@ -245,17 +242,11 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                         </StyledIconSlot>
                         <AnimatePresence initial={false}>
                             {shouldShowSecondaryLabel && secondaryAction.label && (
-                                <motion.span
-                                    animate={{ opacity: 1, width: 'auto' }}
-                                    exit={{ opacity: 0, width: 0 }}
-                                    initial={{ opacity: 0, width: 0 }}
+                                <StyledLabelWrapper
+                                    animate={{ opacity: 1, width: 'auto', marginLeft: 6 }}
+                                    exit={{ opacity: 0, width: 0, marginLeft: 0 }}
+                                    initial={{ opacity: 0, width: 0, marginLeft: 0 }}
                                     key="secondary-label"
-                                    style={{
-                                        flex: '1 1 auto',
-                                        minWidth: 0,
-                                        overflow: 'hidden',
-                                        textAlign: 'left',
-                                    }}
                                     transition={{ duration: 0.3 }}
                                 >
                                     <StyledSecondaryLabel
@@ -263,7 +254,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                                     >
                                         {secondaryAction.label}
                                     </StyledSecondaryLabel>
-                                </motion.span>
+                                </StyledLabelWrapper>
                             )}
                         </AnimatePresence>
                     </StyledActionContent>
