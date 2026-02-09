@@ -118,7 +118,7 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
     ${({ $isSecondary }) =>
         $isSecondary &&
         css`
-            margin-left: 2px;
+            margin-left: 1px;
         `}
 
     /* Fully hide the secondary action when the whole control is collapsed. */
