@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import MultiActionButton from '../src/components/multi-action-button/MultiActionButton';
 import { MultiActionButtonStatusType, MultiActionButtonHeight } from '../src';
 
@@ -91,4 +91,71 @@ export const LargeSize = Template.bind({});
 
 LargeSize.args = {
     height: MultiActionButtonHeight.Large,
+};
+
+type RecordingStage = 'idle' | 'started' | 'recording' | 'stopped';
+
+const recordingLabelByStage: Record<RecordingStage, string> = {
+    idle: 'Mitschnitt starten',
+    started: 'Mitschnitt gestartet',
+    recording: 'Beenden (01:23)',
+    stopped: 'Mitschnitt beendet',
+};
+
+export const RecordingFlow: StoryFn<typeof MultiActionButton> = (args) => {
+    const [stage, setStage] = useState<RecordingStage>('idle');
+    const timeoutRef = useRef<number | null>(null);
+    const collapseDelay = args.extendedTimeoutMs ?? 2000;
+
+    const clearTimer = useCallback(() => {
+        if (timeoutRef.current) {
+            window.clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+        }
+    }, []);
+
+    const scheduleStage = useCallback(
+        (nextStage: RecordingStage) => {
+            clearTimer();
+            timeoutRef.current = window.setTimeout(() => setStage(nextStage), collapseDelay);
+        },
+        [clearTimer, collapseDelay],
+    );
+
+    useEffect(
+        () => () => {
+            clearTimer();
+        },
+        [clearTimer],
+    );
+
+    const handleSecondaryClick = useCallback(() => {
+        if (stage === 'idle') {
+            setStage('started');
+            scheduleStage('recording');
+            return;
+        }
+
+        if (stage === 'recording' || stage === 'started') {
+            setStage('stopped');
+            scheduleStage('idle');
+        }
+    }, [scheduleStage, stage]);
+
+    const resolvedSecondaryAction = useMemo(
+        () => ({
+            icon: 'fa fa-microphone',
+            ...args.secondaryAction,
+            label: recordingLabelByStage[stage],
+            onClick: handleSecondaryClick,
+        }),
+        [args.secondaryAction, handleSecondaryClick, stage],
+    );
+
+    return (
+        <MultiActionButton
+            {...args}
+            secondaryAction={resolvedSecondaryAction}
+        />
+    );
 };
