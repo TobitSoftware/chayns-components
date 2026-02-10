@@ -55,11 +55,6 @@ const ActionButton: FC<ActionButtonProps> = ({
     const isPrimary = actionType === 'primary';
     const isSecondary = actionType === 'secondary';
     const actionColor = action.color ?? '#FFFFFF';
-    
-    const labelKey =
-        typeof action.label === 'string' || typeof action.label === 'number'
-            ? action.label
-            : actionType;
 
     return (
         <StyledActionButton
@@ -89,11 +84,10 @@ const ActionButton: FC<ActionButtonProps> = ({
                         action.icon
                     )}
                 </StyledIconSlot>
-                <AnimatePresence initial={false} mode="wait">
+                <AnimatePresence initial={false}>
                     {/* Animate width and margin to avoid layout jumps when labels mount/unmount. */}
                     {showLabel && (
                         <StyledLabelWrapper
-                            key={labelKey}
                             animate={{ opacity: 1, width: 'auto', marginLeft: LABEL_GAP }}
                             exit={{ opacity: 0, width: 0, marginLeft: 0 }}
                             initial={{ opacity: 0, width: 0, marginLeft: 0 }}
