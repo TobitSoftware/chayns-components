@@ -4,7 +4,9 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - 'v5.[0-9]+.[0-9]+(?:-beta.[0-9]+)?'
+      - 'v5.[0-9]+.[0-9]+'
+      - 'v5.[0-9]+.[0-9]+-alpha.[0-9]+'
+      - 'v5.[0-9]+.[0-9]+-beta.[0-9]+'
 
 permissions:
   id-token: write  # Required for OIDC
@@ -17,6 +19,9 @@ jobs:
     env:
       API_TOKEN_KEY: ${{ secrets.API_TOKEN_KEY }}
       API_TOKEN_SECRET: ${{ secrets.API_TOKEN_SECRET }}
+      TAG: >-
+        ${{ contains(github.ref_name, 'alpha') && 'alpha' || (contains(github.ref_name, '-') &&
+        'beta' || 'latest') }}
 
     steps:
       - name: Checkout branch
@@ -26,7 +31,7 @@ jobs:
         uses: ./.github/actions/lerna-build
 
       - name: Publish packages
-        run: lerna publish from-package --yes
+        run: lerna publish from-package --yes --dist-tag {{ env.TAG }}
 
       - name: Generate and upload docs
         run: npm run docs
