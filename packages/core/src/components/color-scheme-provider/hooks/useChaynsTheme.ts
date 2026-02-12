@@ -19,6 +19,10 @@ export type ThemeOptions = {
     customVariables?: Record<string, string>;
 };
 
+const DesignSettingsKeyMap: Partial<Record<keyof ChaynsDesignSettings, string>> = {
+    headerBarColor: 'header-bar',
+};
+
 const createTheme = ({
     colors,
     colorMode,
@@ -71,7 +75,9 @@ const createTheme = ({
 
                 return;
             }
-            result[key] = designSettings[key as keyof ChaynsDesignSettings] as string;
+            result[DesignSettingsKeyMap[key as keyof ChaynsDesignSettings] || key] = designSettings[
+                key as keyof ChaynsDesignSettings
+            ] as string;
         });
     }
 
