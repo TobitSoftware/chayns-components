@@ -31,7 +31,7 @@ jobs:
         uses: ./.github/actions/lerna-build
 
       - name: Publish packages
-        run: lerna publish from-package --yes --dist-tag {{ env.TAG }}
+        run: lerna publish from-package --yes --dist-tag ${{ env.TAG }}
 
       - name: Generate and upload docs
         run: npm run docs
