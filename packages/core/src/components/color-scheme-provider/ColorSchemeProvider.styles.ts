@@ -18,9 +18,8 @@ export const StyledColorSchemeProvider = styled.div<ColorSchemeProviderProps>`
         })}
 
     ${({ theme }: ColorSchemeProviderProps) =>
-        !!theme['header-bar'] &&
         `
-        --chayns-color--header-bar: ${theme['header-bar']};
+        --chayns-color--header-bar: ${theme['header-bar'] ?? theme.primary};
     `}
 
     // ToDo: Remove .h1...
