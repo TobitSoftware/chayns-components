@@ -1,4 +1,5 @@
 module.exports = {
+    plugins: ['react-hooks'],
     rules: {
         '@typescript-eslint/no-misused-promises': [
             'error',
@@ -24,5 +25,5 @@ module.exports = {
             },
         ],
     },
-    extends: ['@chayns-toolkit', 'plugin:storybook/recommended'],
+    extends: ['@chayns-toolkit', 'plugin:storybook/recommended', 'plugin:react-hooks/recommended'],
 };
