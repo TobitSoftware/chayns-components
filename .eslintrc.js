@@ -24,8 +24,6 @@ module.exports = {
                 mjs: 'never',
             },
         ],
-        'react-hooks/rules-of-hooks': 'warn',
-        'react-hooks/exhaustive-deps': 'warn',
     },
     extends: ['@chayns-toolkit', 'plugin:storybook/recommended', 'plugin:react-hooks/recommended'],
 };
