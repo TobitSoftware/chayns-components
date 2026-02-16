@@ -138,9 +138,14 @@ export type MultiActionButtonProps = {
      */
     className?: string;
     /**
-     * Auto-reset timeout for the extended state (ms).
-     * @description Applies only when the secondary action is clicked (not when hovered). After the timeout,
-     * the secondary action collapses automatically.
+     * Timeout in ms before the secondary action collapses after a click.
+     * @description Set to 0 to keep the secondary action extended until the user collapses it.
+     * @example
+     * <MultiActionButton
+     *   primaryAction={primaryAction}
+     *   secondaryAction={secondaryAction}
+     *   extendedTimeoutMs={0}
+     * />
      * @default 3000
      * @optional
      */

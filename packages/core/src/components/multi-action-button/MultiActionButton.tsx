@@ -47,6 +47,11 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
             window.clearTimeout(autoCollapseTimeoutRef.current);
         }
 
+        if (extendedTimeoutMs <= 0) {
+            autoCollapseTimeoutRef.current = null;
+            return;
+        }
+
         autoCollapseTimeoutRef.current = window.setTimeout(() => {
             setIsSecondaryExpanded(false);
             setIsExtendedByClick(false);
