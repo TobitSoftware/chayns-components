@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useIsTouch } from '../../utils/environment';
 import ActionButton from './action-button/ActionButton';
-import { StyledMultiActionButton } from './MultiActionButton.styles';
+import { StyledMultiActionButton, StyledSeparator } from './MultiActionButton.styles';
 import { MultiActionButtonHeight } from './MultiActionButton.types';
 import type {
     MultiActionButtonActionEvent,
@@ -16,6 +16,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     backgroundColor,
     className,
     extendedTimeoutMs = 3000,
+    gapColor,
     height = MultiActionButtonHeight.Medium,
     isCollapsed = false,
     isDisabled = false,
@@ -194,21 +195,24 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                 height={height}
             />
             {secondaryAction && (
-                <ActionButton
-                    action={secondaryAction}
-                    actionType="secondary"
-                    backgroundColor={backgroundColor}
-                    isCollapsed={isCollapsed}
-                    isDisabled={isDisabled}
-                    isExpanded={isSecondaryExpanded}
-                    isHidden={isCollapsed}
-                    onClick={handleSecondaryClick}
-                    onMouseEnter={handleSecondaryMouseEnter}
-                    onMouseLeave={handleSecondaryMouseLeave}
-                    showLabel={isSecondaryLabelVisible}
-                    shouldUseContentWidth={shouldUseContentWidth}
-                    height={height}
-                />
+                <>
+                    {!isCollapsed && <StyledSeparator $gapColor={gapColor} />}
+                    <ActionButton
+                        action={secondaryAction}
+                        actionType="secondary"
+                        backgroundColor={backgroundColor}
+                        isCollapsed={isCollapsed}
+                        isDisabled={isDisabled}
+                        isExpanded={isSecondaryExpanded}
+                        isHidden={isCollapsed}
+                        onClick={handleSecondaryClick}
+                        onMouseEnter={handleSecondaryMouseEnter}
+                        onMouseLeave={handleSecondaryMouseLeave}
+                        showLabel={isSecondaryLabelVisible}
+                        shouldUseContentWidth={shouldUseContentWidth}
+                        height={height}
+                    />
+                </>
             )}
         </StyledMultiActionButton>
     );

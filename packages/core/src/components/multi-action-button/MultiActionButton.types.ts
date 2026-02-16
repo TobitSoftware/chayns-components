@@ -158,6 +158,12 @@ export type MultiActionButtonProps = {
      */
     height?: number;
     /**
+     * Optional color for the 1px separator line between actions.
+     * @description Defaults to theme.cw-body-background and falls back to #fff if not available.
+     * @optional
+     */
+    gapColor?: string;
+    /**
      * Whether the button is collapsed to a single icon.
      * @description When collapsed, only the primary icon is shown and the overall width shrinks to a circle.
      * Use this to provide compact states or toolbar modes.

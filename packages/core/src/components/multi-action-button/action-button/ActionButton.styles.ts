@@ -48,7 +48,6 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
         border-radius 0.2s ease,
         color 0.2s ease,
         flex-grow 0.2s ease,
-        margin-left 0.2s ease,
         opacity 0.2s ease,
         padding 0.2s ease,
         width 0.2s ease;
@@ -115,17 +114,10 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
             width: ${props.$height}px;
         `}
 
-    ${({ $isSecondary }) =>
-        $isSecondary &&
-        css`
-            margin-left: 1px;
-        `}
-
     /* Fully hide the secondary action when the whole control is collapsed. */
     ${({ $isHidden }) =>
         $isHidden &&
         css`
-            margin-left: 0;
             opacity: 0;
             pointer-events: none;
             width: 0;
