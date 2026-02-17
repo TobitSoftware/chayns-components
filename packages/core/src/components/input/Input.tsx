@@ -126,6 +126,10 @@ export type InputProps = {
      */
     placeholder?: ReactNode;
     /**
+     * Color of the placeholder text.
+     */
+    placeholderColor?: CSSProperties['color'];
+    /**
      * An element that should be displayed on the right side of the Input.
      */
     rightElement?: ReactElement;
@@ -183,6 +187,7 @@ const Input = forwardRef<InputRef, InputProps>(
             onKeyDown,
             onPaste,
             placeholder,
+            placeholderColor,
             rightElement,
             shouldShowOnlyBottomBorder,
             shouldRemainPlaceholder = false,
@@ -359,7 +364,10 @@ const Input = forwardRef<InputRef, InputProps>(
                                     duration: shouldPreventPlaceholderAnimation ? 0 : 0.1,
                                 }}
                             >
-                                <StyledInputLabel $isInvalid={isInvalid}>
+                                <StyledInputLabel
+                                    $color={placeholderColor}
+                                    $isInvalid={isInvalid}
+                                >
                                     {placeholder}
                                 </StyledInputLabel>
                             </StyledMotionInputLabelWrapper>
@@ -404,6 +412,7 @@ const Input = forwardRef<InputRef, InputProps>(
                 onKeyDown,
                 onPaste,
                 placeholder,
+                placeholderColor,
                 placeholderWidth,
                 rightElement,
                 shouldPreventPlaceholderAnimation,

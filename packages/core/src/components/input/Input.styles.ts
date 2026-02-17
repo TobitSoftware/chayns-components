@@ -145,7 +145,10 @@ export const StyledMotionInputElement = styled(motion.div)`
     display: flex;
 `;
 
-type StyledInputLabelProps = WithTheme<{ $isInvalid?: boolean }>;
+type StyledInputLabelProps = WithTheme<{
+    $color?: CSSProperties['color'];
+    $isInvalid?: boolean;
+}>;
 
 export const StyledInputLabel = styled.label<StyledInputLabelProps>`
     line-height: 1.3;
@@ -154,8 +157,8 @@ export const StyledInputLabel = styled.label<StyledInputLabelProps>`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: ${({ theme, $isInvalid }: StyledInputLabelProps) =>
-        $isInvalid ? theme.wrong : `rgba(${theme['text-rgb'] ?? ''}, 0.45)`};
+    color: ${({ theme, $color, $isInvalid }: StyledInputLabelProps) =>
+        $color ?? ($isInvalid ? theme.wrong : `rgba(${theme['text-rgb'] ?? ''}, 0.45)`)};
 `;
 
 type StyledMotionInputClearIconProps = WithTheme<{
