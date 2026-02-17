@@ -291,7 +291,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     : { bottom: size === InputSize.Small ? -4 : -10, right: -6 };
             }
 
-            return { left: -1 };
+            return { left: -1, top: -1.5 };
         }, [
             hasValue,
             shouldPreventPlaceholderAnimation,
@@ -364,10 +364,7 @@ const Input = forwardRef<InputRef, InputProps>(
                                     duration: shouldPreventPlaceholderAnimation ? 0 : 0.1,
                                 }}
                             >
-                                <StyledInputLabel
-                                    $color={placeholderColor}
-                                    $isInvalid={isInvalid}
-                                >
+                                <StyledInputLabel $color={placeholderColor} $isInvalid={isInvalid}>
                                     {placeholder}
                                 </StyledInputLabel>
                             </StyledMotionInputLabelWrapper>
