@@ -1,6 +1,7 @@
 import { AnimatePresence } from 'motion/react';
 import React, { FC, MouseEvent } from 'react';
 import Icon from '../../icon/Icon';
+import Tooltip from '../../tooltip/Tooltip';
 import {
     StyledActionButton,
     StyledActionContent,
@@ -55,13 +56,45 @@ const ActionButton: FC<ActionButtonProps> = ({
     const isPrimary = actionType === 'primary';
     const isSecondary = actionType === 'secondary';
     const actionColor = action.color ?? '#FFFFFF';
+    const isActionDisabled = isDisabled || Boolean(action.isDisabled);
+    const disabledReason = action.disabledReason?.trim();
+    const shouldShowDisabledReason = Boolean(disabledReason) && isActionDisabled;
+
+    const actionContent = (
+        <StyledActionContent>
+            <StyledIconSlot $height={height}>
+                {typeof action.icon === 'string' ? (
+                    <Icon icons={[action.icon]} color={actionColor} size={height - 24} />
+                ) : (
+                    action.icon
+                )}
+            </StyledIconSlot>
+            <AnimatePresence initial={false}>
+                {/* Animate width and margin to avoid layout jumps when labels mount/unmount. */}
+                {showLabel && (
+                    <StyledLabelWrapper
+                        animate={{ opacity: 1, width: 'auto', marginLeft: LABEL_GAP }}
+                        exit={{ opacity: 0, width: 0, marginLeft: 0 }}
+                        initial={{ opacity: 0, width: 0, marginLeft: 0 }}
+                        transition={LABEL_TRANSITION}
+                    >
+                        <StyledSecondaryLabel style={{ color: actionColor }}>
+                            {action.label}
+                        </StyledSecondaryLabel>
+                    </StyledLabelWrapper>
+                )}
+            </AnimatePresence>
+        </StyledActionContent>
+    );
 
     return (
         <StyledActionButton
-            disabled={isDisabled || action.isDisabled}
+            aria-disabled={isActionDisabled}
+            disabled={isActionDisabled && !shouldShowDisabledReason}
             $backgroundColor={backgroundColor}
             $isCollapsed={isCollapsed}
             $isExpanded={isSecondary ? isExpanded : undefined}
+            $isInteractionDisabled={isActionDisabled}
             $isHidden={isSecondary ? isHidden : undefined}
             $isPrimary={isPrimary}
             $isSecondary={isSecondary}
@@ -76,30 +109,13 @@ const ActionButton: FC<ActionButtonProps> = ({
             onMouseLeave={onMouseLeave}
             type="button"
         >
-            <StyledActionContent>
-                <StyledIconSlot $height={height}>
-                    {typeof action.icon === 'string' ? (
-                        <Icon icons={[action.icon]} color={actionColor} size={height - 24} />
-                    ) : (
-                        action.icon
-                    )}
-                </StyledIconSlot>
-                <AnimatePresence initial={false}>
-                    {/* Animate width and margin to avoid layout jumps when labels mount/unmount. */}
-                    {showLabel && (
-                        <StyledLabelWrapper
-                            animate={{ opacity: 1, width: 'auto', marginLeft: LABEL_GAP }}
-                            exit={{ opacity: 0, width: 0, marginLeft: 0 }}
-                            initial={{ opacity: 0, width: 0, marginLeft: 0 }}
-                            transition={LABEL_TRANSITION}
-                        >
-                            <StyledSecondaryLabel style={{ color: actionColor }}>
-                                {action.label}
-                            </StyledSecondaryLabel>
-                        </StyledLabelWrapper>
-                    )}
-                </AnimatePresence>
-            </StyledActionContent>
+            {shouldShowDisabledReason && disabledReason ? (
+                <Tooltip maxItemWidth={400} item={{ text: disabledReason }}>
+                    {actionContent}
+                </Tooltip>
+            ) : (
+                actionContent
+            )}
         </StyledActionButton>
     );
 };

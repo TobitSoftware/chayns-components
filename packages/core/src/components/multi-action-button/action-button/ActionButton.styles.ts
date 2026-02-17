@@ -13,6 +13,7 @@ type StyledActionButtonProps = WithTheme<{
     $isShrunk?: boolean;
     $isSolo?: boolean;
     $pulseColors?: [string, string];
+    $isInteractionDisabled?: boolean;
     $height: number;
     $statusType?: MultiActionButtonStatusType;
     $shouldUseContentWidth?: boolean;
@@ -158,6 +159,13 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
             border-radius: ${props.$height / 2}px;
         `}
 
+    ${({ $isInteractionDisabled }) =>
+        $isInteractionDisabled &&
+        css`
+            cursor: default;
+            opacity: 0.5;
+        `}
+
     /* Optional pulse overlay used by status. */
     ${({ $statusType, $pulseColors }) =>
         $statusType === MultiActionButtonStatusType.Pulse &&
@@ -180,10 +188,13 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
         opacity: 0.5;
     }
 
-    &:hover:not(:disabled) {
-        background-color: ${({ $backgroundColor, theme }) =>
-            `color-mix(in srgb, ${$backgroundColor || theme?.primary || '#000'} 85%, black)`};
-    }
+    ${({ $isInteractionDisabled, $backgroundColor, theme }) =>
+        !$isInteractionDisabled &&
+        css`
+            &:hover:not(:disabled) {
+                background-color: ${`color-mix(in srgb, ${$backgroundColor || theme?.primary || '#000'} 85%, black)`};
+            }
+        `}
 `;
 
 export const StyledActionContent = styled.span`

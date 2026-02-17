@@ -97,6 +97,12 @@ export type MultiActionButtonAction = {
      */
     isDisabled?: boolean;
     /**
+     * Optional reason shown in a tooltip when the action is disabled.
+     * @description Use this to explain why the action is currently unavailable.
+     * @optional
+     */
+    disabledReason?: string;
+    /**
      * The optional label for the action.
      * @description The label is shown next to the icon and will be truncated with ellipsis when
      * there is not enough horizontal space.

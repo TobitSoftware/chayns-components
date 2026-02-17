@@ -93,6 +93,18 @@ LargeSize.args = {
     height: MultiActionButtonHeight.Large,
 };
 
+export const DisabledActionWithReason = Template.bind({});
+
+DisabledActionWithReason.args = {
+    secondaryAction: {
+        icon: 'fa fa-microphone',
+        label: 'Mitschnitt starten',
+        isDisabled: true,
+        disabledReason:
+            'Verwende die Sidekick™ App oder den Sidekick™ Desktop Client, um Mitschnitte zu erstellen.',
+    },
+};
+
 type RecordingStage = 'idle' | 'started' | 'recording' | 'stopped';
 
 const recordingLabelByStage: Record<RecordingStage, string> = {
@@ -152,10 +164,5 @@ export const RecordingFlow: StoryFn<typeof MultiActionButton> = (args) => {
         [args.secondaryAction, handleSecondaryClick, stage],
     );
 
-    return (
-        <MultiActionButton
-            {...args}
-            secondaryAction={resolvedSecondaryAction}
-        />
-    );
+    return <MultiActionButton {...args} secondaryAction={resolvedSecondaryAction} />;
 };
