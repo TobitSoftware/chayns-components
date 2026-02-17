@@ -10,6 +10,7 @@ import {
     StyledSecondaryLabel,
 } from './ActionButton.styles';
 import type { MultiActionButtonAction } from '../MultiActionButton.types';
+import { PopupAlignment } from '../../../types/popup';
 
 const LABEL_GAP = 6;
 const LABEL_TRANSITION = { duration: 0.3 };
@@ -110,7 +111,11 @@ const ActionButton: FC<ActionButtonProps> = ({
             type="button"
         >
             {shouldShowDisabledReason && disabledReason ? (
-                <Tooltip maxItemWidth={400} item={{ text: disabledReason }}>
+                <Tooltip
+                    alignment={PopupAlignment.BottomRight}
+                    item={{ text: disabledReason }}
+                    maxItemWidth={400}
+                >
                     {actionContent}
                 </Tooltip>
             ) : (
