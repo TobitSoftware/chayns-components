@@ -137,6 +137,8 @@ export const StyledMotionInputLabelWrapper = styled(motion.label)`
     position: absolute;
     user-select: none;
     max-width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
 `;
 
 export const StyledMotionInputElement = styled(motion.div)`
