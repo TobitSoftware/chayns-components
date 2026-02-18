@@ -60,12 +60,13 @@ const ActionButton: FC<ActionButtonProps> = ({
     const isActionDisabled = isDisabled || Boolean(action.isDisabled);
     const disabledReason = action.disabledReason?.trim();
     const shouldShowDisabledReason = Boolean(disabledReason) && isActionDisabled;
+    const iconSize = height - 24;
 
     const actionContent = (
         <StyledActionContent>
             <StyledIconSlot $height={height}>
                 {typeof action.icon === 'string' ? (
-                    <Icon icons={[action.icon]} color={actionColor} size={height - 24} />
+                    <Icon icons={[action.icon]} color={actionColor} size={iconSize} />
                 ) : (
                     action.icon
                 )}

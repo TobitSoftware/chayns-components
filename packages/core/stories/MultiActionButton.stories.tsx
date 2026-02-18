@@ -105,6 +105,27 @@ DisabledActionWithReason.args = {
     },
 };
 
+export const ReactElementIcons = Template.bind({});
+
+ReactElementIcons.args = {
+    primaryAction: {
+        icon: (
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2 14.7 9.3 22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7L12 2z" />
+            </svg>
+        ),
+        label: 'Chatten',
+    },
+    secondaryAction: {
+        icon: (
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 3a4 4 0 0 1 4 4v5a4 4 0 1 1-8 0V7a4 4 0 0 1 4-4zm-6 9a1 1 0 1 1 2 0 4 4 0 0 0 8 0 1 1 0 1 1 2 0 6 6 0 0 1-5 5.91V21h2a1 1 0 1 1 0 2H9a1 1 0 1 1 0-2h2v-3.09A6 6 0 0 1 6 12z" />
+            </svg>
+        ),
+        label: 'Mitschnitt starten',
+    },
+};
+
 type RecordingStage = 'idle' | 'started' | 'recording' | 'stopped';
 
 const recordingLabelByStage: Record<RecordingStage, string> = {

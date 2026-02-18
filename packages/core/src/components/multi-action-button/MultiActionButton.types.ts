@@ -1,4 +1,4 @@
-import type { MouseEvent, ReactNode } from 'react';
+import type { MouseEvent, ReactElement, ReactNode } from 'react';
 import type { MotionValue } from 'motion/react';
 
 /**
@@ -86,10 +86,10 @@ export type MultiActionButtonAction = {
     color?: string;
     /**
      * The icon for the action.
-     * @description Can be a FontAwesome class string (e.g., 'fa fa-microphone') or a custom ReactNode.
+     * @description Can be a FontAwesome class string (e.g., 'fa fa-microphone') or a custom React element.
      * The icon is always rendered inside a fixed-size slot to keep alignment stable.
      */
-    icon: string | ReactNode;
+    icon: string | ReactElement;
     /**
      * Whether the action is disabled.
      * @description Disabled actions do not respond to hover or click and are visually dimmed.
