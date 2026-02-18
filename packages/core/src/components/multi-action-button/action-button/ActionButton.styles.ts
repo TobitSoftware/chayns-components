@@ -163,7 +163,6 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
         $isInteractionDisabled &&
         css`
             cursor: default;
-            opacity: 0.5;
         `}
 
     /* Optional pulse overlay used by status. */
@@ -185,7 +184,6 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
 
     &:disabled {
         cursor: default;
-        opacity: 0.5;
     }
 
     ${({ $isInteractionDisabled, $backgroundColor, theme }) =>
@@ -207,12 +205,14 @@ export const StyledActionContent = styled.span`
     z-index: 1;
 `;
 
-export const StyledIconSlot = styled.span<{ $height: number }>`
+export const StyledIconSlot = styled.span<{ $height: number; $isDisabled?: boolean }>`
     align-items: center;
     display: inline-flex;
     flex: 0 0 auto;
     height: ${({ $height }) => $height}px;
     justify-content: center;
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
+    transition: opacity 0.2s ease;
     width: ${({ $height }) => $height}px;
 `;
 

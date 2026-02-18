@@ -64,7 +64,7 @@ const ActionButton: FC<ActionButtonProps> = ({
 
     const actionContent = (
         <StyledActionContent>
-            <StyledIconSlot $height={height}>
+            <StyledIconSlot $height={height} $isDisabled={isActionDisabled}>
                 {typeof action.icon === 'string' ? (
                     <Icon icons={[action.icon]} color={actionColor} size={iconSize} />
                 ) : (
