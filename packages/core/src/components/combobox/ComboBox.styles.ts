@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { BrowserName } from '../../types/chayns';
 import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import type { ComboBoxProps } from './ComboBox';
+import { ComboBoxProps, ComboBoxSize } from './ComboBox';
 import { DropdownDirection } from '../../types/dropdown';
 
 type StyledComboBoxProps = WithTheme<{
@@ -47,6 +47,7 @@ type StyledComboBoxHeaderProps = WithTheme<{
     $shouldChangeColor: boolean;
     $shouldShowBigImage: ComboBoxProps['shouldShowBigImage'];
     $shouldShowTransparentBackground: boolean;
+    $size: ComboBoxSize;
 }>;
 
 export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
@@ -57,7 +58,19 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     transition: background-color 0.2s ease-in-out;
 
-    min-height: 42px;
+    ${({ $size }) => {
+        switch ($size) {
+            case ComboBoxSize.SMALL:
+                return css`
+                    height: 34px;
+                `;
+            case ComboBoxSize.NORMAL:
+            default:
+                return css`
+                    min-height: 42px;
+                `;
+        }
+    }}
 
     ${({ theme, $shouldShowTransparentBackground, $shouldChangeColor }) => {
         if ($shouldShowTransparentBackground) {
@@ -193,7 +206,11 @@ export const StyledComboBoxClearIconWrapper = styled.div<StyledComboBoxClearIcon
     width: 40px;
 `;
 
-type StyledComboBoxIconWrapperProps = { $shouldShowBorderLeft: boolean; $isDisabled: boolean };
+type StyledComboBoxIconWrapperProps = {
+    $shouldShowBorderLeft: boolean;
+    $isDisabled: boolean;
+    $size: ComboBoxSize;
+};
 
 export const StyledComboBoxIconWrapper = styled.div<StyledComboBoxIconWrapperProps>`
     align-items: center;
@@ -202,9 +219,22 @@ export const StyledComboBoxIconWrapper = styled.div<StyledComboBoxIconWrapperPro
     cursor: ${({ $isDisabled }) => (!$isDisabled ? 'pointer' : 'default')};
     display: flex;
     flex: 0 0 auto;
-    height: 40px;
     justify-content: center;
     width: 40px;
+
+    ${({ $size }) => {
+        switch ($size) {
+            case ComboBoxSize.SMALL:
+                return css`
+                    height: 30px;
+                `;
+            case ComboBoxSize.NORMAL:
+            default:
+                return css`
+                    height: 40px;
+                `;
+        }
+    }}
 `;
 
 type StyledComboBoxBodyProps = WithTheme<{

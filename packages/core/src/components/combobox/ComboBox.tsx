@@ -70,6 +70,11 @@ export interface IComboBoxItem {
     textStyles?: ComboBoxTextStyles;
 }
 
+export enum ComboBoxSize {
+    NORMAL = 'normal',
+    SMALL = 'small',
+}
+
 export type ComboBoxProps = {
     /**
      * The width of the body.
@@ -156,6 +161,10 @@ export type ComboBoxProps = {
      */
     shouldDropDownUseMaxItemWidth?: boolean;
     /**
+     * The size of the ComboBox.
+     */
+    size?: ComboBoxSize;
+    /**
      * Optional min width for the prefix element.
      */
     prefixMinWidth?: number;
@@ -179,6 +188,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             shouldShowRoundImage,
             onInputFocus,
             prefixMinWidth,
+            size = ComboBoxSize.NORMAL,
             shouldUseFullWidth = false,
             onInputChange,
             shouldUseCurrentItemWidth = false,
@@ -623,6 +633,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                         onClick={handleHeaderClick}
                         $isOpen={isAnimating}
                         $isTouch={isTouch}
+                        $size={size}
                         $shouldShowTransparentBackground={shouldShowTransparentBackground}
                         $isDisabled={isDisabled}
                         $shouldChangeColor={shouldChangeColor}
@@ -675,6 +686,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                         {!shouldDisableActions && (
                             <StyledComboBoxIconWrapper
                                 $isDisabled={isDisabled}
+                                $size={size}
                                 $shouldShowBorderLeft={
                                     shouldShowClearIcon === true &&
                                     internalSelectedItem !== undefined
@@ -718,6 +730,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                 handleHeaderClick,
                 isAnimating,
                 isTouch,
+                size,
                 shouldShowTransparentBackground,
                 isDisabled,
                 shouldChangeColor,
