@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ContextMenuAlignment } from '../src/types/contextMenu';
 import SharingBar from '../src/components/sharing-bar/SharingBar';
 import React from 'react';
+import { ContextMenuAlignment } from '../src';
 
 export default {
     title: 'Core/SharingBar',
