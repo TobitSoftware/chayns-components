@@ -79,6 +79,13 @@ export type MultiActionButtonActionEvent = {
  */
 export type MultiActionButtonAction = {
     /**
+     * Optional background color for this action.
+     * @description Overrides the component-level background color for this specific action.
+     * If omitted, `MultiActionButton.backgroundColor` is used as fallback.
+     * @optional
+     */
+    backgroundColor?: string;
+    /**
      * Optional color for the icon and label.
      * @description Overrides the default text/icon color. If omitted, the current theme text color is used.
      * @optional

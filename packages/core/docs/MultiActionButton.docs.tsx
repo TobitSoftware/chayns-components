@@ -10,18 +10,19 @@ const Component: FC = () => {
             primaryAction={{
                 icon: 'fa fa-pen',
                 label: 'Chatten',
+                backgroundColor: '#0b6b3a',
                 onClick: () => console.log('Primary'),
             }}
             secondaryAction={{
                 icon: 'fa fa-microphone',
                 label: 'Mitschnitt starten',
+                backgroundColor: '#0f6d7e',
                 onClick: () => console.log('Secondary'),
                 status: {
                     type: MultiActionButtonStatusType.Pulse,
-                    pulseColor: 'rgba(255, 0, 0, 0.6)',
+                    pulseColors: ['#A50000', '#630000'],
                 },
             }}
-            backgroundColor="#0b6b3a"
         />
     );
 };

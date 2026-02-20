@@ -184,7 +184,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
             <ActionButton
                 action={primaryAction}
                 actionType="primary"
-                backgroundColor={backgroundColor}
+                backgroundColor={primaryAction.backgroundColor ?? backgroundColor}
                 isCollapsed={isCollapsed}
                 isDisabled={isDisabled}
                 isShrunk={hasSecondaryAction && isSecondaryExpanded}
@@ -200,7 +200,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                     <ActionButton
                         action={secondaryAction}
                         actionType="secondary"
-                        backgroundColor={backgroundColor}
+                        backgroundColor={secondaryAction.backgroundColor ?? backgroundColor}
                         isCollapsed={isCollapsed}
                         isDisabled={isDisabled}
                         isExpanded={isSecondaryExpanded}

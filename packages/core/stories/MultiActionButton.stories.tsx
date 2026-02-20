@@ -55,6 +55,21 @@ CustomBackground.args = {
     backgroundColor: '#0f6d7e',
 };
 
+export const ActionSpecificBackgrounds = Template.bind({});
+
+ActionSpecificBackgrounds.args = {
+    primaryAction: {
+        icon: 'fa fa-pen',
+        label: 'Chatten',
+        backgroundColor: '#0f6d7e',
+    },
+    secondaryAction: {
+        icon: 'fa fa-microphone',
+        label: 'Mitschnitt starten',
+        backgroundColor: '#8c1c13',
+    },
+};
+
 export const OnlyPrimary = Template.bind({});
 
 OnlyPrimary.args = {
