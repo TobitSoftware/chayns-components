@@ -1,7 +1,6 @@
 import { getDevice } from 'chayns-api';
 import React, { FC, ReactNode, UIEvent } from 'react';
 import { BrowserName } from '../../../types/chayns';
-import { AccordionContext } from '../Accordion';
 import { StyledAccordionContent } from './AccordionContent.styles';
 
 export type AccordionContentProps = {

@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { motion } from 'motion/react';
 
 type StyledIconWrapperProps = {
     $isDisabled?: boolean;

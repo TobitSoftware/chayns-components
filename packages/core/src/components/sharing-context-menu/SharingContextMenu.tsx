@@ -1,5 +1,5 @@
 import { getSite } from 'chayns-api';
-import { forwardRef, useCallback } from 'react';
+import React, { forwardRef, useCallback } from 'react';
 import { SHAREPROVIDER } from '../../constants/sharingBar';
 import { useIsTouch } from '../../utils/environment';
 import { copyToClipboard, shareWithApp, shareWithUrl } from '../../utils/sharingBar';
@@ -121,6 +121,7 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
         ];
 
         return (
+            // eslint-disable-next-line react/jsx-props-no-spreading
             <ContextMenu items={contextMenuItems} ref={ref} {...contextMenuProps}>
                 {children}
             </ContextMenu>

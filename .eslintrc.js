@@ -1,11 +1,12 @@
 module.exports = {
     rules: {
-        '@typescript-eslint/no-misused-promises': [
-            'error',
-            {
-                checksVoidReturn: false,
-            },
-        ],
+        // not properly setup and this is already handled in chayns-toolkit base config
+        // '@typescript-eslint/no-misused-promises': [
+        //     'error',
+        //     {
+        //         checksVoidReturn: false,
+        //     },
+        // ],
         'no-void': 'off',
         // We organize imports on commit so this is not needed.
         'import/order': 'off',
@@ -25,4 +26,8 @@ module.exports = {
         ],
     },
     extends: ['@chayns-toolkit', 'plugin:storybook/recommended'],
+    // use another tsconfig for linting to avoid including test files and other non-source files
+    parserOptions: {
+        project: './tsconfig.lint.json',
+    },
 };

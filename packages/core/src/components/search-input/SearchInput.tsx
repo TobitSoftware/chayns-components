@@ -2,7 +2,6 @@ import { AnimatePresence } from 'motion/react';
 import React, {
     ChangeEventHandler,
     CSSProperties,
-    FC,
     forwardRef,
     useCallback,
     useEffect,

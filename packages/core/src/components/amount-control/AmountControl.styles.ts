@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
-import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { DisplayState } from './AmountControl';
 
 type StyledAmountControlProps = WithTheme<{
