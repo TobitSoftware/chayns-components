@@ -104,7 +104,9 @@ export { default as SelectButton } from './components/select-button/SelectButton
 export { default as SetupWizardItem } from './components/setup-wizard/setup-wizard-item/SetupWizardItem';
 export { default as SetupWizard } from './components/setup-wizard/SetupWizard';
 export type { SetupWizardRef } from './components/setup-wizard/SetupWizard';
+export { default as SharingContextMenu } from './components/sharing-context-menu/SharingContextMenu';
 export { default as SharingBar } from './components/sharing-bar/SharingBar';
+export { default as SharingButton } from './components/sharing-button/SharingButton';
 export { default as Signature } from './components/signature/Signature';
 export type { SignatureRef } from './components/signature/Signature';
 export { default as SliderButton } from './components/slider-button/SliderButton';

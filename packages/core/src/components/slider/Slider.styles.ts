@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import styled from 'styled-components';
-import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledSliderProps = WithTheme<{ $isDisabled?: boolean }>;
 
