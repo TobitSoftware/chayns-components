@@ -9,6 +9,7 @@ export default {
     args: {
         link: 'https://components.chayns.net/',
         alignment: ContextMenuAlignment.BottomRight,
+        children: 'Teilen',
     },
 } as Meta<typeof SharingButton>;
 
@@ -30,4 +31,9 @@ export const CustomLink = Template.bind({});
 CustomLink.args = {
     link: 'https://github.com/TobitSoftware/chayns-components',
     alignment: ContextMenuAlignment.BottomLeft,
+};
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+    isDisabled: true,
 };

@@ -5,9 +5,11 @@ import SharingContextMenu, {
 } from '../sharing-context-menu/SharingContextMenu';
 import { StyledSharingButtonContainer } from './SharingButton.styles';
 import Button from '../button/Button';
+import { ButtonProps } from '../button/Button.types';
 
 export type SharingButtonProps = PropsWithChildren<
-    Pick<SharingContextMenuProps, 'link' | 'alignment' | 'container'>
+    Pick<SharingContextMenuProps, 'link' | 'alignment' | 'container'> &
+        Pick<ButtonProps, 'isDisabled'>
 >;
 
 const SharingButton: FunctionComponent<SharingButtonProps> = ({
@@ -15,6 +17,7 @@ const SharingButton: FunctionComponent<SharingButtonProps> = ({
     alignment,
     container,
     children,
+    isDisabled,
 }) => {
     const contextMenuRef = React.useRef<ContextMenuRef>(null);
     const [isButtonDisabled, setIsButtonDisabled] = React.useState(false);
@@ -41,7 +44,7 @@ const SharingButton: FunctionComponent<SharingButtonProps> = ({
                 onShow={handleOnShow}
                 onHide={handleOnHide}
             >
-                <Button onClick={handleButtonClick} isDisabled={isButtonDisabled}>
+                <Button onClick={handleButtonClick} isDisabled={isButtonDisabled || isDisabled}>
                     {children}
                 </Button>
             </SharingContextMenu>
