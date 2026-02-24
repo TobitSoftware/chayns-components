@@ -121,6 +121,14 @@ export type ComboBoxProps = {
      */
     onSelect?: (comboboxItem?: IComboBoxItem) => Promise<boolean> | boolean | void;
     /**
+     * Function to be executed when the content of the `ComboBox` is shown.
+     */
+    onShow?: () => void;
+    /**
+     * Function to be executed when the content of the `ComboBox` is hidden.
+     */
+    onHide?: () => void;
+    /**
      * A text that should be displayed when no item is selected.
      */
     placeholder: string;
@@ -183,6 +191,8 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             prefix,
             container,
             selectedItem,
+            onHide,
+            onShow,
             shouldShowBigImage,
             shouldShowClearIcon,
             shouldShowRoundImage,
@@ -286,12 +296,20 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
         );
 
         const handleOpen = useCallback(() => {
+            if (typeof onShow === 'function') {
+                onShow();
+            }
+
             setIsAnimating(true);
-        }, []);
+        }, [onShow]);
 
         const handleClose = useCallback(() => {
+            if (typeof onHide === 'function') {
+                onHide();
+            }
+
             setIsAnimating(false);
-        }, []);
+        }, [onHide]);
 
         /**
          * This function sets the selected item
@@ -310,7 +328,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                             if (shouldPreventSelection) return;
 
                             setInternalSelectedItem(itemToSelect);
-                            setIsAnimating(false);
+                            handleClose();
                         });
 
                         return;
@@ -318,7 +336,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                 }
 
                 setInternalSelectedItem(itemToSelect);
-                setIsAnimating(false);
+                handleClose();
             },
             [onSelect],
         );
