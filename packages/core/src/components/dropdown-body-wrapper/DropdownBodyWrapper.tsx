@@ -61,6 +61,10 @@ interface DropdownBodyWrapperProps {
      * Whether the dropdown should be visible.
      */
     shouldShowDropdown: boolean;
+    /**
+     * Whether the outside events should be captured.
+     */
+    shouldCaptureEvents?: boolean;
 }
 
 const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
@@ -75,6 +79,7 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
     onClose,
     onOutsideClick,
     onMeasure,
+    shouldCaptureEvents = true,
     shouldShowDropdown,
 }) => {
     const isInChaynsWalletRef = useRef(false);
@@ -165,6 +170,7 @@ const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
         onClose: handleClose,
         onTouchEnd: handleTouchEnd,
         onTouchStart: handleTouchStart,
+        shouldCaptureEvents,
     });
 
     useEffect(() => {

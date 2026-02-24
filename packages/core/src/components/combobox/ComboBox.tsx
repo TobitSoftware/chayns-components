@@ -169,6 +169,10 @@ export type ComboBoxProps = {
      */
     shouldDropDownUseMaxItemWidth?: boolean;
     /**
+     * Whether the outside events should be captured.
+     */
+    shouldCaptureEvents?: boolean;
+    /**
      * The size of the ComboBox.
      */
     size?: ComboBoxSize;
@@ -190,6 +194,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             placeholder,
             prefix,
             container,
+            shouldCaptureEvents,
             selectedItem,
             onHide,
             onShow,
@@ -719,6 +724,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                             anchorElement={styledComboBoxElementRef.current}
                             bodyWidth={bodyWidth}
                             contentHeight={contentHeight}
+                            shouldCaptureEvents={shouldCaptureEvents}
                             onClose={handleClose}
                             direction={direction}
                             container={container}

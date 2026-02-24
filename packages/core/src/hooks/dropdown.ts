@@ -8,6 +8,7 @@ interface UseDropdownListenerOptions {
     onClose: () => void;
     onTouchEnd: (event: TouchEvent) => void;
     onTouchStart: (event: TouchEvent) => void;
+    shouldCaptureEvents?: boolean;
 }
 
 export const useDropdownListener = ({
@@ -15,18 +16,19 @@ export const useDropdownListener = ({
     onClose,
     onTouchEnd,
     onTouchStart,
+    shouldCaptureEvents,
 }: UseDropdownListenerOptions) => {
     useEffect(() => {
-        document.addEventListener('click', onClick, true);
-        document.addEventListener('touchend', onTouchEnd, true);
-        document.addEventListener('touchstart', onTouchStart, true);
+        document.addEventListener('click', onClick, shouldCaptureEvents);
+        document.addEventListener('touchend', onTouchEnd, shouldCaptureEvents);
+        document.addEventListener('touchstart', onTouchStart, shouldCaptureEvents);
 
         window.addEventListener('blur', onClose);
 
         return () => {
-            document.removeEventListener('click', onClick, true);
-            document.removeEventListener('touchend', onTouchEnd, true);
-            document.removeEventListener('touchstart', onTouchStart, true);
+            document.removeEventListener('click', onClick, shouldCaptureEvents);
+            document.removeEventListener('touchend', onTouchEnd, shouldCaptureEvents);
+            document.removeEventListener('touchstart', onTouchStart, shouldCaptureEvents);
 
             window.removeEventListener('blur', onClose);
         };
