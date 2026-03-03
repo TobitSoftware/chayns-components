@@ -33,6 +33,8 @@ import {
     type ReplaceTextOptions,
     insertPseudoMarker,
     insertCursorAtMarker,
+    getCurrentCursorPosition,
+    setCursorPositionByAbsIndex,
 } from '../../utils/selection';
 import { convertHTMLToText, convertTextToHTML } from '../../utils/text';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
@@ -147,6 +149,7 @@ export interface EmojiInputRef {
     stopProgress: () => void;
     focus: () => void;
     blur: () => void;
+    setCursorPosition: (position?: number) => void;
 }
 
 const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
@@ -195,11 +198,26 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const shouldDeleteOneMoreBackwards = useRef(false);
         const shouldDeleteOneMoreForwards = useRef(false);
 
+        const savedCursorPositionRef = useRef<number>(0);
+
         const valueRef = useRef(value);
 
-        useCursorPosition(editorRef, onCursorPositionChange, { isDisabled });
-
         const { browser } = getDevice();
+
+        useCursorPosition(
+            editorRef,
+            useCallback(
+                (position: number) => {
+                    savedCursorPositionRef.current = position;
+
+                    if (typeof onCursorPositionChange === 'function') {
+                        onCursorPositionChange(position);
+                    }
+                },
+                [onCursorPositionChange],
+            ),
+            { isDisabled },
+        );
 
         const shouldChangeColor = useMemo(
             () => areaProvider.shouldChangeColor ?? false,
@@ -601,6 +619,28 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             setProgressDuration(0);
         }, []);
 
+        const handleSetCursorPosition = useCallback((position?: number) => {
+            if (!editorRef.current) {
+                return;
+            }
+
+            const resolvedPosition = position ?? savedCursorPositionRef.current;
+
+            savedCursorPositionRef.current = resolvedPosition;
+
+            editorRef.current.focus();
+
+            setCursorPositionByAbsIndex({
+                editorElement: editorRef.current,
+                position: resolvedPosition,
+            });
+
+            const updatedPosition = getCurrentCursorPosition(editorRef.current);
+            if (typeof updatedPosition === 'number') {
+                savedCursorPositionRef.current = updatedPosition;
+            }
+        }, []);
+
         useImperativeHandle(
             ref,
             () => ({
@@ -610,12 +650,14 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 stopProgress: handleStopProgress,
                 focus: () => editorRef.current?.focus(),
                 blur: () => editorRef.current?.blur(),
+                setCursorPosition: handleSetCursorPosition,
             }),
             [
                 handleInsertTextAtCursorPosition,
                 handleReplaceText,
                 handleStartProgress,
                 handleStopProgress,
+                handleSetCursorPosition,
             ],
         );
 

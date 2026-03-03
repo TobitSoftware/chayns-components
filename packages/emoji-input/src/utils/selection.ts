@@ -327,6 +327,11 @@ interface FindAndSelectTextOptions {
     options?: ReplaceTextOptions;
 }
 
+export interface SetCursorPositionByAbsIndexOptions {
+    editorElement: HTMLDivElement;
+    position: number;
+}
+
 type Match = { node: Node; offset: number; absIndex: number };
 
 export const findAndSelectText = ({
@@ -417,4 +422,105 @@ export const getCurrentCursorPosition = (editorElement: HTMLDivElement | null): 
     } catch {
         return convertHTMLToText(editorElement.innerHTML).length;
     }
+};
+
+type CursorTarget = { node: Text; offset: number };
+
+const getCursorTargetByAbsIndex = ({
+    editorElement,
+    position,
+}: SetCursorPositionByAbsIndexOptions): CursorTarget | null => {
+    const childNodes = Array.from(editorElement.childNodes);
+
+    if (childNodes.length === 0) {
+        const textNode = document.createTextNode('');
+        editorElement.appendChild(textNode);
+
+        return { node: textNode, offset: 0 };
+    }
+
+    const clampedPosition = clamp(position, 0, convertHTMLToText(editorElement.innerHTML).length);
+
+    let absCounter = 0;
+
+    const searchNodes = (node: Node): CursorTarget | null => {
+        if (node.nodeType === Node.TEXT_NODE) {
+            const textNode = node as Text;
+            const nodeText = textNode.nodeValue ?? '';
+            const nextAbsCounter = absCounter + nodeText.length;
+
+            if (clampedPosition <= nextAbsCounter) {
+                return {
+                    node: textNode,
+                    offset: clamp(clampedPosition - absCounter, 0, nodeText.length),
+                };
+            }
+
+            absCounter = nextAbsCounter;
+
+            return null;
+        }
+
+        if (node.nodeName === 'LC_MENTION') {
+            return null;
+        }
+
+        for (const child of Array.from(node.childNodes)) {
+            const found = searchNodes(child);
+            if (found) {
+                return found;
+            }
+        }
+
+        return null;
+    };
+
+    for (const rootNode of childNodes) {
+        const found = searchNodes(rootNode);
+        if (found) {
+            return found;
+        }
+    }
+
+    const lastTextNode = editorElement.lastChild;
+    if (lastTextNode?.nodeType === Node.TEXT_NODE) {
+        const textNode = lastTextNode as Text;
+        return { node: textNode, offset: textNode.length };
+    }
+
+    const appendedTextNode = document.createTextNode('\u200B');
+    editorElement.appendChild(appendedTextNode);
+
+    return { node: appendedTextNode, offset: appendedTextNode.length };
+};
+
+export const setCursorPositionByAbsIndex = ({
+    editorElement,
+    position,
+}: SetCursorPositionByAbsIndexOptions): void => {
+    const selection = window.getSelection?.();
+
+    if (!selection) {
+        return;
+    }
+
+    const target = getCursorTargetByAbsIndex({ editorElement, position });
+
+    if (!target) {
+        return;
+    }
+
+    const range = document.createRange();
+
+    try {
+        range.setStart(target.node, target.offset);
+        range.setEnd(target.node, target.offset);
+    } catch {
+        return;
+    }
+
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    range.collapse(true);
 };
