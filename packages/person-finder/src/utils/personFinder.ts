@@ -73,7 +73,10 @@ export const filterDataByKeys = (
                     type: PersonFinderFilterTypes.PERSON,
                 };
 
-                const fullName = `${ownUserEntry.firstName} ${ownUserEntry.lastName}`.trim();
+                const fullName = [ownUserEntry.firstName, ownUserEntry.lastName]
+                    .filter(Boolean)
+                    .join(' ')
+                    .trim();
 
                 if (
                     original.searchString.length < 3 ||
