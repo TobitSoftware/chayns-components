@@ -40,4 +40,9 @@ export {
     startOfMonth,
     isAfter,
     isBefore,
+    subDays,
+    addHours,
+    addMinutes,
+    subHours,
+    subMinutes,
 } from './utils/date';

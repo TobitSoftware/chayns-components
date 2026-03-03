@@ -125,3 +125,33 @@ export const addDays = (date: Date, days: number): Date => {
     result.setDate(date.getDate() + days);
     return result;
 };
+
+export const subDays = (date: Date, days: number): Date => {
+    const result = new Date(date);
+    result.setDate(date.getDate() - days);
+    return result;
+};
+
+export const addHours = (date: Date, hours: number): Date => {
+    const result = new Date(date);
+    result.setHours(date.getHours() + hours);
+    return result;
+};
+
+export const addMinutes = (date: Date, minutes: number): Date => {
+    const result = new Date(date);
+    result.setMinutes(date.getMinutes() + minutes);
+    return result;
+};
+
+export const subHours = (date: Date, hours: number): Date => {
+    const result = new Date(date);
+    result.setHours(date.getHours() - hours);
+    return result;
+};
+
+export const subMinutes = (date: Date, minutes: number): Date => {
+    const result = new Date(date);
+    result.setMinutes(date.getMinutes() - minutes);
+    return result;
+};
