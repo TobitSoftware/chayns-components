@@ -69,7 +69,7 @@ Dieser Text ist generiert und dient als Platzhaltertext ohne spezifische Bedeutu
 
         const addTextWithRandomInterval = () => {
             if (iteration.current < maxIterations) {
-                const delay = Math.random() * (700 - 400) + 400;
+                const delay = Math.random() * 300 + 400;
                 setTimeout(() => {
                     setText((prevText) => prevText + textChunks[iteration.current]);
                     iteration.current = iteration.current + 1;
