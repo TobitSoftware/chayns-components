@@ -21,7 +21,13 @@ import {
     StyledTypewriterPseudoText,
     StyledTypewriterText,
 } from './Typewriter.styles';
-import { calculateAutoSpeed, getCharactersCount, getSubTextFromHTML, shuffleArray } from './utils';
+import {
+    calculateAutoSpeed,
+    getCharactersCount,
+    getSubTextFromHTML,
+    shuffleArray,
+    updateChunkStreamingSpeedEMA,
+} from './utils';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
@@ -30,10 +36,6 @@ export type TypewriterProps = {
      * The number of characters that will be animated per animation cycle.
      */
     animationSteps?: number;
-    /**
-     * The base speed factor to calculate the animation speed.
-     */
-    autoSpeedBaseFactor?: number;
     /**
      * The text to type
      */
@@ -160,15 +162,14 @@ const Typewriter: FC<TypewriterProps> = ({
     startDelay = TypewriterDelay.None,
     textStyle,
     shouldCalcAutoSpeed = false,
-    autoSpeedBaseFactor = 2000,
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
     const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
     const [shouldPreventBlinkingCursor, setShouldPreventBlinkingCursor] = useState(false);
     const [isResetAnimationActive, setIsResetAnimationActive] = useState(false);
     const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
-    const [autoSpeed, setAutoSpeed] = useState<number>();
-    const [autoSteps, setAutoSteps] = useState(animationSteps);
+    const autoSpeed = useRef<number>();
+    const autoSteps = useRef<number>(animationSteps);
 
     const functions = useFunctions();
     const values = useValues();
@@ -189,7 +190,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
     useEffect(() => {
         if (animationSteps > 0 && !shouldCalcAutoSpeed) {
-            setAutoSteps(animationSteps);
+            autoSteps.current = animationSteps;
         }
     }, [animationSteps, shouldCalcAutoSpeed]);
 
@@ -252,6 +253,12 @@ const Typewriter: FC<TypewriterProps> = ({
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 
+    const chunkIntervalExponentialMovingAverage = useRef({
+        lastTimestamp: Date.now(),
+        lastLength: charactersCount,
+        ema: speed,
+    });
+
     const [shownCharCount, setShownCharCount] = useState(
         charactersCount > 0 ? 0 : textContent.length,
     );
@@ -259,22 +266,26 @@ const Typewriter: FC<TypewriterProps> = ({
     const currentPosition = useRef(0);
 
     useEffect(() => {
-        if (!shouldCalcAutoSpeed) {
-            setAutoSpeed(undefined);
-            setAutoSteps(animationSteps);
+        chunkIntervalExponentialMovingAverage.current = updateChunkStreamingSpeedEMA({
+            currentLength: charactersCount,
+            state: chunkIntervalExponentialMovingAverage.current,
+            alpha: 0.5,
+        });
+    }, [charactersCount]);
 
+    useEffect(() => {
+        if (!shouldCalcAutoSpeed) {
+            autoSpeed.current = undefined;
+            autoSteps.current = animationSteps;
             return;
         }
 
-        const { speed: calculatedAutoSpeed, steps } = calculateAutoSpeed({
-            fullTextLength: charactersCount,
-            currentPosition: currentPosition.current,
-            baseSpeedFactor: autoSpeedBaseFactor,
-        });
-
-        setAutoSpeed(calculatedAutoSpeed);
-        setAutoSteps(steps);
-    }, [animationSteps, autoSpeedBaseFactor, charactersCount, shouldCalcAutoSpeed]);
+        const { speed: calculatedAutoSpeed, steps } = calculateAutoSpeed(
+            chunkIntervalExponentialMovingAverage.current.ema,
+        );
+        autoSpeed.current = calculatedAutoSpeed;
+        autoSteps.current = steps;
+    }, [animationSteps, charactersCount, shouldCalcAutoSpeed, textContent.length]);
 
     const isAnimatingText =
         shownCharCount < textContent.length ||
@@ -316,7 +327,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
             interval = window.setInterval(() => {
                 setShownCharCount((prevState) => {
-                    const nextState = prevState - autoSteps;
+                    const nextState = prevState - autoSteps.current;
                     currentPosition.current = nextState;
 
                     if (nextState === 0) {
@@ -349,7 +360,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
                 const runTypingInterval = () => {
                     setShownCharCount((prevState) => {
-                        let nextState = Math.min(prevState + autoSteps, charactersCount);
+                        let nextState = Math.min(prevState + autoSteps.current, charactersCount);
 
                         if (nextState >= charactersCount && !shouldWaitForContent) {
                             window.clearInterval(interval);
@@ -386,8 +397,7 @@ const Typewriter: FC<TypewriterProps> = ({
                         return nextState;
                     });
                 };
-
-                interval = window.setInterval(runTypingInterval, autoSpeed ?? speed);
+                interval = window.setInterval(runTypingInterval, autoSpeed.current ?? speed);
             };
 
             if (startDelay) {
@@ -401,27 +411,25 @@ const Typewriter: FC<TypewriterProps> = ({
             window.clearInterval(interval);
         };
     }, [
-        resetSpeed,
-        speed,
-        resetDelay,
-        childrenCount,
-        charactersCount,
-        textContent.length,
-        shouldStopAnimation,
-        shouldWaitForContent,
-        isResetAnimationActive,
-        shouldUseResetAnimation,
         areMultipleChildrenGiven,
-        handleSetNextChildrenIndex,
-        nextTextDelay,
-        startDelay,
-        onResetAnimationStart,
-        onResetAnimationEnd,
-        onTypingAnimationStart,
-        onTypingAnimationEnd,
-        cursorType,
-        autoSpeed,
         autoSteps,
+        charactersCount,
+        cursorType,
+        handleSetNextChildrenIndex,
+        isResetAnimationActive,
+        nextTextDelay,
+        onResetAnimationEnd,
+        onResetAnimationStart,
+        onTypingAnimationEnd,
+        onTypingAnimationStart,
+        resetDelay,
+        resetSpeed,
+        shouldStopAnimation,
+        shouldUseResetAnimation,
+        shouldWaitForContent,
+        speed,
+        startDelay,
+        textContent.length,
     ]);
 
     useEffect(() => {

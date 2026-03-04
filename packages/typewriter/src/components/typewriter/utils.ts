@@ -187,28 +187,68 @@ export const shuffleArray = <T>(array: T[]): T[] => {
     return result;
 };
 
-interface CalculateAutoSpeedProps {
-    fullTextLength: number;
-    currentPosition: number;
-    baseSpeedFactor: number;
-}
-
-export const calculateAutoSpeed = ({
-    fullTextLength,
-    currentPosition,
-    baseSpeedFactor,
-}: CalculateAutoSpeedProps): { speed: number; steps: number } => {
-    const MIN_SPEED = 1;
-    const MAX_SPEED = 10;
-
-    const remainingLength = fullTextLength - currentPosition;
-
-    // Calculate the speed with the remaining text length and the baseSpeedFactor
-    const speed = Math.min(baseSpeedFactor / remainingLength, MAX_SPEED);
-
-    if (speed < MIN_SPEED) {
-        return { speed: 1, steps: 2 };
+export const calculateAutoSpeed = (
+    ema: number,
+    minMsPerTick = 10,
+): { speed: number; steps: number } => {
+    if (!ema || ema <= 0) {
+        return { speed: 100, steps: 1 };
     }
 
-    return { speed, steps: 1 };
+    const msPerChar = 1000 / ema;
+
+    if (msPerChar >= minMsPerTick) {
+        return { speed: msPerChar, steps: 1 };
+    }
+
+    const steps = Math.max(1, Math.ceil(minMsPerTick / msPerChar));
+    return { speed: minMsPerTick, steps };
+};
+
+interface CalculateEMAProps {
+    currentEMA: number;
+    newValue: number;
+    alpha: number;
+}
+
+export const calculateEMA = ({ currentEMA, newValue, alpha }: CalculateEMAProps): number =>
+    alpha * newValue + (1 - alpha) * currentEMA;
+
+interface ChunkStreamingSpeedState {
+    lastTimestamp: number;
+    lastLength: number;
+    ema: number;
+}
+
+interface UpdateLlmSpeedProps {
+    currentLength: number;
+    state: ChunkStreamingSpeedState;
+    alpha: number;
+}
+
+export const updateChunkStreamingSpeedEMA = ({
+    currentLength,
+    state,
+    alpha,
+}: UpdateLlmSpeedProps): ChunkStreamingSpeedState => {
+    const now = Date.now();
+    const deltaTime = now - state.lastTimestamp;
+
+    if (deltaTime <= 0) return state;
+
+    const deltaLength = currentLength - state.lastLength;
+
+    const charsPerSecond = Math.max(0, (deltaLength / deltaTime) * 1000);
+
+    const newEMA = calculateEMA({
+        currentEMA: state.ema,
+        newValue: charsPerSecond,
+        alpha,
+    });
+
+    return {
+        lastTimestamp: now,
+        lastLength: currentLength,
+        ema: newEMA,
+    };
 };
