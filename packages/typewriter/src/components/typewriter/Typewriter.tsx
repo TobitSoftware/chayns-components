@@ -269,7 +269,7 @@ const Typewriter: FC<TypewriterProps> = ({
         chunkIntervalExponentialMovingAverage.current = updateChunkStreamingSpeedEMA({
             currentLength: charactersCount,
             state: chunkIntervalExponentialMovingAverage.current,
-            alpha: 0.5,
+            alpha: 0.3,
         });
     }, [charactersCount]);
 
