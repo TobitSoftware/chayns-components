@@ -1,3 +1,5 @@
+import { TypewriterSpeed } from '../../types/speed';
+
 /**
  * Returns a substring of an HTML string while preserving HTML structure.
  *
@@ -187,22 +189,19 @@ export const shuffleArray = <T>(array: T[]): T[] => {
     return result;
 };
 
-export const calculateAutoSpeed = (
-    ema: number,
-    minMsPerTick = 10,
-): { speed: number; steps: number } => {
-    if (!ema || ema <= 0) {
-        return { speed: 100, steps: 1 };
+export const calculateAutoSpeed = (ema: number): { speed: number; steps: number } => {
+    if (ema <= 0) {
+        return { speed: TypewriterSpeed.ExtraSlow, steps: 1 };
     }
 
     const msPerChar = 1000 / ema;
 
-    if (msPerChar >= minMsPerTick) {
+    if (msPerChar >= TypewriterSpeed.ExtraFast) {
         return { speed: msPerChar, steps: 1 };
     }
 
-    const steps = Math.max(1, Math.ceil(minMsPerTick / msPerChar));
-    return { speed: minMsPerTick, steps };
+    const steps = Math.max(1, Math.ceil(TypewriterSpeed.ExtraFast / msPerChar));
+    return { speed: TypewriterSpeed.ExtraFast, steps };
 };
 
 interface CalculateEMAProps {
