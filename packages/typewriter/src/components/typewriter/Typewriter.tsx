@@ -188,12 +188,6 @@ const Typewriter: FC<TypewriterProps> = ({
         }
     }, [hasRenderedChildrenOnce]);
 
-    useEffect(() => {
-        if (animationSteps > 0 && !shouldCalcAutoSpeed) {
-            autoSteps.current = animationSteps;
-        }
-    }, [animationSteps, shouldCalcAutoSpeed]);
-
     const sortedChildren = useMemo(
         () =>
             Array.isArray(children) && shouldSortChildrenRandomly
@@ -285,7 +279,7 @@ const Typewriter: FC<TypewriterProps> = ({
         );
         autoSpeed.current = calculatedAutoSpeed;
         autoSteps.current = steps;
-    }, [animationSteps, charactersCount, shouldCalcAutoSpeed, textContent.length]);
+    }, [animationSteps, charactersCount, shouldCalcAutoSpeed]);
 
     const isAnimatingText =
         shownCharCount < textContent.length ||
