@@ -213,8 +213,8 @@ interface CalculateEMAProps {
 export const calculateEMA = ({ currentEMA, newValue, alpha }: CalculateEMAProps): number =>
     alpha * newValue + (1 - alpha) * currentEMA;
 
-interface ChunkStreamingSpeedState {
-    lastTimestamp: number;
+export interface ChunkStreamingSpeedState {
+    lastTimestamp?: number;
     lastLength: number;
     ema: number;
 }
@@ -231,7 +231,7 @@ export const updateChunkStreamingSpeedEMA = ({
     alpha,
 }: UpdateLlmSpeedProps): ChunkStreamingSpeedState => {
     const now = Date.now();
-    const deltaTime = now - state.lastTimestamp;
+    const deltaTime = now - (state?.lastTimestamp ?? now);
 
     if (deltaTime <= 0) return state;
 

@@ -23,6 +23,7 @@ import {
 } from './Typewriter.styles';
 import {
     calculateAutoSpeed,
+    ChunkStreamingSpeedState,
     getCharactersCount,
     getSubTextFromHTML,
     shuffleArray,
@@ -247,10 +248,10 @@ const Typewriter: FC<TypewriterProps> = ({
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 
-    const chunkIntervalExponentialMovingAverage = useRef({
-        lastTimestamp: Date.now(),
+    const chunkIntervalExponentialMovingAverage = useRef<ChunkStreamingSpeedState>({
+        lastTimestamp: undefined,
         lastLength: charactersCount,
-        ema: speed,
+        ema: charactersCount,
     });
 
     const [shownCharCount, setShownCharCount] = useState(
