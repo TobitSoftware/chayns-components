@@ -79,9 +79,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
         }
     }, [percentage]);
 
-    useEffect(() => {
-        popupRef.current?.show();
-    }, [shouldShowThumbLabel]);
+    popupRef.current?.show();
 
     const progressBar = useMemo(() => {
         if (shouldHideProgress) {
@@ -129,26 +127,26 @@ const ProgressBar: FC<ProgressBarProps> = ({
                     animate={{ width: `${internalPercentage}%` }}
                     exit={{ width: '0%' }}
                     transition={{ type: 'tween' }}
-                />
-
-                {shouldShowThumbLabel && (
-                    <div
-                        style={{
-                            position: 'absolute',
-                            left: `${Math.min(Math.max(internalPercentage, 0), 100)}%`,
-                            pointerEvents: 'none',
-                        }}
-                    >
-                        <Popup
-                            ref={popupRef}
-                            content={thumbLabel}
-                            alignment={PopupAlignment.TopCenter}
-                            onHide={() => popupRef.current?.show()}
+                >
+                    {shouldShowThumbLabel && (
+                        <div
+                            style={{
+                                position: 'absolute',
+                                right: 0,
+                                pointerEvents: 'none',
+                            }}
                         >
-                            {}
-                        </Popup>
-                    </div>
-                )}
+                            <Popup
+                                ref={popupRef}
+                                content={thumbLabel}
+                                alignment={PopupAlignment.TopCenter}
+                                onHide={() => popupRef.current?.show()}
+                            >
+                                {}
+                            </Popup>
+                        </div>
+                    )}
+                </StyledMotionProgressBarProgress>
 
                 {shouldShowLabelInline && label && (
                     <StyledProgressBarLabel
