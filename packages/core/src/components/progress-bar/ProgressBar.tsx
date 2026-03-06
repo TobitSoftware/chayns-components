@@ -52,7 +52,7 @@ export type ProgressBarProps = {
      */
     steps?: Range<0, 101>[];
     shouldShowThumbLabel?: boolean;
-    thumbLabelFormatter?: (value: number) => string | React.ReactNode;
+    thumbLabel?: React.ReactNode;
 };
 
 const ProgressBar: FC<ProgressBarProps> = ({
@@ -63,7 +63,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
     steps,
     colors,
     shouldShowThumbLabel = false,
-    thumbLabelFormatter,
+    thumbLabel,
 }) => {
     const [internalPercentage, setInternalPercentage] = useState(0);
     const uuid = useUuid();
@@ -141,13 +141,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
                     >
                         <Popup
                             ref={popupRef}
-                            content={
-                                typeof thumbLabelFormatter === 'function' ? (
-                                    thumbLabelFormatter(internalPercentage)
-                                ) : (
-                                    <div style={{ padding: '4px' }}>{internalPercentage}%</div>
-                                )
-                            }
+                            content={thumbLabel}
                             alignment={PopupAlignment.TopCenter}
                             onHide={() => popupRef.current?.show()}
                         >
@@ -183,7 +177,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
         shouldShowLabelInline,
         shouldShowThumbLabel,
         steps,
-        thumbLabelFormatter,
+        thumbLabel,
         uuid,
     ]);
 
