@@ -237,7 +237,7 @@ export const updateChunkStreamingSpeedEMA = ({
     const now = Date.now();
     const deltaTime = now - (state?.lastTimestamp ?? now);
 
-    if (deltaTime <= 0) return state;
+    if (deltaTime <= 0) return { ...state, lastTimestamp: now };
 
     const deltaLength = currentLength - state.lastLength;
 

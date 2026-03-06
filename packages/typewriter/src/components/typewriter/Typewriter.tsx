@@ -261,12 +261,18 @@ const Typewriter: FC<TypewriterProps> = ({
     const currentPosition = useRef(0);
 
     useEffect(() => {
+        if (shouldUseResetAnimation) {
+            chunkIntervalExponentialMovingAverage.current = {
+                ema: charactersCount,
+                lastLength: charactersCount,
+            };
+        }
         chunkIntervalExponentialMovingAverage.current = updateChunkStreamingSpeedEMA({
             currentLength: charactersCount,
             state: chunkIntervalExponentialMovingAverage.current,
             alpha: 0.3,
         });
-    }, [charactersCount]);
+    }, [charactersCount, shouldUseResetAnimation]);
 
     useEffect(() => {
         if (!shouldCalcAutoSpeed) {
