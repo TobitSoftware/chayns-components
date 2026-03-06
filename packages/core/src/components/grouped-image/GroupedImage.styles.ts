@@ -23,7 +23,25 @@ type StyledImageProps = WithTheme<{
     $uuid: string;
 }>;
 
-export const StyledGroupImageElement = styled.div<StyledImageProps>`
+export const StyledGroupImageElement = styled.div.attrs<StyledImageProps>(
+    ({ $isSecondImage, $hasMultipleImages, $hasCornerImage, $uuid }) => {
+        let clipPath: string | undefined;
+        if (
+            ($isSecondImage && $hasCornerImage) ||
+            (!$isSecondImage && !$hasMultipleImages && $hasCornerImage)
+        ) {
+            clipPath = `url(#care-of-mask--${$uuid})`;
+        } else if (!$isSecondImage && $hasMultipleImages) {
+            clipPath = `url(#second-image-mask--${$uuid})`;
+        }
+
+        return {
+            style: {
+                clipPath,
+            },
+        };
+    },
+)`
     aspect-ratio: 1;
     border-radius: ${({ $shouldShowRoundImage }) => ($shouldShowRoundImage ? '50%' : '0')};
     position: absolute;
@@ -57,25 +75,6 @@ export const StyledGroupImageElement = styled.div<StyledImageProps>`
                   top: 0;
                   left: 0;
               `}
-
-    ${({ $isSecondImage, $hasMultipleImages, $hasCornerImage, $uuid }) => {
-        if (
-            ($isSecondImage && $hasCornerImage) ||
-            (!$isSecondImage && !$hasMultipleImages && $hasCornerImage)
-        ) {
-            return css`
-                clip-path: url(${`#care-of-mask--${$uuid}`});
-            `;
-        }
-
-        if (!$isSecondImage && $hasMultipleImages) {
-            return css`
-                clip-path: url(${`#second-image-mask--${$uuid}`});
-            `;
-        }
-
-        return '';
-    }}
 
     ${({ $background, $shouldPreventBackground, theme }) =>
         !$shouldPreventBackground &&
