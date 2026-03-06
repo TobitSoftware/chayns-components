@@ -211,10 +211,10 @@ export const calculateAutoSpeed = (ema: number): { speed: number; steps: number 
 interface CalculateEMAProps {
     currentEMA: number;
     newValue: number;
-    alpha: number;
+    alpha?: number;
 }
 
-export const calculateEMA = ({ currentEMA, newValue, alpha }: CalculateEMAProps): number =>
+export const calculateEMA = ({ currentEMA, newValue, alpha = 0.25 }: CalculateEMAProps): number =>
     alpha * newValue + (1 - alpha) * currentEMA;
 
 export interface ChunkStreamingSpeedState {
@@ -223,17 +223,15 @@ export interface ChunkStreamingSpeedState {
     ema: number;
 }
 
-interface UpdateLlmSpeedProps {
+interface ChunkStreamingSpeedProps {
     currentLength: number;
     state: ChunkStreamingSpeedState;
-    alpha: number;
 }
 
 export const updateChunkStreamingSpeedEMA = ({
     currentLength,
     state,
-    alpha,
-}: UpdateLlmSpeedProps): ChunkStreamingSpeedState => {
+}: ChunkStreamingSpeedProps): ChunkStreamingSpeedState => {
     const now = Date.now();
     const deltaTime = now - (state?.lastTimestamp ?? now);
 
@@ -246,7 +244,6 @@ export const updateChunkStreamingSpeedEMA = ({
     const newEMA = calculateEMA({
         currentEMA: state.ema,
         newValue: charsPerSecond,
-        alpha,
     });
 
     return {

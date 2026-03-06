@@ -117,6 +117,11 @@ export type TypewriterProps = {
      */
     shouldCalcAutoSpeed?: boolean;
     /**
+     * Sets how long the animation should last when `shouldCalcAutoSpeed` is enabled in milliseconds.
+     * When chunks are streamed, this value will only be used for the initial speed and then change to the speed characters are added at
+     */
+    autoSpeedBaseFactor?: number;
+    /**
      * Specifies whether the reset of the text should be animated with a backspace animation for
      * multiple texts.
      */
@@ -163,6 +168,7 @@ const Typewriter: FC<TypewriterProps> = ({
     startDelay = TypewriterDelay.None,
     textStyle,
     shouldCalcAutoSpeed = false,
+    autoSpeedBaseFactor = 2000,
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
     const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
@@ -251,7 +257,7 @@ const Typewriter: FC<TypewriterProps> = ({
     const chunkIntervalExponentialMovingAverage = useRef<ChunkStreamingSpeedState>({
         lastTimestamp: undefined,
         lastLength: charactersCount,
-        ema: charactersCount,
+        ema: charactersCount / (autoSpeedBaseFactor / 1000),
     });
 
     const [shownCharCount, setShownCharCount] = useState(
@@ -263,16 +269,15 @@ const Typewriter: FC<TypewriterProps> = ({
     useEffect(() => {
         if (shouldUseResetAnimation) {
             chunkIntervalExponentialMovingAverage.current = {
-                ema: charactersCount,
+                ema: charactersCount / (autoSpeedBaseFactor / 1000),
                 lastLength: charactersCount,
             };
         }
         chunkIntervalExponentialMovingAverage.current = updateChunkStreamingSpeedEMA({
             currentLength: charactersCount,
             state: chunkIntervalExponentialMovingAverage.current,
-            alpha: 0.3,
         });
-    }, [charactersCount, shouldUseResetAnimation]);
+    }, [autoSpeedBaseFactor, charactersCount, shouldUseResetAnimation]);
 
     useEffect(() => {
         if (!shouldCalcAutoSpeed) {
