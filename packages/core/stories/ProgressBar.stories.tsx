@@ -16,6 +16,7 @@ const Template: StoryFn<typeof ProgressBar> = ({ ...args }) => <ProgressBar {...
 export const General = Template.bind({});
 export const InfinityProgressBar = Template.bind({});
 export const AIServiceProgress = Template.bind({});
+export const Popup = Template.bind({});
 
 InfinityProgressBar.args = {
     percentage: undefined,
@@ -25,4 +26,8 @@ AIServiceProgress.args = {
     steps: [25, 50, 75, 95],
     shouldShowLabelInline: true,
     label: '34% verbraucht',
+};
+
+Popup.args = {
+    shouldShowThumbLabel: true,
 };

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useUuid } from '../../hooks/uuid';
 import {
     StyledMotionProgressBarProgress,
@@ -9,6 +9,8 @@ import {
     StyledProgressBarStep,
     StyledProgressBarStepWrapper,
 } from './ProgressBar.styles';
+import Popup from '../popup/Popup';
+import { PopupAlignment, PopupRef } from '../../types/popup';
 
 type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
     ? Acc[number]
@@ -49,6 +51,8 @@ export type ProgressBarProps = {
      * Visual marked steps.
      */
     steps?: Range<0, 101>[];
+    shouldShowThumbLabel?: boolean;
+    thumbLabelFormatter?: (value: number) => string | React.ReactNode;
 };
 
 const ProgressBar: FC<ProgressBarProps> = ({
@@ -58,9 +62,12 @@ const ProgressBar: FC<ProgressBarProps> = ({
     shouldShowLabelInline = false,
     steps,
     colors,
+    shouldShowThumbLabel = false,
+    thumbLabelFormatter,
 }) => {
     const [internalPercentage, setInternalPercentage] = useState(0);
     const uuid = useUuid();
+    const popupRef = useRef<PopupRef | null>(null);
 
     useEffect(() => {
         if (typeof percentage !== 'number') {
@@ -71,6 +78,10 @@ const ProgressBar: FC<ProgressBarProps> = ({
             setInternalPercentage(percentage);
         }
     }, [percentage]);
+
+    useEffect(() => {
+        popupRef.current?.show();
+    }, [shouldShowThumbLabel]);
 
     const progressBar = useMemo(() => {
         if (shouldHideProgress) {
@@ -119,6 +130,32 @@ const ProgressBar: FC<ProgressBarProps> = ({
                     exit={{ width: '0%' }}
                     transition={{ type: 'tween' }}
                 />
+
+                {shouldShowThumbLabel && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            left: `${Math.min(Math.max(internalPercentage, 0), 100)}%`,
+                            pointerEvents: 'none',
+                        }}
+                    >
+                        <Popup
+                            ref={popupRef}
+                            content={
+                                typeof thumbLabelFormatter === 'function' ? (
+                                    thumbLabelFormatter(internalPercentage)
+                                ) : (
+                                    <div style={{ padding: '4px' }}>{internalPercentage}%</div>
+                                )
+                            }
+                            alignment={PopupAlignment.TopCenter}
+                            onHide={() => popupRef.current?.show()}
+                        >
+                            {}
+                        </Popup>
+                    </div>
+                )}
+
                 {shouldShowLabelInline && label && (
                     <StyledProgressBarLabel
                         $shouldShowLabelInline={shouldShowLabelInline}
@@ -129,17 +166,24 @@ const ProgressBar: FC<ProgressBarProps> = ({
                         {label}
                     </StyledProgressBarLabel>
                 )}
+
                 <StyledProgressBarBackground $color={colors?.backgroundColor} />
             </StyledProgressBarProgressWrapper>
         );
     }, [
-        colors,
+        colors?.backgroundColor,
+        colors?.primaryTextColor,
+        colors?.progressColor,
+        colors?.secondaryTextColor,
+        colors?.stepColor,
         internalPercentage,
         label,
         percentage,
         shouldHideProgress,
         shouldShowLabelInline,
+        shouldShowThumbLabel,
         steps,
+        thumbLabelFormatter,
         uuid,
     ]);
 
@@ -154,13 +198,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
                 )}
             </StyledProgressBar>
         ),
-        [
-            progressBar,
-            label,
-            shouldShowLabelInline,
-            colors?.primaryTextColor,
-            colors?.secondaryTextColor,
-        ],
+        [colors?.primaryTextColor, label, progressBar, shouldShowLabelInline],
     );
 };
 
