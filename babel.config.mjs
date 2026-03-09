@@ -1,4 +1,5 @@
 export default {
+    plugins: [['babel-plugin-react-compiler', { target: '18', compilationMode: 'annotation' }]],
     env: {
         esm: {
             sourceType: 'unambiguous',
