@@ -13,7 +13,8 @@ import {
 } from './ProgressBar.styles';
 import { PopupAlignment, PopupRef } from '../../types/popup';
 import { ThemeContext, ThemeProvider } from 'styled-components';
-import { Popup, Theme } from '../../index';
+import { Theme } from '../color-scheme-provider/ColorSchemeProvider';
+import Popup from '../popup/Popup';
 
 type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
     ? Acc[number]
@@ -74,6 +75,8 @@ const ProgressBar: FC<ProgressBarProps> = ({
     thumbLabel,
     showShine = false,
 }) => {
+    'use memo';
+
     const [internalPercentage, setInternalPercentage] = useState(0);
     const uuid = useUuid();
     const popupRef = useRef<PopupRef | null>(null);
