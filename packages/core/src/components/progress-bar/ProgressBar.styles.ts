@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledProgressBar = styled.div`
@@ -29,11 +29,39 @@ export const StyledProgressBarProgressWrapper = styled.div<StyledProgressBarProg
 
 type StyledProgressBarProgressProps = WithTheme<{ $color?: string }>;
 
+const shineMove = keyframes`
+    from {
+        transform: translateX(-150%);
+    }
+    to {
+        transform: translateX(150%);
+    }
+`;
+
+export const StyledProgressBarShine = styled.div<{ $speed?: number; delay?: number }>`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 33%,
+        rgba(255, 255, 255, 0.5) 50%,
+        rgba(255, 255, 255, 0) 66%
+    );
+    transform: translateX(-150%);
+    animation: ${shineMove} ${({ $speed = 5 }) => `${$speed}s`} linear infinite;
+    animation-delay: ${({ delay = 0 }) => `${delay}s`};
+    opacity: 0.95;
+`;
+
 export const StyledMotionProgressBarProgress = styled(motion.div)<StyledProgressBarProgressProps>`
     height: 100%;
     position: absolute;
     top: 0;
     left: 0;
+    overflow: hidden;
     z-index: 2;
     display: flex;
     align-items: center;
@@ -99,4 +127,9 @@ export const StyledProgressBarStep = styled.div<StyledProgressBarStepProps>`
     position: absolute;
     top: 0;
     left: ${({ $position }: StyledProgressBarStepProps) => $position}%;
+`;
+
+export const StyledProgressBarThumbLabel = styled.div`
+    position: absolute;
+    right: 0;
 `;
