@@ -100,3 +100,8 @@ export const StyledProgressBarStep = styled.div<StyledProgressBarStepProps>`
     top: 0;
     left: ${({ $position }: StyledProgressBarStepProps) => $position}%;
 `;
+
+export const StyledProgressBarThumbLabel = styled.div`
+    position: absolute;
+    right: 0;
+`;

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useUuid } from '../../hooks/uuid';
 import {
     StyledMotionProgressBarProgress,
@@ -8,9 +8,11 @@ import {
     StyledProgressBarProgressWrapper,
     StyledProgressBarStep,
     StyledProgressBarStepWrapper,
+    StyledProgressBarThumbLabel,
 } from './ProgressBar.styles';
-import Popup from '../popup/Popup';
 import { PopupAlignment, PopupRef } from '../../types/popup';
+import { ThemeContext, ThemeProvider } from 'styled-components';
+import { Popup, Theme } from '../../index';
 
 type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
     ? Acc[number]
@@ -68,6 +70,8 @@ const ProgressBar: FC<ProgressBarProps> = ({
     const [internalPercentage, setInternalPercentage] = useState(0);
     const uuid = useUuid();
     const popupRef = useRef<PopupRef | null>(null);
+
+    const theme = useContext(ThemeContext) as Theme | undefined;
 
     useEffect(() => {
         if (typeof percentage !== 'number') {
@@ -131,21 +135,23 @@ const ProgressBar: FC<ProgressBarProps> = ({
                     onAnimationComplete={() => popupRef.current?.show()}
                 >
                     {shouldShowThumbLabel && thumbLabel && (
-                        <div
-                            style={{
-                                position: 'absolute',
-                                right: 0,
-                            }}
-                        >
-                            <Popup
-                                ref={popupRef}
-                                content={thumbLabel}
-                                alignment={PopupAlignment.TopCenter}
-                                onHide={() => popupRef.current?.show()}
+                        <StyledProgressBarThumbLabel>
+                            <ThemeProvider
+                                theme={{
+                                    '000': colors?.backgroundColor ?? theme?.['104'],
+                                    text: colors?.secondaryTextColor ?? theme?.['300'],
+                                }}
                             >
-                                {}
-                            </Popup>
-                        </div>
+                                <Popup
+                                    ref={popupRef}
+                                    content={thumbLabel}
+                                    alignment={PopupAlignment.TopCenter}
+                                    onHide={() => popupRef.current?.show()}
+                                >
+                                    {}
+                                </Popup>
+                            </ThemeProvider>
+                        </StyledProgressBarThumbLabel>
                     )}
                 </StyledMotionProgressBarProgress>
 
