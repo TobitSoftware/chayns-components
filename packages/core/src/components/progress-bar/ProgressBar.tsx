@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, useContext, useMemo, useRef } from 'react';
 import { useUuid } from '../../hooks/uuid';
 import {
     StyledMotionProgressBarProgress,
@@ -75,47 +75,34 @@ const ProgressBar: FC<ProgressBarProps> = ({
     thumbLabel,
     showShine = false,
 }) => {
-    'use memo';
+    ('use memo');
 
-    const [internalPercentage, setInternalPercentage] = useState(0);
     const uuid = useUuid();
     const popupRef = useRef<PopupRef | null>(null);
 
     const theme = useContext(ThemeContext) as Theme | undefined;
 
-    useEffect(() => {
-        if (typeof percentage !== 'number') {
-            return;
-        }
-
-        if (percentage >= 0 && percentage <= 100) {
-            setInternalPercentage(percentage);
-        }
-    }, [percentage]);
-
-    popupRef.current?.show();
-
     const shineEffect = useMemo(() => {
-        if (!showShine) return null;
+        if (!showShine || percentage === undefined) return null;
         const FULL_ANIMATION_LENGTH = 5;
         const MAX_SHINE_COUNT = 6;
 
-        const shineCount = Math.ceil(MAX_SHINE_COUNT * (internalPercentage / 100));
-        const speed = FULL_ANIMATION_LENGTH * (internalPercentage / 100);
+        const shineCount = Math.ceil(MAX_SHINE_COUNT * (percentage / 100));
+        const speed = FULL_ANIMATION_LENGTH * (percentage / 100);
         return Array.from({ length: shineCount }).map((_, index) => (
             <StyledProgressBarShine
                 $speed={speed}
                 delay={(FULL_ANIMATION_LENGTH / shineCount) * index}
             />
         ));
-    }, [internalPercentage, showShine]);
+    }, [percentage, showShine]);
 
     const progressBar = useMemo(() => {
         if (shouldHideProgress) {
             return null;
         }
 
-        if (typeof percentage !== 'number') {
+        if (percentage === undefined) {
             return (
                 <StyledProgressBarProgressWrapper>
                     <StyledMotionProgressBarProgress
@@ -153,7 +140,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
                     $color={colors?.progressColor}
                     key={`progress-bar__${uuid}`}
                     initial={{ width: '0%' }}
-                    animate={{ width: `${internalPercentage}%` }}
+                    animate={{ width: `${percentage}%` }}
                     exit={{ width: '0%' }}
                     transition={{ type: 'tween' }}
                     onUpdate={() => popupRef.current?.show()}
@@ -186,7 +173,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
                         $shouldShowLabelInline={shouldShowLabelInline}
                         $primaryColor={colors?.primaryTextColor}
                         $secondaryColor={colors?.secondaryTextColor}
-                        $colorSplitPosition={internalPercentage}
+                        $colorSplitPosition={percentage}
                     >
                         {label}
                     </StyledProgressBarLabel>
@@ -201,7 +188,6 @@ const ProgressBar: FC<ProgressBarProps> = ({
         colors?.progressColor,
         colors?.secondaryTextColor,
         colors?.stepColor,
-        internalPercentage,
         label,
         percentage,
         shineEffect,
