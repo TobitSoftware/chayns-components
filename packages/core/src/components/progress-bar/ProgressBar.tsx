@@ -127,13 +127,14 @@ const ProgressBar: FC<ProgressBarProps> = ({
                     animate={{ width: `${internalPercentage}%` }}
                     exit={{ width: '0%' }}
                     transition={{ type: 'tween' }}
+                    onUpdate={() => popupRef.current?.show()}
+                    onAnimationComplete={() => popupRef.current?.show()}
                 >
-                    {shouldShowThumbLabel && (
+                    {shouldShowThumbLabel && thumbLabel && (
                         <div
                             style={{
                                 position: 'absolute',
                                 right: 0,
-                                pointerEvents: 'none',
                             }}
                         >
                             <Popup
