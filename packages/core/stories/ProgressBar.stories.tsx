@@ -27,6 +27,8 @@ export const InfinityProgressBar = Template.bind({});
 export const AIServiceProgress = Template.bind({});
 export const MovingThumbLabel = MovingTemplate.bind({});
 
+export const ShineAnimation = Template.bind({});
+
 InfinityProgressBar.args = {
     percentage: undefined,
 };
@@ -39,4 +41,9 @@ AIServiceProgress.args = {
 
 MovingThumbLabel.args = {
     thumbLabel: 'Beispiel Thumblabel',
+};
+
+ShineAnimation.args = {
+    percentage: 100,
+    showShine: true,
 };

@@ -6,6 +6,7 @@ import {
     StyledProgressBarBackground,
     StyledProgressBarLabel,
     StyledProgressBarProgressWrapper,
+    StyledProgressBarShine,
     StyledProgressBarStep,
     StyledProgressBarStepWrapper,
     StyledProgressBarThumbLabel,
@@ -53,7 +54,14 @@ export type ProgressBarProps = {
      * Visual marked steps.
      */
     steps?: Range<0, 101>[];
+    /**
+     * The label that should be displayed on the thumb of the progress bar.
+     */
     thumbLabel?: React.ReactNode;
+    /**
+     * Whether a shine animation should be shown on the progress bar. The amount of shine is based on the percentage value.
+     */
+    showShine?: boolean;
 };
 
 const ProgressBar: FC<ProgressBarProps> = ({
@@ -64,6 +72,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
     steps,
     colors,
     thumbLabel,
+    showShine = false,
 }) => {
     const [internalPercentage, setInternalPercentage] = useState(0);
     const uuid = useUuid();
@@ -82,6 +91,21 @@ const ProgressBar: FC<ProgressBarProps> = ({
     }, [percentage]);
 
     popupRef.current?.show();
+
+    const shineEffect = useMemo(() => {
+        if (!showShine) return null;
+        const FULL_ANIMATION_LENGTH = 5;
+        const MAX_SHINE_COUNT = 6;
+
+        const shineCount = Math.ceil(MAX_SHINE_COUNT * (internalPercentage / 100));
+        const speed = FULL_ANIMATION_LENGTH * (internalPercentage / 100);
+        return Array.from({ length: shineCount }).map((_, index) => (
+            <StyledProgressBarShine
+                $speed={speed}
+                delay={(FULL_ANIMATION_LENGTH / shineCount) * index}
+            />
+        ));
+    }, [internalPercentage, showShine]);
 
     const progressBar = useMemo(() => {
         if (shouldHideProgress) {
@@ -132,8 +156,9 @@ const ProgressBar: FC<ProgressBarProps> = ({
                     onUpdate={() => popupRef.current?.show()}
                     onAnimationComplete={() => popupRef.current?.show()}
                 >
+                    {showShine && shineEffect}
                     {thumbLabel && (
-                        <StyledProgressBarThumbLabel>
+                        <StyledProgressBarThumbLabel onClick={(event) => event.stopPropagation()}>
                             <ThemeProvider
                                 theme={{
                                     '000': colors?.backgroundColor ?? theme?.['104'],
@@ -176,8 +201,10 @@ const ProgressBar: FC<ProgressBarProps> = ({
         internalPercentage,
         label,
         percentage,
+        shineEffect,
         shouldHideProgress,
         shouldShowLabelInline,
+        showShine,
         steps,
         theme,
         thumbLabel,
