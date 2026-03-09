@@ -38,6 +38,5 @@ AIServiceProgress.args = {
 };
 
 MovingThumbLabel.args = {
-    shouldShowThumbLabel: true,
     thumbLabel: 'Beispiel Thumblabel',
 };

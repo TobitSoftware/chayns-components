@@ -53,7 +53,6 @@ export type ProgressBarProps = {
      * Visual marked steps.
      */
     steps?: Range<0, 101>[];
-    shouldShowThumbLabel?: boolean;
     thumbLabel?: React.ReactNode;
 };
 
@@ -64,7 +63,6 @@ const ProgressBar: FC<ProgressBarProps> = ({
     shouldShowLabelInline = false,
     steps,
     colors,
-    shouldShowThumbLabel = false,
     thumbLabel,
 }) => {
     const [internalPercentage, setInternalPercentage] = useState(0);
@@ -134,7 +132,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
                     onUpdate={() => popupRef.current?.show()}
                     onAnimationComplete={() => popupRef.current?.show()}
                 >
-                    {shouldShowThumbLabel && thumbLabel && (
+                    {thumbLabel && (
                         <StyledProgressBarThumbLabel>
                             <ThemeProvider
                                 theme={{
@@ -180,8 +178,8 @@ const ProgressBar: FC<ProgressBarProps> = ({
         percentage,
         shouldHideProgress,
         shouldShowLabelInline,
-        shouldShowThumbLabel,
         steps,
+        theme,
         thumbLabel,
         uuid,
     ]);
