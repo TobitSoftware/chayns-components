@@ -75,7 +75,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
     thumbLabel,
     showShine = false,
 }) => {
-    ('use memo');
+    'use memo';
 
     const uuid = useUuid();
     const popupRef = useRef<PopupRef | null>(null);
@@ -91,8 +91,10 @@ const ProgressBar: FC<ProgressBarProps> = ({
         const speed = FULL_ANIMATION_LENGTH * (percentage / 100);
         return Array.from({ length: shineCount }).map((_, index) => (
             <StyledProgressBarShine
+                /* eslint-disable-next-line react/no-array-index-key */
+                key={`progress-bar-shine__${shineCount}__${index}`}
                 $speed={speed}
-                delay={(FULL_ANIMATION_LENGTH / shineCount) * index}
+                $delay={(FULL_ANIMATION_LENGTH / shineCount) * index}
             />
         ));
     }, [percentage, showShine]);

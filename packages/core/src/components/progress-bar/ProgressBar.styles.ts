@@ -38,10 +38,12 @@ const shineMove = keyframes`
     }
 `;
 
-export const StyledProgressBarShine = styled.div<{ $speed?: number; delay?: number }>`
+export const StyledProgressBarShine = styled.div.attrs<{ $speed?: number; $delay?: number }>(
+    ({ $delay }) => ({
+        style: { animationDelay: `${$delay ?? 0}s` },
+    }),
+)`
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     background: linear-gradient(
@@ -52,7 +54,6 @@ export const StyledProgressBarShine = styled.div<{ $speed?: number; delay?: numb
     );
     transform: translateX(-150%);
     animation: ${shineMove} ${({ $speed = 5 }) => `${$speed}s`} linear infinite;
-    animation-delay: ${({ delay = 0 }) => `${delay}s`};
     opacity: 0.95;
 `;
 
