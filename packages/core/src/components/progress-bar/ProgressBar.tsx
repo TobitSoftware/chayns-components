@@ -63,6 +63,10 @@ export type ProgressBarProps = {
      * Whether a shine animation should be shown on the progress bar. The amount of shine is based on the percentage value.
      */
     showShine?: boolean;
+    /**
+     * The height of the progress bar in pixels. If not provided, it will be 10px if shouldShowLabelInline is false and 20px if shouldShowLabelInline is true.
+     */
+    height?: number;
 };
 
 const ProgressBar: FC<ProgressBarProps> = ({
@@ -74,6 +78,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
     colors,
     thumbLabel,
     showShine = false,
+    height,
 }) => {
     'use memo';
 
@@ -126,7 +131,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
         }
 
         return (
-            <StyledProgressBarProgressWrapper $isBig={shouldShowLabelInline}>
+            <StyledProgressBarProgressWrapper $isBig={shouldShowLabelInline} $height={height}>
                 {!!steps?.length && (
                     <StyledProgressBarStepWrapper>
                         {steps.map((step) => (
@@ -190,6 +195,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
         colors?.progressColor,
         colors?.secondaryTextColor,
         colors?.stepColor,
+        height,
         label,
         percentage,
         shineEffect,

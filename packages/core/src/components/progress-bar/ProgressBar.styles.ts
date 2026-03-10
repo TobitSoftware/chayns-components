@@ -17,14 +17,15 @@ export const StyledProgressBarBackground = styled.div<StyledProgressBarBackgroun
 
 type StyledProgressBarProgressWrapperProps = WithTheme<{
     $isBig?: boolean;
+    $height?: number;
 }>;
 
 export const StyledProgressBarProgressWrapper = styled.div<StyledProgressBarProgressWrapperProps>`
     overflow: hidden;
     position: relative;
     width: 100%;
-    height: ${({ $isBig }) => ($isBig ? 20 : 10)}px;
-    border-radius: ${({ $isBig }) => ($isBig ? 20 : 2)}px;
+    height: ${({ $height, $isBig }) => $height || ($isBig ? 20 : 10)}px;
+    border-radius: ${({ $height, $isBig }) => ($isBig ? $height : 2)}px;
 `;
 
 type StyledProgressBarProgressProps = WithTheme<{ $color?: string }>;
