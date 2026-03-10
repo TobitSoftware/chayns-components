@@ -2,8 +2,8 @@ import { ChaynsProvider, ChaynsReactFunctions, ChaynsReactValues } from 'chayns-
 import React, { type CSSProperties } from 'react';
 import { renderToString } from 'react-dom/server';
 import ColorSchemeProvider from '../components/color-scheme-provider/ColorSchemeProvider';
-import type { IComboBoxItem } from '../components/combobox/ComboBox';
 import type { SliderButtonItem } from '../types/slider-button';
+import { IComboBoxItem } from '../components/combobox/ComboBox.types';
 
 interface CalculateMaxComboBoxItemWidthOptions {
     functions: ChaynsReactFunctions;

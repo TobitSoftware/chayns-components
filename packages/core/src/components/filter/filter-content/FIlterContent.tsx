@@ -14,8 +14,9 @@ import {
     SearchConfig,
     SortConfig,
 } from '../../../types/filter';
-import ComboBox, { IComboBoxItem } from '../../combobox/ComboBox';
+import ComboBox from '../../combobox/ComboBox';
 import Checkbox from '../../checkbox/Checkbox';
+import { IComboBoxItem } from '../../combobox/ComboBox.types';
 
 export type FilterContentProps = {
     searchConfig?: SearchConfig;

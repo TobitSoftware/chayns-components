@@ -1,4 +1,3 @@
-import { getDevice } from 'chayns-api';
 import React, {
     ChangeEventHandler,
     CSSProperties,
@@ -14,7 +13,6 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { BrowserName } from '../../types/chayns';
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import { StyledInputRightElement } from '../input/Input.styles';
 import {
@@ -97,8 +95,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
         const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-        const { browser } = getDevice();
-
         useCursorRepaint(textareaRef);
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -141,7 +137,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                     >
                         <StyledTextAreaContent>
                             <StyledTextAreaInput
-                                $browser={browser?.name as BrowserName}
+                                className="chayns-scrollbar"
                                 disabled={isDisabled}
                                 $isInvalid={isInvalid}
                                 ref={textareaRef}
@@ -171,7 +167,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 </StyledTextArea>
             ),
             [
-                browser?.name,
                 isDisabled,
                 isInvalid,
                 isOverflowing,

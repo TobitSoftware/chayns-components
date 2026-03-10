@@ -1,6 +1,4 @@
-import { getDevice } from 'chayns-api';
 import React, { FC, ReactNode, UIEvent, useMemo } from 'react';
-import { BrowserName } from '../../../types/chayns';
 import type { AccordionProps } from '../Accordion';
 import { AccordionGroupContext } from '../accordion-group/AccordionGroup';
 import { StyledMotionAccordionBody } from './AccordionBody.styles';
@@ -38,8 +36,6 @@ const AccordionBody: FC<AccordionBodyProps> = ({
     shouldSkipAnimation,
     onAnimationComplete,
 }) => {
-    const { browser } = getDevice();
-
     const AccordionGroupContextProviderValue = useMemo(
         () => ({ openAccordionUuid: undefined }),
         [],
@@ -56,9 +52,8 @@ const AccordionBody: FC<AccordionBodyProps> = ({
                 height: shouldSkipAnimation ? { duration: 0, ease: 'linear' } : { duration: 0.25 },
                 opacity: shouldSkipAnimation ? { duration: 0 } : { duration: 0.25 },
             }}
-            className="beta-chayns-accordion-body"
+            className="beta-chayns-accordion-body chayns-scrollbar"
             $maxHeight={maxHeight}
-            $browser={browser?.name as BrowserName}
             onAnimationComplete={onAnimationComplete}
             onScroll={onScroll}
         >

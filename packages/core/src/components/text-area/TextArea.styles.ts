@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react';
-import styled, { css } from 'styled-components';
-import { BrowserName } from '../../types/chayns';
+import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { TextAreaProps } from './TextArea';
 
@@ -37,7 +36,6 @@ export const StyledTextAreaContent = styled.div`
 `;
 
 type StyledTextAreaInputProps = WithTheme<{
-    $browser: BrowserName;
     $isInvalid: TextAreaProps['isInvalid'];
     $isOverflowing: boolean;
     $maxHeight: CSSProperties['maxHeight'];
@@ -58,35 +56,6 @@ export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
     width: 100%;
     padding: 8px 10px;
     cursor: text;
-
-    // Styles for custom scrollbar
-    ${({ $browser, theme }: StyledTextAreaInputProps) =>
-        $browser === 'firefox'
-            ? css`
-                  scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
-                  scrollbar-width: thin;
-              `
-            : css`
-                  &::-webkit-scrollbar {
-                      width: 10px;
-                  }
-
-                  &::-webkit-scrollbar-track {
-                      background-color: transparent;
-                  }
-
-                  &::-webkit-scrollbar-button {
-                      background-color: transparent;
-                      height: 5px;
-                  }
-
-                  &::-webkit-scrollbar-thumb {
-                      background-color: rgba(${theme['text-rgb']}, 0.15);
-                      border-radius: 20px;
-                      background-clip: padding-box;
-                      border: solid 3px transparent;
-                  }
-              `}
 `;
 
 export const StyledTextAreaLabelWrapper = styled.label`

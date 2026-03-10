@@ -1,5 +1,4 @@
-import { AreaContext, BrowserName, useIsTouch } from '@chayns-components/core';
-import { getDevice } from 'chayns-api';
+import { AreaContext, useIsTouch } from '@chayns-components/core';
 import { AnimatePresence } from 'motion/react';
 import React, {
     ChangeEvent,
@@ -201,8 +200,6 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const savedCursorPositionRef = useRef<number>(0);
 
         const valueRef = useRef(value);
-
-        const { browser } = getDevice();
 
         useCursorPosition(
             editorRef,
@@ -840,7 +837,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         />
                     )}
                     <StyledMotionEmojiInputEditor
-                        $browser={browser?.name as BrowserName}
+                        className="chayns-scrollbar"
                         animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
                         contentEditable
                         id={inputId}

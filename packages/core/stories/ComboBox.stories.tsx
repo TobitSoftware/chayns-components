@@ -1,9 +1,10 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React, { ChangeEvent, useState } from 'react';
 import { DropdownDirection } from '../src/types/dropdown';
-import ComboBox, { IComboBoxItem } from '../src/components/combobox/ComboBox';
+import ComboBox from '../src/components/combobox/ComboBox';
 import Icon from '../src/components/icon/Icon';
 import { Badge } from '@chayns-components/core';
+import { IComboBoxItem } from '../src/components/combobox/ComboBox.types';
 
 export default {
     title: 'Core/ComboBox',

@@ -1,7 +1,6 @@
 // @ts-nocheck
 
-import { BrowserName, useCombinedRefs, useIsMeasuredClone } from '@chayns-components/core';
-import { getDevice } from 'chayns-api';
+import { useCombinedRefs, useIsMeasuredClone } from '@chayns-components/core';
 import emojiLib from 'emojilib';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import germanEmojiLib from '../../../constants/emoji-de-DE.json';
@@ -70,8 +69,6 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
     const shouldPreventEmojiControlsRef = useRef(false);
 
     const combinedRef = useCombinedRefs(emojiRef, ref);
-
-    const { browser } = getDevice();
 
     const { addOrUpdateEmojiInHistory, historyEmojis } = useEmojiHistory({
         accessToken,
@@ -317,7 +314,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
 
     return (
         <StyledEmojiPickerEmojis
-            $browser={browser?.name as BrowserName}
+            className="chayns-scrollbar"
             $shouldPreventScroll={shouldPreventScroll}
             $shouldShowNoContentInfo={shouldShowNoContentInfo}
             ref={combinedRef}

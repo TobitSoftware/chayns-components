@@ -20,8 +20,6 @@ import {
     StyledSearchBoxBodyHead,
     StyledSearchBoxBodyHeadGroupName,
 } from './SearchBoxBody.styles';
-import { useDevice } from 'chayns-api';
-import { BrowserName } from '../../../types/chayns';
 
 export type SearchBoxBodyProps = {
     children: ReactNode;
@@ -50,8 +48,6 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
         const [currentGroupName, setCurrentGroupName] = useState('');
 
         const headRef = useRef<HTMLDivElement>(null);
-
-        const { browser } = useDevice();
 
         const headSize = useElementSize(headRef);
 
@@ -128,7 +124,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                         $headHeight={headHeight}
                         key="content"
                         id={`searchBoxContent__${uuid}`}
-                        $browser={(browser as { name: BrowserName })?.name}
+                        className="chayns-scrollbar"
                         tabIndex={0}
                         onScroll={handleScroll}
                     >
@@ -137,7 +133,6 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                 </StyledSearchBoxBody>
             ),
             [
-                browser,
                 children,
                 currentGroupName,
                 filterButtons,

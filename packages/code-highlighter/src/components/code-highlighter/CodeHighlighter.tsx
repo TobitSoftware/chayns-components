@@ -1,5 +1,3 @@
-import { BrowserName } from '@chayns-components/core';
-import { useDevice } from 'chayns-api';
 import { format } from 'prettier/standalone';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -16,6 +14,20 @@ import {
     StyledCodeHighlighterHeader,
 } from './CodeHighlighter.styles';
 import CopyToClipboard from './copy-to-clipboard/CopyToClipboard';
+
+type AddScrollbarClassOptions = {
+    root: HTMLDivElement | null;
+    className: string;
+};
+
+const addScrollbarClassToPre = ({ root, className }: AddScrollbarClassOptions) => {
+    if (!root) return;
+
+    const preElement = root.querySelector('pre');
+    if (!preElement) return;
+
+    preElement.classList.add(className);
+};
 
 export type CodeHighlighterProps = {
     /**
@@ -73,7 +85,9 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const { browser } = useDevice();
+    useEffect(() => {
+        addScrollbarClassToPre({ root: ref.current, className: 'chayns-scrollbar' });
+    }, []);
 
     useEffect(() => {
         const handleResize = () => {
@@ -156,12 +170,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
     return useMemo(
         () => (
-            <StyledCodeHighlighter
-                $browser={browser?.name as BrowserName}
-                $shouldWrapLines={shouldWrapLines}
-                $codeTheme={theme}
-                ref={ref}
-            >
+            <StyledCodeHighlighter $shouldWrapLines={shouldWrapLines} $codeTheme={theme} ref={ref}>
                 <StyledCodeHighlighterHeader $codeTheme={theme}>
                     <StyledCodeHighlighterFileName $codeTheme={theme}>
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
@@ -183,7 +192,6 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
             </StyledCodeHighlighter>
         ),
         [
-            browser?.name,
             theme,
             language,
             code,

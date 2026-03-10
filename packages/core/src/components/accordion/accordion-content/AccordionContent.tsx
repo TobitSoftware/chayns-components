@@ -1,6 +1,4 @@
-import { getDevice } from 'chayns-api';
 import React, { FC, ReactNode, UIEvent } from 'react';
-import { BrowserName } from '../../../types/chayns';
 import { StyledAccordionContent } from './AccordionContent.styles';
 
 export type AccordionContentProps = {
@@ -27,21 +25,16 @@ const AccordionContent: FC<AccordionContentProps> = ({
     maxHeight,
     onScroll,
     shouldPreventBottomSpace = false,
-}) => {
-    const { browser } = getDevice();
-
-    return (
-        <StyledAccordionContent
-            className="beta-chayns-accordion-content"
-            $browser={browser?.name as BrowserName}
-            $maxHeight={maxHeight}
-            onScroll={onScroll}
-            $shouldPreventBottomSpace={shouldPreventBottomSpace}
-        >
-            {children}
-        </StyledAccordionContent>
-    );
-};
+}) => (
+    <StyledAccordionContent
+        className="beta-chayns-accordion-content chayns-scrollbar"
+        $maxHeight={maxHeight}
+        onScroll={onScroll}
+        $shouldPreventBottomSpace={shouldPreventBottomSpace}
+    >
+        {children}
+    </StyledAccordionContent>
+);
 
 AccordionContent.displayName = 'AccordionContent';
 

@@ -43,14 +43,7 @@ export {
 } from './components/file-list/FileList';
 export { default as FileSelect } from './components/file-select/FileSelect';
 export { default as DropdownBodyWrapper } from './components/dropdown-body-wrapper/DropdownBodyWrapper';
-export {
-    default as ComboBox,
-    type ComboBoxTextStyles,
-    type IComboBoxItem as ComboBoxItem,
-    type IComboBoxItems as ComboBoxItems,
-    type ComboBoxRef,
-    ComboBoxSize,
-} from './components/combobox/ComboBox';
+export { default as ComboBox } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as HighlightSlider } from './components/highlight-slider/HighlightSlider';
 export type { HighlightSliderItemColors as HighlightSliderColors } from './components/highlight-slider/highlight-slider-item/HighlightSliderItem';
@@ -155,3 +148,8 @@ export { isTobitEmployee } from './utils/isTobitEmployee';
 export { getUsableHeight } from './utils/pageProvider';
 export { uploadFile } from './utils/uploadFile';
 export type { Theme } from './components/color-scheme-provider/ColorSchemeProvider';
+export { ComboBoxSize } from './components/combobox/ComboBox.types';
+export { IComboBoxItem as ComboBoxItem } from './components/combobox/ComboBox.types';
+export { ComboBoxTextStyles } from './components/combobox/ComboBox.types';
+export { IComboBoxItems as ComboBoxItems } from './components/combobox/ComboBox.types';
+export { ComboBoxRef } from './components/combobox/ComboBox.types';

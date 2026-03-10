@@ -1,6 +1,6 @@
 import type { BrowserName, WithTheme } from '@chayns-components/core';
 import { motion } from 'motion/react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { getFontFamily } from '../../utils/font';
 
 type StyledEmojiInputProps = WithTheme<{ $isDisabled?: boolean; $shouldChangeColor: boolean }>;
@@ -43,7 +43,6 @@ export const StyledEmojiInputContent = styled.div`
 
 type StyledEmojiInputEditorProps = WithTheme<{
     $shouldShowContent: boolean;
-    $browser: BrowserName;
 }>;
 
 export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputEditorProps>`
@@ -69,33 +68,6 @@ export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputE
             opacity: 0.5;
         }
     }
-
-    // Styles for custom scrollbar
-    ${({ $browser, theme }: StyledEmojiInputEditorProps) =>
-        $browser === 'firefox'
-            ? css`
-                  scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
-                  scrollbar-width: thin;
-              `
-            : css`
-                  &::-webkit-scrollbar {
-                      width: 5px;
-                  }
-
-                  &::-webkit-scrollbar-track {
-                      background-color: transparent;
-                  }
-
-                  &::-webkit-scrollbar-button {
-                      background-color: transparent;
-                      height: 5px;
-                  }
-
-                  &::-webkit-scrollbar-thumb {
-                      background-color: rgba(${theme['text-rgb']}, 0.15);
-                      border-radius: 20px;
-                  }
-              `}
 `;
 
 export const StyledEmojiInputRightWrapper = styled.div`

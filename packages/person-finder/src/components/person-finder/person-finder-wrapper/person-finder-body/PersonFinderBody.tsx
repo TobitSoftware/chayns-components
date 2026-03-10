@@ -1,9 +1,7 @@
 import React, { forwardRef, UIEvent, useMemo, useRef, useState } from 'react';
 import { StyledPersonFinderBody, StyledPersonFinderBodyContent } from './PersonFinderBody.styles';
 import { PersonFinderFilterTypes } from '../../../../types/personFinder';
-import { BrowserName } from '@chayns-components/core';
 import { usePersonFinder } from '../../../PersonFinderProvider';
-import { useDevice } from 'chayns-api';
 import { getGroupName } from '../../../../utils/personFinder';
 import { useClosestElementAbove } from '../../../../hooks/personFinder';
 import PersonFinderGroup from './person-finder-group/PersonFinderGroup';
@@ -19,8 +17,6 @@ export type PersonFinderBodyProps = {
 const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
     ({ onAdd, filterTypes, onRemove, shouldRenderInline }, ref) => {
         const { activeFilter, data } = usePersonFinder();
-
-        const { browser } = useDevice();
 
         const [isScrollTop, setIsScrollTop] = useState(true);
 
@@ -68,7 +64,7 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
                 />
                 <StyledPersonFinderBodyContent
                     ref={contentRef}
-                    $browser={browser?.name as BrowserName}
+                    className="chayns-scrollbar"
                     onScroll={handleContentScroll}
                 >
                     {content}

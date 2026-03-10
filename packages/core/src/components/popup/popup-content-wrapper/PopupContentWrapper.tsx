@@ -1,11 +1,10 @@
-import { getDevice, useSite } from 'chayns-api';
+import { useSite } from 'chayns-api';
 import React, { ReactNode, type MouseEventHandler } from 'react';
 import { PopupAlignment, PopupCoordinates } from '../../../types/popup';
 import {
     StyledMotionPopupContentWrapper,
     StyledPopupContentWrapperContent,
 } from './PopupContentWrapper.styles';
-import { BrowserName } from '../../../types/chayns';
 
 type PopupContentProps = {
     alignment: PopupAlignment;
@@ -35,8 +34,6 @@ const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
         ref,
     ) => {
         const { colorMode } = useSite();
-
-        const { browser } = getDevice();
 
         const isBottomLeftAlignment = alignment === PopupAlignment.BottomLeft;
         const isTopLeftAlignment = alignment === PopupAlignment.TopLeft;
@@ -74,7 +71,7 @@ const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
                 `}
             >
                 <StyledPopupContentWrapperContent
-                    $browser={browser?.name as BrowserName}
+                    className="chayns-scrollbar"
                     $maxHeight={maxHeight}
                 >
                     {children}

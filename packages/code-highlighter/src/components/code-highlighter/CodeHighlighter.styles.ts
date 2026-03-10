@@ -1,10 +1,9 @@
-import type { BrowserName, WithTheme } from '@chayns-components/core';
-import styled, { css } from 'styled-components';
+import type { WithTheme } from '@chayns-components/core';
+import styled from 'styled-components';
 import { CodeHighlighterTheme } from '../../types/codeHighlighter';
 
 type StyledCodeHighlighterProps = WithTheme<{
     $codeTheme: CodeHighlighterTheme;
-    $browser: BrowserName;
     $shouldWrapLines?: boolean;
 }>;
 
@@ -20,33 +19,6 @@ export const StyledCodeHighlighter = styled.div<StyledCodeHighlighterProps>`
         overflow: auto;
         padding: 15px;
         line-height: 1.5;
-
-        // Styles for custom scrollbar
-        ${({ $browser, theme }: StyledCodeHighlighterProps) =>
-            $browser === 'firefox'
-                ? css`
-                      scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
-                      scrollbar-width: thin;
-                  `
-                : css`
-                      &::-webkit-scrollbar {
-                          height: 5px;
-                      }
-
-                      &::-webkit-scrollbar-track {
-                          background-color: transparent;
-                      }
-
-                      &::-webkit-scrollbar-button {
-                          background-color: transparent;
-                          height: 5px;
-                      }
-
-                      &::-webkit-scrollbar-thumb {
-                          background-color: rgba(${theme['text-rgb']}, 0.15);
-                          border-radius: 20px;
-                      }
-                  `}
 
         code {
             white-space: ${({ $shouldWrapLines }) =>

@@ -1,6 +1,5 @@
 import { motion } from 'motion/react';
-import styled, { css } from 'styled-components';
-import { BrowserName } from '../../types/chayns';
+import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledSearchBox = styled.div``;
@@ -8,7 +7,6 @@ export const StyledSearchBox = styled.div``;
 type StyledMotionSearchBoxBodyProps = WithTheme<{
     $height: number;
     $width: number;
-    $browser: BrowserName;
 }>;
 
 export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBoxBodyProps>`
@@ -27,33 +25,6 @@ export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBo
     overflow-y: ${({ $height }) => ($height <= 300 ? 'hidden' : 'auto')};
     box-shadow: 0 0 0 1px
         rgba(${({ theme }: StyledMotionSearchBoxBodyProps) => theme['009-rgb']}, 0.08) inset;
-
-    // Styles for custom scrollbar
-    ${({ $browser, theme }: StyledMotionSearchBoxBodyProps) =>
-        $browser === 'firefox'
-            ? css`
-                  scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
-                  scrollbar-width: thin;
-              `
-            : css`
-                  &::-webkit-scrollbar {
-                      width: 5px;
-                  }
-
-                  &::-webkit-scrollbar-track {
-                      background-color: transparent;
-                  }
-
-                  &::-webkit-scrollbar-button {
-                      background-color: transparent;
-                      height: 5px;
-                  }
-
-                  &::-webkit-scrollbar-thumb {
-                      background-color: rgba(${theme['text-rgb']}, 0.15);
-                      border-radius: 20px;
-                  }
-              `}
 `;
 
 export const StyledSearchBoxIcon = styled.div`

@@ -1,10 +1,9 @@
-import type { BrowserName, WithTheme } from '@chayns-components/core';
+import type { WithTheme } from '@chayns-components/core';
 import styled, { css } from 'styled-components';
 
 type StyledEmojiPickerEmojisProps = WithTheme<{
     $shouldPreventScroll: boolean;
     $shouldShowNoContentInfo: boolean;
-    $browser: BrowserName;
 }>;
 
 export const StyledEmojiPickerEmojis = styled.div<StyledEmojiPickerEmojisProps>`
@@ -27,32 +26,7 @@ export const StyledEmojiPickerEmojis = styled.div<StyledEmojiPickerEmojisProps>`
         $shouldPreventScroll &&
         css`
             padding-right: 5px;
-        `} // Styles for custom scrollbar
-    ${({ $browser, theme }: StyledEmojiPickerEmojisProps) =>
-        $browser === 'firefox'
-            ? css`
-                  scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
-                  scrollbar-width: thin;
-              `
-            : css`
-                  &::-webkit-scrollbar {
-                      width: 5px;
-                  }
-
-                  &::-webkit-scrollbar-track {
-                      background-color: transparent;
-                  }
-
-                  &::-webkit-scrollbar-button {
-                      background-color: transparent;
-                      height: 5px;
-                  }
-
-                  &::-webkit-scrollbar-thumb {
-                      background-color: rgba(${theme['text-rgb']}, 0.15);
-                      border-radius: 20px;
-                  }
-              `}
+        `}
 `;
 
 export const StyledEmojiPickerEmojisNoContentInfo = styled.div`

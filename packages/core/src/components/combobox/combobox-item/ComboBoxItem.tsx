@@ -1,7 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import { useIsTouch } from '../../../utils/environment';
 import Icon from '../../icon/Icon';
-import type { ComboBoxProps, IComboBoxItem } from '../ComboBox';
 import {
     StyledComboBoxItem,
     StyledComboBoxItemContent,
@@ -13,6 +12,7 @@ import {
     StyledComboBoxItemIconsWrapper,
     StyledComboBoxItemImage,
 } from './ComboBoxItem.styles';
+import { ComboBoxProps, IComboBoxItem } from '../ComboBox.types';
 
 export type ComboBoxItemProps = {
     item: IComboBoxItem;
