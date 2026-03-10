@@ -78,6 +78,8 @@ const NumberInput: FC<NumberInputProps> = ({
     shouldShowOnlyBottomBorder,
     minNumber = -Infinity,
 }) => {
+    'use memo';
+
     // the plainText will be shown in the input, when it is in focus
     const [plainText, setPlainText] = useState<string>('');
     // the formattedValue will be shown in the input, when it is not in focus

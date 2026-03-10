@@ -25,6 +25,7 @@ interface FormateNumberOptions {
 }
 
 export const formateNumber = ({ number, isMoneyInput, isTimeInput }: FormateNumberOptions) => {
+    if (Number.isNaN(number)) return '';
     if (isTimeInput && typeof number === 'string') {
         let hours = 0;
         let minutes = 0;
