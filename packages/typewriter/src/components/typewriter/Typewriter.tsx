@@ -334,6 +334,8 @@ const Typewriter: FC<TypewriterProps> = ({
 
                 if (nextShownCharCount <= 0) {
                     cancelAnimationFrame(frameId);
+                    currentPosition.current = 0;
+                    setShownCharCount(0);
 
                     if (typeof onResetAnimationEnd === 'function') {
                         onResetAnimationEnd();
@@ -347,6 +349,10 @@ const Typewriter: FC<TypewriterProps> = ({
                     }
                     return;
                 }
+
+                currentPosition.current = nextShownCharCount;
+                setShownCharCount(nextShownCharCount);
+
                 lastTime = timestamp;
                 frameId = requestAnimationFrame(resetAnimation);
             };
@@ -369,7 +375,6 @@ const Typewriter: FC<TypewriterProps> = ({
                     const charactersToAdd = Math.ceil(
                         timeSinceLastFrame / (autoSpeed.current ?? speed),
                     );
-                    console.log(autoSpeed.current, resetSpeed);
 
                     if (charactersToAdd > 0) {
                         setShownCharCount((prevState) => {
