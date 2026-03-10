@@ -1,8 +1,15 @@
-import { ChaynsDesignSettings, ChaynsParagraphFormat, ColorMode, useSite } from 'chayns-api';
+import {
+    ChaynsDesignSettings,
+    ChaynsParagraphFormat,
+    ColorMode,
+    useDevice,
+    useSite,
+} from 'chayns-api';
 import React, { createContext, FC, ReactNode, useContext, useMemo } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { StyledColorSchemeProvider } from './ColorSchemeProvider.styles';
 import { useChaynsTheme } from './hooks/useChaynsTheme';
+import { BrowserName } from '../../types/chayns';
 
 export type ColorSchemeProviderProps = {
     /**
@@ -90,6 +97,8 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
     const { color: internalColor, colorMode: internalColorMode } = useSite();
 
+    const { browser } = useDevice();
+
     const color = colorProp ?? context?.designSettings?.color ?? internalColor;
     const colorMode = colorModeProp ?? context?.designSettings?.colorMode ?? internalColorMode;
 
@@ -115,7 +124,11 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     return (
         <ThemeProvider theme={contextValue.theme}>
             <ColorSchemeContext.Provider value={contextValue}>
-                <StyledColorSchemeProvider className="color-scheme-provider" style={style}>
+                <StyledColorSchemeProvider
+                    className="color-scheme-provider"
+                    style={style}
+                    $browser={browser?.name as BrowserName}
+                >
                     {children}
                 </StyledColorSchemeProvider>
                 <GlobalStyle />
