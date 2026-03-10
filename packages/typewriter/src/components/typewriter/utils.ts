@@ -189,23 +189,12 @@ export const shuffleArray = <T>(array: T[]): T[] => {
     return result;
 };
 
-export const calculateAutoSpeed = (ema: number): { speed: number; steps: number } => {
-    // nested timer calls are clamped to a 4ms minimum
-    // https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout#reasons_for_longer_delays_than_specified
-    const MINIMUM_TIMEOUT = 4;
-
+export const getSafeAutoSpeed = (ema: number): number => {
     if (ema <= 0) {
-        return { speed: TypewriterSpeed.ExtraSlow, steps: 1 };
+        return TypewriterSpeed.ExtraSlow;
     }
 
-    const msPerChar = 1000 / ema;
-
-    if (msPerChar >= MINIMUM_TIMEOUT) {
-        return { speed: msPerChar, steps: 1 };
-    }
-
-    const steps = Math.max(1, MINIMUM_TIMEOUT / msPerChar);
-    return { speed: MINIMUM_TIMEOUT, steps };
+    return 1000 / ema;
 };
 
 interface CalculateEMAProps {

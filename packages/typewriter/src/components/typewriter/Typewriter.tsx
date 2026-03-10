@@ -22,9 +22,9 @@ import {
     StyledTypewriterText,
 } from './Typewriter.styles';
 import {
-    calculateAutoSpeed,
     ChunkStreamingSpeedState,
     getCharactersCount,
+    getSafeAutoSpeed,
     getSubTextFromHTML,
     shuffleArray,
     updateChunkStreamingSpeedEMA,
@@ -273,11 +273,7 @@ const Typewriter: FC<TypewriterProps> = ({
             return;
         }
 
-        const { speed: calculatedAutoSpeed, steps } = calculateAutoSpeed(
-            chunkIntervalExponentialMovingAverage.current.ema,
-        );
-        autoSpeed.current = calculatedAutoSpeed;
-        autoSteps.current = steps;
+        autoSpeed.current = getSafeAutoSpeed(chunkIntervalExponentialMovingAverage.current.ema);
     }, [animationSteps, charactersCount, shouldCalcAutoSpeed]);
 
     const isAnimatingText =
@@ -296,7 +292,6 @@ const Typewriter: FC<TypewriterProps> = ({
     const handleSetNextChildrenIndex = useCallback(
         () =>
             setCurrentChildrenIndex(() => {
-                let frameId: number;
                 let newIndex = currentChildrenIndex + 1;
 
                 if (newIndex > childrenCount - 1) {
@@ -309,12 +304,16 @@ const Typewriter: FC<TypewriterProps> = ({
     );
 
     useEffect(() => {
+        let frameId: number;
+        let lastTime: number | undefined;
         let interval: number | undefined;
 
         if (shouldStopAnimation || charactersCount === 0) {
             setShownCharCount(textContent.length);
             currentPosition.current = textContent.length;
         } else if (isResetAnimationActive) {
+            // reset animation
+
             if (typeof onResetAnimationStart === 'function') {
                 onResetAnimationStart();
             }
@@ -343,6 +342,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 });
             }, resetSpeed);
         } else {
+            // typing animation
             const startTypingAnimation = () => {
                 if (cursorType === CursorType.Thin) {
                     setShouldPreventBlinkingCursor(true);
@@ -352,47 +352,55 @@ const Typewriter: FC<TypewriterProps> = ({
                     onTypingAnimationStart();
                 }
 
-                const runTypingInterval = () => {
-                    setShownCharCount((prevState) => {
-                        let nextState = Math.min(prevState + autoSteps.current, charactersCount);
+                const runTypingInterval = (time: number) => {
+                    if (lastTime === undefined) lastTime = time;
+                    const timeSinceLastFrame = time - lastTime;
+                    const charactersToAdd = Math.ceil(
+                        timeSinceLastFrame / (autoSpeed.current ?? speed),
+                    );
+                    if (charactersToAdd > 0) {
+                        setShownCharCount((prevState) => {
+                            let nextState = prevState + charactersToAdd;
 
-                        if (nextState >= charactersCount && !shouldWaitForContent) {
-                            window.clearInterval(interval);
+                            if (nextState >= charactersCount && !shouldWaitForContent) {
+                                if (cursorType === CursorType.Thin) {
+                                    setShouldPreventBlinkingCursor(false);
+                                }
 
-                            if (cursorType === CursorType.Thin) {
-                                setShouldPreventBlinkingCursor(false);
+                                if (typeof onTypingAnimationEnd === 'function') {
+                                    onTypingAnimationEnd();
+                                }
+
+                                /**
+                                 * At this point, the next value for "shownCharCount" is deliberately set to
+                                 * the length of the textContent to correctly display HTML elements
+                                 * after the last letter.
+                                 */
+                                nextState = textContent.length;
+
+                                cancelAnimationFrame(frameId);
+
+                                if (areMultipleChildrenGiven) {
+                                    setTimeout(() => {
+                                        if (shouldUseResetAnimation) {
+                                            setIsResetAnimationActive(true);
+                                        } else {
+                                            setShownCharCount(0);
+                                            setTimeout(handleSetNextChildrenIndex, nextTextDelay);
+                                        }
+                                    }, resetDelay);
+                                }
                             }
 
-                            if (typeof onTypingAnimationEnd === 'function') {
-                                onTypingAnimationEnd();
-                            }
+                            currentPosition.current = nextState;
 
-                            /**
-                             * At this point, the next value for "shownCharCount" is deliberately set to
-                             * the length of the textContent to correctly display HTML elements
-                             * after the last letter.
-                             */
-                            nextState = textContent.length;
-
-                            if (areMultipleChildrenGiven) {
-                                setTimeout(() => {
-                                    if (shouldUseResetAnimation) {
-                                        setIsResetAnimationActive(true);
-                                    } else {
-                                        setShownCharCount(0);
-                                        setTimeout(handleSetNextChildrenIndex, nextTextDelay);
-                                    }
-                                }, resetDelay);
-                            }
-                        }
-
-                        currentPosition.current = nextState;
-
-                        return nextState;
-                    });
+                            return nextState;
+                        });
+                        lastTime = time;
+                    }
+                    frameId = requestAnimationFrame(runTypingInterval);
                 };
-
-                interval = window.setInterval(runTypingInterval, autoSpeed.current ?? speed);
+                frameId = requestAnimationFrame(runTypingInterval);
             };
 
             if (startDelay) {
@@ -401,8 +409,8 @@ const Typewriter: FC<TypewriterProps> = ({
                 startTypingAnimation();
             }
         }
-
         return () => {
+            cancelAnimationFrame(frameId);
             window.clearInterval(interval);
         };
     }, [
