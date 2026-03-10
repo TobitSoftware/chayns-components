@@ -1,20 +1,33 @@
 import { ColorSchemeProvider, useColorScheme } from '@chayns-components/core';
 import { ChaynsProvider, useFunctions, useValues } from 'chayns-api';
-import React, { FC, ReactElement, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, {
+    FC,
+    ReactElement,
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { renderToString } from 'react-dom/server';
 import { CSSPropertiesWithVars } from 'styled-components/dist/types';
 import { CursorType } from '../../types/cursor';
 import { TypewriterDelay, TypewriterSpeed } from '../../types/speed';
 import AnimatedTypewriterText from './AnimatedTypewriterText';
-import { StyledTypewriter, StyledTypewriterPseudoText, StyledTypewriterText } from './Typewriter.styles';
+import {
+    StyledTypewriter,
+    StyledTypewriterPseudoText,
+    StyledTypewriterText,
+} from './Typewriter.styles';
 import {
     calculateAutoSpeed,
     ChunkStreamingSpeedState,
     getCharactersCount,
     getSubTextFromHTML,
     shuffleArray,
-    updateChunkStreamingSpeedEMA
+    updateChunkStreamingSpeedEMA,
 } from './utils';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
@@ -189,8 +202,8 @@ const Typewriter: FC<TypewriterProps> = ({
     const areMultipleChildrenGiven = Array.isArray(sortedChildren);
     const childrenCount = areMultipleChildrenGiven ? sortedChildren.length : 1;
 
-    const textContent = useMemo(() => {
-        const renderChildToString = (child: ReactElement | ReactElement[] | string | string[]) =>
+    const renderChildToString = useCallback(
+        (child: ReactElement | ReactElement[] | string | string[]) =>
             React.isValidElement(child)
                 ? renderToString(
                       <ChaynsProvider data={values} functions={functions} isModule>
@@ -199,11 +212,19 @@ const Typewriter: FC<TypewriterProps> = ({
                               colorMode={colorScheme?.designSettings?.colorMode}
                               style={{ display: 'inline' }}
                           >
+    const textContent = useMemo(() => {
                               <span className="notranslate">{child}</span>
                           </ColorSchemeProvider>
                       </ChaynsProvider>,
                   )
-                : (child as string);
+                : (child as string),
+        [
+            colorScheme?.designSettings?.color,
+            colorScheme?.designSettings?.colorMode,
+            functions,
+            values,
+        ],
+    );
 
         if (areMultipleChildrenGiven) {
             const currentChildren = sortedChildren[currentChildrenIndex];
@@ -216,15 +237,7 @@ const Typewriter: FC<TypewriterProps> = ({
         }
 
         return renderChildToString(sortedChildren);
-    }, [
-        areMultipleChildrenGiven,
-        colorScheme?.designSettings?.color,
-        colorScheme?.designSettings?.colorMode,
-        currentChildrenIndex,
-        functions,
-        sortedChildren,
-        values,
-    ]);
+    }, [areMultipleChildrenGiven, currentChildrenIndex, renderChildToString, sortedChildren]);
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 
@@ -283,6 +296,7 @@ const Typewriter: FC<TypewriterProps> = ({
     const handleSetNextChildrenIndex = useCallback(
         () =>
             setCurrentChildrenIndex(() => {
+        let frameId: number;
                 let newIndex = currentChildrenIndex + 1;
 
                 if (newIndex > childrenCount - 1) {
@@ -377,21 +391,7 @@ const Typewriter: FC<TypewriterProps> = ({
                         return nextState;
                     });
                 };
-                let start: number;
-                const animateFrame = (timestamp: number) => {
-                    if (start === undefined) start = timestamp;
 
-                    setShownCharCount((prevState) => {
-                        const elapsedTime = timestamp - start;
-
-                        const charactersToAdd =
-                            Math.floor(elapsedTime / (autoSpeed.current ?? speed)) *
-                            autoSteps.current;
-
-                        currentPosition.current = prevState + charactersToAdd;
-                        return prevState + charactersToAdd;
-                    });
-                };
                 interval = window.setInterval(runTypingInterval, autoSpeed.current ?? speed);
             };
 
@@ -440,21 +440,10 @@ const Typewriter: FC<TypewriterProps> = ({
 
     const pseudoTextHTML = useMemo(() => {
         if (pseudoChildren) {
-            const pseudoText = React.isValidElement(pseudoChildren)
-                ? renderToString(
-                      <ChaynsProvider data={values} functions={functions} isModule>
-                          <ColorSchemeProvider
-                              color={colorScheme?.designSettings?.color}
-                              colorMode={colorScheme?.designSettings?.colorMode}
-                              style={{ display: 'inline' }}
-                          >
-                              {pseudoChildren}
-                          </ColorSchemeProvider>
-                      </ChaynsProvider>,
-                  )
-                : (pseudoChildren as string);
+            const pseudoText = renderChildToString(pseudoChildren);
 
             if (shouldUseAnimationHeight) {
+        renderChildToString,
                 return getSubTextFromHTML(pseudoText, shownCharCount);
             }
 
@@ -467,14 +456,10 @@ const Typewriter: FC<TypewriterProps> = ({
 
         return textContent || '&#8203;';
     }, [
-        colorScheme?.designSettings?.color,
-        colorScheme?.designSettings?.colorMode,
-        functions,
         pseudoChildren,
         shouldUseAnimationHeight,
         shownCharCount,
         textContent,
-        values,
     ]);
 
     return useMemo(
