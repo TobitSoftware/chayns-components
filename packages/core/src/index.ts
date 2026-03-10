@@ -149,7 +149,9 @@ export { getUsableHeight } from './utils/pageProvider';
 export { uploadFile } from './utils/uploadFile';
 export type { Theme } from './components/color-scheme-provider/ColorSchemeProvider';
 export { ComboBoxSize } from './components/combobox/ComboBox.types';
-export { IComboBoxItem as ComboBoxItem } from './components/combobox/ComboBox.types';
-export { ComboBoxTextStyles } from './components/combobox/ComboBox.types';
-export { IComboBoxItems as ComboBoxItems } from './components/combobox/ComboBox.types';
-export { ComboBoxRef } from './components/combobox/ComboBox.types';
+export type {
+    IComboBoxItem as ComboBoxItem,
+    ComboBoxTextStyles,
+    IComboBoxItems as ComboBoxItems,
+    ComboBoxRef,
+} from './components/combobox/ComboBox.types';
