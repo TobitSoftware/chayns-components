@@ -1,33 +1,20 @@
 import { ColorSchemeProvider, useColorScheme } from '@chayns-components/core';
 import { ChaynsProvider, useFunctions, useValues } from 'chayns-api';
-import React, {
-    FC,
-    ReactElement,
-    useCallback,
-    useEffect,
-    useLayoutEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import React, { FC, ReactElement, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { renderToString } from 'react-dom/server';
 import { CSSPropertiesWithVars } from 'styled-components/dist/types';
 import { CursorType } from '../../types/cursor';
 import { TypewriterDelay, TypewriterSpeed } from '../../types/speed';
 import AnimatedTypewriterText from './AnimatedTypewriterText';
-import {
-    StyledTypewriter,
-    StyledTypewriterPseudoText,
-    StyledTypewriterText,
-} from './Typewriter.styles';
+import { StyledTypewriter, StyledTypewriterPseudoText, StyledTypewriterText } from './Typewriter.styles';
 import {
     calculateAutoSpeed,
     ChunkStreamingSpeedState,
     getCharactersCount,
     getSubTextFromHTML,
     shuffleArray,
-    updateChunkStreamingSpeedEMA,
+    updateChunkStreamingSpeedEMA
 } from './utils';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
@@ -189,11 +176,7 @@ const Typewriter: FC<TypewriterProps> = ({
         }
     }, [children]);
 
-    useEffect(() => {
-        if (!hasRenderedChildrenOnce) {
-            setHasRenderedChildrenOnce(true);
-        }
-    }, [hasRenderedChildrenOnce]);
+    if (!hasRenderedChildrenOnce) setHasRenderedChildrenOnce(true);
 
     const sortedChildren = useMemo(
         () =>
@@ -207,41 +190,32 @@ const Typewriter: FC<TypewriterProps> = ({
     const childrenCount = areMultipleChildrenGiven ? sortedChildren.length : 1;
 
     const textContent = useMemo(() => {
+        const renderChildToString = (child: ReactElement | ReactElement[] | string | string[]) =>
+            React.isValidElement(child)
+                ? renderToString(
+                      <ChaynsProvider data={values} functions={functions} isModule>
+                          <ColorSchemeProvider
+                              color={colorScheme?.designSettings?.color}
+                              colorMode={colorScheme?.designSettings?.colorMode}
+                              style={{ display: 'inline' }}
+                          >
+                              <span className="notranslate">{child}</span>
+                          </ColorSchemeProvider>
+                      </ChaynsProvider>,
+                  )
+                : (child as string);
+
         if (areMultipleChildrenGiven) {
             const currentChildren = sortedChildren[currentChildrenIndex];
 
             if (currentChildren) {
-                return React.isValidElement(currentChildren)
-                    ? renderToString(
-                          <ChaynsProvider data={values} functions={functions} isModule>
-                              <ColorSchemeProvider
-                                  color={colorScheme?.designSettings?.color}
-                                  colorMode={colorScheme?.designSettings?.colorMode}
-                                  style={{ display: 'inline' }}
-                              >
-                                  <span className="notranslate">{currentChildren}</span>
-                              </ColorSchemeProvider>
-                          </ChaynsProvider>,
-                      )
-                    : (currentChildren as string);
+                return renderChildToString(currentChildren);
             }
 
             return '';
         }
 
-        return React.isValidElement(sortedChildren)
-            ? renderToString(
-                  <ChaynsProvider data={values} functions={functions} isModule>
-                      <ColorSchemeProvider
-                          color={colorScheme?.designSettings?.color}
-                          colorMode={colorScheme?.designSettings?.colorMode}
-                          style={{ display: 'inline' }}
-                      >
-                          <span className="notranslate">{sortedChildren}</span>
-                      </ColorSchemeProvider>
-                  </ChaynsProvider>,
-              )
-            : (sortedChildren as string);
+        return renderChildToString(sortedChildren);
     }, [
         areMultipleChildrenGiven,
         colorScheme?.designSettings?.color,
@@ -401,6 +375,21 @@ const Typewriter: FC<TypewriterProps> = ({
                         currentPosition.current = nextState;
 
                         return nextState;
+                    });
+                };
+                let start: number;
+                const animateFrame = (timestamp: number) => {
+                    if (start === undefined) start = timestamp;
+
+                    setShownCharCount((prevState) => {
+                        const elapsedTime = timestamp - start;
+
+                        const charactersToAdd =
+                            Math.floor(elapsedTime / (autoSpeed.current ?? speed)) *
+                            autoSteps.current;
+
+                        currentPosition.current = prevState + charactersToAdd;
+                        return prevState + charactersToAdd;
                     });
                 };
                 interval = window.setInterval(runTypingInterval, autoSpeed.current ?? speed);
