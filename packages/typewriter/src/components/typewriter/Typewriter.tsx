@@ -317,32 +317,43 @@ const Typewriter: FC<TypewriterProps> = ({
             if (typeof onResetAnimationStart === 'function') {
                 onResetAnimationStart();
             }
+            lastTime = undefined;
+            const resetAnimation = (timestamp: number) => {
+                if (lastTime === undefined) lastTime = timestamp;
+                const timeSinceLastFrame = timestamp - lastTime;
+                const charactersToRemove = Math.ceil(
+                    timeSinceLastFrame / (autoSpeed.current ?? resetSpeed),
+                );
 
-            interval = window.setInterval(() => {
-                setShownCharCount((prevState) => {
-                    const nextState = prevState - autoSteps.current;
-                    currentPosition.current = nextState;
+                if (charactersToRemove === 0) {
+                    frameId = requestAnimationFrame(resetAnimation);
+                    return;
+                }
 
-                    if (nextState === 0) {
-                        window.clearInterval(interval);
+                const nextShownCharCount = shownCharCount - charactersToRemove;
 
-                        if (typeof onResetAnimationEnd === 'function') {
-                            onResetAnimationEnd();
-                        }
+                if (nextShownCharCount <= 0) {
+                    cancelAnimationFrame(frameId);
 
-                        if (areMultipleChildrenGiven) {
-                            setTimeout(() => {
-                                setIsResetAnimationActive(false);
-                                handleSetNextChildrenIndex();
-                            }, nextTextDelay);
-                        }
+                    if (typeof onResetAnimationEnd === 'function') {
+                        onResetAnimationEnd();
                     }
 
-                    return nextState;
-                });
-            }, resetSpeed);
+                    if (areMultipleChildrenGiven) {
+                        setTimeout(() => {
+                            setIsResetAnimationActive(false);
+                            handleSetNextChildrenIndex();
+                        }, nextTextDelay);
+                    }
+                    return;
+                }
+                lastTime = timestamp;
+                frameId = requestAnimationFrame(resetAnimation);
+            };
+            frameId = requestAnimationFrame(resetAnimation);
         } else {
             // typing animation
+            lastTime = undefined;
             const startTypingAnimation = () => {
                 if (cursorType === CursorType.Thin) {
                     setShouldPreventBlinkingCursor(true);
@@ -358,6 +369,8 @@ const Typewriter: FC<TypewriterProps> = ({
                     const charactersToAdd = Math.ceil(
                         timeSinceLastFrame / (autoSpeed.current ?? speed),
                     );
+                    console.log(autoSpeed.current, resetSpeed);
+
                     if (charactersToAdd > 0) {
                         setShownCharCount((prevState) => {
                             let nextState = prevState + charactersToAdd;
@@ -393,7 +406,6 @@ const Typewriter: FC<TypewriterProps> = ({
                             }
 
                             currentPosition.current = nextState;
-
                             return nextState;
                         });
                         lastTime = time;
@@ -430,6 +442,7 @@ const Typewriter: FC<TypewriterProps> = ({
         shouldStopAnimation,
         shouldUseResetAnimation,
         shouldWaitForContent,
+        shownCharCount,
         speed,
         startDelay,
         textContent.length,
