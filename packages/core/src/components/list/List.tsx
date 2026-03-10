@@ -2,7 +2,6 @@ import { AnimatePresence, MotionConfig } from 'motion/react';
 import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
 
 interface IListContext {
-    incrementExpandableItemCount: () => () => void;
     isAnyItemExpandable: boolean;
     isWrapped: boolean;
     openItemUuid: string | undefined;
@@ -10,7 +9,6 @@ interface IListContext {
 }
 
 export const ListContext = React.createContext<IListContext>({
-    incrementExpandableItemCount: () => () => {},
     isAnyItemExpandable: false,
     isWrapped: false,
     openItemUuid: undefined,
@@ -32,8 +30,9 @@ type ListProps = {
 };
 
 const List: FC<ListProps> = ({ children, isWrapped = false }) => {
+    'use memo';
+
     const [openItemUuid, setOpenItemUuid] = useState<IListContext['openItemUuid']>(undefined);
-    const [expandableItemCount, setExpandableItemCount] = useState<number>(0);
 
     const updateOpenItemUuid = useCallback<IListContext['updateOpenItemUuid']>(
         (uuid, { shouldOnlyOpen } = {}) => {
@@ -48,29 +47,30 @@ const List: FC<ListProps> = ({ children, isWrapped = false }) => {
         [setOpenItemUuid],
     );
 
-    const incrementExpandableItemCount = useCallback(() => {
-        setExpandableItemCount((count) => count + 1);
-
-        return () => {
-            setExpandableItemCount((count) => count - 1);
-        };
-    }, [setExpandableItemCount]);
+    const hasExpandableChildren = (node: ReactNode): boolean => {
+        let found = false;
+        React.Children.forEach(node, (child) => {
+            if (found) return;
+            if (
+                React.isValidElement<{
+                    children?: ReactNode;
+                }>(child) &&
+                child.props.children !== undefined
+            ) {
+                found = true;
+            }
+        });
+        return found;
+    };
 
     const providerValue = useMemo<IListContext>(
         () => ({
-            incrementExpandableItemCount,
-            isAnyItemExpandable: expandableItemCount > 0,
+            isAnyItemExpandable: hasExpandableChildren(children),
             isWrapped,
             openItemUuid,
             updateOpenItemUuid,
         }),
-        [
-            expandableItemCount,
-            incrementExpandableItemCount,
-            isWrapped,
-            openItemUuid,
-            updateOpenItemUuid,
-        ],
+        [children, isWrapped, openItemUuid, updateOpenItemUuid],
     );
 
     return (

@@ -236,13 +236,8 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
         },
         ref,
     ) => {
-        const {
-            incrementExpandableItemCount,
-            isAnyItemExpandable,
-            isWrapped,
-            openItemUuid,
-            updateOpenItemUuid,
-        } = useContext(ListContext);
+        const { isAnyItemExpandable, isWrapped, openItemUuid, updateOpenItemUuid } =
+            useContext(ListContext);
 
         const { isWrapped: isParentAccordionWrapped } = useContext(AccordionContext);
 
@@ -293,16 +288,6 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             },
             [isExpandable, onClick, updateOpenItemUuid, uuid],
         );
-
-        useEffect(() => {
-            if (isExpandable && !shouldHideIndicator) {
-                // The incrementExpandableItemCount function returns a cleanup
-                // function to decrement expandableItemCount if component unmounts
-                return incrementExpandableItemCount();
-            }
-
-            return undefined;
-        }, [incrementExpandableItemCount, isExpandable, shouldHideIndicator]);
 
         useEffect(() => {
             if (isDefaultOpen) {
