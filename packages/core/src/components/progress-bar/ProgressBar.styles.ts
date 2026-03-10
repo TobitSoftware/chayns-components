@@ -25,7 +25,7 @@ export const StyledProgressBarProgressWrapper = styled.div<StyledProgressBarProg
     position: relative;
     width: 100%;
     height: ${({ $height, $isBig }) => $height || ($isBig ? 20 : 10)}px;
-    border-radius: ${({ $height, $isBig }) => ($isBig ? $height : 2)}px;
+    border-radius: ${({ $height, $isBig }) => ($isBig ? ($height ?? 20) : ($height ?? 10) / 5)}px;
 `;
 
 type StyledProgressBarProgressProps = WithTheme<{ $color?: string }>;
