@@ -212,7 +212,6 @@ const Typewriter: FC<TypewriterProps> = ({
                               colorMode={colorScheme?.designSettings?.colorMode}
                               style={{ display: 'inline' }}
                           >
-    const textContent = useMemo(() => {
                               <span className="notranslate">{child}</span>
                           </ColorSchemeProvider>
                       </ChaynsProvider>,
@@ -226,6 +225,7 @@ const Typewriter: FC<TypewriterProps> = ({
         ],
     );
 
+    const textContent = useMemo(() => {
         if (areMultipleChildrenGiven) {
             const currentChildren = sortedChildren[currentChildrenIndex];
 
@@ -296,7 +296,7 @@ const Typewriter: FC<TypewriterProps> = ({
     const handleSetNextChildrenIndex = useCallback(
         () =>
             setCurrentChildrenIndex(() => {
-        let frameId: number;
+                let frameId: number;
                 let newIndex = currentChildrenIndex + 1;
 
                 if (newIndex > childrenCount - 1) {
@@ -443,7 +443,6 @@ const Typewriter: FC<TypewriterProps> = ({
             const pseudoText = renderChildToString(pseudoChildren);
 
             if (shouldUseAnimationHeight) {
-        renderChildToString,
                 return getSubTextFromHTML(pseudoText, shownCharCount);
             }
 
@@ -457,6 +456,7 @@ const Typewriter: FC<TypewriterProps> = ({
         return textContent || '&#8203;';
     }, [
         pseudoChildren,
+        renderChildToString,
         shouldUseAnimationHeight,
         shownCharCount,
         textContent,
