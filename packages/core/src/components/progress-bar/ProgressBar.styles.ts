@@ -32,10 +32,10 @@ type StyledProgressBarProgressProps = WithTheme<{ $color?: string }>;
 
 const shineMove = keyframes`
     from {
-        transform: translateX(-150%);
+        transform: translateX(-100%);
     }
     to {
-        transform: translateX(150%);
+        transform: translateX(100%);
     }
 `;
 

@@ -91,17 +91,21 @@ const ProgressBar: FC<ProgressBarProps> = ({
 
     const shineEffect = useMemo(() => {
         if (!showShine || percentage === undefined) return null;
-        const FULL_ANIMATION_LENGTH = 5;
+        const MIN_ANIMATION_LENGTH = 1;
+        const MAX_ANIMATION_LENGTH = 5;
         const MAX_SHINE_COUNT = 6;
+        const t = percentage / 100;
 
-        const shineCount = Math.ceil(MAX_SHINE_COUNT * (percentage / 100));
-        const speed = FULL_ANIMATION_LENGTH * (percentage / 100);
+        const shineCount = Math.ceil(MAX_SHINE_COUNT * t);
+
+        const speed = MIN_ANIMATION_LENGTH + (MAX_ANIMATION_LENGTH - MIN_ANIMATION_LENGTH) * t;
+
         return Array.from({ length: shineCount }).map((_, index) => (
             <StyledProgressBarShine
                 /* eslint-disable-next-line react/no-array-index-key */
                 key={`progress-bar-shine__${shineCount}__${index}`}
                 $speed={speed}
-                $delay={-(FULL_ANIMATION_LENGTH / shineCount) * index}
+                $delay={-(speed / shineCount) * index}
             />
         ));
     }, [percentage, showShine]);
