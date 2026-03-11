@@ -304,62 +304,83 @@ const Typewriter: FC<TypewriterProps> = ({
     );
 
     useEffect(() => {
-        let frameId: number;
+        // frame and timeout ids used for cleanup
+        let frameId: number | undefined;
         let lastTime: number | undefined;
-        let interval: number | undefined;
+        let timeoutId: number | undefined;
+
+        const safeCancelFrame = () => {
+            if (typeof frameId === 'number') {
+                cancelAnimationFrame(frameId);
+                frameId = undefined;
+            }
+        };
+
+        const safeClearTimeout = (id?: number) => {
+            if (typeof id === 'number') {
+                clearTimeout(id);
+                id = undefined;
+            }
+        };
+
+        const startAnimationFrameLoop = (
+            onTick: (charactersToChange: number) => void,
+            speedParam: number,
+        ) => {
+            lastTime = undefined;
+            const loop = (timestamp: number) => {
+                if (lastTime === undefined) lastTime = timestamp;
+                const timeSinceLastFrame = timestamp - lastTime;
+                const rate = autoSpeed.current ?? speedParam;
+                const charactersToChange = Math.round(timeSinceLastFrame / rate);
+
+                if (charactersToChange === 0) {
+                    frameId = requestAnimationFrame(loop);
+                    return;
+                }
+
+                onTick(charactersToChange);
+
+                lastTime = timestamp;
+                frameId = requestAnimationFrame(loop);
+            };
+
+            frameId = requestAnimationFrame(loop);
+        };
 
         if (shouldStopAnimation || charactersCount === 0) {
             setShownCharCount(textContent.length);
             currentPosition.current = textContent.length;
         } else if (isResetAnimationActive) {
             // reset animation
-
             if (typeof onResetAnimationStart === 'function') {
                 onResetAnimationStart();
             }
-            lastTime = undefined;
-            const resetAnimation = (timestamp: number) => {
-                if (lastTime === undefined) lastTime = timestamp;
-                const timeSinceLastFrame = timestamp - lastTime;
-                const charactersToRemove = Math.ceil(
-                    timeSinceLastFrame / (autoSpeed.current ?? resetSpeed),
-                );
 
-                if (charactersToRemove === 0) {
-                    frameId = requestAnimationFrame(resetAnimation);
-                    return;
-                }
+            startAnimationFrameLoop((charactersToRemove) => {
+                setShownCharCount((prev) => {
+                    const nextShownCharCount = Math.max(0, prev - charactersToRemove);
+                    currentPosition.current = nextShownCharCount;
 
-                const nextShownCharCount = shownCharCount - charactersToRemove;
+                    if (nextShownCharCount <= 0) {
+                        safeCancelFrame();
 
-                if (nextShownCharCount <= 0) {
-                    cancelAnimationFrame(frameId);
-                    currentPosition.current = 0;
-                    setShownCharCount(0);
+                        if (typeof onResetAnimationEnd === 'function') {
+                            onResetAnimationEnd();
+                        }
 
-                    if (typeof onResetAnimationEnd === 'function') {
-                        onResetAnimationEnd();
+                        if (areMultipleChildrenGiven) {
+                            timeoutId = window.setTimeout(() => {
+                                setIsResetAnimationActive(false);
+                                handleSetNextChildrenIndex();
+                            }, nextTextDelay);
+                        }
                     }
 
-                    if (areMultipleChildrenGiven) {
-                        setTimeout(() => {
-                            setIsResetAnimationActive(false);
-                            handleSetNextChildrenIndex();
-                        }, nextTextDelay);
-                    }
-                    return;
-                }
-
-                currentPosition.current = nextShownCharCount;
-                setShownCharCount(nextShownCharCount);
-
-                lastTime = timestamp;
-                frameId = requestAnimationFrame(resetAnimation);
-            };
-            frameId = requestAnimationFrame(resetAnimation);
+                    return nextShownCharCount;
+                });
+            }, resetSpeed);
         } else {
-            // typing animation
-            lastTime = undefined;
             const startTypingAnimation = () => {
                 if (cursorType === CursorType.Thin) {
                     setShouldPreventBlinkingCursor(true);
@@ -369,70 +390,62 @@ const Typewriter: FC<TypewriterProps> = ({
                     onTypingAnimationStart();
                 }
 
-                const runTypingInterval = (time: number) => {
-                    if (lastTime === undefined) lastTime = time;
-                    const timeSinceLastFrame = time - lastTime;
-                    const charactersToAdd = Math.ceil(
-                        timeSinceLastFrame / (autoSpeed.current ?? speed),
-                    );
+                startAnimationFrameLoop((charactersToAdd) => {
+                    setShownCharCount((prevState) => {
+                        let nextState = prevState + charactersToAdd;
 
-                    if (charactersToAdd > 0) {
-                        setShownCharCount((prevState) => {
-                            let nextState = prevState + charactersToAdd;
-
-                            if (nextState >= charactersCount && !shouldWaitForContent) {
-                                if (cursorType === CursorType.Thin) {
-                                    setShouldPreventBlinkingCursor(false);
-                                }
-
-                                if (typeof onTypingAnimationEnd === 'function') {
-                                    onTypingAnimationEnd();
-                                }
-
-                                /**
-                                 * At this point, the next value for "shownCharCount" is deliberately set to
-                                 * the length of the textContent to correctly display HTML elements
-                                 * after the last letter.
-                                 */
-                                nextState = textContent.length;
-
-                                cancelAnimationFrame(frameId);
-
-                                if (areMultipleChildrenGiven) {
-                                    setTimeout(() => {
-                                        if (shouldUseResetAnimation) {
-                                            setIsResetAnimationActive(true);
-                                        } else {
-                                            setShownCharCount(0);
-                                            setTimeout(handleSetNextChildrenIndex, nextTextDelay);
-                                        }
-                                    }, resetDelay);
-                                }
+                        if (nextState >= charactersCount && !shouldWaitForContent) {
+                            if (cursorType === CursorType.Thin) {
+                                setShouldPreventBlinkingCursor(false);
                             }
 
-                            currentPosition.current = nextState;
-                            return nextState;
-                        });
-                        lastTime = time;
-                    }
-                    frameId = requestAnimationFrame(runTypingInterval);
-                };
-                frameId = requestAnimationFrame(runTypingInterval);
+                            if (typeof onTypingAnimationEnd === 'function') {
+                                onTypingAnimationEnd();
+                            }
+
+                            /**
+                             * At this point, the next value for "shownCharCount" is deliberately set to
+                             * the length of the textContent to correctly display HTML elements
+                             * after the last letter.
+                             */
+                            nextState = textContent.length;
+
+                            safeCancelFrame();
+
+                            if (areMultipleChildrenGiven) {
+                                timeoutId = window.setTimeout(() => {
+                                    if (shouldUseResetAnimation) {
+                                        setIsResetAnimationActive(true);
+                                    } else {
+                                        setShownCharCount(0);
+                                        timeoutId = window.setTimeout(
+                                            handleSetNextChildrenIndex,
+                                            nextTextDelay,
+                                        );
+                                    }
+                                }, resetDelay);
+                            }
+                        }
+
+                        currentPosition.current = nextState;
+                        return nextState;
+                    });
+                }, speed);
             };
 
             if (startDelay) {
-                setTimeout(startTypingAnimation, startDelay);
+                timeoutId = window.setTimeout(startTypingAnimation, startDelay);
             } else {
                 startTypingAnimation();
             }
         }
+
         return () => {
-            cancelAnimationFrame(frameId);
-            window.clearInterval(interval);
+            safeCancelFrame();
+            safeClearTimeout(timeoutId);
         };
     }, [
         areMultipleChildrenGiven,
-        autoSteps,
         charactersCount,
         cursorType,
         handleSetNextChildrenIndex,
@@ -447,7 +460,6 @@ const Typewriter: FC<TypewriterProps> = ({
         shouldStopAnimation,
         shouldUseResetAnimation,
         shouldWaitForContent,
-        shownCharCount,
         speed,
         startDelay,
         textContent.length,
