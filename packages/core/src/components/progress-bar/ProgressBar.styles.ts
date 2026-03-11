@@ -25,10 +25,8 @@ export const StyledProgressBarProgressWrapper = styled.div<StyledProgressBarProg
     position: relative;
     width: 100%;
     height: ${({ $height, $isBig }) => $height || ($isBig ? 20 : 10)}px;
-    border-radius: ${({ $height, $isBig }) => ($isBig ? ($height ?? 20) : ($height ?? 10) / 5)}px;
+    border-radius: ${({ $height, $isBig }) => $height || ($isBig ? 20 : 10)}px;
 `;
-
-type StyledProgressBarProgressProps = WithTheme<{ $color?: string }>;
 
 const shineMove = keyframes`
     from {
@@ -58,6 +56,11 @@ export const StyledProgressBarShine = styled.div.attrs<{ $speed?: number; $delay
     opacity: 0.95;
 `;
 
+type StyledProgressBarProgressProps = WithTheme<{ $color?: string }> & {
+    $height?: number;
+    $isBig?: boolean;
+};
+
 export const StyledMotionProgressBarProgress = styled(motion.div)<StyledProgressBarProgressProps>`
     height: 100%;
     position: absolute;
@@ -70,6 +73,7 @@ export const StyledMotionProgressBarProgress = styled(motion.div)<StyledProgress
     padding-left: 12px;
     background-color: ${({ theme, $color }: StyledProgressBarProgressProps) =>
         $color ?? theme.headline};
+    border-radius: ${({ $height, $isBig }) => $height || ($isBig ? 20 : 10)}px;
 `;
 
 type StyledProgressBarLabelProps = WithTheme<{
@@ -134,4 +138,5 @@ export const StyledProgressBarStep = styled.div<StyledProgressBarStepProps>`
 export const StyledProgressBarThumbLabel = styled.div`
     position: absolute;
     right: 0;
+    height: 100%;
 `;

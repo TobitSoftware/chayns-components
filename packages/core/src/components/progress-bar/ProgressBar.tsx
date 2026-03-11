@@ -28,6 +28,7 @@ interface Colors {
     stepColor?: string;
     primaryTextColor?: string;
     secondaryTextColor?: string;
+    thumbLabelColor?: string;
 }
 
 export type ProgressBarProps = {
@@ -85,7 +86,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
     const uuid = useUuid();
     const [coordinates, setCoordinates] = useState<{ x: number; y: number }>();
     const popupRef = useRef<PopupRef | null>(null);
-    const hostContainerRef = useRef<HTMLDivElement | null>(null);
+    const [hostContainer, setHostContainer] = useState<HTMLDivElement | null>(null);
 
     const theme = useContext(ThemeContext) as Theme | undefined;
 
@@ -111,8 +112,8 @@ const ProgressBar: FC<ProgressBarProps> = ({
     }, [percentage, showShine]);
 
     useEffect(() => {
-        if (thumbLabel) setCoordinates(hostContainerRef.current?.getBoundingClientRect());
-    }, [thumbLabel]);
+        if (thumbLabel) setCoordinates(hostContainer?.getBoundingClientRect());
+    }, [hostContainer, thumbLabel]);
 
     useEffect(() => {
         if (coordinates) popupRef.current?.show();
@@ -145,7 +146,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
         }
 
         return (
-            <div ref={hostContainerRef}>
+            <div ref={(instance) => setHostContainer(instance)} style={{ border: 0 }}>
                 <StyledProgressBarProgressWrapper $isBig={shouldShowLabelInline} $height={height}>
                     {!!steps?.length && (
                         <StyledProgressBarStepWrapper>
@@ -159,6 +160,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
                         </StyledProgressBarStepWrapper>
                     )}
                     <StyledMotionProgressBarProgress
+                        $height={height}
                         $color={colors?.progressColor}
                         key={`progress-bar__${uuid}`}
                         initial={{ width: '0%' }}
@@ -175,7 +177,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
                             >
                                 <ThemeProvider
                                     theme={{
-                                        '000': colors?.backgroundColor ?? theme?.['104'],
+                                        '000': colors?.thumbLabelColor ?? theme?.['104'],
                                         text: colors?.secondaryTextColor ?? theme?.['300'],
                                     }}
                                 >
@@ -184,7 +186,8 @@ const ProgressBar: FC<ProgressBarProps> = ({
                                         content={thumbLabel}
                                         alignment={PopupAlignment.TopCenter}
                                         onHide={() => popupRef.current?.show()}
-                                        container={hostContainerRef.current ?? undefined}
+                                        container={hostContainer ?? undefined}
+                                        shouldUseChildrenWidth
                                     >
                                         {}
                                     </Popup>
@@ -214,7 +217,9 @@ const ProgressBar: FC<ProgressBarProps> = ({
         colors?.progressColor,
         colors?.secondaryTextColor,
         colors?.stepColor,
+        colors?.thumbLabelColor,
         height,
+        hostContainer,
         label,
         percentage,
         shineEffect,
