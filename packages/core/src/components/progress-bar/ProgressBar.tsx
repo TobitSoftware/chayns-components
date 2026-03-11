@@ -1,4 +1,4 @@
-import React, { FC, useContext, useMemo, useRef } from 'react';
+import React, { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useUuid } from '../../hooks/uuid';
 import {
     StyledMotionProgressBarProgress,
@@ -83,7 +83,9 @@ const ProgressBar: FC<ProgressBarProps> = ({
     'use memo';
 
     const uuid = useUuid();
+    const [coordinates, setCoordinates] = useState<{ x: number; y: number }>();
     const popupRef = useRef<PopupRef | null>(null);
+    const hostContainerRef = useRef<HTMLDivElement | null>(null);
 
     const theme = useContext(ThemeContext) as Theme | undefined;
 
@@ -99,10 +101,18 @@ const ProgressBar: FC<ProgressBarProps> = ({
                 /* eslint-disable-next-line react/no-array-index-key */
                 key={`progress-bar-shine__${shineCount}__${index}`}
                 $speed={speed}
-                $delay={(FULL_ANIMATION_LENGTH / shineCount) * index}
+                $delay={-(FULL_ANIMATION_LENGTH / shineCount) * index}
             />
         ));
     }, [percentage, showShine]);
+
+    useEffect(() => {
+        if (thumbLabel) setCoordinates(hostContainerRef.current?.getBoundingClientRect());
+    }, [thumbLabel]);
+
+    useEffect(() => {
+        if (coordinates) popupRef.current?.show();
+    }, [coordinates]);
 
     const progressBar = useMemo(() => {
         if (shouldHideProgress) {
@@ -131,63 +141,68 @@ const ProgressBar: FC<ProgressBarProps> = ({
         }
 
         return (
-            <StyledProgressBarProgressWrapper $isBig={shouldShowLabelInline} $height={height}>
-                {!!steps?.length && (
-                    <StyledProgressBarStepWrapper>
-                        {steps.map((step) => (
-                            <StyledProgressBarStep
-                                $position={step}
-                                key={`progress-step-${step}`}
-                                $color={colors?.stepColor}
-                            />
-                        ))}
-                    </StyledProgressBarStepWrapper>
-                )}
-                <StyledMotionProgressBarProgress
-                    $color={colors?.progressColor}
-                    key={`progress-bar__${uuid}`}
-                    initial={{ width: '0%' }}
-                    animate={{ width: `${percentage}%` }}
-                    exit={{ width: '0%' }}
-                    transition={{ type: 'tween' }}
-                    onUpdate={() => popupRef.current?.show()}
-                    onAnimationComplete={() => popupRef.current?.show()}
-                >
-                    {showShine && shineEffect}
-                    {thumbLabel && (
-                        <StyledProgressBarThumbLabel onClick={(event) => event.stopPropagation()}>
-                            <ThemeProvider
-                                theme={{
-                                    '000': colors?.backgroundColor ?? theme?.['104'],
-                                    text: colors?.secondaryTextColor ?? theme?.['300'],
-                                }}
-                            >
-                                <Popup
-                                    ref={popupRef}
-                                    content={thumbLabel}
-                                    alignment={PopupAlignment.TopCenter}
-                                    onHide={() => popupRef.current?.show()}
-                                >
-                                    {}
-                                </Popup>
-                            </ThemeProvider>
-                        </StyledProgressBarThumbLabel>
+            <div ref={hostContainerRef}>
+                <StyledProgressBarProgressWrapper $isBig={shouldShowLabelInline} $height={height}>
+                    {!!steps?.length && (
+                        <StyledProgressBarStepWrapper>
+                            {steps.map((step) => (
+                                <StyledProgressBarStep
+                                    $position={step}
+                                    key={`progress-step-${step}`}
+                                    $color={colors?.stepColor}
+                                />
+                            ))}
+                        </StyledProgressBarStepWrapper>
                     )}
-                </StyledMotionProgressBarProgress>
-
-                {shouldShowLabelInline && label && (
-                    <StyledProgressBarLabel
-                        $shouldShowLabelInline={shouldShowLabelInline}
-                        $primaryColor={colors?.primaryTextColor}
-                        $secondaryColor={colors?.secondaryTextColor}
-                        $colorSplitPosition={percentage}
+                    <StyledMotionProgressBarProgress
+                        $color={colors?.progressColor}
+                        key={`progress-bar__${uuid}`}
+                        initial={{ width: '0%' }}
+                        animate={{ width: `${percentage}%` }}
+                        exit={{ width: '0%' }}
+                        transition={{ type: 'tween' }}
+                        onUpdate={() => popupRef.current?.show()}
+                        onAnimationComplete={() => popupRef.current?.show()}
                     >
-                        {label}
-                    </StyledProgressBarLabel>
-                )}
+                        {showShine && shineEffect}
+                        {thumbLabel && (
+                            <StyledProgressBarThumbLabel
+                                onClick={(event) => event.stopPropagation()}
+                            >
+                                <ThemeProvider
+                                    theme={{
+                                        '000': colors?.backgroundColor ?? theme?.['104'],
+                                        text: colors?.secondaryTextColor ?? theme?.['300'],
+                                    }}
+                                >
+                                    <Popup
+                                        ref={popupRef}
+                                        content={thumbLabel}
+                                        alignment={PopupAlignment.TopCenter}
+                                        onHide={() => popupRef.current?.show()}
+                                        container={hostContainerRef.current ?? undefined}
+                                    >
+                                        {}
+                                    </Popup>
+                                </ThemeProvider>
+                            </StyledProgressBarThumbLabel>
+                        )}
+                    </StyledMotionProgressBarProgress>
 
-                <StyledProgressBarBackground $color={colors?.backgroundColor} />
-            </StyledProgressBarProgressWrapper>
+                    {shouldShowLabelInline && label && (
+                        <StyledProgressBarLabel
+                            $shouldShowLabelInline={shouldShowLabelInline}
+                            $primaryColor={colors?.primaryTextColor}
+                            $secondaryColor={colors?.secondaryTextColor}
+                            $colorSplitPosition={percentage}
+                        >
+                            {label}
+                        </StyledProgressBarLabel>
+                    )}
+
+                    <StyledProgressBarBackground $color={colors?.backgroundColor} />
+                </StyledProgressBarProgressWrapper>
+            </div>
         );
     }, [
         colors?.backgroundColor,
