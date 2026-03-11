@@ -188,6 +188,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
                                         onHide={() => popupRef.current?.show()}
                                         container={hostContainer ?? undefined}
                                         shouldUseChildrenWidth
+                                        shouldBeOpen
                                     >
                                         {}
                                     </Popup>

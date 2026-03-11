@@ -66,6 +66,10 @@ export type PopupProps = {
      * The Y offset of the popup to the children.
      */
     yOffset?: number;
+    /**
+     * Whether the popup should be open. This can be used to control the popup from outside.
+     */
+    shouldBeOpen?: boolean;
 };
 
 const Popup = forwardRef<PopupRef, PopupProps>(
@@ -83,6 +87,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             shouldScrollWithContent = true,
             shouldUseFullWidth = false,
             yOffset = 0,
+            shouldBeOpen = false,
         },
         ref,
     ) => {
@@ -95,7 +100,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             PopupAlignment.TopLeft,
         );
         const [offset, setOffset] = useState<number>(0);
-        const [isOpen, setIsOpen] = useState(false);
+        const [isOpen, setIsOpen] = useState(shouldBeOpen);
         const [portal, setPortal] = useState<ReactPortal>();
         const [pseudoSize, setPseudoSize] = useState<{ height: number; width: number }>();
         const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
@@ -265,6 +270,12 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, [alignment, newContainer, pseudoSize, shouldScrollWithContent, yOffset]);
 
         useEffect(() => {
+            if (shouldBeOpen) {
+                handleShow();
+            }
+        }, [handleShow, shouldBeOpen]);
+
+        useEffect(() => {
             if (!newContainer || !popupRef.current) return;
 
             const viewHeight = newContainer.clientHeight;
@@ -333,7 +344,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         );
 
         useEffect(() => {
-            if (isOpen) {
+            if (isOpen && !shouldBeOpen) {
                 document.addEventListener('click', handleDocumentClick, true);
                 window.addEventListener('blur', handleHide);
 
@@ -348,7 +359,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 document.removeEventListener('click', handleDocumentClick, true);
                 window.removeEventListener('blur', handleHide);
             };
-        }, [handleDocumentClick, handleHide, isOpen, onHide, onShow]);
+        }, [handleDocumentClick, handleHide, isOpen, onHide, onShow, shouldBeOpen]);
 
         useEffect(() => {
             if (!newContainer) {
