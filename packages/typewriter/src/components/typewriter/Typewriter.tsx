@@ -316,10 +316,10 @@ const Typewriter: FC<TypewriterProps> = ({
             }
         };
 
-        const safeClearTimeout = (id?: number) => {
-            if (typeof id === 'number') {
-                clearTimeout(id);
-                id = undefined;
+        const safeClearTimeout = () => {
+            if (typeof timeoutId === 'number') {
+                clearTimeout(timeoutId);
+                timeoutId = undefined;
             }
         };
 
@@ -442,7 +442,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
         return () => {
             safeCancelFrame();
-            safeClearTimeout(timeoutId);
+            safeClearTimeout();
         };
     }, [
         areMultipleChildrenGiven,
