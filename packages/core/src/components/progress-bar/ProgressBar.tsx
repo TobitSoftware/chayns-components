@@ -1,4 +1,12 @@
-import React, { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+    FC,
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { useUuid } from '../../hooks/uuid';
 import {
     StyledMotionProgressBarProgress,
@@ -111,7 +119,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
         ));
     }, [percentage, showShine]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (thumbLabel) setCoordinates(hostContainer?.getBoundingClientRect());
     }, [hostContainer, thumbLabel]);
 
@@ -146,7 +154,10 @@ const ProgressBar: FC<ProgressBarProps> = ({
         }
 
         return (
-            <div ref={(instance) => setHostContainer(instance)} style={{ border: 0 }}>
+            <div
+                ref={(instance) => setHostContainer(instance)}
+                style={{ border: 0, position: 'relative' }}
+            >
                 <StyledProgressBarProgressWrapper $isBig={shouldShowLabelInline} $height={height}>
                     {!!steps?.length && (
                         <StyledProgressBarStepWrapper>
@@ -189,6 +200,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
                                         container={hostContainer ?? undefined}
                                         shouldUseChildrenWidth
                                         shouldBeOpen
+                                        shouldScrollWithContent
                                         yOffset={-12}
                                     >
                                         {}

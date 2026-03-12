@@ -144,6 +144,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     return;
                 }
 
+                const HORIZONTAL_PADDING = 23;
+
                 const { height: pseudoHeight, width: pseudoWidth } = pseudoSize;
 
                 const {
@@ -170,6 +172,12 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 const y =
                     (childrenTop + childrenHeight / 2 - top) / zoomY + element.scrollTop - yOffset;
 
+                // Use one coordinate space for all horizontal bounds checks.
+                const boundaryLeft = element.scrollLeft;
+                const boundaryWidth = containerWidth / zoomX;
+                const boundaryRight = boundaryLeft + boundaryWidth;
+                const relativeX = x - boundaryLeft;
+
                 const shouldShowBottom =
                     pseudoHeight > childrenTop - 25 ||
                     alignment === PopupAlignment.BottomLeft ||
@@ -185,8 +193,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     : alignment === PopupAlignment.TopCenter;
 
                 const hasEnoughSpaceForCenter =
-                    pseudoWidth / 2 <= childrenCenterX - 25 &&
-                    pseudoWidth / 2 <= window.innerWidth - childrenCenterX - 25;
+                    pseudoWidth / 2 <= relativeX - HORIZONTAL_PADDING &&
+                    pseudoWidth / 2 <= boundaryWidth - relativeX - HORIZONTAL_PADDING;
 
                 if (shouldUseCenterAlignment && hasEnoughSpaceForCenter) {
                     setInternalAlignment(
@@ -194,13 +202,16 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     );
                     setOffset(0);
                     setCoordinates({
-                        x: x < 23 ? 23 : x,
+                        x: Math.min(
+                            Math.max(x, boundaryLeft + HORIZONTAL_PADDING),
+                            boundaryRight - HORIZONTAL_PADDING,
+                        ),
                         y,
                     });
                 } else {
                     let isRight = false;
 
-                    if (pseudoWidth > childrenCenterX - 25 || shouldForceRight) {
+                    if (pseudoWidth > relativeX - HORIZONTAL_PADDING || shouldForceRight) {
                         setInternalAlignment(
                             shouldShowBottom ? PopupAlignment.BottomRight : PopupAlignment.TopRight,
                         );
@@ -215,15 +226,15 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
                     if (isRight) {
                         newOffset =
-                            x + pseudoWidth >= window.innerWidth
-                                ? x + pseudoWidth - window.innerWidth
+                            relativeX + pseudoWidth >= boundaryWidth
+                                ? relativeX + pseudoWidth - boundaryWidth
                                 : 0;
                     } else {
-                        const right = window.innerWidth - childrenCenterX;
+                        const right = boundaryWidth - relativeX;
 
                         newOffset =
-                            right + pseudoWidth >= window.innerWidth
-                                ? right + pseudoWidth - window.innerWidth
+                            right + pseudoWidth >= boundaryWidth
+                                ? right + pseudoWidth - boundaryWidth
                                 : 0;
                     }
 
@@ -232,7 +243,10 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     const newX = x - newOffset;
 
                     setCoordinates({
-                        x: newX < 23 ? 23 : newX,
+                        x: Math.min(
+                            Math.max(newX, boundaryLeft + HORIZONTAL_PADDING),
+                            boundaryRight - HORIZONTAL_PADDING,
+                        ),
                         y,
                     });
                 }
