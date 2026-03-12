@@ -138,6 +138,8 @@ export const StyledProgressBarStep = styled.div<StyledProgressBarStepProps>`
 export const StyledProgressBarThumbLabel = styled.div`
     position: absolute;
     right: 0;
+    // 💩 hardcode height offset of popup
+    top: 13px;
     // revert till POPUPALIGNMENT respect if top or bottom
     // height: 100%;
 `;
