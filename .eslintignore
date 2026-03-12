@@ -1,5 +1,5 @@
 *.stories.tsx
-generate-docs.ts
+generate-docs-2.ts
 packages/**/lib
 packages/**/node_modules
 *.docs.tsx
