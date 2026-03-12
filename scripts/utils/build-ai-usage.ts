@@ -1270,7 +1270,7 @@ const finalizePackageStoryDocs = (packageDocs: PackageStoryDocs): PackageStoryDo
 const writePackageAIUsageFile = (packageDocs: PackageStoryDocs): string => {
     const outputFilePath = path.resolve(
         getPackageDirectoryPath(packageDocs.packageName),
-        'AI_USAGE.md',
+        'AGENTS.md',
     );
     const markdown = renderPackageAIUsage({ packageDocs });
 

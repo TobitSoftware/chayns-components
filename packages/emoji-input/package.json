@@ -37,7 +37,7 @@
     },
     "files": [
         "lib",
-        "AI_USAGE.md"
+        "AGENTS.md"
     ],
     "repository": {
         "type": "git",
