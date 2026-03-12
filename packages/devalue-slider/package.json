@@ -33,7 +33,8 @@
         "test": "__tests__"
     },
     "files": [
-        "lib"
+        "lib",
+        "AI_USAGE.md"
     ],
     "repository": {
         "type": "git",
