@@ -34,7 +34,7 @@ jobs:
         run: lerna publish from-package --yes --dist-tag ${{ env.TAG }}
 
       - name: Generate and upload docs
-        run: npm run docs
+        run: npm run generate:docs
 
   deploy:
     needs: publish
