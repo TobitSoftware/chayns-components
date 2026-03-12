@@ -189,6 +189,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
                                         container={hostContainer ?? undefined}
                                         shouldUseChildrenWidth
                                         shouldBeOpen
+                                        yOffset={-12}
                                     >
                                         {}
                                     </Popup>
