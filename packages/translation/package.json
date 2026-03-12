@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/translation",
-    "version": "5.0.34",
+    "version": "5.0.35",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
