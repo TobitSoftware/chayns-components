@@ -53,12 +53,12 @@ const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
 
         const percentageOffsetY = isTopAlignment ? -100 : 0;
 
-        let anchorOffsetX = -21;
+        let anchorOffsetX = -13;
 
         if (isCenterAlignment) {
             anchorOffsetX = 0;
         } else if (isBottomLeftAlignment || isTopLeftAlignment) {
-            anchorOffsetX = 21;
+            anchorOffsetX = 13;
         }
 
         const anchorOffsetY = isTopAlignment ? -21 : 21;

@@ -198,7 +198,6 @@ const ProgressBar: FC<ProgressBarProps> = ({
                                         alignment={PopupAlignment.TopCenter}
                                         onHide={() => popupRef.current?.show()}
                                         container={hostContainer ?? undefined}
-                                        shouldUseChildrenWidth
                                         shouldBeOpen
                                         shouldScrollWithContent
                                         yOffset={-12}

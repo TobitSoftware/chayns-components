@@ -175,7 +175,6 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 // Use one coordinate space for all horizontal bounds checks.
                 const boundaryLeft = element.scrollLeft;
                 const boundaryWidth = containerWidth / zoomX;
-                const boundaryRight = boundaryLeft + boundaryWidth;
                 const relativeX = x - boundaryLeft;
 
                 const shouldShowBottom =
@@ -202,10 +201,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     );
                     setOffset(0);
                     setCoordinates({
-                        x: Math.min(
-                            Math.max(x, boundaryLeft + HORIZONTAL_PADDING),
-                            boundaryRight - HORIZONTAL_PADDING,
-                        ),
+                        x,
                         y,
                     });
                 } else {
@@ -226,15 +222,15 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
                     if (isRight) {
                         newOffset =
-                            relativeX + pseudoWidth >= boundaryWidth
-                                ? relativeX + pseudoWidth - boundaryWidth
+                            relativeX + pseudoWidth >= boundaryWidth - HORIZONTAL_PADDING
+                                ? relativeX + pseudoWidth - (boundaryWidth - HORIZONTAL_PADDING)
                                 : 0;
                     } else {
                         const right = boundaryWidth - relativeX;
 
                         newOffset =
-                            right + pseudoWidth >= boundaryWidth
-                                ? right + pseudoWidth - boundaryWidth
+                            right + pseudoWidth >= boundaryWidth + HORIZONTAL_PADDING
+                                ? right + pseudoWidth - (boundaryWidth + HORIZONTAL_PADDING)
                                 : 0;
                     }
 
@@ -243,10 +239,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     const newX = x - newOffset;
 
                     setCoordinates({
-                        x: Math.min(
-                            Math.max(newX, boundaryLeft + HORIZONTAL_PADDING),
-                            boundaryRight - HORIZONTAL_PADDING,
-                        ),
+                        x: newX,
                         y,
                     });
                 }
