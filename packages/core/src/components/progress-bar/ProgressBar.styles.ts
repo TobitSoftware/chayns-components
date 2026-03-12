@@ -135,9 +135,18 @@ export const StyledProgressBarStep = styled.div<StyledProgressBarStepProps>`
     left: ${({ $position }: StyledProgressBarStepProps) => $position}%;
 `;
 
-export const StyledProgressBarThumbLabel = styled.div`
+type StyledProgressBarThumbLabelProps = WithTheme<{
+    $height?: number;
+    $isBig?: boolean;
+}>;
+export const StyledProgressBarThumbLabel = styled.div<StyledProgressBarThumbLabelProps>`
     position: absolute;
-    right: 0;
+    right: ${({ $height, $isBig }) => {
+        // set div exactly to end of border radius
+        if ($height) return $height / 2;
+        if ($isBig) return 20 / 2;
+        return 10 / 2;
+    }}px;
     top: 0;
     // revert till POPUPALIGNMENT respect if top or bottom
     // height: 100%;

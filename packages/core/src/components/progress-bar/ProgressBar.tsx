@@ -184,6 +184,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
                         {showShine && shineEffect}
                         {thumbLabel && (
                             <StyledProgressBarThumbLabel
+                                $height={height}
                                 onClick={(event) => event.stopPropagation()}
                             >
                                 <ThemeProvider
