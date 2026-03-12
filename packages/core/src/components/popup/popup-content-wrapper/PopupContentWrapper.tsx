@@ -1,5 +1,5 @@
 import { useSite } from 'chayns-api';
-import React, { ReactNode, type MouseEventHandler } from 'react';
+import React, { type MouseEventHandler, ReactNode } from 'react';
 import { PopupAlignment, PopupCoordinates } from '../../../types/popup';
 import {
     StyledMotionPopupContentWrapper,
@@ -36,16 +36,34 @@ const PopupContentWrapper = React.forwardRef<HTMLDivElement, PopupContentProps>(
         const { colorMode } = useSite();
 
         const isBottomLeftAlignment = alignment === PopupAlignment.BottomLeft;
+        const isBottomCenterAlignment = alignment === PopupAlignment.BottomCenter;
         const isTopLeftAlignment = alignment === PopupAlignment.TopLeft;
+        const isTopCenterAlignment = alignment === PopupAlignment.TopCenter;
         const isTopRightAlignment = alignment === PopupAlignment.TopRight;
+        const isCenterAlignment = isBottomCenterAlignment || isTopCenterAlignment;
+        const isTopAlignment = isTopLeftAlignment || isTopCenterAlignment || isTopRightAlignment;
 
-        const percentageOffsetX = isBottomLeftAlignment || isTopLeftAlignment ? -100 : 0;
-        const percentageOffsetY = isTopRightAlignment || isTopLeftAlignment ? -100 : 0;
+        let percentageOffsetX = 0;
 
-        const anchorOffsetX = isBottomLeftAlignment || isTopLeftAlignment ? 21 : -21;
-        const anchorOffsetY = isTopRightAlignment || isTopLeftAlignment ? -21 : 21;
+        if (isCenterAlignment) {
+            percentageOffsetX = -50;
+        } else if (isBottomLeftAlignment || isTopLeftAlignment) {
+            percentageOffsetX = -100;
+        }
 
-        const exitAndInitialY = isTopLeftAlignment || isTopRightAlignment ? -16 : 16;
+        const percentageOffsetY = isTopAlignment ? -100 : 0;
+
+        let anchorOffsetX = -21;
+
+        if (isCenterAlignment) {
+            anchorOffsetX = 0;
+        } else if (isBottomLeftAlignment || isTopLeftAlignment) {
+            anchorOffsetX = 21;
+        }
+
+        const anchorOffsetY = isTopAlignment ? -21 : 21;
+
+        const exitAndInitialY = isTopAlignment ? -16 : 16;
 
         return (
             <StyledMotionPopupContentWrapper

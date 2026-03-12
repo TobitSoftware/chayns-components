@@ -165,77 +165,51 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 const zoomX = containerWidth / (element as HTMLElement).offsetWidth;
                 const zoomY = containerHeight / (element as HTMLElement).offsetHeight;
 
-                if (
+                const childrenCenterX = childrenLeft + childrenWidth / 2;
+                const x = (childrenCenterX - left) / zoomX + element.scrollLeft;
+                const y =
+                    (childrenTop + childrenHeight / 2 - top) / zoomY + element.scrollTop - yOffset;
+
+                const shouldShowBottom =
                     pseudoHeight > childrenTop - 25 ||
                     alignment === PopupAlignment.BottomLeft ||
-                    alignment === PopupAlignment.BottomRight
-                ) {
-                    let isRight = false;
+                    alignment === PopupAlignment.BottomRight ||
+                    alignment === PopupAlignment.BottomCenter;
 
-                    if (
-                        pseudoWidth > childrenLeft + childrenWidth / 2 - 25 ||
-                        alignment === PopupAlignment.BottomRight
-                    ) {
-                        setInternalAlignment(PopupAlignment.BottomRight);
+                const shouldForceRight = shouldShowBottom
+                    ? alignment === PopupAlignment.BottomRight
+                    : alignment === PopupAlignment.TopRight;
 
-                        isRight = true;
-                    } else {
-                        setInternalAlignment(PopupAlignment.BottomLeft);
-                    }
+                const shouldUseCenterAlignment = shouldShowBottom
+                    ? alignment === PopupAlignment.BottomCenter
+                    : alignment === PopupAlignment.TopCenter;
 
-                    const x =
-                        (childrenLeft + childrenWidth / 2 - left) / zoomX + element.scrollLeft;
-                    const y =
-                        (childrenTop + childrenHeight / 2 - top) / zoomY +
-                        element.scrollTop -
-                        yOffset;
+                const hasEnoughSpaceForCenter =
+                    pseudoWidth / 2 <= childrenCenterX - 25 &&
+                    pseudoWidth / 2 <= window.innerWidth - childrenCenterX - 25;
 
-                    let newOffset;
-
-                    if (isRight) {
-                        newOffset =
-                            x + pseudoWidth >= window.innerWidth
-                                ? x + pseudoWidth - window.innerWidth
-                                : 0;
-                    } else {
-                        newOffset = 0;
-
-                        const right = window.innerWidth - (childrenLeft + childrenWidth / 2);
-
-                        newOffset =
-                            right + pseudoWidth >= window.innerWidth
-                                ? right + pseudoWidth - window.innerWidth
-                                : 0;
-                    }
-
-                    setOffset(newOffset);
-
-                    const newX = x - newOffset;
-
+                if (shouldUseCenterAlignment && hasEnoughSpaceForCenter) {
+                    setInternalAlignment(
+                        shouldShowBottom ? PopupAlignment.BottomCenter : PopupAlignment.TopCenter,
+                    );
+                    setOffset(0);
                     setCoordinates({
-                        x: newX < 23 ? 23 : newX,
+                        x: x < 23 ? 23 : x,
                         y,
                     });
                 } else {
                     let isRight = false;
 
-                    if (
-                        pseudoWidth > childrenLeft + childrenWidth / 2 - 25 ||
-                        alignment === PopupAlignment.TopRight
-                    ) {
-                        setInternalAlignment(PopupAlignment.TopRight);
-
+                    if (pseudoWidth > childrenCenterX - 25 || shouldForceRight) {
+                        setInternalAlignment(
+                            shouldShowBottom ? PopupAlignment.BottomRight : PopupAlignment.TopRight,
+                        );
                         isRight = true;
                     } else {
-                        setInternalAlignment(PopupAlignment.TopLeft);
+                        setInternalAlignment(
+                            shouldShowBottom ? PopupAlignment.BottomLeft : PopupAlignment.TopLeft,
+                        );
                     }
-
-                    const x =
-                        (childrenLeft + childrenWidth / 2 - left) / zoomX + element.scrollLeft;
-                    const y =
-                        (childrenTop + childrenHeight / 2 - top) / zoomY +
-                        element.scrollTop -
-                        yOffset;
 
                     let newOffset;
 
@@ -245,9 +219,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                                 ? x + pseudoWidth - window.innerWidth
                                 : 0;
                     } else {
-                        newOffset = 0;
-
-                        const right = window.innerWidth - (childrenLeft + childrenWidth / 2);
+                        const right = window.innerWidth - childrenCenterX;
 
                         newOffset =
                             right + pseudoWidth >= window.innerWidth
@@ -274,6 +246,26 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 handleShow();
             }
         }, [handleShow, shouldBeOpen]);
+
+        const handleReposition = useCallback(() => {
+            if (isOpen) {
+                handleShow();
+            }
+        }, [handleShow, isOpen]);
+
+        useEffect(() => {
+            if (!isOpen) {
+                return;
+            }
+
+            window.addEventListener('resize', handleReposition);
+            window.addEventListener('scroll', handleReposition, true);
+
+            return () => {
+                window.removeEventListener('resize', handleReposition);
+                window.removeEventListener('scroll', handleReposition, true);
+            };
+        }, [handleReposition, isOpen]);
 
         useEffect(() => {
             if (!newContainer || !popupRef.current) return;
