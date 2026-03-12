@@ -18,7 +18,7 @@
         "preversion": "lerna exec -- npm run build:types",
         "upgrade:minor": "lerna exec -- ncu -u -t minor",
         "upgrade": "lerna exec -- ncu -u",
-        "commit:usage": "git add packages/**/AI_USAGE.md && git diff --cached --quiet || git commit -m \"📝 Update AI_USAGE.md\"",
+        "commit:usage": "git add packages/**/AI_USAGE.md && git diff --cached --quiet || git commit --no-verify -m \"📝 Update AI_USAGE.md\"",
         "generate:docs": "npx ts-node --project tsconfig.scripts.json scripts/generate-docs.ts",
         "generate:usage": "npx ts-node --project tsconfig.scripts.json scripts/generate-ai-usage.ts"
     },
