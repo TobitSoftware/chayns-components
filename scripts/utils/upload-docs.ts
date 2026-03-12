@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import fetch from 'node-fetch';
 import FormData from 'form-data';
 import type {
     AuthTokenResponse,
@@ -103,7 +104,7 @@ const uploadFile = async ({
     });
 
     const uploadResponse = await fetch(AWS_UPLOAD_URL, {
-        body: formData as unknown as BodyInit,
+        body: formData,
         headers: formData.getHeaders(),
         method: 'POST',
     });
