@@ -1410,5 +1410,9 @@ export const buildAiUsage = async () => {
 
     script.success(`Generated ${writtenFiles} AI usage files.`);
 
+    if (fs.existsSync(DOCS_OUTPUT_PATH)) {
+        fs.unlinkSync(DOCS_OUTPUT_PATH);
+    }
+
     return docs;
 };
