@@ -42,8 +42,7 @@ import { CodeHighlighter } from '@chayns-components/code-highlighter';
 
 ## CodeHighlighter
 
-`CodeHighlighter` is exported by `@chayns-components/code-highlighter` and should be imported from
-the public package entry point.
+`CodeHighlighter` is exported by `@chayns-components/code-highlighter` and should be imported from the public package entry point.
 
 ### Import
 
@@ -91,10 +90,10 @@ import { CodeHighlighter } from '@chayns-components/code-highlighter';
     shouldShowLineNumbers
     language={'tsx'}
     highlightedLines={{
-        added: [15, 16, 17, 18, 19],
-        removed: [14],
-        marked: [5],
-    }}
+            added: [15, 16, 17, 18, 19],
+            removed: [14],
+            marked: [5],
+        }}
     code={`import React from 'react';
     import { ColorSchemeProvider } from '@chayns-components/core';
     import { ChaynsProvider, getSite } from 'chayns-api';
@@ -247,9 +246,7 @@ import { CodeHighlighter } from '@chayns-components/code-highlighter';
     copyButtonText={'Code kopieren'}
     shouldShowLineNumbers
     language={''}
-    code={
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed rhoncus nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Donec semper ante quis molestie vulputate. Praesent facilisis auctor turpis. Duis sodales dictum sem, id aliquet nisi faucibus egestas. Morbi volutpat dapibus feugiat.'
-    }
+    code={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed rhoncus nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Donec semper ante quis molestie vulputate. Praesent facilisis auctor turpis. Duis sodales dictum sem, id aliquet nisi faucibus egestas. Morbi volutpat dapibus feugiat.'}
     shouldWrapLines
 />
 ```
@@ -264,12 +261,9 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `CodeHighlighter` directly from `@chayns-components/code-highlighter` instead of internal
-  source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `CodeHighlighter` directly from `@chayns-components/code-highlighter` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/code-highlighter/src/...`; always
-  use the public package export.
+- Avoid imports from internal paths such as `@chayns-components/code-highlighter/src/...`; always use the public package export.

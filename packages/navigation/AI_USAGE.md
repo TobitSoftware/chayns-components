@@ -31,8 +31,7 @@ import { DynamicToolbar } from '@chayns-components/navigation';
 
 ## DynamicToolbar
 
-Die DynamicToolbar blendet Aktionen je nach Breite automatisch aus, gruppiert sie im Overflow-Menü
-und lässt sich zwischen Floating- und Area-Layout umschalten.
+Die DynamicToolbar blendet Aktionen je nach Breite automatisch aus, gruppiert sie im Overflow-Menü und lässt sich zwischen Floating- und Area-Layout umschalten.
 
 ### Import
 
@@ -134,12 +133,9 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `DynamicToolbar` directly from `@chayns-components/navigation` instead of internal source
-  paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `DynamicToolbar` directly from `@chayns-components/navigation` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/navigation/src/...`; always use the
-  public package export.
+- Avoid imports from internal paths such as `@chayns-components/navigation/src/...`; always use the public package export.

@@ -15,19 +15,18 @@ import { CodeScanner } from '@chayns-components/scanner';
 ```tsx
 <CodeScanner
     errorMessages={{
-        alreadyInUse: 'Die Kamera wird bereits von einer anderen Anwendung verwendet.',
-        cameraNotAvailable: 'Die Kameranutzung ist nicht möglich.',
-        noCodeFound: 'Es konnte kein Code gefunden werden.',
-        noPermission: 'Um einen QR-Code zu scannen, aktiviere Deine Kamera.',
-    }}
+                alreadyInUse: 'Die Kamera wird bereits von einer anderen Anwendung verwendet.',
+                cameraNotAvailable: 'Die Kameranutzung ist nicht möglich.',
+                noCodeFound: 'Es konnte kein Code gefunden werden.',
+                noPermission: 'Um einen QR-Code zu scannen, aktiviere Deine Kamera.',
+            }}
     shouldTriggerForSameCode
 />
 ```
 
 ## CodeScanner
 
-`CodeScanner` is exported by `@chayns-components/scanner` and should be imported from the public
-package entry point.
+`CodeScanner` is exported by `@chayns-components/scanner` and should be imported from the public package entry point.
 
 ### Import
 
@@ -42,11 +41,11 @@ import { CodeScanner } from '@chayns-components/scanner';
 ```tsx
 <CodeScanner
     errorMessages={{
-        alreadyInUse: 'Die Kamera wird bereits von einer anderen Anwendung verwendet.',
-        cameraNotAvailable: 'Die Kameranutzung ist nicht möglich.',
-        noCodeFound: 'Es konnte kein Code gefunden werden.',
-        noPermission: 'Um einen QR-Code zu scannen, aktiviere Deine Kamera.',
-    }}
+                alreadyInUse: 'Die Kamera wird bereits von einer anderen Anwendung verwendet.',
+                cameraNotAvailable: 'Die Kameranutzung ist nicht möglich.',
+                noCodeFound: 'Es konnte kein Code gefunden werden.',
+                noPermission: 'Um einen QR-Code zu scannen, aktiviere Deine Kamera.',
+            }}
     shouldTriggerForSameCode
 />
 ```
@@ -62,10 +61,8 @@ No additional exported types documented.
 ### Usage Notes
 
 - Import `CodeScanner` directly from `@chayns-components/scanner` instead of internal source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/scanner/src/...`; always use the
-  public package export.
+- Avoid imports from internal paths such as `@chayns-components/scanner/src/...`; always use the public package export.

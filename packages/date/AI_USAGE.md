@@ -16,37 +16,41 @@ import { Calendar, DateInfo, OpeningTimes } from '@chayns-components/date';
 <Calendar
     type={CalendarType.Single}
     highlightedDates={[
-        {
-            dates: [getDayOfCurrentMonth(-3), getDayOfCurrentMonth(1), getDayOfCurrentMonth(22)],
-            style: { textColor: 'white', backgroundColor: 'blue' },
-        },
-        {
-            dates: [getDayOfCurrentMonth(21)],
-            style: { textColor: 'white', backgroundColor: 'red' },
-        },
-        {
-            dates: [getDayOfCurrentMonth(20), getDayOfCurrentMonth(28)],
-            style: { textColor: 'white', backgroundColor: 'green' },
-        },
-    ]}
+                {
+                    dates: [
+                        getDayOfCurrentMonth(-3),
+                        getDayOfCurrentMonth(1),
+                        getDayOfCurrentMonth(22),
+                    ],
+                    style: { textColor: 'white', backgroundColor: 'blue' },
+                },
+                {
+                    dates: [getDayOfCurrentMonth(21)],
+                    style: { textColor: 'white', backgroundColor: 'red' },
+                },
+                {
+                    dates: [getDayOfCurrentMonth(20), getDayOfCurrentMonth(28)],
+                    style: { textColor: 'white', backgroundColor: 'green' },
+                },
+            ]}
     disabledDates={[getDayOfCurrentMonth(10), getDayOfCurrentMonth(15)]}
     categories={[
-        {
-            dates: [getDayOfCurrentMonth(35), getDayOfCurrentMonth(13)],
-            color: 'green',
-            id: 'meeting',
-        },
-        {
-            dates: [getDayOfCurrentMonth(3), getDayOfCurrentMonth(14)],
-            color: 'black',
-            id: 'holiday',
-        },
-        {
-            dates: [getDayOfCurrentMonth(14)],
-            color: 'purple',
-            id: 'birthday',
-        },
-    ]}
+                {
+                    dates: [getDayOfCurrentMonth(35), getDayOfCurrentMonth(13)],
+                    color: 'green',
+                    id: 'meeting',
+                },
+                {
+                    dates: [getDayOfCurrentMonth(3), getDayOfCurrentMonth(14)],
+                    color: 'black',
+                    id: 'holiday',
+                },
+                {
+                    dates: [getDayOfCurrentMonth(14)],
+                    color: 'purple',
+                    id: 'birthday',
+                },
+            ]}
 />
 ```
 
@@ -58,8 +62,7 @@ import { Calendar, DateInfo, OpeningTimes } from '@chayns-components/date';
 
 ## Calendar
 
-`Calendar` is exported by `@chayns-components/date` and should be imported from the public package
-entry point.
+`Calendar` is exported by `@chayns-components/date` and should be imported from the public package entry point.
 
 ### Import
 
@@ -75,37 +78,41 @@ import { Calendar } from '@chayns-components/date';
 <Calendar
     type={CalendarType.Single}
     highlightedDates={[
-        {
-            dates: [getDayOfCurrentMonth(-3), getDayOfCurrentMonth(1), getDayOfCurrentMonth(22)],
-            style: { textColor: 'white', backgroundColor: 'blue' },
-        },
-        {
-            dates: [getDayOfCurrentMonth(21)],
-            style: { textColor: 'white', backgroundColor: 'red' },
-        },
-        {
-            dates: [getDayOfCurrentMonth(20), getDayOfCurrentMonth(28)],
-            style: { textColor: 'white', backgroundColor: 'green' },
-        },
-    ]}
+                {
+                    dates: [
+                        getDayOfCurrentMonth(-3),
+                        getDayOfCurrentMonth(1),
+                        getDayOfCurrentMonth(22),
+                    ],
+                    style: { textColor: 'white', backgroundColor: 'blue' },
+                },
+                {
+                    dates: [getDayOfCurrentMonth(21)],
+                    style: { textColor: 'white', backgroundColor: 'red' },
+                },
+                {
+                    dates: [getDayOfCurrentMonth(20), getDayOfCurrentMonth(28)],
+                    style: { textColor: 'white', backgroundColor: 'green' },
+                },
+            ]}
     disabledDates={[getDayOfCurrentMonth(10), getDayOfCurrentMonth(15)]}
     categories={[
-        {
-            dates: [getDayOfCurrentMonth(35), getDayOfCurrentMonth(13)],
-            color: 'green',
-            id: 'meeting',
-        },
-        {
-            dates: [getDayOfCurrentMonth(3), getDayOfCurrentMonth(14)],
-            color: 'black',
-            id: 'holiday',
-        },
-        {
-            dates: [getDayOfCurrentMonth(14)],
-            color: 'purple',
-            id: 'birthday',
-        },
-    ]}
+                {
+                    dates: [getDayOfCurrentMonth(35), getDayOfCurrentMonth(13)],
+                    color: 'green',
+                    id: 'meeting',
+                },
+                {
+                    dates: [getDayOfCurrentMonth(3), getDayOfCurrentMonth(14)],
+                    color: 'black',
+                    id: 'holiday',
+                },
+                {
+                    dates: [getDayOfCurrentMonth(14)],
+                    color: 'purple',
+                    id: 'birthday',
+                },
+            ]}
 />
 ```
 
@@ -115,42 +122,46 @@ import { Calendar } from '@chayns-components/date';
 <Calendar
     type={CalendarType.Single}
     highlightedDates={[
-        {
-            dates: [getDayOfCurrentMonth(-3), getDayOfCurrentMonth(1), getDayOfCurrentMonth(22)],
-            style: { textColor: 'white', backgroundColor: 'blue' },
-        },
-        {
-            dates: [getDayOfCurrentMonth(21)],
-            style: { textColor: 'white', backgroundColor: 'red' },
-        },
-        {
-            dates: [getDayOfCurrentMonth(20), getDayOfCurrentMonth(28)],
-            style: { textColor: 'white', backgroundColor: 'green' },
-        },
-    ]}
+                {
+                    dates: [
+                        getDayOfCurrentMonth(-3),
+                        getDayOfCurrentMonth(1),
+                        getDayOfCurrentMonth(22),
+                    ],
+                    style: { textColor: 'white', backgroundColor: 'blue' },
+                },
+                {
+                    dates: [getDayOfCurrentMonth(21)],
+                    style: { textColor: 'white', backgroundColor: 'red' },
+                },
+                {
+                    dates: [getDayOfCurrentMonth(20), getDayOfCurrentMonth(28)],
+                    style: { textColor: 'white', backgroundColor: 'green' },
+                },
+            ]}
     disabledDates={[getDayOfCurrentMonth(10), getDayOfCurrentMonth(15)]}
     categories={[
-        {
-            dates: [getDayOfCurrentMonth(35), getDayOfCurrentMonth(13)],
-            color: 'green',
-            id: 'meeting',
-        },
-        {
-            dates: [getDayOfCurrentMonth(3), getDayOfCurrentMonth(14)],
-            color: 'black',
-            id: 'holiday',
-        },
-        {
-            dates: [getDayOfCurrentMonth(14)],
-            color: 'purple',
-            id: 'birthday',
-        },
-    ]}
+                {
+                    dates: [getDayOfCurrentMonth(35), getDayOfCurrentMonth(13)],
+                    color: 'green',
+                    id: 'meeting',
+                },
+                {
+                    dates: [getDayOfCurrentMonth(3), getDayOfCurrentMonth(14)],
+                    color: 'black',
+                    id: 'holiday',
+                },
+                {
+                    dates: [getDayOfCurrentMonth(14)],
+                    color: 'purple',
+                    id: 'birthday',
+                },
+            ]}
     customThumbColors={{
-        mainBackgroundColor: 'purple',
-        mainTextColor: 'white',
-        secondaryBackgroundColor: 'pink',
-    }}
+            mainBackgroundColor: 'purple',
+            mainTextColor: 'white',
+            secondaryBackgroundColor: 'pink',
+        }}
 />
 ```
 
@@ -165,18 +176,14 @@ No additional exported types documented.
 ### Usage Notes
 
 - Import `Calendar` directly from `@chayns-components/date` instead of internal source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/date/src/...`; always use the public
-  package export.
-
+- Avoid imports from internal paths such as `@chayns-components/date/src/...`; always use the public package export.
 ## DateInfo
 
-`DateInfo` is exported by `@chayns-components/date` and should be imported from the public package
-entry point.
+`DateInfo` is exported by `@chayns-components/date` and should be imported from the public package entry point.
 
 ### Import
 
@@ -189,7 +196,9 @@ import { DateInfo } from '@chayns-components/date';
 #### General
 
 ```tsx
-<DateInfo date={new Date()} />
+<DateInfo
+    date={new Date()}
+/>
 ```
 
 ### Props
@@ -203,18 +212,14 @@ No additional exported types documented.
 ### Usage Notes
 
 - Import `DateInfo` directly from `@chayns-components/date` instead of internal source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/date/src/...`; always use the public
-  package export.
-
+- Avoid imports from internal paths such as `@chayns-components/date/src/...`; always use the public package export.
 ## OpeningTimes
 
-`OpeningTimes` is exported by `@chayns-components/date` and should be imported from the public
-package entry point.
+`OpeningTimes` is exported by `@chayns-components/date` and should be imported from the public package entry point.
 
 ### Import
 
@@ -259,9 +264,7 @@ import { OpeningTimes } from '@chayns-components/date';
         { id: 'samstag', weekdayId: 5, times: [{ start: '08:00', end: '18:00', id: '7' }] },
         { id: 'sonntag', weekdayId: 6, times: [{ start: '18:00', end: '08:00', id: '8' }] },
     ]}
-    hintText={
-        'Einige der Öffnungszeiten überschneiden sich oder sind nicht in der richtigen Reihenfolge.'
-    }
+    hintText={'Einige der Öffnungszeiten überschneiden sich oder sind nicht in der richtigen Reihenfolge.'}
 />
 ```
 
@@ -300,9 +303,7 @@ import { OpeningTimes } from '@chayns-components/date';
         { id: 'samstag', weekdayId: 5, times: [{ start: '08:00', end: '18:00', id: '7' }] },
         { id: 'sonntag', weekdayId: 6, times: [{ start: '18:00', end: '08:00', id: '8' }] },
     ]}
-    hintText={
-        'Einige der Öffnungszeiten überschneiden sich oder sind nicht in der richtigen Reihenfolge.'
-    }
+    hintText={'Einige der Öffnungszeiten überschneiden sich oder sind nicht in der richtigen Reihenfolge.'}
     editMode
 />
 ```
@@ -342,9 +343,7 @@ import { OpeningTimes } from '@chayns-components/date';
         { id: 'samstag', weekdayId: 5, times: [{ start: '08:00', end: '18:00', id: '7' }] },
         { id: 'sonntag', weekdayId: 6, times: [{ start: '18:00', end: '08:00', id: '8' }] },
     ]}
-    hintText={
-        'Einige der Öffnungszeiten überschneiden sich oder sind nicht in der richtigen Reihenfolge.'
-    }
+    hintText={'Einige der Öffnungszeiten überschneiden sich oder sind nicht in der richtigen Reihenfolge.'}
     currentDayId={getCurrentDay()}
 />
 ```
@@ -360,10 +359,8 @@ No additional exported types documented.
 ### Usage Notes
 
 - Import `OpeningTimes` directly from `@chayns-components/date` instead of internal source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/date/src/...`; always use the public
-  package export.
+- Avoid imports from internal paths such as `@chayns-components/date/src/...`; always use the public package export.
