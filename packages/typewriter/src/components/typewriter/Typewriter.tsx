@@ -276,11 +276,16 @@ const Typewriter: FC<TypewriterProps> = ({
         autoSpeed.current = getSafeAutoSpeed(chunkIntervalExponentialMovingAverage.current.ema);
     }, [animationSteps, charactersCount, shouldCalcAutoSpeed]);
 
-    const isAnimatingText =
-        shownCharCount < textContent.length ||
-        shouldForceCursorAnimation ||
-        areMultipleChildrenGiven ||
-        textContent.length === 0;
+    const shouldShowFullTextImmediately = shouldStopAnimation || charactersCount === 0;
+    const effectiveShownCharCount = shouldShowFullTextImmediately
+        ? textContent.length
+        : shownCharCount;
+
+    const isTypingAnimationActive =
+        !shouldShowFullTextImmediately &&
+        (effectiveShownCharCount < textContent.length || areMultipleChildrenGiven);
+
+    const isAnimatingText = isTypingAnimationActive || shouldForceCursorAnimation;
 
     const handleClick = useCallback((event: React.MouseEvent) => {
         event.stopPropagation();
@@ -306,7 +311,7 @@ const Typewriter: FC<TypewriterProps> = ({
     useEffect(() => {
         // frame and timeout ids used for cleanup
         let frameId: number | undefined;
-        let lastTime: number | undefined;
+        let lastTimeRendered: number | undefined;
         let timeoutId: number | undefined;
 
         const safeCancelFrame = () => {
@@ -327,10 +332,10 @@ const Typewriter: FC<TypewriterProps> = ({
             onTick: (charactersToChange: number) => void,
             speedParam: number,
         ) => {
-            lastTime = undefined;
+            lastTimeRendered = undefined;
             const loop = (timestamp: number) => {
-                if (lastTime === undefined) lastTime = timestamp;
-                const timeSinceLastFrame = timestamp - lastTime;
+                if (lastTimeRendered === undefined) lastTimeRendered = timestamp;
+                const timeSinceLastFrame = timestamp - lastTimeRendered;
                 const rate = autoSpeed.current ?? speedParam;
                 const charactersToChange = Math.round(timeSinceLastFrame / rate);
 
@@ -341,17 +346,21 @@ const Typewriter: FC<TypewriterProps> = ({
 
                 onTick(charactersToChange);
 
-                lastTime = timestamp;
+                lastTimeRendered = timestamp;
                 frameId = requestAnimationFrame(loop);
             };
 
             frameId = requestAnimationFrame(loop);
         };
 
-        if (shouldStopAnimation || charactersCount === 0) {
-            setShownCharCount(textContent.length);
+        if (shouldShowFullTextImmediately) {
             currentPosition.current = textContent.length;
-        } else if (isResetAnimationActive) {
+            return () => {
+                safeCancelFrame();
+                safeClearTimeout();
+            };
+        }
+        if (isResetAnimationActive) {
             // reset animation
             if (typeof onResetAnimationStart === 'function') {
                 onResetAnimationStart();
@@ -457,6 +466,7 @@ const Typewriter: FC<TypewriterProps> = ({
         onTypingAnimationStart,
         resetDelay,
         resetSpeed,
+        shouldShowFullTextImmediately,
         shouldStopAnimation,
         shouldUseResetAnimation,
         shouldWaitForContent,
@@ -466,14 +476,14 @@ const Typewriter: FC<TypewriterProps> = ({
     ]);
 
     useEffect(() => {
-        if (!isAnimatingText && typeof onFinish === 'function') {
+        if (!isTypingAnimationActive && typeof onFinish === 'function') {
             onFinish();
         }
-    }, [isAnimatingText, onFinish]);
+    }, [isTypingAnimationActive, onFinish]);
 
     const shownText = useMemo(
-        () => getSubTextFromHTML(textContent, shownCharCount),
-        [shownCharCount, textContent],
+        () => getSubTextFromHTML(textContent, effectiveShownCharCount),
+        [effectiveShownCharCount, textContent],
     );
 
     const pseudoTextHTML = useMemo(() => {
@@ -481,22 +491,22 @@ const Typewriter: FC<TypewriterProps> = ({
             const pseudoText = renderChildToString(pseudoChildren);
 
             if (shouldUseAnimationHeight) {
-                return getSubTextFromHTML(pseudoText, shownCharCount);
+                return getSubTextFromHTML(pseudoText, effectiveShownCharCount);
             }
 
             return pseudoText;
         }
 
         if (shouldUseAnimationHeight && textContent) {
-            return getSubTextFromHTML(textContent, shownCharCount);
+            return getSubTextFromHTML(textContent, effectiveShownCharCount);
         }
 
         return textContent || '&#8203;';
     }, [
+        effectiveShownCharCount,
         pseudoChildren,
         renderChildToString,
         shouldUseAnimationHeight,
-        shownCharCount,
         textContent,
     ]);
 
@@ -504,7 +514,7 @@ const Typewriter: FC<TypewriterProps> = ({
         () => (
             <StyledTypewriter
                 $cursorType={cursorType}
-                onClick={isAnimatingText ? handleClick : undefined}
+                onClick={isTypingAnimationActive ? handleClick : undefined}
                 $isAnimatingText={isAnimatingText}
                 $shouldHideCursor={shouldHideCursor}
                 $shouldPreventBlinkAnimation={shouldPreventBlinkingCursor}
@@ -554,6 +564,7 @@ const Typewriter: FC<TypewriterProps> = ({
             handleClick,
             hasRenderedChildrenOnce,
             isAnimatingText,
+            isTypingAnimationActive,
             pseudoTextHTML,
             shouldHideCursor,
             shouldPreventBlinkingCursor,
