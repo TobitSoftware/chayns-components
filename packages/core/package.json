@@ -75,6 +75,7 @@
         "@chayns/colors": "^2.0.2",
         "@chayns/uac-service": "~0.0.62",
         "clsx": "^2.1.1",
+        "react-compiler-runtime": "^1.0.0",
         "uuid": "^10.0.0"
     },
     "peerDependencies": {

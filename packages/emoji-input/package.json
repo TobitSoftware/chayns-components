@@ -76,6 +76,7 @@
     "dependencies": {
         "@chayns-components/core": "^5.0.38",
         "emojilib": "^3.0.12",
+        "react-compiler-runtime": "^1.0.0",
         "unicode-emoji-json": "^0.8.0"
     },
     "peerDependencies": {

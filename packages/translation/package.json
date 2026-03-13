@@ -70,7 +70,8 @@
     },
     "dependencies": {
         "clsx": "^2.1.1",
-        "lodash.throttle": "^4.1.1"
+        "lodash.throttle": "^4.1.1",
+        "react-compiler-runtime": "^1.0.0"
     },
     "peerDependencies": {
         "chayns-api": ">=2.2.0",

@@ -76,7 +76,8 @@
         "@googlemaps/react-wrapper": "^1.2.0",
         "@googlemaps/typescript-guards": "^2.0.3",
         "@react-google-maps/api": "^2.20.8",
-        "fast-equals": "^5.4.0"
+        "fast-equals": "^5.4.0",
+        "react-compiler-runtime": "^1.0.0"
     },
     "peerDependencies": {
         "chayns-api": ">=2.2.0",

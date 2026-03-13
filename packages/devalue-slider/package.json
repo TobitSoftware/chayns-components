@@ -54,7 +54,8 @@
     },
     "dependencies": {
         "@chayns-components/core": "^5.0.38",
-        "@react-hook/size": "^2.1.2"
+        "@react-hook/size": "^2.1.2",
+        "react-compiler-runtime": "^1.0.0"
     },
     "devDependencies": {
         "@babel/cli": "^7.28.6",

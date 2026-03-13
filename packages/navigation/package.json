@@ -70,7 +70,8 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.38"
+        "@chayns-components/core": "^5.0.38",
+        "react-compiler-runtime": "^1.0.0"
     },
     "peerDependencies": {
         "chayns-api": ">=2.2.0",
