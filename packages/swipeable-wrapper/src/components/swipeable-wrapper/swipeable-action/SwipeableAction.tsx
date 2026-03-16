@@ -57,7 +57,7 @@ const SwipeableAction: FC<SwipeableActionProps> = ({
      */
     const actionOverlayOffset = useSpring(0, {
         bounce: 0,
-    }) as MotionValue<number>;
+    });
 
     /**
      * Combines the two values above to create the correct X transform that has
