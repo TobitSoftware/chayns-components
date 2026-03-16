@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { getLanguage, vibrate } from 'chayns-api';
 
@@ -17,15 +17,17 @@ export type TimerProps = {
 };
 
 const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 'white' }) => {
+    'use memo';
+
     const { active: language } = getLanguage();
 
-    const refDate = useRef(new Date());
-    const [distance, setDistance] = useState(
-        intervalToDuration({
-            start: devalueTime,
-            end: new Date(),
-        }),
-    );
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    const distance = intervalToDuration({
+        start: devalueTime,
+        end: currentTime,
+    });
+
     const minutesShowValue = useMemo(
         () => Math.max(distance.minutes ?? 0, 0).toString(),
         [distance.minutes],
@@ -36,17 +38,20 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
     );
 
     useEffect(() => {
-        refDate.current = new Date();
-        const interval = setInterval(() => {
-            refDate.current = new Date();
-            setDistance(
-                intervalToDuration({
-                    start: devalueTime,
-                    end: refDate.current,
-                }),
-            );
-        }, 500);
-        return () => clearInterval(interval);
+        let latestAnimationFrame: number;
+        let lastUpdate: number | undefined;
+
+        const loop = (time: number) => {
+            if (lastUpdate === undefined || time - lastUpdate >= 500) {
+                lastUpdate = time;
+                setCurrentTime(new Date());
+            }
+
+            latestAnimationFrame = requestAnimationFrame(loop);
+        };
+
+        latestAnimationFrame = requestAnimationFrame(loop);
+        return () => cancelAnimationFrame(latestAnimationFrame);
     }, [devalueTime]);
 
     const handlePointerDownCapture = useCallback(() => {
@@ -55,14 +60,14 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
 
     const label = useMemo(() => {
         let text = 'Vor ##SECONDS## Sek. (##TIME## Uhr)';
-        if (differenceInHours(refDate.current, devalueTime) > 0) {
+        if (differenceInHours(currentTime, devalueTime) > 0) {
             const distanceLabel = getTimeTillNow({
                 date: new Date(),
                 currentDate: devalueTime,
                 language,
             });
             text = `${distanceLabel} (##TIME## Uhr)`;
-        } else if (differenceInMinutes(refDate.current, devalueTime) > 0) {
+        } else if (differenceInMinutes(currentTime, devalueTime) > 0) {
             text = 'Vor ##MINUTES## Min. ##SECONDS## Sek. (##TIME## Uhr)';
         }
 
@@ -80,7 +85,7 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
             .replace('##MINUTES##', minutesShowValue)
             .replace('##SECONDS##', secondsShowValue)
             .replace('##TIME##', formatTime(devalueTime, 'HH:mm'));
-    }, [devalueTime, minutesShowValue, secondsShowValue, language]);
+    }, [currentTime, devalueTime, minutesShowValue, secondsShowValue, language]);
 
     return (
         <Container

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
+import React, { type CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
 import Slider, { type SliderRef } from './slider/Slider';
 import Timer from './timer/Timer';
 
@@ -60,6 +60,8 @@ const DevalueSlider: React.FC<DevalueSliderProps> = ({
     onChange,
     onComplete,
 }) => {
+    'use memo';
+
     const [timerDevalueTime, setTimerDevalueTime] = useState(devalueTime);
 
     const sliderRef = useRef<SliderRef>(null);
