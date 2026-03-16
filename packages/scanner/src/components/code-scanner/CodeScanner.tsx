@@ -98,12 +98,12 @@ const CodeScanner: FC<CodeScannerProps> = ({
     errorMessages,
 }) => {
     const [isPolyfillLoaded, setIsPolyfillLoaded] = useState(false);
-    const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
     const [barcodeDetector, setBarcodeDetector] = useState<BarcodeDetector>();
     const [stream, setStream] = useState<MediaStream>();
     const [scannerError, setScannerError] = useState<ScannerErrorType | undefined>(undefined);
     const [isScanningFile, setIsScanningFile] = useState(false);
     const [isHandlingCode, setIsHandlingCode] = useState(false);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
     const lastCode = useRef<string>();
     const handleStopRef = useRef<() => void>();
     const isHandlingCodeRef = useRef(false);
@@ -232,9 +232,9 @@ const CodeScanner: FC<CodeScannerProps> = ({
 
             setStream(res);
 
-            videoRef.srcObject = res;
+            if (videoRef.current) videoRef.current.srcObject = res;
 
-            await videoRef.play();
+            await videoRef.current?.play();
         }
 
         const codeDetector = new BarcodeDetector(
@@ -245,8 +245,8 @@ const CodeScanner: FC<CodeScannerProps> = ({
     }, [isPolyfillLoaded, minZoom, trackConstraints, allowedFormats, videoConstraints, videoRef]);
 
     const handleStopCameraAccess = useCallback(() => {
-        if (videoRef) {
-            videoRef.pause();
+        if (videoRef.current) {
+            videoRef.current.pause();
         }
 
         if (barcodeDetector) {
@@ -296,12 +296,12 @@ const CodeScanner: FC<CodeScannerProps> = ({
 
         if (!isScanningFile && !isHandlingCode) {
             const scan = async () => {
-                if (!isHandlingCodeRef.current) {
-                    const result = await barcodeDetector.detect(videoRef);
+                if (!isHandlingCodeRef.current && videoRef.current) {
+                    const result = await barcodeDetector.detect(videoRef.current);
                     handleScanResult(result);
                 }
 
-                lastTimeout = setTimeout(scan, 250);
+                lastTimeout = setTimeout(() => void scan, 250);
             };
 
             void scan();
@@ -341,7 +341,7 @@ const CodeScanner: FC<CodeScannerProps> = ({
                 </StyledCodeScannerTextWrapper>
             )}
             <StyledCodeScannerPreview
-                ref={setVideoRef}
+                ref={videoRef}
                 autoPlay
                 playsInline
                 height="100%"
