@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, FC, useEffect, useRef, useState } from 'react';
+import React, { ChangeEventHandler, FC, useEffect, useState } from 'react';
 import { NUMBER_CLEAR_REGEX } from '../../constants/numberInput';
 import { formateNumber, isValidString, parseFloatWithDecimals } from '../../utils/numberInput';
 import Input from '../input/Input';
@@ -87,15 +87,14 @@ const NumberInput: FC<NumberInputProps> = ({
     const [hasFocus, setHasFocus] = useState<boolean>(false);
     const [shouldRemainPlaceholder, setShouldRemainPlaceholder] = useState<boolean>(false);
 
+    const [isInitialInput, setIsInitialInput] = useState(true);
     const [isValueInvalid, setIsValueInvalid] = useState(false);
     const localPlaceholder = placeholder ?? (isMoneyInput ? '€' : undefined);
-
-    const initialInputRef = useRef(true);
 
     const onLocalChange: ChangeEventHandler<HTMLInputElement> = (event) => {
         const newValue = event.target.value;
 
-        initialInputRef.current = false;
+        setIsInitialInput(false);
 
         const sanitizedValueString = newValue
             // Removes everything except numbers, commas and points
@@ -213,7 +212,7 @@ const NumberInput: FC<NumberInputProps> = ({
 
             // checks, if a given number is invalid, if the input is not in focus
             if (!hasFocus) {
-                if (parsedNumber === null && initialInputRef.current) {
+                if (parsedNumber === null && isInitialInput) {
                     setIsValueInvalid(false);
                 } else {
                     setIsValueInvalid(
@@ -234,7 +233,7 @@ const NumberInput: FC<NumberInputProps> = ({
                       isTimeInput,
                   })}${isMoneyInput ? ' €' : ''}`,
         );
-    }, [hasFocus, isMoneyInput, isTimeInput, maxNumber, minNumber, plainText]);
+    }, [hasFocus, isInitialInput, isMoneyInput, isTimeInput, maxNumber, minNumber, plainText]);
 
     useEffect(() => {
         if (typeof value === 'string') {
