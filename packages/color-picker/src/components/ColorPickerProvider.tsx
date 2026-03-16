@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import React, { type ReactNode, useCallback, useMemo, useState } from 'react';
 import { hexToRgb, isValidRGBA } from '../utils/color';
 
 interface IColorPickerContext {
@@ -49,9 +49,22 @@ interface ColorPickerProviderProps {
 }
 
 const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerProviderProps) => {
-    const [internalSelectedColor, setInternalSelectedColor] = useState<string>();
-    const [internalHueColor, setInternalHueColor] = useState<string>();
-    const [internalIsPresetColor, setInternalIsPresetColor] = useState<boolean>(false);
+    'use memo';
+
+    const defaultColor = () => {
+        if (selectedColor && !isValidRGBA(selectedColor)) {
+            const { r, g, b, a } = hexToRgb(selectedColor);
+
+            return `rgba(${r},${g},${b},${a})`;
+        }
+        return selectedColor;
+    };
+
+    const [internalSelectedColor, setInternalSelectedColor] = useState<string | undefined>(
+        defaultColor(),
+    );
+    const [internalHueColor, setInternalHueColor] = useState<string | undefined>(defaultColor());
+    const [internalIsPresetColor, setInternalIsPresetColor] = useState<boolean>(!!defaultColor());
     const [internalShouldGetCoordinates, setInternalShouldGetCoordinates] = useState<boolean>(true);
     const [internalShouldCallOnSelect, setInternalShouldCallOnSelect] = useState<boolean>(false);
     const [internalCanGetColorFromArea, setInternalCanGetColorFromArea] = useState<boolean>(false);
@@ -80,27 +93,11 @@ const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerP
         setInternalCanGetColorFromArea(canGetColorFromArea);
     }, []);
 
-    useEffect(() => {
-        let newColor = selectedColor;
+    if (typeof onSelect === 'function' && internalShouldCallOnSelect && internalSelectedColor) {
+        onSelect(internalSelectedColor);
 
-        if (newColor && !isValidRGBA(newColor)) {
-            const { r, g, b, a } = hexToRgb(newColor);
-
-            newColor = `rgba(${r},${g},${b},${a})`;
-        }
-
-        setInternalSelectedColor(newColor);
-        setInternalHueColor(newColor);
-        setInternalIsPresetColor(true);
-    }, [selectedColor]);
-
-    useEffect(() => {
-        if (typeof onSelect === 'function' && internalShouldCallOnSelect && internalSelectedColor) {
-            onSelect(internalSelectedColor);
-
-            setInternalShouldCallOnSelect(false);
-        }
-    }, [internalSelectedColor, internalShouldCallOnSelect, onSelect]);
+        setInternalShouldCallOnSelect(false);
+    }
 
     const providerValue = useMemo<IColorPickerContext>(
         () => ({
