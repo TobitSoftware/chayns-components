@@ -66,24 +66,30 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
     onSwipeEnd,
     onSwipeStart,
 }) => {
-    const [leftThreshold, setLeftThreshold] = useState(
-        calcThreshold({
-            actionCount: leftActions.length,
-            direction: 'left',
-            width: window.innerWidth,
-        }),
-    );
-
-    const [rightThreshold, setRightThreshold] = useState(
-        calcThreshold({
-            actionCount: rightActions.length,
-            direction: 'right',
-            width: window.innerWidth,
-        }),
-    );
-
     const swipeableWrapperRef = useRef<HTMLDivElement | null>(null);
     const isSwipingRef = useRef(false);
+
+    const [parentWidth, setParentWidth] = useState<number>(window.innerWidth);
+
+    const leftThreshold = useMemo(
+        () =>
+            calcThreshold({
+                actionCount: leftActions.length,
+                direction: 'left',
+                width: parentWidth,
+            }),
+        [leftActions.length, parentWidth],
+    );
+
+    const rightThreshold = useMemo(
+        () =>
+            calcThreshold({
+                actionCount: rightActions.length,
+                direction: 'right',
+                width: parentWidth,
+            }),
+        [rightActions.length, parentWidth],
+    );
 
     const listItemXOffset = useMotionValue(0);
 
@@ -108,27 +114,28 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
     );
 
     useEffect(() => {
-        const width = swipeableWrapperRef.current?.parentElement?.offsetWidth;
-
-        // This check was deliberately chosen because a width of 0 is also not permitted.
-        if (width) {
-            setLeftThreshold(
-                calcThreshold({
-                    actionCount: leftActions.length,
-                    direction: 'left',
-                    width,
-                }),
-            );
-
-            setRightThreshold(
-                calcThreshold({
-                    actionCount: rightActions.length,
-                    direction: 'right',
-                    width,
-                }),
-            );
+        const parent = swipeableWrapperRef.current?.parentElement;
+        if (!parent) {
+            return undefined;
         }
-    }, [leftActions.length, rightActions.length]);
+
+        const updateWidth = () => {
+            const { offsetWidth } = parent;
+            if (offsetWidth && offsetWidth !== parentWidth) {
+                setParentWidth(offsetWidth);
+            }
+        };
+
+        updateWidth();
+
+        const observer = new ResizeObserver(() => {
+            updateWidth();
+        });
+
+        observer.observe(parent);
+
+        return () => observer.disconnect();
+    }, [parentWidth]);
 
     // Close an opened menu when anything outside it is tapped
     useEffect(() => {
