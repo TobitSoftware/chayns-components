@@ -15,9 +15,7 @@ export default {
 } as Meta<typeof Typewriter>;
 
 const Template: StoryFn<typeof Typewriter> = ({ children, ...args }) => (
-    <Typewriter {...args} shouldCalcAutoSpeed>
-        {children}
-    </Typewriter>
+    <Typewriter {...args}>{children}</Typewriter>
 );
 
 const TextAreaTemplate: StoryFn<typeof Typewriter> = ({ children, ...args }) => (
@@ -275,13 +273,4 @@ WithCodeHighlighter.args = {
             sea takimata sanctus est.
         </>
     ),
-};
-
-export const test = Template.bind({});
-
-test.args = {
-    children: 'Hallooo.',
-    textStyle: {
-        color: 'red',
-    },
 };
