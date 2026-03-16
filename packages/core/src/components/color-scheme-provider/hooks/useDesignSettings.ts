@@ -17,26 +17,24 @@ export const useDesignSettings = ({
 }: UseDesignSettingsOptions) => {
     const styleSettings = useStyleSettings();
 
-    const [value, setValue] = useState<ChaynsDesignSettings | undefined>(
-        designSettings ?? styleSettings?.designSettings,
-    );
-
-    const shouldLoad = !designSettings && !styleSettings?.designSettings;
+    const [apiData, setApiData] = useState<ChaynsDesignSettings | undefined>(undefined);
 
     useEffect(() => {
-        setValue(designSettings ?? styleSettings?.designSettings);
-    }, [designSettings, styleSettings?.designSettings]);
+        const shouldLoad = !designSettings && !styleSettings?.designSettings;
 
-    useEffect(() => {
         if (shouldLoad) {
             void getDesignSettings(siteId).then((result) => {
-                setValue(result);
+                setApiData(result);
             });
         }
-    }, [shouldLoad, siteId]);
+    }, [designSettings, styleSettings?.designSettings, siteId]);
+
+    const designSettingsOverride = designSettings ?? styleSettings?.designSettings;
+
+    const combinedSettings = Object.assign(apiData ?? {}, designSettingsOverride);
 
     return useMemo(
-        () => ({ ...value, color, colorMode }) as ChaynsDesignSettings | undefined,
-        [color, colorMode, value],
+        () => ({ ...combinedSettings, color, colorMode }) as ChaynsDesignSettings | undefined,
+        [color, colorMode, combinedSettings],
     );
 };
