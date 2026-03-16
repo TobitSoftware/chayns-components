@@ -107,11 +107,9 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
             }
         }, [isSearchInputActive, onActiveChange]);
 
-        useEffect(() => {
-            if (typeof isActive === 'boolean') {
-                setIsSearchInputActive(isActive);
-            }
-        }, [isActive]);
+        if (isActive !== undefined && isActive !== isSearchInputActive) {
+            setIsSearchInputActive(isActive);
+        }
 
         useImperativeHandle(
             ref,

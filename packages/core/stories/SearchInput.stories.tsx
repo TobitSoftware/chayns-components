@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import SearchInput from '../src/components/search-input/SearchInput';
-import React from 'react';
+import React, { useState } from 'react';
+import Button from '../src/components/button/Button';
 
 export default {
     title: 'Core/SearchInput',
@@ -17,3 +18,14 @@ const Template: StoryFn<typeof SearchInput> = (args) => (
 );
 
 export const General = Template.bind({});
+
+export const ToggleSearchFromOutside = () => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+        <>
+            <Button onClick={() => setIsOpen(!isOpen)}>Toggle search from outside</Button>
+            <SearchInput onChange={() => undefined} isActive={isOpen} />
+        </>
+    );
+};
