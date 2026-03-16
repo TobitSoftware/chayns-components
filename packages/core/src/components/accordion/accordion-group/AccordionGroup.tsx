@@ -15,7 +15,6 @@ import { useUuid } from '../../../hooks/uuid';
 import { AreaContext } from '../../area-provider/AreaContextProvider';
 
 type IUpdateOpenAccordionUuid = (uuid: string, options?: { shouldOnlyOpen?: boolean }) => void;
-type IUpdateAccordionUuids = (uuids: string[]) => void;
 
 interface IAccordionGroupContext {
     isWrapped?: boolean;
@@ -23,7 +22,6 @@ interface IAccordionGroupContext {
     setOpenAccordionUuid?: Dispatch<SetStateAction<string | undefined>>;
     updateOpenAccordionUuid?: IUpdateOpenAccordionUuid;
     accordionUuids?: string[];
-    updateAccordionUuids?: IUpdateAccordionUuids;
     accordionGroupUuid?: string;
 }
 
@@ -33,7 +31,6 @@ export const AccordionGroupContext = React.createContext<IAccordionGroupContext>
     setOpenAccordionUuid: undefined,
     updateOpenAccordionUuid: undefined,
     accordionUuids: undefined,
-    updateAccordionUuids: undefined,
     accordionGroupUuid: undefined,
 });
 
@@ -61,17 +58,14 @@ type AccordionGroupProps = {
 };
 
 const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose, onOpen }) => {
+    'use memo';
+
     const [openAccordionUuid, setOpenAccordionUuid] =
         useState<IAccordionGroupContext['openAccordionUuid']>(undefined);
-    const [accordionUuids, setAccordionUuids] = useState<string[]>();
 
     const accordionGroupId = useUuid();
 
     const isInitialRenderRef = useRef(true);
-
-    const updateAccordionUuids = useCallback((uuids: string[]) => {
-        setAccordionUuids(uuids);
-    }, []);
 
     const areaProvider = useContext(AreaContext);
 
@@ -92,8 +86,8 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
         [setOpenAccordionUuid],
     );
 
-    useEffect(() => {
-        if (childrenCount === 0) return;
+    const accordionUuids = useMemo(() => {
+        if (childrenCount === 0) return [];
 
         const elements = document.querySelectorAll('[data-uuid]');
         const elementUuids = Array.from(elements).map((el) => el.getAttribute('data-uuid'));
@@ -103,13 +97,13 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
         elementUuids.forEach((elementUuid) => {
             const [groupUuid, accordionUuid] = (elementUuid ?? '').split('---');
 
-            if (groupUuid === accordionGroupId && typeof accordionUuid === 'string') {
+            if (groupUuid === accordionGroupId && accordionUuid !== undefined) {
                 result.push(accordionUuid);
             }
         });
 
-        updateAccordionUuids(result);
-    }, [accordionGroupId, childrenCount, updateAccordionUuids]);
+        return result;
+    }, [accordionGroupId, childrenCount]);
 
     useEffect(() => {
         if (isInitialRenderRef.current) {
@@ -129,18 +123,10 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
             openAccordionUuid,
             setOpenAccordionUuid,
             updateOpenAccordionUuid,
-            updateAccordionUuids,
             accordionUuids,
             accordionGroupUuid: accordionGroupId,
         }),
-        [
-            accordionGroupId,
-            accordionUuids,
-            shouldWrap,
-            openAccordionUuid,
-            updateAccordionUuids,
-            updateOpenAccordionUuid,
-        ],
+        [accordionGroupId, accordionUuids, shouldWrap, openAccordionUuid, updateOpenAccordionUuid],
     );
 
     return (
