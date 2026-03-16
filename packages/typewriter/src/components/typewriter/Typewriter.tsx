@@ -253,9 +253,7 @@ const Typewriter: FC<TypewriterProps> = ({
     ]);
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
-
     const chunkIntervalExponentialMovingAverage = useRef<ChunkStreamingSpeedState>({
-        lastTimestamp: undefined,
         lastLength: charactersCount,
         ema: charactersCount / (autoSpeedBaseFactor / 1000),
     });
@@ -285,10 +283,10 @@ const Typewriter: FC<TypewriterProps> = ({
             autoSteps.current = animationSteps;
             return;
         }
-
         const { speed: calculatedAutoSpeed, steps } = calculateAutoSpeed(
             chunkIntervalExponentialMovingAverage.current.ema,
         );
+
         autoSpeed.current = calculatedAutoSpeed;
         autoSteps.current = steps;
     }, [animationSteps, charactersCount, shouldCalcAutoSpeed]);

@@ -198,7 +198,7 @@ export const calculateAutoSpeed = (ema: number): { speed: number; steps: number 
         return { speed: TypewriterSpeed.ExtraSlow, steps: 1 };
     }
 
-    const msPerChar = 1000 / ema;
+    const msPerChar = Math.min(1000 / ema, TypewriterSpeed.ExtraSlow);
 
     if (msPerChar >= MINIMUM_TIMEOUT) {
         return { speed: msPerChar, steps: 1 };
