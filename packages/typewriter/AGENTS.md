@@ -217,18 +217,6 @@ import { Typewriter } from '@chayns-components/typewriter';
 </Typewriter>
 ```
 
-#### test
-
-```tsx
-<Typewriter
-    textStyle={{
-            color: 'red',
-        }}
->
-    {'Hallooo.'}
-</Typewriter>
-```
-
 ### Props
 
 No prop documentation available.
