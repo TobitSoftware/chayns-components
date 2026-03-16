@@ -1,6 +1,5 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
 import { ChaynsDesignSettings, ChaynsParagraphFormat, ColorMode } from 'chayns-api';
-import { useEffect, useMemo, useRef, useState } from 'react';
 import { convertIconStyle, getHeadlineColorSelector } from '../../../utils/font';
 import type { Theme } from '../ColorSchemeProvider';
 import { useDesignSettings } from './useDesignSettings';
@@ -123,6 +122,8 @@ export const useChaynsTheme = ({
     theme,
     customVariables,
 }: ThemeOptions) => {
+    'use memo';
+
     const designSettings = useDesignSettings({
         color,
         colorMode,
@@ -131,10 +132,9 @@ export const useChaynsTheme = ({
     });
 
     const paragraphFormat = useParagraphFormat(siteId, paragraphFormatProp);
-    const isMountedRef = useRef<boolean>(false);
 
-    const [internalTheme, setInternalTheme] = useState<Theme>(() =>
-        createTheme({
+    return {
+        theme: createTheme({
             colors,
             colorMode,
             color,
@@ -145,44 +145,7 @@ export const useChaynsTheme = ({
             iconColor,
             customVariables,
         }),
-    );
-
-    useEffect(() => {
-        if (!isMountedRef.current) {
-            isMountedRef.current = true;
-            return;
-        }
-        setInternalTheme(
-            createTheme({
-                colors,
-                colorMode,
-                color,
-                secondaryColor,
-                designSettings,
-                paragraphFormat,
-                theme,
-                iconColor,
-                customVariables,
-            }),
-        );
-    }, [
-        color,
-        colorMode,
-        colors,
         designSettings,
         paragraphFormat,
-        secondaryColor,
-        theme,
-        customVariables,
-        iconColor,
-    ]);
-
-    return useMemo(
-        () => ({
-            theme: internalTheme,
-            designSettings,
-            paragraphFormat,
-        }),
-        [internalTheme, designSettings, paragraphFormat],
-    );
+    };
 };
