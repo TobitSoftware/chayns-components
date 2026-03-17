@@ -1,12 +1,12 @@
-import { Checkbox, Popup, useElementSize, type PopupRef } from '@chayns-components/core';
+import { Checkbox, Popup, type PopupRef, useElementSize } from '@chayns-components/core';
 import React, {
     FC,
+    type ReactElement,
     useCallback,
     useEffect,
     useMemo,
     useRef,
     useState,
-    type ReactElement,
 } from 'react';
 import {
     HintTextPosition,
@@ -16,10 +16,10 @@ import {
     type Time,
     type Weekday,
 } from '../../types/openingTimes';
-import HintText from './hint-text/HintText';
 import OpeningInputs from './opening-inputs/OpeningInputs';
 import {
     StyledOpeningTimes,
+    StyledOpeningTimesHintText,
     StyledOpeningTimesTooltipContent,
     StyledOpeningTimesWeekDay,
     StyledOpeningTimesWrapper,
@@ -81,6 +81,8 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     onTimeAdd,
     onTimeRemove,
 }) => {
+    'use memo';
+
     const [newOpeningTimes, setNewOpeningTimes] = useState<OpeningTime[]>();
     const [invalidOpeningTimes, setInvalidOpeningTimes] = useState<
         { openingTimeId: string; invalidTimeIds: string[] }[]
@@ -373,11 +375,11 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
         () => (
             <StyledOpeningTimes ref={ref}>
                 {shouldShowHint && hintText && hintTextPosition === HintTextPosition.Top && (
-                    <HintText text={hintText} />
+                    <StyledOpeningTimesHintText>{hintText}</StyledOpeningTimesHintText>
                 )}
                 {displayedContent}
                 {shouldShowHint && hintText && hintTextPosition === HintTextPosition.Bottom && (
-                    <HintText text={hintText} />
+                    <StyledOpeningTimesHintText>{hintText}</StyledOpeningTimesHintText>
                 )}
             </StyledOpeningTimes>
         ),

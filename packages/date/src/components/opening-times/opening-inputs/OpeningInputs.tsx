@@ -1,7 +1,7 @@
 import { AnimatePresence } from 'motion/react';
-import React, { FC, useCallback, useEffect, useMemo, useState, type ReactElement } from 'react';
+import React, { FC, type ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidV4 } from 'uuid';
-import { OpeningTimesButtonType, type OpeningTime, type Time } from '../../../types/openingTimes';
+import { type OpeningTime, OpeningTimesButtonType, type Time } from '../../../types/openingTimes';
 import OpeningInput from './opening-input/OpeningInput';
 import { StyledOpeningInputPreview, StyledOpeningInputs } from './OpeningInputs.styles';
 
@@ -60,6 +60,8 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
     editMode = false,
     closedText = '',
 }) => {
+    'use memo';
+
     const [newTimes, setNewTimes] = useState<Time[]>();
     const [invalidTimes, setInvalidTimes] = useState<string[]>([]);
 
