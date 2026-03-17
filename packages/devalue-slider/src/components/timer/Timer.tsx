@@ -42,8 +42,10 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
         let lastUpdate: number | undefined;
 
         const loop = (time: number) => {
-            if (lastUpdate === undefined || time - lastUpdate >= 500) {
-                lastUpdate = time;
+            const UPDATE_INTERVAL = 1000;
+            if (lastUpdate === undefined) lastUpdate = time;
+            if (time - lastUpdate >= UPDATE_INTERVAL) {
+                lastUpdate += UPDATE_INTERVAL;
                 setCurrentTime(new Date());
             }
 
