@@ -1,8 +1,13 @@
 import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useState } from 'react';
-import { filterDuplicateFile, filterDuplicateFileUrls, isValidFileType } from '../../utils/file';
+import {
+    filterDuplicateFile,
+    filterDuplicateFileUrls,
+    isValidFileType,
+    UploadedFile,
+} from '../../utils/file';
 import { StyledFileInput } from './FileInput.styles';
 import FileList, { IFileItem } from '../file-list/FileList';
-import FileSelect, { UploadedFile } from '../file-select/FileSelect';
+import FileSelect from '../file-select/FileSelect';
 
 export const TSIMG_FILE_TYPES =
     'image/png, image/jpg, image/jpeg, image/gif, image/webp, image/svg+xml, image/avif';

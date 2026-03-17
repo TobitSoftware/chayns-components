@@ -1,8 +1,8 @@
 import { createDialog, DialogType } from 'chayns-api';
 import React, { DragEvent, FC, useCallback, useMemo } from 'react';
 import type { ImageDialogResult } from '../../types/fileInput';
-import { isValidFileType } from '../../utils/file';
 import { selectFiles } from '../../utils/fileDialog';
+import { isValidFileType, UploadedFile } from '../../utils/file';
 import Icon from '../icon/Icon';
 import {
     StyledFileSelect,
@@ -21,12 +21,6 @@ type DialogInput = {
     initialView: DialogView;
     imageArrayBuffer?: File;
 };
-
-export interface UploadedFile {
-    url: string;
-    size?: number;
-    name?: string;
-}
 
 export type FileSelectProps = {
     /**
@@ -82,6 +76,8 @@ const FileSelect: FC<FileSelectProps> = ({
     imageSelectPlaceholder,
     shouldPreventImageUpload = false,
 }) => {
+    'use memo';
+
     const handleAddImages = useCallback(
         (images: UploadedFile[]) => {
             if (typeof onAdd === 'function') {

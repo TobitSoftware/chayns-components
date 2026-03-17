@@ -1,5 +1,3 @@
-import { UploadedFile } from '../components/file-select/FileSelect';
-
 export const hasDuplicate = <T>(
     items: T[],
     newItem: T,
@@ -13,6 +11,12 @@ interface FilerDuplicateFileOptions {
 
 export const filterDuplicateFile = ({ files, newFile }: FilerDuplicateFileOptions) =>
     hasDuplicate(files, newFile, (a, b) => a.name === b.name && a.size === b.size);
+
+export interface UploadedFile {
+    url: string;
+    size?: number;
+    name?: string;
+}
 
 interface FilterDuplicateFileUrlsOptions {
     files: UploadedFile[];
