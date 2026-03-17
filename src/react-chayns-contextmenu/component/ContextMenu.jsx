@@ -44,6 +44,7 @@ const ContextMenu = React.forwardRef(
             coordinates,
             positionOnChildren = 1,
             arrowDistance = 0,
+            customOpenDialog,
         },
         ref
     ) => {
@@ -167,7 +168,9 @@ const ContextMenu = React.forwardRef(
                 )
                     ? ' '
                     : '';
-                const { buttonType, selection } = await chayns.dialog.select({
+                const { buttonType, selection } = await (
+                    customOpenDialog ?? chayns.dialog.select
+                )({
                     type: 2,
                     list: items.map(({ text, icon, stringName }, index) => ({
                         // eslint-disable-next-line no-nested-ternary
@@ -194,7 +197,7 @@ const ContextMenu = React.forwardRef(
             } else {
                 setIsBubbleShown(true);
             }
-        }, [disableDialog, items, onLayerClick]);
+        }, [disableDialog, items, onLayerClick, customOpenDialog]);
 
         const hide = useCallback(() => {
             setIsBubbleShown(false);
@@ -468,7 +471,10 @@ ContextMenu.propTypes = {
      * Disables the use of a dialog on mobile.
      */
     disableDialog: PropTypes.bool,
-
+    /**
+     * Custom open dialog function for mobile. If not provided, the default chayns dialog will be used.
+     */
+    customOpenDialog: PropTypes.func,
     /**
      * Adjust the distance of the arrow and the end of the children. This only
      * applies if `positionOnChildren` is set to left (`0`) or right (`2`).

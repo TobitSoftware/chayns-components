@@ -65,6 +65,7 @@ The `ContextMenu`-component takes the following props:
 | [style](#style)                                 | `object`                                                                                                                 |                                 |          |
 | [removeParentSpace](#removeparentspace)         | `boolean`                                                                                                                | `false`                         |          |
 | [disableDialog](#disabledialog)                 | `boolean`                                                                                                                | `false`                         |          |
+| [customOpenDialog](#customopendialog)           | `function`                                                                                                               |                                 |          |
 | [arrowDistance](#arrowdistance)                 | `number`                                                                                                                 | `0`                             |          |
 
 ### `onLayerClick`
@@ -272,6 +273,17 @@ disableDialog?: boolean
 ```
 
 Disables the use of a dialog on mobile.
+
+---
+
+### `customOpenDialog`
+
+```ts
+customOpenDialog?: function
+```
+
+Custom open dialog function for mobile. If not provided, the default chayns
+dialog will be used.
 
 ---
 
