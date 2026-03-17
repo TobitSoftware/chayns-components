@@ -151,15 +151,9 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         }
 
         const internalIcon = getIsExpandableIcon(theme.accordionIcon);
-        const internalIconStyle = () => {
-            if (theme.iconStyle) {
-                if (theme.iconStyle === 'fa-duotone') return `${theme.iconStyle} fas`;
-                return theme.iconStyle;
-            }
-            return 'fa-regular';
-        };
-
-        return <StyledUnicodeIcon className={internalIconStyle()} $icon={internalIcon} />;
+        return (
+            <StyledUnicodeIcon className={theme.iconStyle ?? 'fa-regular'} $icon={internalIcon} />
+        );
     }, [icon, isFixed, theme.accordionIcon, theme.headline, theme.iconColor, theme.iconStyle]);
 
     let accordionHeadHeight = isOpen ? headHeight.open : headHeight.closed;

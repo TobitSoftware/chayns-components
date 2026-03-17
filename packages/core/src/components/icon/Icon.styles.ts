@@ -58,4 +58,12 @@ export const StyledUnicodeIcon = styled.i<StyledUnicodeIconProps>`
     &:before {
         content: ${({ $icon }) => `"\\${$icon}"`};
     }
+    &:after {
+        content: ${({ theme, $icon }) => {
+            if (theme.iconStyle === 'fa-duotone') {
+                return `"\\${$icon}"`;
+            }
+            return '';
+        }};
+    }
 `;
