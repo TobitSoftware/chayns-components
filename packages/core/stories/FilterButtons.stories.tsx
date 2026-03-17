@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import FilterButtons from '../src/components/filter-buttons/FilterButtons';
 import { FilterButtonSize } from '../src/types/filterButtons';
-import React from 'react';
+import React, { useState } from 'react';
 
 export default {
     title: 'Core/FilterButtons',
@@ -47,12 +47,12 @@ export const General = Template.bind({});
 
 export const FilterButtonWithSmallButtons = Template.bind({});
 
-export const FilterButtonWithSelectedIds = Template.bind({});
+export const FilterButtonWithSelectedIds: StoryFn<typeof FilterButtons> = (args) => {
+    const [selectedIds, setSelectedIds] = useState<string[]>(['1', '3']);
+
+    return <FilterButtons {...args} selectedItemIds={selectedIds} onSelect={setSelectedIds} />;
+};
 
 FilterButtonWithSmallButtons.args = {
     size: FilterButtonSize.Small,
-};
-
-FilterButtonWithSelectedIds.args = {
-    selectedItemIds: ['1', '3'],
 };

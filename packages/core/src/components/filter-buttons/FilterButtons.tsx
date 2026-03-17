@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react';
 import {
     FilterButtonItemShape,
     FilterButtonSize,
@@ -42,16 +42,11 @@ const FilterButtons: FC<FilterButtonsProps> = ({
     shouldCalcCountForAll = false,
     size = FilterButtonSize.Normal,
 }) => {
-    const [selectedIds, setSelectedIds] = useState<string[]>(['all']);
+    'use memo';
 
-    /**
-     * This function set the selectedItemKey
-     */
-    useEffect(() => {
-        if (selectedItemIds) {
-            setSelectedIds(selectedItemIds);
-        }
-    }, [selectedItemIds]);
+    const [internalSelectedIds, setInternalSelectedIds] = useState<string[]>(['all']);
+
+    const selectedIds = selectedItemIds || internalSelectedIds;
 
     /**
      * Function to update the selected items
@@ -72,7 +67,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
                 newIds = ['all'];
             }
 
-            setSelectedIds(newIds);
+            setInternalSelectedIds(newIds);
 
             if (typeof onSelect === 'function') {
                 onSelect(newIds.filter((selectedId) => selectedId !== 'all'));
