@@ -32,6 +32,18 @@ type ListProps = {
 const List: FC<ListProps> = ({ children, isWrapped = false }) => {
     'use memo';
 
+    const isListItemElement = (
+        child: ReactNode,
+    ): child is React.ReactElement<{ children?: ReactNode }> => {
+        if (!React.isValidElement(child)) {
+            return false;
+        }
+
+        const elementType = child.type as { displayName?: string; name?: string };
+
+        return elementType.displayName === 'ListItem' || elementType.name === 'ListItem';
+    };
+
     const [openItemUuid, setOpenItemUuid] = useState<IListContext['openItemUuid']>(undefined);
 
     const updateOpenItemUuid = useCallback<IListContext['updateOpenItemUuid']>(
@@ -51,12 +63,7 @@ const List: FC<ListProps> = ({ children, isWrapped = false }) => {
         let found = false;
         React.Children.forEach(node, (child) => {
             if (found) return;
-            if (
-                React.isValidElement<{
-                    children?: ReactNode;
-                }>(child) &&
-                child.props.children !== undefined
-            ) {
+            if (isListItemElement(child) && child.props.children !== undefined) {
                 found = true;
             }
         });
