@@ -25,6 +25,11 @@ import {
 } from './TextArea.styles';
 import { useCursorRepaint } from '../../hooks/resize';
 
+type TextAreaColors = {
+    backgroundColor: CSSProperties['backgroundColor'];
+    borderColor: CSSProperties['borderColor'];
+};
+
 export type TextAreaProps = {
     /**
      * Disables the text area so that it cannot be changed.
@@ -70,6 +75,10 @@ export type TextAreaProps = {
      * Value if the text area should be controlled.
      */
     value?: string;
+    /**
+     * Provide custom colors to the TextArea Component
+     */
+    colors?: TextAreaColors;
 };
 
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
@@ -134,6 +143,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                     <StyledTextAreaContentWrapper
                         $isInvalid={isInvalid}
                         $shouldChangeColor={shouldChangeColor}
+                        $backgroundColor={colors?.backgroundColor}
+                        $borderColor={colors?.borderColor}
                     >
                         <StyledTextAreaContent>
                             <StyledTextAreaInput
