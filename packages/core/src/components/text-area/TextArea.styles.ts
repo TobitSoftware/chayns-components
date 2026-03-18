@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { TextAreaProps } from './TextArea';
+import { motion } from 'motion/react';
 
 type StyledTextAreaProps = WithTheme<{ $isDisabled?: boolean }>;
 
@@ -60,10 +61,8 @@ export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
     cursor: text;
 `;
 
-export const StyledTextAreaLabelWrapper = styled.label`
-    left: 10px;
-    top: 12px;
-    align-items: baseline;
+export const StyledTextAreaLabelWrapper = styled(motion.label)`
+    align-items: center;
     display: flex;
     flex: 0 0 auto;
     gap: 4px;
@@ -71,7 +70,7 @@ export const StyledTextAreaLabelWrapper = styled.label`
     pointer-events: none;
     position: absolute;
     user-select: none;
-    width: calc(100% - 20px);
+    max-width: calc(100% - 20px);
     cursor: text;
 `;
 

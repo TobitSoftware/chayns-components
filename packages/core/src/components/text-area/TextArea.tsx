@@ -95,9 +95,12 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             onBlur,
             maxHeight = '120px',
             minHeight = '41px',
+            colors,
         },
         ref,
     ) => {
+        'use memo';
+
         const [isOverflowing, setIsOverflowing] = useState(false);
 
         const areaProvider = useContext(AreaContext);
@@ -137,6 +140,22 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             }
         }, [adjustTextareaHeight, value]);
 
+        const hasValue = value && value.length > 0;
+
+        const labelPosition = useMemo(
+            () =>
+                hasValue
+                    ? {
+                          bottom: '2px',
+                          right: '2px',
+                      }
+                    : {
+                          top: '12px',
+                          left: '10px',
+                      },
+            [hasValue],
+        );
+
         return useMemo(
             () => (
                 <StyledTextArea $isDisabled={isDisabled}>
@@ -162,13 +181,17 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                                 $isOverflowing={isOverflowing}
                                 rows={1}
                             />
-                            {!value && (
-                                <StyledTextAreaLabelWrapper>
-                                    <StyledTextAreaLabel $isInvalid={isInvalid}>
-                                        {placeholder}
-                                    </StyledTextAreaLabel>
-                                </StyledTextAreaLabelWrapper>
-                            )}
+                            <StyledTextAreaLabelWrapper
+                                animate={{ fontSize: hasValue ? '9px' : undefined }}
+                                initial={false}
+                                layout
+                                style={labelPosition}
+                                transition={{ type: 'tween' }}
+                            >
+                                <StyledTextAreaLabel $isInvalid={isInvalid}>
+                                    {placeholder}
+                                </StyledTextAreaLabel>
+                            </StyledTextAreaLabelWrapper>
                         </StyledTextAreaContent>
                         {rightElement && shouldShowBorder && rightElement}
                     </StyledTextAreaContentWrapper>
@@ -180,18 +203,22 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             [
                 isDisabled,
                 isInvalid,
-                isOverflowing,
-                maxHeight,
-                minHeight,
+                shouldChangeColor,
+                colors?.backgroundColor,
+                colors?.borderColor,
+                value,
                 onBlur,
                 onChange,
                 onFocus,
                 onKeyDown,
+                maxHeight,
+                minHeight,
+                isOverflowing,
+                hasValue,
+                labelPosition,
                 placeholder,
                 rightElement,
-                shouldChangeColor,
                 shouldShowBorder,
-                value,
             ],
         );
     },
