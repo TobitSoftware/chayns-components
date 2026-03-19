@@ -184,7 +184,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                             <StyledTextAreaLabelWrapper
                                 animate={{ fontSize: hasValue ? '9px' : undefined }}
                                 initial={false}
-                                layout
                                 style={labelPosition}
                                 transition={{ type: 'tween', duration: 0.1 }}
                             >
