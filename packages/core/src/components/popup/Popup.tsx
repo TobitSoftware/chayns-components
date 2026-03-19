@@ -1,7 +1,6 @@
 import { AnimatePresence } from 'motion/react';
 import React, {
     forwardRef,
-    ReactNode,
     ReactPortal,
     useCallback,
     useEffect,
@@ -16,61 +15,9 @@ import AreaContextProvider from '../area-provider/AreaContextProvider';
 import PopupContentWrapper from './popup-content-wrapper/PopupContentWrapper';
 import { StyledPopup } from './Popup.styles';
 import { useMeasuredClone } from '../../hooks/element';
+import type { PopupProps } from './Popup.types';
 
-export type PopupProps = {
-    /**
-     * The alignment of the popup. By default, the popup will calculate the best alignment.
-     */
-    alignment?: PopupAlignment;
-    /**
-     * The element over which the content of the `ContextMenu` should be displayed.
-     */
-    children?: ReactNode;
-    /**
-     * The element where the content of the `Popup` should be rendered via React Portal.
-     */
-    container?: Element;
-    /**
-     * The content that should be displayed inside the popup.
-     */
-    content: ReactNode;
-    /**
-     * Function to be executed when the content of the Context menu has been hidden.
-     */
-    onHide?: VoidFunction;
-    /**
-     * Function to be executed when the content of the Context menu has been shown.
-     */
-    onShow?: VoidFunction;
-    /**
-     * Whether the tooltip should be hidden after the children is not hovered.
-     */
-    shouldHideOnChildrenLeave?: boolean;
-    /**
-     * Whether the popup should scroll with the content.
-     */
-    shouldScrollWithContent?: boolean;
-    /**
-     * Whether the popup should be opened on hover. If not, the popup will be opened on click.
-     */
-    shouldShowOnHover?: boolean;
-    /**
-     * Whether the width of the children should be used.
-     */
-    shouldUseChildrenWidth?: boolean;
-    /**
-     * Whether the popup children should use the full width.
-     */
-    shouldUseFullWidth?: boolean;
-    /**
-     * The Y offset of the popup to the children.
-     */
-    yOffset?: number;
-    /**
-     * Whether the popup should be open. This can be used to control the popup from outside.
-     */
-    shouldBeOpen?: boolean;
-};
+export type { PopupProps } from './Popup.types';
 
 const Popup = forwardRef<PopupRef, PopupProps>(
     (
@@ -81,6 +28,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             container,
             onHide,
             children,
+            isOpen,
             shouldHideOnChildrenLeave,
             shouldShowOnHover = false,
             shouldUseChildrenWidth = true,
@@ -100,15 +48,18 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             PopupAlignment.TopLeft,
         );
         const [offset, setOffset] = useState<number>(0);
-        const [isOpen, setIsOpen] = useState(shouldBeOpen);
+        const [isInternallyOpen, setIsInternallyOpen] = useState(shouldBeOpen);
         const [portal, setPortal] = useState<ReactPortal>();
         const [pseudoSize, setPseudoSize] = useState<{ height: number; width: number }>();
         const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
         const [contentMaxHeight, setContentMaxHeight] = useState<number | undefined>(undefined);
 
         const timeout = useRef<number>();
+        const previousIsVisibleRef = useRef(false);
 
         const uuid = useUuid();
+        const isControlled = typeof isOpen === 'boolean';
+        const isPopupOpen = isControlled ? isOpen : isInternallyOpen;
 
         const { height, width, measuredElement } = useMeasuredClone({
             content,
@@ -138,7 +89,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             setPseudoSize({ height, width });
         }, [height, width]);
 
-        const handleShow = useCallback(() => {
+        const updatePopupPosition = useCallback(() => {
             if (popupRef.current && pseudoSize) {
                 if (!newContainer) {
                     return;
@@ -243,25 +194,41 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                         y,
                     });
                 }
-
-                setIsOpen(true);
             }
         }, [alignment, newContainer, pseudoSize, shouldScrollWithContent, yOffset]);
 
+        const handleShow = useCallback(() => {
+            updatePopupPosition();
+
+            if (isControlled) {
+                return;
+            }
+
+            setIsInternallyOpen(true);
+        }, [isControlled, updatePopupPosition]);
+
         useEffect(() => {
+            if (isControlled) {
+                if (isOpen) {
+                    updatePopupPosition();
+                }
+
+                return;
+            }
+
             if (shouldBeOpen) {
                 handleShow();
             }
-        }, [handleShow, shouldBeOpen]);
+        }, [handleShow, isControlled, isOpen, shouldBeOpen, updatePopupPosition]);
 
         const handleReposition = useCallback(() => {
-            if (isOpen) {
-                handleShow();
+            if (isPopupOpen) {
+                updatePopupPosition();
             }
-        }, [handleShow, isOpen]);
+        }, [isPopupOpen, updatePopupPosition]);
 
         useEffect(() => {
-            if (!isOpen) {
+            if (!isPopupOpen) {
                 return;
             }
 
@@ -272,7 +239,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 window.removeEventListener('resize', handleReposition);
                 window.removeEventListener('scroll', handleReposition, true);
             };
-        }, [handleReposition, isOpen]);
+        }, [handleReposition, isPopupOpen]);
 
         useEffect(() => {
             if (!newContainer || !popupRef.current) return;
@@ -294,21 +261,37 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, [coordinates.y, internalAlignment, newContainer]);
 
         const handleChildrenClick = () => {
+            if (isControlled) {
+                return;
+            }
+
             handleShow();
         };
 
         const handleHide = useCallback(() => {
-            setIsOpen(false);
-        }, []);
+            if (isControlled) {
+                return;
+            }
+
+            setIsInternallyOpen(false);
+        }, [isControlled]);
 
         const handleMouseEnter = useCallback(() => {
+            if (isControlled) {
+                return;
+            }
+
             if (shouldShowOnHover) {
                 window.clearTimeout(timeout.current);
                 handleShow();
             }
-        }, [handleShow, shouldShowOnHover]);
+        }, [handleShow, isControlled, shouldShowOnHover]);
 
         const handleMouseLeave = useCallback(() => {
+            if (isControlled) {
+                return;
+            }
+
             if (!shouldShowOnHover) {
                 return;
             }
@@ -322,7 +305,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             timeout.current = window.setTimeout(() => {
                 handleHide();
             }, 500);
-        }, [handleHide, shouldHideOnChildrenLeave, shouldShowOnHover]);
+        }, [handleHide, isControlled, shouldHideOnChildrenLeave, shouldShowOnHover]);
 
         const handleDocumentClick = useCallback<EventListener>(
             (event) => {
@@ -343,22 +326,36 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         );
 
         useEffect(() => {
-            if (isOpen && !shouldBeOpen) {
+            if (!isPopupOpen) {
+                return undefined;
+            }
+
+            if (!isControlled && !shouldBeOpen) {
                 document.addEventListener('click', handleDocumentClick, true);
                 window.addEventListener('blur', handleHide);
-
-                if (typeof onShow === 'function') {
-                    onShow();
-                }
-            } else if (typeof onHide === 'function') {
-                onHide();
             }
 
             return () => {
                 document.removeEventListener('click', handleDocumentClick, true);
                 window.removeEventListener('blur', handleHide);
             };
-        }, [handleDocumentClick, handleHide, isOpen, onHide, onShow, shouldBeOpen]);
+        }, [handleDocumentClick, handleHide, isControlled, isPopupOpen, shouldBeOpen]);
+
+        useEffect(() => {
+            if (previousIsVisibleRef.current === isPopupOpen) {
+                return;
+            }
+
+            previousIsVisibleRef.current = isPopupOpen;
+
+            if (isPopupOpen) {
+                onShow?.();
+
+                return;
+            }
+
+            onHide?.();
+        }, [isPopupOpen, onHide, onShow]);
 
         useEffect(() => {
             if (!newContainer) {
@@ -368,7 +365,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             setPortal(() =>
                 createPortal(
                     <AnimatePresence initial={false}>
-                        {isOpen && (
+                        {isPopupOpen && (
                             <PopupContentWrapper
                                 width={pseudoSize?.width ?? 0}
                                 offset={offset}
@@ -398,7 +395,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             coordinates,
             handleMouseEnter,
             handleMouseLeave,
-            isOpen,
+            isPopupOpen,
             offset,
             pseudoSize?.width,
             uuid,

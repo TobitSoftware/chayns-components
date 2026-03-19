@@ -85,6 +85,7 @@ export { default as Popup } from './components/popup/Popup';
 export { default as PopupContent } from './components/popup/popup-content/PopupContent';
 export { default as ProgressBar } from './components/progress-bar/ProgressBar';
 export { PopupAlignment } from './types/popup';
+export type { PopupProps } from './components/popup/Popup.types';
 export {
     default as RadioButtonGroup,
     type RadioButtonGroupRef,
