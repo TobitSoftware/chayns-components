@@ -140,7 +140,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             }
         }, [adjustTextareaHeight, value]);
 
-        const hasValue = value && value.length > 0;
+        const hasValue = value !== undefined && value.length > 0;
 
         const labelPosition = useMemo(
             () =>
@@ -186,7 +186,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                                 initial={false}
                                 layout
                                 style={labelPosition}
-                                transition={{ type: 'tween' }}
+                                transition={{ type: 'tween', duration: 0.1 }}
                             >
                                 <StyledTextAreaLabel $isInvalid={isInvalid}>
                                     {placeholder}
