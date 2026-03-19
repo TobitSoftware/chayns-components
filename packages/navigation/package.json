@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/navigation",
-    "version": "5.0.44",
+    "version": "5.0.45",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -70,7 +70,7 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.44",
+        "@chayns-components/core": "^5.0.45",
         "react-compiler-runtime": "^1.0.0"
     },
     "peerDependencies": {
