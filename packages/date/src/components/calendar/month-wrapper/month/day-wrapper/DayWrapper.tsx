@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, type ReactElement, CSSProperties } from 'react';
+import React, { CSSProperties, FC, type ReactElement, useCallback, useMemo } from 'react';
 import {
     CalendarType,
     type Categories,
@@ -55,6 +55,8 @@ const DayWrapper: FC<DayWrapperProps> = ({
     disabledDates,
     currentDateBackgroundColor,
 }) => {
+    'use memo';
+
     const dayOfCurrentMonth = useMemo(() => new Date(year, month - 1, 13), [month, year]);
 
     const days = useMemo(() => {
@@ -92,7 +94,6 @@ const DayWrapper: FC<DayWrapperProps> = ({
             let isIntervalStart = false;
             let isIntervalEnd = false;
             let isWithinIntervalSelection = false;
-            const showHoverEffect = false;
 
             let isDisabled =
                 // Disables dates, that are not between minDate and maxDate.
@@ -184,6 +185,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
         handleDayClick,
         highlightedDates,
         setHoveringDay,
+        currentDateBackgroundColor,
     ]);
 
     return <StyledDayWrapper>{dayElements}</StyledDayWrapper>;
