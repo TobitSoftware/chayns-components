@@ -356,7 +356,6 @@ const CodeScanner: FC<CodeScannerProps> = ({
             {!!barcodeDetector && (
                 <ScannerToolbar
                     placeholder={placeholder}
-                    videoConstraints={videoConstraints}
                     onFileSelect={(data) => {
                         setIsScanningFile(true);
 

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Icon, selectFiles } from '@chayns-components/core';
 import {
     StyledScannerToolbar,
@@ -50,14 +50,9 @@ type ScannerToolbarProps = {
      * The active media stream used by the scanner.
      */
     stream?: MediaStream;
-    /**
-     * Defines constraints for the video element, e.g., resolution or facing mode.
-     */
-    videoConstraints: MediaTrackConstraints;
 };
 
 const ScannerToolbar: FC<ScannerToolbarProps> = ({
-    videoConstraints,
     onFileSelect,
     isScanningFile,
     hasScannerError = false,
@@ -69,79 +64,68 @@ const ScannerToolbar: FC<ScannerToolbarProps> = ({
     isTorchDisabled = false,
     isFileSelectDisabled = false,
 }) => {
-    const [tracks, setTrack] = useState<MediaStreamTrack[]>();
+    'use memo';
+
     const [isZoomed, setIsZoomed] = useState<boolean>();
     const previousIsZoomed = usePrevious(isZoomed);
-    const [isZoomSupported, setIsZoomSupported] = useState(false);
     const [isTorchActive, setIsTorchActive] = useState(false);
-    const [isTorchSupported, setIsTorchSupported] = useState(false);
     const [isImageSelectActive, setIsImageSelectActive] = useState(false);
 
-    const minZoom = useRef(minZoomProp);
-    const maxZoom = useRef(maxZoomProp);
+    const trackInfo = useMemo(() => {
+        const videoTracks = stream?.getVideoTracks() ?? [];
 
-    useEffect(() => {
-        if (hasScannerError) {
-            setIsTorchSupported(false);
-            setIsZoomSupported(false);
-            setIsZoomed(false);
-            setTrack(undefined);
-        } else if (stream) {
-            const videoTracks = stream.getVideoTracks();
+        let canZoom = false;
+        let canTorch = false;
+        let minZoom = minZoomProp;
+        let maxZoom = maxZoomProp;
 
-            let canZoom = false;
-            let canTorch = false;
-
+        if (!hasScannerError) {
             videoTracks.forEach((track) => {
                 if (checkTrackSupport(track, 'zoom')) {
                     canZoom = true;
 
                     const capabilities = track.getCapabilities();
 
-                    if (capabilities.zoom.min > minZoomProp) {
-                        minZoom.current = capabilities.zoom.min;
+                    if (capabilities.zoom.min > minZoom) {
+                        minZoom = capabilities.zoom.min;
                     }
-                    if (capabilities.zoom.max < maxZoomProp) {
-                        maxZoom.current = capabilities.zoom.max;
+                    if (capabilities.zoom.max < maxZoom) {
+                        maxZoom = capabilities.zoom.max;
                     }
                 }
                 if (checkTrackSupport(track, 'torch')) {
                     canTorch = true;
                 }
             });
-
-            if (canZoom && !isZoomDisabled) {
-                setIsZoomSupported(true);
-                setIsZoomed(false);
-            }
-
-            setIsTorchSupported(canTorch && !isTorchDisabled);
-            setTrack(videoTracks);
         }
-    }, [
-        videoConstraints,
-        hasScannerError,
-        stream,
-        minZoomProp,
-        maxZoomProp,
-        isZoomDisabled,
-        isTorchDisabled,
-    ]);
+
+        return {
+            canTorch,
+            canZoom,
+            maxZoom,
+            minZoom,
+            tracks: videoTracks,
+        };
+    }, [hasScannerError, maxZoomProp, minZoomProp, stream]);
+
+    const isZoomSupported = trackInfo.canZoom && !isZoomDisabled;
+    const isTorchSupported = trackInfo.canTorch && !isTorchDisabled;
+    const { tracks, minZoom, maxZoom } = trackInfo;
 
     useEffect(() => {
-        if (tracks?.length && isZoomSupported) {
+        if (tracks.length > 0 && isZoomSupported) {
             if (typeof previousIsZoomed === 'undefined') {
                 tracks.forEach((track) => {
                     if (checkTrackSupport(track, 'zoom')) {
                         void track.applyConstraints({
-                            advanced: [{ zoom: isZoomed ? maxZoom.current : minZoom.current }],
+                            advanced: [{ zoom: isZoomed ? maxZoom : minZoom }],
                         });
                     }
                 });
             } else if (previousIsZoomed !== isZoomed) {
                 animateNumericValue(
-                    previousIsZoomed ? maxZoom.current : minZoom.current,
-                    isZoomed ? maxZoom.current : minZoom.current,
+                    previousIsZoomed ? maxZoom : minZoom,
+                    isZoomed ? maxZoom : minZoom,
                     500,
                     (value) => {
                         tracks.forEach((track) => {
@@ -155,10 +139,10 @@ const ScannerToolbar: FC<ScannerToolbarProps> = ({
                 );
             }
         }
-    }, [isZoomSupported, isZoomed, previousIsZoomed, tracks]);
+    }, [isZoomSupported, isZoomed, previousIsZoomed, tracks, minZoom, maxZoom]);
 
     useEffect(() => {
-        if (tracks?.length && isTorchSupported) {
+        if (tracks.length > 0 && isTorchSupported) {
             tracks.forEach((track) => {
                 if (checkTrackSupport(track, 'torch')) {
                     void track.applyConstraints({
@@ -181,7 +165,7 @@ const ScannerToolbar: FC<ScannerToolbarProps> = ({
         <StyledScannerToolbar>
             <StyledScannerToolbarButton
                 $isAvailable={isTorchSupported}
-                $isActive={isTorchActive}
+                $isActive={isTorchSupported && isTorchActive}
                 onClick={() => {
                     setIsTorchActive((prev) => !prev);
                 }}
@@ -190,7 +174,7 @@ const ScannerToolbar: FC<ScannerToolbarProps> = ({
             </StyledScannerToolbarButton>
             <StyledScannerToolbarButton
                 $isAvailable={isZoomSupported}
-                $isActive={isZoomed}
+                $isActive={isZoomSupported && isZoomed}
                 onClick={() => {
                     setIsZoomed((prev) => !prev);
                 }}
