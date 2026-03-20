@@ -97,13 +97,13 @@ const CodeScanner: FC<CodeScannerProps> = ({
     placeholder,
     errorMessages,
 }) => {
-    const [isPolyfillLoaded, setIsPolyfillLoaded] = useState(false);
     const [barcodeDetector, setBarcodeDetector] = useState<BarcodeDetector>();
     const [stream, setStream] = useState<MediaStream>();
     const [scannerError, setScannerError] = useState<ScannerErrorType | undefined>(undefined);
     const [isScanningFile, setIsScanningFile] = useState(false);
     const [isHandlingCode, setIsHandlingCode] = useState(false);
     const videoRef = useRef<HTMLVideoElement | null>(null);
+    const isDetectorReadyRef = useRef(false);
     const lastCode = useRef<string>();
     const handleStopRef = useRef<() => void>();
     const isHandlingCodeRef = useRef(false);
@@ -193,7 +193,13 @@ const CodeScanner: FC<CodeScannerProps> = ({
     );
 
     const handleVideoInitialization = useCallback(async () => {
-        if (!navigator.mediaDevices.getUserMedia || !videoRef || !isPolyfillLoaded) return;
+        if (
+            !navigator.mediaDevices.getUserMedia ||
+            !videoRef.current ||
+            !isDetectorReadyRef.current
+        ) {
+            return;
+        }
 
         let res: MediaStream | undefined;
 
@@ -232,7 +238,7 @@ const CodeScanner: FC<CodeScannerProps> = ({
 
             setStream(res);
 
-            if (videoRef.current) videoRef.current.srcObject = res;
+            videoRef.current.srcObject = res;
 
             await videoRef.current?.play();
         }
@@ -242,7 +248,18 @@ const CodeScanner: FC<CodeScannerProps> = ({
         );
 
         setBarcodeDetector(codeDetector);
-    }, [isPolyfillLoaded, minZoom, trackConstraints, allowedFormats, videoConstraints, videoRef]);
+    }, [minZoom, trackConstraints, allowedFormats, videoConstraints, videoRef]);
+
+    const handleVideoRef = useCallback(
+        (node: HTMLVideoElement | null) => {
+            videoRef.current = node;
+
+            if (node && isDetectorReadyRef.current) {
+                void handleVideoInitialization();
+            }
+        },
+        [handleVideoInitialization],
+    );
 
     const handleStopCameraAccess = useCallback(() => {
         if (videoRef.current) {
@@ -262,13 +279,14 @@ const CodeScanner: FC<CodeScannerProps> = ({
     // Load BarCodeDetector
     useEffect(() => {
         void loadQrCodeDetector().then(() => {
-            setIsPolyfillLoaded(true);
+            isDetectorReadyRef.current = true;
+            void handleVideoInitialization();
         });
 
         return () => {
             if (handleStopRef.current) handleStopRef.current();
         };
-    }, [loadQrCodeDetector]);
+    }, [handleVideoInitialization, loadQrCodeDetector]);
 
     useEffect(() => {
         handleStopRef.current = handleStopCameraAccess;
@@ -310,19 +328,6 @@ const CodeScanner: FC<CodeScannerProps> = ({
         return () => clearTimeout(lastTimeout);
     }, [barcodeDetector, handleScanResult, isHandlingCode, isScanningFile, videoRef, scanInterval]);
 
-    useEffect(() => {
-        if (
-            !navigator.mediaDevices.enumerateDevices ||
-            !navigator.mediaDevices.getUserMedia ||
-            !videoRef ||
-            !isPolyfillLoaded
-        ) {
-            return;
-        }
-
-        void handleVideoInitialization();
-    }, [handleVideoInitialization, isPolyfillLoaded, videoRef]);
-
     return (
         <StyledCodeScanner>
             {(!barcodeDetector || errorText) && (
@@ -341,7 +346,7 @@ const CodeScanner: FC<CodeScannerProps> = ({
                 </StyledCodeScannerTextWrapper>
             )}
             <StyledCodeScannerPreview
-                ref={videoRef}
+                ref={handleVideoRef}
                 autoPlay
                 playsInline
                 height="100%"
