@@ -6,6 +6,11 @@ import { type IListContext, ListContext, type ListProps } from './List.types';
 const List: FC<ListProps> = ({ children, isWrapped = false }) => {
     'use memo';
 
+    const isListItemElement = (
+        child: ReactNode,
+    ): child is React.ReactElement<ListItemProps, typeof ListItem> =>
+        React.isValidElement(child) && child.type === ListItem;
+
     const [openItemUuid, setOpenItemUuid] = useState<IListContext['openItemUuid']>(undefined);
 
     const updateOpenItemUuid: IListContext['updateOpenItemUuid'] = (
@@ -26,9 +31,8 @@ const List: FC<ListProps> = ({ children, isWrapped = false }) => {
         Children.forEach(node, (child) => {
             if (found) return;
             if (
-                React.isValidElement<{
-                    children?: ReactNode;
-                }>(child) &&
+                isListItemElement(child) &&
+                !child.props.shouldHideIndicator &&
                 child.props.children !== undefined
             ) {
                 found = true;

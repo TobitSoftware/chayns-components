@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { TextAreaProps } from './TextArea';
+import { motion } from 'motion/react';
 
 type StyledTextAreaProps = WithTheme<{ $isDisabled?: boolean }>;
 
@@ -12,19 +13,21 @@ export const StyledTextArea = styled.div<StyledTextAreaProps>`
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     position: relative;
 `;
-
 type StyledTextAreaContentWrapperProps = WithTheme<{
+    $backgroundColor?: CSSProperties['backgroundColor'];
+    $borderColor?: CSSProperties['borderColor'];
     $isInvalid: TextAreaProps['isInvalid'];
     $shouldChangeColor: boolean;
 }>;
 
 export const StyledTextAreaContentWrapper = styled.div<StyledTextAreaContentWrapperProps>`
-    background-color: ${({ theme, $shouldChangeColor }: StyledTextAreaContentWrapperProps) =>
-        theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
+    background-color: ${({ theme, $shouldChangeColor, $backgroundColor }) =>
+        $backgroundColor ??
+        (theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100'])};
     border-radius: 3px;
     border: 1px solid
-        ${({ theme, $isInvalid }: StyledTextAreaContentWrapperProps) =>
-            $isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)'};
+        ${({ theme, $isInvalid, $borderColor }) =>
+            $borderColor ?? ($isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)')};
     width: 100%;
     display: flex;
 `;
@@ -58,10 +61,8 @@ export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
     cursor: text;
 `;
 
-export const StyledTextAreaLabelWrapper = styled.label`
-    left: 10px;
-    top: 12px;
-    align-items: baseline;
+export const StyledTextAreaLabelWrapper = styled(motion.label)`
+    align-items: center;
     display: flex;
     flex: 0 0 auto;
     gap: 4px;
@@ -69,7 +70,7 @@ export const StyledTextAreaLabelWrapper = styled.label`
     pointer-events: none;
     position: absolute;
     user-select: none;
-    width: calc(100% - 20px);
+    max-width: calc(100% - 20px);
     cursor: text;
 `;
 

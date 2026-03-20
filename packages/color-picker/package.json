@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/color-picker",
-    "version": "5.0.41",
+    "version": "5.0.47",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -45,7 +45,6 @@
         "build:types": "tsc",
         "build:cjs": "cross-env NODE_ENV=cjs babel src --out-dir lib/cjs --extensions=.ts,.tsx --source-maps --ignore=src/stories",
         "build:esm": "cross-env NODE_ENV=esm babel src --out-dir lib/esm --extensions=.ts,.tsx --source-maps --ignore=src/stories",
-        "prepublishOnly": "npm run build",
         "watch:js": "npm run build:esm -- --watch",
         "link": "npm link && npm run watch:js"
     },
@@ -71,7 +70,7 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.41",
+        "@chayns-components/core": "^5.0.47",
         "@chayns/colors": "^2.0.2",
         "react-compiler-runtime": "^1.0.0"
     },
