@@ -130,10 +130,10 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
 
         const [isFocused, setIsFocused] = useState(false);
         const [shouldShowBody, setShouldShowBody] = useState(false);
+        const [anchorElement, setAnchorElement] = useState<HTMLDivElement | null>(null);
 
-        const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement>(null);
-        const keyRef = useRef(`person-finder-${uuidV4()}`);
+        const key = useMemo(() => `person-finder-${uuidV4()}`, []);
         const tagInputRef = useRef<TagInputRef>(null);
 
         const { isTouch } = useDevice();
@@ -295,10 +295,10 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
                 return body;
             }
 
-            if (boxRef.current) {
+            if (anchorElement) {
                 return (
                     <DropdownBodyWrapper
-                        anchorElement={boxRef.current}
+                        anchorElement={anchorElement}
                         container={container}
                         direction={dropdownDirection}
                         onClose={handleClose}
@@ -319,12 +319,13 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             handleClose,
             handleDropdownOutsideClick,
             handleRemove,
+            anchorElement,
             shouldRenderInline,
             showBody,
         ]);
 
         return (
-            <StyledPersonFinder ref={boxRef} onFocus={handleOpen} key={keyRef.current}>
+            <StyledPersonFinder ref={setAnchorElement} onFocus={handleOpen} key={key}>
                 <TagInput
                     leftElement={leftElement}
                     onBlur={handleTagInputBlur}

@@ -21,7 +21,6 @@ export type PersonFinderGroupProps = {
     filterKey: PersonFinderFilterTypes;
     entries: PersonFinderEntry[];
     count: number;
-    search: string;
     shouldShowGroupName: boolean;
     onAdd: (id: string) => void;
     onRemove: (id: string) => void;
