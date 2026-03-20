@@ -23,8 +23,10 @@ import {
 import ExpandableContent from '../expandable-content/ExpandableContent';
 import Icon from '../icon/Icon';
 import FilterContent from './filter-content/FIlterContent';
+import ComboBox from '../combobox/ComboBox';
 import {
     CheckboxConfig,
+    ComboboxConfig,
     FilterButtonConfig,
     FilterRef,
     FilterType,
@@ -49,6 +51,7 @@ export type FilterProps = {
     filterButtonConfig?: FilterButtonConfig;
     sortConfig?: SortConfig;
     checkboxConfig?: CheckboxConfig;
+    comboboxConfig?: ComboboxConfig;
     onActiveChange?: (isActive: boolean) => void;
     shouldShowRoundedHoverEffect?: boolean;
     rightIcons?: FilterRightIcon[];
@@ -65,6 +68,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             shouldShowRoundedHoverEffect = false,
             filterButtonConfig,
             checkboxConfig,
+            comboboxConfig,
             onActiveChange,
             rightIcons,
         },
@@ -84,24 +88,58 @@ const Filter = forwardRef<FilterRef, FilterProps>(
         const contextMenuRef = useRef<ContextMenuRef>(null);
 
         const type = useMemo(() => {
-            if (filterButtonConfig && !searchConfig && !sortConfig && !checkboxConfig) {
+            if (
+                filterButtonConfig &&
+                !searchConfig &&
+                !sortConfig &&
+                !checkboxConfig &&
+                !comboboxConfig
+            ) {
                 return FilterType.ONLY_FILTER;
             }
 
-            if (!filterButtonConfig && !searchConfig && sortConfig && !checkboxConfig) {
+            if (
+                !filterButtonConfig &&
+                !searchConfig &&
+                sortConfig &&
+                !checkboxConfig &&
+                !comboboxConfig
+            ) {
                 return FilterType.ONLY_SORT;
             }
 
-            if (!filterButtonConfig && searchConfig && !sortConfig && !checkboxConfig) {
+            if (
+                !filterButtonConfig &&
+                searchConfig &&
+                !sortConfig &&
+                !checkboxConfig &&
+                !comboboxConfig
+            ) {
                 return FilterType.ONLY_SEARCH;
             }
 
-            if (!filterButtonConfig && !searchConfig && !sortConfig && checkboxConfig) {
+            if (
+                !filterButtonConfig &&
+                !searchConfig &&
+                !sortConfig &&
+                checkboxConfig &&
+                !comboboxConfig
+            ) {
                 return FilterType.ONLY_CHECKBOX;
             }
 
+            if (
+                !filterButtonConfig &&
+                !searchConfig &&
+                !sortConfig &&
+                !checkboxConfig &&
+                comboboxConfig
+            ) {
+                return FilterType.ONLY_COMBOBOX;
+            }
+
             return FilterType.MULTIPLE;
-        }, [checkboxConfig, filterButtonConfig, searchConfig, sortConfig]);
+        }, [checkboxConfig, comboboxConfig, filterButtonConfig, searchConfig, sortConfig]);
 
         const icons = useMemo(() => {
             switch (type) {
@@ -237,6 +275,17 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             }));
         }, [sortConfig]);
 
+        const comboboxElement = useMemo(() => {
+            if (!comboboxConfig) {
+                return null;
+            }
+
+            return (
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                <ComboBox {...comboboxConfig} />
+            );
+        }, [comboboxConfig]);
+
         return useMemo(
             () => (
                 <StyledFilter ref={filterRef}>
@@ -293,6 +342,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                             // eslint-disable-next-line react/jsx-props-no-spreading
                             <Checkbox {...checkboxConfig} />
                         )}
+                        {type === FilterType.ONLY_COMBOBOX && comboboxElement}
                     </StyledFilterHead>
                     {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
                         <StyledFilterContentWrapper ref={contentRef}>
@@ -306,6 +356,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                                     filterButtonConfig={filterButtonConfig}
                                     sortConfig={sortConfig}
                                     checkboxConfig={checkboxConfig}
+                                    comboboxConfig={comboboxConfig}
                                 />
                             </ExpandableContent>
                         </StyledFilterContentWrapper>
@@ -327,6 +378,8 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 isOpen,
                 shouldFocus,
                 filterButtonConfig,
+                comboboxConfig,
+                comboboxElement,
                 shouldShowRoundedHoverEffect,
             ],
         );

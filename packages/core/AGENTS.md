@@ -1698,6 +1698,32 @@ import { Filter } from '@chayns-components/core';
             selectedItem: { text: 'alphanumerisch', id: 'alphanumerisch' },
             onSortChange: () => {},
         }}
+    comboboxConfig={{
+            label: 'Kategorie wählen',
+            placeholder: 'Keine Kategorie gewählt',
+            lists: [
+                {
+                    list: [
+                        { text: 'Alle Kategorien', value: 'all', icons: ['fa fa-list'] },
+                        {
+                            text: 'Lebensmittel',
+                            value: 'food',
+                            icons: ['fa fa-burger'],
+                            subtext: 'Frisch & regional',
+                        },
+                        { text: 'Getränke', value: 'drinks', icons: ['fa fa-bottle-water'] },
+                        { text: 'Haushalt', value: 'household', icons: ['fa fa-soap'] },
+                        {
+                            text: 'Elektronik',
+                            value: 'electronics',
+                            icons: ['fa fa-bolt'],
+                            subtext: 'Smartphones, TV & mehr',
+                        },
+                        { text: 'Bekleidung', value: 'clothing', icons: ['fa fa-tshirt'] },
+                    ],
+                },
+            ],
+        }}
 />
 ```
 
@@ -1778,6 +1804,40 @@ import { Filter } from '@chayns-components/core';
     headline={'Checkbox'}
     checkboxConfig={{
             children: 'Checkbox Label',
+        }}
+/>
+```
+
+#### Only Combobox
+
+```tsx
+<Filter
+    headline={'Combobox'}
+    comboboxConfig={{
+            label: 'Kategorie wählen',
+            placeholder: 'Keine Kategorie gewählt',
+            lists: [
+                {
+                    list: [
+                        { text: 'Alle Kategorien', value: 'all', icons: ['fa fa-list'] },
+                        {
+                            text: 'Lebensmittel',
+                            value: 'food',
+                            icons: ['fa fa-burger'],
+                            subtext: 'Frisch & regional',
+                        },
+                        { text: 'Getränke', value: 'drinks', icons: ['fa fa-bottle-water'] },
+                        { text: 'Haushalt', value: 'household', icons: ['fa fa-soap'] },
+                        {
+                            text: 'Elektronik',
+                            value: 'electronics',
+                            icons: ['fa fa-bolt'],
+                            subtext: 'Smartphones, TV & mehr',
+                        },
+                        { text: 'Bekleidung', value: 'clothing', icons: ['fa fa-tshirt'] },
+                    ],
+                },
+            ],
         }}
 />
 ```
