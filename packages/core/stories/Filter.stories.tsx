@@ -2,6 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import React, { useState } from 'react';
 import Filter from '../src/components/filter/Filter';
 import { FilterButtonSize } from '../src';
+import type { IComboBoxItem } from '../src/components/combobox/ComboBox.types';
 import { SortItem } from '../src/types/filter';
 
 export default {
@@ -16,6 +17,7 @@ const Template: StoryFn<typeof Filter> = ({ ...args }) => {
         text: 'alphanumerisch',
         id: 'alphanumerisch',
     });
+    const [comboboxItem, setComboboxItem] = useState<IComboBoxItem | undefined>();
 
     const handleSearchChange = (value: string) => {
         setSearchValue(value);
@@ -40,6 +42,17 @@ const Template: StoryFn<typeof Filter> = ({ ...args }) => {
                       }
                     : undefined
             }
+            comboboxConfig={
+                args.comboboxConfig
+                    ? {
+                          ...args.comboboxConfig,
+                          selectedItem: comboboxItem,
+                          onSelect: (item) => {
+                              setComboboxItem(item);
+                          },
+                      }
+                    : undefined
+            }
         />
     );
 };
@@ -53,6 +66,8 @@ export const OnlyFilterButtons = Template.bind({});
 export const OnlySort = Template.bind({});
 
 export const OnlyCheckbox = Template.bind({});
+
+export const OnlyCombobox = Template.bind({});
 
 General.args = {
     headline: '',
@@ -104,6 +119,32 @@ General.args = {
         ],
         selectedItem: { text: 'alphanumerisch', id: 'alphanumerisch' },
         onSortChange: () => {},
+    },
+    comboboxConfig: {
+        label: 'Kategorie wählen',
+        placeholder: 'Keine Kategorie gewählt',
+        lists: [
+            {
+                list: [
+                    { text: 'Alle Kategorien', value: 'all', icons: ['fa fa-list'] },
+                    {
+                        text: 'Lebensmittel',
+                        value: 'food',
+                        icons: ['fa fa-burger'],
+                        subtext: 'Frisch & regional',
+                    },
+                    { text: 'Getränke', value: 'drinks', icons: ['fa fa-bottle-water'] },
+                    { text: 'Haushalt', value: 'household', icons: ['fa fa-soap'] },
+                    {
+                        text: 'Elektronik',
+                        value: 'electronics',
+                        icons: ['fa fa-bolt'],
+                        subtext: 'Smartphones, TV & mehr',
+                    },
+                    { text: 'Bekleidung', value: 'clothing', icons: ['fa fa-tshirt'] },
+                ],
+            },
+        ],
     },
 };
 
@@ -169,5 +210,35 @@ OnlyCheckbox.args = {
     headline: 'Checkbox',
     checkboxConfig: {
         children: 'Checkbox Label',
+    },
+};
+
+OnlyCombobox.args = {
+    headline: 'Combobox',
+    comboboxConfig: {
+        label: 'Kategorie wählen',
+        placeholder: 'Keine Kategorie gewählt',
+        lists: [
+            {
+                list: [
+                    { text: 'Alle Kategorien', value: 'all', icons: ['fa fa-list'] },
+                    {
+                        text: 'Lebensmittel',
+                        value: 'food',
+                        icons: ['fa fa-burger'],
+                        subtext: 'Frisch & regional',
+                    },
+                    { text: 'Getränke', value: 'drinks', icons: ['fa fa-bottle-water'] },
+                    { text: 'Haushalt', value: 'household', icons: ['fa fa-soap'] },
+                    {
+                        text: 'Elektronik',
+                        value: 'electronics',
+                        icons: ['fa fa-bolt'],
+                        subtext: 'Smartphones, TV & mehr',
+                    },
+                    { text: 'Bekleidung', value: 'clothing', icons: ['fa fa-tshirt'] },
+                ],
+            },
+        ],
     },
 };
