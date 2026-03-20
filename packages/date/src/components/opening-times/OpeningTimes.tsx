@@ -81,8 +81,6 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     onTimeAdd,
     onTimeRemove,
 }) => {
-    'use memo';
-
     const [newOpeningTimes, setNewOpeningTimes] = useState<OpeningTime[]>();
     const [invalidOpeningTimes, setInvalidOpeningTimes] = useState<
         { openingTimeId: string; invalidTimeIds: string[] }[]

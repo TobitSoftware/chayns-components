@@ -49,8 +49,6 @@ interface ColorPickerProviderProps {
 }
 
 const ColorPickerProvider = ({ children, selectedColor, onSelect }: ColorPickerProviderProps) => {
-    'use memo';
-
     const defaultColor = () => {
         if (selectedColor && !isValidRGBA(selectedColor)) {
             const { r, g, b, a } = hexToRgb(selectedColor);

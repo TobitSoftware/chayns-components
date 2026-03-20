@@ -4,8 +4,6 @@ import ListItem, { type ListItemProps } from './list-item/ListItem';
 import { type IListContext, ListContext, type ListProps } from './List.types';
 
 const List: FC<ListProps> = ({ children, isWrapped = false }) => {
-    'use memo';
-
     const isListItemElement = (
         child: ReactNode,
     ): child is React.ReactElement<ListItemProps, typeof ListItem> =>

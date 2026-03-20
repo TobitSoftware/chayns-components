@@ -99,8 +99,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         },
         ref,
     ) => {
-        'use memo';
-
         const [isOverflowing, setIsOverflowing] = useState(false);
 
         const areaProvider = useContext(AreaContext);

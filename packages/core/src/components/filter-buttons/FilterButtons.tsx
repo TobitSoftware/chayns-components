@@ -42,8 +42,6 @@ const FilterButtons: FC<FilterButtonsProps> = ({
     shouldCalcCountForAll = false,
     size = FilterButtonSize.Normal,
 }) => {
-    'use memo';
-
     const [internalSelectedIds, setInternalSelectedIds] = useState<string[]>(['all']);
 
     const selectedIds = selectedItemIds || internalSelectedIds;

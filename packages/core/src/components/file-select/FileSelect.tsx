@@ -76,8 +76,6 @@ const FileSelect: FC<FileSelectProps> = ({
     imageSelectPlaceholder,
     shouldPreventImageUpload = false,
 }) => {
-    'use memo';
-
     const handleAddImages = useCallback(
         (images: UploadedFile[]) => {
             if (typeof onAdd === 'function') {

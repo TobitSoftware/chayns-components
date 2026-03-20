@@ -60,8 +60,6 @@ const DevalueSlider: React.FC<DevalueSliderProps> = ({
     onChange,
     onComplete,
 }) => {
-    'use memo';
-
     const [timerDevalueTime, setTimerDevalueTime] = useState(devalueTime);
 
     const sliderRef = useRef<SliderRef>(null);

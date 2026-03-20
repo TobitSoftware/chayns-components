@@ -60,8 +60,6 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
     editMode = false,
     closedText = '',
 }) => {
-    'use memo';
-
     const [newTimes, setNewTimes] = useState<Time[]>();
     const [invalidTimes, setInvalidTimes] = useState<string[]>([]);
 

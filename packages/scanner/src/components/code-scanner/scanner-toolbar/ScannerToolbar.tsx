@@ -64,8 +64,6 @@ const ScannerToolbar: FC<ScannerToolbarProps> = ({
     isTorchDisabled = false,
     isFileSelectDisabled = false,
 }) => {
-    'use memo';
-
     const [isZoomed, setIsZoomed] = useState<boolean>();
     const previousIsZoomed = usePrevious(isZoomed);
     const [isTorchActive, setIsTorchActive] = useState(false);

@@ -58,8 +58,6 @@ type AccordionGroupProps = {
 };
 
 const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose, onOpen }) => {
-    'use memo';
-
     const [openAccordionUuid, setOpenAccordionUuid] =
         useState<IAccordionGroupContext['openAccordionUuid']>(undefined);
 

@@ -122,8 +122,6 @@ export const useChaynsTheme = ({
     theme,
     customVariables,
 }: ThemeOptions) => {
-    'use memo';
-
     const designSettings = useDesignSettings({
         color,
         colorMode,

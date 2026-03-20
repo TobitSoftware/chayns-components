@@ -17,8 +17,6 @@ export type TimerProps = {
 };
 
 const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 'white' }) => {
-    'use memo';
-
     const { active: language } = getLanguage();
 
     const [currentTime, setCurrentTime] = useState(new Date());

@@ -89,8 +89,6 @@ const ProgressBar: FC<ProgressBarProps> = ({
     showShine = false,
     height,
 }) => {
-    'use memo';
-
     const uuid = useUuid();
     const [coordinates, setCoordinates] = useState<{ x: number; y: number }>();
     const popupRef = useRef<PopupRef | null>(null);

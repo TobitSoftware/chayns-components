@@ -55,8 +55,6 @@ const DayWrapper: FC<DayWrapperProps> = ({
     disabledDates,
     currentDateBackgroundColor,
 }) => {
-    'use memo';
-
     const dayOfCurrentMonth = useMemo(() => new Date(year, month - 1, 13), [month, year]);
 
     const days = useMemo(() => {
