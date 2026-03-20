@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import type { IMarker, Position } from '../../../../../types/positionInput';
 
 export type MarkerProps = {
@@ -11,49 +11,38 @@ export type MarkerProps = {
 };
 
 const Marker: FC<MarkerProps> = ({ id, isDraggable, position, onChange, onRemove, map }) => {
-    const [pin, setPin] = useState<google.maps.Marker>();
-
     useEffect(() => {
-        if (pin) {
-            google.maps.event.addListener(pin, 'dragend', (evt: google.maps.MapMouseEvent) => {
+        const pin = new google.maps.Marker({
+            draggable: isDraggable,
+            map,
+            position,
+        });
+
+        const dragendListener = google.maps.event.addListener(
+            pin,
+            'dragend',
+            (evt: google.maps.MapMouseEvent) => {
                 const newLat = evt.latLng?.lat();
                 const newLng = evt.latLng?.lng();
 
-                if (!newLat || !newLng) {
+                if (newLat == null || newLng == null) {
                     return;
                 }
 
                 onChange({ id, position: { lng: newLng, lat: newLat } });
-            });
+            },
+        );
 
-            google.maps.event.addListener(pin, 'rightclick', () => {
-                onRemove(id);
-            });
-        }
-    }, [pin, id, onChange, onRemove]);
+        const rightclickListener = google.maps.event.addListener(pin, 'rightclick', () => {
+            onRemove(id);
+        });
 
-    useEffect(() => {
-        if (!pin) {
-            setPin(new google.maps.Marker({ map }));
-        }
-
-        // remove marker from map on unmount
         return () => {
-            if (pin) {
-                pin.setMap(null);
-            }
+            google.maps.event.removeListener(dragendListener);
+            google.maps.event.removeListener(rightclickListener);
+            pin.setMap(null);
         };
-    }, [pin, map]);
-
-    useEffect(() => {
-        if (pin) {
-            pin.setOptions({
-                draggable: isDraggable,
-                position,
-                map,
-            });
-        }
-    }, [pin, isDraggable, position, map]);
+    }, [id, isDraggable, map, onChange, onRemove, position]);
 
     return null;
 };
