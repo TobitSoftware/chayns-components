@@ -123,6 +123,35 @@ const MentionFinder: FC<MentionFinderProps> = ({
         [members, searchString],
     );
 
+    const handleMemberClick = useCallback(
+        (member: MentionMember) => {
+            if (fullMatch) {
+                onSelect({ fullMatch, member });
+            }
+        },
+        [fullMatch, onSelect],
+    );
+
+    const handleMemberHover = useCallback((member: MentionMember) => {
+        setActiveMember(member);
+    }, []);
+
+    const items = useMemo(
+        () =>
+            filteredMembers.map((member) => (
+                <MentionFinderItem
+                    isActive={member.id === activeMember?.id}
+                    key={member.id}
+                    member={member}
+                    onClick={handleMemberClick}
+                    onHover={handleMemberHover}
+                />
+            )),
+        [activeMember, filteredMembers, handleMemberClick, handleMemberHover],
+    );
+
+    const shouldRenderPopup = shouldShowPopup && fullMatch && items.length > 0;
+
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
             if ((event.key === 'ArrowUp' || event.key === 'ArrowDown') && shouldRenderPopup) {
@@ -163,21 +192,8 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 }
             }
         },
-        [activeMember, filteredMembers, focusedIndex, fullMatch, onSelect],
+        [activeMember, filteredMembers, focusedIndex, fullMatch, onSelect, shouldRenderPopup],
     );
-
-    const handleMemberClick = useCallback(
-        (member: MentionMember) => {
-            if (fullMatch) {
-                onSelect({ fullMatch, member });
-            }
-        },
-        [fullMatch, onSelect],
-    );
-
-    const handleMemberHover = useCallback((member: MentionMember) => {
-        setActiveMember(member);
-    }, []);
 
     useEffect(() => {
         if (filteredMembers.length > 0) {
@@ -188,20 +204,6 @@ const MentionFinder: FC<MentionFinderProps> = ({
             }
         }
     }, [activeMember?.id, filteredMembers]);
-
-    const items = useMemo(
-        () =>
-            filteredMembers.map((member) => (
-                <MentionFinderItem
-                    isActive={member.id === activeMember?.id}
-                    key={member.id}
-                    member={member}
-                    onClick={handleMemberClick}
-                    onHover={handleMemberHover}
-                />
-            )),
-        [activeMember, filteredMembers, handleMemberClick, handleMemberHover],
-    );
 
     useEffect(() => {
         setDragOffset(0);
@@ -456,8 +458,6 @@ const MentionFinder: FC<MentionFinderProps> = ({
         handleDragTouchEnd,
         handleDragTouchCancel,
     ]);
-
-    const shouldRenderPopup = shouldShowPopup && fullMatch && items.length > 0;
 
     useEffect(() => {
         if (!enableDragHandle || !shouldRenderPopup) {
