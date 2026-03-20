@@ -39,4 +39,16 @@ export const StyledFilterComboboxInline = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
+`;
+
+export const StyledFilterComboboxInlineLabel = styled.div`
+    flex: 0 0 auto;
+`;
+
+export const StyledFilterComboboxInlineComboboxWrapper = styled.div`
+    display: flex;
+    justify-content: end;
+    flex: 1 1 auto;
+    min-width: 0;
 `;

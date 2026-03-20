@@ -1,6 +1,8 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
     StyledFilterComboboxInline,
+    StyledFilterComboboxInlineComboboxWrapper,
+    StyledFilterComboboxInlineLabel,
     StyledFilterComboboxWrapper,
     StyledFilterContent,
     StyledFilterSort,
@@ -109,9 +111,13 @@ const FilterContent: FC<FilterContentProps> = ({
                 )}
                 {comboboxConfig && (
                     <StyledFilterComboboxInline>
-                        {comboboxConfig.label}
-                        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                        <ComboBox {...comboboxConfig} />
+                        <StyledFilterComboboxInlineLabel>
+                            {comboboxConfig.label}
+                        </StyledFilterComboboxInlineLabel>
+                        <StyledFilterComboboxInlineComboboxWrapper>
+                            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                            <ComboBox shouldUseCurrentItemWidth {...comboboxConfig} />
+                        </StyledFilterComboboxInlineComboboxWrapper>
                     </StyledFilterComboboxInline>
                 )}
                 {checkboxConfig && (
