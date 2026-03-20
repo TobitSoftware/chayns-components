@@ -280,11 +280,9 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 return null;
             }
 
-            const { list, ...comboboxProps } = comboboxConfig;
-
             return (
                 // eslint-disable-next-line react/jsx-props-no-spreading
-                <ComboBox lists={[{ list }]} {...comboboxProps} shouldShowRoundImage />
+                <ComboBox {...comboboxConfig} />
             );
         }, [comboboxConfig]);
 
