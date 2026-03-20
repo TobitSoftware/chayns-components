@@ -17,7 +17,7 @@ import { useUuid } from '../../../hooks/uuid';
 import type { IListItemRightElements } from '../../../types/list';
 import { AccordionContext } from '../../accordion/Accordion';
 import AreaContextProvider, { AreaContext } from '../../area-provider/AreaContextProvider';
-import { ListContext } from '../List';
+import { ListContext } from '../List.types';
 import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
 import { StyledListItem, StyledListItemTooltip } from './ListItem.styles';
