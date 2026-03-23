@@ -52,8 +52,6 @@ const SliderButton: FC<SliderButtonProps> = ({
     selectedButtonId,
 }) => {
     const [dragRange, setDragRange] = useState({ left: 0, right: 0 });
-    const [shownItemsCount, setShownItemsCount] = useState(items.length);
-    const [sliderSize, setSliderSize] = useState({ width: 0 });
     const [currentId, setCurrentId] = useState('');
     const [currentPopupId, setCurrentPopupId] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -69,27 +67,7 @@ const SliderButton: FC<SliderButtonProps> = ({
     const initialItemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
     const elementSize = useElementSize(sliderButtonRef);
 
-    useEffect(() => {
-        if (elementSize) setSliderSize(elementSize);
-    }, [elementSize]);
-
-    const setPopupId = useCallback(
-        (selectedId: string) => {
-            const ids = items.slice(shownItemsCount - 1).map(({ id }) => id);
-
-            const newId = ids.find((id) => id === selectedId);
-
-            if (newId) {
-                setCurrentId('more');
-                setCurrentPopupId(newId);
-
-                return;
-            }
-
-            setCurrentId(selectedId);
-        },
-        [items, shownItemsCount],
-    );
+    const sliderSize = useMemo(() => elementSize ?? { width: 0 }, [elementSize]);
 
     const isSliderBigger = useMemo(
         () => sliderSize && Math.floor(sliderSize.width / initialItemWidth) < items.length - 1,
@@ -113,11 +91,29 @@ const SliderButton: FC<SliderButtonProps> = ({
         return count;
     }, [items, sliderSize.width]);
 
+    const shownItemsCount = isSliderBigger ? maxShownItemsCount : items.length;
+
+    const setPopupId = useCallback(
+        (selectedId: string) => {
+            const ids = items.slice(shownItemsCount - 1).map(({ id }) => id);
+
+            const newId = ids.find((id) => id === selectedId);
+
+            if (newId) {
+                setCurrentId('more');
+                setCurrentPopupId(newId);
+
+                return;
+            }
+
+            setCurrentId(selectedId);
+        },
+        [items, shownItemsCount],
+    );
+
     const itemWidth = useMemo(() => {
         const sliderWidth = sliderSize?.width || 0;
         const itemCount = items.length || 1;
-
-        setShownItemsCount(isSliderBigger ? maxShownItemsCount : itemCount);
 
         return sliderWidth / (isSliderBigger ? maxShownItemsCount : itemCount);
     }, [isSliderBigger, items.length, maxShownItemsCount, sliderSize?.width]);
