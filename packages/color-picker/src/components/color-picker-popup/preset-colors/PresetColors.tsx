@@ -1,8 +1,6 @@
 import { isHex } from '@chayns/colors';
-import React, { useContext, useEffect, useMemo, useState, type ReactElement } from 'react';
+import React, { type ReactElement, useContext, useEffect, useMemo, useState } from 'react';
 
-import { putSiteColors } from '../../../api/color/get';
-import { getSiteColors } from '../../../api/color/put';
 import { PRESETCOLORS } from '../../../constants/color';
 import type { IPresetColor } from '../../../types/colorPicker';
 import { extractRgbValues, hexToRgb, rgbToHex } from '../../../utils/color';
@@ -10,6 +8,8 @@ import { ColorPickerContext } from '../../ColorPickerProvider';
 import PresetButton from './preset-button/PresetButton';
 import PresetColor from './preset-color/PresetColor';
 import { StyledPresetColors } from './PresetColors.styles';
+import { getSiteColors } from '../../../api/color/get';
+import { putSiteColors } from '../../../api/color/put';
 
 interface PresetColorsProps {
     presetColors?: IPresetColor[];
