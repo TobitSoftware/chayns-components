@@ -51,7 +51,6 @@ const SliderButton: FC<SliderButtonProps> = ({
     onChange,
     selectedButtonId,
 }) => {
-    const [dragRange, setDragRange] = useState({ left: 0, right: 0 });
     const [currentId, setCurrentId] = useState('');
     const [currentPopupId, setCurrentPopupId] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -118,15 +117,13 @@ const SliderButton: FC<SliderButtonProps> = ({
         return sliderWidth / (isSliderBigger ? maxShownItemsCount : itemCount);
     }, [isSliderBigger, items.length, maxShownItemsCount, sliderSize?.width]);
 
-    useEffect(() => {
-        if (sliderSize) {
-            const sliderWidth = itemWidth * (items.length - 1);
+    const sliderWidth = itemWidth * (items.length - 1);
+    const count = Math.floor(sliderSize.width / itemWidth);
 
-            const count = Math.floor(sliderSize.width / itemWidth);
-
-            setDragRange({ left: 0, right: isSliderBigger ? itemWidth * count : sliderWidth });
-        }
-    }, [isSliderBigger, itemWidth, items.length, sliderSize]);
+    const dragRange = useMemo(
+        () => ({ left: 0, right: isSliderBigger ? itemWidth * count : sliderWidth }),
+        [count, isSliderBigger, itemWidth, sliderWidth],
+    );
 
     const animation = useCallback(
         async (x: number) => {
@@ -154,8 +151,6 @@ const SliderButton: FC<SliderButtonProps> = ({
     useEffect(() => {
         if (typeof selectedButtonId === 'string') {
             let index = items.findIndex(({ id }) => id === selectedButtonId);
-
-            setCurrentId(selectedButtonId);
 
             setPopupId(selectedButtonId);
 
