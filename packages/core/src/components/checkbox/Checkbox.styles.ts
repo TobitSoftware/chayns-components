@@ -106,11 +106,11 @@ export const StyledCheckboxBox = styled.label<StyledCheckboxBoxProps>`
                 return 'none';
             }
 
-            return `1px solid ${$borderColor ?? `rgba(${theme['409-rgb']}, 0.5)`}`;
+            return `1px solid ${$borderColor ?? `rgba(${theme['409-rgb'] ?? '0,0,0'}, 0.5)`}`;
         }};
 
         border-radius: ${({ $shouldShowAsSwitch, $borderRadius }) =>
-            $borderRadius ?? ($shouldShowAsSwitch ? '100px' : 0)};
+            $borderRadius ?? ($shouldShowAsSwitch ? '100px' : '0')};
         content: ' ';
         height: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '13px' : '15px')};
         left: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '10px' : 0)};

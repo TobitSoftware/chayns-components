@@ -10,17 +10,16 @@ export const StyledColorSchemeProvider = styled.div<ColorSchemeProviderProps>`
     color: var(--chayns-color--text);
 
     ${({ theme }: ColorSchemeProviderProps) =>
-        getAvailableColorList().map((colorName: string) => {
-            const colorNameRgb = `${colorName}-rgb`;
-            return [
-                `--chayns-color--${colorName}: ${theme[colorName]};`,
-                `--chayns-color-rgb--${colorName}: ${theme[colorNameRgb]};`,
-            ];
-        })}
+        getAvailableColorList()
+            .map((colorName: string) => {
+                const colorNameRgb = `${colorName}-rgb`;
+                return `--chayns-color--${colorName}: ${theme[colorName] ?? ''};\n--chayns-color-rgb--${colorName}: ${theme[colorNameRgb] ?? ''};`;
+            })
+            .join('\n')}
 
     ${({ theme }: ColorSchemeProviderProps) =>
         `
-        --chayns-color--header-bar: ${theme['header-bar'] ?? theme.primary};
+        --chayns-color--header-bar: ${theme['header-bar'] ?? theme.primary ?? ''};
     `}
 
     // ToDo: Remove .h1...
@@ -33,7 +32,7 @@ export const StyledColorSchemeProvider = styled.div<ColorSchemeProviderProps>`
         ${({ $browser, theme }: ColorSchemeProviderProps) =>
             $browser === 'firefox'
                 ? css`
-                      scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
+                      scrollbar-color: rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.15) transparent;
                       scrollbar-width: thin;
                   `
                 : css`
@@ -53,7 +52,7 @@ export const StyledColorSchemeProvider = styled.div<ColorSchemeProviderProps>`
                       }
 
                       &::-webkit-scrollbar-thumb {
-                          background-color: rgba(${theme['text-rgb']}, 0.15);
+                          background-color: rgba(${theme['text-rgb'] ?? '0,0,0'}, 0.15);
                           border-radius: 20px;
                           background-clip: padding-box;
                           border: solid 3px transparent;

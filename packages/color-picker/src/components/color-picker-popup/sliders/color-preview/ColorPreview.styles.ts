@@ -32,10 +32,13 @@ type StyledColorPreviewColorProps = WithTheme<{ $color?: string }>;
 
 export const StyledColorPreviewColor = styled.div.attrs<StyledColorPreviewColorProps>(
     ({ $color, theme }) => ({
-        style: {
-            backgroundColor: $color,
-            border: `1px ${(theme as Theme).text} solid`,
-        },
+        style: (() => {
+            const borderColor = (theme as Theme).text ?? 'transparent';
+            return {
+                backgroundColor: $color,
+                border: `1px solid ${borderColor}`,
+            };
+        })(),
     }),
 )`
     height: 100%;
