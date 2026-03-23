@@ -1,6 +1,6 @@
 import { Accordion, AccordionGroup, AreaContext } from '@chayns-components/core';
 import { isHex } from '@chayns/colors';
-import React, { useContext, useEffect, useMemo, useState, type ChangeEvent } from 'react';
+import React, { type ChangeEvent, useContext, useMemo, useState } from 'react';
 
 import { extractRgbValues, hexToRgb, isValidRGBA, rgbToHex } from '../../../utils/color';
 import { ColorPickerContext } from '../../ColorPickerProvider';
@@ -15,8 +15,8 @@ const MoreOptions = () => {
         useContext(ColorPickerContext);
     const areaProvider = useContext(AreaContext);
 
-    const [tmpHexValue, setTmpHexValue] = useState('');
-    const [tmpRgbValue, setTmpRgbValue] = useState('');
+    const [inputHexValue, setInputHexValue] = useState<string>();
+    const [inputRgbValue, setInputRgbValue] = useState<string>();
     const [isHexInvalid, setIsHexInvalid] = useState(false);
     const [isRgbInvalid, setIsRgbInvalid] = useState(false);
 
@@ -26,7 +26,7 @@ const MoreOptions = () => {
     );
 
     const handleHexChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setTmpHexValue(event.target.value);
+        setInputHexValue(event.target.value);
 
         const isValid = isHex(event.target.value);
 
@@ -44,7 +44,7 @@ const MoreOptions = () => {
     };
 
     const handleRgbChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setTmpRgbValue(event.target.value);
+        setInputRgbValue(event.target.value);
 
         const isValid = isValidRGBA(event.target.value);
 
@@ -59,19 +59,26 @@ const MoreOptions = () => {
         }
     };
 
-    useEffect(() => {
+    const derivedRgbValue = () => {
         if (selectedColor) {
             if (isValidRGBA(selectedColor)) {
-                setTmpRgbValue(selectedColor);
-                setTmpHexValue(rgbToHex(extractRgbValues(selectedColor ?? '')));
-            } else {
-                const { r, g, b, a } = hexToRgb(selectedColor);
-
-                setTmpRgbValue(`rgba(${r},${g},${b},${a})`);
-                setTmpHexValue(selectedColor);
+                return selectedColor;
             }
+            const { r, g, b, a } = hexToRgb(selectedColor);
+            return `rgba(${r},${g},${b},${a})`;
         }
-    }, [selectedColor]);
+        return undefined;
+    };
+
+    const derivedHexValue = () => {
+        if (selectedColor) {
+            if (isValidRGBA(selectedColor)) {
+                return rgbToHex(extractRgbValues(selectedColor));
+            }
+            return selectedColor;
+        }
+        return undefined;
+    };
 
     return (
         <StyledMoreOptions>
@@ -80,13 +87,13 @@ const MoreOptions = () => {
                     <StyledMoreOptionsInputWrapper>
                         <StyledMoreOptionsInput
                             $shouldChangeColor={shouldChangeColor}
-                            value={tmpHexValue}
+                            value={inputHexValue ?? derivedHexValue()}
                             onChange={handleHexChange}
                             $isInvalid={isHexInvalid}
                         />
                         <StyledMoreOptionsInput
                             $shouldChangeColor={shouldChangeColor}
-                            value={tmpRgbValue}
+                            value={inputRgbValue ?? derivedRgbValue()}
                             onChange={handleRgbChange}
                             $isInvalid={isRgbInvalid}
                         />
