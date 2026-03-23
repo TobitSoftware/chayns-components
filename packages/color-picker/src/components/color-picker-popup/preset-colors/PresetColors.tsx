@@ -1,5 +1,5 @@
 import { isHex } from '@chayns/colors';
-import React, { type ReactElement, useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import { PRESETCOLORS } from '../../../constants/color';
 import type { IPresetColor } from '../../../types/colorPicker';
@@ -10,6 +10,7 @@ import PresetColor from './preset-color/PresetColor';
 import { StyledPresetColors } from './PresetColors.styles';
 import { getSiteColors } from '../../../api/color/get';
 import { putSiteColors } from '../../../api/color/put';
+import { v4 } from 'uuid';
 
 interface PresetColorsProps {
     presetColors?: IPresetColor[];
@@ -30,54 +31,53 @@ const PresetColors = ({
 
     const [siteColors, setSiteColors] = useState<IPresetColor[] | undefined>(undefined);
 
-    const loadSiteColors = async (presetColorId?: IPresetColor['id']) => {
+    const removeSiteColor = async (presetColorId: IPresetColor['id']) => {
+        const deletedColor = siteColors?.find(({ id }) => id === presetColorId)?.color;
+
+        if (!deletedColor) return;
+
+        const filteredColors = siteColors?.filter(({ color }) => color !== deletedColor);
+
+        const formattedColors = filteredColors?.map(({ color }) => {
+            const rgbValues = extractRgbValues(color);
+
+            return rgbToHex(rgbValues);
+        });
+
+        await putSiteColors(formattedColors ?? []);
+        setSiteColors(filteredColors);
+    };
+
+    const loadSiteColors = async () => {
         const colors = await getSiteColors();
 
-        setSiteColors((prevColors) => {
-            const newColors = colors.value.map((color) => {
-                const { r, g, b, a } = hexToRgb(color);
+        return colors.value.map((color) => {
+            const { r, g, b, a } = hexToRgb(color);
 
-                const newColor = `rgba(${r},${g},${b},${a})`;
+            const newColor = `rgba(${r},${g},${b},${a})`;
 
-                return {
-                    color: newColor,
-                    id: Math.random().toString(),
-                    isCustom: true,
-                };
-            });
-
-            if (!presetColorId) {
-                return newColors;
-            }
-
-            const deletedColor = prevColors?.find(({ id }) => id === presetColorId)?.color;
-
-            if (!deletedColor) {
-                return newColors;
-            }
-
-            const filteredColors = newColors?.filter(({ color }) => color !== deletedColor);
-
-            const formattedColors = filteredColors?.map(({ color }) => {
-                const rgbValues = extractRgbValues(color);
-
-                return rgbToHex(rgbValues);
-            });
-
-            void putSiteColors(formattedColors ?? []);
-
-            return filteredColors;
+            return {
+                color: newColor,
+                id: v4(),
+                isCustom: true,
+            };
         });
     };
 
     useEffect(() => {
-        if (!shouldUseSiteColors) {
-            setSiteColors(undefined);
-
-            return;
+        async function fetchSiteColors() {
+            if (!shouldUseSiteColors) return;
+            const result = await loadSiteColors();
+            if (!ignore) setSiteColors(result);
         }
 
-        void loadSiteColors();
+        let ignore = false;
+
+        void fetchSiteColors();
+
+        return () => {
+            ignore = true;
+        };
     }, [shouldUseSiteColors]);
 
     const combinedColors = useMemo(() => {
@@ -104,15 +104,9 @@ const PresetColors = ({
         return [...PRESETCOLORS, ...(siteColors ?? []), ...tmp];
     }, [presetColors, shouldHideDefaultPresetColors, siteColors]);
 
-    const content = useMemo(() => {
-        const items: ReactElement[] = [];
-
-        combinedColors.forEach(({ color, id }) => {
-            items.push(<PresetColor key={`preset-color__${id}`} color={color} />);
-        });
-
-        return items;
-    }, [combinedColors]);
+    const content = combinedColors.map(({ color, id }) => (
+        <PresetColor key={`preset-color__${id}`} color={color} />
+    ));
 
     const currentPresetColor = useMemo(
         () => combinedColors.find(({ color }) => color === selectedColor),
@@ -140,7 +134,7 @@ const PresetColors = ({
     };
 
     const handleRemoveColor = (presetColorId: IPresetColor['id']) => {
-        void loadSiteColors(presetColorId);
+        void removeSiteColor(presetColorId);
 
         if (typeof onPresetColorRemove === 'function') {
             onPresetColorRemove(presetColorId);
