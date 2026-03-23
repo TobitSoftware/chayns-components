@@ -7,7 +7,7 @@ import {
     DYNAMIC_TOOLBAR_CONTENT_WIDTH_VW,
 } from '../DynamicToolbar.constants';
 
-type StyledMotionDynamicToolbarOverflowTrayProps = WithTheme<{}>;
+type StyledMotionDynamicToolbarOverflowTrayProps = WithTheme<unknown>;
 
 export const StyledMotionDynamicToolbarOverflowTray = styled(
     motion.div,

@@ -1,4 +1,4 @@
-import type { BrowserName, WithTheme } from '@chayns-components/core';
+import type { WithTheme } from '@chayns-components/core';
 import { motion } from 'motion/react';
 import styled from 'styled-components';
 import { getFontFamily } from '../../utils/font';

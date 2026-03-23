@@ -27,7 +27,7 @@ module.exports = {
             },
         ],
     },
-    extends: ['@chayns-toolkit', 'plugin:storybook/recommended'],
+    extends: ['@chayns-toolkit', 'plugin:storybook/recommended', 'plugin:react-hooks/recommended'],
     // use another tsconfig for linting to avoid including test files and other non-source files
     parserOptions: {
         project: path.resolve(__dirname, './tsconfig.lint.json'),
