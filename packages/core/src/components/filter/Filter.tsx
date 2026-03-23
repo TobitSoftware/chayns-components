@@ -18,7 +18,6 @@ import {
     StyledFilterIcon,
     StyledFilterIconWrapper,
     StyledFilterSearch,
-    StyledMotionFilterBackground,
 } from './Filter.styles';
 import ExpandableContent from '../expandable-content/ExpandableContent';
 import Icon from '../icon/Icon';
@@ -77,8 +76,6 @@ const Filter = forwardRef<FilterRef, FilterProps>(
         const [isOpen, setIsOpen] = useState(false);
         const [isSearchActive, setIsSearchActive] = useState(false);
         const [shouldFocus, setShouldFocus] = useState(false);
-        const [backgroundDistance, setBackgroundDistance] = useState(0);
-        const [backgroundCoordinates, setBackgroundCoordinates] = useState({ top: 0, left: 0 });
 
         const contentRef = useRef<HTMLDivElement | null>(null);
         const iconRef = useRef<HTMLDivElement | null>(null);
@@ -213,26 +210,6 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             }
         }, [handleHide, handleShow, isOpen]);
 
-        useEffect(() => {
-            if (headline && iconRef.current && contentRef.current && filterRef.current) {
-                const iconRect = iconRef.current.getBoundingClientRect();
-                const filterRect = filterRef.current.getBoundingClientRect();
-                const contentRect = contentRef.current.getBoundingClientRect();
-
-                const relativeTop = iconRect.bottom - filterRect.top;
-                const relativeLeft = iconRect.left - filterRect.left;
-
-                setBackgroundDistance(contentRect.top - iconRect.bottom);
-                setBackgroundCoordinates({
-                    top: relativeTop,
-                    left: relativeLeft,
-                });
-            } else {
-                setBackgroundDistance(0);
-                setBackgroundCoordinates({ top: 0, left: 0 });
-            }
-        }, [headline]);
-
         const iconElement = useMemo(
             () => (
                 <StyledFilterIcon
@@ -245,18 +222,6 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 </StyledFilterIcon>
             ),
             [handleIconClick, icons, isOpen, shouldShowRoundedHoverEffect],
-        );
-
-        const backgroundElement = useMemo(
-            () => (
-                <StyledMotionFilterBackground
-                    $top={backgroundCoordinates.top}
-                    $left={backgroundCoordinates.left}
-                    animate={{ height: isOpen ? `${backgroundDistance}px` : 0 }}
-                    transition={{ duration: 0.1, delay: isOpen ? 0 : 0.2 }}
-                />
-            ),
-            [backgroundDistance, isOpen, backgroundCoordinates],
         );
 
         const sortItems: ContextMenuItem[] = useMemo(() => {
@@ -300,24 +265,21 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                             </StyledFilterHeadlineElement>
                         )}
                         {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
-                            <>
-                                <StyledFilterIconWrapper>
-                                    {rightIcons &&
-                                        rightIcons.map(({ icons: rIcons, onClick }) => (
-                                            <StyledFilterIcon
-                                                onClick={onClick}
-                                                $isOpen={false}
-                                                $shouldShowRoundedHoverEffect={
-                                                    shouldShowRoundedHoverEffect
-                                                }
-                                            >
-                                                <Icon icons={rIcons} size={18} />
-                                            </StyledFilterIcon>
-                                        ))}
-                                    {iconElement}
-                                </StyledFilterIconWrapper>
-                                {backgroundDistance > 0 && backgroundElement}
-                            </>
+                            <StyledFilterIconWrapper>
+                                {rightIcons &&
+                                    rightIcons.map(({ icons: rIcons, onClick }) => (
+                                        <StyledFilterIcon
+                                            onClick={onClick}
+                                            $isOpen={false}
+                                            $shouldShowRoundedHoverEffect={
+                                                shouldShowRoundedHoverEffect
+                                            }
+                                        >
+                                            <Icon icons={rIcons} size={18} />
+                                        </StyledFilterIcon>
+                                    ))}
+                                {iconElement}
+                            </StyledFilterIconWrapper>
                         )}
                         {type === FilterType.ONLY_SEARCH && searchConfig && (
                             <StyledFilterSearch>
@@ -346,10 +308,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                     </StyledFilterHead>
                     {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
                         <StyledFilterContentWrapper ref={contentRef}>
-                            <ExpandableContent
-                                isOpen={isOpen}
-                                startDelay={backgroundDistance > 0 ? 0.1 : 0}
-                            >
+                            <ExpandableContent isOpen={isOpen}>
                                 <FilterContent
                                     shouldAutoFocus={shouldFocus}
                                     searchConfig={searchConfig}
@@ -369,8 +328,6 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 type,
                 rightIcons,
                 iconElement,
-                backgroundDistance,
-                backgroundElement,
                 searchConfig,
                 sortConfig,
                 sortItems,
