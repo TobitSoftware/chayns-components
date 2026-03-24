@@ -1,13 +1,10 @@
 import React, {
     forwardRef,
-    MouseEvent,
-    UIEvent,
+    type MouseEventHandler,
+    type ReactNode,
     useCallback,
-    useEffect,
-    useMemo,
     useRef,
     useState,
-    type ReactNode,
 } from 'react';
 import { useElementSize } from '../../../hooks/element';
 import { useUuid } from '../../../hooks/uuid';
@@ -47,106 +44,94 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
         const [hasScrolled, setHasScrolled] = useState(false);
         const [currentGroupName, setCurrentGroupName] = useState('');
 
-        const headRef = useRef<HTMLDivElement>(null);
+        const headRef = useRef<HTMLDivElement | null>(null);
+        const contentRef = useRef<HTMLDivElement | null>(null);
 
         const headSize = useElementSize(headRef);
 
         const uuid = useUuid();
 
-        const headHeight = useMemo(
-            () => (headSize?.height ? headSize.height + 15 : 0),
-            [headSize?.height],
-        );
+        const headHeight = headSize?.height ? headSize.height + 15 : 0;
 
-        useEffect(() => {
-            const element = document.getElementById(`searchBoxContent__${uuid}`);
+        const shouldShowGroupName =
+            (selectedGroups?.length === 1 && selectedGroups[0] === 'all') ||
+            selectedGroups?.length !== 1;
 
-            if (
-                element &&
-                ((selectedGroups?.length === 1 && selectedGroups[0] === 'all') ||
-                    selectedGroups?.length !== 1)
-            ) {
+        const updateCurrentGroupName = useCallback(() => {
+            const element = contentRef.current;
+
+            if (element && shouldShowGroupName) {
                 setCurrentGroupName(getCurrentGroupName(element));
-            } else {
-                setCurrentGroupName('');
+                return;
             }
-        }, [uuid, children, selectedGroups]);
 
-        const handlePreventDefault = (event: MouseEvent) => {
+            setCurrentGroupName('');
+        }, [shouldShowGroupName]);
+
+        const handlePreventDefault: MouseEventHandler<HTMLDivElement> = (event) => {
             event.preventDefault();
             event.stopPropagation();
         };
 
         const handleScroll = useCallback(
-            (event: UIEvent) => {
-                const { scrollTop } = event.target as HTMLDivElement;
+            (event: React.UIEvent<HTMLDivElement>) => {
+                const { scrollTop } = event.currentTarget;
 
                 setHasScrolled(scrollTop > 1);
 
-                if (
-                    (selectedGroups?.length === 1 && selectedGroups[0] === 'all') ||
-                    selectedGroups?.length !== 1
-                ) {
-                    setCurrentGroupName(getCurrentGroupName(event.target as HTMLDivElement));
+                if (shouldShowGroupName) {
+                    setCurrentGroupName(getCurrentGroupName(event.currentTarget));
                 }
             },
-            [selectedGroups],
+            [shouldShowGroupName],
         );
 
-        return useMemo(
-            () => (
-                <StyledSearchBoxBody
-                    onClick={handlePreventDefault}
-                    ref={ref}
-                    inert={!shouldShow ? 'true' : undefined}
-                >
-                    {filterButtons && filterButtons?.length > 1 && (
-                        <StyledSearchBoxBodyHead
-                            ref={headRef}
-                            $hasScrolled={hasScrolled}
-                            $hasGroupName={!!currentGroupName}
-                        >
-                            {!shouldHideFilterButtons && (
-                                <FilterButtons
-                                    items={filterButtons}
-                                    size={0}
-                                    onSelect={onGroupSelect}
-                                    selectedItemIds={selectedGroups}
-                                />
-                            )}
-                            <StyledSearchBoxBodyHeadGroupName>
-                                {currentGroupName.replace('_', '')}
-                            </StyledSearchBoxBodyHeadGroupName>
-                        </StyledSearchBoxBodyHead>
-                    )}
-                    <StyledSearchBoxBodyContent
-                        $height={height}
-                        $headHeight={headHeight}
-                        key="content"
-                        id={`searchBoxContent__${uuid}`}
-                        className="chayns-scrollbar"
-                        tabIndex={0}
-                        onScroll={handleScroll}
+        const handleContentRef = useCallback(
+            (node: HTMLDivElement | null) => {
+                contentRef.current = node;
+                updateCurrentGroupName();
+            },
+            [updateCurrentGroupName],
+        );
+
+        return (
+            <StyledSearchBoxBody
+                onClick={handlePreventDefault}
+                ref={ref}
+                inert={!shouldShow ? 'true' : undefined}
+            >
+                {filterButtons && filterButtons?.length > 1 && (
+                    <StyledSearchBoxBodyHead
+                        ref={headRef}
+                        $hasScrolled={hasScrolled}
+                        $hasGroupName={!!currentGroupName}
                     >
-                        {children}
-                    </StyledSearchBoxBodyContent>
-                </StyledSearchBoxBody>
-            ),
-            [
-                children,
-                currentGroupName,
-                filterButtons,
-                handleScroll,
-                hasScrolled,
-                headHeight,
-                height,
-                onGroupSelect,
-                ref,
-                selectedGroups,
-                shouldHideFilterButtons,
-                shouldShow,
-                uuid,
-            ],
+                        {!shouldHideFilterButtons && (
+                            <FilterButtons
+                                items={filterButtons}
+                                size={0}
+                                onSelect={onGroupSelect}
+                                selectedItemIds={selectedGroups}
+                            />
+                        )}
+                        <StyledSearchBoxBodyHeadGroupName>
+                            {currentGroupName.replace('_', '')}
+                        </StyledSearchBoxBodyHeadGroupName>
+                    </StyledSearchBoxBodyHead>
+                )}
+                <StyledSearchBoxBodyContent
+                    $height={height}
+                    $headHeight={headHeight}
+                    key="content"
+                    id={`searchBoxContent__${uuid}`}
+                    ref={handleContentRef}
+                    className="chayns-scrollbar"
+                    tabIndex={0}
+                    onScroll={handleScroll}
+                >
+                    {children}
+                </StyledSearchBoxBodyContent>
+            </StyledSearchBoxBody>
         );
     },
 );
