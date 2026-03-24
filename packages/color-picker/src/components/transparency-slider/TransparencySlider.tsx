@@ -1,5 +1,5 @@
 import { setRefreshScrollEnabled } from 'chayns-api';
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { ChangeEvent, useCallback, useMemo, useRef, useState, useLayoutEffect } from 'react';
 import { hexToRgb, isValidRGBA, splitRgb } from '../../utils/color';
 import {
     StyledTransparencySlider,
@@ -35,36 +35,32 @@ const TransparencySlider = ({
     onEnd,
     color = 'rgba(255, 0, 0, 1)',
 }: TransparencySliderProps) => {
-    const [editedValue, setEditedValue] = useState(0);
-    const [pureColor, setPureColor] = useState<string>();
-    const [previewColor, setPreviewColor] = useState<string>();
-
-    const sliderThumbRef = useRef<HTMLDivElement>(null);
-    const sliderRef = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-        if (color) {
-            let rgb;
-
-            if (isValidRGBA(color)) {
-                rgb = splitRgb(color);
-            } else {
-                rgb = hexToRgb(color);
-            }
-
-            if (!rgb) {
-                return;
-            }
-
-            const { r, g, b, a } = rgb;
-
-            const newColor = `rgba(${r}, ${g}, ${b}, ${a})`;
-
-            setPreviewColor(newColor);
-            setPureColor(`rgb(${r},${g},${b},1)`);
-            setEditedValue(100 - a * 100);
-        }
+    const rgb = useMemo(() => {
+        if (!color) return undefined;
+        return isValidRGBA(color) ? splitRgb(color) : hexToRgb(color);
     }, [color]);
+
+    const derivedPreviewColor = useMemo(() => {
+        if (!rgb) return undefined;
+        const { r, g, b, a } = rgb;
+        return `rgba(${r}, ${g}, ${b}, ${a})`;
+    }, [rgb]);
+
+    const derivedPureColor = useMemo(() => {
+        if (!rgb) return undefined;
+        const { r, g, b } = rgb;
+        return `rgba(${r}, ${g}, ${b}, 1)`;
+    }, [rgb]);
+
+    const derivedEditedValue = useMemo(() => {
+        if (!rgb) return 0;
+        return 100 - rgb.a * 100;
+    }, [rgb]);
+
+    const [editedValue, setEditedValue] = useState<number>(() => derivedEditedValue ?? 0);
+
+    const sliderRef = useRef<HTMLInputElement | null>(null);
+    const sliderThumbRef = useRef<HTMLDivElement | null>(null);
 
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -72,76 +68,77 @@ const TransparencySlider = ({
 
             setEditedValue(a);
 
-            const rgb = splitRgb(pureColor);
+            const rgbVal = splitRgb(derivedPureColor);
 
-            if (!rgb) {
+            if (!rgbVal) {
                 return;
             }
 
-            const { r, g, b } = rgb;
+            const { r, g, b } = rgbVal;
 
             const newColor = `rgba(${r}, ${g}, ${b}, ${(100 - a) / 100})`;
-
-            setPreviewColor(newColor);
 
             if (typeof onChange === 'function') {
                 onChange(newColor);
             }
         },
-        [onChange, pureColor],
+        [derivedPureColor, onChange],
     );
 
-    const sliderThumbPosition = useMemo(() => {
+    const [sliderThumbPosition, setSliderThumbPosition] = useState(0);
+
+    useLayoutEffect(() => {
         if (sliderRef.current && sliderThumbRef.current) {
-            return (
+            setSliderThumbPosition(
                 (editedValue / 100) *
-                (sliderRef.current.offsetWidth - sliderThumbRef.current.offsetWidth / 2)
+                    (sliderRef.current.offsetWidth - sliderThumbRef.current.offsetWidth / 2),
             );
+        } else {
+            setSliderThumbPosition(0);
         }
-        return 0;
     }, [editedValue]);
 
     const handleStart = useCallback(() => {
         void setRefreshScrollEnabled(false);
 
         if (typeof onStart === 'function') {
-            const rgb = splitRgb(pureColor);
+            const rgbVal = splitRgb(derivedPureColor);
 
-            if (!rgb) {
+            if (!rgbVal) {
                 return;
             }
 
-            const { r, g, b } = rgb;
+            const { r, g, b } = rgbVal;
 
             const newColor = `rgba(${r}, ${g}, ${b}, ${(100 - editedValue) / 100})`;
 
             onStart(newColor);
         }
-    }, [editedValue, onStart, pureColor]);
+    }, [editedValue, onStart, derivedPureColor]);
 
     const handleEnd = useCallback(() => {
         void setRefreshScrollEnabled(true);
 
         if (typeof onEnd === 'function') {
-            const rgb = splitRgb(pureColor);
+            const rgbVal = splitRgb(derivedPureColor);
 
-            if (!rgb) {
+            if (!rgbVal) {
                 return;
             }
 
-            const { r, g, b } = rgb;
+            const { r, g, b } = rgbVal;
 
             const newColor = `rgba(${r}, ${g}, ${b}, ${(100 - editedValue) / 100})`;
 
             onEnd(newColor);
         }
-    }, [editedValue, onEnd, pureColor]);
+    }, [editedValue, onEnd, derivedPureColor]);
 
     return (
         <StyledTransparencySlider>
             <StyledTransparencySliderInput
                 ref={sliderRef}
-                $color={pureColor}
+                $color={derivedPureColor}
                 type="range"
                 min={0}
                 max={100}
@@ -156,7 +153,7 @@ const TransparencySlider = ({
                 $position={sliderThumbPosition}
             >
                 <StyledTransparencySliderThumbBackground />
-                <StyledTransparencySliderThumb $color={previewColor} />
+                <StyledTransparencySliderThumb $color={derivedPreviewColor} />
             </StyledTransparencySliderThumbWrapper>
         </StyledTransparencySlider>
     );
