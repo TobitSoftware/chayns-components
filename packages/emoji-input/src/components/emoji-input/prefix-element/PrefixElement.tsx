@@ -19,13 +19,13 @@ import {
 export type PrefixElementProps = {
     prefixElementRef: RefObject<HTMLDivElement>;
     element: string;
-    setIsPrefixAnimationFinished: Dispatch<SetStateAction<boolean>>;
+    setFinishedPrefixElement: Dispatch<SetStateAction<string | undefined>>;
 };
 
 const PrefixElement: FC<PrefixElementProps> = ({
     prefixElementRef,
     element,
-    setIsPrefixAnimationFinished,
+    setFinishedPrefixElement,
 }) => {
     const [shouldShow, setShouldShow] = useState(true);
     const [prefixText, setPrefixText] = useState('');
@@ -40,10 +40,10 @@ const PrefixElement: FC<PrefixElementProps> = ({
         (index: number) => {
             if (index === prefixText.length - 1) {
                 setShouldShow(false);
-                setIsPrefixAnimationFinished(true);
+                setFinishedPrefixElement(element);
             }
         },
-        [prefixText.length, setIsPrefixAnimationFinished],
+        [element, prefixText.length, setFinishedPrefixElement],
     );
 
     const content = useMemo(
