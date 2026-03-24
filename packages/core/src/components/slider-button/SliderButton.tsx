@@ -1,6 +1,6 @@
 import { setRefreshScrollEnabled } from 'chayns-api';
 import { AnimatePresence, useAnimate } from 'motion/react';
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, useCallback, useMemo, useRef, useState } from 'react';
 import { useElementSize } from '../../hooks/element';
 import { PopupRef } from '../../types/popup';
 import type { SliderButtonItem } from '../../types/slider-button';
@@ -148,31 +148,27 @@ const SliderButton: FC<SliderButtonProps> = ({
         [animation, itemWidth],
     );
 
-    useEffect(() => {
-        if (typeof selectedButtonId === 'string') {
+    const getDerivedCurrentId = () => {
+        if (selectedButtonId !== undefined && items.some((i) => i.id === selectedButtonId))
+            return selectedButtonId;
+        if (currentId) return currentId;
+        return items[0]?.id ?? '';
+    };
+    const derivedCurrentId = getDerivedCurrentId();
+
+    const derivedCurrentPopupId = currentPopupId || selectedButtonId || '';
+
+    const getDerivedCurrentIndex = () => {
+        if (selectedButtonId !== undefined) {
             let index = items.findIndex(({ id }) => id === selectedButtonId);
-
-            setPopupId(selectedButtonId);
-
-            if (items.length > shownItemsCount && index > shownItemsCount - 1) {
+            if (items.length > shownItemsCount && index > shownItemsCount - 1)
                 index = shownItemsCount - 1;
-            }
-
-            if (index >= 0) {
-                setItemPosition(index);
-            }
+            return index >= 0 ? index : 0;
         }
-    }, [
-        animation,
-        dragRange.right,
-        isSliderBigger,
-        itemWidth,
-        items,
-        selectedButtonId,
-        setItemPosition,
-        setPopupId,
-        shownItemsCount,
-    ]);
+        if (currentIndex >= 0) return currentIndex;
+        return 0;
+    };
+    const derivedCurrentIndex = getDerivedCurrentIndex();
 
     const handleClick = useCallback(
         (id: string, index: number) => {
@@ -251,7 +247,7 @@ const SliderButton: FC<SliderButtonProps> = ({
                 <StyledSliderButtonPopupContentItem
                     key={`slider-button-${id}`}
                     onClick={() => handleClick(id, newItems.length)}
-                    $isSelected={id === currentPopupId}
+                    $isSelected={id === derivedCurrentPopupId}
                 >
                     {text}
                 </StyledSliderButtonPopupContentItem>
@@ -289,7 +285,7 @@ const SliderButton: FC<SliderButtonProps> = ({
                 {text}
             </StyledSliderButtonItem>
         ));
-    }, [currentPopupId, handleClick, isSecondary, itemWidth, items, shownItemsCount]);
+    }, [derivedCurrentPopupId, handleClick, isSecondary, itemWidth, items, shownItemsCount]);
 
     const pseudoButtons = useMemo(() => {
         if (items.length > shownItemsCount) {
@@ -428,7 +424,7 @@ const SliderButton: FC<SliderButtonProps> = ({
                     $width={itemWidth}
                     onDragEnd={handleDragEnd}
                     onDragStart={handleDragStart}
-                    onClick={() => handleClick(currentId, currentIndex)}
+                    onClick={() => handleClick(derivedCurrentId, derivedCurrentIndex)}
                     style={{ backgroundColor: thumbBackgroundColor }}
                 />
                 <StyledSliderButtonWrapper
@@ -448,8 +444,8 @@ const SliderButton: FC<SliderButtonProps> = ({
         [
             backgroundColor,
             buttons,
-            currentId,
-            currentIndex,
+            derivedCurrentId,
+            derivedCurrentIndex,
             dragRange,
             handleClick,
             handleDragEnd,

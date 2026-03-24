@@ -22,9 +22,18 @@ const Template: StoryFn<typeof SliderButton> = (args) => {
     return <SliderButton {...args} />;
 };
 
+const ControlledSliderButton: StoryFn<typeof SliderButton> = (args) => {
+    const [state, setState] = React.useState<string>();
+    console.debug(state);
+
+    return <SliderButton {...args} onChange={setState} selectedButtonId={state} />;
+};
+
 export const General = Template.bind({});
 
 export const Expanded = Template.bind({});
+
+export const Controlled = ControlledSliderButton.bind({});
 
 Expanded.args = {
     items: [
