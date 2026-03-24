@@ -67,16 +67,21 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
         },
         ref,
     ) => {
-        const [internalSelectedItem, setInternalSelectedItem] = useState<IComboBoxItem>();
+        // internalSelectedItem starts from controlled selectedItem when provided; otherwise can be set internally
+        const [internalSelectedItem, setInternalSelectedItem] = useState<IComboBoxItem | undefined>(
+            () => selectedItem,
+        );
         const [isAnimating, setIsAnimating] = useState(false);
-        const [minWidth, setMinWidth] = useState<number | undefined>(undefined);
-        const [bodyMinWidth, setBodyMinWidth] = useState(0);
+        // min widths are derived from lists/parent size; will compute via useMemo below (avoid setState in effects)
         const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
         const isInputFocused = useRef(false);
 
-        const styledComboBoxElementRef = useRef<HTMLDivElement>(null);
+        const styledComboBoxElementRef = useRef<HTMLDivElement | null>(null);
         const contentRef = useRef<HTMLDivElement | null>(null);
+
+        // Anchor element stored in state to avoid reading ref.current during render (rules-of-react)
+        const [anchorElement, setAnchorElement] = useState<HTMLDivElement | null>(null);
 
         const parentSize = useElementSize(styledComboBoxElementRef, {
             shouldUseParentElement: true,
@@ -89,11 +94,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
 
         const areaProvider = useContext(AreaContext);
 
-        useEffect(() => {
-            if (shouldUseFullWidth && parentSize) {
-                setMinWidth(parentSize.width);
-            }
-        }, [parentSize, shouldUseFullWidth]);
+        // parent size handled in width calculation memo below; avoid calling setState synchronously in effects
 
         const shouldChangeColor = useMemo(
             () => areaProvider.shouldChangeColor ?? false,
@@ -287,7 +288,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
         /**
          * This function calculates the greatest width
          */
-        useEffect(() => {
+        const { computedMinWidth, computedBodyMinWidth } = useMemo(() => {
             const allItems = lists.flatMap((list) => list.list);
 
             let maxItemWidth = calculateMaxComboBoxItemWidth({
@@ -302,21 +303,15 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             });
 
             if (shouldDropDownUseMaxItemWidth) {
-                maxItemWidth += 20 + 2 + 1; // 20px padding (left and right), 2px border, 1px puffer for rounding errors
-
-                setBodyMinWidth(maxItemWidth);
-                setMinWidth(maxItemWidth);
-
-                return;
+                maxItemWidth += 20 + 2 + 1; // padding + border + puffer
+                return { computedMinWidth: maxItemWidth, computedBodyMinWidth: maxItemWidth };
             }
 
-            const parentWidth =
-                styledComboBoxElementRef.current?.parentElement?.getBoundingClientRect().width ?? 0;
+            const parentWidth = parentSize?.width ?? 0;
 
-            const paddingWidth = 20 + 2 + 40 + (shouldShowClearIcon ? 40 : 0) + 1; // padding + border + arrow icon + optional clear icon + 1px puffer for rounding errors
+            const paddingWidth = 20 + 2 + 40 + (shouldShowClearIcon ? 40 : 0) + 1;
 
             let prefixWidth = 0;
-
             if (prefix) {
                 const prefixTextWidth = calculateMaxComboBoxItemWidth({
                     list: [{ text: prefix, value: 'prefix' }],
@@ -332,15 +327,11 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             let tmpMinWidth = calculatedWidth;
             let tmpBodyMinWidth = calculatedWidth;
 
-            // Full width settings
             if (shouldUseFullWidth) {
                 tmpMinWidth = parentWidth;
-
                 tmpBodyMinWidth =
                     parentWidth < calculatedWidth - 20 ? calculatedWidth - 20 : parentWidth;
-            }
-            // Current item width settings
-            else if (shouldUseCurrentItemWidth && internalSelectedItem) {
+            } else if (shouldUseCurrentItemWidth && internalSelectedItem) {
                 const internalSelectedItemWidth = calculateMaxComboBoxItemWidth({
                     list: [internalSelectedItem],
                     functions,
@@ -349,23 +340,18 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                 });
 
                 const itemWidth = internalSelectedItemWidth + paddingWidth + prefixWidth;
-
                 tmpMinWidth = itemWidth;
-
                 tmpBodyMinWidth =
                     itemWidth < calculatedWidth - 20 ? calculatedWidth - 20 : itemWidth;
             }
 
-            if (tmpMinWidth > parentWidth) {
-                tmpMinWidth = parentWidth;
-            }
+            if (tmpMinWidth > parentWidth) tmpMinWidth = parentWidth;
+            if (tmpBodyMinWidth > parentWidth) tmpBodyMinWidth = parentWidth;
 
-            if (tmpBodyMinWidth > parentWidth) {
-                tmpBodyMinWidth = parentWidth;
-            }
-
-            setMinWidth(tmpMinWidth);
-            setBodyMinWidth(shouldUseCurrentItemWidth ? tmpMinWidth : tmpBodyMinWidth);
+            return {
+                computedMinWidth: tmpMinWidth,
+                computedBodyMinWidth: shouldUseCurrentItemWidth ? tmpMinWidth : tmpBodyMinWidth,
+            };
         }, [
             functions,
             internalSelectedItem,
@@ -379,15 +365,8 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             shouldUseCurrentItemWidth,
             shouldUseFullWidth,
             values,
+            parentSize?.width,
         ]);
-
-        /**
-         * This function sets the external selected item
-         */
-        useEffect(() => {
-            setIsAnimating(false);
-            setInternalSelectedItem(selectedItem);
-        }, [selectedItem]);
 
         const placeholderImageUrl = useMemo(() => {
             if (selectedItem) {
@@ -491,8 +470,11 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
         return useMemo(
             () => (
                 <StyledComboBox
-                    ref={styledComboBoxElementRef}
-                    $minWidth={minWidth}
+                    ref={(node) => {
+                        styledComboBoxElementRef.current = node;
+                        setAnchorElement(node);
+                    }}
+                    $minWidth={computedMinWidth}
                     $shouldUseFullWidth={shouldUseFullWidth}
                     $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
                 >
@@ -564,9 +546,9 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                             </StyledComboBoxIconWrapper>
                         )}
                     </StyledComboBoxHeader>
-                    {styledComboBoxElementRef.current && (
+                    {anchorElement && (
                         <DropdownBodyWrapper
-                            anchorElement={styledComboBoxElementRef.current}
+                            anchorElement={anchorElement}
                             bodyWidth={bodyWidth}
                             contentHeight={contentHeight}
                             shouldCaptureEvents={shouldCaptureEvents}
@@ -574,13 +556,13 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                             direction={direction}
                             container={container}
                             shouldShowDropdown={isAnimating}
-                            minBodyWidth={bodyWidth ?? bodyMinWidth}
+                            minBodyWidth={bodyWidth ?? computedBodyMinWidth}
                             maxHeight={maxHeight}
                         >
                             <StyledComboBoxBody
                                 $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
                                 $maxHeight={maxHeight}
-                                $minWidth={bodyWidth ?? bodyMinWidth}
+                                $minWidth={bodyWidth ?? computedBodyMinWidth}
                                 className="chayns-scrollbar"
                                 ref={contentRef}
                                 tabIndex={0}
@@ -592,7 +574,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                 </StyledComboBox>
             ),
             [
-                minWidth,
+                computedMinWidth,
                 shouldUseFullWidth,
                 shouldUseCurrentItemWidth,
                 direction,
@@ -624,9 +606,10 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                 shouldCaptureEvents,
                 handleClose,
                 container,
-                bodyMinWidth,
+                computedBodyMinWidth,
                 maxHeight,
                 comboBoxGroups,
+                anchorElement,
             ],
         );
     },
