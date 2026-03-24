@@ -104,12 +104,6 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
         };
     }, []);
 
-    useEffect(() => {
-        if (isHidden && isOverflowTrayOpen) {
-            setIsOverflowTrayOpen(false);
-        }
-    }, [isHidden, isOverflowTrayOpen]);
-
     const handleItemSelection = useCallback(
         (item: DynamicToolbarItem) => {
             if (item.isDisabled) {
@@ -141,11 +135,7 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
         };
     }, [availableWidth, items]);
 
-    useEffect(() => {
-        if (overflowItems.length === 0 && isOverflowTrayOpen) {
-            setIsOverflowTrayOpen(false);
-        }
-    }, [overflowItems.length, isOverflowTrayOpen]);
+    const isTrayVisible = isOverflowTrayOpen && !isHidden && overflowItems.length > 0;
 
     const renderedVisibleItems = useMemo(
         () =>
@@ -176,7 +166,7 @@ const DynamicToolbar: FC<DynamicToolbarProps> = ({
                         activeItemId={activeItemId}
                         handleItemSelection={handleItemSelection}
                         items={overflowItems}
-                        isOpen={isOverflowTrayOpen}
+                        isOpen={isTrayVisible}
                         key="overflow-tray"
                     />
                     <StyledDynamicToolbarBackground $layout={layout} />
