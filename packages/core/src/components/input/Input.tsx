@@ -10,7 +10,6 @@ import React, {
     ReactNode,
     useCallback,
     useContext,
-    useEffect,
     useImperativeHandle,
     useMemo,
     useRef,
@@ -211,8 +210,7 @@ const Input = forwardRef<InputRef, InputProps>(
         },
         ref,
     ) => {
-        const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
-        const [placeholderWidth, setPlaceholderWidth] = useState(0);
+        const [internalValue, setInternalValue] = useState(value ?? '');
 
         const areaProvider = useContext(AreaContext);
 
@@ -224,37 +222,39 @@ const Input = forwardRef<InputRef, InputProps>(
         useCursorRepaint(inputRef);
 
         const placeholderSize = useElementSize(placeholderRef);
-
-        useEffect(() => {
-            if (placeholderSize && shouldShowOnlyBottomBorder) {
-                setPlaceholderWidth(placeholderSize.width + 5);
-            }
-        }, [placeholderSize, shouldShowOnlyBottomBorder]);
+        const placeholderWidth =
+            shouldShowOnlyBottomBorder && placeholderSize ? placeholderSize.width + 5 : 0;
+        const displayValue = value ?? internalValue;
+        const hasValue = displayValue !== '';
 
         const handleClearIconClick = useCallback(() => {
             if (inputRef.current) {
                 inputRef.current.value = '';
 
-                setHasValue(false);
+                if (typeof value !== 'string') {
+                    setInternalValue('');
+                }
 
                 if (typeof onChange === 'function') {
                     onChange({ target: inputRef.current } as ChangeEvent<HTMLInputElement>);
                 }
             }
-        }, [onChange]);
+        }, [onChange, value]);
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const shouldShowBorder = rightElement?.props?.style?.backgroundColor === undefined;
 
         const handleInputFieldChange = useCallback(
             (event: ChangeEvent<HTMLInputElement>) => {
-                setHasValue(event.target.value !== '');
+                if (typeof value !== 'string') {
+                    setInternalValue(event.target.value);
+                }
 
                 if (typeof onChange === 'function') {
                     onChange(event);
                 }
             },
-            [onChange],
+            [onChange, value],
         );
 
         useImperativeHandle(
@@ -265,12 +265,6 @@ const Input = forwardRef<InputRef, InputProps>(
             }),
             [],
         );
-
-        useEffect(() => {
-            if (typeof value === 'string') {
-                setHasValue(value !== '');
-            }
-        }, [value]);
 
         let backgroundColor: CSSProperties['backgroundColor'] | undefined;
         let internalColor: CSSProperties['color'] | undefined;
@@ -339,7 +333,7 @@ const Input = forwardRef<InputRef, InputProps>(
                                 onPaste={onPaste}
                                 ref={inputRef}
                                 type={type}
-                                value={value}
+                                value={displayValue}
                                 autoFocus={shouldUseAutoFocus}
                                 inputMode={inputMode}
                                 autoComplete={autoComplete}
@@ -408,6 +402,8 @@ const Input = forwardRef<InputRef, InputProps>(
                 shouldShowBorder,
                 shouldShowOnlyBottomBorder,
                 size,
+                color?.border,
+                color?.placeholder,
                 leftElement,
                 internalColor,
                 placeholderWidth,
@@ -418,7 +414,7 @@ const Input = forwardRef<InputRef, InputProps>(
                 onKeyDown,
                 onPaste,
                 type,
-                value,
+                displayValue,
                 shouldUseAutoFocus,
                 inputMode,
                 autoComplete,
@@ -429,7 +425,6 @@ const Input = forwardRef<InputRef, InputProps>(
                 theme.fontSize,
                 theme.wrong,
                 labelPosition,
-                color?.placeholder,
                 placeholder,
                 shouldShowClearIcon,
                 handleClearIconClick,
