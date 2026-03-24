@@ -1,4 +1,4 @@
-import React, { FC, type ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, type ReactElement, useCallback, useMemo, useState } from 'react';
 import { Wrapper } from '@googlemaps/react-wrapper';
 import { StyledMapWrapper } from './MapWrapper.styles';
 import type { IMarker, PolygonOptions, Position } from '../../../types/positionInput';
@@ -27,18 +27,21 @@ const MapWrapper: FC<MapWrapperProps> = ({
     onMarkerRemove,
     onMarkerChange,
 }) => {
-    const [polygonPath, setPolygonPath] = useState<Position[]>();
-    const [canPolyDraw, setCanPolyDraw] = useState(false);
     const [zoom, setZoom] = useState(initialZoom);
     const [center, setCenter] = useState<Position>(initialPosition);
-    const [internalMarkers, setInternalMarkers] = useState<IMarker[]>();
+    const [internalMarkers, setInternalMarkers] = useState<IMarker[]>(markers ?? []);
     const [map, setMap] = useState<google.maps.Map>();
+    const currentMarkers = markers ?? internalMarkers;
+    const isControlled = markers !== undefined;
 
-    useEffect(() => {
-        if (markers) {
-            setInternalMarkers(markers);
-        }
-    }, [markers]);
+    const updateInternalMarkers = useCallback(
+        (updater: (prevMarkers: IMarker[]) => IMarker[]) => {
+            if (!isControlled) {
+                setInternalMarkers(updater);
+            }
+        },
+        [isControlled],
+    );
 
     const handleClick = useCallback(
         (e: google.maps.MapMouseEvent) => {
@@ -48,83 +51,25 @@ const MapWrapper: FC<MapWrapperProps> = ({
                 return;
             }
 
-            setInternalMarkers((prevState) => {
-                if (prevState && prevState.length >= 2) {
+            updateInternalMarkers((prevState) => {
+                if (prevState.length >= 2) {
                     return prevState;
                 }
 
                 const newMarker: IMarker = {
                     position: { lat: latLng.lat, lng: latLng.lng },
-                    id: prevState ? prevState.length : 0,
+                    id: prevState.length,
                 };
 
                 if (typeof onMarkerAdd === 'function') {
                     onMarkerAdd(newMarker);
                 }
 
-                return prevState ? [...prevState, newMarker] : [newMarker];
+                return [...prevState, newMarker];
             });
         },
-        [onMarkerAdd],
+        [onMarkerAdd, updateInternalMarkers],
     );
-
-    useEffect(() => {
-        if (!internalMarkers) {
-            return;
-        }
-
-        if (internalMarkers.length !== 2) {
-            setCanPolyDraw(false);
-
-            return;
-        }
-
-        const path: Position[] = [
-            {
-                lat: internalMarkers[0]?.position.lat ?? 0,
-                lng: internalMarkers[0]?.position.lng ?? 0,
-            },
-            {
-                lat: internalMarkers[0]?.position.lat ?? 0,
-                lng: internalMarkers[1]?.position.lng ?? 0,
-            },
-            {
-                lat: internalMarkers[1]?.position.lat ?? 0,
-                lng: internalMarkers[1]?.position.lng ?? 0,
-            },
-            {
-                lat: internalMarkers[1]?.position.lat ?? 0,
-                lng: internalMarkers[0]?.position.lng ?? 0,
-            },
-        ];
-
-        const maxLat = path.reduce((prev, current) => (prev.lat > current.lat ? prev : current));
-        const minLat = path.reduce((prev, current) => (prev.lat < current.lat ? prev : current));
-        const maxLng = path.reduce((prev, current) => (prev.lng > current.lng ? prev : current));
-        const minLng = path.reduce((prev, current) => (prev.lng < current.lng ? prev : current));
-
-        const topLeft = path.find((item) => item.lat === maxLat.lat && item.lng === minLng.lng);
-        const bottomRight = path.find((item) => item.lat === minLat.lat && item.lng === maxLng.lng);
-
-        if (!topLeft || !bottomRight) {
-            return;
-        }
-
-        const centerLat = (topLeft.lat + bottomRight.lat) / 2;
-        const centerLng = (topLeft.lng + bottomRight.lng) / 2;
-
-        const polygonCenter = {
-            lat: centerLat,
-            lng: centerLng,
-        };
-
-        if (!polygonCenter) {
-            return;
-        }
-
-        setCanPolyDraw(true);
-        setPolygonPath(path);
-    }, [internalMarkers]);
 
     const handleIdle = (m: google.maps.Map) => {
         setMap(m);
@@ -138,8 +83,8 @@ const MapWrapper: FC<MapWrapperProps> = ({
 
     const handleMarkerChange = useCallback(
         (marker: IMarker) => {
-            setInternalMarkers((prevState) => {
-                const updatedMarkers = (prevState ?? []).map((prevMarker) => {
+            updateInternalMarkers((prevState) => {
+                const updatedMarkers = prevState.map((prevMarker) => {
                     if (prevMarker.id === marker.id) {
                         return { ...prevMarker, position: marker.position };
                     }
@@ -153,30 +98,30 @@ const MapWrapper: FC<MapWrapperProps> = ({
                 return updatedMarkers;
             });
         },
-        [onMarkerChange],
+        [onMarkerChange, updateInternalMarkers],
     );
 
     const handleMarkerRemove = useCallback(
         (id: number) => {
-            setInternalMarkers((prevState) => {
+            updateInternalMarkers((prevState) => {
                 if (typeof onMarkerRemove === 'function') {
                     onMarkerRemove(id);
                 }
 
-                return prevState ? prevState.filter((marker) => marker.id !== id) : [];
+                return prevState.filter((marker) => marker.id !== id);
             });
         },
-        [onMarkerRemove],
+        [onMarkerRemove, updateInternalMarkers],
     );
 
     const markerList = useMemo(() => {
         const items: ReactElement[] = [];
 
-        if (!internalMarkers) {
+        if (!currentMarkers) {
             return items;
         }
 
-        internalMarkers.forEach(({ id, position }) => {
+        currentMarkers.forEach(({ id, position }) => {
             items.push(
                 <Marker
                     key={`marker_${id}`}
@@ -191,31 +136,55 @@ const MapWrapper: FC<MapWrapperProps> = ({
         });
 
         return items;
-    }, [handleMarkerChange, handleMarkerRemove, internalMarkers, map]);
+    }, [currentMarkers, handleMarkerChange, handleMarkerRemove, map]);
 
-    return useMemo(
-        () => (
-            <StyledMapWrapper>
-                <Wrapper apiKey={apiToken} libraries={['places']}>
-                    <Map
-                        onClick={handleClick}
-                        onIdle={handleIdle}
-                        onPositionChange={handlePositionChange}
-                        center={center}
-                        zoom={zoom}
-                        fullscreenControl={false}
-                        mapTypeControl={false}
-                        streetViewControl={false}
-                    >
-                        <>
-                            {markerList}
-                            {canPolyDraw && <Polygon path={polygonPath} options={polygonOptions} />}
-                        </>
-                    </Map>
-                </Wrapper>
-            </StyledMapWrapper>
-        ),
-        [apiToken, handleClick, center, zoom, markerList, canPolyDraw, polygonPath, polygonOptions],
+    const polygonPath = useMemo<Position[] | undefined>(() => {
+        const [firstMarker, secondMarker] = currentMarkers;
+
+        if (!firstMarker || !secondMarker || currentMarkers.length !== 2) {
+            return undefined;
+        }
+
+        return [
+            {
+                lat: firstMarker.position.lat,
+                lng: firstMarker.position.lng,
+            },
+            {
+                lat: firstMarker.position.lat,
+                lng: secondMarker.position.lng,
+            },
+            {
+                lat: secondMarker.position.lat,
+                lng: secondMarker.position.lng,
+            },
+            {
+                lat: secondMarker.position.lat,
+                lng: firstMarker.position.lng,
+            },
+        ];
+    }, [currentMarkers]);
+
+    return (
+        <StyledMapWrapper>
+            <Wrapper apiKey={apiToken} libraries={['places']}>
+                <Map
+                    onClick={handleClick}
+                    onIdle={handleIdle}
+                    onPositionChange={handlePositionChange}
+                    center={center}
+                    zoom={zoom}
+                    fullscreenControl={false}
+                    mapTypeControl={false}
+                    streetViewControl={false}
+                >
+                    <>
+                        {markerList}
+                        {polygonPath && <Polygon path={polygonPath} options={polygonOptions} />}
+                    </>
+                </Map>
+            </Wrapper>
+        </StyledMapWrapper>
     );
 };
 
