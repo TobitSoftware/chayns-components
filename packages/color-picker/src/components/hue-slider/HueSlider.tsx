@@ -5,11 +5,11 @@ import React, {
     CSSProperties,
     FC,
     useCallback,
-    useEffect,
     useMemo,
     useRef,
     useState,
 } from 'react';
+import { useElementSize } from '@chayns-components/core';
 import { convertColorToHsl, extractHsl, hexToRgb, isValidRGBA, splitRgb } from '../../utils/color';
 import { StyledHueSlider, StyledHueSliderInput, StyledHueSliderThumb } from './HueSlider.styles';
 
@@ -43,42 +43,48 @@ const HueSlider: FC<HueSliderProps> = ({
     opacity,
     color = 'rgba(255, 0, 0, 1)',
 }) => {
-    const [editedValue, setEditedValue] = useState(0);
-    const [hslColor, setHslColor] = useState<CSSProperties['color']>('hsl(0, 0, 100)');
-    const [internalOpacity, setInternalOpacity] = useState(1);
+    const sliderRef = useRef<HTMLDivElement>(null);
 
-    const sliderThumbRef = useRef<HTMLDivElement>(null);
-    const sliderRef = useRef<HTMLInputElement>(null);
+    const parsedColor = useMemo(() => {
+        let rgb;
 
-    useEffect(() => {
-        if (color) {
-            let rgb;
-
-            if (isValidRGBA(color)) {
-                rgb = splitRgb(color);
-            } else {
-                rgb = hexToRgb(color);
-            }
-
-            if (!rgb) {
-                return;
-            }
-
-            const { r, g, b, a } = rgb;
-
-            setInternalOpacity(a);
-
-            const hsl = convertColorToHsl(`rgba(${r}, ${g}, ${b}, 1)`);
-            const match = hsl?.toString().match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/);
-
-            if (!match || !match[1]) {
-                return;
-            }
-
-            setHslColor(`hsl(${match[1]}, 100%, 50%)`);
-            setEditedValue(parseInt(match[1], 10));
+        if (isValidRGBA(color)) {
+            rgb = splitRgb(color);
+        } else {
+            rgb = hexToRgb(color);
         }
+
+        if (!rgb) {
+            return {
+                editedValue: 0,
+                hslColor: 'hsl(0, 0, 100)',
+                opacity: 1,
+            };
+        }
+
+        const { r, g, b, a } = rgb;
+
+        const hsl = convertColorToHsl(`rgba(${r}, ${g}, ${b}, 1)`);
+        const match = hsl?.toString().match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/);
+
+        if (!match || !match[1]) {
+            return {
+                editedValue: 0,
+                hslColor: 'hsl(0, 0, 100)',
+                opacity: a,
+            };
+        }
+
+        return {
+            editedValue: parseInt(match[1], 10),
+            hslColor: `hsl(${match[1]}, 100%, 50%)`,
+            opacity: a,
+        };
     }, [color]);
+
+    const [editedValue, setEditedValue] = useState(parsedColor.editedValue);
+    const [hslColor, setHslColor] = useState<CSSProperties['color']>(parsedColor.hslColor);
+    const [internalOpacity] = useState(parsedColor.opacity);
 
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -105,15 +111,11 @@ const HueSlider: FC<HueSliderProps> = ({
         [internalOpacity, onChange, opacity],
     );
 
-    const sliderThumbPosition = useMemo(() => {
-        if (sliderRef.current && sliderThumbRef.current) {
-            return (
-                (editedValue / 360) *
-                (sliderRef.current.offsetWidth - sliderThumbRef.current.offsetWidth / 2)
-            );
-        }
-        return 0;
-    }, [editedValue]);
+    const sliderSize = useElementSize(sliderRef);
+    const sliderThumbWidth = 36;
+    const sliderThumbPosition = sliderSize?.width
+        ? (editedValue / 360) * Math.max(sliderSize.width - sliderThumbWidth / 2, 0)
+        : 0;
 
     const handleStart = useCallback(() => {
         void setRefreshScrollEnabled(false);
@@ -161,9 +163,8 @@ const HueSlider: FC<HueSliderProps> = ({
 
     return useMemo(
         () => (
-            <StyledHueSlider>
+            <StyledHueSlider ref={sliderRef}>
                 <StyledHueSliderInput
-                    ref={sliderRef}
                     $color={hslColor}
                     type="range"
                     min={0}
@@ -173,11 +174,7 @@ const HueSlider: FC<HueSliderProps> = ({
                     onPointerDown={handleStart}
                     onPointerUp={handleEnd}
                 />
-                <StyledHueSliderThumb
-                    ref={sliderThumbRef}
-                    $position={sliderThumbPosition}
-                    $color={hslColor}
-                />
+                <StyledHueSliderThumb $position={sliderThumbPosition} $color={hslColor} />
             </StyledHueSlider>
         ),
         [editedValue, handleEnd, handleInputChange, handleStart, hslColor, sliderThumbPosition],
