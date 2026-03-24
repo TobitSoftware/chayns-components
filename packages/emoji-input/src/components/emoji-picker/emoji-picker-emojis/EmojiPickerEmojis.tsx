@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { useCombinedRefs, useIsMeasuredClone } from '@chayns-components/core';
 import emojiLib from 'emojilib';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -37,9 +35,12 @@ interface EmojiCategory {
 }
 
 type EmojiData = EmojiCategory[];
-interface EmojiDictionary {
-    [key: string]: EmojiType;
-}
+type EmojiDataEntry = Omit<EmojiType, 'emoji'>;
+type EmojiDictionary = Record<string, EmojiDataEntry>;
+type EmojiKeywords = Record<string, string[]>;
+
+const emojiKeywords = emojiLib as EmojiKeywords;
+const germanEmojiKeywords = germanEmojiLib as EmojiKeywords;
 
 const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
     accessToken,
@@ -52,7 +53,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
     const [shouldShowSkinTonePopup, setShouldShowSkinTonePopup] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState<number>(0);
     const [emojiCategories, setEmojiCategories] = useState<EmojiData>([]);
-    const [emojiList, setEmojiList] = useState<EmojiDictionary[]>([]);
+    const [emojiList, setEmojiList] = useState<EmojiDictionary>({});
 
     useEffect(() => {
         void import('unicode-emoji-json/data-by-group.json').then(({ default: categories }) => {
@@ -217,16 +218,12 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
         if (searchString.trim() !== '') {
             const lowerSearchString = searchString.toLowerCase();
 
-            const searchResults: JSX.Element[] = [];
+            const searchResults: React.ReactElement[] = [];
 
             Object.entries(emojiList).forEach(([emoji, { name, skin_tone_support }], index) => {
-                const keywords = (emojiLib as { [key: string]: string[] })[emoji] as
-                    | string[]
-                    | undefined;
+                const keywords = emojiKeywords[emoji];
 
-                const germanKeywords = (germanEmojiLib as { [key: string]: string[] })[emoji] as
-                    | string[]
-                    | undefined;
+                const germanKeywords = germanEmojiKeywords[emoji];
 
                 if (
                     name.includes(lowerSearchString) ||
@@ -300,14 +297,16 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
                 />
             ));
     }, [
-        searchString,
-        selectedCategory,
+        emojiCategories,
+        emojiList,
         focusedIndex,
-        shouldShowSkinTonePopup,
-        handleRightClick,
         handlePopupVisibilityChange,
+        handleRightClick,
         handleSelect,
         historyEmojis,
+        searchString,
+        selectedCategory,
+        shouldShowSkinTonePopup,
     ]);
 
     const shouldShowNoContentInfo = !emojis || emojis.length === 0;
