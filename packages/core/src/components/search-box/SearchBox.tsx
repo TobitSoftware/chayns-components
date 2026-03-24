@@ -158,7 +158,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         },
         ref,
     ) => {
-        const [matchingListsItems, setMatchingListsItems] = useState<ISearchBoxItems[]>(lists);
         const [selectedImage, setSelectedImage] = useState<ReactElement>();
         const [value, setValue] = useState(
             typeof presetValue === 'string' && presetValue !== '' ? presetValue : '',
@@ -180,6 +179,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         const hasFocusRef = useRef<boolean>(false);
         const isAnimatingRef = useRef<boolean>(false);
+        const shouldPreventAutoOpenRef = useRef<boolean>(false);
         const shouldShowPresetValue = useRef<boolean>(
             typeof presetValue === 'string' && presetValue !== '',
         );
@@ -230,40 +230,53 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 });
             }
 
-            const newMatchingItems: ISearchBoxItems[] = [];
+            return newLists;
+        }, [groups, lists]);
 
-            newLists.forEach(({ list, groupName }) => {
-                const newList = searchList({ items: list, searchString: value });
+        const getMatchingListsItems = useCallback(
+            (searchString: string) => {
+                if (!shouldShowContentOnEmptyInput && searchString === '') {
+                    return [];
+                }
 
-                if (newList.length > 0) {
+                const newMatchingItems: ISearchBoxItems[] = [];
+
+                activeList.forEach(({ list, groupName }) => {
+                    const newList = searchList({ items: list, searchString });
+
+                    if (newList.length > 0) {
+                        newMatchingItems.push({
+                            groupName,
+                            list: newList,
+                        });
+                    }
+                });
+
+                if (newMatchingItems.length === 0 && shouldAddInputToList) {
                     newMatchingItems.push({
-                        groupName,
-                        list: newList,
+                        groupName: undefined,
+                        list: [],
                     });
                 }
-            });
 
-            if (newMatchingItems.length === 0 && shouldAddInputToList) {
-                newMatchingItems.push({
-                    groupName: undefined,
-                    list: [],
-                });
-            }
+                return newMatchingItems.map(({ list, groupName }) => ({
+                    groupName,
+                    list: list.filter((item) => {
+                        if (typeof customFilter === 'function') {
+                            return customFilter(item);
+                        }
 
-            const filteredMatchingListItems = newMatchingItems.map(({ list, groupName }) => ({
-                groupName,
-                list: list.filter((item) => {
-                    if (typeof customFilter === 'function') {
-                        return customFilter(item);
-                    }
-                    return !(newMatchingItems.length === 1 && item.text === value);
-                }),
-            }));
+                        return !(newMatchingItems.length === 1 && item.text === searchString);
+                    }),
+                }));
+            },
+            [activeList, customFilter, shouldAddInputToList, shouldShowContentOnEmptyInput],
+        );
 
-            setMatchingListsItems(filteredMatchingListItems);
-
-            return newLists;
-        }, [groups, lists, customFilter, shouldAddInputToList, value]);
+        const matchingListsItems = useMemo(
+            () => getMatchingListsItems(value),
+            [getMatchingListsItems, value],
+        );
 
         const handleOpen = useCallback(() => {
             setShouldShowBody(true);
@@ -334,6 +347,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         useEffect(() => {
             if (
+                !shouldPreventAutoOpenRef.current &&
                 (matchingListsItems.length !== 0 || hintText) &&
                 !isAnimatingRef.current &&
                 hasFocusRef.current
@@ -348,81 +362,24 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          */
         const handleFocus = useCallback(() => {
             hasFocusRef.current = true;
+            shouldPreventAutoOpenRef.current = false;
 
             if (shouldShowContentOnEmptyInput) {
-                const newMatchingItems: ISearchBoxItems[] = [];
-
-                activeList.forEach(({ list, groupName }) => {
-                    const newList = searchList({ items: list, searchString: value });
-
-                    if (newList.length > 0) {
-                        newMatchingItems.push({
-                            groupName,
-                            list: newList,
-                        });
-                    }
-                });
-
-                if (newMatchingItems.length === 0 && shouldAddInputToList) {
-                    newMatchingItems.push({
-                        groupName: undefined,
-                        list: [],
-                    });
-                }
-
-                const filteredMatchingListItems = newMatchingItems.map(({ list, groupName }) => ({
-                    groupName,
-                    list: list.filter((item) => {
-                        if (typeof customFilter === 'function') {
-                            return customFilter(item);
-                        }
-                        return !(newMatchingItems.length === 1 && item.text === value);
-                    }),
-                }));
-
-                setMatchingListsItems(filteredMatchingListItems);
+                const filteredMatchingListItems = getMatchingListsItems(value);
 
                 if (filteredMatchingListItems.length !== 0 || hintText) {
                     handleOpen();
                 }
             }
-        }, [
-            shouldShowContentOnEmptyInput,
-            activeList,
-            shouldAddInputToList,
-            hintText,
-            value,
-            customFilter,
-            handleOpen,
-        ]);
+        }, [shouldShowContentOnEmptyInput, getMatchingListsItems, hintText, value, handleOpen]);
 
         /**
          * This function filters the lists by input
          */
 
         useEffect(() => {
-            const newMatchingItems: ISearchBoxItems[] = [];
-
-            activeList.forEach(({ list, groupName }) => {
-                const newList = searchList({ items: list, searchString: value });
-
-                if (newList.length > 0) {
-                    newMatchingItems.push({
-                        groupName,
-                        list: newList,
-                    });
-                }
-            });
-
-            if (newMatchingItems.length === 0 && shouldAddInputToList) {
-                newMatchingItems.push({
-                    groupName: undefined,
-                    list: [],
-                });
-            }
-
             if (shouldAddInputToList && inputToListValue !== '') {
-                newMatchingItems.forEach(({ list }) => {
+                matchingListsItems.forEach(({ list }) => {
                     list.forEach(({ text }) => {
                         if (text.toLowerCase() === inputToListValue.toLowerCase()) {
                             setInputToListValue('');
@@ -430,13 +387,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     });
                 });
             }
-        }, [
-            inputToListValue,
-            activeList,
-            shouldAddInputToList,
-            shouldShowContentOnEmptyInput,
-            value,
-        ]);
+        }, [inputToListValue, shouldAddInputToList, matchingListsItems]);
 
         const handleClick = useCallback(() => {
             if (shouldShowBody) {
@@ -474,36 +425,14 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          */
         const handleChange = useCallback(
             (event: ChangeEvent<HTMLInputElement>) => {
-                const filteredLists: ISearchBoxItems[] = [];
                 shouldShowPresetValue.current = false;
+                shouldPreventAutoOpenRef.current = false;
 
-                activeList.forEach(({ list, groupName }) => {
-                    const newList = searchList({ items: list, searchString: event.target.value });
-
-                    if (newList.length > 0) {
-                        filteredLists.push({
-                            groupName,
-                            list: newList,
-                        });
-                    }
-                });
-
-                if (filteredLists.length === 0 && shouldAddInputToList) {
-                    filteredLists.push({
-                        groupName: undefined,
-                        list: [],
-                    });
-                }
+                const newMatchingListsItems = getMatchingListsItems(event.target.value);
 
                 setSelectedImage(undefined);
 
-                if (!shouldShowContentOnEmptyInput && !event.target.value) {
-                    setMatchingListsItems([]);
-                } else {
-                    setMatchingListsItems(filteredLists);
-                }
-
-                if (filteredLists.length !== 0) {
+                if (newMatchingListsItems.length !== 0) {
                     handleOpen();
                 }
 
@@ -514,7 +443,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     onChange(event);
                 }
             },
-            [activeList, handleOpen, onChange, shouldAddInputToList, shouldShowContentOnEmptyInput],
+            [getMatchingListsItems, handleOpen, onChange],
         );
 
         /**
@@ -565,8 +494,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                         />
                     ) : undefined,
                 );
-
-                setMatchingListsItems([]);
 
                 if (typeof onSelect === 'function') {
                     onSelect(newItem);
@@ -736,11 +663,15 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             shouldShowBody,
         ]);
 
-        const handleKeyPress = useCallback((event: KeyboardEvent) => {
-            if (event.keyCode === 27) {
-                setMatchingListsItems([]);
-            }
-        }, []);
+        const handleKeyPress = useCallback(
+            (event: KeyboardEvent) => {
+                if (event.key === 'Escape') {
+                    shouldPreventAutoOpenRef.current = true;
+                    handleClose();
+                }
+            },
+            [handleClose],
+        );
 
         useImperativeHandle(
             ref,
@@ -754,7 +685,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             document.addEventListener('keydown', handleKeyPress);
 
             return () => {
-                document.addEventListener('keydown', handleKeyPress);
+                document.removeEventListener('keydown', handleKeyPress);
             };
         }, [handleKeyPress]);
 
