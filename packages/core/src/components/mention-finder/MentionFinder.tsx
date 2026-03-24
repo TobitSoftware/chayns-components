@@ -87,21 +87,23 @@ const MentionFinder: FC<MentionFinderProps> = ({
     dragCloseThresholdInPx = DRAG_CLOSE_THRESHOLD_IN_PX,
     overlayContainerSelector,
 }) => {
-    const [activeMember, setActiveMember] = useState(members[0]);
+    const [activeMemberId, setActiveMemberId] = useState(members[0]?.id);
     const [focusedIndex, setFocusedIndex] = useState(0);
-    const [shouldShowPopup, setShouldShowPopup] = useState(true);
+    const [closedInputValue, setClosedInputValue] = useState<string | null>(null);
 
-    const popupRef = useRef<HTMLDivElement>(null);
     const listRef = useRef<HTMLDivElement>(null);
     const dragStartYRef = useRef<number | null>(null);
     const hasTriggeredDragCloseRef = useRef(false);
     const activePointerIdRef = useRef<number | null>(null);
     const activeTouchIdRef = useRef<number | null>(null);
 
-    const [isDraggingHandle, setIsDraggingHandle] = useState(false);
-    const [dragOffset, setDragOffset] = useState(0);
-    const [dragProgress, setDragProgress] = useState(0);
-    const [overlayContainer, setOverlayContainer] = useState<Element | null>(null);
+    const [dragState, setDragState] = useState({
+        inputValue,
+        isDragging: false,
+        offset: 0,
+        progress: 0,
+    });
+    const [popupElement, setPopupElement] = useState<HTMLDivElement | null>(null);
 
     const [fullMatch, searchString] = useMemo(() => {
         // eslint-disable-next-line no-irregular-whitespace
@@ -123,6 +125,14 @@ const MentionFinder: FC<MentionFinderProps> = ({
         [members, searchString],
     );
 
+    const activeMember = useMemo(
+        () =>
+            filteredMembers.find(({ id }) => id === activeMemberId) ??
+            filteredMembers[focusedIndex] ??
+            filteredMembers[0],
+        [activeMemberId, filteredMembers, focusedIndex],
+    );
+
     const handleMemberClick = useCallback(
         (member: MentionMember) => {
             if (fullMatch) {
@@ -133,7 +143,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
     );
 
     const handleMemberHover = useCallback((member: MentionMember) => {
-        setActiveMember(member);
+        setActiveMemberId(member.id);
     }, []);
 
     const items = useMemo(
@@ -150,7 +160,12 @@ const MentionFinder: FC<MentionFinderProps> = ({
         [activeMember, filteredMembers, handleMemberClick, handleMemberHover],
     );
 
-    const shouldRenderPopup = shouldShowPopup && fullMatch && items.length > 0;
+    const shouldRenderPopup = Boolean(
+        fullMatch && items.length > 0 && closedInputValue !== inputValue,
+    );
+    const isDraggingHandle = dragState.inputValue === inputValue && dragState.isDragging;
+    const dragOffset = dragState.inputValue === inputValue ? dragState.offset : 0;
+    const dragProgress = dragState.inputValue === inputValue ? dragState.progress : 0;
 
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
@@ -177,7 +192,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
 
                     const member = filteredMembers[newIndex];
 
-                    setActiveMember(member);
+                    setActiveMemberId(member?.id);
 
                     const newElement = children[newIndex] as HTMLDivElement;
                     newElement.tabIndex = 0;
@@ -196,41 +211,32 @@ const MentionFinder: FC<MentionFinderProps> = ({
     );
 
     useEffect(() => {
-        if (filteredMembers.length > 0) {
-            const isActiveMemberShown = filteredMembers.some(({ id }) => id === activeMember?.id);
-
-            if (!isActiveMemberShown) {
-                setActiveMember(filteredMembers[0]);
-            }
-        }
-    }, [activeMember?.id, filteredMembers]);
-
-    useEffect(() => {
-        setDragOffset(0);
-        setDragProgress(0);
-        hasTriggeredDragCloseRef.current = false;
-        setShouldShowPopup(true);
-    }, [inputValue]);
-
-    useEffect(() => {
-        if (shouldShowPopup) {
+        if (shouldRenderPopup) {
             window.addEventListener('keydown', handleKeyDown, true);
         }
 
         return () => {
             window.removeEventListener('keydown', handleKeyDown, true);
         };
-    }, [handleKeyDown, shouldShowPopup]);
+    }, [handleKeyDown, shouldRenderPopup]);
 
     const closePopupViaDrag = useCallback(() => {
         if (hasTriggeredDragCloseRef.current) {
             return;
         }
         hasTriggeredDragCloseRef.current = true;
-        setDragOffset(0);
-        setDragProgress(0);
-        setShouldShowPopup(false);
-    }, []);
+        setClosedInputValue(inputValue);
+        setDragState((state) =>
+            state.inputValue === inputValue
+                ? {
+                      ...state,
+                      isDragging: false,
+                      offset: 0,
+                      progress: 0,
+                  }
+                : state,
+        );
+    }, [inputValue]);
 
     const handleOverlayClick = useCallback(() => {
         closePopupViaDrag();
@@ -249,40 +255,53 @@ const MentionFinder: FC<MentionFinderProps> = ({
             const positiveDelta = Math.max(0, normalizedDelta);
             const limitedDelta = Math.min(positiveDelta, dragCloseThresholdInPx);
 
-            setDragOffset(limitedDelta * closingDirectionMultiplier);
-            setDragProgress(Math.min(positiveDelta / dragCloseThresholdInPx, 1));
+            setDragState((state) =>
+                state.inputValue === inputValue
+                    ? {
+                          ...state,
+                          isDragging: true,
+                          offset: limitedDelta * closingDirectionMultiplier,
+                          progress: Math.min(positiveDelta / dragCloseThresholdInPx, 1),
+                      }
+                    : state,
+            );
 
             if (positiveDelta >= dragCloseThresholdInPx) {
                 dragStartYRef.current = null;
-                setIsDraggingHandle(false);
                 closePopupViaDrag();
                 return true;
             }
 
             return false;
         },
-        [closePopupViaDrag, dragCloseThresholdInPx, popupAlignment],
+        [closePopupViaDrag, dragCloseThresholdInPx, inputValue, popupAlignment],
     );
 
-    const handleDragPointerDown = useCallback((event: PointerEvent<HTMLDivElement>) => {
-        if (event.pointerType === 'touch') {
-            return;
-        }
-        if (event.pointerType === 'mouse' && event.button !== 0) {
-            return;
-        }
-        if (dragStartYRef.current !== null) {
-            return;
-        }
-        activePointerIdRef.current = event.pointerId;
-        dragStartYRef.current = event.clientY;
-        hasTriggeredDragCloseRef.current = false;
-        setDragOffset(0);
-        setDragProgress(0);
-        setIsDraggingHandle(true);
-        event.currentTarget.setPointerCapture(event.pointerId);
-        event.stopPropagation();
-    }, []);
+    const handleDragPointerDown = useCallback(
+        (event: PointerEvent<HTMLDivElement>) => {
+            if (event.pointerType === 'touch') {
+                return;
+            }
+            if (event.pointerType === 'mouse' && event.button !== 0) {
+                return;
+            }
+            if (dragStartYRef.current !== null) {
+                return;
+            }
+            activePointerIdRef.current = event.pointerId;
+            dragStartYRef.current = event.clientY;
+            hasTriggeredDragCloseRef.current = false;
+            setDragState({
+                inputValue,
+                isDragging: true,
+                offset: 0,
+                progress: 0,
+            });
+            event.currentTarget.setPointerCapture(event.pointerId);
+            event.stopPropagation();
+        },
+        [inputValue],
+    );
 
     const handleDragPointerMove = useCallback(
         (event: PointerEvent<HTMLDivElement>) => {
@@ -309,15 +328,22 @@ const MentionFinder: FC<MentionFinderProps> = ({
     const resetDragState = useCallback(
         (shouldClose = false) => {
             dragStartYRef.current = null;
-            setIsDraggingHandle(false);
             if (shouldClose) {
                 closePopupViaDrag();
             } else {
-                setDragOffset(0);
-                setDragProgress(0);
+                setDragState((state) =>
+                    state.inputValue === inputValue
+                        ? {
+                              ...state,
+                              isDragging: false,
+                              offset: 0,
+                              progress: 0,
+                          }
+                        : state,
+                );
             }
         },
-        [closePopupViaDrag],
+        [closePopupViaDrag, inputValue],
     );
 
     const handleDragPointerUp = useCallback(
@@ -347,24 +373,30 @@ const MentionFinder: FC<MentionFinderProps> = ({
         [resetDragState],
     );
 
-    const handleDragTouchStart = useCallback((event: TouchEvent<HTMLDivElement>) => {
-        if (event.touches.length === 0 || dragStartYRef.current !== null) {
-            return;
-        }
+    const handleDragTouchStart = useCallback(
+        (event: TouchEvent<HTMLDivElement>) => {
+            if (event.touches.length === 0 || dragStartYRef.current !== null) {
+                return;
+            }
 
-        const touch = event.touches[0];
+            const touch = event.touches[0];
 
-        if (!touch) return;
+            if (!touch) return;
 
-        activeTouchIdRef.current = touch.identifier;
-        dragStartYRef.current = touch.clientY;
-        hasTriggeredDragCloseRef.current = false;
-        setDragOffset(0);
-        setDragProgress(0);
-        setIsDraggingHandle(true);
-        event.preventDefault();
-        event.stopPropagation();
-    }, []);
+            activeTouchIdRef.current = touch.identifier;
+            dragStartYRef.current = touch.clientY;
+            hasTriggeredDragCloseRef.current = false;
+            setDragState({
+                inputValue,
+                isDragging: true,
+                offset: 0,
+                progress: 0,
+            });
+            event.preventDefault();
+            event.stopPropagation();
+        },
+        [inputValue],
+    );
 
     const handleDragTouchMove = useCallback(
         (event: TouchEvent<HTMLDivElement>) => {
@@ -459,25 +491,17 @@ const MentionFinder: FC<MentionFinderProps> = ({
         handleDragTouchCancel,
     ]);
 
-    useEffect(() => {
-        if (!enableDragHandle || !shouldRenderPopup) {
-            setOverlayContainer(null);
-            return;
+    const overlayContainer = useMemo(() => {
+        if (!enableDragHandle || !shouldRenderPopup || typeof document === 'undefined') {
+            return null;
         }
 
-        const container = popupRef.current?.closest(
-            overlayContainerSelector ?? '.dialog-inner, .chayns-threads, .page-provider, .tapp',
+        return (
+            popupElement?.closest(
+                overlayContainerSelector ?? '.dialog-inner, .chayns-threads, .page-provider, .tapp',
+            ) ?? document.body
         );
-
-        if (container) {
-            setOverlayContainer(container);
-            return;
-        }
-
-        if (typeof document !== 'undefined') {
-            setOverlayContainer(document.body);
-        }
-    }, [enableDragHandle, overlayContainerSelector, shouldRenderPopup]);
+    }, [enableDragHandle, overlayContainerSelector, popupElement, shouldRenderPopup]);
 
     const overlayPortal =
         overlayContainer && enableDragHandle
@@ -504,7 +528,9 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 <AnimatePresence initial={false}>
                     {shouldRenderPopup && (
                         <StyledMotionMentionFinderPopup
-                            ref={popupRef}
+                            ref={(node) => {
+                                setPopupElement(node);
+                            }}
                             animate={{
                                 height: 'auto',
                                 opacity: 1,
