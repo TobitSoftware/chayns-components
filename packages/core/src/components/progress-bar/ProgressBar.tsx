@@ -1,12 +1,4 @@
-import React, {
-    FC,
-    useContext,
-    useEffect,
-    useLayoutEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import React, { FC, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useUuid } from '../../hooks/uuid';
 import {
     StyledMotionProgressBarProgress,
@@ -90,7 +82,6 @@ const ProgressBar: FC<ProgressBarProps> = ({
     height,
 }) => {
     const uuid = useUuid();
-    const [coordinates, setCoordinates] = useState<{ x: number; y: number }>();
     const popupRef = useRef<PopupRef | null>(null);
     const [hostContainer, setHostContainer] = useState<HTMLDivElement | null>(null);
 
@@ -118,12 +109,8 @@ const ProgressBar: FC<ProgressBarProps> = ({
     }, [percentage, showShine]);
 
     useLayoutEffect(() => {
-        if (thumbLabel) setCoordinates(hostContainer?.getBoundingClientRect());
+        popupRef.current?.show();
     }, [hostContainer, thumbLabel]);
-
-    useEffect(() => {
-        if (coordinates) popupRef.current?.show();
-    }, [coordinates]);
 
     const progressBar = useMemo(() => {
         if (shouldHideProgress) {
