@@ -170,10 +170,10 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const [inputToListValue, setInputToListValue] = useState<string>('');
         const [groups, setGroups] = useState<string[]>(['all']);
         const [shouldShowBody, setShouldShowBody] = useState(false);
+        const [boxRef, setBoxRef] = useState<HTMLElement | null>(null);
 
         const uuid = useUuid();
 
-        const boxRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement>(null);
         const inputRef = useRef<HTMLInputElement | null>(null);
         const tagInputRef = useRef<TagInputRef>(null);
@@ -774,7 +774,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         return useMemo(
             () => (
-                <StyledSearchBox ref={boxRef} key={`search-box-${uuid}`}>
+                <StyledSearchBox ref={(instance) => setBoxRef(instance)} key={`search-box-${uuid}`}>
                     <div id={`search_box_input${uuid}`}>
                         {tagInputSettings ? (
                             <TagInput
@@ -805,9 +805,9 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             />
                         )}
                     </div>
-                    {boxRef.current && (
+                    {boxRef && (
                         <DropdownBodyWrapper
-                            anchorElement={boxRef.current}
+                            anchorElement={boxRef}
                             container={container}
                             direction={dropdownDirection}
                             maxHeight={300}
@@ -832,6 +832,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 </StyledSearchBox>
             ),
             [
+                boxRef,
                 container,
                 content,
                 dropdownDirection,
