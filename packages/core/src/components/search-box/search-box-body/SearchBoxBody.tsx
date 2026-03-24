@@ -1,12 +1,13 @@
 import React, {
     forwardRef,
     MouseEvent,
-    type ReactNode,
     UIEvent,
     useCallback,
+    useEffect,
     useMemo,
     useRef,
     useState,
+    type ReactNode,
 } from 'react';
 import { useElementSize } from '../../../hooks/element';
 import { useUuid } from '../../../hooks/uuid';
@@ -44,7 +45,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
         ref,
     ) => {
         const [hasScrolled, setHasScrolled] = useState(false);
-        const [currentGroupName, setCurrentGroupName] = useState<string>();
+        const [currentGroupName, setCurrentGroupName] = useState('');
 
         const headRef = useRef<HTMLDivElement>(null);
 
@@ -57,7 +58,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
             [headSize?.height],
         );
 
-        const derivedGroupName = useMemo(() => {
+        useEffect(() => {
             const element = document.getElementById(`searchBoxContent__${uuid}`);
 
             if (
@@ -65,10 +66,11 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                 ((selectedGroups?.length === 1 && selectedGroups[0] === 'all') ||
                     selectedGroups?.length !== 1)
             ) {
-                return getCurrentGroupName(element);
+                setCurrentGroupName(getCurrentGroupName(element));
+            } else {
+                setCurrentGroupName('');
             }
-            return '';
-        }, [selectedGroups, uuid]);
+        }, [uuid, children, selectedGroups]);
 
         const handlePreventDefault = (event: MouseEvent) => {
             event.preventDefault();
@@ -102,7 +104,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                         <StyledSearchBoxBodyHead
                             ref={headRef}
                             $hasScrolled={hasScrolled}
-                            $hasGroupName={!!(currentGroupName ?? derivedGroupName)}
+                            $hasGroupName={!!currentGroupName}
                         >
                             {!shouldHideFilterButtons && (
                                 <FilterButtons
@@ -113,7 +115,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                                 />
                             )}
                             <StyledSearchBoxBodyHeadGroupName>
-                                {(currentGroupName ?? derivedGroupName).replace('_', '')}
+                                {currentGroupName.replace('_', '')}
                             </StyledSearchBoxBodyHeadGroupName>
                         </StyledSearchBoxBodyHead>
                     )}
@@ -133,7 +135,6 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
             [
                 children,
                 currentGroupName,
-                derivedGroupName,
                 filterButtons,
                 handleScroll,
                 hasScrolled,
