@@ -17,7 +17,7 @@ export type SkinTonePopupProps = {
     onSelect: (emojiWithSkinTone: string) => void;
     overlayPosition: { top: number };
     position: { left: number; top: number };
-    emojiList: { [x: string]: { skin_tone_support: any } };
+    emojiList: { [x: string]: { skin_tone_support: boolean } };
 };
 
 const SkinTonePopup: FC<SkinTonePopupProps> = ({
