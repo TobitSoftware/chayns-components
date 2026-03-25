@@ -1,4 +1,4 @@
-import React, { createContext, type ReactNode } from 'react';
+import { createContext, type ReactNode } from 'react';
 
 export interface IListContext {
     isAnyItemExpandable: boolean;
