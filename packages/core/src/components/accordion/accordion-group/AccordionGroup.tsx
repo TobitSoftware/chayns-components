@@ -84,11 +84,30 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
         [setOpenAccordionUuid],
     );
 
+    const [elementUuids, setElementUuids] = useState<(string | null)[]>([]);
+
+    useEffect(() => {
+        const updateUuids = () => {
+            const elements = document.querySelectorAll('[data-uuid]');
+            const uuids = Array.from(elements).map((el) => el.getAttribute('data-uuid'));
+            setElementUuids(uuids);
+        };
+
+        updateUuids();
+
+        const observer = new MutationObserver(updateUuids);
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['data-uuid'],
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
     const accordionUuids = useMemo(() => {
         if (childrenCount === 0) return [];
-
-        const elements = document.querySelectorAll('[data-uuid]');
-        const elementUuids = Array.from(elements).map((el) => el.getAttribute('data-uuid'));
 
         const result: string[] = [];
 
@@ -101,7 +120,7 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
         });
 
         return result;
-    }, [accordionGroupId, childrenCount]);
+    }, [accordionGroupId, childrenCount, elementUuids]);
 
     useEffect(() => {
         if (isInitialRenderRef.current) {
@@ -115,20 +134,17 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
         }
     }, [onClose, onOpen, openAccordionUuid]);
 
-    const providerValue = useMemo<IAccordionGroupContext>(
-        () => ({
-            isWrapped: shouldWrap,
-            openAccordionUuid,
-            setOpenAccordionUuid,
-            updateOpenAccordionUuid,
-            accordionUuids,
-            accordionGroupUuid: accordionGroupId,
-        }),
-        [accordionGroupId, accordionUuids, shouldWrap, openAccordionUuid, updateOpenAccordionUuid],
-    );
+    const providerValue = (): IAccordionGroupContext => ({
+        isWrapped: shouldWrap,
+        openAccordionUuid,
+        setOpenAccordionUuid,
+        updateOpenAccordionUuid,
+        accordionUuids,
+        accordionGroupUuid: accordionGroupId,
+    });
 
     return (
-        <AccordionGroupContext.Provider value={providerValue}>
+        <AccordionGroupContext.Provider value={providerValue()}>
             <MotionConfig transition={{ type: 'tween' }}>
                 <AnimatePresence initial={false}>{children}</AnimatePresence>
             </MotionConfig>
