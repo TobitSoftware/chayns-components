@@ -236,16 +236,18 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         null,
     );
     const latestHandledRequestRef = useRef<number>(0);
+    const nextRequestIdRef = useRef<number>(0);
+    const throttledRequestRef = useRef<ThrottledFunction<() => void> | null>(null);
 
-    const throttledRequest = useRef<ThrottledFunction<() => void>>(
-        throttle(
+    useEffect(() => {
+        const throttledRequest = throttle(
             async () => {
                 const args = latestArgsRef.current;
 
                 if (!args) return;
 
                 const { search: searchString, filter } = args;
-                const requestTimestamp = Date.now();
+                const requestId = ++nextRequestIdRef.current;
 
                 filter.forEach((key) => {
                     updateLoadingState(key, LoadingState.Pending);
@@ -257,11 +259,11 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                     skipMap: {},
                 });
 
-                if (requestTimestamp < latestHandledRequestRef.current) {
+                if (requestId < latestHandledRequestRef.current) {
                     return;
                 }
 
-                latestHandledRequestRef.current = requestTimestamp;
+                latestHandledRequestRef.current = requestId;
 
                 if (!result) return;
 
@@ -309,8 +311,17 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             },
             THROTTLE_INTERVAL,
             { leading: false, trailing: true },
-        ),
-    ).current;
+        );
+
+        throttledRequestRef.current = throttledRequest as ThrottledFunction<() => void> | null;
+
+        return () => {
+            throttledRequest.cancel();
+            if (throttledRequestRef.current === throttledRequest) {
+                throttledRequestRef.current = null;
+            }
+        };
+    }, [friends, friendsPriority, updateData, updateLoadingState]);
 
     useEffect(() => {
         dataRef.current = data;
@@ -400,7 +411,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         } else {
             latestArgsRef.current = { search, filter: active };
 
-            throttledRequest();
+            throttledRequestRef.current?.();
         }
     }, [
         filterTypes,
@@ -410,19 +421,11 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         friendsPriority,
         updateData,
         updateLoadingState,
-        throttledRequest,
         searchData,
         uacFilter,
         searchLocal,
         entries,
     ]);
-
-    useEffect(
-        () => () => {
-            throttledRequest.cancel();
-        },
-        [throttledRequest],
-    );
 
     // load initial data
     useEffect(() => {
