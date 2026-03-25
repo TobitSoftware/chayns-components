@@ -1,10 +1,9 @@
 import { motion } from 'motion/react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 import { DropdownCoordinates, DropdownTransform } from '../../../types/dropdown';
 
 type StyledMotionDelayedDropdownContentProps = WithTheme<{
-    $shouldHideContent: boolean;
     $coordinates: DropdownCoordinates;
     $transform: DropdownTransform;
 }>;
@@ -22,14 +21,5 @@ export const StyledMotionDelayedDropdownContent = styled(
 
     transform: ${({ $transform }) => `translate(${$transform.x}, ${$transform.y})`};
 
-    ${({ $shouldHideContent }) =>
-        $shouldHideContent
-            ? css`
-                  visibility: hidden;
-                  pointer-events: none;
-                  z-index: -1;
-              `
-            : css`
-                  z-index: 15;
-              `}
+    z-index: 15;
 `;
