@@ -10,6 +10,7 @@ import { getMarkdownTables, parseMarkdown } from './markdown/formatMarkdown';
 interface FormatStringOptions extends ParseBBCodesOptions {
     parseMarkdown?: boolean;
     parseBBCode?: boolean;
+    defaultHtmlTag?: string;
 }
 
 interface FormatStringResult {
@@ -34,6 +35,7 @@ export const formatStringToHtml = (
         parseBBCode: parseBBCodeOption = false,
         customInlineLevelBBCodeTags = [],
         customBlockLevelBBCodeTags = [],
+        defaultHtmlTag,
     } = options || {};
 
     let formattedString = string;
@@ -70,7 +72,7 @@ export const formatStringToHtml = (
                 });
             }
 
-            formattedString = parseMarkdown(formattedString, parseBBCodeOption);
+            formattedString = parseMarkdown(formattedString, parseBBCodeOption, defaultHtmlTag);
 
             // Remove trailing \n
             formattedString = formattedString.replace(/\n$/, '');

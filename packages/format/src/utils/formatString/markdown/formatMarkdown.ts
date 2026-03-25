@@ -9,9 +9,11 @@ const inlineTextRule = /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<![`*_]|\b_|$)
 
 const TABLE_ID_PREFIX = 'formatted-table-';
 
+let currentDefaultHTMLTag: string | null = 'p';
+
 /*
-   The marked Pipeline, including tokenizer, renderer and hooks, are explained here:
-   https://marked.js.org/using_pro
+ The marked Pipeline, including tokenizer, renderer and hooks, are explained here:
+ https://marked.js.org/using_pro
 */
 
 const tokenizer: TokenizerObject = {
@@ -69,7 +71,7 @@ const tokenizer: TokenizerObject = {
     },
     // Disables the conversion of backslash at the end of a line to a line break. This is needed for
     // LaTeX formulas, since multiline LaTeX formulas have 2 backslashes at the end of their lines.
-    // Without this '\\' would be converted to '\<br>' which breaks LaTeX formulas.
+    // Without this '\\' would be converted to '\' which breaks LaTeX formulas.
     br() {
         return undefined;
     },
@@ -124,8 +126,7 @@ const renderer: RendererObject = {
             return text;
         }
 
-        let result = `<a href="${cleanHref}" rel="noopener noreferrer" target="_blank"`;
-
+        let result = `<a href="${cleanHref}" target="_blank"`;
         if (title) {
             result += ` title="${title}"`;
         }
@@ -157,6 +158,12 @@ const renderer: RendererObject = {
         // Ensures that the default listitem renderer from marked js is used.
         return false;
     },
+    // Custom paragraph renderer to support dynamic HTML tags
+    paragraph({ tokens }: Tokens.Paragraph): string {
+        const text = this.parser.parseInline(tokens);
+        if (!currentDefaultHTMLTag) return text;
+        return `<${currentDefaultHTMLTag}>${text}</${currentDefaultHTMLTag}>\n`;
+    },
 };
 
 const postprocess = (html: string): string => {
@@ -175,8 +182,10 @@ marked.use({ tokenizer, renderer, hooks: { postprocess } });
 
 // Parses Markdown following the GitHub flavored Markdown specification. The tokenizer and renderer
 // are slightly modified to prevent HTML escaping in code block and inline code.
-export const parseMarkdown = (text: string, parseBBCode: boolean) =>
-    marked.parse(text, {
+export const parseMarkdown = (text: string, parseBBCode: boolean, defaultHTMLTag?: string) => {
+    currentDefaultHTMLTag = defaultHTMLTag ?? null;
+
+    const result = marked.parse(text, {
         walkTokens: (token) => {
             if (parseBBCode && (token.type === 'codespan' || token.type === 'code')) {
                 // eslint-disable-next-line no-param-reassign
@@ -187,9 +196,13 @@ export const parseMarkdown = (text: string, parseBBCode: boolean) =>
         },
     }) as string;
 
-// It is important that, &amp; is replaced last to prevent double escaping.
+    currentDefaultHTMLTag = 'p'; // Reset to default
+    return result;
+};
+
+// It is important that, & is replaced last to prevent double escaping.
 const unescapeHtml = (text: string) =>
-    text.replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&amp;', '&');
+    text.replaceAll('<', '<').replaceAll('>', '>').replaceAll('&', '&');
 
 export const getMarkdownTables = (text: string): TableObject[] => {
     const tableTokens: Tokens.Table[] = [];

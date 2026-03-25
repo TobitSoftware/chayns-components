@@ -7,19 +7,19 @@ describe('HTML Formatter Function', () => {
     describe('Format Plain Text', () => {
         describe('Line breaks', () => {
             test('should format line breaks correctly', () => {
-                const result = formatStringToHtml('Line 1\nLine 2');
+                const result = formatStringToHtml('Line 1\nLine 2', { defaultHtmlTag: 'p' });
                 expect(result.html).toEqual('<p>Line 1\nLine 2</p>');
                 expect(result.tables).toEqual([]);
             });
 
             test('should format multiple line breaks correctly', () => {
-                const result = formatStringToHtml('Line 1\n\nLine 2');
+                const result = formatStringToHtml('Line 1\n\nLine 2', { defaultHtmlTag: 'p' });
                 expect(result.html).toEqual('<p>Line 1</p>\n<p>Line 2</p>');
                 expect(result.tables).toEqual([]);
             });
 
             test('should remove trailing and leading new lines', () => {
-                const result = formatStringToHtml('\n\n\nLine 1\n\n\n');
+                const result = formatStringToHtml('\n\n\nLine 1\n\n\n', { defaultHtmlTag: 'p' });
                 expect(result.html).toEqual('<p>Line 1</p>');
                 expect(result.tables).toEqual([]);
             });
@@ -27,13 +27,15 @@ describe('HTML Formatter Function', () => {
 
         describe('Whitespaces', () => {
             test('should not remove repeated whitespaces', () => {
-                const result = formatStringToHtml('Text    with    spaces');
+                const result = formatStringToHtml('Text    with    spaces', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(result.html).toEqual('<p>Text    with    spaces</p>');
                 expect(result.tables).toEqual([]);
             });
 
             test('should not remove leading and trailing whitespaces', () => {
-                const result = formatStringToHtml('   Text   ');
+                const result = formatStringToHtml('   Text   ', { defaultHtmlTag: 'p' });
                 expect(result.html).toEqual('<p>   Text   </p>');
                 expect(result.tables).toEqual([]);
             });
@@ -41,18 +43,21 @@ describe('HTML Formatter Function', () => {
 
         describe('HTML', () => {
             test('should escape < and > correctly', () => {
-                const resultEscape = formatStringToHtml('<div>Test</div>');
+                const resultEscape = formatStringToHtml('<div>Test</div>', { defaultHtmlTag: 'p' });
                 expect(resultEscape.html).toEqual('<p>&lt;div&gt;Test&lt;/div&gt;</p>');
                 expect(resultEscape.tables).toEqual([]);
             });
 
             test('should not escape &', () => {
-                const resultEscape1 = formatStringToHtml('&lt;div&gt;Test&lt;/div&gt;');
+                const resultEscape1 = formatStringToHtml('&lt;div&gt;Test&lt;/div&gt;', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(resultEscape1.html).toEqual('<p>&lt;div&gt;Test&lt;/div&gt;</p>');
                 expect(resultEscape1.tables).toEqual([]);
 
                 const resultEscape2 = formatStringToHtml(
                     '&amp;lt;div&amp;gt;Test&amp;lt;/div&amp;gt;',
+                    { defaultHtmlTag: 'p' },
                 );
                 expect(resultEscape2.html).toEqual(
                     '<p>&amp;lt;div&amp;gt;Test&amp;lt;/div&amp;gt;</p>',
@@ -65,7 +70,7 @@ describe('HTML Formatter Function', () => {
 
         describe('URLs', () => {
             test('should not format URLs', () => {
-                const result = formatStringToHtml('https://example.com');
+                const result = formatStringToHtml('https://example.com', { defaultHtmlTag: 'p' });
                 expect(result.html).toEqual('<p>https://example.com</p>');
                 expect(result.tables).toEqual([]);
             });
@@ -75,55 +80,61 @@ describe('HTML Formatter Function', () => {
     describe('Format Markdown', () => {
         describe('All Elements', () => {
             test('should format text styling correctly', () => {
-                const boldResult = formatStringToHtml('**bold**');
+                const boldResult = formatStringToHtml('**bold**', { defaultHtmlTag: 'p' });
                 expect(boldResult.html).toEqual('<p><strong>bold</strong></p>');
                 expect(boldResult.tables).toEqual([]);
 
-                const italicResult = formatStringToHtml('*italic*');
+                const italicResult = formatStringToHtml('*italic*', { defaultHtmlTag: 'p' });
                 expect(italicResult.html).toEqual('<p><em>italic</em></p>');
                 expect(italicResult.tables).toEqual([]);
 
-                const inlineCodeResult = formatStringToHtml('`inline code`');
+                const inlineCodeResult = formatStringToHtml('`inline code`', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(inlineCodeResult.html).toEqual('<p><code>inline code</code></p>');
                 expect(inlineCodeResult.tables).toEqual([]);
             });
 
             test('should format headings correctly', () => {
-                const h1Result = formatStringToHtml('# h1');
+                const h1Result = formatStringToHtml('# h1', { defaultHtmlTag: 'p' });
                 expect(h1Result.html).toEqual('<h1>h1</h1>');
                 expect(h1Result.tables).toEqual([]);
 
-                const h2Result = formatStringToHtml('## h2');
+                const h2Result = formatStringToHtml('## h2', { defaultHtmlTag: 'p' });
                 expect(h2Result.html).toEqual('<h2>h2</h2>');
                 expect(h2Result.tables).toEqual([]);
 
-                const h3Result = formatStringToHtml('### h3');
+                const h3Result = formatStringToHtml('### h3', { defaultHtmlTag: 'p' });
                 expect(h3Result.html).toEqual('<h3>h3</h3>');
                 expect(h3Result.tables).toEqual([]);
 
-                const h4Result = formatStringToHtml('#### h4');
+                const h4Result = formatStringToHtml('#### h4', { defaultHtmlTag: 'p' });
                 expect(h4Result.html).toEqual('<h4>h4</h4>');
                 expect(h4Result.tables).toEqual([]);
 
-                const h5Result = formatStringToHtml('##### h5');
+                const h5Result = formatStringToHtml('##### h5', { defaultHtmlTag: 'p' });
                 expect(h5Result.html).toEqual('<h5>h5</h5>');
                 expect(h5Result.tables).toEqual([]);
 
-                const h6Result = formatStringToHtml('###### h6');
+                const h6Result = formatStringToHtml('###### h6', { defaultHtmlTag: 'p' });
                 expect(h6Result.html).toEqual('<h6>h6</h6>');
                 expect(h6Result.tables).toEqual([]);
             });
 
             test('should format links correctly', () => {
-                const result = formatStringToHtml('[Link](https://example.com)');
+                const result = formatStringToHtml('[Link](https://example.com)', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(result.html).toEqual(
-                    '<p><a href="https://example.com" rel="noopener noreferrer" target="_blank">Link</a></p>',
+                    '<p><a href="https://example.com" target="_blank">Link</a></p>',
                 );
                 expect(result.tables).toEqual([]);
             });
 
             test('should format images correctly', () => {
-                const result = formatStringToHtml('![Alt Text](https://example.com/image.jpg)');
+                const result = formatStringToHtml('![Alt Text](https://example.com/image.jpg)', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(result.html).toEqual(
                     '<p><img src="https://example.com/image.jpg" alt="Alt Text"></p>',
                 );
@@ -136,19 +147,27 @@ describe('HTML Formatter Function', () => {
                 const expectedOrderedListResult =
                     '<ol>\n<li value="1">Item 1</li>\n<li value="2">Item 2</li>\n<li value="3">Item 3</li>\n</ol>';
 
-                const unorderedListResult1 = formatStringToHtml('- Item 1\n- Item 2\n- Item 3');
+                const unorderedListResult1 = formatStringToHtml('- Item 1\n- Item 2\n- Item 3', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(unorderedListResult1.html).toEqual(expectedUnorderedListResult);
                 expect(unorderedListResult1.tables).toEqual([]);
 
-                const unorderedListResult2 = formatStringToHtml('* Item 1\n* Item 2\n* Item 3');
+                const unorderedListResult2 = formatStringToHtml('* Item 1\n* Item 2\n* Item 3', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(unorderedListResult2.html).toEqual(expectedUnorderedListResult);
                 expect(unorderedListResult2.tables).toEqual([]);
 
-                const orderedListResult = formatStringToHtml('1. Item 1\n2. Item 2\n3. Item 3');
+                const orderedListResult = formatStringToHtml('1. Item 1\n2. Item 2\n3. Item 3', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(orderedListResult.html).toEqual(expectedOrderedListResult);
                 expect(orderedListResult.tables).toEqual([]);
 
-                const orderedListResult2 = formatStringToHtml('1) Item 1\n2) Item 2\n3) Item 3');
+                const orderedListResult2 = formatStringToHtml('1) Item 1\n2) Item 2\n3) Item 3', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(orderedListResult2.html).toEqual(expectedOrderedListResult);
                 expect(orderedListResult2.tables).toEqual([]);
             });
@@ -156,21 +175,25 @@ describe('HTML Formatter Function', () => {
             test('should format thematic breaks correctly', () => {
                 const expectedThematicBreakResult = '<hr>';
 
-                const result1 = formatStringToHtml('---');
+                const result1 = formatStringToHtml('---', { defaultHtmlTag: 'p' });
                 expect(result1.html).toEqual(expectedThematicBreakResult);
                 expect(result1.tables).toEqual([]);
 
-                const result2 = formatStringToHtml('***');
+                const result2 = formatStringToHtml('***', { defaultHtmlTag: 'p' });
                 expect(result2.html).toEqual(expectedThematicBreakResult);
                 expect(result2.tables).toEqual([]);
             });
 
             test('should format code blocks correctly', () => {
-                const resultWithoutLanguage = formatStringToHtml('```\nconst a = 1;\n```');
+                const resultWithoutLanguage = formatStringToHtml('```\nconst a = 1;\n```', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(resultWithoutLanguage.html).toEqual('<pre><code>const a = 1;</code></pre>');
                 expect(resultWithoutLanguage.tables).toEqual([]);
 
-                const resultWithLanguage = formatStringToHtml('```js\nconst a = 1;\n```');
+                const resultWithLanguage = formatStringToHtml('```js\nconst a = 1;\n```', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(resultWithLanguage.html).toEqual(
                     '<pre><code class="language-js">const a = 1;</code></pre>',
                 );
@@ -180,7 +203,7 @@ describe('HTML Formatter Function', () => {
             test('should format tables correctly', () => {
                 const inputString =
                     '| Header 1 | Header 2 |\n|----------|----------|\n| Cell 1   | Cell 2   |';
-                const result = formatStringToHtml(inputString);
+                const result = formatStringToHtml(inputString, { defaultHtmlTag: 'p' });
                 expect(removeLinebreaks(result.html)).toEqual(
                     '<table id="formatted-table-0"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead><tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody></table>',
                 );
@@ -197,13 +220,17 @@ describe('HTML Formatter Function', () => {
         describe('Inline Code', () => {
             describe('HTML In Code', () => {
                 test('should escape < and > within inline code correctly', () => {
-                    const result1 = formatStringToHtml('`<div>Test</div>`');
+                    const result1 = formatStringToHtml('`<div>Test</div>`', {
+                        defaultHtmlTag: 'p',
+                    });
                     expect(result1.html).toEqual('<p><code>&lt;div&gt;Test&lt;/div&gt;</code></p>');
                     expect(result1.tables).toEqual([]);
                 });
 
                 test('should not escape & within inline code', () => {
-                    const resultEscape1 = formatStringToHtml('`&lt;div&gt;Test&lt;/div&gt;`');
+                    const resultEscape1 = formatStringToHtml('`&lt;div&gt;Test&lt;/div&gt;`', {
+                        defaultHtmlTag: 'p',
+                    });
                     expect(resultEscape1.html).toEqual(
                         '<p><code>&lt;div&gt;Test&lt;/div&gt;</code></p>',
                     );
@@ -211,6 +238,7 @@ describe('HTML Formatter Function', () => {
 
                     const resultEscape2 = formatStringToHtml(
                         '`&amp;lt;div&amp;gt;Test&amp;lt;/div&amp;gt;`',
+                        { defaultHtmlTag: 'p' },
                     );
                     expect(resultEscape2.html).toEqual(
                         '<p><code>&amp;lt;div&amp;gt;Test&amp;lt;/div&amp;gt;</code></p>',
@@ -220,13 +248,16 @@ describe('HTML Formatter Function', () => {
             });
 
             test('should not format markdown within inline code', () => {
-                const result = formatStringToHtml('`**bold** *italic*`');
+                const result = formatStringToHtml('`**bold** *italic*`', { defaultHtmlTag: 'p' });
                 expect(result.html).toEqual('<p><code>**bold** *italic*</code></p>');
                 expect(result.tables).toEqual([]);
             });
 
             test('should not format bb-code within inline code', () => {
-                const result = formatStringToHtml('`[b]bold[/b]`', { parseBBCode: true });
+                const result = formatStringToHtml('`[b]bold[/b]`', {
+                    parseBBCode: true,
+                    defaultHtmlTag: 'p',
+                });
                 expect(result.html).toEqual('<p><code>[b]bold[/b]</code></p>');
                 expect(result.tables).toEqual([]);
             });
@@ -236,6 +267,7 @@ describe('HTML Formatter Function', () => {
             test('should format code blocks with multiple lines correctly', () => {
                 const resultWithoutLanguage = formatStringToHtml(
                     '```\nconst a = 1;\nconst b = 2;\n```',
+                    { defaultHtmlTag: 'p' },
                 );
                 expect(resultWithoutLanguage.html).toEqual(
                     '<pre><code>const a = 1;\nconst b = 2;</code></pre>',
@@ -244,6 +276,7 @@ describe('HTML Formatter Function', () => {
 
                 const resultWithLanguage = formatStringToHtml(
                     '```js\nconst a = 1;\nconst b = 2;\n```',
+                    { defaultHtmlTag: 'p' },
                 );
                 expect(resultWithLanguage.html).toEqual(
                     '<pre><code class="language-js">const a = 1;\nconst b = 2;</code></pre>',
@@ -252,20 +285,24 @@ describe('HTML Formatter Function', () => {
             });
 
             test('should not format 4 spaces as code block', () => {
-                const result = formatStringToHtml('    const a = 1;');
+                const result = formatStringToHtml('    const a = 1;', { defaultHtmlTag: 'p' });
                 expect(result.html).toEqual('<p>    const a = 1;</p>');
                 expect(result.tables).toEqual([]);
             });
 
             describe('HTML In Code', () => {
                 test('should escape < and > within code block', () => {
-                    const resultWithoutLanguage = formatStringToHtml('```\n<div>Test</div>\n```');
+                    const resultWithoutLanguage = formatStringToHtml('```\n<div>Test</div>\n```', {
+                        defaultHtmlTag: 'p',
+                    });
                     expect(resultWithoutLanguage.html).toEqual(
                         '<pre><code>&lt;div&gt;Test&lt;/div&gt;</code></pre>',
                     );
                     expect(resultWithoutLanguage.tables).toEqual([]);
 
-                    const resultWithLanguage = formatStringToHtml('```html\n<div>Test</div>\n```');
+                    const resultWithLanguage = formatStringToHtml('```html\n<div>Test</div>\n```', {
+                        defaultHtmlTag: 'p',
+                    });
                     expect(resultWithLanguage.html).toEqual(
                         '<pre><code class="language-html">&lt;div&gt;Test&lt;/div&gt;</code></pre>',
                     );
@@ -275,6 +312,7 @@ describe('HTML Formatter Function', () => {
                 test('should not escape & within code block', () => {
                     const resultEscape1 = formatStringToHtml(
                         '```\n&lt;div&gt;Test&lt;/div&gt;\n```',
+                        { defaultHtmlTag: 'p' },
                     );
                     expect(resultEscape1.html).toEqual(
                         '<pre><code>&lt;div&gt;Test&lt;/div&gt;</code></pre>',
@@ -283,6 +321,7 @@ describe('HTML Formatter Function', () => {
 
                     const resultEscape2 = formatStringToHtml(
                         '```\n&amp;lt;div&amp;gt;Test&amp;lt;/div&amp;gt;\n```',
+                        { defaultHtmlTag: 'p' },
                     );
                     expect(resultEscape2.html).toEqual(
                         '<pre><code>&amp;lt;div&amp;gt;Test&amp;lt;/div&amp;gt;</code></pre>',
@@ -292,11 +331,15 @@ describe('HTML Formatter Function', () => {
             });
 
             test('should not format markdown within code block', () => {
-                const resultWithoutLanguage = formatStringToHtml('```\n**Test**\n```');
+                const resultWithoutLanguage = formatStringToHtml('```\n**Test**\n```', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(resultWithoutLanguage.html).toEqual('<pre><code>**Test**</code></pre>');
                 expect(resultWithoutLanguage.tables).toEqual([]);
 
-                const resultWithLanguage = formatStringToHtml('```html\n**Test**\n```');
+                const resultWithLanguage = formatStringToHtml('```html\n**Test**\n```', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(resultWithLanguage.html).toEqual(
                     '<pre><code class="language-html">**Test**</code></pre>',
                 );
@@ -304,11 +347,15 @@ describe('HTML Formatter Function', () => {
             });
 
             test('should not format bb-code within code block', () => {
-                const resultWithoutLanguage = formatStringToHtml('```\n[b]Test[/b]\n```');
+                const resultWithoutLanguage = formatStringToHtml('```\n[b]Test[/b]\n```', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(resultWithoutLanguage.html).toEqual('<pre><code>[b]Test[/b]</code></pre>');
                 expect(resultWithoutLanguage.tables).toEqual([]);
 
-                const resultWithLanguage = formatStringToHtml('```html\n[b]Test[/b]\n```');
+                const resultWithLanguage = formatStringToHtml('```html\n[b]Test[/b]\n```', {
+                    defaultHtmlTag: 'p',
+                });
                 expect(resultWithLanguage.html).toEqual(
                     '<pre><code class="language-html">[b]Test[/b]</code></pre>',
                 );
@@ -356,14 +403,15 @@ describe('HTML Formatter Function', () => {
                     '| Header 1 | Header 2 | Header 3 |\n|----------|----------|----------|\n| <div>Cell 1</div> | &lt;div&gt;Cell 2&lt;/div&gt; | &amp;lt;div&amp;gt;Cell 3&amp;lt;/div&amp;gt; |';
                 const result = formatStringToHtml(inputString, {
                     parseBBCode: true,
+                    defaultHtmlTag: 'p',
                 });
                 expect(removeLinebreaks(result.html)).toEqual(
                     '<table id="formatted-table-0"><thead><tr><th>Header 1</th><th>Header 2</th><th>Header 3</th></tr></thead><tbody><tr><td>&lt;div&gt;Cell 1&lt;/div&gt;</td><td>&lt;div&gt;Cell 2&lt;/div&gt;</td><td>&amp;lt;div&amp;gt;Cell 3&amp;lt;/div&amp;gt;</td></tr></tbody></table>',
                 );
                 expect(result.tables).toEqual([
                     {
-                        csv: 'Header 1,Header 2,Header 3\n<div>Cell 1</div>,<div>Cell 2</div>,&lt;div&gt;Cell 3&lt;/div&gt;\n',
-                        raw: '| Header 1 | Header 2 | Header 3 |\n|----------|----------|----------|\n| <div>Cell 1</div> | <div>Cell 2</div> | &lt;div&gt;Cell 3&lt;/div&gt; |',
+                        csv: 'Header 1,Header 2,Header 3\n<div>Cell 1</div>,&lt;div&gt;Cell 2&lt;/div&gt;,&amp;lt;div&amp;gt;Cell 3&amp;lt;/div&amp;gt;\n',
+                        raw: '| Header 1 | Header 2 | Header 3 |\n|----------|----------|----------|\n| <div>Cell 1</div> | &lt;div&gt;Cell 2&lt;/div&gt; | &amp;lt;div&amp;gt;Cell 3&amp;lt;/div&amp;gt; |',
                         id: 'formatted-table-0',
                     },
                 ]);
@@ -448,7 +496,10 @@ describe('HTML Formatter Function', () => {
 
         describe('Conflicts with BB-Code', () => {
             test('should not format bb code tag followed by paranthese to link', () => {
-                const result = formatStringToHtml('[b]bold[/b](test)', { parseBBCode: true });
+                const result = formatStringToHtml('[b]bold[/b](test)', {
+                    parseBBCode: true,
+                    defaultHtmlTag: 'p',
+                });
                 expect(result.html).toEqual('<p><b>bold</b>(test)</p>');
                 expect(result.tables).toEqual([]);
             });
@@ -462,6 +513,7 @@ describe('HTML Formatter Function', () => {
                 test('should format b tag correctly', () => {
                     const result = formatStringToHtml('[b]bold[/b]', {
                         parseBBCode: true,
+                        defaultHtmlTag: 'p',
                     });
                     expect(result.html).toEqual('<p><b>bold</b></p>');
                     expect(result.tables).toEqual([]);
@@ -470,6 +522,7 @@ describe('HTML Formatter Function', () => {
                 test('should format strong tag correctly', () => {
                     const result = formatStringToHtml('[strong]bold[/strong]', {
                         parseBBCode: true,
+                        defaultHtmlTag: 'p',
                     });
                     expect(result.html).toEqual('<p><strong>bold</strong></p>');
                     expect(result.tables).toEqual([]);
@@ -478,6 +531,7 @@ describe('HTML Formatter Function', () => {
                 test('should format i tag correctly', () => {
                     const result = formatStringToHtml('[i]italic[/i]', {
                         parseBBCode: true,
+                        defaultHtmlTag: 'p',
                     });
                     expect(result.html).toEqual('<p><i>italic</i></p>');
                     expect(result.tables).toEqual([]);
@@ -486,6 +540,7 @@ describe('HTML Formatter Function', () => {
                 test('should format em tag correctly', () => {
                     const result = formatStringToHtml('[em]italic[/em]', {
                         parseBBCode: true,
+                        defaultHtmlTag: 'p',
                     });
                     expect(result.html).toEqual('<p><em>italic</em></p>');
                     expect(result.tables).toEqual([]);
@@ -494,6 +549,7 @@ describe('HTML Formatter Function', () => {
                 test('should format u tag correctly', () => {
                     const result = formatStringToHtml('[u]underline[/u]', {
                         parseBBCode: true,
+                        defaultHtmlTag: 'p',
                     });
                     expect(result.html).toEqual('<p><u>underline</u></p>');
                     expect(result.tables).toEqual([]);
@@ -502,6 +558,7 @@ describe('HTML Formatter Function', () => {
                 test('should format s tag correctly', () => {
                     const result = formatStringToHtml('[s]strike[/s]', {
                         parseBBCode: true,
+                        defaultHtmlTag: 'p',
                     });
                     expect(result.html).toEqual('<p><s>strike</s></p>');
                     expect(result.tables).toEqual([]);
@@ -510,6 +567,7 @@ describe('HTML Formatter Function', () => {
                 test('should format span tag correctly', () => {
                     const result = formatStringToHtml('[span]span[/span]', {
                         parseBBCode: true,
+                        defaultHtmlTag: 'p',
                     });
                     expect(result.html).toEqual('<p><span>span</span></p>');
                     expect(result.tables).toEqual([]);
@@ -520,6 +578,7 @@ describe('HTML Formatter Function', () => {
                         '[img src="https://example.com/image.jpg"][/img]',
                         {
                             parseBBCode: true,
+                            defaultHtmlTag: 'p',
                         },
                     );
                     expect(result.html).toEqual('<p><img src="https://example.com/image.jpg"></p>');
@@ -531,6 +590,7 @@ describe('HTML Formatter Function', () => {
                 test('should format center tag correctly', () => {
                     const result = formatStringToHtml('[center]centered text[/center]', {
                         parseBBCode: true,
+                        defaultHtmlTag: 'p',
                     });
                     expect(result.html).toEqual('<p><center>centered text</center></p>');
                     expect(result.tables).toEqual([]);
@@ -539,6 +599,7 @@ describe('HTML Formatter Function', () => {
                 test('should format ul tag correctly', () => {
                     const result = formatStringToHtml('[ul][li]Item 1[/li][li]Item 2[/li][/ul]', {
                         parseBBCode: true,
+                        defaultHtmlTag: 'p',
                     });
                     expect(result.html).toEqual('<p><ul><li>Item 1</li><li>Item 2</li></ul></p>');
                     expect(result.tables).toEqual([]);
@@ -547,6 +608,7 @@ describe('HTML Formatter Function', () => {
                 test('should format ol tag correctly', () => {
                     const result = formatStringToHtml('[ol][li]Item 1[/li][li]Item 2[/li][/ol]', {
                         parseBBCode: true,
+                        defaultHtmlTag: 'p',
                     });
                     expect(result.html).toEqual('<p><ol><li>Item 1</li><li>Item 2</li></ol></p>');
                     expect(result.tables).toEqual([]);
@@ -555,6 +617,7 @@ describe('HTML Formatter Function', () => {
                 test('should format li tag correctly', () => {
                     const result = formatStringToHtml('[li]Item[/li]', {
                         parseBBCode: true,
+                        defaultHtmlTag: 'p',
                     });
                     expect(result.html).toEqual('<p><li>Item</li></p>');
                     expect(result.tables).toEqual([]);
@@ -568,6 +631,7 @@ describe('HTML Formatter Function', () => {
                     headingTags.forEach((tag) => {
                         const result = formatStringToHtml(getHeadingInput(tag), {
                             parseBBCode: true,
+                            defaultHtmlTag: 'p',
                         });
                         expect(result.html).toEqual(getHeadingOutput(tag));
                         expect(result.tables).toEqual([]);
@@ -577,6 +641,7 @@ describe('HTML Formatter Function', () => {
                 test('should format p tag correctly', () => {
                     const result = formatStringToHtml('[p]paragraph[/p]', {
                         parseBBCode: true,
+                        defaultHtmlTag: 'p',
                     });
                     expect(result.html).toEqual('<p><p>paragraph</p></p>');
                     expect(result.tables).toEqual([]);
@@ -591,6 +656,7 @@ describe('HTML Formatter Function', () => {
                     const result1 = formatStringToHtml(input, {
                         parseBBCode: true,
                         customInlineLevelBBCodeTags: ['custom'],
+                        defaultHtmlTag: 'p',
                     });
                     expect(result1.html).toEqual(output);
                     expect(result1.tables).toEqual([]);
@@ -598,6 +664,7 @@ describe('HTML Formatter Function', () => {
                     const result2 = formatStringToHtml(input, {
                         parseBBCode: true,
                         customBlockLevelBBCodeTags: ['custom'],
+                        defaultHtmlTag: 'p',
                     });
                     expect(result2.html).toEqual(output);
                     expect(result2.tables).toEqual([]);
@@ -606,6 +673,7 @@ describe('HTML Formatter Function', () => {
                 test('should not format unknown custom tags', () => {
                     const result = formatStringToHtml('[unknown]unknown[/unknown]', {
                         parseBBCode: true,
+                        defaultHtmlTag: 'p',
                     });
                     expect(result.html).toEqual('<p>[unknown]unknown[/unknown]</p>');
                     expect(result.tables).toEqual([]);
@@ -617,12 +685,14 @@ describe('HTML Formatter Function', () => {
                     test('should format line breaks between block level elements correctly', () => {
                         const result1 = formatStringToHtml('[h1]h1[/h1]\n[h2]h2[/h2]', {
                             parseBBCode: true,
+                            defaultHtmlTag: 'p',
                         });
                         expect(result1.html).toEqual('<p><h1>h1</h1><h2>h2</h2></p>');
                         expect(result1.tables).toEqual([]);
 
                         const result2 = formatStringToHtml('[h1]h1[/h1]\n\n[h2]h2[/h2]', {
                             parseBBCode: true,
+                            defaultHtmlTag: 'p',
                         });
                         expect(result2.html).toEqual('<p><h1>h1</h1></p>\n<p><h2>h2</h2></p>');
                         expect(result2.tables).toEqual([]);
@@ -631,12 +701,14 @@ describe('HTML Formatter Function', () => {
                     test('should format line breaks between inline elements correctly', () => {
                         const result1 = formatStringToHtml('[b]bold[/b]\n[i]italic[/i]', {
                             parseBBCode: true,
+                            defaultHtmlTag: 'p',
                         });
                         expect(result1.html).toEqual('<p><b>bold</b>\n<i>italic</i></p>');
                         expect(result1.tables).toEqual([]);
 
                         const result2 = formatStringToHtml('[b]bold[/b]\n\n[i]italic[/i]', {
                             parseBBCode: true,
+                            defaultHtmlTag: 'p',
                         });
                         expect(result2.html).toEqual('<p><b>bold</b></p>\n<p><i>italic</i></p>');
                         expect(result2.tables).toEqual([]);
@@ -647,6 +719,7 @@ describe('HTML Formatter Function', () => {
                     test('should format line breaks within block level elements correctly', () => {
                         const result = formatStringToHtml('[h1]Line 1\nLine 2[/h1]', {
                             parseBBCode: true,
+                            defaultHtmlTag: 'p',
                         });
                         expect(result.html).toEqual('<p><h1>Line 1\nLine 2</h1></p>');
                         expect(result.tables).toEqual([]);
@@ -664,6 +737,7 @@ describe('HTML Formatter Function', () => {
                     test('should remove trailing and leading new lines within block level elements', () => {
                         const result = formatStringToHtml('[h1]\n\n\nLine 1\n\n\n[/h1]', {
                             parseBBCode: true,
+                            defaultHtmlTag: 'p',
                         });
                         expect(result.html).toEqual('<p><h1>Line 1</h1></p>');
                         expect(result.tables).toEqual([]);
@@ -677,6 +751,7 @@ describe('HTML Formatter Function', () => {
                     {
                         parseBBCode: true,
                         customInlineLevelBBCodeTags: ['link'],
+                        defaultHtmlTag: 'p',
                     },
                 );
                 expect(result.html).toEqual(
@@ -688,6 +763,7 @@ describe('HTML Formatter Function', () => {
             test('should apply style attribute correctly', () => {
                 const result = formatStringToHtml('[span style="color: red;"]red text[/span]', {
                     parseBBCode: true,
+                    defaultHtmlTag: 'p',
                 });
                 expect(result.html).toEqual('<p><span style="color: red;">red text</span></p>');
                 expect(result.tables).toEqual([]);
@@ -696,6 +772,7 @@ describe('HTML Formatter Function', () => {
             test('should format nested elements correctly', () => {
                 const result = formatStringToHtml('[b][i]bold italic[/i][/b]', {
                     parseBBCode: true,
+                    defaultHtmlTag: 'p',
                 });
                 expect(result.html).toEqual('<p><b><i>bold italic</i></b></p>');
                 expect(result.tables).toEqual([]);
@@ -707,6 +784,7 @@ describe('HTML Formatter Function', () => {
         test('should format bb-code within markdown correctly', () => {
             const result = formatStringToHtml('*[b]bold[/b]*', {
                 parseBBCode: true,
+                defaultHtmlTag: 'p',
             });
             expect(result.html).toEqual('<p><em><b>bold</b></em></p>');
             expect(result.tables).toEqual([]);
@@ -715,9 +793,51 @@ describe('HTML Formatter Function', () => {
         test('should format markdown within bb-code correctly', () => {
             const result = formatStringToHtml('[b]*bold*[/b]', {
                 parseBBCode: true,
+                defaultHtmlTag: 'p',
             });
             expect(result.html).toEqual('<p><b><em>bold</em></b></p>');
             expect(result.tables).toEqual([]);
+        });
+    });
+
+    describe('Formatting without defaultHtmlTag', () => {
+        test('should wrap plain text in nothing by default', () => {
+            const result = formatStringToHtml('Hello world');
+            expect(result.html).toEqual('Hello world');
+            expect(result.tables).toEqual([]);
+        });
+
+        test('should handle line breaks in plain text', () => {
+            const result = formatStringToHtml('Line 1\nLine 2');
+            expect(result.html).toEqual('Line 1\nLine 2');
+            expect(result.tables).toEqual([]);
+        });
+
+        test('should format markdown bold and italic', () => {
+            const result = formatStringToHtml('**bold** and *italic*');
+            expect(result.html).toEqual('<strong>bold</strong> and <em>italic</em>');
+            expect(result.tables).toEqual([]);
+        });
+
+        test('should format markdown heading', () => {
+            const result = formatStringToHtml('# Heading');
+            expect(result.html).toEqual('<h1>Heading</h1>');
+            expect(result.tables).toEqual([]);
+        });
+
+        test('should format bb-code if enabled', () => {
+            const result = formatStringToHtml('[b]bold[/b]', { parseBBCode: true });
+            expect(result.html).toEqual('<b>bold</b>');
+            expect(result.tables).toEqual([]);
+        });
+
+        test('should format markdown table', () => {
+            const input = '| H1 | H2 |\n|----|----|\n| a  | b  |';
+            const result = formatStringToHtml(input);
+            expect(removeLinebreaks(result.html)).toEqual(
+                '<table id="formatted-table-0"><thead><tr><th>H1</th><th>H2</th></tr></thead><tbody><tr><td>a</td><td>b</td></tr></tbody></table>',
+            );
+            expect(result.tables.length).toBe(1);
         });
     });
 });
