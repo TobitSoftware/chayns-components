@@ -21,7 +21,7 @@ import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';
 import { AccordionWrappedContext } from './accordion-provider/AccordionContextProvider';
 import { StyledMotionAccordion } from './Accordion.styles';
-import { useInitialRenderRef } from '../../hooks/ref';
+import { TargetAndTransition } from 'motion';
 
 export const AccordionContext = React.createContext<{ isWrapped?: boolean }>({
     isWrapped: undefined,
@@ -215,14 +215,15 @@ const Accordion: FC<AccordionProps> = ({
 
     const isInitialRenderRef = useRef(true);
 
-    const initialRenderSkipRef = useInitialRenderRef(true);
-
-    const shouldSkipAnimation =
-        shouldSkipAnimationProp ?? (initialRenderSkipRef.current && isDefaultOpen);
+    const shouldSkipAnimation = shouldSkipAnimationProp;
 
     const isInGroup = shouldSkipAnimation ? false : typeof updateOpenAccordionUuid === 'function';
 
-    const isOpen = isInGroup ? openAccordionUuid === uuid : isAccordionOpen;
+    const isOpen = useMemo(() => {
+        if (isInGroup) return openAccordionUuid === uuid;
+        if (typeof isOpened === 'boolean') return isOpened;
+        return isAccordionOpen;
+    }, [isInGroup, openAccordionUuid, uuid, isOpened, isAccordionOpen]);
 
     const isOpenRef = useRef(isOpen);
     const onCloseRef = useRef(onClose);
@@ -240,24 +241,21 @@ const Accordion: FC<AccordionProps> = ({
     }, [isOpen, onClose, onOpen]);
 
     const handleHeadClick = useCallback(() => {
-        if (isDisabled) {
+        if (isDisabled) return;
+
+        if (isInGroup) {
+            updateOpenAccordionUuid?.(uuid);
             return;
         }
 
-        if (typeof updateOpenAccordionUuid === 'function') {
-            updateOpenAccordionUuid(uuid);
-        }
-
         setIsAccordionOpen((currentIsAccordionOpen) => !currentIsAccordionOpen);
-    }, [isDisabled, updateOpenAccordionUuid, uuid]);
+    }, [isDisabled, isInGroup, updateOpenAccordionUuid, uuid]);
 
     useEffect(() => {
         if (isDisabled && isOpen) {
             if (typeof updateOpenAccordionUuid === 'function') {
                 updateOpenAccordionUuid(uuid);
             }
-
-            setIsAccordionOpen((currentIsAccordionOpen) => !currentIsAccordionOpen);
         }
     }, [isDisabled, isOpen, updateOpenAccordionUuid, uuid]);
 
@@ -274,24 +272,21 @@ const Accordion: FC<AccordionProps> = ({
     }, [isOpen]);
 
     useEffect(() => {
-        if (isDefaultOpen) {
-            if (typeof updateOpenAccordionUuid === 'function') {
-                updateOpenAccordionUuid(uuid, { shouldOnlyOpen: true });
-            } else {
-                setIsAccordionOpen(true);
-            }
+        if (isDefaultOpen && typeof updateOpenAccordionUuid === 'function') {
+            updateOpenAccordionUuid(uuid, { shouldOnlyOpen: true });
         }
     }, [isDefaultOpen, updateOpenAccordionUuid, uuid]);
 
     useEffect(() => {
         if (typeof isOpened === 'boolean') {
-            if (typeof updateOpenAccordionUuid === 'function' && isOpened !== isOpenRef.current) {
-                updateOpenAccordionUuid(uuid);
-            } else {
-                setIsAccordionOpen(isOpened);
+            if (isInGroup) {
+                const currentlyOpen = openAccordionUuid === uuid;
+                if (isOpened !== currentlyOpen) {
+                    updateOpenAccordionUuid?.(uuid);
+                }
             }
         }
-    }, [isOpened, updateOpenAccordionUuid, uuid]);
+    }, [isOpened, isInGroup, openAccordionUuid, updateOpenAccordionUuid, uuid]);
 
     const accordionContextProviderValue = useMemo(
         () => ({ isWrapped: isWrapped === true }),
@@ -305,13 +300,13 @@ const Accordion: FC<AccordionProps> = ({
 
     const accordionWrappedContextProviderValue = useMemo(() => ({ isWrapped: true }), []);
 
-    const initialAnimation = useMemo(() => {
-        if (shouldSkipAnimation) {
-            return { height: 'auto', opacity: 1 };
+    const initialAnimation = useMemo((): TargetAndTransition => {
+        if (isDefaultOpen) {
+            return { height: 'auto', opacity: 1, transition: { duration: 5 } };
         }
 
         return isOpen ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 };
-    }, [isOpen, shouldSkipAnimation]);
+    }, [isDefaultOpen, isOpen]);
 
     return (
         <StyledMotionAccordion
