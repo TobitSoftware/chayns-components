@@ -4323,6 +4323,18 @@ import { SliderButton } from '@chayns-components/core';
 />
 ```
 
+#### Rounded
+
+```tsx
+<SliderButton
+    items={[
+            { id: 'parken', text: 'Parken' },
+            { id: 'fahren', text: 'Fahren' },
+        ]}
+    isRounded
+/>
+```
+
 ### Props
 
 No prop documentation available.
