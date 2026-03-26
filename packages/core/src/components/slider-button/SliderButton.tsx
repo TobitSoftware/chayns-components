@@ -181,7 +181,7 @@ const SliderButton: FC<SliderButtonProps> = ({
                 return;
             }
 
-            if (currentIndex === index && items.length === 2) {
+            if (getDerivedCurrentIndex() === index && items.length === 2) {
                 const otherItem = items.find((_, findIndex) => index !== findIndex);
                 if (!otherItem) return;
 
