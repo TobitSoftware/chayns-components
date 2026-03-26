@@ -11,11 +11,15 @@ export const StyledSliderButton = styled.div<StyledSliderButtonProps>`
     position: relative;
 `;
 
-type StyledSliderButtonWrapperProps = WithTheme<{ $width: number; $isDisabled?: boolean }>;
+type StyledSliderButtonWrapperProps = WithTheme<{
+    $width: number;
+    $isDisabled?: boolean;
+    $isRounded: boolean;
+}>;
 
 export const StyledSliderButtonWrapper = styled.div<StyledSliderButtonWrapperProps>`
     align-items: center;
-    border-radius: 3px;
+    border-radius: ${({ $isRounded }) => ($isRounded ? 32 : 3)}px;
     border: none;
     color: white;
     cursor: pointer;
@@ -90,7 +94,7 @@ export const StyledSliderButtonButtonsWrapper = styled.div<StyledSliderButtonBut
     pointer-events: ${({ $isInvisible }) => ($isInvisible ? 'auto' : 'none')};
 `;
 
-type StyledMotionSliderButtonThumbProps = WithTheme<{ $width: number }>;
+type StyledMotionSliderButtonThumbProps = WithTheme<{ $width: number; $isRounded: boolean }>;
 
 export const StyledMotionSliderButtonThumb = styled(motion.div)<StyledMotionSliderButtonThumbProps>`
     font-size: 110%;
@@ -98,7 +102,7 @@ export const StyledMotionSliderButtonThumb = styled(motion.div)<StyledMotionSlid
     opacity: 1;
     width: ${({ $width }) => $width - 8}px;
     position: absolute;
-    border-radius: 2px;
+    border-radius: ${({ $isRounded }) => ($isRounded ? 24 : 3)}px;
     top: 4px;
     left: 4px;
     white-space: nowrap;

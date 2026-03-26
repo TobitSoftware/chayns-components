@@ -33,6 +33,8 @@ export const General = Template.bind({});
 
 export const Expanded = Template.bind({});
 
+export const Rounded = Template.bind({});
+
 export const Controlled = ControlledSliderButton.bind({});
 
 Expanded.args = {
@@ -44,5 +46,13 @@ Expanded.args = {
         { id: 'freitag', text: 'Freitag' },
         { id: 'samstag', text: 'Samstag' },
         { id: 'sonntag', text: 'Sonntag' },
+    ],
+};
+
+Rounded.args = {
+    isRounded: true,
+    items: [
+        { id: 'parken', text: 'Parken' },
+        { id: 'fahren', text: 'Fahren' },
     ],
 };

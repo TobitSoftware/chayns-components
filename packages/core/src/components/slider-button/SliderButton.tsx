@@ -42,6 +42,10 @@ export type SliderButtonProps = {
      * The id of the button that should be selected.
      */
     selectedButtonId?: string;
+    /**
+     *
+     */
+    isRounded?: boolean;
 };
 
 const SliderButton: FC<SliderButtonProps> = ({
@@ -50,6 +54,7 @@ const SliderButton: FC<SliderButtonProps> = ({
     items,
     onChange,
     selectedButtonId,
+    isRounded = false,
 }) => {
     const [currentId, setCurrentId] = useState('');
     const [currentPopupId, setCurrentPopupId] = useState('');
@@ -413,6 +418,7 @@ const SliderButton: FC<SliderButtonProps> = ({
                     {pseudoButtons}
                 </StyledSliderButtonButtonsWrapper>
                 <StyledMotionSliderButtonThumb
+                    $isRounded={isRounded}
                     ref={scope}
                     drag={isDisabled ? false : 'x'}
                     dragElastic={0}
@@ -428,6 +434,7 @@ const SliderButton: FC<SliderButtonProps> = ({
                     style={{ backgroundColor: thumbBackgroundColor }}
                 />
                 <StyledSliderButtonWrapper
+                    $isRounded={isRounded}
                     $isDisabled={isDisabled}
                     $width={!isSliderBigger ? dragRange.right + itemWidth : dragRange.right}
                     ref={sliderButtonWrapperRef}
@@ -451,6 +458,7 @@ const SliderButton: FC<SliderButtonProps> = ({
             handleDragEnd,
             handleDragStart,
             isDisabled,
+            isRounded,
             isSliderBigger,
             itemWidth,
             pseudoButtons,
