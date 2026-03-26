@@ -1,9 +1,9 @@
 import {
+    type FileItem,
     Image,
+    type InternalFileItem,
     uploadFile,
     Video,
-    type FileItem,
-    type InternalFileItem,
 } from '@chayns-components/core';
 import {
     createDialog,
@@ -82,6 +82,8 @@ const Gallery: FC<GalleryProps> = ({
     onRemove,
     viewMode = GalleryViewMode.GRID,
 }) => {
+    'use no memo';
+
     const [fileItems, setFileItems] = useState<InternalFileItem[]>([]);
 
     /**

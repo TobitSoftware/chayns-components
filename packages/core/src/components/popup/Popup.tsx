@@ -39,6 +39,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         },
         ref,
     ) => {
+        'use no memo';
+
         const [coordinates, setCoordinates] = useState<PopupCoordinates>({
             x: 0,
             y: 0,

@@ -170,6 +170,8 @@ const Typewriter: FC<TypewriterProps> = ({
     shouldCalcAutoSpeed = false,
     autoSpeedBaseFactor = 2000,
 }) => {
+    'use no memo';
+
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
     const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
     const [shouldPreventBlinkingCursor, setShouldPreventBlinkingCursor] = useState(false);

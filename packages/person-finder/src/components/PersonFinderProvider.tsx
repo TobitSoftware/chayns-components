@@ -104,6 +104,8 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     uacFilter,
     entries,
 }) => {
+    'use no memo';
+
     const [data, setData] = useState<IPersonFinderContext['data']>();
     const [friends, setFriends] = useState<PersonEntry[]>();
     const [uacUsers, setUacUsers] = useState<PersonEntry[]>();

@@ -3,11 +3,11 @@ import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 
 import { useIsTouch } from '../../utils/environment';
 import ActionButton from './action-button/ActionButton';
 import { StyledMultiActionButton, StyledSeparator } from './MultiActionButton.styles';
-import { MultiActionButtonHeight } from './MultiActionButton.types';
 import type {
     MultiActionButtonActionEvent,
     MultiActionButtonProps,
 } from './MultiActionButton.types';
+import { MultiActionButtonHeight } from './MultiActionButton.types';
 
 /**
  * Multi-action button with optional secondary action that can expand on hover/click.
@@ -25,6 +25,8 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     shouldUseFullWidth,
     width,
 }) => {
+    'use no memo';
+
     const [isExtendedByClick, setIsExtendedByClick] = useState(false);
     const [isSecondaryExpanded, setIsSecondaryExpanded] = useState(false);
     const [isSecondaryHovered, setIsSecondaryHovered] = useState(false);

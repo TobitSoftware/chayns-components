@@ -1,12 +1,12 @@
 import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
     type Dispatch,
     type FC,
     type RefObject,
     type SetStateAction,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
 } from 'react';
 import { convertTextToHTML } from '../../../utils/text';
 import {
@@ -27,6 +27,8 @@ const PrefixElement: FC<PrefixElementProps> = ({
     element,
     setFinishedPrefixElement,
 }) => {
+    'use no memo';
+
     const [shouldShow, setShouldShow] = useState(true);
     const [prefixText, setPrefixText] = useState('');
 
