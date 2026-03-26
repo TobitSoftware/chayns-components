@@ -104,7 +104,7 @@ const SkinTonePopup: FC<SkinTonePopupProps> = ({
     }, [focusedIndex, onHidePopup, onSelect]);
 
     const emojis = useMemo(() => {
-        const result: JSX.Element[] = [];
+        const result: React.ReactElement[] = [];
 
         Object.entries(emojiComponents).forEach(([key, value], index) => {
             if (key.includes('skin_tone')) {
