@@ -194,6 +194,15 @@ const SliderButton: FC<SliderButtonProps> = ({
                 return;
             }
 
+            if (currentIndex === index && items.length === 2) {
+                const otherItem = items.find((_, findIndex) => index !== findIndex);
+                if (!otherItem) return;
+
+                setPopupId(otherItem.id);
+                setItemPosition(items.indexOf(otherItem));
+                return;
+            }
+
             setPopupId(id);
 
             if (typeof onChange === 'function' && id !== 'more') {
@@ -210,7 +219,7 @@ const SliderButton: FC<SliderButtonProps> = ({
 
             setItemPosition(index);
         },
-        [isDisabled, onChange, setItemPosition, setPopupId],
+        [currentIndex, isDisabled, items, onChange, setItemPosition, setPopupId],
     );
 
     const backgroundColor = useMemo(() => {
