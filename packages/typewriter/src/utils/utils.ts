@@ -1,4 +1,4 @@
-import { TypewriterSpeed } from '../../types/speed';
+import { TypewriterSpeed } from '../types/speed';
 
 /**
  * Returns a substring of an HTML string while preserving HTML structure.

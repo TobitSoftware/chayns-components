@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import { CSSPropertiesWithVars } from 'styled-components/dist/types';
-import { StyledTypewriterText } from './Typewriter.styles';
+import { StyledTypewriterText } from '../TypewriterView.styles';
 
 type AnimatedTypewriterTextProps = {
     shouldHideCursor: boolean;

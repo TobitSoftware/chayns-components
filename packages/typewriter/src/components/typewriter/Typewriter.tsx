@@ -1,36 +1,13 @@
 import { ColorSchemeProvider, useColorScheme } from '@chayns-components/core';
 import { ChaynsProvider, useFunctions, useValues } from 'chayns-api';
-import React, {
-    FC,
-    ReactElement,
-    useCallback,
-    useEffect,
-    useLayoutEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
-import { createPortal } from 'react-dom';
+import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import { CSSPropertiesWithVars } from 'styled-components/dist/types';
 import { CursorType } from '../../types/cursor';
 import { TypewriterDelay, TypewriterSpeed } from '../../types/speed';
-import AnimatedTypewriterText from './AnimatedTypewriterText';
-import {
-    StyledTypewriter,
-    StyledTypewriterPseudoText,
-    StyledTypewriterText,
-} from './Typewriter.styles';
-import {
-    ChunkStreamingSpeedState,
-    getCharactersCount,
-    getSafeAutoSpeed,
-    getSubTextFromHTML,
-    shuffleArray,
-    updateChunkStreamingSpeedEMA,
-} from './utils';
-
-const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+import TypewriterView from './typewrite-view/TypewriterView';
+import useTypewriterAnimation from '../../hooks/useTypewriterAnimation';
+import { getCharactersCount, getSubTextFromHTML, shuffleArray } from '../../utils/utils';
 
 export type TypewriterProps = {
     /**
@@ -171,25 +148,11 @@ const Typewriter: FC<TypewriterProps> = ({
     autoSpeedBaseFactor = 2000,
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
-    const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
-    const [shouldPreventBlinkingCursor, setShouldPreventBlinkingCursor] = useState(false);
-    const [isResetAnimationActive, setIsResetAnimationActive] = useState(false);
-    const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
-    const autoSpeed = useRef<number>();
-    const autoSteps = useRef<number>(animationSteps);
 
     const functions = useFunctions();
     const values = useValues();
 
     const colorScheme = useColorScheme();
-
-    useIsomorphicLayoutEffect(() => {
-        if (children) {
-            setHasRenderedChildrenOnce(false);
-        }
-    }, [children]);
-
-    if (!hasRenderedChildrenOnce) setHasRenderedChildrenOnce(true);
 
     const sortedChildren = useMemo(
         () =>
@@ -225,6 +188,20 @@ const Typewriter: FC<TypewriterProps> = ({
         ],
     );
 
+    const handleSetNextChildrenIndex = useCallback(
+        () =>
+            setCurrentChildrenIndex((prevIndex) => {
+                let newIndex = prevIndex + 1;
+
+                if (newIndex > childrenCount - 1) {
+                    newIndex = 0;
+                }
+
+                return newIndex;
+            }),
+        [childrenCount],
+    );
+
     const textContent = useMemo(() => {
         if (areMultipleChildrenGiven) {
             const currentChildren = sortedChildren[currentChildrenIndex];
@@ -240,244 +217,38 @@ const Typewriter: FC<TypewriterProps> = ({
     }, [areMultipleChildrenGiven, currentChildrenIndex, renderChildToString, sortedChildren]);
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
-    const chunkIntervalExponentialMovingAverage = useRef<ChunkStreamingSpeedState>({
-        lastLength: charactersCount,
-        ema: charactersCount / (autoSpeedBaseFactor / 1000),
-    });
 
-    const [shownCharCount, setShownCharCount] = useState(
-        charactersCount > 0 ? 0 : textContent.length,
-    );
-
-    const currentPosition = useRef(0);
-
-    useEffect(() => {
-        if (shouldUseResetAnimation) {
-            chunkIntervalExponentialMovingAverage.current = {
-                ema: charactersCount / (autoSpeedBaseFactor / 1000),
-                lastLength: charactersCount,
-            };
-        }
-        chunkIntervalExponentialMovingAverage.current = updateChunkStreamingSpeedEMA({
-            currentLength: charactersCount,
-            state: chunkIntervalExponentialMovingAverage.current,
-        });
-    }, [autoSpeedBaseFactor, charactersCount, shouldUseResetAnimation]);
-
-    useEffect(() => {
-        if (!shouldCalcAutoSpeed) {
-            autoSpeed.current = undefined;
-            autoSteps.current = animationSteps;
-            return;
-        }
-
-        autoSpeed.current = getSafeAutoSpeed(chunkIntervalExponentialMovingAverage.current.ema);
-    }, [animationSteps, charactersCount, shouldCalcAutoSpeed]);
-
-    const shouldShowFullTextImmediately = shouldStopAnimation || charactersCount === 0;
-    const effectiveShownCharCount = shouldShowFullTextImmediately
-        ? textContent.length
-        : shownCharCount;
-
-    const isTypingAnimationActive =
-        !shouldShowFullTextImmediately &&
-        (effectiveShownCharCount < textContent.length || areMultipleChildrenGiven);
-
-    const isAnimatingText = isTypingAnimationActive || shouldForceCursorAnimation;
-
-    const handleClick = useCallback((event: React.MouseEvent) => {
-        event.stopPropagation();
-        event.preventDefault();
-
-        setShouldStopAnimation(true);
-    }, []);
-
-    const handleSetNextChildrenIndex = useCallback(
-        () =>
-            setCurrentChildrenIndex(() => {
-                let newIndex = currentChildrenIndex + 1;
-
-                if (newIndex > childrenCount - 1) {
-                    newIndex = 0;
-                }
-
-                return newIndex;
-            }),
-        [childrenCount, currentChildrenIndex],
-    );
-
-    useEffect(() => {
-        // frame and timeout ids used for cleanup
-        let frameId: number | undefined;
-        let lastTimeRendered: number | undefined;
-        let timeoutId: number | undefined;
-
-        const safeCancelFrame = () => {
-            if (typeof frameId === 'number') {
-                cancelAnimationFrame(frameId);
-                frameId = undefined;
-            }
-        };
-
-        const safeClearTimeout = () => {
-            if (typeof timeoutId === 'number') {
-                clearTimeout(timeoutId);
-                timeoutId = undefined;
-            }
-        };
-
-        const startAnimationFrameLoop = (
-            onTick: (charactersToChange: number) => void,
-            speedParam: number,
-        ) => {
-            lastTimeRendered = undefined;
-            const loop = (timestamp: number) => {
-                if (lastTimeRendered === undefined) lastTimeRendered = timestamp;
-                const timeSinceLastFrame = timestamp - lastTimeRendered;
-                const rate = autoSpeed.current ?? speedParam;
-                const charactersToChange = Math.round(timeSinceLastFrame / rate);
-
-                if (charactersToChange === 0) {
-                    frameId = requestAnimationFrame(loop);
-                    return;
-                }
-
-                onTick(charactersToChange);
-
-                lastTimeRendered = timestamp;
-                frameId = requestAnimationFrame(loop);
-            };
-
-            frameId = requestAnimationFrame(loop);
-        };
-
-        if (shouldShowFullTextImmediately) {
-            currentPosition.current = textContent.length;
-            return () => {
-                safeCancelFrame();
-                safeClearTimeout();
-            };
-        }
-        if (isResetAnimationActive) {
-            // reset animation
-            if (typeof onResetAnimationStart === 'function') {
-                onResetAnimationStart();
-            }
-
-            startAnimationFrameLoop((charactersToRemove) => {
-                setShownCharCount((prev) => {
-                    const nextShownCharCount = Math.max(0, prev - charactersToRemove);
-                    currentPosition.current = nextShownCharCount;
-
-                    if (nextShownCharCount <= 0) {
-                        safeCancelFrame();
-
-                        if (typeof onResetAnimationEnd === 'function') {
-                            onResetAnimationEnd();
-                        }
-
-                        if (areMultipleChildrenGiven) {
-                            timeoutId = window.setTimeout(() => {
-                                setIsResetAnimationActive(false);
-                                handleSetNextChildrenIndex();
-                            }, nextTextDelay);
-                        }
-                    }
-
-                    return nextShownCharCount;
-                });
-            }, resetSpeed);
-        } else {
-            const startTypingAnimation = () => {
-                if (cursorType === CursorType.Thin) {
-                    setShouldPreventBlinkingCursor(true);
-                }
-
-                if (typeof onTypingAnimationStart === 'function') {
-                    onTypingAnimationStart();
-                }
-
-                startAnimationFrameLoop((charactersToAdd) => {
-                    setShownCharCount((prevState) => {
-                        let nextState = prevState + charactersToAdd;
-
-                        if (nextState >= charactersCount && !shouldWaitForContent) {
-                            if (cursorType === CursorType.Thin) {
-                                setShouldPreventBlinkingCursor(false);
-                            }
-
-                            if (typeof onTypingAnimationEnd === 'function') {
-                                onTypingAnimationEnd();
-                            }
-
-                            /**
-                             * At this point, the next value for "shownCharCount" is deliberately set to
-                             * the length of the textContent to correctly display HTML elements
-                             * after the last letter.
-                             */
-                            nextState = textContent.length;
-
-                            safeCancelFrame();
-
-                            if (areMultipleChildrenGiven) {
-                                timeoutId = window.setTimeout(() => {
-                                    if (shouldUseResetAnimation) {
-                                        setIsResetAnimationActive(true);
-                                    } else {
-                                        setShownCharCount(0);
-                                        timeoutId = window.setTimeout(
-                                            handleSetNextChildrenIndex,
-                                            nextTextDelay,
-                                        );
-                                    }
-                                }, resetDelay);
-                            }
-                        }
-
-                        currentPosition.current = nextState;
-                        return nextState;
-                    });
-                }, speed);
-            };
-
-            if (startDelay) {
-                timeoutId = window.setTimeout(startTypingAnimation, startDelay);
-            } else {
-                startTypingAnimation();
-            }
-        }
-
-        return () => {
-            safeCancelFrame();
-            safeClearTimeout();
-        };
-    }, [
-        areMultipleChildrenGiven,
+    const {
+        effectiveShownCharCount,
+        hasRenderedChildrenOnce,
+        handleClick,
+        isAnimatingText,
+        isTypingAnimationActive,
+        shouldPreventBlinkingCursor,
+    } = useTypewriterAnimation({
+        autoSpeedBaseFactor,
+        animationSteps,
         charactersCount,
+        childrenKey: children,
+        childrenCount,
+        currentTextLength: textContent.length,
         cursorType,
-        handleSetNextChildrenIndex,
-        isResetAnimationActive,
         nextTextDelay,
+        onAdvanceChild: handleSetNextChildrenIndex,
+        onFinish,
         onResetAnimationEnd,
         onResetAnimationStart,
         onTypingAnimationEnd,
         onTypingAnimationStart,
         resetDelay,
         resetSpeed,
-        shouldShowFullTextImmediately,
-        shouldStopAnimation,
+        shouldCalcAutoSpeed,
+        shouldForceCursorAnimation,
         shouldUseResetAnimation,
         shouldWaitForContent,
         speed,
         startDelay,
-        textContent.length,
-    ]);
-
-    useEffect(() => {
-        if (!isTypingAnimationActive && typeof onFinish === 'function') {
-            onFinish();
-        }
-    }, [isTypingAnimationActive, onFinish]);
+    });
 
     const shownText = useMemo(
         () => getSubTextFromHTML(textContent, effectiveShownCharCount),
@@ -508,69 +279,20 @@ const Typewriter: FC<TypewriterProps> = ({
         textContent,
     ]);
 
-    return useMemo(
-        () => (
-            <StyledTypewriter
-                $cursorType={cursorType}
-                onClick={isTypingAnimationActive ? handleClick : undefined}
-                $isAnimatingText={isAnimatingText}
-                $shouldHideCursor={shouldHideCursor}
-                $shouldPreventBlinkAnimation={shouldPreventBlinkingCursor}
-            >
-                {isAnimatingText ? (
-                    <AnimatedTypewriterText
-                        shouldHideCursor={shouldHideCursor}
-                        shouldRemainSingleLine={shouldRemainSingleLine}
-                        shownText={shownText}
-                        textStyle={textStyle}
-                    />
-                ) : (
-                    <StyledTypewriterText
-                        className="notranslate"
-                        $shouldRemainSingleLine={shouldRemainSingleLine}
-                        dangerouslySetInnerHTML={
-                            typeof sortedChildren === 'string' ? { __html: shownText } : undefined
-                        }
-                        style={textStyle}
-                    >
-                        {typeof sortedChildren !== 'string' ? sortedChildren : undefined}
-                    </StyledTypewriterText>
-                )}
-                {isAnimatingText && (
-                    <StyledTypewriterPseudoText
-                        $isAnimatingText={isAnimatingText}
-                        $shouldHideCursor={shouldHideCursor}
-                        dangerouslySetInnerHTML={{ __html: pseudoTextHTML }}
-                    />
-                )}
-                {/*
-                    The following is needed because some components like the CodeHighlighter will not render correct
-                    if the element is not rendered on a client before...
-                */}
-                {!hasRenderedChildrenOnce &&
-                    createPortal(
-                        <div style={{ position: 'absolute', visibility: 'hidden' }}>
-                            {children}
-                        </div>,
-                        document.body,
-                    )}
-            </StyledTypewriter>
-        ),
-        [
-            children,
-            cursorType,
-            handleClick,
-            hasRenderedChildrenOnce,
-            isAnimatingText,
-            isTypingAnimationActive,
-            pseudoTextHTML,
-            shouldHideCursor,
-            shouldPreventBlinkingCursor,
-            shouldRemainSingleLine,
-            shownText,
-            sortedChildren,
-            textStyle,
-        ],
+    return (
+        <TypewriterView
+            children={sortedChildren}
+            cursorType={cursorType}
+            handleClick={isTypingAnimationActive ? handleClick : undefined}
+            hasRenderedChildrenOnce={hasRenderedChildrenOnce}
+            isAnimatingText={isAnimatingText}
+            pseudoTextHTML={pseudoTextHTML}
+            shouldHideCursor={shouldHideCursor}
+            shouldPreventBlinkingCursor={shouldPreventBlinkingCursor}
+            shouldRemainSingleLine={shouldRemainSingleLine}
+            shownText={shownText}
+            textStyle={textStyle}
+        />
     );
 };
 
