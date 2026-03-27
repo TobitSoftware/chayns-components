@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import {
     ChunkStreamingSpeedState,
     getSafeAutoSpeed,
@@ -19,7 +19,7 @@ const useChunkStreamingSpeed = ({
     charactersCount,
     shouldCalcAutoSpeed,
 }: UseChunkStreamingSpeedProps) => {
-    const [autoSpeed, setAutoSpeed] = useState<number>();
+    const autoSpeed = useRef<number>();
     const chunkStreamingSpeed = useRef<ChunkStreamingSpeedState>({
         lastLength: charactersCount,
         ema: getInitialChunkSpeed(charactersCount, autoSpeedBaseFactor),
@@ -34,12 +34,11 @@ const useChunkStreamingSpeed = ({
 
     useEffect(() => {
         if (!shouldCalcAutoSpeed) {
-            setAutoSpeed(undefined);
+            autoSpeed.current = undefined;
             return;
         }
 
-        const nextAutoSpeed = getSafeAutoSpeed(chunkStreamingSpeed.current.ema);
-        setAutoSpeed(nextAutoSpeed);
+        autoSpeed.current = getSafeAutoSpeed(chunkStreamingSpeed.current.ema);
     }, [charactersCount, shouldCalcAutoSpeed]);
 
     return autoSpeed;

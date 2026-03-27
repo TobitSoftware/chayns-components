@@ -128,7 +128,7 @@ const useTypewriterAnimation = ({
                 if (lastTimeRendered === undefined) lastTimeRendered = timestamp;
                 const deltaTime = timestamp - lastTimeRendered;
                 accumulatedTime += deltaTime;
-                const rate = autoSpeed ?? speedParam;
+                const rate = autoSpeed.current ?? speedParam;
                 const charactersToChange = Math.floor(accumulatedTime / rate);
 
                 if (charactersToChange === 0) {
