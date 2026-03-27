@@ -25,8 +25,7 @@ import { ColorPicker, ColorPickerPopup, HueSlider } from '@chayns-components/col
 
 ## ColorPicker
 
-`ColorPicker` is exported by `@chayns-components/color-picker` and should be imported from the
-public package entry point.
+`ColorPicker` is exported by `@chayns-components/color-picker` and should be imported from the public package entry point.
 
 ### Import
 
@@ -51,19 +50,25 @@ import { ColorPicker } from '@chayns-components/color-picker';
 #### With Preset Colors
 
 ```tsx
-<ColorPicker shouldShowPresetColors />
+<ColorPicker
+    shouldShowPresetColors
+/>
 ```
 
 #### With Transparency Slider
 
 ```tsx
-<ColorPicker shouldShowTransparencySlider />
+<ColorPicker
+    shouldShowTransparencySlider
+/>
 ```
 
 #### With More Options
 
 ```tsx
-<ColorPicker shouldShowMoreOptions />
+<ColorPicker
+    shouldShowMoreOptions
+/>
 ```
 
 #### Show Plain
@@ -87,20 +92,15 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `ColorPicker` directly from `@chayns-components/color-picker` instead of internal source
-  paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `ColorPicker` directly from `@chayns-components/color-picker` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/color-picker/src/...`; always use
-  the public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/color-picker/src/...`; always use the public package export.
 ## ColorPickerPopup
 
-`ColorPickerPopup` is exported by `@chayns-components/color-picker` and should be imported from the
-public package entry point.
+`ColorPickerPopup` is exported by `@chayns-components/color-picker` and should be imported from the public package entry point.
 
 ### Import
 
@@ -126,20 +126,15 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `ColorPickerPopup` directly from `@chayns-components/color-picker` instead of internal
-  source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `ColorPickerPopup` directly from `@chayns-components/color-picker` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/color-picker/src/...`; always use
-  the public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/color-picker/src/...`; always use the public package export.
 ## HueSlider
 
-`HueSlider` is exported by `@chayns-components/color-picker` and should be imported from the public
-package entry point.
+`HueSlider` is exported by `@chayns-components/color-picker` and should be imported from the public package entry point.
 
 ### Import
 
@@ -165,20 +160,15 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `HueSlider` directly from `@chayns-components/color-picker` instead of internal source
-  paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `HueSlider` directly from `@chayns-components/color-picker` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/color-picker/src/...`; always use
-  the public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/color-picker/src/...`; always use the public package export.
 ## TransparencySlider
 
-`TransparencySlider` is exported by `@chayns-components/color-picker` and should be imported from
-the public package entry point.
+`TransparencySlider` is exported by `@chayns-components/color-picker` and should be imported from the public package entry point.
 
 ### Import
 
@@ -191,7 +181,9 @@ import { TransparencySlider } from '@chayns-components/color-picker';
 #### General
 
 ```tsx
-<TransparencySlider color={'rgba(255, 0, 0, 1)'} />
+<TransparencySlider
+    color={'rgba(255, 0, 0, 1)'}
+/>
 ```
 
 ### Props
@@ -204,12 +196,9 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `TransparencySlider` directly from `@chayns-components/color-picker` instead of internal
-  source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `TransparencySlider` directly from `@chayns-components/color-picker` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/color-picker/src/...`; always use
-  the public package export.
+- Avoid imports from internal paths such as `@chayns-components/color-picker/src/...`; always use the public package export.

@@ -21,8 +21,7 @@ import { PositionInput } from '@chayns-components/maps';
 
 ## PositionInput
 
-`PositionInput` is exported by `@chayns-components/maps` and should be imported from the public
-package entry point.
+`PositionInput` is exported by `@chayns-components/maps` and should be imported from the public package entry point.
 
 ### Import
 
@@ -52,10 +51,8 @@ No additional exported types documented.
 ### Usage Notes
 
 - Import `PositionInput` directly from `@chayns-components/maps` instead of internal source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/maps/src/...`; always use the public
-  package export.
+- Avoid imports from internal paths such as `@chayns-components/maps/src/...`; always use the public package export.
