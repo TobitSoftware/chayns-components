@@ -58,23 +58,18 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
         $bottomBorderColor,
     }: StyledMotionAccordionProps) => {
         if ($shouldForceBackground || $shouldHideBottomLine) return undefined;
+        const shouldShowBottomBorder =
+            theme.accordionLines && $shouldShowLines && ($isWrapped || !$isOpen);
 
-        if ($bottomBorderColor)
+        if ($bottomBorderColor && shouldShowBottomBorder)
             return css`
                 border-bottom-color: ${$bottomBorderColor};
             `;
-        if (theme.accordionLines) {
-            if ($isWrapped && $shouldShowLines) {
-                return css`
-                    border-bottom-color: rgba(${theme['headline-rgb']}, 1);
-                `;
-            }
 
-            if (!$isOpen && $shouldShowLines) {
-                return css`
-                    border-bottom-color: rgba(${theme['headline-rgb']}, 1);
-                `;
-            }
+        if (shouldShowBottomBorder) {
+            return css`
+                border-bottom-color: rgba(${theme['headline-rgb']}, 1);
+            `;
         }
 
         return undefined;
