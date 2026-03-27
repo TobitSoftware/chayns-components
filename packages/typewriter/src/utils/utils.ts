@@ -203,7 +203,7 @@ interface CalculateEMAProps {
     alpha?: number;
 }
 
-export const calculateEMA = ({ currentEMA, newValue, alpha = 0.25 }: CalculateEMAProps): number =>
+export const calculateEMA = ({ currentEMA, newValue, alpha = 0.75 }: CalculateEMAProps): number =>
     alpha * newValue + (1 - alpha) * currentEMA;
 
 export interface ChunkStreamingSpeedState {
