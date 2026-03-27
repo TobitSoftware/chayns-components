@@ -90,4 +90,12 @@ export type ButtonProps = {
      * @optional
      */
     buttonDesign?: number;
+    /**
+     * Duration in seconds for the tap animation.
+     * @description
+     * Overrides how long the pressed state animation should take when the button is tapped.
+     * Set this to `0` for an immediate press effect.
+     * @optional
+     */
+    tapDuration?: number;
 };
