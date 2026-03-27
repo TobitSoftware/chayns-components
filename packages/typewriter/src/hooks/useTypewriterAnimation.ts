@@ -1,16 +1,11 @@
 import type { MouseEvent } from 'react';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { CursorType } from '../types/cursor';
-import {
-    ChunkStreamingSpeedState,
-    getSafeAutoSpeed,
-    updateChunkStreamingSpeedEMA,
-} from '../utils/utils';
+import useChunkStreamingSpeed from './useChunkStreamingSpeed';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 type UseTypewriterAnimationProps = {
-    animationSteps: number;
     autoSpeedBaseFactor: number;
     charactersCount: number;
     childrenKey: unknown;
@@ -44,7 +39,6 @@ export type UseTypewriterAnimationResult = {
 };
 
 const useTypewriterAnimation = ({
-    animationSteps,
     autoSpeedBaseFactor,
     charactersCount,
     childrenKey,
@@ -74,10 +68,10 @@ const useTypewriterAnimation = ({
     const [shownCharCount, setShownCharCount] = useState(
         charactersCount > 0 ? 0 : currentTextLength,
     );
-    const autoSpeed = useRef<number>();
-    const chunkIntervalExponentialMovingAverage = useRef<ChunkStreamingSpeedState>({
-        lastLength: charactersCount,
-        ema: charactersCount / (autoSpeedBaseFactor / 1000),
+    const autoSpeed = useChunkStreamingSpeed({
+        autoSpeedBaseFactor,
+        charactersCount,
+        shouldCalcAutoSpeed,
     });
 
     useIsomorphicLayoutEffect(() => {
@@ -85,29 +79,6 @@ const useTypewriterAnimation = ({
     }, [childrenKey]);
 
     if (!hasRenderedChildrenOnce) setHasRenderedChildrenOnce(true);
-
-    useEffect(() => {
-        if (shouldUseResetAnimation) {
-            chunkIntervalExponentialMovingAverage.current = {
-                ema: charactersCount / (autoSpeedBaseFactor / 1000),
-                lastLength: charactersCount,
-            };
-        }
-
-        chunkIntervalExponentialMovingAverage.current = updateChunkStreamingSpeedEMA({
-            currentLength: charactersCount,
-            state: chunkIntervalExponentialMovingAverage.current,
-        });
-    }, [autoSpeedBaseFactor, charactersCount, shouldUseResetAnimation]);
-
-    useEffect(() => {
-        if (!shouldCalcAutoSpeed) {
-            autoSpeed.current = undefined;
-            return;
-        }
-
-        autoSpeed.current = getSafeAutoSpeed(chunkIntervalExponentialMovingAverage.current.ema);
-    }, [animationSteps, autoSpeedBaseFactor, charactersCount, shouldCalcAutoSpeed]);
 
     const shouldShowFullTextImmediately = shouldStopAnimation || charactersCount === 0;
     const effectiveShownCharCount = shouldShowFullTextImmediately
@@ -130,6 +101,7 @@ const useTypewriterAnimation = ({
     useEffect(() => {
         let frameId: number | undefined;
         let lastTimeRendered: number | undefined;
+        let accumulatedTime = 0;
         let timeoutId: number | undefined;
 
         const safeCancelFrame = () => {
@@ -151,18 +123,22 @@ const useTypewriterAnimation = ({
             speedParam: number,
         ) => {
             lastTimeRendered = undefined;
+            accumulatedTime = 0;
             const loop = (timestamp: number) => {
                 if (lastTimeRendered === undefined) lastTimeRendered = timestamp;
-                const timeSinceLastFrame = timestamp - lastTimeRendered;
+                const deltaTime = timestamp - lastTimeRendered;
+                accumulatedTime += deltaTime;
                 const rate = autoSpeed.current ?? speedParam;
-                const charactersToChange = Math.round(timeSinceLastFrame / rate);
+                const charactersToChange = Math.floor(accumulatedTime / rate);
 
                 if (charactersToChange === 0) {
+                    lastTimeRendered = timestamp;
                     frameId = requestAnimationFrame(loop);
                     return;
                 }
 
                 onTick(charactersToChange);
+                accumulatedTime -= charactersToChange * rate;
 
                 lastTimeRendered = timestamp;
                 frameId = requestAnimationFrame(loop);

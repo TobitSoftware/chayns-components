@@ -227,7 +227,6 @@ const Typewriter: FC<TypewriterProps> = ({
         shouldPreventBlinkingCursor,
     } = useTypewriterAnimation({
         autoSpeedBaseFactor,
-        animationSteps,
         charactersCount,
         childrenKey: children,
         childrenCount,
@@ -251,7 +250,7 @@ const Typewriter: FC<TypewriterProps> = ({
     });
 
     const shownText = useMemo(
-        () => getSubTextFromHTML(textContent, effectiveShownCharCount),
+        () => getSubTextFromHTML(textContent, effectiveShownCharCount) || '&#8203;',
         [effectiveShownCharCount, textContent],
     );
 
@@ -281,7 +280,6 @@ const Typewriter: FC<TypewriterProps> = ({
 
     return (
         <TypewriterView
-            children={sortedChildren}
             cursorType={cursorType}
             handleClick={isTypingAnimationActive ? handleClick : undefined}
             hasRenderedChildrenOnce={hasRenderedChildrenOnce}
@@ -292,7 +290,9 @@ const Typewriter: FC<TypewriterProps> = ({
             shouldRemainSingleLine={shouldRemainSingleLine}
             shownText={shownText}
             textStyle={textStyle}
-        />
+        >
+            {sortedChildren}
+        </TypewriterView>
     );
 };
 
