@@ -25,17 +25,15 @@ export const StyledProgressBarProgressWrapper = styled.div<StyledProgressBarProg
     position: relative;
     width: 100%;
     height: ${({ $height, $isBig }) => $height || ($isBig ? 20 : 10)}px;
-    border-radius: ${({ $height, $isBig }) => ($isBig ? ($height ?? 20) : ($height ?? 10) / 5)}px;
+    border-radius: ${({ $height, $isBig }) => $height || ($isBig ? 20 : 10)}px;
 `;
-
-type StyledProgressBarProgressProps = WithTheme<{ $color?: string }>;
 
 const shineMove = keyframes`
     from {
-        transform: translateX(-150%);
+        transform: translateX(-100%);
     }
     to {
-        transform: translateX(150%);
+        transform: translateX(100%);
     }
 `;
 
@@ -58,6 +56,11 @@ export const StyledProgressBarShine = styled.div.attrs<{ $speed?: number; $delay
     opacity: 0.95;
 `;
 
+type StyledProgressBarProgressProps = WithTheme<{ $color?: string }> & {
+    $height?: number;
+    $isBig?: boolean;
+};
+
 export const StyledMotionProgressBarProgress = styled(motion.div)<StyledProgressBarProgressProps>`
     height: 100%;
     position: absolute;
@@ -70,6 +73,7 @@ export const StyledMotionProgressBarProgress = styled(motion.div)<StyledProgress
     padding-left: 12px;
     background-color: ${({ theme, $color }: StyledProgressBarProgressProps) =>
         $color ?? theme.headline};
+    border-radius: ${({ $height, $isBig }) => $height || ($isBig ? 20 : 10)}px;
 `;
 
 type StyledProgressBarLabelProps = WithTheme<{
@@ -131,7 +135,19 @@ export const StyledProgressBarStep = styled.div<StyledProgressBarStepProps>`
     left: ${({ $position }: StyledProgressBarStepProps) => $position}%;
 `;
 
-export const StyledProgressBarThumbLabel = styled.div`
+type StyledProgressBarThumbLabelProps = WithTheme<{
+    $height?: number;
+    $isBig?: boolean;
+}>;
+export const StyledProgressBarThumbLabel = styled.div<StyledProgressBarThumbLabelProps>`
     position: absolute;
-    right: 0;
+    right: ${({ $height, $isBig }) => {
+        // set div exactly to end of border radius
+        if ($height) return $height / 2;
+        if ($isBig) return 20 / 2;
+        return 10 / 2;
+    }}px;
+    top: 0;
+    // revert till POPUPALIGNMENT respect if top or bottom
+    // height: 100%;
 `;

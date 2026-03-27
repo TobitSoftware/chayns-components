@@ -10,13 +10,14 @@ export const StyledFilterContent = styled.div<StyledFilterContentProps>`
 
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
 `;
 
 export const StyledFilterSort = styled.div`
     display: flex;
     align-items: center;
-    gap: 20px;
+    justify-content: space-between;
+    gap: 10px;
 `;
 
 export const StyledFilterSortText = styled.div`
@@ -32,4 +33,22 @@ export const StyledFilterComboboxWrapper = styled.div<StyledFilterComboboxWrappe
     justify-content: end;
     
     width: ${({ $textWidth }) => `calc(100% - ${$textWidth}px)`}}
+`;
+
+export const StyledFilterComboboxInline = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+`;
+
+export const StyledFilterComboboxInlineLabel = styled.div`
+    flex: 0 0 auto;
+`;
+
+export const StyledFilterComboboxInlineComboboxWrapper = styled.div`
+    display: flex;
+    justify-content: end;
+    flex: 1 1 auto;
+    min-width: 0;
 `;

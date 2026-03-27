@@ -42,6 +42,10 @@ export type SliderButtonProps = {
      * The id of the button that should be selected.
      */
     selectedButtonId?: string;
+    /**
+     *
+     */
+    isRounded?: boolean;
 };
 
 const SliderButton: FC<SliderButtonProps> = ({
@@ -50,6 +54,7 @@ const SliderButton: FC<SliderButtonProps> = ({
     items,
     onChange,
     selectedButtonId,
+    isRounded = false,
 }) => {
     const [dragRange, setDragRange] = useState({ left: 0, right: 0 });
     const [shownItemsCount, setShownItemsCount] = useState(items.length);
@@ -189,6 +194,15 @@ const SliderButton: FC<SliderButtonProps> = ({
                 return;
             }
 
+            if (currentIndex === index && items.length === 2) {
+                const otherItem = items.find((_, findIndex) => index !== findIndex);
+                if (!otherItem) return;
+
+                setPopupId(otherItem.id);
+                setItemPosition(items.indexOf(otherItem));
+                return;
+            }
+
             setPopupId(id);
 
             if (typeof onChange === 'function' && id !== 'more') {
@@ -205,7 +219,7 @@ const SliderButton: FC<SliderButtonProps> = ({
 
             setItemPosition(index);
         },
-        [isDisabled, onChange, setItemPosition, setPopupId],
+        [currentIndex, isDisabled, items, onChange, setItemPosition, setPopupId],
     );
 
     const backgroundColor = useMemo(() => {
@@ -426,6 +440,7 @@ const SliderButton: FC<SliderButtonProps> = ({
                     {pseudoButtons}
                 </StyledSliderButtonButtonsWrapper>
                 <StyledMotionSliderButtonThumb
+                    $isRounded={isRounded}
                     ref={scope}
                     drag={isDisabled ? false : 'x'}
                     dragElastic={0}
@@ -441,6 +456,7 @@ const SliderButton: FC<SliderButtonProps> = ({
                     style={{ backgroundColor: thumbBackgroundColor }}
                 />
                 <StyledSliderButtonWrapper
+                    $isRounded={isRounded}
                     $isDisabled={isDisabled}
                     $width={!isSliderBigger ? dragRange.right + itemWidth : dragRange.right}
                     ref={sliderButtonWrapperRef}
@@ -464,6 +480,7 @@ const SliderButton: FC<SliderButtonProps> = ({
             handleDragEnd,
             handleDragStart,
             isDisabled,
+            isRounded,
             isSliderBigger,
             itemWidth,
             pseudoButtons,

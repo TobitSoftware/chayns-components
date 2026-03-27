@@ -19,6 +19,7 @@ type StyledInputContentWrapperProps = WithTheme<{
     $isInvalid?: boolean;
     $size: InputSize;
     $shouldShowTransparentBackground: boolean;
+    $borderColor?: CSSProperties['borderColor'];
 }>;
 
 export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
@@ -32,7 +33,11 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
     width: 100%;
     transition: opacity 0.3s ease;
 
-    ${({ theme, $isInvalid, $shouldShowTransparentBackground }) => {
+    ${({ theme, $isInvalid, $shouldShowTransparentBackground, $borderColor }) => {
+        if ($borderColor)
+            return css`
+                border-color: ${$borderColor};
+            `;
         if ($isInvalid) {
             return css`
                 border-color: ${theme.wrong};

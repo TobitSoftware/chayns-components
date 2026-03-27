@@ -72,6 +72,11 @@ export enum InputSize {
     Medium = 'medium',
 }
 
+interface Color {
+    placeholder?: CSSProperties['color'];
+    border?: CSSProperties['borderColor'];
+}
+
 export type InputProps = {
     /**
      * If set and the input is disabled, the input will display a tooltip with this message.
@@ -126,9 +131,9 @@ export type InputProps = {
      */
     placeholder?: ReactNode;
     /**
-     * Color of the placeholder text.
+     * Colors for different parts of the input. You can set the color of the placeholder and the border color.
      */
-    placeholderColor?: CSSProperties['color'];
+    color?: Color;
     /**
      * An element that should be displayed on the right side of the Input.
      */
@@ -187,7 +192,7 @@ const Input = forwardRef<InputRef, InputProps>(
             onKeyDown,
             onPaste,
             placeholder,
-            placeholderColor,
+            color,
             rightElement,
             shouldShowOnlyBottomBorder,
             shouldRemainPlaceholder = false,
@@ -268,7 +273,7 @@ const Input = forwardRef<InputRef, InputProps>(
         }, [value]);
 
         let backgroundColor: CSSProperties['backgroundColor'] | undefined;
-        let color: CSSProperties['color'] | undefined;
+        let internalColor: CSSProperties['color'] | undefined;
 
         if (shouldShowTransparentBackground) {
             backgroundColor = 'transparent';
@@ -279,7 +284,7 @@ const Input = forwardRef<InputRef, InputProps>(
             )
         ) {
             backgroundColor = 'white';
-            color = '#555';
+            internalColor = '#555';
         } else if (areaProvider.shouldChangeColor) {
             backgroundColor = theme['000'];
         }
@@ -310,6 +315,7 @@ const Input = forwardRef<InputRef, InputProps>(
                         $shouldRoundRightCorners={shouldShowBorder}
                         $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                         $size={size}
+                        $borderColor={color?.border}
                     >
                         {leftElement && (
                             <StyledInputIconWrapper>{leftElement}</StyledInputIconWrapper>
@@ -318,7 +324,7 @@ const Input = forwardRef<InputRef, InputProps>(
                             $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                         >
                             <StyledInputField
-                                $color={color}
+                                $color={internalColor}
                                 $placeholderWidth={placeholderWidth}
                                 id={id}
                                 disabled={isDisabled}
@@ -364,7 +370,10 @@ const Input = forwardRef<InputRef, InputProps>(
                                     duration: shouldPreventPlaceholderAnimation ? 0 : 0.1,
                                 }}
                             >
-                                <StyledInputLabel $color={placeholderColor} $isInvalid={isInvalid}>
+                                <StyledInputLabel
+                                    $color={color?.placeholder}
+                                    $isInvalid={isInvalid}
+                                >
                                     {placeholder}
                                 </StyledInputLabel>
                             </StyledMotionInputLabelWrapper>
@@ -392,39 +401,39 @@ const Input = forwardRef<InputRef, InputProps>(
                 </StyledInput>
             ),
             [
-                autoComplete,
-                backgroundColor,
-                color,
-                handleClearIconClick,
-                handleInputFieldChange,
-                hasValue,
-                id,
-                inputMode,
                 isDisabled,
+                shouldShowTransparentBackground,
+                backgroundColor,
                 isInvalid,
-                labelPosition,
+                shouldShowBorder,
+                shouldShowOnlyBottomBorder,
+                size,
                 leftElement,
+                internalColor,
+                placeholderWidth,
+                id,
                 onBlur,
+                handleInputFieldChange,
                 onFocus,
                 onKeyDown,
                 onPaste,
-                placeholder,
-                placeholderColor,
-                placeholderWidth,
-                rightElement,
-                shouldPreventPlaceholderAnimation,
-                shouldRemainPlaceholder,
-                shouldShowBorder,
-                shouldShowCenteredContent,
-                shouldShowClearIcon,
-                shouldShowOnlyBottomBorder,
-                shouldShowTransparentBackground,
-                shouldUseAutoFocus,
-                size,
-                theme.fontSize,
-                theme.wrong,
                 type,
                 value,
+                shouldUseAutoFocus,
+                inputMode,
+                autoComplete,
+                shouldShowCenteredContent,
+                shouldPreventPlaceholderAnimation,
+                hasValue,
+                shouldRemainPlaceholder,
+                theme.fontSize,
+                theme.wrong,
+                labelPosition,
+                color?.placeholder,
+                placeholder,
+                shouldShowClearIcon,
+                handleClearIconClick,
+                rightElement,
             ],
         );
 

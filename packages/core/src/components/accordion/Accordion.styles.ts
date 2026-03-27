@@ -10,6 +10,7 @@ type StyledMotionAccordionProps = WithTheme<{
     $shouldHideBackground?: boolean;
     $shouldShowLines?: boolean;
     $shouldHideBottomLine: boolean;
+    $bottomBorderColor?: string;
 }>;
 
 export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionProps>`
@@ -54,9 +55,14 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
         $shouldShowLines,
         $shouldHideBottomLine,
         theme,
+        $bottomBorderColor,
     }: StyledMotionAccordionProps) => {
         if ($shouldForceBackground || $shouldHideBottomLine) return undefined;
 
+        if ($bottomBorderColor)
+            return css`
+                border-bottom-color: ${$bottomBorderColor};
+            `;
         if (theme.accordionLines) {
             if ($isWrapped && $shouldShowLines) {
                 return css`

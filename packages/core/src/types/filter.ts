@@ -1,5 +1,6 @@
 import { FilterButtonsProps } from '../components/filter-buttons/FilterButtons';
 import { CheckboxProps } from '../components/checkbox/Checkbox';
+import { ComboBoxProps } from '../components/combobox/ComboBox.types';
 
 export interface SearchConfig {
     onSearchChange: (search: string) => void;
@@ -21,6 +22,8 @@ export type CheckboxConfig = CheckboxProps;
 
 export type FilterButtonConfig = FilterButtonsProps;
 
+export type ComboboxConfig = ComboBoxProps & { label: string };
+
 export type FilterRef = {
     hide: VoidFunction;
     show: VoidFunction;
@@ -31,5 +34,6 @@ export enum FilterType {
     ONLY_FILTER,
     ONLY_SORT,
     ONLY_CHECKBOX,
+    ONLY_COMBOBOX,
     MULTIPLE,
 }

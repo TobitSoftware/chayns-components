@@ -151,9 +151,9 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         }
 
         const internalIcon = getIsExpandableIcon(theme.accordionIcon);
-        const internalIconStyle = theme?.iconStyle ? theme.iconStyle : 'fa-regular';
-
-        return <StyledUnicodeIcon className={internalIconStyle} $icon={internalIcon} />;
+        return (
+            <StyledUnicodeIcon className={theme.iconStyle ?? 'fa-regular'} $icon={internalIcon} />
+        );
     }, [icon, isFixed, theme.accordionIcon, theme.headline, theme.iconColor, theme.iconStyle]);
 
     let accordionHeadHeight = isOpen ? headHeight.open : headHeight.closed;

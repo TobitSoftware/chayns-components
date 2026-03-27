@@ -1,7 +1,9 @@
 import { AnimatePresence, MotionConfig } from 'motion/react';
 import React, {
     ChangeEventHandler,
+    type CSSProperties,
     FC,
+    type MouseEventHandler,
     ReactNode,
     UIEvent,
     useCallback,
@@ -10,8 +12,6 @@ import React, {
     useMemo,
     useRef,
     useState,
-    type CSSProperties,
-    type MouseEventHandler,
 } from 'react';
 import { useUuid } from '../../hooks/uuid';
 import { AreaContext } from '../area-provider/AreaContextProvider';
@@ -26,6 +26,11 @@ import { useInitialRenderRef } from '../../hooks/ref';
 export const AccordionContext = React.createContext<{ isWrapped?: boolean }>({
     isWrapped: undefined,
 });
+
+type AccordionColors = {
+    titleColor?: CSSProperties['color'];
+    borderBottomColor?: CSSProperties['borderBottomColor'];
+};
 
 export type AccordionProps = {
     /**
@@ -148,9 +153,9 @@ export type AccordionProps = {
      */
     titleInputProps?: InputProps;
     /**
-     * The title color.
+     * Provide custom colors to the Accordion Component
      */
-    titleColor?: CSSProperties['color'];
+    colors?: AccordionColors;
     /**
      * Whether the accordion should be indexed.
      */
@@ -185,7 +190,7 @@ const Accordion: FC<AccordionProps> = ({
     onTitleInputChange,
     titleInputProps,
     shouldSkipAnimation: shouldSkipAnimationProp = false,
-    titleColor,
+    colors,
     shouldIndex = false,
     onBodyAnimationComplete,
 }) => {
@@ -323,6 +328,7 @@ const Accordion: FC<AccordionProps> = ({
             $shouldForceBackground={shouldForceBackground}
             $shouldHideBackground={shouldHideBackground}
             $shouldHideBottomLine={shouldHideBottomLine}
+            $bottomBorderColor={colors?.borderBottomColor}
             onKeyDown={(e) => {
                 if (
                     e.key === 'Enter' &&
@@ -357,7 +363,7 @@ const Accordion: FC<AccordionProps> = ({
                         titleElement={titleElement}
                         onTitleInputChange={onTitleInputChange}
                         titleInputProps={titleInputProps}
-                        titleColor={titleColor}
+                        titleColor={colors?.titleColor}
                     />
                     <AnimatePresence initial={false}>
                         {(isOpen || shouldRenderClosed) && (

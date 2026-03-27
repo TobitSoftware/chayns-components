@@ -25,6 +25,11 @@ import {
 } from './TextArea.styles';
 import { useCursorRepaint } from '../../hooks/resize';
 
+type TextAreaColors = {
+    backgroundColor: CSSProperties['backgroundColor'];
+    borderColor: CSSProperties['borderColor'];
+};
+
 export type TextAreaProps = {
     /**
      * Disables the text area so that it cannot be changed.
@@ -70,6 +75,10 @@ export type TextAreaProps = {
      * Value if the text area should be controlled.
      */
     value?: string;
+    /**
+     * Provide custom colors to the TextArea Component
+     */
+    colors?: TextAreaColors;
 };
 
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
@@ -86,9 +95,12 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             onBlur,
             maxHeight = '120px',
             minHeight = '41px',
+            colors,
         },
         ref,
     ) => {
+        'use memo';
+
         const [isOverflowing, setIsOverflowing] = useState(false);
 
         const areaProvider = useContext(AreaContext);
@@ -128,12 +140,30 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             }
         }, [adjustTextareaHeight, value]);
 
+        const hasValue = value !== undefined && value.length > 0;
+
+        const labelPosition = useMemo(
+            () =>
+                hasValue
+                    ? {
+                          bottom: '2px',
+                          right: '2px',
+                      }
+                    : {
+                          top: '12px',
+                          left: '10px',
+                      },
+            [hasValue],
+        );
+
         return useMemo(
             () => (
                 <StyledTextArea $isDisabled={isDisabled}>
                     <StyledTextAreaContentWrapper
                         $isInvalid={isInvalid}
                         $shouldChangeColor={shouldChangeColor}
+                        $backgroundColor={colors?.backgroundColor}
+                        $borderColor={colors?.borderColor}
                     >
                         <StyledTextAreaContent>
                             <StyledTextAreaInput
@@ -151,13 +181,16 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                                 $isOverflowing={isOverflowing}
                                 rows={1}
                             />
-                            {!value && (
-                                <StyledTextAreaLabelWrapper>
-                                    <StyledTextAreaLabel $isInvalid={isInvalid}>
-                                        {placeholder}
-                                    </StyledTextAreaLabel>
-                                </StyledTextAreaLabelWrapper>
-                            )}
+                            <StyledTextAreaLabelWrapper
+                                animate={{ fontSize: hasValue ? '9px' : undefined }}
+                                initial={false}
+                                style={labelPosition}
+                                transition={{ type: 'tween', duration: 0.1 }}
+                            >
+                                <StyledTextAreaLabel $isInvalid={isInvalid}>
+                                    {placeholder}
+                                </StyledTextAreaLabel>
+                            </StyledTextAreaLabelWrapper>
                         </StyledTextAreaContent>
                         {rightElement && shouldShowBorder && rightElement}
                     </StyledTextAreaContentWrapper>
@@ -169,18 +202,22 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             [
                 isDisabled,
                 isInvalid,
-                isOverflowing,
-                maxHeight,
-                minHeight,
+                shouldChangeColor,
+                colors?.backgroundColor,
+                colors?.borderColor,
+                value,
                 onBlur,
                 onChange,
                 onFocus,
                 onKeyDown,
+                maxHeight,
+                minHeight,
+                isOverflowing,
+                hasValue,
+                labelPosition,
                 placeholder,
                 rightElement,
-                shouldChangeColor,
                 shouldShowBorder,
-                value,
             ],
         );
     },

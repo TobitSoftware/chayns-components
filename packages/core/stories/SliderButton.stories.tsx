@@ -26,6 +26,8 @@ export const General = Template.bind({});
 
 export const Expanded = Template.bind({});
 
+export const Rounded = Template.bind({});
+
 Expanded.args = {
     items: [
         { id: 'montag', text: 'Montag' },
@@ -35,5 +37,13 @@ Expanded.args = {
         { id: 'freitag', text: 'Freitag' },
         { id: 'samstag', text: 'Samstag' },
         { id: 'sonntag', text: 'Sonntag' },
+    ],
+};
+
+Rounded.args = {
+    isRounded: true,
+    items: [
+        { id: 'parken', text: 'Parken' },
+        { id: 'fahren', text: 'Fahren' },
     ],
 };

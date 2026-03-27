@@ -240,9 +240,7 @@ const Typewriter: FC<TypewriterProps> = ({
     }, [areMultipleChildrenGiven, currentChildrenIndex, renderChildToString, sortedChildren]);
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
-
     const chunkIntervalExponentialMovingAverage = useRef<ChunkStreamingSpeedState>({
-        lastTimestamp: undefined,
         lastLength: charactersCount,
         ema: charactersCount / (autoSpeedBaseFactor / 1000),
     });

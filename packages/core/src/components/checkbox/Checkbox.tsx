@@ -1,6 +1,7 @@
 import React, {
     ChangeEvent,
     ChangeEventHandler,
+    CSSProperties,
     FC,
     ReactElement,
     useCallback,
@@ -17,6 +18,22 @@ import {
     StyledCheckboxInput,
     StyledCheckboxLabel,
 } from './Checkbox.styles';
+
+type CheckboxColors = {
+    /**
+     * Background color for the checked state.
+     */
+    checkedBackgroundColor?: CSSProperties['backgroundColor'];
+    /**
+     * Background color for the unchecked state.
+     */
+    uncheckedBackgroundColor?: CSSProperties['backgroundColor'];
+
+    /**
+     * Border color for the checkbox or switch indicator.
+     */
+    borderColor?: CSSProperties['borderColor'];
+};
 
 export type CheckboxProps = {
     /**
@@ -48,6 +65,11 @@ export type CheckboxProps = {
      */
     shouldShowAsSwitch?: boolean;
     /**
+     * Border radius for the checkbox or switch indicator.
+     */
+    borderRadius?: CSSProperties['borderRadius'];
+    colors?: CheckboxColors;
+    /**
      * Whether the Checkbox should be displayed centered to the label or at the top
      */
     shouldShowCentered?: boolean;
@@ -60,6 +82,8 @@ const Checkbox: FC<CheckboxProps> = ({
     labelClassName,
     onChange,
     shouldShowAsSwitch,
+    borderRadius,
+    colors,
     shouldShowCentered = false,
     shouldChangeOnLabelClick = true,
 }) => {
@@ -117,6 +141,10 @@ const Checkbox: FC<CheckboxProps> = ({
                     $isChecked={isChecked ?? isActive}
                     $isDisabled={isDisabled}
                     $shouldShowAsSwitch={shouldShowAsSwitch}
+                    $checkedBackgroundColor={colors?.checkedBackgroundColor}
+                    $uncheckedBackgroundColor={colors?.uncheckedBackgroundColor}
+                    $borderRadius={borderRadius}
+                    $borderColor={colors?.borderColor}
                 />
             </StyledCheckboxBoxWrapper>
             <StyledCheckboxLabel

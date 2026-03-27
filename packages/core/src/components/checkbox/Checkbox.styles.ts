@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import type { CSSProperties } from 'react';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { CheckboxProps } from './Checkbox';
 
@@ -35,6 +36,10 @@ type StyledCheckboxBoxProps = WithTheme<{
     $shouldShowAsSwitch?: CheckboxProps['shouldShowAsSwitch'];
     $isDisabled?: CheckboxProps['isDisabled'];
     $isChecked?: CheckboxProps['isChecked'];
+    $checkedBackgroundColor?: CSSProperties['backgroundColor'];
+    $uncheckedBackgroundColor?: CSSProperties['backgroundColor'];
+    $borderRadius?: CSSProperties['borderRadius'];
+    $borderColor?: CSSProperties['borderColor'];
 }>;
 
 export const StyledCheckboxBox = styled.label<StyledCheckboxBoxProps>`
@@ -80,22 +85,32 @@ export const StyledCheckboxBox = styled.label<StyledCheckboxBoxProps>`
         background-color: ${({
             $isChecked,
             $shouldShowAsSwitch,
+            $checkedBackgroundColor,
+            $uncheckedBackgroundColor,
             theme,
         }: StyledCheckboxBoxProps) => {
+            const activeBackgroundColor =
+                $checkedBackgroundColor ?? ($shouldShowAsSwitch ? theme.green : theme['408']);
+            const inactiveBackgroundColor =
+                $uncheckedBackgroundColor ?? ($shouldShowAsSwitch ? theme.red : theme['403']);
+
             if ($shouldShowAsSwitch) {
-                return $isChecked ? theme.green : theme.red;
+                return $isChecked ? activeBackgroundColor : inactiveBackgroundColor;
             }
 
-            return $isChecked ? theme['408'] : theme['403'];
+            return $isChecked ? activeBackgroundColor : inactiveBackgroundColor;
         }};
 
-        ${({ $shouldShowAsSwitch, theme }) =>
-            !$shouldShowAsSwitch &&
-            css`
-                border: 1px solid rgba(${theme['409-rgb']}, 0.5);
-            `}
+        border: ${({ $borderColor, $shouldShowAsSwitch, theme }: StyledCheckboxBoxProps) => {
+            if ($shouldShowAsSwitch) {
+                return 'none';
+            }
 
-        border-radius: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '100px' : 0)};
+            return `1px solid ${$borderColor ?? `rgba(${theme['409-rgb']}, 0.5)`}`;
+        }};
+
+        border-radius: ${({ $shouldShowAsSwitch, $borderRadius }) =>
+            $borderRadius ?? ($shouldShowAsSwitch ? '100px' : 0)};
         content: ' ';
         height: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '13px' : '15px')};
         left: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '10px' : 0)};

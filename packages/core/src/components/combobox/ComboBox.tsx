@@ -310,15 +310,10 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                 return;
             }
 
-            const hasImage = [selectedItem, ...allItems].some((item) => item?.imageUrl);
-            const hasIcon = [selectedItem, ...allItems].some((item) => item?.icons);
-
             const parentWidth =
                 styledComboBoxElementRef.current?.parentElement?.getBoundingClientRect().width ?? 0;
 
-            const paddingWidth = 20 + 2 + 40 + 40; // padding + border + arrow icon + optional clear icon
-            const imageWidth = hasImage ? 32 : 0; // image width + gap if images present
-            const iconWidth = hasIcon ? 40 : 0; // icon width + gap if icons present
+            const paddingWidth = 20 + 2 + 40 + (shouldShowClearIcon ? 40 : 0) + 1; // padding + border + arrow icon + optional clear icon + 1px puffer for rounding errors
 
             let prefixWidth = 0;
 
@@ -332,8 +327,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                 prefixWidth = Math.max(prefixTextWidth + 5, 32);
             }
 
-            const calculatedWidth =
-                maxItemWidth + paddingWidth + imageWidth + iconWidth + prefixWidth;
+            const calculatedWidth = maxItemWidth + paddingWidth + prefixWidth;
 
             let tmpMinWidth = calculatedWidth;
             let tmpBodyMinWidth = calculatedWidth;
@@ -354,8 +348,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                     values,
                 });
 
-                const itemWidth =
-                    internalSelectedItemWidth + paddingWidth + imageWidth + iconWidth + prefixWidth;
+                const itemWidth = internalSelectedItemWidth + paddingWidth + prefixWidth;
 
                 tmpMinWidth = itemWidth;
 
@@ -382,6 +375,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             selectedItem,
             shouldDropDownUseMaxItemWidth,
             shouldShowBigImage,
+            shouldShowClearIcon,
             shouldUseCurrentItemWidth,
             shouldUseFullWidth,
             values,

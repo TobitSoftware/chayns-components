@@ -1,5 +1,8 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+    StyledFilterComboboxInline,
+    StyledFilterComboboxInlineComboboxWrapper,
+    StyledFilterComboboxInlineLabel,
     StyledFilterComboboxWrapper,
     StyledFilterContent,
     StyledFilterSort,
@@ -10,6 +13,7 @@ import Icon from '../../icon/Icon';
 import FilterButtons from '../../filter-buttons/FilterButtons';
 import {
     CheckboxConfig,
+    ComboboxConfig,
     FilterButtonConfig,
     SearchConfig,
     SortConfig,
@@ -23,6 +27,7 @@ export type FilterContentProps = {
     filterButtonConfig?: FilterButtonConfig;
     sortConfig?: SortConfig;
     checkboxConfig?: CheckboxConfig;
+    comboboxConfig?: ComboboxConfig;
     shouldAutoFocus: boolean;
 };
 
@@ -31,6 +36,7 @@ const FilterContent: FC<FilterContentProps> = ({
     sortConfig,
     filterButtonConfig,
     checkboxConfig,
+    comboboxConfig,
     shouldAutoFocus,
 }) => {
     const sortTextRef = useRef<HTMLDivElement>(null);
@@ -103,6 +109,17 @@ const FilterContent: FC<FilterContentProps> = ({
                         </StyledFilterComboboxWrapper>
                     </StyledFilterSort>
                 )}
+                {comboboxConfig && (
+                    <StyledFilterComboboxInline>
+                        <StyledFilterComboboxInlineLabel>
+                            {comboboxConfig.label}
+                        </StyledFilterComboboxInlineLabel>
+                        <StyledFilterComboboxInlineComboboxWrapper>
+                            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                            <ComboBox shouldUseCurrentItemWidth {...comboboxConfig} />
+                        </StyledFilterComboboxInlineComboboxWrapper>
+                    </StyledFilterComboboxInline>
+                )}
                 {checkboxConfig && (
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     <Checkbox {...checkboxConfig} />
@@ -111,6 +128,7 @@ const FilterContent: FC<FilterContentProps> = ({
         ),
         [
             checkboxConfig,
+            comboboxConfig,
             filterButtonConfig,
             handleSelectSortItem,
             searchConfig,

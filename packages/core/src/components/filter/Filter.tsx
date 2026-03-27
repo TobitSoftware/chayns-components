@@ -18,13 +18,14 @@ import {
     StyledFilterIcon,
     StyledFilterIconWrapper,
     StyledFilterSearch,
-    StyledMotionFilterBackground,
 } from './Filter.styles';
 import ExpandableContent from '../expandable-content/ExpandableContent';
 import Icon from '../icon/Icon';
 import FilterContent from './filter-content/FIlterContent';
+import ComboBox from '../combobox/ComboBox';
 import {
     CheckboxConfig,
+    ComboboxConfig,
     FilterButtonConfig,
     FilterRef,
     FilterType,
@@ -49,6 +50,7 @@ export type FilterProps = {
     filterButtonConfig?: FilterButtonConfig;
     sortConfig?: SortConfig;
     checkboxConfig?: CheckboxConfig;
+    comboboxConfig?: ComboboxConfig;
     onActiveChange?: (isActive: boolean) => void;
     shouldShowRoundedHoverEffect?: boolean;
     rightIcons?: FilterRightIcon[];
@@ -65,6 +67,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             shouldShowRoundedHoverEffect = false,
             filterButtonConfig,
             checkboxConfig,
+            comboboxConfig,
             onActiveChange,
             rightIcons,
         },
@@ -73,8 +76,6 @@ const Filter = forwardRef<FilterRef, FilterProps>(
         const [isOpen, setIsOpen] = useState(false);
         const [isSearchActive, setIsSearchActive] = useState(false);
         const [shouldFocus, setShouldFocus] = useState(false);
-        const [backgroundDistance, setBackgroundDistance] = useState(0);
-        const [backgroundCoordinates, setBackgroundCoordinates] = useState({ top: 0, left: 0 });
 
         const contentRef = useRef<HTMLDivElement | null>(null);
         const iconRef = useRef<HTMLDivElement | null>(null);
@@ -84,24 +85,58 @@ const Filter = forwardRef<FilterRef, FilterProps>(
         const contextMenuRef = useRef<ContextMenuRef>(null);
 
         const type = useMemo(() => {
-            if (filterButtonConfig && !searchConfig && !sortConfig && !checkboxConfig) {
+            if (
+                filterButtonConfig &&
+                !searchConfig &&
+                !sortConfig &&
+                !checkboxConfig &&
+                !comboboxConfig
+            ) {
                 return FilterType.ONLY_FILTER;
             }
 
-            if (!filterButtonConfig && !searchConfig && sortConfig && !checkboxConfig) {
+            if (
+                !filterButtonConfig &&
+                !searchConfig &&
+                sortConfig &&
+                !checkboxConfig &&
+                !comboboxConfig
+            ) {
                 return FilterType.ONLY_SORT;
             }
 
-            if (!filterButtonConfig && searchConfig && !sortConfig && !checkboxConfig) {
+            if (
+                !filterButtonConfig &&
+                searchConfig &&
+                !sortConfig &&
+                !checkboxConfig &&
+                !comboboxConfig
+            ) {
                 return FilterType.ONLY_SEARCH;
             }
 
-            if (!filterButtonConfig && !searchConfig && !sortConfig && checkboxConfig) {
+            if (
+                !filterButtonConfig &&
+                !searchConfig &&
+                !sortConfig &&
+                checkboxConfig &&
+                !comboboxConfig
+            ) {
                 return FilterType.ONLY_CHECKBOX;
             }
 
+            if (
+                !filterButtonConfig &&
+                !searchConfig &&
+                !sortConfig &&
+                !checkboxConfig &&
+                comboboxConfig
+            ) {
+                return FilterType.ONLY_COMBOBOX;
+            }
+
             return FilterType.MULTIPLE;
-        }, [checkboxConfig, filterButtonConfig, searchConfig, sortConfig]);
+        }, [checkboxConfig, comboboxConfig, filterButtonConfig, searchConfig, sortConfig]);
 
         const icons = useMemo(() => {
             switch (type) {
@@ -175,26 +210,6 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             }
         }, [handleHide, handleShow, isOpen]);
 
-        useEffect(() => {
-            if (headline && iconRef.current && contentRef.current && filterRef.current) {
-                const iconRect = iconRef.current.getBoundingClientRect();
-                const filterRect = filterRef.current.getBoundingClientRect();
-                const contentRect = contentRef.current.getBoundingClientRect();
-
-                const relativeTop = iconRect.bottom - filterRect.top;
-                const relativeLeft = iconRect.left - filterRect.left;
-
-                setBackgroundDistance(contentRect.top - iconRect.bottom);
-                setBackgroundCoordinates({
-                    top: relativeTop,
-                    left: relativeLeft,
-                });
-            } else {
-                setBackgroundDistance(0);
-                setBackgroundCoordinates({ top: 0, left: 0 });
-            }
-        }, [headline]);
-
         const iconElement = useMemo(
             () => (
                 <StyledFilterIcon
@@ -207,18 +222,6 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 </StyledFilterIcon>
             ),
             [handleIconClick, icons, isOpen, shouldShowRoundedHoverEffect],
-        );
-
-        const backgroundElement = useMemo(
-            () => (
-                <StyledMotionFilterBackground
-                    $top={backgroundCoordinates.top}
-                    $left={backgroundCoordinates.left}
-                    animate={{ height: isOpen ? `${backgroundDistance}px` : 0 }}
-                    transition={{ duration: 0.1, delay: isOpen ? 0 : 0.2 }}
-                />
-            ),
-            [backgroundDistance, isOpen, backgroundCoordinates],
         );
 
         const sortItems: ContextMenuItem[] = useMemo(() => {
@@ -237,6 +240,17 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             }));
         }, [sortConfig]);
 
+        const comboboxElement = useMemo(() => {
+            if (!comboboxConfig) {
+                return null;
+            }
+
+            return (
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                <ComboBox {...comboboxConfig} />
+            );
+        }, [comboboxConfig]);
+
         return useMemo(
             () => (
                 <StyledFilter ref={filterRef}>
@@ -251,24 +265,21 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                             </StyledFilterHeadlineElement>
                         )}
                         {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
-                            <>
-                                <StyledFilterIconWrapper>
-                                    {rightIcons &&
-                                        rightIcons.map(({ icons: rIcons, onClick }) => (
-                                            <StyledFilterIcon
-                                                onClick={onClick}
-                                                $isOpen={false}
-                                                $shouldShowRoundedHoverEffect={
-                                                    shouldShowRoundedHoverEffect
-                                                }
-                                            >
-                                                <Icon icons={rIcons} size={18} />
-                                            </StyledFilterIcon>
-                                        ))}
-                                    {iconElement}
-                                </StyledFilterIconWrapper>
-                                {backgroundDistance > 0 && backgroundElement}
-                            </>
+                            <StyledFilterIconWrapper>
+                                {rightIcons &&
+                                    rightIcons.map(({ icons: rIcons, onClick }) => (
+                                        <StyledFilterIcon
+                                            onClick={onClick}
+                                            $isOpen={false}
+                                            $shouldShowRoundedHoverEffect={
+                                                shouldShowRoundedHoverEffect
+                                            }
+                                        >
+                                            <Icon icons={rIcons} size={18} />
+                                        </StyledFilterIcon>
+                                    ))}
+                                {iconElement}
+                            </StyledFilterIconWrapper>
                         )}
                         {type === FilterType.ONLY_SEARCH && searchConfig && (
                             <StyledFilterSearch>
@@ -293,19 +304,18 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                             // eslint-disable-next-line react/jsx-props-no-spreading
                             <Checkbox {...checkboxConfig} />
                         )}
+                        {type === FilterType.ONLY_COMBOBOX && comboboxElement}
                     </StyledFilterHead>
                     {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
                         <StyledFilterContentWrapper ref={contentRef}>
-                            <ExpandableContent
-                                isOpen={isOpen}
-                                startDelay={backgroundDistance > 0 ? 0.1 : 0}
-                            >
+                            <ExpandableContent isOpen={isOpen}>
                                 <FilterContent
                                     shouldAutoFocus={shouldFocus}
                                     searchConfig={searchConfig}
                                     filterButtonConfig={filterButtonConfig}
                                     sortConfig={sortConfig}
                                     checkboxConfig={checkboxConfig}
+                                    comboboxConfig={comboboxConfig}
                                 />
                             </ExpandableContent>
                         </StyledFilterContentWrapper>
@@ -318,8 +328,6 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 type,
                 rightIcons,
                 iconElement,
-                backgroundDistance,
-                backgroundElement,
                 searchConfig,
                 sortConfig,
                 sortItems,
@@ -327,6 +335,8 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 isOpen,
                 shouldFocus,
                 filterButtonConfig,
+                comboboxConfig,
+                comboboxElement,
                 shouldShowRoundedHoverEffect,
             ],
         );

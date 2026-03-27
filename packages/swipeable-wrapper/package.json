@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/swipeable-wrapper",
-    "version": "5.0.26",
+    "version": "5.0.51",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -33,7 +33,8 @@
         "test": "__tests__"
     },
     "files": [
-        "lib"
+        "lib",
+        "AGENTS.md"
     ],
     "repository": {
         "type": "git",
@@ -44,7 +45,6 @@
         "build:types": "tsc",
         "build:cjs": "cross-env NODE_ENV=cjs babel src --out-dir lib/cjs --extensions=.ts,.tsx --source-maps --ignore=src/stories",
         "build:esm": "cross-env NODE_ENV=esm babel src --out-dir lib/esm --extensions=.ts,.tsx --source-maps --ignore=src/stories",
-        "prepublishOnly": "npm run build",
         "watch:js": "npm run build:esm -- --watch",
         "watch:ts": "npm run build:types -- -w",
         "link": "npm link && concurrently \"npm run watch:js\" \"npm run watch:ts\""
@@ -71,7 +71,8 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.26"
+        "@chayns-components/core": "^5.0.51",
+        "react-compiler-runtime": "^1.0.0"
     },
     "peerDependencies": {
         "chayns-api": ">=2.2.0",

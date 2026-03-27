@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/maps",
-    "version": "5.0.26",
+    "version": "5.0.51",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -33,7 +33,8 @@
         "test": "__tests__"
     },
     "files": [
-        "lib"
+        "lib",
+        "AGENTS.md"
     ],
     "repository": {
         "type": "git",
@@ -44,7 +45,6 @@
         "build:types": "tsc",
         "build:cjs": "cross-env NODE_ENV=cjs babel src --out-dir lib/cjs --extensions=.ts,.tsx --source-maps --ignore=src/stories",
         "build:esm": "cross-env NODE_ENV=esm babel src --out-dir lib/esm --extensions=.ts,.tsx --source-maps --ignore=src/stories",
-        "prepublishOnly": "npm run build",
         "watch:js": "npm run build:esm -- --watch",
         "link": "npm link && npm run watch:js"
     },
@@ -71,11 +71,12 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.26",
+        "@chayns-components/core": "^5.0.51",
         "@googlemaps/react-wrapper": "^1.2.0",
         "@googlemaps/typescript-guards": "^2.0.3",
         "@react-google-maps/api": "^2.20.8",
-        "fast-equals": "^5.4.0"
+        "fast-equals": "^5.4.0",
+        "react-compiler-runtime": "^1.0.0"
     },
     "peerDependencies": {
         "chayns-api": ">=2.2.0",

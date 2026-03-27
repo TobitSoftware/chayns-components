@@ -39,26 +39,38 @@ export const StyledMotionPopupContentWrapper = styled(
                 case PopupAlignment.TopLeft:
                     return css`
                         bottom: -7px;
-                        right: ${13 + $offset}px;
+                        right: ${5 + $offset}px;
                         transform: rotate(45deg);
                     `;
                 case PopupAlignment.BottomLeft:
                     return css`
                         top: -7px;
-                        right: ${13 + $offset}px;
+                        right: ${5 + $offset}px;
+                        transform: rotate(225deg);
+                    `;
+                case PopupAlignment.TopCenter:
+                    return css`
+                        bottom: -7px;
+                        left: calc(50% - 7px);
+                        transform: rotate(45deg);
+                    `;
+                case PopupAlignment.BottomCenter:
+                    return css`
+                        top: -7px;
+                        left: calc(50% - 7px);
                         transform: rotate(225deg);
                     `;
                 case PopupAlignment.TopRight:
                     return css`
                         transform: rotate(45deg);
                         bottom: -7px;
-                        left: ${13 + $offset}px;
+                        left: ${5 + $offset}px;
                     `;
                 case PopupAlignment.BottomRight:
                     return css`
                         transform: rotate(225deg);
                         top: -7px;
-                        left: ${13 + $offset}px;
+                        left: ${5 + $offset}px;
                     `;
                 default:
                     return undefined;
