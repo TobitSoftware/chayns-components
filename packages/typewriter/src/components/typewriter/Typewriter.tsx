@@ -29,109 +29,119 @@ import {
     shuffleArray,
     updateChunkStreamingSpeedEMA,
 } from './utils';
+import useTypewriterAnimation from './useTypewriterAnimation';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export type TypewriterProps = {
     /**
-     * The number of characters that will be animated per animation cycle.
+     * The number of characters that will be animated per animation step.
+     *
+     * The step is advanced by the requestAnimationFrame-driven scheduler. When
+     * `shouldCalcAutoSpeed` is enabled, the component may override this value dynamically.
      */
     animationSteps?: number;
     /**
-     * The text to type
+     * The content to type.
+     *
+     * Strings are animated directly. React elements and arrays are rendered to HTML first so the
+     * typewriter can preserve nested markup and inline components.
      */
     children: ReactElement | ReactElement[] | string | string[];
     /**
-     * The type of the cursor. Use the CursorType enum for this prop.
+     * The type of the cursor. Use the `CursorType` enum for this prop.
      */
     cursorType?: CursorType;
     /**
      * The delay in milliseconds before the next text is shown.
-     * This prop is only used if multiple texts are given.
+     *
+     * This prop is only used when `children` is an array.
      */
     nextTextDelay?: TypewriterDelay;
     /**
-     * Function that is executed when the typewriter animation has finished. This function will not
-     * be executed if multiple texts are used.
+     * Function that is executed when the entire typewriter animation has finished.
+     *
+     * This callback is not used while more texts are still queued.
      */
     onFinish?: VoidFunction;
     /**
-     * Function that is executed when the reset animation has finished. This function will not be
-     * executed if `shouldUseResetAnimation` is not set to `true`.
+     * Function that is executed when the reset animation has finished.
+     *
+     * This callback only runs when `shouldUseResetAnimation` is enabled.
      */
     onResetAnimationEnd?: VoidFunction;
     /**
-     * Function that is executed when the reset animation has started. This function will not be
-     * executed if `shouldUseResetAnimation` is not set to `true`.
+     * Function that is executed when the reset animation has started.
+     *
+     * This callback only runs when `shouldUseResetAnimation` is enabled.
      */
     onResetAnimationStart?: VoidFunction;
     /**
-     * Function that is executed when the typing animation has finished. If multiple texts are given,
-     * this function will be executed for each text.
+     * Function that is executed when the typing animation has finished.
+     *
+     * If multiple texts are given, this function will be executed for each text.
      */
     onTypingAnimationEnd?: VoidFunction;
     /**
-     * Function that is executed when the typing animation has started. If multiple texts are given,
-     * this function will be executed for each text.
+     * Function that is executed when the typing animation has started.
+     *
+     * If multiple texts are given, this function will be executed for each text.
      */
     onTypingAnimationStart?: VoidFunction;
     /**
-     * Pseudo-element to be rendered invisible during animation to define the size of the element
-     * for the typewriter effect. By default, the "children" is used for this purpose.
+     * Invisible content that defines the reserved layout size while the animation is running.
+     *
+     * When omitted, the visible `children` are used as the layout template.
      */
     pseudoChildren?: ReactElement | string;
     /**
      * Waiting time in milliseconds before the typewriter resets the text.
-     * This prop is only used if multiple texts are given.
+     *
+     * This prop is only used when `children` is an array.
      */
     resetDelay?: TypewriterDelay;
     /**
-     * The reset speed of the animation. Use the TypewriterSpeed enum for this prop.
+     * The reset speed of the animation. Use the `TypewriterSpeed` enum for this prop.
      */
     resetSpeed?: TypewriterSpeed | number;
     /**
-     * Specifies whether the cursor should be forced to animate even if no text is currently animated.
+     * Keeps the cursor animated even if the current text is not actively changing.
      */
     shouldForceCursorAnimation?: boolean;
     /**
-     * Specifies whether the cursor should be hidden
+     * Hides the cursor entirely.
      */
     shouldHideCursor?: boolean;
     /**
-     * Whether the content should remain a single line.
+     * Keeps the content on a single line and applies ellipsis overflow handling.
      */
     shouldRemainSingleLine?: boolean;
     /**
-     * Specifies whether the children should be sorted randomly if there are multiple texts.
-     * This makes the typewriter start with a different text each time and also changes them
-     * in a random order.
+     * Randomizes the order of `children` when multiple texts are provided.
      */
     shouldSortChildrenRandomly?: boolean;
     /**
-     * Specifies whether the animation should use its full height or the height of the current
-     * chunk.
+     * Makes the hidden sizing text follow the currently revealed chunk instead of the full content.
      */
     shouldUseAnimationHeight?: boolean;
     /**
-     * Whether the animation speed should be calculated with the chunk interval.
+     * Derives the typing cadence from the observed streaming rate.
      */
     shouldCalcAutoSpeed?: boolean;
     /**
-     * Sets how long the animation should last when `shouldCalcAutoSpeed` is enabled in milliseconds.
-     * When chunks are streamed, this value will only be used for the initial speed and then change to the speed characters are added at
+     * Base factor used to initialize the auto-speed EMA.
      */
     autoSpeedBaseFactor?: number;
     /**
-     * Specifies whether the reset of the text should be animated with a backspace animation for
-     * multiple texts.
+     * Animates the reset between multiple texts with a backspace-like effect.
      */
     shouldUseResetAnimation?: boolean;
     /**
-     * Whether the typewriter should wait for new content
+     * Keeps the typewriter active while waiting for new content to arrive.
      */
     shouldWaitForContent?: boolean;
     /**
-     * The speed of the animation. Use the TypewriterSpeed enum for this prop.
+     * The speed of the animation. Use the `TypewriterSpeed` enum for this prop.
      */
     speed?: TypewriterSpeed | number;
     /**
@@ -139,7 +149,7 @@ export type TypewriterProps = {
      */
     startDelay?: TypewriterDelay;
     /**
-     * The style of the typewriter text element
+     * Inline styles for the visible text element.
      */
     textStyle?: CSSPropertiesWithVars;
 };
@@ -172,9 +182,6 @@ const Typewriter: FC<TypewriterProps> = ({
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
     const [hasRenderedChildrenOnce, setHasRenderedChildrenOnce] = useState(false);
-    const [shouldPreventBlinkingCursor, setShouldPreventBlinkingCursor] = useState(false);
-    const [isResetAnimationActive, setIsResetAnimationActive] = useState(false);
-    const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
     const autoSpeed = useRef<number>();
     const autoSteps = useRef<number>(animationSteps);
 
@@ -258,12 +265,6 @@ const Typewriter: FC<TypewriterProps> = ({
         ema: charactersCount / (autoSpeedBaseFactor / 1000),
     });
 
-    const [shownCharCount, setShownCharCount] = useState(
-        charactersCount > 0 ? 0 : textContent.length,
-    );
-
-    const currentPosition = useRef(0);
-
     useEffect(() => {
         if (shouldUseResetAnimation) {
             chunkIntervalExponentialMovingAverage.current = {
@@ -291,150 +292,41 @@ const Typewriter: FC<TypewriterProps> = ({
         autoSteps.current = steps;
     }, [animationSteps, charactersCount, shouldCalcAutoSpeed]);
 
+    const handleSetNextChildrenIndex = useCallback(() => {
+        setCurrentChildrenIndex((prevIndex) => {
+            const nextIndex = prevIndex + 1;
+
+            return nextIndex > childrenCount - 1 ? 0 : nextIndex;
+        });
+    }, [childrenCount]);
+
+    const { handleClick, isResetAnimationActive, shownCharCount, shouldPreventBlinkingCursor } =
+        useTypewriterAnimation({
+            areMultipleChildrenGiven,
+            autoSpeedRef: autoSpeed,
+            autoStepsRef: autoSteps,
+            charactersCount,
+            cursorType,
+            nextTextDelay,
+            onAdvanceText: handleSetNextChildrenIndex,
+            onResetAnimationEnd,
+            onResetAnimationStart,
+            onTypingAnimationEnd,
+            onTypingAnimationStart,
+            resetDelay,
+            resetSpeed,
+            shouldUseResetAnimation,
+            shouldWaitForContent,
+            speed,
+            startDelay,
+            textContentLength: textContent.length,
+        });
+
     const isAnimatingText =
         shownCharCount < textContent.length ||
         shouldForceCursorAnimation ||
         areMultipleChildrenGiven ||
         textContent.length === 0;
-
-    const handleClick = useCallback((event: React.MouseEvent) => {
-        event.stopPropagation();
-        event.preventDefault();
-
-        setShouldStopAnimation(true);
-    }, []);
-
-    const handleSetNextChildrenIndex = useCallback(
-        () =>
-            setCurrentChildrenIndex(() => {
-                let newIndex = currentChildrenIndex + 1;
-
-                if (newIndex > childrenCount - 1) {
-                    newIndex = 0;
-                }
-
-                return newIndex;
-            }),
-        [childrenCount, currentChildrenIndex],
-    );
-
-    useEffect(() => {
-        let interval: number | undefined;
-
-        if (shouldStopAnimation || charactersCount === 0) {
-            setShownCharCount(textContent.length);
-            currentPosition.current = textContent.length;
-        } else if (isResetAnimationActive) {
-            if (typeof onResetAnimationStart === 'function') {
-                onResetAnimationStart();
-            }
-
-            interval = window.setInterval(() => {
-                setShownCharCount((prevState) => {
-                    const nextState = prevState - autoSteps.current;
-                    currentPosition.current = nextState;
-
-                    if (nextState === 0) {
-                        window.clearInterval(interval);
-
-                        if (typeof onResetAnimationEnd === 'function') {
-                            onResetAnimationEnd();
-                        }
-
-                        if (areMultipleChildrenGiven) {
-                            setTimeout(() => {
-                                setIsResetAnimationActive(false);
-                                handleSetNextChildrenIndex();
-                            }, nextTextDelay);
-                        }
-                    }
-
-                    return nextState;
-                });
-            }, resetSpeed);
-        } else {
-            const startTypingAnimation = () => {
-                if (cursorType === CursorType.Thin) {
-                    setShouldPreventBlinkingCursor(true);
-                }
-
-                if (typeof onTypingAnimationStart === 'function') {
-                    onTypingAnimationStart();
-                }
-
-                const runTypingInterval = () => {
-                    setShownCharCount((prevState) => {
-                        let nextState = Math.min(prevState + autoSteps.current, charactersCount);
-
-                        if (nextState >= charactersCount && !shouldWaitForContent) {
-                            window.clearInterval(interval);
-
-                            if (cursorType === CursorType.Thin) {
-                                setShouldPreventBlinkingCursor(false);
-                            }
-
-                            if (typeof onTypingAnimationEnd === 'function') {
-                                onTypingAnimationEnd();
-                            }
-
-                            /**
-                             * At this point, the next value for "shownCharCount" is deliberately set to
-                             * the length of the textContent to correctly display HTML elements
-                             * after the last letter.
-                             */
-                            nextState = textContent.length;
-
-                            if (areMultipleChildrenGiven) {
-                                setTimeout(() => {
-                                    if (shouldUseResetAnimation) {
-                                        setIsResetAnimationActive(true);
-                                    } else {
-                                        setShownCharCount(0);
-                                        setTimeout(handleSetNextChildrenIndex, nextTextDelay);
-                                    }
-                                }, resetDelay);
-                            }
-                        }
-
-                        currentPosition.current = nextState;
-
-                        return nextState;
-                    });
-                };
-                interval = window.setInterval(runTypingInterval, autoSpeed.current ?? speed);
-            };
-
-            if (startDelay) {
-                setTimeout(startTypingAnimation, startDelay);
-            } else {
-                startTypingAnimation();
-            }
-        }
-
-        return () => {
-            window.clearInterval(interval);
-        };
-    }, [
-        areMultipleChildrenGiven,
-        autoSteps,
-        charactersCount,
-        cursorType,
-        handleSetNextChildrenIndex,
-        isResetAnimationActive,
-        nextTextDelay,
-        onResetAnimationEnd,
-        onResetAnimationStart,
-        onTypingAnimationEnd,
-        onTypingAnimationStart,
-        resetDelay,
-        resetSpeed,
-        shouldStopAnimation,
-        shouldUseResetAnimation,
-        shouldWaitForContent,
-        speed,
-        startDelay,
-        textContent.length,
-    ]);
 
     useEffect(() => {
         if (!isAnimatingText && typeof onFinish === 'function') {
