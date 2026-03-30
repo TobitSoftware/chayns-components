@@ -70,7 +70,6 @@ export const StyledMotionProgressBarProgress = styled(motion.div)<StyledProgress
     z-index: 2;
     display: flex;
     align-items: center;
-    padding-left: 12px;
     background-color: ${({ theme, $color }: StyledProgressBarProgressProps) =>
         $color ?? theme.headline};
     border-radius: ${({ $height, $isBig }) => $height || ($isBig ? 20 : 10)}px;
@@ -90,7 +89,7 @@ export const StyledProgressBarLabel = styled.div<StyledProgressBarLabelProps>`
     white-space: nowrap;
 
     ${({ $colorSplitPosition, $primaryColor, $secondaryColor, theme }) =>
-        $colorSplitPosition &&
+        typeof $colorSplitPosition === 'number' &&
         css`
             position: absolute;
             z-index: 2;
