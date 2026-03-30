@@ -136,6 +136,13 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
         [highlightedLines, width],
     );
 
+    const lineNumberStyle = useMemo(
+        () => ({
+            WebkitUserSelect: 'none' as const,
+        }),
+        [],
+    );
+
     const formattedCode = useMemo(() => {
         if (language) {
             void getParserForLanguage(language).then((config) => {
@@ -181,6 +188,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                 </StyledCodeHighlighterHeader>
                 <SyntaxHighlighter
                     language={language ?? ''}
+                    lineNumberStyle={lineNumberStyle}
                     showLineNumbers={shouldShowLineNumbers}
                     style={theme === CodeHighlighterTheme.Dark ? oneDark : oneLight}
                     wrapLines
@@ -192,12 +200,13 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
             </StyledCodeHighlighter>
         ),
         [
+            shouldWrapLines,
             theme,
             language,
             code,
             copyButtonText,
+            lineNumberStyle,
             shouldShowLineNumbers,
-            shouldWrapLines,
             lineWrapper,
             formattedCode,
         ],

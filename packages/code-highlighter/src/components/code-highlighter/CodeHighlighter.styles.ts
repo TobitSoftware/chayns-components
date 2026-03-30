@@ -30,11 +30,6 @@ export const StyledCodeHighlighter = styled.div<StyledCodeHighlighterProps>`
     .language-markdown .token.table {
         display: inline;
     }
-
-    // Prevents the line-number gutter from being selected when users copy code.
-    .react-syntax-highlighter-line-number {
-        -webkit-user-select: none;
-    }
 `;
 
 type StyledCodeHighlighterHeaderProps = WithTheme<{
