@@ -37,13 +37,13 @@ const AnimatedTypewriterText: FC<AnimatedTypewriterTextProps> = ({
 
                 const lastParentWithContent = traverseNodes(ref);
 
-                // Removes lastWithContent class from all elements
+                // Removes the cursor marker from the previous render.
                 ref.classList.remove('typewriter-lastWithContent');
-                ref.querySelectorAll('.lastWithContent').forEach((element) => {
+                ref.querySelectorAll('.typewriter-lastWithContent').forEach((element) => {
                     element.classList.remove('typewriter-lastWithContent');
                 });
 
-                // Adds lastWithContent class to the last element with content
+                // Adds the cursor marker to the last element that still contains text.
                 if (lastParentWithContent) {
                     lastParentWithContent.classList.add('typewriter-lastWithContent');
                 } else {
