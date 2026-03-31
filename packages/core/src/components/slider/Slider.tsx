@@ -158,7 +158,7 @@ export type SliderProps = {
      * <Slider thumbLabelFormatter={(value) => `${value} €`} />
      * @optional
      */
-    thumbLabelFormatter?: (value: number) => string;
+    thumbLabelFormatter?: (value: number, isMeasuring?: boolean) => string;
     /**
      * The current value of the slider.
      * @description

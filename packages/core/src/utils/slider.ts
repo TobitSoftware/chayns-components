@@ -61,7 +61,7 @@ export const calculateGradientOffset = ({
 
 interface GetThumbMaxWidthOptions {
     maxNumber: number;
-    thumbLabelFormatter?: (value: number) => string;
+    thumbLabelFormatter?: (value: number, isMeasuring?: boolean) => string;
 }
 
 interface CalculatePopupPositionOptions {
@@ -98,7 +98,7 @@ export const getThumbMaxWidth = ({ maxNumber, thumbLabelFormatter }: GetThumbMax
 
     element.textContent =
         typeof thumbLabelFormatter === 'function'
-            ? thumbLabelFormatter(maxNumber)
+            ? thumbLabelFormatter(maxNumber, true)
             : String(maxNumber);
 
     document.body.appendChild(element);
