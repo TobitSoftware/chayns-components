@@ -1,13 +1,7 @@
 import { Icon, selectFiles } from '@chayns-components/core';
 import React, { FC, useCallback } from 'react';
 import { StyledAddFile, StyledAddFIleIconWrapper } from './AddFile.styles';
-
-export type AddFileProps = {
-    /**
-     *  Function to be executed when files are added
-     */
-    onAdd: (files: File[]) => void;
-};
+import type { AddFileProps } from './AddFile.types';
 
 const AddFile: FC<AddFileProps> = ({ onAdd }) => {
     const openSelectDialog = useCallback(async () => {
