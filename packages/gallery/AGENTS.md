@@ -1,44 +1,28 @@
 # @chayns-components/gallery
 
-React component package providing `Gallery` for chayns applications.
+React component package providing 3 documented components for chayns applications.
 
-Documented components: `Gallery`.
+Documented components: `Gallery`, `GalleryEditor`, `GalleryViewer`.
 
 ## Import
 
 ```ts
-import { Gallery } from '@chayns-components/gallery';
+import { Gallery, GalleryEditor, GalleryViewer } from '@chayns-components/gallery';
 ```
 
 ## Typical Usage
 
 ```tsx
 <Gallery
-    files={[
-                {
-                    id: 'first-image',
-                    file: {
-                        id: '1',
-                        url: 'https://tsimg.cloud/77896-21884/8aee1a304297729a4542b97325940a656a3da8f2.png',
-                    },
-                },
-                {
-                    id: 'second-image',
-                    file: {
-                        id: '2',
-                        url: 'https://tsimg.cloud/77896-21884/54a117f35e5fb57520e64471461af5491c0eff06.png',
-                    },
-                },
-                {
-                    id: 'third-image',
-                    file: {
-                        id: '3',
-                        url: 'https://tsimg.cloud/77896-21884/25399416f38c1d960f521a3530c8a2bc70a88bb9.png',
-                    },
-                },
-            ]}
+    files={galleryStoryFiles}
 />
 ```
+
+## Components
+
+- `Gallery`
+- `GalleryEditor`
+- `GalleryViewer`
 
 ## Gallery
 
@@ -56,29 +40,7 @@ import { Gallery } from '@chayns-components/gallery';
 
 ```tsx
 <Gallery
-    files={[
-                {
-                    id: 'first-image',
-                    file: {
-                        id: '1',
-                        url: 'https://tsimg.cloud/77896-21884/8aee1a304297729a4542b97325940a656a3da8f2.png',
-                    },
-                },
-                {
-                    id: 'second-image',
-                    file: {
-                        id: '2',
-                        url: 'https://tsimg.cloud/77896-21884/54a117f35e5fb57520e64471461af5491c0eff06.png',
-                    },
-                },
-                {
-                    id: 'third-image',
-                    file: {
-                        id: '3',
-                        url: 'https://tsimg.cloud/77896-21884/25399416f38c1d960f521a3530c8a2bc70a88bb9.png',
-                    },
-                },
-            ]}
+    files={galleryStoryFiles}
 />
 ```
 
@@ -86,30 +48,18 @@ import { Gallery } from '@chayns-components/gallery';
 
 ```tsx
 <Gallery
-    files={[
-                {
-                    id: 'first-image',
-                    file: {
-                        id: '1',
-                        url: 'https://tsimg.cloud/77896-21884/8aee1a304297729a4542b97325940a656a3da8f2.png',
-                    },
-                },
-                {
-                    id: 'second-image',
-                    file: {
-                        id: '2',
-                        url: 'https://tsimg.cloud/77896-21884/54a117f35e5fb57520e64471461af5491c0eff06.png',
-                    },
-                },
-                {
-                    id: 'third-image',
-                    file: {
-                        id: '3',
-                        url: 'https://tsimg.cloud/77896-21884/25399416f38c1d960f521a3530c8a2bc70a88bb9.png',
-                    },
-                },
-            ]}
+    files={galleryStoryFiles.slice(0, 3)}
     isEditMode
+    maxFiles={6}
+/>
+```
+
+#### Wrapper Read Only Square
+
+```tsx
+<Gallery
+    files={galleryViewerSquareFiles}
+    viewMode={GalleryViewMode.SQUARE}
 />
 ```
 
@@ -124,6 +74,119 @@ No additional exported types documented.
 ### Usage Notes
 
 - Import `Gallery` directly from `@chayns-components/gallery` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+
+### Anti Patterns
+
+- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the public package export.
+## GalleryEditor
+
+`GalleryEditor` is exported by `@chayns-components/gallery` and should be imported from the public package entry point.
+
+### Import
+
+```ts
+import { GalleryEditor } from '@chayns-components/gallery';
+```
+
+### Examples
+
+#### General
+
+```tsx
+<GalleryEditor
+    allowDragAndDrop={false}
+    fileMinWidth={100}
+    files={galleryStoryFiles.slice(0, 3)}
+    maxFiles={6}
+/>
+```
+
+#### Reached Max Files
+
+```tsx
+<GalleryEditor
+    allowDragAndDrop={false}
+    fileMinWidth={100}
+    files={galleryStoryFiles.slice(0, 4)}
+    maxFiles={4}
+/>
+```
+
+### Props
+
+No prop documentation available.
+
+### Types
+
+No additional exported types documented.
+
+### Usage Notes
+
+- Import `GalleryEditor` directly from `@chayns-components/gallery` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+
+### Anti Patterns
+
+- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the public package export.
+## GalleryViewer
+
+`GalleryViewer` is exported by `@chayns-components/gallery` and should be imported from the public package entry point.
+
+### Import
+
+```ts
+import { GalleryViewer } from '@chayns-components/gallery';
+```
+
+### Examples
+
+#### General
+
+```tsx
+<GalleryViewer
+    files={galleryStoryFiles}
+    viewMode={GalleryViewMode.GRID}
+/>
+```
+
+#### Square Mode
+
+```tsx
+<GalleryViewer
+    files={galleryViewerSquareFiles}
+    viewMode={GalleryViewMode.SQUARE}
+/>
+```
+
+#### Single Item Fallback Ratio
+
+```tsx
+<GalleryViewer
+    files={[
+            {
+                id: 'single-fallback-image',
+                file: {
+                    id: 'fallback-1',
+                    url: 'https://picsum.photos/id/1025/1200/900',
+                },
+            },
+        ]}
+    viewMode={GalleryViewMode.GRID}
+/>
+```
+
+### Props
+
+No prop documentation available.
+
+### Types
+
+No additional exported types documented.
+
+### Usage Notes
+
+- Import `GalleryViewer` directly from `@chayns-components/gallery` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
