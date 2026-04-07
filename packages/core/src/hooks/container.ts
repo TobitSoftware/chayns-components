@@ -8,7 +8,6 @@ export enum ContainerAnchor {
     ROOT = '#root',
     TAPP = '.tapp',
     WALLET = '.wallet',
-    COLOR_SCHEME = '.color-scheme-provider',
 }
 
 const DEFAULT_CONTAINER_ANCHORS = [
@@ -17,7 +16,6 @@ const DEFAULT_CONTAINER_ANCHORS = [
     ContainerAnchor.PAGE,
     ContainerAnchor.ROOT,
     ContainerAnchor.TAPP,
-    ContainerAnchor.COLOR_SCHEME,
 ];
 
 interface UseContainerProps {
