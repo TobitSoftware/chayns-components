@@ -163,7 +163,7 @@ const SliderButton: FC<SliderButtonProps> = ({
 
     const derivedCurrentPopupId = currentPopupId || selectedButtonId || '';
 
-    const getDerivedCurrentIndex = () => {
+    const getDerivedCurrentIndex = useCallback(() => {
         if (selectedButtonId !== undefined) {
             let index = items.findIndex(({ id }) => id === selectedButtonId);
             if (items.length > shownItemsCount && index > shownItemsCount - 1)
@@ -172,7 +172,8 @@ const SliderButton: FC<SliderButtonProps> = ({
         }
         if (currentIndex >= 0) return currentIndex;
         return 0;
-    };
+    }, [currentIndex, items, selectedButtonId, shownItemsCount]);
+
     const derivedCurrentIndex = getDerivedCurrentIndex();
 
     const handleClick = useCallback(
@@ -206,7 +207,7 @@ const SliderButton: FC<SliderButtonProps> = ({
 
             setItemPosition(index);
         },
-        [currentIndex, isDisabled, items, onChange, setItemPosition, setPopupId],
+        [getDerivedCurrentIndex, isDisabled, items, onChange, setItemPosition, setPopupId],
     );
 
     const backgroundColor = useMemo(() => {
