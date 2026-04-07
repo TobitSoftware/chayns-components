@@ -6,7 +6,7 @@ import {
     useSite,
 } from 'chayns-api';
 import React, { createContext, FC, ReactNode, useContext, useMemo } from 'react';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { createGlobalStyle, css, ThemeProvider } from 'styled-components';
 import { StyledColorSchemeProvider } from './ColorSchemeProvider.styles';
 import { useChaynsTheme } from './hooks/useChaynsTheme';
 import { BrowserName } from '../../types/chayns';
@@ -70,6 +70,47 @@ const GlobalStyle = createGlobalStyle`
             color: #888;
             letter-spacing: -0.3px;
         }
+    }
+
+    .chayns-scrollbar {
+        ${({ theme }: WithTheme<unknown>) => {
+            const textRgb = theme['text-rgb'] ?? '';
+
+            return css`
+                @supports selector(::-webkit-scrollbar-button) {
+                    &::-webkit-scrollbar {
+                        width: 10px;
+                        height: 10px;
+                    }
+
+                    &::-webkit-scrollbar-thumb {
+                        background-color: rgba(${textRgb}, 0.15);
+                        border-radius: 20px;
+                        background-clip: padding-box;
+                        border: solid 3px transparent;
+                    }
+
+                    &::-webkit-scrollbar-track {
+                        background-color: transparent;
+                    }
+
+                    &::-webkit-scrollbar-corner {
+                        background-color: transparent;
+                    }
+
+                    &::-webkit-scrollbar-button {
+                        background-color: transparent;
+                        height: 5px;
+                        width: 5px;
+                    }
+                }
+
+                @supports not selector(::-webkit-scrollbar-button) {
+                    scrollbar-color: rgba(${textRgb}, 0.15) transparent;
+                    //scrollbar-width: thin;
+                }
+            `;
+        }}
     }
 `;
 
