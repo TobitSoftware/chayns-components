@@ -3320,6 +3320,43 @@ import { MultiActionButton } from '@chayns-components/core';
 />
 ```
 
+#### Auto Collapse Responsive
+
+```tsx
+<MultiActionButton
+    isDisabled={false}
+    extendedTimeoutMs={2000}
+    primaryAction={{
+                icon: 'fa fa-pen',
+                label: 'Chatten',
+            }}
+    secondaryAction={{
+                icon: 'fa fa-microphone',
+                label: 'Mitschnitt starten',
+            }}
+    shouldAutoCollapse
+/>
+```
+
+#### Auto Collapse Responsive Full Width
+
+```tsx
+<MultiActionButton
+    isDisabled={false}
+    extendedTimeoutMs={2000}
+    primaryAction={{
+                icon: 'fa fa-pen',
+                label: 'Chatten',
+            }}
+    secondaryAction={{
+                icon: 'fa fa-microphone',
+                label: 'Mitschnitt starten',
+            }}
+    shouldAutoCollapse
+    shouldUseFullWidth
+/>
+```
+
 #### Pulsing Secondary
 
 ```tsx
