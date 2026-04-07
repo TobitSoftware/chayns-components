@@ -4,7 +4,6 @@ import React, {
     type RefObject,
     type SetStateAction,
     useCallback,
-    useEffect,
     useMemo,
     useState,
 } from 'react';
@@ -27,16 +26,14 @@ const PrefixElement: FC<PrefixElementProps> = ({
     element,
     setIsPrefixAnimationFinished,
 }) => {
-    'use no memo';
-
     const [shouldShow, setShouldShow] = useState(true);
-    const [prefixText, setPrefixText] = useState('');
+    const prefixText = useMemo(() => {
+        const wrapper = document.createElement('div');
 
-    useEffect(() => {
-        if (prefixElementRef.current) {
-            setPrefixText(prefixElementRef.current.textContent ?? '');
-        }
-    }, [prefixElementRef]);
+        wrapper.innerHTML = convertTextToHTML(element);
+
+        return wrapper.textContent ?? '';
+    }, [element]);
 
     const handleAnimationEnd = useCallback(
         (index: number) => {
