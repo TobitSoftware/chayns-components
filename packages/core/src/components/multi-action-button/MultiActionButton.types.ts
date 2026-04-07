@@ -1,5 +1,6 @@
 import type { MouseEvent, ReactElement, ReactNode } from 'react';
 import type { MotionValue } from 'motion/react';
+import type { ContextMenuItem } from '../context-menu/ContextMenu.types';
 
 /**
  * Supported status types for the multi action button.
@@ -131,6 +132,8 @@ export type MultiActionButtonAction = {
     status?: MultiActionButtonActionStatus;
 };
 
+export type MultiActionButtonSecondaryContextMenu = ContextMenuItem[];
+
 /**
  * Props for the MultiActionButton component.
  */
@@ -202,6 +205,14 @@ export type MultiActionButtonProps = {
      * @optional
      */
     secondaryAction?: MultiActionButtonAction;
+    /**
+     * Context menu rendered as the secondary action.
+     * @description When the list contains entries, the secondary slot renders a fixed down-arrow
+     * trigger that opens a ContextMenu. If the list is empty or undefined, no context menu trigger
+     * is shown and `secondaryAction` can be used as usual.
+     * @optional
+     */
+    secondaryContextMenu?: MultiActionButtonSecondaryContextMenu;
     /**
      * Whether the button should take the full width of its parent.
      * @description When true, the control stretches to 100% width unless `width` is provided.

@@ -76,6 +76,32 @@ OnlyPrimary.args = {
     secondaryAction: undefined,
 };
 
+export const ContextMenuSecondaryAction = Template.bind({});
+
+ContextMenuSecondaryAction.args = {
+    secondaryAction: undefined,
+    secondaryContextMenu: [
+        {
+            icons: ['fa fa-pencil'],
+            key: 'rename',
+            onClick: () => console.log('Umbenennen'),
+            text: 'Umbenennen',
+        },
+        {
+            icons: ['fa fa-eye'],
+            key: 'show',
+            onClick: () => console.log('Einblenden'),
+            text: 'Einblenden',
+        },
+        {
+            icons: ['fa fa-trash'],
+            key: 'delete',
+            onClick: () => console.log('Löschen'),
+            text: 'Löschen',
+        },
+    ],
+};
+
 export const PulsingSecondary = Template.bind({});
 
 PulsingSecondary.args = {

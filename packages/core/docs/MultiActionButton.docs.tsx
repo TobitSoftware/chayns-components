@@ -1,8 +1,5 @@
 import React, { FC } from 'react';
-import {
-    MultiActionButton,
-    MultiActionButtonStatusType,
-} from '@chayns-components/core';
+import { MultiActionButton } from '@chayns-components/core';
 
 const Component: FC = () => {
     return (
@@ -13,16 +10,20 @@ const Component: FC = () => {
                 backgroundColor: '#0b6b3a',
                 onClick: () => console.log('Primary'),
             }}
-            secondaryAction={{
-                icon: 'fa fa-microphone',
-                label: 'Mitschnitt starten',
-                backgroundColor: '#0f6d7e',
-                onClick: () => console.log('Secondary'),
-                status: {
-                    type: MultiActionButtonStatusType.Pulse,
-                    pulseColors: ['#A50000', '#630000'],
+            secondaryContextMenu={[
+                {
+                    icons: ['fa fa-play'],
+                    key: 'start',
+                    onClick: () => console.log('Start'),
+                    text: 'Starten',
                 },
-            }}
+                {
+                    icons: ['fa fa-stop'],
+                    key: 'stop',
+                    onClick: () => console.log('Stop'),
+                    text: 'Beenden',
+                },
+            ]}
         />
     );
 };

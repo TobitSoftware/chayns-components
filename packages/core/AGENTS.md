@@ -1426,6 +1426,12 @@ import { ContextMenu } from '@chayns-components/core';
 />
 ```
 
+#### With YOffset
+
+```tsx
+<ContextMenu yOffset={12} />
+```
+
 ### Props
 
 No prop documentation available.
@@ -3281,6 +3287,40 @@ import { MultiActionButton } from '@chayns-components/core';
         label: 'Chatten',
     }}
     secondaryAction={undefined}
+/>
+```
+
+#### Context Menu Secondary Action
+
+```tsx
+<MultiActionButton
+    isDisabled={false}
+    extendedTimeoutMs={2000}
+    primaryAction={{
+        icon: 'fa fa-pen',
+        label: 'Chatten',
+    }}
+    secondaryAction={undefined}
+    secondaryContextMenu={[
+        {
+            icons: ['fa fa-pencil'],
+            key: 'rename',
+            onClick: () => console.log('Umbenennen'),
+            text: 'Umbenennen',
+        },
+        {
+            icons: ['fa fa-eye'],
+            key: 'show',
+            onClick: () => console.log('Einblenden'),
+            text: 'Einblenden',
+        },
+        {
+            icons: ['fa fa-trash'],
+            key: 'delete',
+            onClick: () => console.log('Löschen'),
+            text: 'Löschen',
+        },
+    ]}
 />
 ```
 

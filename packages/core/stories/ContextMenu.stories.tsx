@@ -36,6 +36,8 @@ export const WithSpacer = Template.bind({});
 
 export const WithoutIcons = Template.bind({});
 
+export const WithYOffset = Template.bind({});
+
 General.args = {
     items: [
         {
@@ -101,4 +103,9 @@ WithoutIcons.args = {
             text: 'Löschen',
         },
     ],
+};
+
+WithYOffset.args = {
+    ...General.args,
+    yOffset: 12,
 };
