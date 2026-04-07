@@ -229,7 +229,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         useEffect(() => {
             if (!isPopupOpen) {
-                return;
+                return undefined;
             }
 
             window.addEventListener('resize', handleReposition);
