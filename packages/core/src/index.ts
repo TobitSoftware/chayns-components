@@ -140,6 +140,7 @@ export {
     type MultiActionButtonActionStatus,
     MultiActionButtonHeight,
     type MultiActionButtonProps,
+    type MultiActionButtonSecondaryContextMenu,
     MultiActionButtonStatusType,
 } from './components/multi-action-button/MultiActionButton.types';
 export { ClampPosition } from './types/truncation';

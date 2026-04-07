@@ -1,4 +1,4 @@
-import type { MouseEvent, ReactNode } from 'react';
+import type { CSSProperties, MouseEvent, ReactNode } from 'react';
 
 /**
  * Enum representing the possible alignments for the context menu.
@@ -52,6 +52,11 @@ export type ContextMenuProps = {
      * @optional
      */
     alignment?: ContextMenuAlignment;
+    /**
+     * Additional class name applied to the trigger wrapper.
+     * @optional
+     */
+    className?: string;
     /**
      * Children element
      * @description The element over which the content of the ContextMenu should be displayed.
@@ -125,12 +130,33 @@ export type ContextMenuProps = {
      */
     shouldHidePopupArrow?: boolean;
     /**
+     * Whether the default trigger padding/background styles should be applied.
+     * @description Disable this when the trigger child already provides its own full visual styling.
+     * @default true
+     * @optional
+     */
+    shouldUseDefaultTriggerStyles?: boolean;
+    /**
      * Show hover effect flag
      * @description Whether the hover effect should be shown.
      * @default false
      * @optional
      */
     shouldShowHoverEffect?: boolean;
+    /**
+     * Inline styles applied to the trigger wrapper.
+     * @optional
+     */
+    style?: CSSProperties;
+    /**
+     * Vertical offset between the trigger element and the context menu.
+     * @description Use this prop to fine-tune the context menu position on the Y axis. Positive and
+     * negative values can be used depending on the desired spacing.
+     * @default 0
+     * @example yOffset={8}
+     * @optional
+     */
+    yOffset?: number;
     /**
      * Z-index value
      * @description The z-index of the popup.

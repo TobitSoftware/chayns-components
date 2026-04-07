@@ -30,6 +30,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
     (
         {
             alignment,
+            className,
             children = <Icon icons={['ts-ellipsis_v']} size={18} />,
             container,
             coordinates,
@@ -41,6 +42,9 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             shouldDisableClick = false,
             shouldHidePopupArrow = false,
             shouldShowHoverEffect = false,
+            shouldUseDefaultTriggerStyles = true,
+            style,
+            yOffset = 0,
             zIndex = 20,
         },
         ref,
@@ -168,7 +172,10 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 const x =
                     (childrenLeft + childrenWidth / 2 - left) / zoomX + newContainer.scrollLeft;
-                const y = (childrenTop + childrenHeight / 2 - top) / zoomY + newContainer.scrollTop;
+                const y =
+                    (childrenTop + childrenHeight / 2 - top) / zoomY +
+                    newContainer.scrollTop -
+                    yOffset;
 
                 setInternalCoordinates({ x, y });
 
@@ -186,9 +193,9 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 setIsContentShown(true);
             }
-        }, [isTouch, items, newContainer]);
+        }, [isTouch, items, newContainer, yOffset]);
 
-        const handleClick = useCallback<MouseEventHandler<HTMLDivElement>>(
+        const handleClick = useCallback<MouseEventHandler<HTMLSpanElement>>(
             (event) => {
                 if (shouldDisableClick) {
                     return;
@@ -301,11 +308,17 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         return (
             <>
                 <StyledContextMenu
-                    className="beta-chayns-context-menu"
+                    className={
+                        className
+                            ? `beta-chayns-context-menu ${className}`
+                            : 'beta-chayns-context-menu'
+                    }
                     $isActive={isContentShown && shouldShowHoverEffect}
                     $shouldAddHoverEffect={!isTouch && shouldShowHoverEffect}
+                    $shouldUseDefaultTriggerStyles={shouldUseDefaultTriggerStyles}
                     onClick={handleClick}
                     ref={contextMenuRef}
+                    style={style}
                 >
                     {children}
                 </StyledContextMenu>
