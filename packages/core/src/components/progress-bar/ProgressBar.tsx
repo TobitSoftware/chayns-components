@@ -187,9 +187,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
                                         shouldBeOpen
                                         shouldScrollWithContent
                                         yOffset={-12}
-                                    >
-                                        {}
-                                    </Popup>
+                                    />
                                 </ThemeProvider>
                             </StyledProgressBarThumbLabel>
                         )}

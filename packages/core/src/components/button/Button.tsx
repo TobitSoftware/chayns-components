@@ -25,6 +25,7 @@ const Button: FC<ButtonProps> = ({
     shouldShowAsSelectButton = false,
     shouldShowTextAsRobotoMedium = true,
     buttonDesign,
+    tapDuration = 0.5,
 }) => {
     const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
         if (shouldStopPropagation) {
@@ -111,7 +112,12 @@ const Button: FC<ButtonProps> = ({
             animate={{
                 opacity: isDisabled ? 0.5 : 1,
             }}
-            transition={{ visibility: { duration: 0 }, duration: 0.5 }}
+            transition={{
+                visibility: { duration: 0 },
+                duration: tapDuration,
+                ease: 'easeIn',
+                type: 'tween',
+            }}
             whileTap={isDisabled ? {} : { ...tapStyles, transition: { duration: 0 } }}
             whileHover={isDisabled ? {} : { ...hoverStyles }}
         >
