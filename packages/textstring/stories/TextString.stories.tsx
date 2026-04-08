@@ -1,4 +1,4 @@
-import { RadioButton, RadioButtonGroup, type RadioButtonItem } from '@chayns-components/core';
+import { RadioButton, RadioButtonGroup } from '@chayns-components/core';
 import { Meta, StoryFn } from '@storybook/react';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Textstring, TextstringProvider } from '../src';
@@ -18,12 +18,8 @@ const Template: StoryFn<typeof Textstring> = ({ ...args }) => (
 const TextstringWithReplacementTemplate: StoryFn<typeof Textstring> = ({ ...args }) => {
     const [food, setFood] = useState('##food##');
 
-    const handleFoodChange = useCallback((item: RadioButtonItem) => {
-        if (!item.isChecked) {
-            return;
-        }
-
-        switch (item.id) {
+    const handleFoodChange = useCallback((id?: string) => {
+        switch (id) {
             case '0':
                 setFood('Eis');
                 break;
@@ -52,11 +48,11 @@ const TextstringWithReplacementTemplate: StoryFn<typeof Textstring> = ({ ...args
                 />
                 <i>'##food##' wird durch die ausgewählte Speise ersetzt</i>
                 <h2>Speise auswählen</h2>
-                <RadioButtonGroup>
-                    <RadioButton id="0" label="Eis" onChange={handleFoodChange} />
-                    <RadioButton id="1" label="Pizza" onChange={handleFoodChange} />
-                    <RadioButton id="2" label="Schokolade" onChange={handleFoodChange} />
-                    <RadioButton id="3" label="Salat" onChange={handleFoodChange} />
+                <RadioButtonGroup onSelect={handleFoodChange}>
+                    <RadioButton id="0" label="Eis" />
+                    <RadioButton id="1" label="Pizza" />
+                    <RadioButton id="2" label="Schokolade" />
+                    <RadioButton id="3" label="Salat" />
                 </RadioButtonGroup>
             </TextstringProvider>
         );

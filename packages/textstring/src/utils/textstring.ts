@@ -97,3 +97,19 @@ export const getTextstringValue = ({
         value,
     );
 };
+
+interface TtsToITextStringOptions {
+    stringName: string;
+    fallback: string;
+}
+export const ttsToITextString = (
+    textString: TtsToITextStringOptions | string,
+): { name: string; fallback: string } => {
+    if (typeof textString === 'string') {
+        return { name: textString, fallback: textString };
+    }
+    return {
+        name: textString.stringName,
+        fallback: textString.fallback,
+    };
+};
