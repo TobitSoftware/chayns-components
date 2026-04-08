@@ -1,9 +1,8 @@
 import { getAvailableColorList } from '@chayns/colors';
 import { styled } from 'styled-components';
 import type { WithTheme } from './ColorSchemeProvider';
-import { BrowserName } from '../../types/chayns';
 
-type ColorSchemeProviderProps = WithTheme<{ $browser: BrowserName }>;
+type ColorSchemeProviderProps = WithTheme;
 
 // noinspection CssUnresolvedCustomProperty
 export const StyledColorSchemeProvider = styled.div<ColorSchemeProviderProps>`

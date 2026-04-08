@@ -1,15 +1,8 @@
-import {
-    ChaynsDesignSettings,
-    ChaynsParagraphFormat,
-    ColorMode,
-    useDevice,
-    useSite,
-} from 'chayns-api';
+import { ChaynsDesignSettings, ChaynsParagraphFormat, ColorMode, useSite } from 'chayns-api';
 import React, { createContext, FC, ReactNode, useContext, useMemo } from 'react';
 import { createGlobalStyle, css, ThemeProvider } from 'styled-components';
 import { StyledColorSchemeProvider } from './ColorSchemeProvider.styles';
 import { useChaynsTheme } from './hooks/useChaynsTheme';
-import { BrowserName } from '../../types/chayns';
 
 export type ColorSchemeProviderProps = {
     /**
@@ -107,7 +100,7 @@ const GlobalStyle = createGlobalStyle`
 
                 @supports not selector(::-webkit-scrollbar-button) {
                     scrollbar-color: rgba(${textRgb}, 0.15) transparent;
-                    //scrollbar-width: thin;
+                    scrollbar-width: thin;
                 }
             `;
         }}
@@ -138,8 +131,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
     const { color: internalColor, colorMode: internalColorMode } = useSite();
 
-    const { browser } = useDevice();
-
     const color = colorProp ?? context?.designSettings?.color ?? internalColor;
     const colorMode = colorModeProp ?? context?.designSettings?.colorMode ?? internalColorMode;
 
@@ -165,11 +156,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     return (
         <ThemeProvider theme={contextValue.theme}>
             <ColorSchemeContext.Provider value={contextValue}>
-                <StyledColorSchemeProvider
-                    className="color-scheme-provider"
-                    style={style}
-                    $browser={browser?.name as BrowserName}
-                >
+                <StyledColorSchemeProvider className="color-scheme-provider" style={style}>
                     {children}
                 </StyledColorSchemeProvider>
                 <GlobalStyle />
