@@ -21,7 +21,7 @@ import {
 } from './Filter.styles';
 import ExpandableContent from '../expandable-content/ExpandableContent';
 import Icon from '../icon/Icon';
-import FilterContent from './filter-content/FIlterContent';
+import FilterContent from './filter-content/FilterContent';
 import ComboBox from '../combobox/ComboBox';
 import {
     CheckboxConfig,
