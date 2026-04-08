@@ -15,5 +15,11 @@ export default {
                 },
             },
         },
+        filterButtons: {
+            all: {
+                stringName: 'txt_chayns_components_core_components_filterButtons_all',
+                fallback: 'Alle',
+            },
+        },
     },
 } as const;
