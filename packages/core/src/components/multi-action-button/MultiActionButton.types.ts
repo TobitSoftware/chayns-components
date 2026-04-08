@@ -214,6 +214,14 @@ export type MultiActionButtonProps = {
      */
     secondaryContextMenu?: MultiActionButtonSecondaryContextMenu;
     /**
+     * Whether the button should collapse automatically based on the available width.
+     * @description When enabled, the control switches from the default layout to an icon-only
+     * layout and finally to a primary-only icon layout as space becomes tighter.
+     * @default false
+     * @optional
+     */
+    shouldAutoCollapse?: boolean;
+    /**
      * Whether the button should take the full width of its parent.
      * @description When true, the control stretches to 100% width unless `width` is provided.
      * @optional

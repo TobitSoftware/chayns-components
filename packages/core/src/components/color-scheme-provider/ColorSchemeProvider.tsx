@@ -1,15 +1,8 @@
-import {
-    ChaynsDesignSettings,
-    ChaynsParagraphFormat,
-    ColorMode,
-    useDevice,
-    useSite,
-} from 'chayns-api';
+import { ChaynsDesignSettings, ChaynsParagraphFormat, ColorMode, useSite } from 'chayns-api';
 import React, { createContext, FC, ReactNode, useContext, useMemo } from 'react';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { createGlobalStyle, css, ThemeProvider } from 'styled-components';
 import { StyledColorSchemeProvider } from './ColorSchemeProvider.styles';
 import { useChaynsTheme } from './hooks/useChaynsTheme';
-import { BrowserName } from '../../types/chayns';
 
 export type ColorSchemeProviderProps = {
     /**
@@ -71,6 +64,47 @@ const GlobalStyle = createGlobalStyle`
             letter-spacing: -0.3px;
         }
     }
+
+    .chayns-scrollbar {
+        ${({ theme }: WithTheme<unknown>) => {
+            const textRgb = theme['text-rgb'] ?? '';
+
+            return css`
+                @supports selector(::-webkit-scrollbar-button) {
+                    &::-webkit-scrollbar {
+                        width: 10px;
+                        height: 10px;
+                    }
+
+                    &::-webkit-scrollbar-thumb {
+                        background-color: rgba(${textRgb}, 0.15);
+                        border-radius: 20px;
+                        background-clip: padding-box;
+                        border: solid 3px transparent;
+                    }
+
+                    &::-webkit-scrollbar-track {
+                        background-color: transparent;
+                    }
+
+                    &::-webkit-scrollbar-corner {
+                        background-color: transparent;
+                    }
+
+                    &::-webkit-scrollbar-button {
+                        background-color: transparent;
+                        height: 5px;
+                        width: 5px;
+                    }
+                }
+
+                @supports not selector(::-webkit-scrollbar-button) {
+                    scrollbar-color: rgba(${textRgb}, 0.15) transparent;
+                    scrollbar-width: thin;
+                }
+            `;
+        }}
+    }
 `;
 
 export interface ColorSchemeContextProps {
@@ -97,8 +131,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
     const { color: internalColor, colorMode: internalColorMode } = useSite();
 
-    const { browser } = useDevice();
-
     const color = colorProp ?? context?.designSettings?.color ?? internalColor;
     const colorMode = colorModeProp ?? context?.designSettings?.colorMode ?? internalColorMode;
 
@@ -124,11 +156,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     return (
         <ThemeProvider theme={contextValue.theme}>
             <ColorSchemeContext.Provider value={contextValue}>
-                <StyledColorSchemeProvider
-                    className="color-scheme-provider"
-                    style={style}
-                    $browser={browser?.name as BrowserName}
-                >
+                <StyledColorSchemeProvider className="color-scheme-provider" style={style}>
                     {children}
                 </StyledColorSchemeProvider>
                 <GlobalStyle />

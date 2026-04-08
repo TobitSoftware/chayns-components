@@ -1,7 +1,45 @@
 import { Meta, StoryFn } from '@storybook/react';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import MultiActionButton from '../src/components/multi-action-button/MultiActionButton';
 import { MultiActionButtonStatusType, MultiActionButtonHeight } from '../src';
+
+interface AutoCollapseDemoProps {
+    args: React.ComponentProps<typeof MultiActionButton>;
+}
+
+const AutoCollapseDemo = ({ args }: AutoCollapseDemoProps) => {
+    const [wrapperWidth, setWrapperWidth] = useState(280);
+
+    const handleWrapperWidthChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+        setWrapperWidth(Number(event.target.value));
+    }, []);
+
+    return (
+        <div style={{ display: 'grid', gap: 16, padding: 24 }}>
+            <label style={{ display: 'grid', gap: 8 }}>
+                <span>{`Wrapper-Breite: ${wrapperWidth}px`}</span>
+                <input
+                    max={420}
+                    min={44}
+                    onChange={handleWrapperWidthChange}
+                    type="range"
+                    value={wrapperWidth}
+                />
+            </label>
+            <div
+                style={{
+                    border: '1px dashed #b7c3d0',
+                    overflow: 'hidden',
+                    width: wrapperWidth,
+                }}
+            >
+                <MultiActionButton {...args} />
+            </div>
+        </div>
+    );
+};
+
+AutoCollapseDemo.displayName = 'AutoCollapseDemo';
 
 export default {
     title: 'Core/MultiActionButton',
@@ -100,6 +138,23 @@ ContextMenuSecondaryAction.args = {
             text: 'Löschen',
         },
     ],
+};
+
+export const AutoCollapseResponsive: StoryFn<typeof MultiActionButton> = (args) => (
+    <AutoCollapseDemo args={args} />
+);
+
+AutoCollapseResponsive.args = {
+    shouldAutoCollapse: true,
+};
+
+export const AutoCollapseResponsiveFullWidth: StoryFn<typeof MultiActionButton> = (args) => (
+    <AutoCollapseDemo args={args} />
+);
+
+AutoCollapseResponsiveFullWidth.args = {
+    shouldAutoCollapse: true,
+    shouldUseFullWidth: true,
 };
 
 export const PulsingSecondary = Template.bind({});

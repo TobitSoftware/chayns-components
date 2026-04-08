@@ -1,11 +1,26 @@
 import clsx from 'clsx';
-import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+    FC,
+    MouseEvent,
+    ReactNode,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
+import { useElementSize, useMeasuredClone } from '../../hooks/element';
 import { useIsTouch } from '../../utils/environment';
 import ContextMenu from '../context-menu/ContextMenu';
 import type { ContextMenuRef } from '../context-menu/ContextMenu.types';
 import ActionButton from './action-button/ActionButton';
 import { StyledMultiActionButton, StyledSeparator } from './MultiActionButton.styles';
-import { getSecondaryContextMenuTriggerStyle } from './MultiActionButton.utils';
+import {
+    getMinimumPrimaryLabelVisibleWidth,
+    getMultiActionButtonAutoCollapseMode,
+    getSecondaryContextMenuTriggerStyle,
+    MultiActionButtonAutoCollapseMode,
+} from './MultiActionButton.utils';
 import type {
     MultiActionButtonAction,
     MultiActionButtonActionEvent,
@@ -17,6 +32,54 @@ const SECONDARY_CONTEXT_MENU_ACTION: MultiActionButtonAction = {
     icon: 'fa fa-chevron-down',
     label: undefined,
 };
+
+interface CreateMeasuredMultiActionButtonContentOptions {
+    backgroundColor?: string;
+    gapColor?: string;
+    height: number;
+    primaryAction: MultiActionButtonAction;
+    secondaryAction?: MultiActionButtonAction;
+}
+
+const createMeasuredMultiActionButtonContent = ({
+    backgroundColor,
+    gapColor,
+    height,
+    primaryAction,
+    secondaryAction,
+}: CreateMeasuredMultiActionButtonContentOptions): ReactNode => (
+    <StyledMultiActionButton style={{ width: 'fit-content' }}>
+        <ActionButton
+            action={primaryAction}
+            actionType="primary"
+            backgroundColor={primaryAction.backgroundColor ?? backgroundColor}
+            isCollapsed={false}
+            isDisabled={false}
+            isShrunk={false}
+            isSolo={!secondaryAction}
+            showLabel
+            shouldUseContentWidth
+            height={height}
+        />
+        {secondaryAction && (
+            <>
+                <StyledSeparator $gapColor={gapColor} $isHidden={false} />
+                <ActionButton
+                    action={secondaryAction}
+                    actionType="secondary"
+                    backgroundColor={secondaryAction.backgroundColor ?? backgroundColor}
+                    isCollapsed={false}
+                    isDisabled={false}
+                    isExpanded={false}
+                    isHidden={false}
+                    showLabel={false}
+                    shouldUseContentWidth
+                    height={height}
+                />
+            </>
+        )}
+    </StyledMultiActionButton>
+);
 
 /**
  * Multi-action button with optional secondary action that can expand on hover/click.
@@ -32,6 +95,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     primaryAction,
     secondaryAction,
     secondaryContextMenu,
+    shouldAutoCollapse = false,
     shouldUseFullWidth,
     width,
 }) => {
@@ -42,26 +106,107 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     const [isSecondaryHovered, setIsSecondaryHovered] = useState(false);
 
     const autoCollapseTimeoutRef = useRef<number | null>(null);
+    const multiActionButtonRef = useRef<HTMLDivElement | null>(null);
     const secondaryContextMenuRef = useRef<ContextMenuRef>(null);
+    const [autoCollapseMode, setAutoCollapseMode] = useState<MultiActionButtonAutoCollapseMode>(
+        MultiActionButtonAutoCollapseMode.Expanded,
+    );
 
     const isTouch = useIsTouch();
+    const parentSize = useElementSize(multiActionButtonRef, { shouldUseParentElement: true });
 
     const hasSecondaryContextMenu = Boolean(secondaryContextMenu?.length);
-    const hasExpandableSecondaryAction = Boolean(secondaryAction) && !hasSecondaryContextMenu;
-    const hasSecondaryAction = hasExpandableSecondaryAction || hasSecondaryContextMenu;
-    const resolvedSecondaryAction = hasSecondaryContextMenu
+    const secondaryTriggerAction = hasSecondaryContextMenu
         ? SECONDARY_CONTEXT_MENU_ACTION
         : secondaryAction;
+    const hasExpandableSecondaryAction = Boolean(secondaryAction) && !hasSecondaryContextMenu;
+    const hasSecondaryAction = Boolean(secondaryTriggerAction);
     const shouldUseContentWidth = !width && !shouldUseFullWidth;
 
-    const resolvedWidth = isCollapsed
-        ? height
-        : (width ?? (shouldUseFullWidth ? '100%' : 'fit-content'));
+    const expandedMeasuredContent = useMemo(
+        () =>
+            createMeasuredMultiActionButtonContent({
+                backgroundColor,
+                gapColor,
+                height,
+                primaryAction,
+                secondaryAction: secondaryTriggerAction,
+            }),
+        [backgroundColor, gapColor, height, primaryAction, secondaryTriggerAction],
+    );
+
+    const { measuredElement, width: expandedMeasuredWidth } = useMeasuredClone({
+        content: expandedMeasuredContent,
+    });
+
+    const availableWidth = useMemo(() => {
+        const parentWidth = parentSize?.width;
+
+        if (typeof width === 'number') {
+            return typeof parentWidth === 'number' ? Math.min(parentWidth, width) : width;
+        }
+
+        return parentWidth;
+    }, [parentSize?.width, width]);
+
+    useEffect(() => {
+        if (!shouldAutoCollapse || isCollapsed) {
+            setAutoCollapseMode(MultiActionButtonAutoCollapseMode.Expanded);
+            return;
+        }
+
+        if (expandedMeasuredWidth <= 0) {
+            return;
+        }
+
+        setAutoCollapseMode((previousMode) =>
+            getMultiActionButtonAutoCollapseMode({
+                availableWidth,
+                expandedWidth: expandedMeasuredWidth,
+                hasSecondaryAction,
+                height,
+                previousMode,
+            }),
+        );
+    }, [
+        availableWidth,
+        expandedMeasuredWidth,
+        hasSecondaryAction,
+        height,
+        isCollapsed,
+        shouldAutoCollapse,
+    ]);
+
+    const isAutoIconsOnly =
+        shouldAutoCollapse && autoCollapseMode === MultiActionButtonAutoCollapseMode.IconsOnly;
+    const isAutoPrimaryOnly =
+        shouldAutoCollapse && autoCollapseMode === MultiActionButtonAutoCollapseMode.PrimaryOnly;
+    const shouldKeepFullWidth = Boolean(shouldUseFullWidth);
+    const shouldHideSecondaryForAutoCollapse = hasSecondaryAction && isAutoPrimaryOnly;
+    const effectiveIsCollapsed = isCollapsed || (!shouldKeepFullWidth && isAutoPrimaryOnly);
+    const resolvedSecondaryAction = hasSecondaryAction ? secondaryTriggerAction : undefined;
+    const isSecondaryHidden = effectiveIsCollapsed || shouldHideSecondaryForAutoCollapse;
+    const shouldPreventSecondaryExpansion = isAutoIconsOnly || isSecondaryHidden;
+    const shouldKeepPrimaryLabelVisible = shouldKeepFullWidth && shouldAutoCollapse;
+    const minimumPrimaryLabelVisibleWidth = getMinimumPrimaryLabelVisibleWidth({
+        hasVisibleSecondaryAction: hasSecondaryAction,
+        height,
+    });
+    const shouldHidePrimaryLabelForMinimumWidth =
+        shouldKeepPrimaryLabelVisible &&
+        typeof availableWidth === 'number' &&
+        availableWidth <= minimumPrimaryLabelVisibleWidth;
+
+    const resolvedWidth = shouldKeepFullWidth
+        ? '100%'
+        : effectiveIsCollapsed
+          ? height
+          : (width ?? 'fit-content');
 
     const secondaryContextMenuTriggerStyle = getSecondaryContextMenuTriggerStyle({
         height,
-        isCollapsed,
-        isExpanded: isSecondaryExpanded,
+        isCollapsed: isSecondaryHidden,
+        isExpanded: false,
         shouldUseContentWidth,
     });
 
@@ -114,11 +259,13 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
      * Collapsing the control should also reset any temporary expansion state.
      */
     useEffect(() => {
-        if (isCollapsed) {
+        if (effectiveIsCollapsed || shouldPreventSecondaryExpansion) {
+            clearAutoCollapseTimeout();
             setIsSecondaryExpanded(false);
             setIsExtendedByClick(false);
+            setIsSecondaryHovered(false);
         }
-    }, [isCollapsed]);
+    }, [clearAutoCollapseTimeout, effectiveIsCollapsed, shouldPreventSecondaryExpansion]);
 
     /**
      * Handler for the primary action button.
@@ -148,7 +295,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
         (event: MouseEvent<HTMLButtonElement>) => {
             if (
                 !resolvedSecondaryAction ||
-                isCollapsed ||
+                isSecondaryHidden ||
                 isDisabled ||
                 resolvedSecondaryAction.isDisabled
             ) {
@@ -168,16 +315,19 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
             };
 
             resolvedSecondaryAction.onClick?.(payload);
-            expandSecondaryByClick();
+            if (!shouldPreventSecondaryExpansion) {
+                expandSecondaryByClick();
+            }
         },
         [
             expandSecondaryByClick,
             hasSecondaryContextMenu,
-            isCollapsed,
+            isSecondaryHidden,
             isDisabled,
             isSecondaryExpanded,
             isTouch,
             resolvedSecondaryAction,
+            shouldPreventSecondaryExpansion,
         ],
     );
 
@@ -187,9 +337,10 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     const handleSecondaryMouseEnter = useCallback(() => {
         if (
             !secondaryAction ||
-            isCollapsed ||
+            isSecondaryHidden ||
             isTouch ||
             isDisabled ||
+            shouldPreventSecondaryExpansion ||
             secondaryAction.isDisabled
         ) {
             return;
@@ -199,7 +350,14 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
         if (!isExtendedByClick) {
             setIsSecondaryExpanded(true);
         }
-    }, [isCollapsed, isDisabled, isExtendedByClick, isTouch, secondaryAction]);
+    }, [
+        isSecondaryHidden,
+        isDisabled,
+        isExtendedByClick,
+        isTouch,
+        secondaryAction,
+        shouldPreventSecondaryExpansion,
+    ]);
 
     const handleSecondaryMouseLeave = useCallback(() => {
         if (isTouch) {
@@ -207,10 +365,10 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
         }
 
         setIsSecondaryHovered(false);
-        if (!isExtendedByClick && !isCollapsed) {
+        if (!isExtendedByClick && !effectiveIsCollapsed) {
             setIsSecondaryExpanded(false);
         }
-    }, [isCollapsed, isExtendedByClick, isTouch]);
+    }, [effectiveIsCollapsed, isExtendedByClick, isTouch]);
 
     /**
      * Secondary label is visible when expanded or when hovered (desktop only).
@@ -218,74 +376,99 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     const isSecondaryLabelVisible = isSecondaryExpanded || (!isTouch && isSecondaryHovered);
 
     return (
-        <StyledMultiActionButton
-            className={clsx('beta-chayns-multi-action', className)}
-            style={{ maxWidth: '100%', width: resolvedWidth }}
-        >
-            <ActionButton
-                action={primaryAction}
-                actionType="primary"
-                backgroundColor={primaryAction.backgroundColor ?? backgroundColor}
-                isCollapsed={isCollapsed}
-                isDisabled={isDisabled}
-                isShrunk={hasExpandableSecondaryAction && isSecondaryExpanded}
-                isSolo={!hasSecondaryAction && !isCollapsed}
-                onClick={handlePrimaryClick}
-                showLabel={!isCollapsed && (!hasExpandableSecondaryAction || !isSecondaryExpanded)}
-                shouldUseContentWidth={shouldUseContentWidth}
-                height={height}
-            />
-            {resolvedSecondaryAction && (
-                <>
-                    {!isCollapsed && <StyledSeparator $gapColor={gapColor} />}
-                    {hasSecondaryContextMenu ? (
-                        <ContextMenu
-                            items={secondaryContextMenu ?? []}
-                            ref={secondaryContextMenuRef}
-                            shouldDisableClick
-                            shouldUseDefaultTriggerStyles={false}
-                            shouldHidePopupArrow
-                            yOffset={-6}
-                            style={secondaryContextMenuTriggerStyle}
-                        >
+        <>
+            {measuredElement}
+            <StyledMultiActionButton
+                className={clsx('beta-chayns-multi-action', className)}
+                ref={multiActionButtonRef}
+                style={{ maxWidth: '100%', width: resolvedWidth }}
+            >
+                <ActionButton
+                    action={primaryAction}
+                    actionType="primary"
+                    backgroundColor={primaryAction.backgroundColor ?? backgroundColor}
+                    isCollapsed={effectiveIsCollapsed}
+                    isDisabled={isDisabled}
+                    isShrunk={
+                        hasSecondaryAction &&
+                        ((!shouldKeepFullWidth && isAutoIconsOnly) || isSecondaryExpanded)
+                    }
+                    isSolo={!hasSecondaryAction || isSecondaryHidden || effectiveIsCollapsed}
+                    onClick={handlePrimaryClick}
+                    showLabel={
+                        !effectiveIsCollapsed &&
+                        !shouldHidePrimaryLabelForMinimumWidth &&
+                        (shouldKeepPrimaryLabelVisible || !isAutoIconsOnly) &&
+                        (shouldKeepPrimaryLabelVisible || !shouldHideSecondaryForAutoCollapse) &&
+                        (!hasExpandableSecondaryAction || !isSecondaryExpanded)
+                    }
+                    shouldUseContentWidth={shouldUseContentWidth}
+                    height={height}
+                />
+                {hasSecondaryAction && (
+                    <>
+                        <StyledSeparator $gapColor={gapColor} $isHidden={isSecondaryHidden} />
+                        {hasSecondaryContextMenu ? (
+                            <ContextMenu
+                                items={secondaryContextMenu ?? []}
+                                ref={secondaryContextMenuRef}
+                                shouldDisableClick
+                                shouldUseDefaultTriggerStyles={false}
+                                shouldHidePopupArrow
+                                yOffset={-6}
+                                style={secondaryContextMenuTriggerStyle}
+                            >
+                                <ActionButton
+                                    action={
+                                        resolvedSecondaryAction ?? SECONDARY_CONTEXT_MENU_ACTION
+                                    }
+                                    actionType="secondary"
+                                    backgroundColor={
+                                        resolvedSecondaryAction?.backgroundColor ?? backgroundColor
+                                    }
+                                    isCollapsed={false}
+                                    isDisabled={isDisabled}
+                                    isExpanded={false}
+                                    isHidden={isSecondaryHidden}
+                                    key="multi-action-secondary-context-menu"
+                                    onClick={handleSecondaryClick}
+                                    showLabel={false}
+                                    shouldUseContentWidth={shouldUseContentWidth}
+                                    height={height}
+                                />
+                            </ContextMenu>
+                        ) : (
                             <ActionButton
-                                action={resolvedSecondaryAction}
+                                action={
+                                    resolvedSecondaryAction ??
+                                    secondaryAction ??
+                                    SECONDARY_CONTEXT_MENU_ACTION
+                                }
                                 actionType="secondary"
                                 backgroundColor={
-                                    resolvedSecondaryAction.backgroundColor ?? backgroundColor
+                                    resolvedSecondaryAction?.backgroundColor ?? backgroundColor
                                 }
-                                isCollapsed={isCollapsed}
+                                isCollapsed={false}
                                 isDisabled={isDisabled}
-                                isExpanded={false}
-                                isHidden={isCollapsed}
+                                isExpanded={!isAutoIconsOnly && isSecondaryExpanded}
+                                isHidden={isSecondaryHidden}
+                                key="multi-action-secondary-button"
                                 onClick={handleSecondaryClick}
-                                showLabel={false}
+                                onMouseEnter={handleSecondaryMouseEnter}
+                                onMouseLeave={handleSecondaryMouseLeave}
+                                showLabel={
+                                    !isSecondaryHidden &&
+                                    !isAutoIconsOnly &&
+                                    isSecondaryLabelVisible
+                                }
                                 shouldUseContentWidth={shouldUseContentWidth}
                                 height={height}
                             />
-                        </ContextMenu>
-                    ) : (
-                        <ActionButton
-                            action={resolvedSecondaryAction}
-                            actionType="secondary"
-                            backgroundColor={
-                                resolvedSecondaryAction.backgroundColor ?? backgroundColor
-                            }
-                            isCollapsed={isCollapsed}
-                            isDisabled={isDisabled}
-                            isExpanded={isSecondaryExpanded}
-                            isHidden={isCollapsed}
-                            onClick={handleSecondaryClick}
-                            onMouseEnter={handleSecondaryMouseEnter}
-                            onMouseLeave={handleSecondaryMouseLeave}
-                            showLabel={isSecondaryLabelVisible}
-                            shouldUseContentWidth={shouldUseContentWidth}
-                            height={height}
-                        />
-                    )}
-                </>
-            )}
-        </StyledMultiActionButton>
+                        )}
+                    </>
+                )}
+            </StyledMultiActionButton>
+        </>
     );
 };
 
