@@ -21,7 +21,7 @@ import {
 } from './Filter.styles';
 import ExpandableContent from '../expandable-content/ExpandableContent';
 import Icon from '../icon/Icon';
-import FilterContent from './filter-content/FilterContent';
+import FIlterContent from './filter-content/FIlterContent';
 import ComboBox from '../combobox/ComboBox';
 import {
     CheckboxConfig,
@@ -309,7 +309,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                     {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
                         <StyledFilterContentWrapper ref={contentRef}>
                             <ExpandableContent isOpen={isOpen}>
-                                <FilterContent
+                                <FIlterContent
                                     shouldAutoFocus={shouldFocus}
                                     searchConfig={searchConfig}
                                     filterButtonConfig={filterButtonConfig}
