@@ -23,7 +23,6 @@ import Checkbox from '../../checkbox/Checkbox';
 import { IComboBoxItem } from '../../combobox/ComboBox.types';
 import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
 import textStrings from '../../../constants/textStrings';
-import { useLanguage } from 'chayns-api';
 
 export type FilterContentProps = {
     searchConfig?: SearchConfig;
@@ -47,7 +46,6 @@ const FIlterContent: FC<FilterContentProps> = ({
 
     const [sortTextWidth, setSortTextWidth] = useState(0);
 
-    const { active: language } = useLanguage();
     const ts = textStrings.components.filter.filterContent;
 
     const handleSelectSortItem = useCallback(
@@ -79,7 +77,7 @@ const FIlterContent: FC<FilterContentProps> = ({
 
     return useMemo(
         () => (
-            <TextstringProvider language={language} libraryName="@chayns-components-core">
+            <TextstringProvider libraryName="@chayns-components-core">
                 <StyledFilterContent>
                     {searchConfig && (
                         <Input
@@ -143,7 +141,6 @@ const FIlterContent: FC<FilterContentProps> = ({
             comboboxConfig,
             filterButtonConfig,
             handleSelectSortItem,
-            language,
             searchConfig,
             sortConfig,
             sortTextWidth,
