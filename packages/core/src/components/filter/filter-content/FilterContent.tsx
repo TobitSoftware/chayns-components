@@ -33,7 +33,7 @@ export type FilterContentProps = {
     shouldAutoFocus: boolean;
 };
 
-const FIlterContent: FC<FilterContentProps> = ({
+const FilterContent: FC<FilterContentProps> = ({
     searchConfig,
     sortConfig,
     filterButtonConfig,
@@ -150,6 +150,6 @@ const FIlterContent: FC<FilterContentProps> = ({
     );
 };
 
-FIlterContent.displayName = 'FIlterContent';
+FilterContent.displayName = 'FIlterContent';
 
-export default FIlterContent;
+export default FilterContent;
