@@ -9,6 +9,8 @@ import {
     getTimeTillNow,
     intervalToDuration,
 } from '../../utils/date';
+import textStrings from '../../constants/textStrings';
+import { Textstring, ttsToITextString } from '@chayns-components/textstring';
 
 export type TimerProps = {
     color: string;
@@ -54,16 +56,11 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
     }, []);
 
     const label = useMemo(() => {
-        let text = 'Vor ##SECONDS## Sek. (##TIME## Uhr)';
+        let text = textStrings.components.timer.devalued;
         if (differenceInHours(refDate.current, devalueTime) > 0) {
-            const distanceLabel = getTimeTillNow({
-                date: new Date(),
-                currentDate: devalueTime,
-                language,
-            });
-            text = `${distanceLabel} (##TIME## Uhr)`;
+            text = textStrings.components.timer.devalued;
         } else if (differenceInMinutes(refDate.current, devalueTime) > 0) {
-            text = 'Vor ##MINUTES## Min. ##SECONDS## Sek. (##TIME## Uhr)';
+            text = textStrings.components.timer.devaluedWithMinutes;
         }
 
         const formatTime = (date: Date, formatString: string): string => {
@@ -76,10 +73,23 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
             return '';
         };
 
-        return text
-            .replace('##MINUTES##', minutesShowValue)
-            .replace('##SECONDS##', secondsShowValue)
-            .replace('##TIME##', formatTime(devalueTime, 'HH:mm'));
+        const distanceLabel = getTimeTillNow({
+            date: new Date(),
+            currentDate: devalueTime,
+            language,
+        });
+
+        return (
+            <Textstring
+                textstring={ttsToITextString(text)}
+                replacements={{
+                    '##MINUTES##': minutesShowValue,
+                    '##SECONDS##': secondsShowValue,
+                    '##TIME##': formatTime(devalueTime, 'HH:mm'),
+                    '##DISTANCE##': distanceLabel,
+                }}
+            />
+        );
     }, [devalueTime, minutesShowValue, secondsShowValue, language]);
 
     return (
