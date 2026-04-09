@@ -2,7 +2,11 @@ export default {
     components: {
         codeHighlighter: {
             copyToClipboard: {
-                copied: 'Kopiert!',
+                copied: {
+                    stringName:
+                        'txt_chayns_components_code_highlighter_components_codeHighlighter_copyToClipboard_copied',
+                    fallback: 'Kopiert!',
+                },
             },
         },
     },
