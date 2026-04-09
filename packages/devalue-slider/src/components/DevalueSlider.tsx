@@ -86,7 +86,11 @@ const DevalueSlider: React.FC<DevalueSliderProps> = ({
     }, [isDisabled]);
 
     if (timerDevalueTime) {
-        return <Timer color={devalueBackgroundColor} devalueTime={timerDevalueTime} />;
+        return (
+            <TextstringProvider libraryName="@chayns-component-devalue-slider">
+                <Timer color={devalueBackgroundColor} devalueTime={timerDevalueTime} />
+            </TextstringProvider>
+        );
     }
 
     return (
