@@ -1,9 +1,15 @@
 export default {
     components: {
         ranking: {
-            title: 'Rangliste',
             button: {
-                loadMore: 'Mehr',
+                loadMore: {
+                    stringName: 'txt_chayns_components_ranking_components_ranking_button_loadMore',
+                    fallback: 'Mehr',
+                },
+            },
+            title: {
+                stringName: 'txt_chayns_components_ranking_components_ranking_title',
+                fallback: 'Rangliste',
             },
         },
     },
