@@ -2,21 +2,67 @@ import { dialog } from 'chayns-api';
 import type { ITextstring, TextstringReplacement } from '../components/textstring/types';
 import type { TextstringValue } from '../types/textstring';
 
+const libraryCache = new Map<string, TextstringValue>();
+const loadingLibraries = new Map<string, Promise<TextstringValue | null>>();
+
 interface LoadLibraryOptions {
     libraryName: string;
     language: string;
 }
 
-export const loadLibrary = async ({ language, libraryName }: LoadLibraryOptions) => {
-    const response = await fetch(
-        `https://webapi.tobit.com/TextstringService/v1.0/LangStrings/${libraryName}?language=${language}`,
-    );
+const getCacheKey = ({ libraryName, language }: LoadLibraryOptions) =>
+    `${libraryName}::${language}`;
 
-    if (response.status !== 200) {
-        return null;
+const storeTextstrings = (cacheKey: string, libraryName: string, value: TextstringValue) => {
+    libraryCache.set(cacheKey, value);
+
+    if (typeof window !== 'undefined') {
+        const prevTextstrings = window.Textstrings;
+
+        window.Textstrings = {
+            ...prevTextstrings,
+            [libraryName]: value,
+        };
+    }
+};
+
+export const loadLibrary = async ({ language, libraryName }: LoadLibraryOptions) => {
+    const cacheKey = getCacheKey({ libraryName, language });
+    const cached = libraryCache.get(cacheKey);
+
+    if (cached) {
+        return cached;
     }
 
-    return (await response.json()) as TextstringValue;
+    const loading = loadingLibraries.get(cacheKey);
+
+    if (loading) {
+        return loading;
+    }
+
+    const request = (async () => {
+        const response = await fetch(
+            `https://webapi.tobit.com/TextstringService/v1.0/LangStrings/${libraryName}?language=${language}`,
+        );
+
+        if (response.status !== 200) {
+            return null;
+        }
+
+        const value = (await response.json()) as TextstringValue;
+
+        storeTextstrings(cacheKey, libraryName, value);
+
+        return value;
+    })();
+
+    loadingLibraries.set(cacheKey, request);
+
+    try {
+        return await request;
+    } finally {
+        loadingLibraries.delete(cacheKey);
+    }
 };
 
 interface SelectLanguageToChangeOptions {
@@ -50,12 +96,7 @@ interface InitTextstringsOptions {
 export const initTextstrings = ({ libraryName, language }: InitTextstringsOptions) => {
     void loadLibrary({ libraryName, language }).then((result) => {
         if (result) {
-            const prevTextstrings = window.Textstrings;
-
-            window.Textstrings = {
-                ...prevTextstrings,
-                [libraryName]: result,
-            };
+            storeTextstrings(getCacheKey({ libraryName, language }), libraryName, result);
         }
     });
 };
