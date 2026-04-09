@@ -5,6 +5,7 @@ import { StyledColorPickerPopup } from './ColorPickerPopup.styles';
 import MoreOptions from './more-options/MoreOptions';
 import PresetColors from './preset-colors/PresetColors';
 import Sliders from './sliders/Sliders';
+import { TextstringProvider } from '@chayns-components/textstring';
 
 interface ColorPickerPopupProps {
     presetColors?: IPresetColor[];
@@ -43,7 +44,11 @@ const ColorPickerPopup = ({
                 onPresetColorRemove={onPresetColorRemove}
             />
         )}
-        {shouldShowMoreOptions && <MoreOptions />}
+        {shouldShowMoreOptions && (
+            <TextstringProvider libraryName="@chayns-components-color-picker">
+                <MoreOptions />
+            </TextstringProvider>
+        )}
     </StyledColorPickerPopup>
 );
 

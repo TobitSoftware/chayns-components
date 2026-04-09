@@ -1,6 +1,6 @@
 import { Accordion, AccordionGroup, AreaContext } from '@chayns-components/core';
 import { isHex } from '@chayns/colors';
-import React, { useContext, useEffect, useMemo, useState, type ChangeEvent } from 'react';
+import React, { type ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
 
 import { extractRgbValues, hexToRgb, isValidRGBA, rgbToHex } from '../../../utils/color';
 import { ColorPickerContext } from '../../ColorPickerProvider';
@@ -9,6 +9,8 @@ import {
     StyledMoreOptionsInput,
     StyledMoreOptionsInputWrapper,
 } from './MoreOptions.styles';
+import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
+import textStrings from '../../../constants/textStrings';
 
 const MoreOptions = () => {
     const { selectedColor, updateSelectedColor, updateShouldCallOnSelect } =
@@ -73,10 +75,16 @@ const MoreOptions = () => {
         }
     }, [selectedColor]);
 
+    const title = useTextstringValue({
+        textstring: ttsToITextString(
+            textStrings.components.colorPickerPopup.moreOptions.accordionTitle,
+        ),
+    });
+
     return (
         <StyledMoreOptions>
             <AccordionGroup isWrapped>
-                <Accordion title="Erweitert">
+                <Accordion title={title}>
                     <StyledMoreOptionsInputWrapper>
                         <StyledMoreOptionsInput
                             $shouldChangeColor={shouldChangeColor}
