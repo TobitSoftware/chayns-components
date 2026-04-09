@@ -2,7 +2,7 @@ import { getAvailableColorList } from '@chayns/colors';
 import { styled } from 'styled-components';
 import type { WithTheme } from './ColorSchemeProvider';
 
-type ColorSchemeProviderProps = WithTheme;
+type ColorSchemeProviderProps = WithTheme<unknown>;
 
 // noinspection CssUnresolvedCustomProperty
 export const StyledColorSchemeProvider = styled.div<ColorSchemeProviderProps>`

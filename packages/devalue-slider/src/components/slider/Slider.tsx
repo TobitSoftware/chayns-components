@@ -2,11 +2,11 @@ import { SmallWaitCursor } from '@chayns-components/core';
 import useSize from '@react-hook/size';
 import { invokeCall, vibrate } from 'chayns-api';
 import {
+    type DragHandler,
     useAnimation,
     useDragControls,
     useMotionValue,
     useTransform,
-    type DragHandler,
 } from 'motion/react';
 import React, {
     forwardRef,
@@ -25,13 +25,15 @@ import {
     Container,
     createThumbVariants,
     Thumb,
+    THUMB_ICON_VARIANTS,
     ThumbIcon,
     ThumbIconContainer,
-    THUMB_ICON_VARIANTS,
     Track,
     TrackBackground,
     TrackText,
 } from './Slider.styles';
+import { Textstring, ttsToITextString } from '@chayns-components/textstring';
+import textStrings from '../../constants/textStrings';
 
 export type SliderProps = {
     color: NonNullable<DevalueSliderProps['backgroundColor']>;
@@ -58,7 +60,7 @@ const Slider = forwardRef<SliderRef, SliderProps>(
             trackHeight = 50,
             thumbSize = 40,
             borderSize = 2,
-            trackText = 'EINLÖSEN',
+            trackText,
             onChange = () => {},
             onDevalue = () => Promise.resolve({ success: true }),
             onComplete,
@@ -271,7 +273,13 @@ const Slider = forwardRef<SliderRef, SliderProps>(
                         $color="white"
                         $baseFontSize={baseFontSize}
                     >
-                        {trackText}
+                        {trackText ?? (
+                            <Textstring
+                                textstring={ttsToITextString(
+                                    textStrings.components.slider.tracktext,
+                                )}
+                            />
+                        )}
                     </TrackText>
                 </Track>
             </Container>

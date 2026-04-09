@@ -20,6 +20,8 @@ import {
     StyledTruncationClampWrapper,
     StyledTruncationPseudoContent,
 } from './Truncation.styles';
+import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
+import textStrings from '../../constants/textStrings';
 
 export type TruncationProps = {
     /**
@@ -58,8 +60,8 @@ const Truncation: FC<TruncationProps> = ({
     collapsedHeight = 150,
     clampPosition = ClampPosition.Right,
     isOpen,
-    moreLabel = 'Mehr',
-    lessLabel = 'Weniger',
+    moreLabel,
+    lessLabel,
     onChange,
     children,
 }) => {
@@ -266,6 +268,11 @@ const Truncation: FC<TruncationProps> = ({
         return () => {};
     }, [originalSmallHeight, children]);
 
+    const ts = textStrings.components.truncation;
+
+    const internalMoreLabel = moreLabel ?? <Textstring textstring={ttsToITextString(ts.more)} />;
+    const internalLessLabel = lessLabel ?? <Textstring textstring={ttsToITextString(ts.less)} />;
+
     return useMemo(
         () => (
             <StyledTruncation className="beta-chayns-truncation" ref={parentRef}>
@@ -287,9 +294,11 @@ const Truncation: FC<TruncationProps> = ({
                 />
                 {showClamp && (
                     <StyledTruncationClampWrapper $position={clampPosition}>
-                        <StyledTruncationClamp onClick={handleClampClick}>
-                            {internalIsOpen ? lessLabel : moreLabel}
-                        </StyledTruncationClamp>
+                        <TextstringProvider libraryName="@chayns-components-core">
+                            <StyledTruncationClamp onClick={handleClampClick}>
+                                {internalIsOpen ? internalLessLabel : internalMoreLabel}
+                            </StyledTruncationClamp>
+                        </TextstringProvider>
                     </StyledTruncationClampWrapper>
                 )}
             </StyledTruncation>

@@ -1,6 +1,7 @@
 import React, { type CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
 import Slider, { type SliderRef } from './slider/Slider';
 import Timer from './timer/Timer';
+import { TextstringProvider } from '@chayns-components/textstring';
 
 export type DevalueSliderOnDevalueHandlerResult = { success: boolean };
 export type DevalueSliderOnDevalueHandler = () => Promise<DevalueSliderOnDevalueHandlerResult>;
@@ -55,7 +56,7 @@ const DevalueSlider: React.FC<DevalueSliderProps> = ({
     devalueBackgroundColor = 'green',
     devalueTime,
     isDisabled,
-    label = 'EINLÖSEN',
+    label,
     onDevalue,
     onChange,
     onComplete,
@@ -85,19 +86,25 @@ const DevalueSlider: React.FC<DevalueSliderProps> = ({
     }, [isDisabled]);
 
     if (timerDevalueTime) {
-        return <Timer color={devalueBackgroundColor} devalueTime={timerDevalueTime} />;
+        return (
+            <TextstringProvider libraryName="@chayns-component-devalue-slider">
+                <Timer color={devalueBackgroundColor} devalueTime={timerDevalueTime} />
+            </TextstringProvider>
+        );
     }
 
     return (
-        <Slider
-            ref={sliderRef}
-            onDevalue={onDevalue}
-            color={backgroundColor}
-            devalueColor={devalueBackgroundColor}
-            onComplete={handleCompleted}
-            onChange={onChange}
-            trackText={label}
-        />
+        <TextstringProvider libraryName="@chayns-component-devalue-slider">
+            <Slider
+                ref={sliderRef}
+                onDevalue={onDevalue}
+                color={backgroundColor}
+                devalueColor={devalueBackgroundColor}
+                onComplete={handleCompleted}
+                onChange={onChange}
+                trackText={label}
+            />
+        </TextstringProvider>
     );
 };
 

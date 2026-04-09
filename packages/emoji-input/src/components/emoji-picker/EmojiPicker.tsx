@@ -4,6 +4,8 @@ import type { Category } from '../../types/category';
 import EmojiPickerCategories from './emoji-picker-categories/EmojiPickerCategories';
 import EmojiPickerEmojis from './emoji-picker-emojis/EmojiPickerEmojis';
 import { StyledEmojiPicker } from './EmojiPicker.styles';
+import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
+import textStrings from '../../constants/textStrings';
 
 export type EmojiPickerProps = {
     /**
@@ -36,9 +38,16 @@ const EmojiPicker: FC<EmojiPickerProps> = ({ accessToken, onSelect, personId }) 
         setSearchString(event.target.value);
     }, []);
 
+    const ts = textStrings.components.emojiPicker.input.placeholder;
     return (
         <StyledEmojiPicker>
-            <Input onChange={handleSearchChange} placeholder="Suchen" value={searchString} />
+            <TextstringProvider libraryName="@chayns-component-emoji-input">
+                <Input
+                    onChange={handleSearchChange}
+                    placeholder={<Textstring textstring={ttsToITextString(ts)} />}
+                    value={searchString}
+                />
+            </TextstringProvider>
             <EmojiPickerEmojis
                 accessToken={accessToken}
                 onSelect={onSelect}

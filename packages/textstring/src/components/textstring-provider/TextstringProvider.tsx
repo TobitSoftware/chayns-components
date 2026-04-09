@@ -1,6 +1,7 @@
 import React, { createContext, FC, ReactNode, useEffect, useState } from 'react';
 import type { TextstringValue } from '../../types/textstring';
 import { loadLibrary } from '../../utils/textstring';
+import { useLanguage } from 'chayns-api';
 
 export const TextstringContext = createContext<TextstringValue>({});
 
@@ -12,7 +13,7 @@ export type TextstringProviderProps = {
     /**
      * The language that should be used.
      */
-    language: string;
+    language?: string;
     /**
      * The name of the library.
      */
@@ -21,10 +22,14 @@ export type TextstringProviderProps = {
 
 const TextstringProvider: FC<TextstringProviderProps> = ({ children, libraryName, language }) => {
     const [textstrings, setTextstrings] = useState<TextstringValue>({});
+    const { active } = useLanguage();
 
     useEffect(() => {
         const loadData = async () => {
-            const textstringResult = await loadLibrary({ libraryName, language });
+            const textstringResult = await loadLibrary({
+                libraryName,
+                language: language ?? active,
+            });
 
             if (textstringResult) {
                 const prevTextstrings = window.Textstrings;
@@ -39,7 +44,7 @@ const TextstringProvider: FC<TextstringProviderProps> = ({ children, libraryName
         };
 
         void loadData();
-    }, [language, libraryName]);
+    }, [active, language, libraryName]);
 
     return <TextstringContext.Provider value={textstrings}>{children}</TextstringContext.Provider>;
 };

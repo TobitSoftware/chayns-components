@@ -9,6 +9,8 @@ import {
     getTimeTillNow,
     intervalToDuration,
 } from '../../utils/date';
+import textStrings from '../../constants/textStrings';
+import { Textstring, ttsToITextString } from '@chayns-components/textstring';
 
 export type TimerProps = {
     color: string;
@@ -59,16 +61,11 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
     }, []);
 
     const label = useMemo(() => {
-        let text = 'Vor ##SECONDS## Sek. (##TIME## Uhr)';
-        if (differenceInHours(currentTime, devalueTime) > 0) {
-            const distanceLabel = getTimeTillNow({
-                date: new Date(),
-                currentDate: devalueTime,
-                language,
-            });
-            text = `${distanceLabel} (##TIME## Uhr)`;
-        } else if (differenceInMinutes(currentTime, devalueTime) > 0) {
-            text = 'Vor ##MINUTES## Min. ##SECONDS## Sek. (##TIME## Uhr)';
+        let text: { stringName: string; fallback: string } = textStrings.components.timer.devalued;
+        if (differenceInHours(refDate.current, devalueTime) > 0) {
+            text = textStrings.components.timer.future;
+        } else if (differenceInMinutes(refDate.current, devalueTime) > 0) {
+            text = textStrings.components.timer.devaluedWithMinutes;
         }
 
         const formatTime = (date: Date, formatString: string): string => {
@@ -81,11 +78,24 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
             return '';
         };
 
-        return text
-            .replace('##MINUTES##', minutesShowValue)
-            .replace('##SECONDS##', secondsShowValue)
-            .replace('##TIME##', formatTime(devalueTime, 'HH:mm'));
-    }, [currentTime, devalueTime, minutesShowValue, secondsShowValue, language]);
+        const distanceLabel = getTimeTillNow({
+            date: new Date(),
+            currentDate: devalueTime,
+            language,
+        });
+
+        return (
+            <Textstring
+                textstring={ttsToITextString(text)}
+                replacements={{
+                    '##MINUTES##': minutesShowValue,
+                    '##SECONDS##': secondsShowValue,
+                    '##TIME##': formatTime(devalueTime, 'HH:mm'),
+                    '##DISTANCE##': distanceLabel,
+                }}
+            />
+        );
+    }, [devalueTime, minutesShowValue, secondsShowValue, language]);
 
     return (
         <Container

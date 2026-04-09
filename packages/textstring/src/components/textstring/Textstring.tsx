@@ -1,4 +1,3 @@
-import { isTobitEmployee } from '@chayns-components/core';
 import React, {
     CSSProperties,
     FC,
@@ -8,6 +7,7 @@ import React, {
     type ReactElement,
 } from 'react';
 import { useTextstringValue } from '../../hooks/useTextstringValue';
+import { isTobitEmployee } from '../../utils/isTobitEmployee';
 import { selectLanguageToChange } from '../../utils/textstring';
 import type { ITextstring, TextstringReplacement } from './types';
 
@@ -61,7 +61,7 @@ const Textstring: FC<TextstringProps> = ({
     const handleClick = useCallback(
         (event: MouseEvent<HTMLElement>) => {
             if (event.ctrlKey) {
-                void isTobitEmployee().then((inGroup) => {
+                void isTobitEmployee().then((inGroup: boolean) => {
                     if (inGroup) {
                         selectLanguageToChange({
                             textstringName: textstring.name,

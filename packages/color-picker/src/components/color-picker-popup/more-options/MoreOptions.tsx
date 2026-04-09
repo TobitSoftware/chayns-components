@@ -9,6 +9,8 @@ import {
     StyledMoreOptionsInput,
     StyledMoreOptionsInputWrapper,
 } from './MoreOptions.styles';
+import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
+import textStrings from '../../../constants/textStrings';
 
 const MoreOptions = () => {
     const { selectedColor, updateSelectedColor, updateShouldCallOnSelect } =
@@ -80,10 +82,16 @@ const MoreOptions = () => {
         return undefined;
     };
 
+    const title = useTextstringValue({
+        textstring: ttsToITextString(
+            textStrings.components.colorPickerPopup.moreOptions.accordionTitle,
+        ),
+    });
+
     return (
         <StyledMoreOptions>
             <AccordionGroup isWrapped>
-                <Accordion title="Erweitert">
+                <Accordion title={title}>
                     <StyledMoreOptionsInputWrapper>
                         <StyledMoreOptionsInput
                             $shouldChangeColor={shouldChangeColor}
