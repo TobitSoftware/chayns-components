@@ -21,5 +21,9 @@ export default {
                 fallback: 'Alle',
             },
         },
+        truncation: {
+            more: 'Mehr',
+            less: 'Weniger',
+        },
     },
 } as const;
