@@ -62,9 +62,9 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
 
     const label = useMemo(() => {
         let text: { stringName: string; fallback: string } = textStrings.components.timer.devalued;
-        if (differenceInHours(refDate.current, devalueTime) > 0) {
+        if (differenceInHours(currentTime, devalueTime) > 0) {
             text = textStrings.components.timer.future;
-        } else if (differenceInMinutes(refDate.current, devalueTime) > 0) {
+        } else if (differenceInMinutes(currentTime, devalueTime) > 0) {
             text = textStrings.components.timer.devaluedWithMinutes;
         }
 
