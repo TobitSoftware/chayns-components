@@ -16,6 +16,8 @@ import { usePersonFinder } from '../../../../PersonFinderProvider';
 import PersonFinderItem from './person-finder-item/PersonFinderItem';
 import { useErrorMessage, useOnlyFriends } from '../../../../../hooks/personFinder';
 import PersonFinderSmallItem from './person-finder-small-item/PersonFinderSmallItem';
+import { Textstring, ttsToITextString } from '@chayns-components/textstring';
+import textStrings from '../../../../../constants/textStrings';
 
 export type PersonFinderGroupProps = {
     filterKey: PersonFinderFilterTypes;
@@ -73,6 +75,8 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
         event.stopPropagation();
     };
 
+    const ts = textStrings.components.personFinder.wrapper.body.group;
+
     return (
         <StyledPersonFinderGroup onClick={handlePreventDefault}>
             {shouldShowGroupName && (
@@ -110,7 +114,8 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
                         shouldShowWaitCursor={loadingState === LoadingState.Pending}
                         onClick={handleLoadMore}
                     >
-                        Mehr {getGroupName(filterKey)}
+                        <Textstring textstring={ttsToITextString(ts.loadMore)} />{' '}
+                        {getGroupName(filterKey)}
                     </Button>
                 </StyledPersonFinderGroupButtonWrapper>
             )}
