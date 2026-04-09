@@ -3,6 +3,8 @@ import { StyledRanking, StyledRankingLoadMoreButton } from './Ranking.styles';
 import { IRankingEntry } from '../../types/ranking';
 import { Accordion, AccordionContent, AccordionGroup, Button, Icon } from '@chayns-components/core';
 import RankingEntry from './ranking-entry/RankingEntry';
+import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
+import textStrings from '../../constants/textStrings';
 
 export type RankingProps = {
     /**
@@ -94,34 +96,42 @@ const Ranking: FC<RankingProps> = ({
         },
         [onSearchChange],
     );
+    const ts = textStrings.components.ranking;
 
     return useMemo(
         () => (
-            <StyledRanking>
-                <Accordion
-                    title={title}
-                    onSearchChange={handleSearchChange}
-                    searchValue={searchValue}
-                    rightElement={
-                        <Icon
-                            icons={shouldShowOnlyFriends ? ['fas fa-star'] : ['far fa-star']}
-                            size={15}
-                            onClick={onFriendVisibleChange}
-                        />
-                    }
-                >
-                    <AccordionGroup>{content}</AccordionGroup>
-                    {typeof onLoadMore === 'function' && (
-                        <AccordionContent>
-                            <StyledRankingLoadMoreButton>
-                                <Button onClick={onLoadMore} shouldShowWaitCursor={isLoadingData}>
-                                    Mehr
-                                </Button>
-                            </StyledRankingLoadMoreButton>
-                        </AccordionContent>
-                    )}
-                </Accordion>
-            </StyledRanking>
+            <TextstringProvider libraryName="@chayns-components-ranking">
+                <StyledRanking>
+                    <Accordion
+                        title={title ?? <Textstring textstring={ttsToITextString(ts.title)} />}
+                        onSearchChange={handleSearchChange}
+                        searchValue={searchValue}
+                        rightElement={
+                            <Icon
+                                icons={shouldShowOnlyFriends ? ['fas fa-star'] : ['far fa-star']}
+                                size={15}
+                                onClick={onFriendVisibleChange}
+                            />
+                        }
+                    >
+                        <AccordionGroup>{content}</AccordionGroup>
+                        {typeof onLoadMore === 'function' && (
+                            <AccordionContent>
+                                <StyledRankingLoadMoreButton>
+                                    <Button
+                                        onClick={onLoadMore}
+                                        shouldShowWaitCursor={isLoadingData}
+                                    >
+                                        <Textstring
+                                            textstring={ttsToITextString(ts.button.loadMore)}
+                                        />
+                                    </Button>
+                                </StyledRankingLoadMoreButton>
+                            </AccordionContent>
+                        )}
+                    </Accordion>
+                </StyledRanking>
+            </TextstringProvider>
         ),
         [
             content,
@@ -132,6 +142,7 @@ const Ranking: FC<RankingProps> = ({
             searchValue,
             shouldShowOnlyFriends,
             title,
+            ts.title,
         ],
     );
 };
