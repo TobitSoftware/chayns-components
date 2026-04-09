@@ -150,6 +150,6 @@ const FilterContent: FC<FilterContentProps> = ({
     );
 };
 
-FilterContent.displayName = 'FIlterContent';
+FilterContent.displayName = 'FilterContent';
 
 export default FilterContent;
