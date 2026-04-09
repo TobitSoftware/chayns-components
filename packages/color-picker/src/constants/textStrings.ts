@@ -2,7 +2,11 @@ export default {
     components: {
         colorPickerPopup: {
             moreOptions: {
-                accordionTitle: 'Erweitert',
+                accordionTitle: {
+                    stringName:
+                        'txt_chayns_components_color_picker_components_colorPickerPopup_moreOptions_accordionTitle',
+                    fallback: 'Erweitert',
+                },
             },
         },
     },
