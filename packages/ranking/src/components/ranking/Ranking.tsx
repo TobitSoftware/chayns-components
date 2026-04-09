@@ -57,7 +57,7 @@ export type RankingProps = {
 };
 
 const Ranking: FC<RankingProps> = ({
-    title = 'Rangliste',
+    title,
     entries,
     onFriendRemove,
     onFriendAdd,
@@ -96,6 +96,7 @@ const Ranking: FC<RankingProps> = ({
         },
         [onSearchChange],
     );
+
     const ts = textStrings.components.ranking;
 
     return useMemo(
@@ -103,7 +104,9 @@ const Ranking: FC<RankingProps> = ({
             <TextstringProvider libraryName="@chayns-components-ranking">
                 <StyledRanking>
                     <Accordion
-                        title={title ?? <Textstring textstring={ttsToITextString(ts.title)} />}
+                        titleElement={
+                            title ?? <Textstring textstring={ttsToITextString(ts.title)} />
+                        }
                         onSearchChange={handleSearchChange}
                         searchValue={searchValue}
                         rightElement={
@@ -142,7 +145,6 @@ const Ranking: FC<RankingProps> = ({
             searchValue,
             shouldShowOnlyFriends,
             title,
-            ts.title,
         ],
     );
 };
