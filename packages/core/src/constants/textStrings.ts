@@ -22,8 +22,14 @@ export default {
             },
         },
         truncation: {
-            more: 'Mehr',
-            less: 'Weniger',
+            less: {
+                stringName: 'txt_chayns_components_core_components_truncation_less',
+                fallback: 'Weniger',
+            },
+            more: {
+                stringName: 'txt_chayns_components_core_components_truncation_more',
+                fallback: 'Mehr',
+            },
         },
     },
 } as const;
