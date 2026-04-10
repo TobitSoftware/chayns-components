@@ -30,13 +30,14 @@ const SidebarGroup: FC<SidebarGroupProps> = ({
                     icons={icons}
                     label={label}
                     id={id}
+                    selectedItemId={selectedItemId}
                     isDisabled={isDisabled}
                     childItems={children}
                     imageUrl={imageUrl}
                     color={color}
                 />
             )),
-        [color, items],
+        [color, items, selectedItemId],
     );
 
     return <StyledSidebarGroup>{content}</StyledSidebarGroup>;

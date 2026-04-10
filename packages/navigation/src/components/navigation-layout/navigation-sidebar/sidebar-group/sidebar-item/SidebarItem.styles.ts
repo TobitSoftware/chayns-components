@@ -64,6 +64,7 @@ export const StyledSidebarItemChildren = styled.div`
     display: flex;
     flex-direction: column;
     gap: 2px;
+    padding-top: 2px;
 
     padding-left: 8px;
 `;

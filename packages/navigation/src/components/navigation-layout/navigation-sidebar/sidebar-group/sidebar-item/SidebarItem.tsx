@@ -10,7 +10,8 @@ import {
     StyledSidebarItemLabel,
     StyledMotionSidebarOpenIcon,
 } from './SidebarItem.styles';
-import { NavigationLayoutItem } from '../../../NavigationLayout.types';
+import { NavigationLayoutItem, NavigationLayoutProps } from '../../../NavigationLayout.types';
+import { isItemOrChildSelected } from './SidebarItem.utils';
 
 interface SidebarItemProps {
     id: NavigationLayoutItem['id'];
@@ -20,6 +21,7 @@ interface SidebarItemProps {
     label: NavigationLayoutItem['label'];
     childItems: NavigationLayoutItem['children'];
     color: string;
+    selectedItemId: NavigationLayoutProps['selectedItemId'];
 }
 
 const SidebarItem: FC<SidebarItemProps> = ({
@@ -28,11 +30,21 @@ const SidebarItem: FC<SidebarItemProps> = ({
     icons,
     imageUrl,
     label,
+    selectedItemId,
     isDisabled,
     color,
 }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [shouldShowChildren, setShouldShowChildren] = useState(false);
+
+    const isSelected = useMemo(
+        () =>
+            isItemOrChildSelected(
+                { id, label, imageUrl, icons, isDisabled, children: childItems },
+                selectedItemId,
+            ),
+        [id, label, imageUrl, icons, isDisabled, childItems, selectedItemId],
+    );
 
     const children = useMemo(() => {
         if (!childItems || childItems.length === 0) {
@@ -43,6 +55,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
             <SidebarItem
                 key={childItem.id}
                 id={childItem.id}
+                selectedItemId={selectedItemId}
                 isDisabled={childItem.isDisabled}
                 icons={childItem.icons}
                 imageUrl={childItem.imageUrl}
@@ -51,12 +64,12 @@ const SidebarItem: FC<SidebarItemProps> = ({
                 color={color}
             />
         ));
-    }, [childItems, color]);
+    }, [childItems, color, selectedItemId]);
 
     return (
         <StyledSidebarItem>
             <StyledSidebarItemHead
-                $shouldHighlight={!isDisabled && isHovered}
+                $shouldHighlight={!isDisabled && (isHovered || isSelected)}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
@@ -71,6 +84,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
                     <StyledMotionSidebarOpenIcon
                         initial={false}
                         animate={{ rotate: shouldShowChildren ? 180 : 0 }}
+                        transition={{ type: 'tween' }}
                         onClick={() => setShouldShowChildren((prev) => !prev)}
                     >
                         <Icon icons={['fa fa-chevron-down']} color={color} />

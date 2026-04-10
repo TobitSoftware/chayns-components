@@ -56,6 +56,23 @@ const NAVIGATION_LAYOUT_GROUPS: NavigationLayoutGroup[] = [
                         label: 'ToDos',
                         icons: ['fa fa-folder'],
                     },
+                    {
+                        id: 'sdfsdf',
+                        label: 'Watcher',
+                        icons: ['fa fa-folder'],
+                        children: [
+                            {
+                                id: 'sdfsdgsg',
+                                label: 'TeamDavid',
+                                icons: ['fa fa-folder'],
+                            },
+                            {
+                                id: 'sgsdgsdgsd',
+                                label: 'chayns.de',
+                                icons: ['fa fa-folder'],
+                            },
+                        ],
+                    },
                 ],
             },
             {
@@ -85,10 +102,11 @@ const meta: Meta<typeof NavigationLayout> = {
         config: {
             color: '#FFFFFF',
             backgroundColor: 'transparent',
+            sidebarMaxWidth: 300,
         },
-        selectedItemId: 'infocenter',
+        selectedItemId: 'sdfsdgsg',
         children: (
-            <div>
+            <div style={{ width: '100%' }}>
                 <h2>Navigation Layout</h2>
                 <p>Minimalbeispiel für den Content-Bereich.</p>
             </div>
