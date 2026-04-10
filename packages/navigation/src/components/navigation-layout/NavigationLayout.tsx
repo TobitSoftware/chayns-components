@@ -12,7 +12,12 @@ import NavigationSidebar from './navigation-sidebar/NavigationSidebar';
 import { DEFAULT_NAVIGATION_LAYOUT_CONFIG } from './NavigationLayout.constants';
 import { useSite } from 'chayns-api';
 
-const NavigationLayout: FC<NavigationLayoutProps> = ({ children, config: configProp }) => {
+const NavigationLayout: FC<NavigationLayoutProps> = ({
+    children,
+    config: configProp,
+    sidebarTopContent,
+    groups,
+}) => {
     const { colorMode } = useSite();
 
     const config = useMemo(
@@ -27,7 +32,13 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({ children, config: configP
         <StyledNavigationLayout>
             <NavigationHeader height={config.headerHeight} color={config.color} />
             <StyledNavigationLayoutContentWrapper>
-                <NavigationSidebar color={config.color} />
+                <NavigationSidebar
+                    color={config.color}
+                    groups={groups}
+                    topContent={sidebarTopContent}
+                    minWidth={config.sidebarMinWidth}
+                    maxWidth={config.sidebarMaxWidth}
+                />
                 <StyledNavigationLayoutContent $colorMode={colorMode}>
                     {children}
                 </StyledNavigationLayoutContent>

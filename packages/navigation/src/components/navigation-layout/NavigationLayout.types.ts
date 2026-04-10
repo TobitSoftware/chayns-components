@@ -15,9 +15,10 @@ export interface NavigationLayoutProps {
 export interface NavigationLayoutConfig {
     headerHeight?: number;
     backgroundColor?: string;
-    color?: string;
     backgroundImage?: string;
-    sidebarBreakPoints?: number[];
+    color?: string;
+    sidebarMinWidth?: number;
+    sidebarMaxWidth?: number;
 }
 
 export interface NavigationLayoutItem {
