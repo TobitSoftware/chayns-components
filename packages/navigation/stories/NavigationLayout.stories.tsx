@@ -8,15 +8,65 @@ import {
 
 const NAVIGATION_LAYOUT_GROUPS: NavigationLayoutGroup[] = [
     {
-        title: 'Allgemein',
+        isPinned: true,
+        id: 'main',
         items: [
             {
-                id: 'dashboard',
-                label: 'Dashboard',
+                id: 'infocenter',
+                label: 'InfoCenter',
+                imageUrl: 'https://tsimg.cloud/static/tobit-team/team_icon.svg',
+            },
+        ],
+    },
+    {
+        id: 'pages',
+        items: [
+            {
+                id: 'sidekick',
+                label: 'SideKick',
+                icons: ['fa ts-sidekick-chat'],
             },
             {
-                id: 'messages',
-                label: 'Nachrichten',
+                id: 'chat',
+                label: 'Chat',
+                icons: ['fa ts-chat'],
+            },
+            {
+                id: 'calendar',
+                label: 'Kalender',
+                icons: ['fa ts-event-inverted'],
+            },
+        ],
+    },
+    {
+        id: 'folder',
+        items: [
+            {
+                id: 'inbox',
+                label: 'Eingang',
+                icons: ['fa fa-inbox-in'],
+                children: [
+                    {
+                        id: 'asdhfkfjhsdsdg',
+                        label: 'Erledigt',
+                        icons: ['fa fa-folder'],
+                    },
+                    {
+                        id: 'hsfahiafhi',
+                        label: 'ToDos',
+                        icons: ['fa fa-folder'],
+                    },
+                ],
+            },
+            {
+                id: 'outbox',
+                label: 'Ausgang',
+                icons: ['fa fa-inbox-out'],
+            },
+            {
+                id: 'drafts',
+                label: 'Entwürfe',
+                icons: ['fa fa-pen-nib'],
             },
         ],
     },
@@ -32,9 +82,13 @@ const meta: Meta<typeof NavigationLayout> = {
     },
     args: {
         groups: NAVIGATION_LAYOUT_GROUPS,
-        selectedItemId: 'dashboard',
+        config: {
+            color: '#FFFFFF',
+            backgroundColor: 'transparent',
+        },
+        selectedItemId: 'infocenter',
         children: (
-            <div style={{ padding: '24px' }}>
+            <div>
                 <h2>Navigation Layout</h2>
                 <p>Minimalbeispiel für den Content-Bereich.</p>
             </div>

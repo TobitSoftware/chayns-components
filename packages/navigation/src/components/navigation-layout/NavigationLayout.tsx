@@ -17,6 +17,8 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
     config: configProp,
     sidebarTopContent,
     groups,
+    selectedItemId,
+    onItemClick,
 }) => {
     const { colorMode } = useSite();
 
@@ -38,6 +40,8 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
                     topContent={sidebarTopContent}
                     minWidth={config.sidebarMinWidth}
                     maxWidth={config.sidebarMaxWidth}
+                    selectedItemId={selectedItemId}
+                    onItemClick={onItemClick}
                 />
                 <StyledNavigationLayoutContent $colorMode={colorMode}>
                     {children}

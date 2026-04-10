@@ -19,18 +19,19 @@ export const StyledMotionNavigationSidebar = styled(motion.div)<StyledNavigation
 
 export const StyledMotionNavigationSidebarContent = styled(motion.div)`
     width: 100%;
-    overflow: hidden;
     display: flex;
+    flex: 1 1 auto;
     flex-direction: column;
     gap: 2px;
+    min-height: 0;
+    overflow: hidden;
 `;
 
-export const StyledMotionNavigationSidebarContentList = styled(motion.div)`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-`;
+type StyledMotionNavigationSidebarContentListProps = WithTheme<{ $isPinned?: boolean }>;
+
+export const StyledMotionNavigationSidebarContentList = styled(
+    motion.div,
+)<StyledMotionNavigationSidebarContentListProps>``;
 
 export const StyledNavigationSidebarResizeHandle = styled(motion.div)`
     position: absolute;

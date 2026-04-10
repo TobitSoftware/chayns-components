@@ -5,20 +5,23 @@ import React, {
     useRef,
     useState,
     PointerEvent as ReactPointerEvent,
+    Fragment,
 } from 'react';
 import {
     StyledMotionNavigationSidebar,
-    StyledNavigationSidebarResizeHandle,
     StyledMotionNavigationSidebarContentList,
     StyledMotionNavigationSidebarContent,
+    StyledNavigationSidebarResizeHandle,
 } from './NavigationSidebar.styles';
-import { NavigationSidebarProps } from './NavigationSidebar.types';
+import { NavigationSidebarGroup, NavigationSidebarProps } from './NavigationSidebar.types';
 import {
     clampSideBarWidth,
     getNearestSideBarWidth,
     useGlobalUserSelect,
 } from './NavigationSidebar.utils';
 import { PanInfo } from 'motion';
+import SidebarGroup from './sidebar-group/SidebarGroup';
+import SidebarDivider from './sidebar-divider/SidebarDivider';
 
 const NavigationSidebar: FC<NavigationSidebarProps> = ({
     color,
@@ -26,6 +29,8 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     maxWidth,
     topContent,
     groups,
+    selectedItemId,
+    onItemClick,
 }) => {
     const [width, setWidth] = useState<number>(minWidth);
     const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -88,6 +93,24 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
         [groups],
     );
 
+    const renderGroups = useCallback(
+        (groupsToRender: NavigationSidebarGroup[]) =>
+            groupsToRender.map(({ items, isReorderable, id }, index) => (
+                <Fragment key={id}>
+                    <SidebarGroup
+                        items={items}
+                        isReorderable={isReorderable}
+                        selectedItemId={selectedItemId}
+                        onClick={onItemClick}
+                        color={color}
+                    />
+
+                    {index < groupsToRender.length - 1 && <SidebarDivider color={color} />}
+                </Fragment>
+            )),
+        [color, onItemClick, selectedItemId],
+    );
+
     return (
         <StyledMotionNavigationSidebar
             $color={color}
@@ -107,7 +130,22 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
         >
             <StyledMotionNavigationSidebarContent>
                 {topContent}
-                <StyledMotionNavigationSidebarContentList />
+                {pinnedGroups.length > 0 && (
+                    <StyledMotionNavigationSidebarContentList $isPinned>
+                        {renderGroups(pinnedGroups)}
+                    </StyledMotionNavigationSidebarContentList>
+                )}
+                {pinnedGroups.length > 0 && scrollableGroups.length > 0 && (
+                    <SidebarDivider color={color} />
+                )}
+                {scrollableGroups.length > 0 && (
+                    <StyledMotionNavigationSidebarContentList
+                        $isPinned
+                        className="chayns-scrollbar"
+                    >
+                        {renderGroups(scrollableGroups)}
+                    </StyledMotionNavigationSidebarContentList>
+                )}
             </StyledMotionNavigationSidebarContent>
             <StyledNavigationSidebarResizeHandle
                 onPointerDown={handlePointerDown}

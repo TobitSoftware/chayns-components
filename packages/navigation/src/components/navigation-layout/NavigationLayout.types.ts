@@ -31,7 +31,7 @@ export interface NavigationLayoutItem {
 }
 
 export interface NavigationLayoutGroup {
-    title?: string;
+    id: string;
     isReorderable?: boolean;
     isPinned?: boolean;
     items: NavigationLayoutItem[];
