@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import NavigationLayout from '../src/components/navigation-layout/NavigationLayout';
 import { MultiActionButton } from '@chayns-components/core';
 import {
@@ -199,11 +199,31 @@ const meta: Meta<typeof NavigationLayout> = {
 
 export default meta;
 
-const Template: StoryFn<typeof NavigationLayout> = (args: NavigationLayoutProps) => (
-    <div style={{ height: '100vh' }}>
-        <NavigationLayout {...args} />
-    </div>
-);
+const Template: StoryFn<typeof NavigationLayout> = (args: NavigationLayoutProps) => {
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (ref.current) {
+            const body = ref.current.closest('body');
+
+            if (body) {
+                body.style.padding = '0';
+
+                return () => {
+                    body.style.padding = '1rem';
+                };
+            }
+        }
+
+        return () => {};
+    }, []);
+
+    return (
+        <div ref={ref} style={{ height: '100vh' }}>
+            <NavigationLayout {...args} />
+        </div>
+    );
+};
 
 export const General = Template.bind({});
 
