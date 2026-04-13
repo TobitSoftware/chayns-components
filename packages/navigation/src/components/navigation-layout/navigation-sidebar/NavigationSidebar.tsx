@@ -35,6 +35,7 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     onItemClick,
     onSidebarOpen,
     onSidebarClose,
+    shouldShowCollapsedLabel,
 }) => {
     const [width, setWidth] = useState<number>(minWidth);
     const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -115,16 +116,16 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
                     <SidebarGroup
                         items={items}
                         isCompact={isCompact}
-                        isReorderable={isReorderable}
                         selectedItemId={selectedItemId}
                         onClick={onItemClick}
                         color={color}
+                        shouldShowCollapsedLabel={shouldShowCollapsedLabel && width === minWidth}
                     />
 
                     {index < groupsToRender.length - 1 && <SidebarDivider color={color} />}
                 </Fragment>
             )),
-        [selectedItemId, onItemClick, color, isCompact],
+        [isCompact, selectedItemId, onItemClick, color, shouldShowCollapsedLabel, width, minWidth],
     );
 
     return (
@@ -143,6 +144,8 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
                           damping: 30,
                       }
             }
+            id="sidebar"
+            data-navigation-sidebar-root="true"
         >
             <StyledMotionNavigationSidebarContent>
                 {topContent}

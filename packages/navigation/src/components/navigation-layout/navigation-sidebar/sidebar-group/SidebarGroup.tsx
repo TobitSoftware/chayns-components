@@ -14,6 +14,7 @@ interface SidebarGroupProps {
     onClick: NavigationLayoutProps['onItemClick'];
     color: string;
     isCompact: boolean;
+    shouldShowCollapsedLabel: NavigationLayoutProps['shouldShowCollapsedLabel'];
 }
 
 const SidebarGroup: FC<SidebarGroupProps> = ({
@@ -23,6 +24,7 @@ const SidebarGroup: FC<SidebarGroupProps> = ({
     onClick,
     isReorderable,
     color,
+    shouldShowCollapsedLabel,
 }) => {
     const content = useMemo(
         () =>
@@ -42,6 +44,7 @@ const SidebarGroup: FC<SidebarGroupProps> = ({
                         icons={icons}
                         imageElement={imageElement}
                         isCompact={isCompact}
+                        shouldShowCollapsedLabel={shouldShowCollapsedLabel}
                         label={label}
                         disabledReason={disabledReason}
                         id={id}

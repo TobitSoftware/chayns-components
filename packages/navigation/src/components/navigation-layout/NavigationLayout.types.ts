@@ -13,6 +13,7 @@ export interface NavigationLayoutProps {
     headerContent: ReactNode;
     onSidebarOpen?: VoidFunction;
     onSidebarClose?: VoidFunction;
+    shouldShowCollapsedLabel?: boolean;
 }
 
 export interface SafeAreas {

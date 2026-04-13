@@ -95,6 +95,26 @@ const NAVIGATION_LAYOUT_GROUPS: NavigationLayoutGroup[] = [
                 icons: ['fa fa-pen-nib'],
                 isDisabled: true,
             },
+            {
+                id: 'spam',
+                label: 'Spam',
+                icons: ['fa fa-ban'],
+            },
+            {
+                id: 'transit',
+                label: 'Transit',
+                icons: ['fa fa-arrow-up-arrow-down'],
+            },
+            {
+                id: 'trash',
+                label: 'Papierkorb',
+                icons: ['fa fa-trash'],
+            },
+            {
+                id: 'contacts',
+                label: 'Adressen',
+                icons: ['fa fa-address-card'],
+            },
         ],
     },
 ];
@@ -171,6 +191,7 @@ const meta: Meta<typeof NavigationLayout> = {
             sidebarMaxWidth: 300,
             color: '#FFFFFF',
         },
+        shouldShowCollapsedLabel: true,
         children: CHILDREN,
         sidebarTopContent: SIDEBAR_TOP_CONTENT,
     },

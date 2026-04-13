@@ -1,6 +1,7 @@
 import { css, styled } from 'styled-components';
 import { motion } from 'motion/react';
 import { WithTheme } from '@chayns-components/core';
+import { Coordinates } from './SidebarItem.utils';
 
 export const StyledSidebarItem = styled.div`
     width: 100%;
@@ -54,6 +55,34 @@ export const StyledSidebarItemHeadContent = styled.div`
     align-items: center;
     height: 100%;
     min-width: 0;
+`;
+
+type StyledSidebarItemPopupProps = WithTheme<{
+    $coordinates: Coordinates;
+}>;
+
+export const StyledSidebarItemPopup = styled.div<StyledSidebarItemPopupProps>`
+    position: absolute;
+    pointer-events: none;
+    opacity: 1;
+    background-color: ${({ theme }) => theme['000']};
+    color: ${({ theme }) => theme.text};
+    border-radius: 4px;
+
+    min-height: 30px;
+    padding: 0 10px;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+    white-space: nowrap;
+
+    box-shadow: 1px 3px 8px rgb(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+
+    top: ${({ $coordinates }) => $coordinates.y}px;
+    left: ${({ $coordinates }) => $coordinates.x}px;
+    transform: translateY(-50%);
 `;
 
 export const StyledSidebarItemIcon = styled.div`

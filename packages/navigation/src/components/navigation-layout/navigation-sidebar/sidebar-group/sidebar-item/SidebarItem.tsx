@@ -9,9 +9,13 @@ import {
     StyledSidebarItemIconImage,
     StyledSidebarItemLabel,
     StyledMotionSidebarOpenIcon,
+    StyledSidebarItemPopup,
 } from './SidebarItem.styles';
 import { NavigationLayoutItem, NavigationLayoutProps } from '../../../NavigationLayout.types';
 import { isItemOrChildSelected } from './SidebarItem.utils';
+import { createPortal } from 'react-dom';
+import { AnimatePresence } from 'motion/react';
+import { useSidebarItemPopup } from './SidebarItem.hooks';
 
 interface SidebarItemProps {
     id: NavigationLayoutItem['id'];
@@ -26,6 +30,7 @@ interface SidebarItemProps {
     color: string;
     isCompact: boolean;
     selectedItemId: NavigationLayoutProps['selectedItemId'];
+    shouldShowCollapsedLabel: NavigationLayoutProps['shouldShowCollapsedLabel'];
 }
 
 const SidebarItem: FC<SidebarItemProps> = ({
@@ -41,9 +46,21 @@ const SidebarItem: FC<SidebarItemProps> = ({
     disabledReason,
     isDisabled,
     color,
+    shouldShowCollapsedLabel,
 }) => {
-    const [isHovered, setIsHovered] = useState(false);
     const [shouldShowChildren, setShouldShowChildren] = useState(false);
+    const {
+        coordinates,
+        handleMouseEnter,
+        handleMouseLeave,
+        isHovered,
+        itemRef,
+        popupContainer,
+        shouldRenderPopup,
+    } = useSidebarItemPopup({
+        isDisabled,
+        shouldShowCollapsedLabel,
+    });
 
     const isSelected = useMemo(
         () =>
@@ -68,12 +85,13 @@ const SidebarItem: FC<SidebarItemProps> = ({
         onClick(id);
     }, [isDisabled, onClick, id]);
 
-    const children = useMemo(() => {
-        if (!childItems || childItems.length === 0) {
-            return null;
-        }
+    const handleOpenIconClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+        event.stopPropagation();
+        setShouldShowChildren((previousValue) => !previousValue);
+    }, []);
 
-        return childItems.map((childItem) => (
+    const renderChildItem = useCallback(
+        (childItem: NavigationLayoutItem) => (
             <SidebarItem
                 key={childItem.id}
                 id={childItem.id}
@@ -82,6 +100,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
                 icons={childItem.icons}
                 disabledReason={childItem.disabledReason}
                 imageUrl={childItem.imageUrl}
+                shouldShowCollapsedLabel={false}
                 imageElement={childItem.imageElement}
                 label={childItem.label}
                 childItems={childItem.children}
@@ -89,8 +108,17 @@ const SidebarItem: FC<SidebarItemProps> = ({
                 onClick={onClick}
                 isCompact={isCompact}
             />
-        ));
-    }, [childItems, color, selectedItemId, isCompact, onClick]);
+        ),
+        [color, isCompact, onClick, selectedItemId],
+    );
+
+    const children = useMemo(() => {
+        if (!childItems || childItems.length === 0) {
+            return null;
+        }
+
+        return childItems.map(renderChildItem);
+    }, [childItems, renderChildItem]);
 
     return (
         <StyledSidebarItem>
@@ -100,11 +128,12 @@ const SidebarItem: FC<SidebarItemProps> = ({
                 shouldUseFullWidth
             >
                 <StyledSidebarItemHead
+                    ref={itemRef}
                     $shouldHighlight={!isDisabled && (isHovered || isSelected)}
                     $isDisabled={isDisabled}
                     $hasDisabledReason={!!disabledReason}
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
                 >
                     <StyledSidebarItemHeadContent>
@@ -120,10 +149,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
                             initial={false}
                             animate={{ rotate: shouldShowChildren ? 180 : 0 }}
                             transition={{ type: 'tween' }}
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                setShouldShowChildren((prev) => !prev);
-                            }}
+                            onClick={handleOpenIconClick}
                         >
                             <Icon icons={['fa fa-chevron-down']} color={color} />
                         </StyledMotionSidebarOpenIcon>
@@ -135,6 +161,17 @@ const SidebarItem: FC<SidebarItemProps> = ({
                     <StyledSidebarItemChildren>{children}</StyledSidebarItemChildren>
                 </ExpandableContent>
             )}
+            {popupContainer &&
+                createPortal(
+                    <AnimatePresence initial={false}>
+                        {shouldRenderPopup && coordinates && (
+                            <StyledSidebarItemPopup $coordinates={coordinates}>
+                                {label}
+                            </StyledSidebarItemPopup>
+                        )}
+                    </AnimatePresence>,
+                    popupContainer,
+                )}
         </StyledSidebarItem>
     );
 };

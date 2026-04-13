@@ -19,6 +19,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
     groups,
     headerContent,
     selectedItemId,
+    shouldShowCollapsedLabel = false,
     onItemClick,
     onSidebarOpen,
     onSidebarClose,
@@ -52,6 +53,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
                     onItemClick={onItemClick}
                     onSidebarOpen={onSidebarOpen}
                     onSidebarClose={onSidebarClose}
+                    shouldShowCollapsedLabel={shouldShowCollapsedLabel}
                 />
                 <StyledNavigationLayoutContent $colorMode={colorMode}>
                     {children}
