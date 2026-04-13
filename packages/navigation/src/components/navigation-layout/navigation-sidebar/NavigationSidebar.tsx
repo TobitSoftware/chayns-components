@@ -167,7 +167,7 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
                     )}
                     {hasPinnedGroups && hasScrollableGroups && <SidebarDivider color={color} />}
                     {hasScrollableGroups && (
-                        <StyledMotionNavigationSidebarContentList className="chayns-scrollbar">
+                        <StyledMotionNavigationSidebarContentList>
                             {renderGroups(scrollableGroups)}
                         </StyledMotionNavigationSidebarContentList>
                     )}

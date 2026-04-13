@@ -63,6 +63,11 @@ export const StyledMotionNavigationSidebarContentList = styled(
                   min-height: min(${SCROLLABLE_GROUPS_MIN_HEIGHT}px, 100%);
                   overflow-y: auto;
               `}
+
+    &::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
 `;
 
 export const StyledNavigationSidebarResizeHandle = styled(motion.div)`
