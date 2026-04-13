@@ -8,3 +8,6 @@ export type {
 
 export { default as DynamicToolbarSpacer } from './components/dynamic-toolbar-spacer/DynamicToolbarSpacer';
 export type { DynamicToolbarSpacerProps } from './components/dynamic-toolbar-spacer/DynamicToolbarSpacer.types';
+
+export { default as NavigationLayout } from './components/navigation-layout/NavigationLayout';
+export { default as UserImage } from './components/user-image/UserImage';
