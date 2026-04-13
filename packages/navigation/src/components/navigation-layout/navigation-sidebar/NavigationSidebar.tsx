@@ -12,6 +12,8 @@ import {
     StyledMotionNavigationSidebarContentList,
     StyledMotionNavigationSidebarContent,
     StyledNavigationSidebarResizeHandle,
+    StyledMotionNavigationSidebarContentWrapper,
+    StyledMotionNavigationSidebarExternalContent,
 } from './NavigationSidebar.styles';
 import { NavigationSidebarProps } from './NavigationSidebar.types';
 import {
@@ -30,6 +32,7 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     minWidth,
     maxWidth,
     topContent,
+    bottomContent,
     groups,
     selectedItemId,
     onItemClick,
@@ -109,9 +112,12 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
         [groups],
     );
 
+    const hasPinnedGroups = pinnedGroups.length > 0;
+    const hasScrollableGroups = scrollableGroups.length > 0;
+
     const renderGroups = useCallback(
         (groupsToRender: NavigationLayoutGroup[]) =>
-            groupsToRender.map(({ items, isReorderable, id }, index) => (
+            groupsToRender.map(({ items, id }, index) => (
                 <Fragment key={id}>
                     <SidebarGroup
                         items={items}
@@ -148,22 +154,28 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
             data-navigation-sidebar-root="true"
         >
             <StyledMotionNavigationSidebarContent>
-                {topContent}
-                {pinnedGroups.length > 0 && (
-                    <StyledMotionNavigationSidebarContentList $isPinned>
-                        {renderGroups(pinnedGroups)}
-                    </StyledMotionNavigationSidebarContentList>
+                {!!topContent && (
+                    <StyledMotionNavigationSidebarExternalContent>
+                        {topContent}
+                    </StyledMotionNavigationSidebarExternalContent>
                 )}
-                {pinnedGroups.length > 0 && scrollableGroups.length > 0 && (
-                    <SidebarDivider color={color} />
-                )}
-                {scrollableGroups.length > 0 && (
-                    <StyledMotionNavigationSidebarContentList
-                        $isPinned
-                        className="chayns-scrollbar"
-                    >
-                        {renderGroups(scrollableGroups)}
-                    </StyledMotionNavigationSidebarContentList>
+                <StyledMotionNavigationSidebarContentWrapper>
+                    {hasPinnedGroups && (
+                        <StyledMotionNavigationSidebarContentList $isPinned>
+                            {renderGroups(pinnedGroups)}
+                        </StyledMotionNavigationSidebarContentList>
+                    )}
+                    {hasPinnedGroups && hasScrollableGroups && <SidebarDivider color={color} />}
+                    {hasScrollableGroups && (
+                        <StyledMotionNavigationSidebarContentList className="chayns-scrollbar">
+                            {renderGroups(scrollableGroups)}
+                        </StyledMotionNavigationSidebarContentList>
+                    )}
+                </StyledMotionNavigationSidebarContentWrapper>
+                {!!bottomContent && (
+                    <StyledMotionNavigationSidebarExternalContent>
+                        {bottomContent}
+                    </StyledMotionNavigationSidebarExternalContent>
                 )}
             </StyledMotionNavigationSidebarContent>
             <StyledNavigationSidebarResizeHandle

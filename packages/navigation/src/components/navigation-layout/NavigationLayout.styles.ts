@@ -18,12 +18,7 @@ export const StyledNavigationLayoutContentWrapper = styled.div`
     min-height: 0;
 `;
 
-type StyledNavigationLayoutContentProps = WithTheme<{ $colorMode: ColorMode }>;
-
-export const StyledNavigationLayoutContent = styled.div<StyledNavigationLayoutContentProps>`
-    background-color: ${({ $colorMode }) =>
-        $colorMode === ColorMode.Dark ? '#121212' : '#FFFFFF'};
-
+export const StyledNavigationLayoutContent = styled.div`
     border-top-left-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.2) 0 0 20px 16px;
 

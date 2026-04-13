@@ -10,12 +10,12 @@ import {
 import NavigationHeader from './navigation-header/NavigationHeader';
 import NavigationSidebar from './navigation-sidebar/NavigationSidebar';
 import { DEFAULT_NAVIGATION_LAYOUT_CONFIG } from './NavigationLayout.constants';
-import { useSite } from 'chayns-api';
 
 const NavigationLayout: FC<NavigationLayoutProps> = ({
     children,
     config: configProp,
     sidebarTopContent,
+    sidebarBottomContent,
     groups,
     headerContent,
     selectedItemId,
@@ -24,8 +24,6 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
     onSidebarOpen,
     onSidebarClose,
 }) => {
-    const { colorMode } = useSite();
-
     const config = useMemo(
         () => ({
             ...DEFAULT_NAVIGATION_LAYOUT_CONFIG,
@@ -47,6 +45,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
                     color={config.color}
                     groups={groups}
                     topContent={sidebarTopContent}
+                    bottomContent={sidebarBottomContent}
                     minWidth={config.sidebarMinWidth}
                     maxWidth={config.sidebarMaxWidth}
                     selectedItemId={selectedItemId}
@@ -55,9 +54,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
                     onSidebarClose={onSidebarClose}
                     shouldShowCollapsedLabel={shouldShowCollapsedLabel}
                 />
-                <StyledNavigationLayoutContent $colorMode={colorMode}>
-                    {children}
-                </StyledNavigationLayoutContent>
+                <StyledNavigationLayoutContent>{children}</StyledNavigationLayoutContent>
             </StyledNavigationLayoutContentWrapper>
             <StyledNavigationLayoutBackground $backgroundColor={config.backgroundColor}>
                 {config.backgroundImage && (

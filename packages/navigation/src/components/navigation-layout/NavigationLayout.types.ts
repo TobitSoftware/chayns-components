@@ -5,6 +5,7 @@ export interface NavigationLayoutProps {
     config?: NavigationLayoutConfig;
     groups: NavigationLayoutGroup[];
     sidebarTopContent?: ReactNode;
+    sidebarBottomContent?: ReactNode;
     selectedItemId?: NavigationLayoutItem['id'];
     onItemClick?: (
         id: NavigationLayoutItem['id'],

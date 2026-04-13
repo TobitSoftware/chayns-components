@@ -135,7 +135,7 @@ const HEADER_CONTENT = (
 );
 
 const CHILDREN = (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: '100%', height: '100%', backgroundColor: 'lightgray', padding: 12 }}>
         <h2>Navigation Layout</h2>
         <p>Minimalbeispiel für den Content-Bereich.</p>
     </div>
@@ -217,4 +217,12 @@ WithBackgroundImage.args = {
         sidebarMaxWidth: 300,
         headerHeight: 70,
     },
+    sidebarBottomContent: (
+        <div style={{ maxWidth: 200, margin: '0 auto' }}>
+            <img
+                style={{ width: '100%', filter: 'invert(1)' }}
+                src="https://tsimg.cloud/static/tobit-team/team_david_icon.svg"
+            />
+        </div>
+    ),
 };
