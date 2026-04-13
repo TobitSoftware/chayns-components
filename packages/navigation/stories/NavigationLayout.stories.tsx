@@ -6,6 +6,7 @@ import {
     NavigationLayoutGroup,
     NavigationLayoutProps,
 } from '../src/components/navigation-layout/NavigationLayout.types';
+import UserImage from '../src/components/user-image/UserImage';
 
 const NAVIGATION_LAYOUT_GROUPS: NavigationLayoutGroup[] = [
     {
@@ -15,7 +16,12 @@ const NAVIGATION_LAYOUT_GROUPS: NavigationLayoutGroup[] = [
             {
                 id: 'infocenter',
                 label: 'InfoCenter',
-                imageUrl: 'https://tsimg.cloud/static/tobit-team/team_icon.svg',
+                imageElement: (
+                    <img
+                        src="https://tsimg.cloud/static/tobit-team/team_icon.svg"
+                        style={{ height: 28, width: 28, filter: 'invert(1)' }}
+                    />
+                ),
             },
         ],
     },
@@ -90,67 +96,80 @@ const NAVIGATION_LAYOUT_GROUPS: NavigationLayoutGroup[] = [
     },
 ];
 
+const HEADER_CONTENT = (
+    <div
+        style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+        }}
+    >
+        <span>Header</span>
+        <UserImage />
+    </div>
+);
+
+const CHILDREN = (
+    <div style={{ width: '100%' }}>
+        <h2>Navigation Layout</h2>
+        <p>Minimalbeispiel für den Content-Bereich.</p>
+    </div>
+);
+
+const SIDEBAR_TOP_CONTENT = (
+    <MultiActionButton
+        primaryAction={{
+            icon: 'fa fa-plus',
+            label: 'Erstellen',
+            onClick: () => {},
+        }}
+        secondaryContextMenu={[
+            {
+                key: 'mail',
+                icons: ['fa fa-envelope'],
+                text: 'Mail',
+                onClick: () => {},
+            },
+            {
+                key: 'chat',
+                icons: ['fa ts-chat'],
+                text: 'Chat',
+                onClick: () => {},
+            },
+            {
+                key: 'contact',
+                icons: ['fa fa-address-book'],
+                text: 'Kontakt',
+                onClick: () => {},
+            },
+            {
+                key: 'appointment',
+                icons: ['fa fa-calendar'],
+                text: 'Termin',
+                onClick: () => {},
+            },
+        ]}
+        shouldUseFullWidth
+        shouldAutoCollapse
+        backgroundColor="rgba(30, 30, 30, 0.3)"
+        gapColor="transparent"
+    />
+);
+
 const meta: Meta<typeof NavigationLayout> = {
     title: 'Navigation/NavigationLayout',
     component: NavigationLayout,
-    argTypes: {
-        children: { control: false },
-        groups: { control: false },
-        sidebarTopContent: { control: false },
-    },
     args: {
         groups: NAVIGATION_LAYOUT_GROUPS,
+        headerContent: HEADER_CONTENT,
         config: {
-            color: '#FFFFFF',
-            backgroundColor: 'transparent',
             sidebarMaxWidth: 300,
+            color: '#FFFFFF',
         },
-        selectedItemId: 'sdfsdgsg',
-        children: (
-            <div style={{ width: '100%' }}>
-                <h2>Navigation Layout</h2>
-                <p>Minimalbeispiel für den Content-Bereich.</p>
-            </div>
-        ),
-        sidebarTopContent: (
-            <MultiActionButton
-                primaryAction={{
-                    icon: 'fa fa-plus',
-                    label: 'Erstellen',
-                    onClick: () => {},
-                }}
-                secondaryContextMenu={[
-                    {
-                        key: 'mail',
-                        icons: ['fa fa-envelope'],
-                        text: 'Mail',
-                        onClick: () => {},
-                    },
-                    {
-                        key: 'chat',
-                        icons: ['fa ts-chat'],
-                        text: 'Chat',
-                        onClick: () => {},
-                    },
-                    {
-                        key: 'contact',
-                        icons: ['fa fa-address-book'],
-                        text: 'Kontakt',
-                        onClick: () => {},
-                    },
-                    {
-                        key: 'appointment',
-                        icons: ['fa fa-calendar'],
-                        text: 'Termin',
-                        onClick: () => {},
-                    },
-                ]}
-                shouldUseFullWidth
-                shouldAutoCollapse
-                backgroundColor="rgba(30, 30, 30, 0.3)"
-                gapColor="transparent"
-            />
-        ),
+        children: CHILDREN,
+        sidebarTopContent: SIDEBAR_TOP_CONTENT,
     },
 };
 
@@ -163,3 +182,15 @@ const Template: StoryFn<typeof NavigationLayout> = (args: NavigationLayoutProps)
 );
 
 export const General = Template.bind({});
+
+export const WithBackgroundImage = Template.bind({});
+
+WithBackgroundImage.args = {
+    config: {
+        color: '#FFFFFF',
+        backgroundColor: 'transparent',
+        backgroundImage: 'https://tsimg.cloud/static/tobit-team/team_background.png',
+        sidebarMaxWidth: 300,
+        headerHeight: 70,
+    },
+};

@@ -1,7 +1,13 @@
 import styled from 'styled-components';
 import { WithTheme } from '@chayns-components/core';
 
-export const StyledUserImage = styled.div``;
+type StyledUserImageProps = WithTheme<{ $size: number }>;
+
+export const StyledUserImage = styled.div<StyledUserImageProps>`
+    height: ${({ $size }) => $size}px;
+
+    aspect-ratio: 1;
+`;
 
 type StyledUserImageUserProps = WithTheme<{ $size: number }>;
 

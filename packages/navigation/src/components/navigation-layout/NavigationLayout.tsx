@@ -17,6 +17,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
     config: configProp,
     sidebarTopContent,
     groups,
+    headerContent,
     selectedItemId,
     onItemClick,
 }) => {
@@ -32,7 +33,12 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
 
     return (
         <StyledNavigationLayout>
-            <NavigationHeader height={config.headerHeight} color={config.color} />
+            <NavigationHeader
+                height={config.headerHeight}
+                color={config.color}
+                headerContent={headerContent}
+                safeAreas={config.safeAreas}
+            />
             <StyledNavigationLayoutContentWrapper>
                 <NavigationSidebar
                     color={config.color}

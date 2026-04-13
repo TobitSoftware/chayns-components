@@ -19,7 +19,7 @@ const UserImage: FC<UserImageProps> = ({
     );
 
     return (
-        <StyledUserImage>
+        <StyledUserImage $size={size}>
             {popupContent ? (
                 <Popup content={popupContent} yOffset={yOffset}>
                     <StyledUserImageUser $size={size} src={src} onClick={onClick} />
