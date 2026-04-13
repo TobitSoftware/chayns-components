@@ -1,7 +1,6 @@
 import React, {
     FC,
     useCallback,
-    useEffect,
     useMemo,
     useRef,
     useState,
@@ -14,7 +13,7 @@ import {
     StyledMotionNavigationSidebarContent,
     StyledNavigationSidebarResizeHandle,
 } from './NavigationSidebar.styles';
-import { NavigationSidebarGroup, NavigationSidebarProps } from './NavigationSidebar.types';
+import { NavigationSidebarProps } from './NavigationSidebar.types';
 import {
     clampSideBarWidth,
     getNearestSideBarWidth,
@@ -24,6 +23,7 @@ import {
 import { PanInfo } from 'motion';
 import SidebarGroup from './sidebar-group/SidebarGroup';
 import SidebarDivider from './sidebar-divider/SidebarDivider';
+import { NavigationLayoutGroup } from '../NavigationLayout.types';
 
 const NavigationSidebar: FC<NavigationSidebarProps> = ({
     color,
@@ -56,9 +56,7 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     }, []);
 
     const handlePan = useCallback(
-        (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
-            void event;
-
+        (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
             setWidth(
                 clampSideBarWidth({
                     width: dragStartWidthRef.current + info.offset.x,
@@ -71,23 +69,23 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     );
 
     const handlePanEnd = useCallback(
-        (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
-            void event;
-
+        (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
             const nextWidth = clampSideBarWidth({
                 width: dragStartWidthRef.current + info.offset.x,
                 minWidth,
                 maxWidth,
             });
 
+            const nearestWidth = getNearestSideBarWidth({
+                width: nextWidth,
+                minWidth,
+                maxWidth,
+            });
+
             setIsDragging(false);
-            setWidth(
-                getNearestSideBarWidth({
-                    width: nextWidth,
-                    minWidth,
-                    maxWidth,
-                }),
-            );
+            setWidth(nearestWidth);
+
+            dragStartWidthRef.current = nearestWidth;
         },
         [maxWidth, minWidth],
     );
@@ -101,7 +99,7 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     );
 
     const renderGroups = useCallback(
-        (groupsToRender: NavigationSidebarGroup[]) =>
+        (groupsToRender: NavigationLayoutGroup[]) =>
             groupsToRender.map(({ items, isReorderable, id }, index) => (
                 <Fragment key={id}>
                     <SidebarGroup
@@ -116,7 +114,7 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
                     {index < groupsToRender.length - 1 && <SidebarDivider color={color} />}
                 </Fragment>
             )),
-        [color, onItemClick, selectedItemId, isCompact],
+        [selectedItemId, onItemClick, color, isCompact],
     );
 
     return (
@@ -124,7 +122,6 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
             $color={color}
             initial={false}
             animate={{ width }}
-            key="sidebar"
             transition={
                 isDragging
                     ? {

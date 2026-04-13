@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { NavigationSidebarGroup, NavigationSidebarItem } from './NavigationSidebar.types';
 
 export interface UseGlobalUserSelectOptions {
     isDisabled: boolean;
@@ -39,94 +38,6 @@ export const useGlobalUserSelect = ({ isDisabled }: UseGlobalUserSelectOptions):
             });
         };
     }, [isDisabled]);
-};
-
-interface SplitNavigationSidebarGroupsOptions {
-    groups: NavigationSidebarGroup[];
-}
-
-interface GetNavigationSidebarGroupKeyOptions {
-    group: NavigationSidebarGroup;
-    index: number;
-}
-
-interface IsNavigationSidebarItemSelectedOptions {
-    item: NavigationSidebarItem;
-    selectedItemId: string;
-}
-
-interface HasNavigationSidebarSelectedDescendantOptions {
-    item: NavigationSidebarItem;
-    selectedItemId: string;
-}
-
-export const splitNavigationSidebarGroups = ({
-    groups,
-}: SplitNavigationSidebarGroupsOptions): {
-    pinnedGroups: NavigationSidebarGroup[];
-    scrollableGroups: NavigationSidebarGroup[];
-} => {
-    const pinnedGroups: NavigationSidebarGroup[] = [];
-    const scrollableGroups: NavigationSidebarGroup[] = [];
-
-    for (const group of groups) {
-        if (group.isPinned) {
-            pinnedGroups.push(group);
-
-            continue;
-        }
-
-        scrollableGroups.push(group);
-    }
-
-    return {
-        pinnedGroups,
-        scrollableGroups,
-    };
-};
-
-export const getNavigationSidebarGroupKey = ({
-    group,
-    index,
-}: GetNavigationSidebarGroupKeyOptions): string => {
-    const itemIds: string[] = [];
-
-    for (const item of group.items) {
-        itemIds.push(item.id);
-    }
-
-    return `${group.title ?? 'group'}-${itemIds.join('-') || index}`;
-};
-
-export const isNavigationSidebarItemSelected = ({
-    item,
-    selectedItemId,
-}: IsNavigationSidebarItemSelectedOptions): boolean => item.id === selectedItemId;
-
-export const hasNavigationSidebarSelectedDescendant = ({
-    item,
-    selectedItemId,
-}: HasNavigationSidebarSelectedDescendantOptions): boolean => {
-    if (!item.children?.length) {
-        return false;
-    }
-
-    for (const childItem of item.children) {
-        if (childItem.id === selectedItemId) {
-            return true;
-        }
-
-        if (
-            hasNavigationSidebarSelectedDescendant({
-                item: childItem,
-                selectedItemId,
-            })
-        ) {
-            return true;
-        }
-    }
-
-    return false;
 };
 
 interface ClampSideBarWidthOptions {

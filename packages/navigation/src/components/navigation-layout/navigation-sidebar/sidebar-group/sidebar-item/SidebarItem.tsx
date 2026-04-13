@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, memo, useEffect, useMemo, useState } from 'react';
 import { ExpandableContent, Icon } from '@chayns-components/core';
 import {
     StyledSidebarItem,
@@ -111,4 +111,4 @@ const SidebarItem: FC<SidebarItemProps> = ({
 
 SidebarItem.displayName = 'SidebarItem';
 
-export default SidebarItem;
+export default memo(SidebarItem);

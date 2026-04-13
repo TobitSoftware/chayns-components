@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, memo, useMemo } from 'react';
 import { StyledSidebarGroup } from './SidebarGroup.styles';
 import {
     NavigationLayoutGroup,
@@ -48,4 +48,4 @@ const SidebarGroup: FC<SidebarGroupProps> = ({
 
 SidebarGroup.displayName = 'SidebarGroup';
 
-export default SidebarGroup;
+export default memo(SidebarGroup);
