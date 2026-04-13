@@ -10,6 +10,14 @@ export interface NavigationLayoutProps {
         id: NavigationLayoutItem['id'],
         parentIds?: NavigationLayoutItem['id'][],
     ) => void;
+    headerContent: ReactNode;
+}
+
+export interface SafeAreas {
+    top?: number;
+    bottom?: number;
+    left?: number;
+    right?: number;
 }
 
 export interface NavigationLayoutConfig {
@@ -19,6 +27,7 @@ export interface NavigationLayoutConfig {
     color?: string;
     sidebarMinWidth?: number;
     sidebarMaxWidth?: number;
+    safeAreas?: SafeAreas;
 }
 
 export interface NavigationLayoutItem {
@@ -26,6 +35,7 @@ export interface NavigationLayoutItem {
     label: string;
     icons?: string[];
     imageUrl?: string;
+    imageElement?: ReactNode;
     isDisabled?: boolean;
     children?: NavigationLayoutItem[];
 }

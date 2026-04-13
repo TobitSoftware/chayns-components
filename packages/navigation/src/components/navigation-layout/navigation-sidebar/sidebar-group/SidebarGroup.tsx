@@ -26,10 +26,11 @@ const SidebarGroup: FC<SidebarGroupProps> = ({
 }) => {
     const content = useMemo(
         () =>
-            items.map(({ id, children, label, imageUrl, icons, isDisabled }) => (
+            items.map(({ id, children, label, imageUrl, icons, isDisabled, imageElement }) => (
                 <SidebarItem
                     key={id}
                     icons={icons}
+                    imageElement={imageElement}
                     isCompact={isCompact}
                     label={label}
                     id={id}

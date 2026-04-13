@@ -20,6 +20,7 @@ interface SidebarItemProps {
     imageUrl: NavigationLayoutItem['imageUrl'];
     label: NavigationLayoutItem['label'];
     childItems: NavigationLayoutItem['children'];
+    imageElement: NavigationLayoutItem['imageElement'];
     color: string;
     isCompact: boolean;
     selectedItemId: NavigationLayoutProps['selectedItemId'];
@@ -33,6 +34,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
     label,
     selectedItemId,
     isCompact,
+    imageElement,
     isDisabled,
     color,
 }) => {
@@ -67,6 +69,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
                 isDisabled={childItem.isDisabled}
                 icons={childItem.icons}
                 imageUrl={childItem.imageUrl}
+                imageElement={childItem.imageElement}
                 label={childItem.label}
                 childItems={childItem.children}
                 color={color}
@@ -85,6 +88,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
                 <StyledSidebarItemHeadContent>
                     <StyledSidebarItemIcon>
                         {imageUrl && <StyledSidebarItemIconImage src={imageUrl} />}
+                        {imageElement}
                         {icons && <Icon icons={icons} size={21} color={color} />}
                     </StyledSidebarItemIcon>
                     <StyledSidebarItemLabel>{label}</StyledSidebarItemLabel>

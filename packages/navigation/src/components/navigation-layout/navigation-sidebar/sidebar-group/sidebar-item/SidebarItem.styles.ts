@@ -51,7 +51,6 @@ export const StyledMotionSidebarOpenIcon = styled(motion.div)`
 
 export const StyledSidebarItemIconImage = styled.img`
     width: 28px;
-    filter: invert(1);
 `;
 
 export const StyledSidebarItemLabel = styled.div`
