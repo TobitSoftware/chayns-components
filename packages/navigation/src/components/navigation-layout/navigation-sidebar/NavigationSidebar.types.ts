@@ -12,4 +12,5 @@ export interface NavigationSidebarProps {
     onSidebarOpen?: NavigationLayoutProps['onSidebarOpen'];
     onSidebarClose?: NavigationLayoutProps['onSidebarClose'];
     shouldShowCollapsedLabel?: NavigationLayoutProps['shouldShowCollapsedLabel'];
+    isMobile?: NavigationLayoutProps['isMobile'];
 }

@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 
 const SCROLLABLE_GROUPS_MIN_HEIGHT = 120;
 
-type StyledNavigationSidebarProps = WithTheme<{ $color: string }>;
+type StyledNavigationSidebarProps = WithTheme<{ $color: string; $isMobile?: boolean }>;
 
 export const StyledMotionNavigationSidebar = styled(motion.div)<StyledNavigationSidebarProps>`
     height: 100%;
@@ -17,6 +17,14 @@ export const StyledMotionNavigationSidebar = styled(motion.div)<StyledNavigation
     overflow: visible;
     z-index: 1;
     padding: 10px;
+
+    ${({ $isMobile }) =>
+        $isMobile &&
+        css`
+            width: 70vw;
+            min-width: 70vw;
+            max-width: 70vw;
+        `}
 `;
 
 export const StyledMotionNavigationSidebarContent = styled(motion.div)`

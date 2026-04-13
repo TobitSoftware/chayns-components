@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { WithTheme } from '@chayns-components/core';
-import { ColorMode } from 'chayns-api';
+import { motion } from 'motion/react';
 
 export const StyledNavigationLayout = styled.div`
     display: flex;
@@ -9,16 +9,20 @@ export const StyledNavigationLayout = styled.div`
     width: 100%;
     min-height: 0;
     position: relative;
+    overflow: hidden;
 `;
 
-export const StyledNavigationLayoutContentWrapper = styled.div`
+export const StyledMotionNavigationLayoutContentWrapper = styled(motion.div)`
     display: flex;
     flex: 1;
     width: 100%;
     min-height: 0;
 `;
 
-type StyledNavigationLayoutContentProps = WithTheme<{ $isCornerContent: boolean }>;
+type StyledNavigationLayoutContentProps = WithTheme<{
+    $isCornerContent: boolean;
+    $isMobile: boolean;
+}>;
 
 export const StyledNavigationLayoutContent = styled.div<StyledNavigationLayoutContentProps>`
     ${({ $isCornerContent }) =>
@@ -31,9 +35,23 @@ export const StyledNavigationLayoutContent = styled.div<StyledNavigationLayoutCo
     overflow: hidden;
 
     flex: 1;
-    width: 100%;
-    min-width: 0;
+    width: ${({ $isMobile }) => ($isMobile ? '100vw' : '100%')};
+    min-width: ${({ $isMobile }) => ($isMobile ? '100vw' : 0)};
     min-height: 0;
+
+    position: relative;
+`;
+
+export const StyledMotionNavigationLayoutContentOverlay = styled(motion.div)`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 3;
+
+    background-color: rgb(0, 0, 0);
 `;
 
 type StyledNavigationLayoutBackgroundProps = WithTheme<{ $backgroundColor: string }>;

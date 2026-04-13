@@ -39,6 +39,7 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     onSidebarOpen,
     onSidebarClose,
     shouldShowCollapsedLabel,
+    isMobile,
 }) => {
     const [width, setWidth] = useState<number>(minWidth);
     const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -47,8 +48,8 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     useGlobalUserSelect({ isDisabled: isDragging });
 
     const isCompact = useMemo(
-        () => width < getSideBarCompactBreakpoint({ minWidth, maxWidth }),
-        [maxWidth, minWidth, width],
+        () => (isMobile ? false : width < getSideBarCompactBreakpoint({ minWidth, maxWidth })),
+        [isMobile, maxWidth, minWidth, width],
     );
 
     const handlePanStart = useCallback((): void => {
@@ -137,8 +138,9 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     return (
         <StyledMotionNavigationSidebar
             $color={color}
+            $isMobile={isMobile}
             initial={false}
-            animate={{ width }}
+            animate={!isMobile ? { width } : {}}
             transition={
                 isDragging
                     ? {
@@ -178,12 +180,14 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
                     </StyledMotionNavigationSidebarExternalContent>
                 )}
             </StyledMotionNavigationSidebarContent>
-            <StyledNavigationSidebarResizeHandle
-                onPointerDown={handlePointerDown}
-                onPanStart={handlePanStart}
-                onPan={handlePan}
-                onPanEnd={handlePanEnd}
-            />
+            {!isMobile && (
+                <StyledNavigationSidebarResizeHandle
+                    onPointerDown={handlePointerDown}
+                    onPanStart={handlePanStart}
+                    onPan={handlePan}
+                    onPanEnd={handlePanEnd}
+                />
+            )}
         </StyledMotionNavigationSidebar>
     );
 };
