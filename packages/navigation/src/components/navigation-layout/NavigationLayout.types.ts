@@ -1,5 +1,28 @@
 import { ReactNode } from 'react';
 
+export type NavigationLayoutItemReorderPlacement = 'before' | 'after' | 'inside';
+
+export interface NavigationLayoutItemLocation {
+    parentIds: NavigationLayoutItem['id'][];
+    index: number;
+}
+
+export interface NavigationLayoutItemReorderSource extends NavigationLayoutItemLocation {
+    itemId: NavigationLayoutItem['id'];
+}
+
+export interface NavigationLayoutItemReorderTarget extends NavigationLayoutItemLocation {
+    itemId?: NavigationLayoutItem['id'];
+    placement: NavigationLayoutItemReorderPlacement;
+}
+
+export interface NavigationLayoutItemReorderEvent {
+    groupId: NavigationLayoutGroup['id'];
+    itemId: NavigationLayoutItem['id'];
+    source: NavigationLayoutItemReorderSource;
+    target: NavigationLayoutItemReorderTarget;
+}
+
 export interface NavigationLayoutProps {
     children: ReactNode;
     config?: NavigationLayoutConfig;
@@ -11,6 +34,7 @@ export interface NavigationLayoutProps {
         id: NavigationLayoutItem['id'],
         parentIds?: NavigationLayoutItem['id'][],
     ) => void;
+    onItemReorder?: (event: NavigationLayoutItemReorderEvent) => void;
     headerContent: ReactNode;
     onSidebarOpen?: VoidFunction;
     onSidebarClose?: VoidFunction;

@@ -1,12 +1,15 @@
 import { Meta, StoryFn } from '@storybook/react';
-import React, { useEffect, useRef } from 'react';
-import NavigationLayout from '../src/components/navigation-layout/NavigationLayout';
+import { action } from '@storybook/addon-actions';
+import React, { useEffect, useRef, useState } from 'react';
 import { MultiActionButton } from '@chayns-components/core';
 import {
+    NavigationLayout,
     NavigationLayoutGroup,
+    NavigationLayoutItemReorderEvent,
     NavigationLayoutProps,
-} from '../src/components/navigation-layout/NavigationLayout.types';
-import UserImage from '../src/components/user-image/UserImage';
+    UserImage,
+    reorderNavigationLayoutGroups,
+} from '../src';
 
 const NAVIGATION_LAYOUT_GROUPS: NavigationLayoutGroup[] = [
     {
@@ -18,6 +21,7 @@ const NAVIGATION_LAYOUT_GROUPS: NavigationLayoutGroup[] = [
                 label: 'InfoCenter',
                 imageElement: (
                     <img
+                        alt="InfoCenter"
                         src="https://tsimg.cloud/static/tobit-team/team_icon.svg"
                         style={{ height: 28, width: 28, filter: 'invert(1)' }}
                     />
@@ -27,6 +31,7 @@ const NAVIGATION_LAYOUT_GROUPS: NavigationLayoutGroup[] = [
     },
     {
         id: 'pages',
+        isReorderable: true,
         items: [
             {
                 id: 'sidekick',
@@ -49,6 +54,7 @@ const NAVIGATION_LAYOUT_GROUPS: NavigationLayoutGroup[] = [
     },
     {
         id: 'folder',
+        isReorderable: true,
         items: [
             {
                 id: 'inbox',
@@ -194,6 +200,7 @@ const meta: Meta<typeof NavigationLayout> = {
         shouldShowCollapsedLabel: true,
         children: CHILDREN,
         sidebarTopContent: SIDEBAR_TOP_CONTENT,
+        onItemReorder: action('onItemReorder'),
     },
 };
 
@@ -201,6 +208,7 @@ export default meta;
 
 const Template: StoryFn<typeof NavigationLayout> = (args: NavigationLayoutProps) => {
     const ref = useRef<HTMLDivElement>(null);
+    const [groups, setGroups] = useState(args.groups);
 
     useEffect(() => {
         if (ref.current) {
@@ -218,9 +226,20 @@ const Template: StoryFn<typeof NavigationLayout> = (args: NavigationLayoutProps)
         return () => {};
     }, []);
 
+    useEffect(() => {
+        setGroups(args.groups);
+    }, [args.groups]);
+
+    const handleItemReorder = (event: NavigationLayoutItemReorderEvent) => {
+        args.onItemReorder?.(event);
+        setGroups((previousGroups) =>
+            reorderNavigationLayoutGroups({ groups: previousGroups, event }),
+        );
+    };
+
     return (
         <div ref={ref} style={{ height: '100vh' }}>
-            <NavigationLayout {...args} />
+            <NavigationLayout {...args} groups={groups} onItemReorder={handleItemReorder} />
         </div>
     );
 };
@@ -242,6 +261,7 @@ WithBackgroundImage.args = {
     sidebarBottomContent: (
         <div style={{ maxWidth: 200, margin: '0 auto' }}>
             <img
+                alt="Sidebar footer"
                 style={{ width: '100%', filter: 'invert(1)' }}
                 src="https://tsimg.cloud/static/tobit-team/team_david_icon.svg"
             />
@@ -260,6 +280,7 @@ Mobile.args = {
     sidebarBottomContent: (
         <div style={{ maxWidth: 200, margin: '0 auto' }}>
             <img
+                alt="Sidebar footer"
                 style={{ width: '100%', filter: 'invert(1)' }}
                 src="https://tsimg.cloud/static/tobit-team/team_david_icon.svg"
             />

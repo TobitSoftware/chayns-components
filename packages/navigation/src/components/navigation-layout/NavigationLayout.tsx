@@ -24,6 +24,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
     isMobile = false,
     shouldShowCollapsedLabel = false,
     onItemClick,
+    onItemReorder,
     onSidebarOpen,
     onSidebarClose,
 }) => {
@@ -75,6 +76,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
                     isMobile={isMobile}
                     selectedItemId={selectedItemId}
                     onItemClick={onItemClick}
+                    onItemReorder={onItemReorder}
                     onSidebarOpen={onSidebarOpen}
                     onSidebarClose={onSidebarClose}
                     shouldShowCollapsedLabel={shouldShowCollapsedLabel && !isMobile}

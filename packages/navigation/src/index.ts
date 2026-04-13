@@ -10,5 +10,20 @@ export { default as DynamicToolbarSpacer } from './components/dynamic-toolbar-sp
 export type { DynamicToolbarSpacerProps } from './components/dynamic-toolbar-spacer/DynamicToolbarSpacer.types';
 
 export { default as NavigationLayout } from './components/navigation-layout/NavigationLayout';
+export {
+    reorderNavigationLayoutGroupItems,
+    reorderNavigationLayoutGroups,
+} from './components/navigation-layout/NavigationLayout.utils';
+export type {
+    NavigationLayoutConfig,
+    NavigationLayoutGroup,
+    NavigationLayoutItem,
+    NavigationLayoutItemLocation,
+    NavigationLayoutItemReorderEvent,
+    NavigationLayoutItemReorderPlacement,
+    NavigationLayoutItemReorderSource,
+    NavigationLayoutItemReorderTarget,
+    NavigationLayoutProps,
+} from './components/navigation-layout/NavigationLayout.types';
 export { default as UserImage } from './components/user-image/UserImage';
 export { default as MenuToggle } from './components/navigation-layout/navigation-header/menu-toggle/MenuToggle';

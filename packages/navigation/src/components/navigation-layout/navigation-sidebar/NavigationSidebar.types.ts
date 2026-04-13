@@ -9,6 +9,7 @@ export interface NavigationSidebarProps {
     groups: NavigationLayoutProps['groups'];
     selectedItemId: NavigationLayoutProps['selectedItemId'];
     onItemClick?: NavigationLayoutProps['onItemClick'];
+    onItemReorder?: NavigationLayoutProps['onItemReorder'];
     onSidebarOpen?: NavigationLayoutProps['onSidebarOpen'];
     onSidebarClose?: NavigationLayoutProps['onSidebarClose'];
     shouldShowCollapsedLabel?: NavigationLayoutProps['shouldShowCollapsedLabel'];

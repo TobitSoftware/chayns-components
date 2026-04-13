@@ -36,6 +36,7 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     groups,
     selectedItemId,
     onItemClick,
+    onItemReorder,
     onSidebarOpen,
     onSidebarClose,
     shouldShowCollapsedLabel,
@@ -118,13 +119,16 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
 
     const renderGroups = useCallback(
         (groupsToRender: NavigationLayoutGroup[]) =>
-            groupsToRender.map(({ items, id }, index) => (
+            groupsToRender.map(({ items, id, isReorderable }, index) => (
                 <Fragment key={id}>
                     <SidebarGroup
+                        groupId={id}
                         items={items}
                         isCompact={isCompact}
+                        isReorderable={isReorderable}
                         selectedItemId={selectedItemId}
                         onClick={onItemClick}
+                        onItemReorder={onItemReorder}
                         color={color}
                         shouldShowCollapsedLabel={shouldShowCollapsedLabel && width === minWidth}
                     />
@@ -132,7 +136,16 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
                     {index < groupsToRender.length - 1 && <SidebarDivider color={color} />}
                 </Fragment>
             )),
-        [isCompact, selectedItemId, onItemClick, color, shouldShowCollapsedLabel, width, minWidth],
+        [
+            color,
+            isCompact,
+            minWidth,
+            onItemClick,
+            onItemReorder,
+            selectedItemId,
+            shouldShowCollapsedLabel,
+            width,
+        ],
     );
 
     return (

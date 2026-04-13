@@ -13,6 +13,8 @@ type StyledSidebarItemHeadProps = WithTheme<{
     $shouldHighlight: boolean;
     $hasDisabledReason: boolean;
     $isDisabled?: boolean;
+    $isDragging?: boolean;
+    $isReorderable?: boolean;
 }>;
 
 export const StyledSidebarItemHead = styled.div<StyledSidebarItemHeadProps>`
@@ -25,23 +27,30 @@ export const StyledSidebarItemHead = styled.div<StyledSidebarItemHeadProps>`
 
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
 
-    ${({ $isDisabled, $hasDisabledReason }) => {
+    ${({ $isDisabled, $hasDisabledReason, $isReorderable }) => {
         if ($isDisabled && $hasDisabledReason) {
             return css`
                 cursor: help;
             `;
         }
 
-        if ($isDisabled) {
+        if ($isDisabled && !$isReorderable) {
             return css`
                 cursor: default;
             `;
         }
 
         return css`
-            cursor: pointer;
+            cursor: ${$isReorderable ? 'grab' : 'pointer'};
         `;
     }}
+
+    ${({ $isDragging }) =>
+        $isDragging &&
+        css`
+            opacity: 0.55;
+            cursor: grabbing;
+        `}
 
     ${({ $shouldHighlight }) =>
         $shouldHighlight &&
