@@ -8,7 +8,11 @@ export const StyledSidebarItem = styled.div`
     flex-direction: column;
 `;
 
-type StyledSidebarItemHeadProps = WithTheme<{ $shouldHighlight: boolean }>;
+type StyledSidebarItemHeadProps = WithTheme<{
+    $shouldHighlight: boolean;
+    $hasDisabledReason: boolean;
+    $isDisabled?: boolean;
+}>;
 
 export const StyledSidebarItemHead = styled.div<StyledSidebarItemHeadProps>`
     height: 42px;
@@ -18,7 +22,25 @@ export const StyledSidebarItemHead = styled.div<StyledSidebarItemHeadProps>`
     align-items: center;
     justify-content: space-between;
 
-    cursor: pointer;
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
+
+    ${({ $isDisabled, $hasDisabledReason }) => {
+        if ($isDisabled && $hasDisabledReason) {
+            return css`
+                cursor: help;
+            `;
+        }
+
+        if ($isDisabled) {
+            return css`
+                cursor: default;
+            `;
+        }
+
+        return css`
+            cursor: pointer;
+        `;
+    }}
 
     ${({ $shouldHighlight }) =>
         $shouldHighlight &&

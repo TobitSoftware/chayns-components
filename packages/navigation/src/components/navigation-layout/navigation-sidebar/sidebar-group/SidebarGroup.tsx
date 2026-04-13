@@ -26,22 +26,35 @@ const SidebarGroup: FC<SidebarGroupProps> = ({
 }) => {
     const content = useMemo(
         () =>
-            items.map(({ id, children, label, imageUrl, icons, isDisabled, imageElement }) => (
-                <SidebarItem
-                    key={id}
-                    icons={icons}
-                    imageElement={imageElement}
-                    isCompact={isCompact}
-                    label={label}
-                    id={id}
-                    selectedItemId={selectedItemId}
-                    isDisabled={isDisabled}
-                    childItems={children}
-                    imageUrl={imageUrl}
-                    color={color}
-                />
-            )),
-        [color, items, selectedItemId, isCompact],
+            items.map(
+                ({
+                    id,
+                    children,
+                    label,
+                    imageUrl,
+                    icons,
+                    isDisabled,
+                    imageElement,
+                    disabledReason,
+                }) => (
+                    <SidebarItem
+                        key={id}
+                        icons={icons}
+                        imageElement={imageElement}
+                        isCompact={isCompact}
+                        label={label}
+                        disabledReason={disabledReason}
+                        id={id}
+                        selectedItemId={selectedItemId}
+                        isDisabled={isDisabled}
+                        onClick={onClick}
+                        childItems={children}
+                        imageUrl={imageUrl}
+                        color={color}
+                    />
+                ),
+            ),
+        [color, items, selectedItemId, isCompact, onClick],
     );
 
     return <StyledSidebarGroup>{content}</StyledSidebarGroup>;

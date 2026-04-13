@@ -32,6 +32,8 @@ const NAVIGATION_LAYOUT_GROUPS: NavigationLayoutGroup[] = [
                 id: 'sidekick',
                 label: 'SideKick',
                 icons: ['fa ts-sidekick-chat'],
+                isDisabled: true,
+                disabledReason: 'SideKick ist nicht verfügbar!',
             },
             {
                 id: 'chat',
@@ -91,6 +93,7 @@ const NAVIGATION_LAYOUT_GROUPS: NavigationLayoutGroup[] = [
                 id: 'drafts',
                 label: 'Entwürfe',
                 icons: ['fa fa-pen-nib'],
+                isDisabled: true,
             },
         ],
     },

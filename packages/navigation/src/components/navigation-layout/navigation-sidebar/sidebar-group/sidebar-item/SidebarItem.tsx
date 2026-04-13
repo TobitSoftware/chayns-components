@@ -1,5 +1,5 @@
-import React, { FC, memo, useEffect, useMemo, useState } from 'react';
-import { ExpandableContent, Icon } from '@chayns-components/core';
+import React, { FC, memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { ExpandableContent, Icon, Tooltip } from '@chayns-components/core';
 import {
     StyledSidebarItem,
     StyledSidebarItemChildren,
@@ -21,6 +21,8 @@ interface SidebarItemProps {
     label: NavigationLayoutItem['label'];
     childItems: NavigationLayoutItem['children'];
     imageElement: NavigationLayoutItem['imageElement'];
+    disabledReason: NavigationLayoutItem['disabledReason'];
+    onClick: NavigationLayoutProps['onItemClick'];
     color: string;
     isCompact: boolean;
     selectedItemId: NavigationLayoutProps['selectedItemId'];
@@ -35,6 +37,8 @@ const SidebarItem: FC<SidebarItemProps> = ({
     selectedItemId,
     isCompact,
     imageElement,
+    onClick,
+    disabledReason,
     isDisabled,
     color,
 }) => {
@@ -56,6 +60,14 @@ const SidebarItem: FC<SidebarItemProps> = ({
         }
     }, [isCompact]);
 
+    const handleClick = useCallback(() => {
+        if (isDisabled || typeof onClick !== 'function') {
+            return;
+        }
+
+        onClick(id);
+    }, [isDisabled, onClick, id]);
+
     const children = useMemo(() => {
         if (!childItems || childItems.length === 0) {
             return null;
@@ -68,42 +80,56 @@ const SidebarItem: FC<SidebarItemProps> = ({
                 selectedItemId={selectedItemId}
                 isDisabled={childItem.isDisabled}
                 icons={childItem.icons}
+                disabledReason={childItem.disabledReason}
                 imageUrl={childItem.imageUrl}
                 imageElement={childItem.imageElement}
                 label={childItem.label}
                 childItems={childItem.children}
                 color={color}
+                onClick={onClick}
                 isCompact={isCompact}
             />
         ));
-    }, [childItems, color, selectedItemId, isCompact]);
+    }, [childItems, color, selectedItemId, isCompact, onClick]);
 
     return (
         <StyledSidebarItem>
-            <StyledSidebarItemHead
-                $shouldHighlight={!isDisabled && (isHovered || isSelected)}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
+            <Tooltip
+                item={{ text: disabledReason ?? '' }}
+                isDisabled={!disabledReason}
+                shouldUseFullWidth
             >
-                <StyledSidebarItemHeadContent>
-                    <StyledSidebarItemIcon>
-                        {imageUrl && <StyledSidebarItemIconImage src={imageUrl} />}
-                        {imageElement}
-                        {icons && <Icon icons={icons} size={21} color={color} />}
-                    </StyledSidebarItemIcon>
-                    <StyledSidebarItemLabel>{label}</StyledSidebarItemLabel>
-                </StyledSidebarItemHeadContent>
-                {!!children && !isCompact && (
-                    <StyledMotionSidebarOpenIcon
-                        initial={false}
-                        animate={{ rotate: shouldShowChildren ? 180 : 0 }}
-                        transition={{ type: 'tween' }}
-                        onClick={() => setShouldShowChildren((prev) => !prev)}
-                    >
-                        <Icon icons={['fa fa-chevron-down']} color={color} />
-                    </StyledMotionSidebarOpenIcon>
-                )}
-            </StyledSidebarItemHead>
+                <StyledSidebarItemHead
+                    $shouldHighlight={!isDisabled && (isHovered || isSelected)}
+                    $isDisabled={isDisabled}
+                    $hasDisabledReason={!!disabledReason}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    onClick={handleClick}
+                >
+                    <StyledSidebarItemHeadContent>
+                        <StyledSidebarItemIcon>
+                            {imageUrl && <StyledSidebarItemIconImage src={imageUrl} />}
+                            {imageElement}
+                            {icons && <Icon icons={icons} size={21} color={color} />}
+                        </StyledSidebarItemIcon>
+                        <StyledSidebarItemLabel>{label}</StyledSidebarItemLabel>
+                    </StyledSidebarItemHeadContent>
+                    {!!children && !isCompact && !isDisabled && (
+                        <StyledMotionSidebarOpenIcon
+                            initial={false}
+                            animate={{ rotate: shouldShowChildren ? 180 : 0 }}
+                            transition={{ type: 'tween' }}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                setShouldShowChildren((prev) => !prev);
+                            }}
+                        >
+                            <Icon icons={['fa fa-chevron-down']} color={color} />
+                        </StyledMotionSidebarOpenIcon>
+                    )}
+                </StyledSidebarItemHead>
+            </Tooltip>
             {!!children && (
                 <ExpandableContent isOpen={shouldShowChildren}>
                     <StyledSidebarItemChildren>{children}</StyledSidebarItemChildren>

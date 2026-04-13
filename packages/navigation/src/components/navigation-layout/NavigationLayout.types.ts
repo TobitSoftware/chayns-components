@@ -37,6 +37,7 @@ export interface NavigationLayoutItem {
     imageUrl?: string;
     imageElement?: ReactNode;
     isDisabled?: boolean;
+    disabledReason?: string;
     children?: NavigationLayoutItem[];
 }
 
