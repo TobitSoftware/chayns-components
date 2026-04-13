@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { WithTheme } from '@chayns-components/core';
 import { ColorMode } from 'chayns-api';
 
@@ -18,9 +18,15 @@ export const StyledNavigationLayoutContentWrapper = styled.div`
     min-height: 0;
 `;
 
-export const StyledNavigationLayoutContent = styled.div`
-    border-top-left-radius: 8px;
-    box-shadow: rgba(0, 0, 0, 0.2) 0 0 20px 16px;
+type StyledNavigationLayoutContentProps = WithTheme<{ $isCornerContent: boolean }>;
+
+export const StyledNavigationLayoutContent = styled.div<StyledNavigationLayoutContentProps>`
+    ${({ $isCornerContent }) =>
+        $isCornerContent &&
+        css`
+            border-top-left-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.2) 0 0 20px 16px;
+        `}
 
     overflow: hidden;
 

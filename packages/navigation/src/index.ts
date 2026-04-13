@@ -11,3 +11,4 @@ export type { DynamicToolbarSpacerProps } from './components/dynamic-toolbar-spa
 
 export { default as NavigationLayout } from './components/navigation-layout/NavigationLayout';
 export { default as UserImage } from './components/user-image/UserImage';
+export { default as MenuToggle } from './components/navigation-layout/navigation-header/menu-toggle/MenuToggle';

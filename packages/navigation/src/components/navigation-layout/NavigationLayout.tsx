@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import { NavigationLayoutProps } from './NavigationLayout.types';
 import {
     StyledNavigationLayout,
@@ -19,11 +19,14 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
     groups,
     headerContent,
     selectedItemId,
+    isMobile,
     shouldShowCollapsedLabel = false,
     onItemClick,
     onSidebarOpen,
     onSidebarClose,
 }) => {
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
+
     const config = useMemo(
         () => ({
             ...DEFAULT_NAVIGATION_LAYOUT_CONFIG,
@@ -32,6 +35,16 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
         [configProp],
     );
 
+    const handleToggleMobileMenu = useCallback(() => {
+        if (!isMobile) {
+            setIsMobileOpen(false);
+
+            return;
+        }
+
+        setIsMobileOpen((prev) => !prev);
+    }, [isMobile]);
+
     return (
         <StyledNavigationLayout>
             <NavigationHeader
@@ -39,6 +52,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
                 color={config.color}
                 headerContent={headerContent}
                 safeAreas={config.safeAreas}
+                isMobile={isMobile}
+                isMobileOpen={isMobileOpen}
+                onMenuClick={handleToggleMobileMenu}
             />
             <StyledNavigationLayoutContentWrapper>
                 <NavigationSidebar
@@ -54,7 +70,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
                     onSidebarClose={onSidebarClose}
                     shouldShowCollapsedLabel={shouldShowCollapsedLabel}
                 />
-                <StyledNavigationLayoutContent>{children}</StyledNavigationLayoutContent>
+                <StyledNavigationLayoutContent $isCornerContent={!isMobile || isMobileOpen}>
+                    {children}
+                </StyledNavigationLayoutContent>
             </StyledNavigationLayoutContentWrapper>
             <StyledNavigationLayoutBackground $backgroundColor={config.backgroundColor}>
                 {config.backgroundImage && (

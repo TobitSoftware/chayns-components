@@ -209,6 +209,8 @@ export const General = Template.bind({});
 
 export const WithBackgroundImage = Template.bind({});
 
+export const Mobile = Template.bind({});
+
 WithBackgroundImage.args = {
     config: {
         color: '#FFFFFF',
@@ -225,4 +227,23 @@ WithBackgroundImage.args = {
             />
         </div>
     ),
+};
+
+Mobile.args = {
+    config: {
+        color: '#FFFFFF',
+        backgroundColor: 'transparent',
+        backgroundImage: 'https://tsimg.cloud/static/tobit-team/team_background.png',
+        sidebarMaxWidth: 300,
+        headerHeight: 70,
+    },
+    sidebarBottomContent: (
+        <div style={{ maxWidth: 200, margin: '0 auto' }}>
+            <img
+                style={{ width: '100%', filter: 'invert(1)' }}
+                src="https://tsimg.cloud/static/tobit-team/team_david_icon.svg"
+            />
+        </div>
+    ),
+    isMobile: true,
 };

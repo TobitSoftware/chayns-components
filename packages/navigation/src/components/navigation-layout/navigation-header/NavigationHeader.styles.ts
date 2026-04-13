@@ -18,4 +18,8 @@ export const StyledNavigationHeader = styled.div<StyledNavigationHeaderProps>`
 
     // Need for electron dragging
     -webkit-app-region: drag;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
 `;

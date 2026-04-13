@@ -5,4 +5,7 @@ export interface NavigationHeaderProps {
     color: string;
     safeAreas?: NavigationLayoutConfig['safeAreas'];
     headerContent: NavigationLayoutProps['headerContent'];
+    isMobile: NavigationLayoutProps['isMobile'];
+    isMobileOpen: boolean;
+    onMenuClick: () => void;
 }

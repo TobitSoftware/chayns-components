@@ -15,6 +15,7 @@ export interface NavigationLayoutProps {
     onSidebarOpen?: VoidFunction;
     onSidebarClose?: VoidFunction;
     shouldShowCollapsedLabel?: boolean;
+    isMobile?: boolean;
 }
 
 export interface SafeAreas {
