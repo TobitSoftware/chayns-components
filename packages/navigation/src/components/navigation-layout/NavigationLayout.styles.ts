@@ -27,6 +27,8 @@ export const StyledNavigationLayoutContent = styled.div<StyledNavigationLayoutCo
     border-top-left-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.2) 0 0 20px 16px;
 
+    overflow: hidden;
+
     flex: 1;
     width: 100%;
     min-width: 0;
