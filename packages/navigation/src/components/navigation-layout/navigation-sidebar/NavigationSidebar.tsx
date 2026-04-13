@@ -33,6 +33,8 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     groups,
     selectedItemId,
     onItemClick,
+    onSidebarOpen,
+    onSidebarClose,
 }) => {
     const [width, setWidth] = useState<number>(minWidth);
     const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -86,8 +88,16 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
             setWidth(nearestWidth);
 
             dragStartWidthRef.current = nearestWidth;
+
+            if (typeof onSidebarOpen === 'function' && nearestWidth === maxWidth) {
+                onSidebarOpen();
+            }
+
+            if (typeof onSidebarClose === 'function' && nearestWidth === minWidth) {
+                onSidebarClose();
+            }
         },
-        [maxWidth, minWidth],
+        [maxWidth, minWidth, onSidebarClose, onSidebarOpen],
     );
 
     const { pinnedGroups, scrollableGroups } = useMemo(

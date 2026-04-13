@@ -8,4 +8,6 @@ export interface NavigationSidebarProps {
     groups: NavigationLayoutProps['groups'];
     selectedItemId: NavigationLayoutProps['selectedItemId'];
     onItemClick?: NavigationLayoutProps['onItemClick'];
+    onSidebarOpen?: NavigationLayoutProps['onSidebarOpen'];
+    onSidebarClose?: NavigationLayoutProps['onSidebarClose'];
 }

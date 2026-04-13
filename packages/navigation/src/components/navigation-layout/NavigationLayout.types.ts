@@ -11,6 +11,8 @@ export interface NavigationLayoutProps {
         parentIds?: NavigationLayoutItem['id'][],
     ) => void;
     headerContent: ReactNode;
+    onSidebarOpen?: VoidFunction;
+    onSidebarClose?: VoidFunction;
 }
 
 export interface SafeAreas {
