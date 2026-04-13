@@ -93,7 +93,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
                     </StyledSidebarItemIcon>
                     <StyledSidebarItemLabel>{label}</StyledSidebarItemLabel>
                 </StyledSidebarItemHeadContent>
-                {!!children && (
+                {!!children && !isCompact && (
                     <StyledMotionSidebarOpenIcon
                         initial={false}
                         animate={{ rotate: shouldShowChildren ? 180 : 0 }}

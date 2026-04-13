@@ -106,7 +106,7 @@ const HEADER_CONTENT = (
             justifyContent: 'space-between',
         }}
     >
-        <span>Header</span>
+        <span style={{ margin: 0, fontSize: 20 }}>Example Header</span>
         <UserImage />
     </div>
 );

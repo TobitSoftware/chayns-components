@@ -31,6 +31,7 @@ export const StyledSidebarItemHeadContent = styled.div`
     display: flex;
     align-items: center;
     height: 100%;
+    min-width: 0;
 `;
 
 export const StyledSidebarItemIcon = styled.div`
@@ -47,6 +48,7 @@ export const StyledMotionSidebarOpenIcon = styled(motion.div)`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
 `;
 
 export const StyledSidebarItemIconImage = styled.img`
@@ -57,6 +59,9 @@ export const StyledSidebarItemLabel = styled.div`
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+
+    flex: 1;
+    min-width: 0;
 `;
 
 export const StyledSidebarItemChildren = styled.div`
