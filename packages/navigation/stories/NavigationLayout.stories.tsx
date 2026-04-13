@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 import NavigationLayout from '../src/components/navigation-layout/NavigationLayout';
+import { MultiActionButton } from '@chayns-components/core';
 import {
     NavigationLayoutGroup,
     NavigationLayoutProps,
@@ -110,6 +111,45 @@ const meta: Meta<typeof NavigationLayout> = {
                 <h2>Navigation Layout</h2>
                 <p>Minimalbeispiel für den Content-Bereich.</p>
             </div>
+        ),
+        sidebarTopContent: (
+            <MultiActionButton
+                primaryAction={{
+                    icon: 'fa fa-plus',
+                    label: 'Erstellen',
+                    onClick: () => {},
+                }}
+                secondaryContextMenu={[
+                    {
+                        key: 'mail',
+                        icons: ['fa fa-envelope'],
+                        text: 'Mail',
+                        onClick: () => {},
+                    },
+                    {
+                        key: 'chat',
+                        icons: ['fa ts-chat'],
+                        text: 'Chat',
+                        onClick: () => {},
+                    },
+                    {
+                        key: 'contact',
+                        icons: ['fa fa-address-book'],
+                        text: 'Kontakt',
+                        onClick: () => {},
+                    },
+                    {
+                        key: 'appointment',
+                        icons: ['fa fa-calendar'],
+                        text: 'Termin',
+                        onClick: () => {},
+                    },
+                ]}
+                shouldUseFullWidth
+                shouldAutoCollapse
+                backgroundColor="rgba(30, 30, 30, 0.3)"
+                gapColor="transparent"
+            />
         ),
     },
 };

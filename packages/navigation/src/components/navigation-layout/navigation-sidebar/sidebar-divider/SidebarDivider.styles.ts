@@ -8,6 +8,6 @@ export const StyledSidebarDivider = styled.div<StyledSidebarDividerProps>`
     opacity: 0.35;
     flex: none;
     height: 1px;
-    margin: 4px 0 8px;
+    margin: 4px 0;
     width: 100%;
 `;

@@ -13,11 +13,13 @@ interface SidebarGroupProps {
     selectedItemId?: NavigationLayoutProps['selectedItemId'];
     onClick: NavigationLayoutProps['onItemClick'];
     color: string;
+    isCompact: boolean;
 }
 
 const SidebarGroup: FC<SidebarGroupProps> = ({
     items,
     selectedItemId,
+    isCompact,
     onClick,
     isReorderable,
     color,
@@ -28,6 +30,7 @@ const SidebarGroup: FC<SidebarGroupProps> = ({
                 <SidebarItem
                     key={id}
                     icons={icons}
+                    isCompact={isCompact}
                     label={label}
                     id={id}
                     selectedItemId={selectedItemId}
@@ -37,7 +40,7 @@ const SidebarGroup: FC<SidebarGroupProps> = ({
                     color={color}
                 />
             )),
-        [color, items, selectedItemId],
+        [color, items, selectedItemId, isCompact],
     );
 
     return <StyledSidebarGroup>{content}</StyledSidebarGroup>;

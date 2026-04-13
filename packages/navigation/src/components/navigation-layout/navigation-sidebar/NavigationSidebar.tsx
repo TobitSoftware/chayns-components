@@ -1,6 +1,7 @@
 import React, {
     FC,
     useCallback,
+    useEffect,
     useMemo,
     useRef,
     useState,
@@ -17,6 +18,7 @@ import { NavigationSidebarGroup, NavigationSidebarProps } from './NavigationSide
 import {
     clampSideBarWidth,
     getNearestSideBarWidth,
+    getSideBarCompactBreakpoint,
     useGlobalUserSelect,
 } from './NavigationSidebar.utils';
 import { PanInfo } from 'motion';
@@ -37,6 +39,11 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     const dragStartWidthRef = useRef<number>(minWidth);
 
     useGlobalUserSelect({ isDisabled: isDragging });
+
+    const isCompact = useMemo(
+        () => width < getSideBarCompactBreakpoint({ minWidth, maxWidth }),
+        [maxWidth, minWidth, width],
+    );
 
     const handlePanStart = useCallback((): void => {
         dragStartWidthRef.current = width;
@@ -99,6 +106,7 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
                 <Fragment key={id}>
                     <SidebarGroup
                         items={items}
+                        isCompact={isCompact}
                         isReorderable={isReorderable}
                         selectedItemId={selectedItemId}
                         onClick={onItemClick}
@@ -108,7 +116,7 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
                     {index < groupsToRender.length - 1 && <SidebarDivider color={color} />}
                 </Fragment>
             )),
-        [color, onItemClick, selectedItemId],
+        [color, onItemClick, selectedItemId, isCompact],
     );
 
     return (
@@ -116,6 +124,7 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
             $color={color}
             initial={false}
             animate={{ width }}
+            key="sidebar"
             transition={
                 isDragging
                     ? {

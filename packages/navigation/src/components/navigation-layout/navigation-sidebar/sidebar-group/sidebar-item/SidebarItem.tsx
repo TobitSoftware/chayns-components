@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { ExpandableContent, Icon } from '@chayns-components/core';
 import {
     StyledSidebarItem,
@@ -21,6 +21,7 @@ interface SidebarItemProps {
     label: NavigationLayoutItem['label'];
     childItems: NavigationLayoutItem['children'];
     color: string;
+    isCompact: boolean;
     selectedItemId: NavigationLayoutProps['selectedItemId'];
 }
 
@@ -31,6 +32,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
     imageUrl,
     label,
     selectedItemId,
+    isCompact,
     isDisabled,
     color,
 }) => {
@@ -45,6 +47,12 @@ const SidebarItem: FC<SidebarItemProps> = ({
             ),
         [id, label, imageUrl, icons, isDisabled, childItems, selectedItemId],
     );
+
+    useEffect(() => {
+        if (isCompact) {
+            setShouldShowChildren(false);
+        }
+    }, [isCompact]);
 
     const children = useMemo(() => {
         if (!childItems || childItems.length === 0) {
@@ -62,9 +70,10 @@ const SidebarItem: FC<SidebarItemProps> = ({
                 label={childItem.label}
                 childItems={childItem.children}
                 color={color}
+                isCompact={isCompact}
             />
         ));
-    }, [childItems, color, selectedItemId]);
+    }, [childItems, color, selectedItemId, isCompact]);
 
     return (
         <StyledSidebarItem>
