@@ -1,3 +1,4 @@
+// noinspection JSUnusedGlobalSymbols
 import {
     NavigationLayoutGroup,
     NavigationLayoutItem,
@@ -13,6 +14,11 @@ interface CloneNavigationLayoutItemsOptions {
 interface AreNavigationLayoutParentIdsEqualOptions {
     parentIdsA: NavigationLayoutItem['id'][];
     parentIdsB: NavigationLayoutItem['id'][];
+}
+
+interface FindNavigationLayoutItemByIdOptions {
+    items: NavigationLayoutItem[];
+    itemId: NavigationLayoutItem['id'];
 }
 
 interface GetNavigationLayoutItemsByParentIdsOptions {
@@ -81,6 +87,30 @@ const cloneNavigationLayoutItems = ({
         ...item,
         children: item.children ? cloneNavigationLayoutItems({ items: item.children }) : undefined,
     }));
+
+const findNavigationLayoutItemById = ({
+    items,
+    itemId,
+}: FindNavigationLayoutItemByIdOptions): NavigationLayoutItem | null => {
+    for (const item of items) {
+        if (item.id === itemId) {
+            return item;
+        }
+
+        if (item.children?.length) {
+            const nestedItem = findNavigationLayoutItemById({
+                items: item.children,
+                itemId,
+            });
+
+            if (nestedItem) {
+                return nestedItem;
+            }
+        }
+    }
+
+    return null;
+};
 
 const getNavigationLayoutItemsByParentIds = ({
     items,
@@ -187,10 +217,10 @@ const normalizeNavigationLayoutReorderTarget = ({
     return target;
 };
 
-export const isNavigationLayoutReorderTargetEqual = ({
+export function isNavigationLayoutReorderTargetEqual({
     targetA,
     targetB,
-}: IsNavigationLayoutReorderTargetEqualOptions): boolean => {
+}: IsNavigationLayoutReorderTargetEqualOptions): boolean {
     if (!targetA || !targetB) {
         return targetA === targetB;
     }
@@ -204,12 +234,12 @@ export const isNavigationLayoutReorderTargetEqual = ({
             parentIdsB: targetB.parentIds,
         })
     );
-};
+}
 
-export const isNavigationLayoutItemReorderEventValid = ({
+export function isNavigationLayoutItemReorderEventValid({
     items,
     event,
-}: IsNavigationLayoutItemReorderEventValidOptions): boolean => {
+}: IsNavigationLayoutItemReorderEventValidOptions): boolean {
     const { itemId, source, target } = event;
     const sourceParentItems = getNavigationLayoutItemsByParentIds({
         items,
@@ -218,6 +248,10 @@ export const isNavigationLayoutItemReorderEventValid = ({
     const sourceItem = sourceParentItems?.[source.index];
 
     if (!sourceParentItems || sourceItem?.id !== itemId || source.itemId !== itemId) {
+        return false;
+    }
+
+    if (sourceItem.isDisabled) {
         return false;
     }
 
@@ -243,6 +277,17 @@ export const isNavigationLayoutItemReorderEventValid = ({
         return false;
     }
 
+    if (target.placement === 'inside' && target.itemId) {
+        const targetItem = findNavigationLayoutItemById({
+            items,
+            itemId: target.itemId,
+        });
+
+        if (!targetItem || targetItem.isDisabled) {
+            return false;
+        }
+    }
+
     const normalizedTarget = normalizeNavigationLayoutReorderTarget({
         source,
         target,
@@ -254,12 +299,12 @@ export const isNavigationLayoutItemReorderEventValid = ({
             parentIdsB: normalizedTarget.parentIds,
         }) && source.index === normalizedTarget.index
     );
-};
+}
 
-export const reorderNavigationLayoutGroupItems = ({
+export function reorderNavigationLayoutGroupItems({
     items,
     event,
-}: ReorderNavigationLayoutGroupItemsOptions): NavigationLayoutItem[] => {
+}: ReorderNavigationLayoutGroupItemsOptions): NavigationLayoutItem[] {
     if (!isNavigationLayoutItemReorderEventValid({ items, event })) {
         return items;
     }
@@ -284,12 +329,12 @@ export const reorderNavigationLayoutGroupItems = ({
         location: target,
         item: sourceResult.item,
     });
-};
+}
 
-export const reorderNavigationLayoutGroups = ({
+export function reorderNavigationLayoutGroups({
     groups,
     event,
-}: ReorderNavigationLayoutGroupsOptions): NavigationLayoutGroup[] => {
+}: ReorderNavigationLayoutGroupsOptions): NavigationLayoutGroup[] {
     const group = groups.find(({ id }) => id === event.groupId);
 
     if (!group) {
@@ -318,6 +363,4 @@ export const reorderNavigationLayoutGroups = ({
             }),
         };
     });
-};
-
-export {};
+}

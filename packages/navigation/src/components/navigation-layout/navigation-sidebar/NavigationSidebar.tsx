@@ -26,6 +26,7 @@ import { PanInfo } from 'motion';
 import SidebarGroup from './sidebar-group/SidebarGroup';
 import SidebarDivider from './sidebar-divider/SidebarDivider';
 import { NavigationLayoutGroup } from '../NavigationLayout.types';
+import { NavigationSidebarProvider } from './NavigationSidebar.context';
 
 const NavigationSidebar: FC<NavigationSidebarProps> = ({
     color,
@@ -36,7 +37,6 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
     groups,
     selectedItemId,
     onItemClick,
-    onItemReorder,
     onSidebarOpen,
     onSidebarClose,
     shouldShowCollapsedLabel,
@@ -116,36 +116,29 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
 
     const hasPinnedGroups = pinnedGroups.length > 0;
     const hasScrollableGroups = scrollableGroups.length > 0;
+    const shouldShowCollapsedSidebarLabel = shouldShowCollapsedLabel && width === minWidth;
+
+    const contextValue = useMemo(
+        () => ({
+            color,
+            isCompact,
+            onItemClick,
+            selectedItemId,
+            shouldShowCollapsedLabel: shouldShowCollapsedSidebarLabel,
+        }),
+        [color, isCompact, onItemClick, selectedItemId, shouldShowCollapsedSidebarLabel],
+    );
 
     const renderGroups = useCallback(
         (groupsToRender: NavigationLayoutGroup[]) =>
             groupsToRender.map(({ items, id, isReorderable }, index) => (
                 <Fragment key={id}>
-                    <SidebarGroup
-                        groupId={id}
-                        items={items}
-                        isCompact={isCompact}
-                        isReorderable={isReorderable}
-                        selectedItemId={selectedItemId}
-                        onClick={onItemClick}
-                        onItemReorder={onItemReorder}
-                        color={color}
-                        shouldShowCollapsedLabel={shouldShowCollapsedLabel && width === minWidth}
-                    />
+                    <SidebarGroup groupId={id} items={items} isReorderable={isReorderable} />
 
                     {index < groupsToRender.length - 1 && <SidebarDivider color={color} />}
                 </Fragment>
             )),
-        [
-            color,
-            isCompact,
-            minWidth,
-            onItemClick,
-            onItemReorder,
-            selectedItemId,
-            shouldShowCollapsedLabel,
-            width,
-        ],
+        [color],
     );
 
     return (
@@ -168,31 +161,33 @@ const NavigationSidebar: FC<NavigationSidebarProps> = ({
             id="sidebar"
             data-navigation-sidebar-root="true"
         >
-            <StyledMotionNavigationSidebarContent>
-                {!!topContent && (
-                    <StyledMotionNavigationSidebarExternalContent>
-                        {topContent}
-                    </StyledMotionNavigationSidebarExternalContent>
-                )}
-                <StyledMotionNavigationSidebarContentWrapper>
-                    {hasPinnedGroups && (
-                        <StyledMotionNavigationSidebarContentList $isPinned>
-                            {renderGroups(pinnedGroups)}
-                        </StyledMotionNavigationSidebarContentList>
+            <NavigationSidebarProvider value={contextValue}>
+                <StyledMotionNavigationSidebarContent>
+                    {!!topContent && (
+                        <StyledMotionNavigationSidebarExternalContent>
+                            {topContent}
+                        </StyledMotionNavigationSidebarExternalContent>
                     )}
-                    {hasPinnedGroups && hasScrollableGroups && <SidebarDivider color={color} />}
-                    {hasScrollableGroups && (
-                        <StyledMotionNavigationSidebarContentList>
-                            {renderGroups(scrollableGroups)}
-                        </StyledMotionNavigationSidebarContentList>
+                    <StyledMotionNavigationSidebarContentWrapper>
+                        {hasPinnedGroups && (
+                            <StyledMotionNavigationSidebarContentList $isPinned>
+                                {renderGroups(pinnedGroups)}
+                            </StyledMotionNavigationSidebarContentList>
+                        )}
+                        {hasPinnedGroups && hasScrollableGroups && <SidebarDivider color={color} />}
+                        {hasScrollableGroups && (
+                            <StyledMotionNavigationSidebarContentList>
+                                {renderGroups(scrollableGroups)}
+                            </StyledMotionNavigationSidebarContentList>
+                        )}
+                    </StyledMotionNavigationSidebarContentWrapper>
+                    {!!bottomContent && (
+                        <StyledMotionNavigationSidebarExternalContent>
+                            {bottomContent}
+                        </StyledMotionNavigationSidebarExternalContent>
                     )}
-                </StyledMotionNavigationSidebarContentWrapper>
-                {!!bottomContent && (
-                    <StyledMotionNavigationSidebarExternalContent>
-                        {bottomContent}
-                    </StyledMotionNavigationSidebarExternalContent>
-                )}
-            </StyledMotionNavigationSidebarContent>
+                </StyledMotionNavigationSidebarContent>
+            </NavigationSidebarProvider>
             {!isMobile && (
                 <StyledNavigationSidebarResizeHandle
                     onPointerDown={handlePointerDown}

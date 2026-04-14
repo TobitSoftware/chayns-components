@@ -1,10 +1,16 @@
-import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
     areCoordinatesEqual,
     Coordinates,
     getScrollableAncestorElements,
     getSidebarItemPopupCoordinates,
 } from './SidebarItem.utils';
+import {
+    NavigationLayoutItem,
+    NavigationLayoutItemReorderSource,
+    NavigationLayoutItemReorderTarget,
+} from '../../../NavigationLayout.types';
+import { isNavigationLayoutReorderTargetEqual } from '../../../NavigationLayout.utils';
 
 export interface UseSidebarItemPopupOptions {
     isDisabled: boolean;
@@ -20,6 +26,50 @@ export interface UseSidebarItemPopupResult {
     popupContainer: HTMLElement | null;
     shouldRenderPopup: boolean;
 }
+
+export interface UseSidebarItemReorderOptions {
+    childItems: NavigationLayoutItem['children'];
+    draggedItemId?: NavigationLayoutItem['id'];
+    dropTarget: NavigationLayoutItemReorderTarget | null;
+    id: NavigationLayoutItem['id'];
+    index: number;
+    isDisabled?: NavigationLayoutItem['isDisabled'];
+    isReorderEnabled: boolean;
+    onDragEnd: VoidFunction;
+    onDragStart: (
+        event: React.DragEvent<HTMLDivElement>,
+        item: NavigationLayoutItemReorderSource,
+    ) => void;
+    onDrop: (target: NavigationLayoutItemReorderTarget) => void;
+    onDropInside?: VoidFunction;
+    onDropTargetChange: (target: NavigationLayoutItemReorderTarget) => void;
+    parentIds: NavigationLayoutItem['id'][];
+}
+
+export interface UseSidebarItemReorderResult {
+    canDragItem: boolean;
+    canDropInsideItem: boolean;
+    childParentIds: NavigationLayoutItem['id'][];
+    childListEndTarget: NavigationLayoutItemReorderTarget | null;
+    handleBeforeDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
+    handleBeforeDrop: (event: React.DragEvent<HTMLDivElement>) => void;
+    handleChildListEndDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
+    handleChildListEndDrop: (event: React.DragEvent<HTMLDivElement>) => void;
+    handleDragEnd: VoidFunction;
+    handleDragStart: (event: React.DragEvent<HTMLDivElement>) => void;
+    handleInsideDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
+    handleInsideDrop: (event: React.DragEvent<HTMLDivElement>) => void;
+    isBeforeDropTargetActive: boolean;
+    isChildListEndTargetActive: boolean;
+    isDragging: boolean;
+    isInsideDropTargetActive: boolean;
+}
+
+const setDragMoveEffect = (event: React.DragEvent<HTMLDivElement>): void => {
+    const { dataTransfer } = event;
+
+    dataTransfer.dropEffect = 'move';
+};
 
 const resolveSidebarContainer = (item: HTMLDivElement | null): HTMLElement | null => {
     if (!item) {
@@ -181,5 +231,205 @@ export const useSidebarItemPopup = ({
         itemRef,
         popupContainer,
         shouldRenderPopup: !isDisabled && !!shouldShowCollapsedLabel && isHovered && !!coordinates,
+    };
+};
+
+export const useSidebarItemReorder = ({
+    childItems,
+    draggedItemId,
+    dropTarget,
+    id,
+    index,
+    isDisabled,
+    isReorderEnabled,
+    onDragEnd,
+    onDragStart,
+    onDrop,
+    onDropInside,
+    onDropTargetChange,
+    parentIds,
+}: UseSidebarItemReorderOptions): UseSidebarItemReorderResult => {
+    const childParentIds = useMemo(() => [...parentIds, id], [id, parentIds]);
+    const canDragItem = isReorderEnabled && !isDisabled;
+    const canDropInsideItem = isReorderEnabled && !isDisabled;
+
+    const currentItem = useMemo<NavigationLayoutItemReorderSource>(
+        () => ({
+            itemId: id,
+            parentIds,
+            index,
+        }),
+        [id, index, parentIds],
+    );
+
+    const beforeTarget = useMemo<NavigationLayoutItemReorderTarget>(
+        () => ({
+            itemId: id,
+            parentIds,
+            index,
+            placement: 'before',
+        }),
+        [id, index, parentIds],
+    );
+
+    const insideTarget = useMemo<NavigationLayoutItemReorderTarget>(
+        () => ({
+            itemId: id,
+            parentIds: childParentIds,
+            index: childItems?.length ?? 0,
+            placement: 'inside',
+        }),
+        [childItems, childParentIds, id],
+    );
+
+    const childListEndTarget = useMemo<NavigationLayoutItemReorderTarget | null>(() => {
+        const lastChild = childItems?.[childItems.length - 1];
+
+        if (!lastChild) {
+            return null;
+        }
+
+        return {
+            itemId: lastChild.id,
+            parentIds: childParentIds,
+            index: childItems.length,
+            placement: 'after',
+        };
+    }, [childItems, childParentIds]);
+
+    const isBeforeDropTargetActive = useMemo(
+        () =>
+            isNavigationLayoutReorderTargetEqual({
+                targetA: dropTarget,
+                targetB: beforeTarget,
+            }),
+        [beforeTarget, dropTarget],
+    );
+
+    const isInsideDropTargetActive = useMemo(
+        () =>
+            isNavigationLayoutReorderTargetEqual({
+                targetA: dropTarget,
+                targetB: insideTarget,
+            }),
+        [dropTarget, insideTarget],
+    );
+
+    const isChildListEndTargetActive = useMemo(
+        () =>
+            isNavigationLayoutReorderTargetEqual({
+                targetA: dropTarget,
+                targetB: childListEndTarget,
+            }),
+        [childListEndTarget, dropTarget],
+    );
+
+    const handleDragStart = useCallback(
+        (event: React.DragEvent<HTMLDivElement>): void => {
+            if (!canDragItem) {
+                return;
+            }
+
+            onDragStart(event, currentItem);
+        },
+        [canDragItem, currentItem, onDragStart],
+    );
+
+    const handleResolvedDragEnd = useCallback((): void => {
+        if (!canDragItem) {
+            return;
+        }
+
+        onDragEnd();
+    }, [canDragItem, onDragEnd]);
+
+    const handleBeforeDragOver = useCallback(
+        (event: React.DragEvent<HTMLDivElement>): void => {
+            event.preventDefault();
+            setDragMoveEffect(event);
+            onDropTargetChange(beforeTarget);
+        },
+        [beforeTarget, onDropTargetChange],
+    );
+
+    const handleBeforeDrop = useCallback(
+        (event: React.DragEvent<HTMLDivElement>): void => {
+            event.preventDefault();
+            event.stopPropagation();
+            onDrop(beforeTarget);
+        },
+        [beforeTarget, onDrop],
+    );
+
+    const handleInsideDragOver = useCallback(
+        (event: React.DragEvent<HTMLDivElement>): void => {
+            if (!canDropInsideItem) {
+                return;
+            }
+
+            event.preventDefault();
+            setDragMoveEffect(event);
+            onDropTargetChange(insideTarget);
+        },
+        [canDropInsideItem, insideTarget, onDropTargetChange],
+    );
+
+    const handleInsideDrop = useCallback(
+        (event: React.DragEvent<HTMLDivElement>): void => {
+            if (!canDropInsideItem) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            onDropInside?.();
+            onDrop(insideTarget);
+        },
+        [canDropInsideItem, insideTarget, onDrop, onDropInside],
+    );
+
+    const handleChildListEndDragOver = useCallback(
+        (event: React.DragEvent<HTMLDivElement>): void => {
+            if (!childListEndTarget) {
+                return;
+            }
+
+            event.preventDefault();
+            setDragMoveEffect(event);
+            onDropTargetChange(childListEndTarget);
+        },
+        [childListEndTarget, onDropTargetChange],
+    );
+
+    const handleChildListEndDrop = useCallback(
+        (event: React.DragEvent<HTMLDivElement>): void => {
+            if (!childListEndTarget) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            onDrop(childListEndTarget);
+        },
+        [childListEndTarget, onDrop],
+    );
+
+    return {
+        canDragItem,
+        canDropInsideItem,
+        childParentIds,
+        childListEndTarget,
+        handleBeforeDragOver,
+        handleBeforeDrop,
+        handleChildListEndDragOver,
+        handleChildListEndDrop,
+        handleDragEnd: handleResolvedDragEnd,
+        handleDragStart,
+        handleInsideDragOver,
+        handleInsideDrop,
+        isBeforeDropTargetActive,
+        isChildListEndTargetActive,
+        isDragging: draggedItemId === id,
+        isInsideDropTargetActive,
     };
 };

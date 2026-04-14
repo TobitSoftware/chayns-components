@@ -11,72 +11,52 @@ import {
     StyledMotionSidebarOpenIcon,
     StyledSidebarItemPopup,
 } from './SidebarItem.styles';
-import {
-    NavigationLayoutItem,
-    NavigationLayoutItemReorderSource,
-    NavigationLayoutItemReorderTarget,
-    NavigationLayoutProps,
-} from '../../../NavigationLayout.types';
+import { NavigationLayoutItem } from '../../../NavigationLayout.types';
 import { isItemOrChildSelected } from './SidebarItem.utils';
 import { createPortal } from 'react-dom';
 import { AnimatePresence } from 'motion/react';
-import { useSidebarItemPopup } from './SidebarItem.hooks';
+import { useSidebarItemPopup, useSidebarItemReorder } from './SidebarItem.hooks';
 import { StyledSidebarDropZone } from '../SidebarGroup.styles';
-import { isNavigationLayoutReorderTargetEqual } from '../../../NavigationLayout.reorder';
+import { useNavigationSidebarContext } from '../../NavigationSidebar.context';
+import { useSidebarGroupReorderContext } from '../SidebarGroup.context';
 
 interface SidebarItemProps {
-    id: NavigationLayoutItem['id'];
+    item: NavigationLayoutItem;
     index: number;
     parentIds: NavigationLayoutItem['id'][];
-    isDisabled: NavigationLayoutItem['isDisabled'];
-    icons: NavigationLayoutItem['icons'];
-    imageUrl: NavigationLayoutItem['imageUrl'];
-    label: NavigationLayoutItem['label'];
-    childItems: NavigationLayoutItem['children'];
-    imageElement: NavigationLayoutItem['imageElement'];
-    disabledReason: NavigationLayoutItem['disabledReason'];
-    onClick: NavigationLayoutProps['onItemClick'];
-    color: string;
-    isCompact: boolean;
-    isReorderable: boolean;
-    draggedItemId?: NavigationLayoutItem['id'];
-    dropTarget: NavigationLayoutItemReorderTarget | null;
-    onDragStart: (
-        event: React.DragEvent<HTMLDivElement>,
-        item: NavigationLayoutItemReorderSource,
-    ) => void;
-    onDragEnd: VoidFunction;
-    onDropTargetChange: (target: NavigationLayoutItemReorderTarget) => void;
-    onDrop: (target: NavigationLayoutItemReorderTarget) => void;
-    selectedItemId: NavigationLayoutProps['selectedItemId'];
-    shouldShowCollapsedLabel: NavigationLayoutProps['shouldShowCollapsedLabel'];
+    shouldShowCollapsedLabel?: boolean;
 }
 
 const SidebarItem: FC<SidebarItemProps> = ({
-    childItems,
-    id,
+    item,
     index,
-    icons,
-    imageUrl,
-    label,
     parentIds,
-    selectedItemId,
-    isCompact,
-    isReorderable,
-    draggedItemId,
-    dropTarget,
-    imageElement,
-    onClick,
-    onDragStart,
-    onDragEnd,
-    onDropTargetChange,
-    onDrop,
-    disabledReason,
-    isDisabled,
-    color,
-    shouldShowCollapsedLabel,
+    shouldShowCollapsedLabel: shouldShowCollapsedLabelProp,
 }) => {
+    const {
+        children: childItems,
+        disabledReason,
+        icons,
+        id,
+        imageElement,
+        imageUrl,
+        isDisabled,
+        label,
+    } = item;
     const [shouldShowChildren, setShouldShowChildren] = useState(false);
+    const { color, isCompact, onItemClick, selectedItemId, shouldShowCollapsedLabel } =
+        useNavigationSidebarContext();
+    const {
+        draggedItemId,
+        dropTarget,
+        isReorderEnabled,
+        onDragEnd,
+        onDragStart,
+        onDrop,
+        onDropTargetChange,
+    } = useSidebarGroupReorderContext();
+    const resolvedShouldShowCollapsedLabel =
+        shouldShowCollapsedLabelProp ?? shouldShowCollapsedLabel;
     const {
         coordinates,
         handleMouseEnter,
@@ -87,16 +67,44 @@ const SidebarItem: FC<SidebarItemProps> = ({
         shouldRenderPopup,
     } = useSidebarItemPopup({
         isDisabled: Boolean(isDisabled),
-        shouldShowCollapsedLabel,
+        shouldShowCollapsedLabel: resolvedShouldShowCollapsedLabel,
+    });
+    const {
+        canDragItem,
+        canDropInsideItem,
+        childParentIds,
+        childListEndTarget,
+        handleBeforeDragOver,
+        handleBeforeDrop,
+        handleChildListEndDragOver,
+        handleChildListEndDrop,
+        handleDragEnd,
+        handleDragStart,
+        handleInsideDragOver,
+        handleInsideDrop,
+        isBeforeDropTargetActive,
+        isChildListEndTargetActive,
+        isDragging,
+        isInsideDropTargetActive,
+    } = useSidebarItemReorder({
+        childItems,
+        draggedItemId,
+        dropTarget,
+        id,
+        index,
+        isDisabled,
+        isReorderEnabled,
+        onDragEnd,
+        onDragStart,
+        onDrop,
+        onDropInside: () => setShouldShowChildren(true),
+        onDropTargetChange,
+        parentIds,
     });
 
     const isSelected = useMemo(
-        () =>
-            isItemOrChildSelected(
-                { id, label, imageUrl, icons, isDisabled, children: childItems },
-                selectedItemId,
-            ),
-        [id, label, imageUrl, icons, isDisabled, childItems, selectedItemId],
+        () => isItemOrChildSelected(item, selectedItemId),
+        [item, selectedItemId],
     );
 
     useEffect(() => {
@@ -105,248 +113,34 @@ const SidebarItem: FC<SidebarItemProps> = ({
         }
     }, [isCompact]);
 
-    const childParentIds = useMemo(() => [...parentIds, id], [id, parentIds]);
-
-    const currentItem = useMemo<NavigationLayoutItemReorderSource>(
-        () => ({
-            itemId: id,
-            parentIds,
-            index,
-        }),
-        [id, index, parentIds],
-    );
-
-    const beforeTarget = useMemo<NavigationLayoutItemReorderTarget>(
-        () => ({
-            itemId: id,
-            parentIds,
-            index,
-            placement: 'before',
-        }),
-        [id, index, parentIds],
-    );
-
-    const insideTarget = useMemo<NavigationLayoutItemReorderTarget>(
-        () => ({
-            itemId: id,
-            parentIds: childParentIds,
-            index: childItems?.length ?? 0,
-            placement: 'inside',
-        }),
-        [childItems, childParentIds, id],
-    );
-
-    const childListEndTarget = useMemo<NavigationLayoutItemReorderTarget | null>(() => {
-        const lastChild = childItems?.[childItems.length - 1];
-
-        if (!lastChild) {
-            return null;
-        }
-
-        return {
-            itemId: lastChild.id,
-            parentIds: childParentIds,
-            index: childItems.length,
-            placement: 'after',
-        };
-    }, [childItems, childParentIds]);
-
-    const canDragItem = isReorderable && !isDisabled;
-    const canDropInsideItem = isReorderable && !isDisabled;
-
-    const isDragging = draggedItemId === id;
-
-    const isBeforeDropTargetActive = useMemo(
-        () =>
-            isNavigationLayoutReorderTargetEqual({
-                targetA: dropTarget,
-                targetB: beforeTarget,
-            }),
-        [beforeTarget, dropTarget],
-    );
-
-    const isInsideDropTargetActive = useMemo(
-        () =>
-            isNavigationLayoutReorderTargetEqual({
-                targetA: dropTarget,
-                targetB: insideTarget,
-            }),
-        [dropTarget, insideTarget],
-    );
-
-    const isChildListEndTargetActive = useMemo(
-        () =>
-            isNavigationLayoutReorderTargetEqual({
-                targetA: dropTarget,
-                targetB: childListEndTarget,
-            }),
-        [childListEndTarget, dropTarget],
-    );
-
     const handleClick = useCallback(() => {
-        if (isDisabled || typeof onClick !== 'function') {
+        if (isDisabled || typeof onItemClick !== 'function') {
             return;
         }
 
-        onClick(id, parentIds);
-    }, [id, isDisabled, onClick, parentIds]);
+        onItemClick(id, parentIds);
+    }, [id, isDisabled, onItemClick, parentIds]);
 
     const handleOpenIconClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
         event.stopPropagation();
         setShouldShowChildren((previousValue) => !previousValue);
     }, []);
 
-    const handleDragStart = useCallback(
-        (event: React.DragEvent<HTMLDivElement>): void => {
-            if (!canDragItem) {
-                return;
-            }
-
-            onDragStart(event, currentItem);
-        },
-        [canDragItem, currentItem, onDragStart],
-    );
-
-    const handleDragEnd = useCallback((): void => {
-        if (!canDragItem) {
-            return;
-        }
-
-        onDragEnd();
-    }, [canDragItem, onDragEnd]);
-
-    const handleBeforeDragOver = useCallback(
-        (event: React.DragEvent<HTMLDivElement>): void => {
-            event.preventDefault();
-
-            const { dataTransfer } = event;
-
-            dataTransfer.dropEffect = 'move';
-
-            onDropTargetChange(beforeTarget);
-        },
-        [beforeTarget, onDropTargetChange],
-    );
-
-    const handleBeforeDrop = useCallback(
-        (event: React.DragEvent<HTMLDivElement>): void => {
-            event.preventDefault();
-            event.stopPropagation();
-
-            onDrop(beforeTarget);
-        },
-        [beforeTarget, onDrop],
-    );
-
-    const handleInsideDragOver = useCallback(
-        (event: React.DragEvent<HTMLDivElement>): void => {
-            if (!canDropInsideItem) {
-                return;
-            }
-
-            event.preventDefault();
-
-            const { dataTransfer } = event;
-
-            dataTransfer.dropEffect = 'move';
-
-            onDropTargetChange(insideTarget);
-        },
-        [canDropInsideItem, insideTarget, onDropTargetChange],
-    );
-
-    const handleInsideDrop = useCallback(
-        (event: React.DragEvent<HTMLDivElement>): void => {
-            if (!canDropInsideItem) {
-                return;
-            }
-
-            event.preventDefault();
-            event.stopPropagation();
-            setShouldShowChildren(true);
-
-            onDrop(insideTarget);
-        },
-        [canDropInsideItem, insideTarget, onDrop],
-    );
-
-    const handleChildListEndDragOver = useCallback(
-        (event: React.DragEvent<HTMLDivElement>): void => {
-            if (!childListEndTarget) {
-                return;
-            }
-
-            event.preventDefault();
-
-            const { dataTransfer } = event;
-
-            dataTransfer.dropEffect = 'move';
-
-            onDropTargetChange(childListEndTarget);
-        },
-        [childListEndTarget, onDropTargetChange],
-    );
-
-    const handleChildListEndDrop = useCallback(
-        (event: React.DragEvent<HTMLDivElement>): void => {
-            if (!childListEndTarget) {
-                return;
-            }
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            onDrop(childListEndTarget);
-        },
-        [childListEndTarget, onDrop],
-    );
-
     const renderChildItem = useCallback(
         (childItem: NavigationLayoutItem, childIndex: number) => (
             <SidebarItem
                 key={childItem.id}
-                draggedItemId={draggedItemId}
-                dropTarget={dropTarget}
-                id={childItem.id}
+                item={childItem}
                 index={childIndex}
                 parentIds={childParentIds}
-                selectedItemId={selectedItemId}
-                isDisabled={childItem.isDisabled}
-                icons={childItem.icons}
-                disabledReason={childItem.disabledReason}
-                imageUrl={childItem.imageUrl}
                 shouldShowCollapsedLabel={false}
-                imageElement={childItem.imageElement}
-                label={childItem.label}
-                childItems={childItem.children}
-                color={color}
-                isReorderable={isReorderable}
-                onClick={onClick}
-                onDragEnd={onDragEnd}
-                onDragStart={onDragStart}
-                onDrop={onDrop}
-                onDropTargetChange={onDropTargetChange}
-                isCompact={isCompact}
             />
         ),
-        [
-            childParentIds,
-            color,
-            draggedItemId,
-            dropTarget,
-            isCompact,
-            isReorderable,
-            onClick,
-            onDragEnd,
-            onDragStart,
-            onDrop,
-            onDropTargetChange,
-            selectedItemId,
-        ],
+        [childParentIds],
     );
 
     const children = useMemo(() => {
-        if (!childItems || childItems.length === 0) {
+        if (!childItems?.length) {
             return null;
         }
 
@@ -355,7 +149,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
 
     return (
         <StyledSidebarItem>
-            {isReorderable && (
+            {isReorderEnabled && (
                 <StyledSidebarDropZone
                     $depth={parentIds.length}
                     $isActive={isBeforeDropTargetActive}
@@ -418,7 +212,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
                 <ExpandableContent isOpen={shouldShowChildren}>
                     <StyledSidebarItemChildren>
                         {children}
-                        {isReorderable && childListEndTarget && (
+                        {isReorderEnabled && childListEndTarget && (
                             <StyledSidebarDropZone
                                 $depth={childParentIds.length}
                                 $isActive={isChildListEndTargetActive}
