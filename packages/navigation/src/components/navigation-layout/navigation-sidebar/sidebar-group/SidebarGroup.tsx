@@ -11,7 +11,7 @@ import {
 import {
     isNavigationLayoutItemReorderEventValid,
     isNavigationLayoutReorderTargetEqual,
-} from '../../NavigationLayout.utils';
+} from '../../NavigationLayout.reorder';
 import SidebarItem from './sidebar-item/SidebarItem';
 
 interface SidebarGroupProps {
@@ -74,8 +74,10 @@ const SidebarGroup: FC<SidebarGroupProps> = ({
                 return;
             }
 
-            event.dataTransfer.effectAllowed = 'move';
-            event.dataTransfer.setData('text/plain', item.itemId);
+            const { dataTransfer } = event;
+
+            dataTransfer.effectAllowed = 'move';
+            dataTransfer.setData('text/plain', item.itemId);
 
             setDraggedItem(item);
             setDropTarget(null);
@@ -143,7 +145,10 @@ const SidebarGroup: FC<SidebarGroupProps> = ({
     const handleGroupEndDragOver = useCallback(
         (event: React.DragEvent<HTMLDivElement>): void => {
             event.preventDefault();
-            event.dataTransfer.dropEffect = 'move';
+
+            const { dataTransfer } = event;
+
+            dataTransfer.dropEffect = 'move';
 
             handleDropTargetChange(groupEndTarget);
         },
@@ -153,10 +158,39 @@ const SidebarGroup: FC<SidebarGroupProps> = ({
     const handleGroupEndDrop = useCallback(
         (event: React.DragEvent<HTMLDivElement>): void => {
             event.preventDefault();
+            event.stopPropagation();
 
             handleItemDrop(groupEndTarget);
         },
         [groupEndTarget, handleItemDrop],
+    );
+
+    const handleGroupDragOver = useCallback(
+        (event: React.DragEvent<HTMLDivElement>): void => {
+            if (!dropTarget) {
+                return;
+            }
+
+            event.preventDefault();
+
+            const { dataTransfer } = event;
+
+            dataTransfer.dropEffect = 'move';
+        },
+        [dropTarget],
+    );
+
+    const handleGroupDrop = useCallback(
+        (event: React.DragEvent<HTMLDivElement>): void => {
+            if (!dropTarget) {
+                return;
+            }
+
+            event.preventDefault();
+
+            handleItemDrop(dropTarget);
+        },
+        [dropTarget, handleItemDrop],
     );
 
     const renderItem = useCallback(
@@ -216,11 +250,12 @@ const SidebarGroup: FC<SidebarGroupProps> = ({
     );
 
     return (
-        <StyledSidebarGroup>
+        <StyledSidebarGroup onDragOver={handleGroupDragOver} onDrop={handleGroupDrop}>
             {items.map(renderItem)}
             <StyledSidebarDropZone
                 $isActive={isGroupEndTargetActive}
                 $isDragging={isDragging}
+                $placement="after"
                 onDragOver={handleGroupEndDragOver}
                 onDrop={handleGroupEndDrop}
             />

@@ -22,7 +22,7 @@ import { createPortal } from 'react-dom';
 import { AnimatePresence } from 'motion/react';
 import { useSidebarItemPopup } from './SidebarItem.hooks';
 import { StyledSidebarDropZone } from '../SidebarGroup.styles';
-import { isNavigationLayoutReorderTargetEqual } from '../../../NavigationLayout.utils';
+import { isNavigationLayoutReorderTargetEqual } from '../../../NavigationLayout.reorder';
 
 interface SidebarItemProps {
     id: NavigationLayoutItem['id'];
@@ -86,7 +86,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
         popupContainer,
         shouldRenderPopup,
     } = useSidebarItemPopup({
-        isDisabled,
+        isDisabled: Boolean(isDisabled),
         shouldShowCollapsedLabel,
     });
 
@@ -151,6 +151,9 @@ const SidebarItem: FC<SidebarItemProps> = ({
         };
     }, [childItems, childParentIds]);
 
+    const canDragItem = isReorderable && !isDisabled;
+    const canDropInsideItem = isReorderable && !isDisabled;
+
     const isDragging = draggedItemId === id;
 
     const isBeforeDropTargetActive = useMemo(
@@ -195,27 +198,30 @@ const SidebarItem: FC<SidebarItemProps> = ({
 
     const handleDragStart = useCallback(
         (event: React.DragEvent<HTMLDivElement>): void => {
-            if (!isReorderable) {
+            if (!canDragItem) {
                 return;
             }
 
             onDragStart(event, currentItem);
         },
-        [currentItem, isReorderable, onDragStart],
+        [canDragItem, currentItem, onDragStart],
     );
 
     const handleDragEnd = useCallback((): void => {
-        if (!isReorderable) {
+        if (!canDragItem) {
             return;
         }
 
         onDragEnd();
-    }, [isReorderable, onDragEnd]);
+    }, [canDragItem, onDragEnd]);
 
     const handleBeforeDragOver = useCallback(
         (event: React.DragEvent<HTMLDivElement>): void => {
             event.preventDefault();
-            event.dataTransfer.dropEffect = 'move';
+
+            const { dataTransfer } = event;
+
+            dataTransfer.dropEffect = 'move';
 
             onDropTargetChange(beforeTarget);
         },
@@ -225,6 +231,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
     const handleBeforeDrop = useCallback(
         (event: React.DragEvent<HTMLDivElement>): void => {
             event.preventDefault();
+            event.stopPropagation();
 
             onDrop(beforeTarget);
         },
@@ -233,22 +240,34 @@ const SidebarItem: FC<SidebarItemProps> = ({
 
     const handleInsideDragOver = useCallback(
         (event: React.DragEvent<HTMLDivElement>): void => {
+            if (!canDropInsideItem) {
+                return;
+            }
+
             event.preventDefault();
-            event.dataTransfer.dropEffect = 'move';
+
+            const { dataTransfer } = event;
+
+            dataTransfer.dropEffect = 'move';
 
             onDropTargetChange(insideTarget);
         },
-        [insideTarget, onDropTargetChange],
+        [canDropInsideItem, insideTarget, onDropTargetChange],
     );
 
     const handleInsideDrop = useCallback(
         (event: React.DragEvent<HTMLDivElement>): void => {
+            if (!canDropInsideItem) {
+                return;
+            }
+
             event.preventDefault();
+            event.stopPropagation();
             setShouldShowChildren(true);
 
             onDrop(insideTarget);
         },
-        [insideTarget, onDrop],
+        [canDropInsideItem, insideTarget, onDrop],
     );
 
     const handleChildListEndDragOver = useCallback(
@@ -258,7 +277,10 @@ const SidebarItem: FC<SidebarItemProps> = ({
             }
 
             event.preventDefault();
-            event.dataTransfer.dropEffect = 'move';
+
+            const { dataTransfer } = event;
+
+            dataTransfer.dropEffect = 'move';
 
             onDropTargetChange(childListEndTarget);
         },
@@ -272,6 +294,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
             }
 
             event.preventDefault();
+            event.stopPropagation();
 
             onDrop(childListEndTarget);
         },
@@ -337,6 +360,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
                     $depth={parentIds.length}
                     $isActive={isBeforeDropTargetActive}
                     $isDragging={!!draggedItemId}
+                    $placement="before"
                     onDragOver={handleBeforeDragOver}
                     onDrop={handleBeforeDrop}
                 />
@@ -352,8 +376,8 @@ const SidebarItem: FC<SidebarItemProps> = ({
                     $isDisabled={isDisabled}
                     $hasDisabledReason={!!disabledReason}
                     $isDragging={isDragging}
-                    $isReorderable={isReorderable}
-                    draggable={isReorderable}
+                    $isReorderable={canDragItem}
+                    draggable={canDragItem}
                     onDragEnd={handleDragEnd}
                     onDragStart={handleDragStart}
                     onMouseEnter={handleMouseEnter}
@@ -380,12 +404,12 @@ const SidebarItem: FC<SidebarItemProps> = ({
                     )}
                 </StyledSidebarItemHead>
             </Tooltip>
-            {isReorderable && (
+            {canDropInsideItem && (
                 <StyledSidebarDropZone
                     $depth={childParentIds.length}
                     $isActive={isInsideDropTargetActive}
                     $isDragging={!!draggedItemId}
-                    $isInside
+                    $placement="inside"
                     onDragOver={handleInsideDragOver}
                     onDrop={handleInsideDrop}
                 />
@@ -399,6 +423,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
                                 $depth={childParentIds.length}
                                 $isActive={isChildListEndTargetActive}
                                 $isDragging={!!draggedItemId}
+                                $placement="after"
                                 onDragOver={handleChildListEndDragOver}
                                 onDrop={handleChildListEndDrop}
                             />

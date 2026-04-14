@@ -4,6 +4,7 @@ import { WithTheme } from '@chayns-components/core';
 import { Coordinates } from './SidebarItem.utils';
 
 export const StyledSidebarItem = styled.div`
+    position: relative;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -34,7 +35,7 @@ export const StyledSidebarItemHead = styled.div<StyledSidebarItemHeadProps>`
             `;
         }
 
-        if ($isDisabled && !$isReorderable) {
+        if ($isDisabled) {
             return css`
                 cursor: default;
             `;
@@ -125,6 +126,7 @@ export const StyledSidebarItemLabel = styled.div`
 `;
 
 export const StyledSidebarItemChildren = styled.div`
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 2px;

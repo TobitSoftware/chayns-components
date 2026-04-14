@@ -13,7 +13,7 @@ export { default as NavigationLayout } from './components/navigation-layout/Navi
 export {
     reorderNavigationLayoutGroupItems,
     reorderNavigationLayoutGroups,
-} from './components/navigation-layout/NavigationLayout.utils';
+} from './components/navigation-layout/NavigationLayout.reorder';
 export type {
     NavigationLayoutConfig,
     NavigationLayoutGroup,

@@ -63,6 +63,11 @@ interface IsNavigationLayoutReorderTargetEqualOptions {
     targetB: NavigationLayoutItemReorderTarget | null;
 }
 
+interface FindNavigationLayoutItemByIdOptions {
+    items: NavigationLayoutItem[];
+    itemId: NavigationLayoutItem['id'];
+}
+
 const areNavigationLayoutParentIdsEqual = ({
     parentIdsA,
     parentIdsB,
@@ -81,6 +86,30 @@ const cloneNavigationLayoutItems = ({
         ...item,
         children: item.children ? cloneNavigationLayoutItems({ items: item.children }) : undefined,
     }));
+
+const findNavigationLayoutItemById = ({
+    items,
+    itemId,
+}: FindNavigationLayoutItemByIdOptions): NavigationLayoutItem | null => {
+    for (const item of items) {
+        if (item.id === itemId) {
+            return item;
+        }
+
+        if (item.children?.length) {
+            const nestedItem = findNavigationLayoutItemById({
+                items: item.children,
+                itemId,
+            });
+
+            if (nestedItem) {
+                return nestedItem;
+            }
+        }
+    }
+
+    return null;
+};
 
 const getNavigationLayoutItemsByParentIds = ({
     items,
@@ -221,6 +250,10 @@ export const isNavigationLayoutItemReorderEventValid = ({
         return false;
     }
 
+    if (sourceItem.isDisabled) {
+        return false;
+    }
+
     if (target.itemId === itemId || target.parentIds.includes(itemId)) {
         return false;
     }
@@ -241,6 +274,17 @@ export const isNavigationLayoutItemReorderEventValid = ({
 
     if (target.index < 0 || target.index > targetParentItems.length) {
         return false;
+    }
+
+    if (target.placement === 'inside' && target.itemId) {
+        const targetItem = findNavigationLayoutItemById({
+            items,
+            itemId: target.itemId,
+        });
+
+        if (!targetItem || targetItem.isDisabled) {
+            return false;
+        }
     }
 
     const normalizedTarget = normalizeNavigationLayoutReorderTarget({
@@ -319,5 +363,3 @@ export const reorderNavigationLayoutGroups = ({
         };
     });
 };
-
-export {};
