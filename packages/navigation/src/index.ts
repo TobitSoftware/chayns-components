@@ -27,3 +27,9 @@ export type {
 } from './components/navigation-layout/NavigationLayout.types';
 export { default as UserImage } from './components/user-image/UserImage';
 export { default as MenuToggle } from './components/navigation-layout/navigation-header/menu-toggle/MenuToggle';
+
+export { default as SplitLayout } from './components/split-layout/SplitLayout';
+export {
+    type SplitLayoutResizeCallback,
+    SplitLayoutDirection,
+} from './components/split-layout/SplitLayout.types';
