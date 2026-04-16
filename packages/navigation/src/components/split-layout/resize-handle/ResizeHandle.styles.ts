@@ -6,6 +6,7 @@ type StyledResizeHandleProps = WithTheme<{ $direction: SplitLayoutDirection }>;
 
 export const StyledResizeHandle = styled.div<StyledResizeHandleProps>`
     position: relative;
+    flex-shrink: 0;
     width: ${({ $direction }) => ($direction === SplitLayoutDirection.HORIZONTAL ? '1px' : '100%')};
     height: ${({ $direction }) => ($direction === SplitLayoutDirection.VERTICAL ? '1px' : '100%')};
 `;
