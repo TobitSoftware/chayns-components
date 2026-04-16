@@ -1,57 +1,107 @@
 import React, {
-    FC,
-    useRef,
-    useMemo,
     useCallback,
     useEffect,
-    useState,
     useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+    type FC,
 } from 'react';
-import {
-    SplitLayoutComponent,
-    SplitLayoutDirection,
-    SplitLayoutProps,
-    SplitLayoutViewProps,
-} from './SplitLayout.types';
-import { StyledSplitLayout, StyledSplitLayoutPane } from './SplitLayout.styles';
 import ResizeHandle from './resize-handle/ResizeHandle';
+import { StyledSplitLayout, StyledSplitLayoutPane } from './SplitLayout.styles';
 import {
-    adjustSizesToContainer,
-    clamp,
-    createInitialSizes,
-    getContainerSize,
-    normalizeViews,
+    SplitLayoutDirection,
+    type SplitLayoutProps,
+    type SplitLayoutSizes,
+    type SplitLayoutViewProps,
+} from './SplitLayout.types';
+import {
+    adjustSplitLayoutSizesToContainer,
+    createInitialSplitLayoutSizes,
+    emitSplitLayoutResize,
+    filterVisibleSplitLayoutViews,
+    getSplitLayoutContainerSize,
+    normalizeSplitLayoutViews,
+    resizeSplitLayoutPair,
 } from './SplitLayout.utils';
 
-const SplitLayout = (({
+type SplitLayoutComponent = FC<SplitLayoutProps> & {
+    View: FC<SplitLayoutViewProps>;
+};
+
+export const SplitLayoutView: FC<SplitLayoutViewProps> = ({ children }) => children;
+
+SplitLayoutView.displayName = 'SplitLayout.View';
+
+export const SplitLayout = (({
     children,
     direction = SplitLayoutDirection.HORIZONTAL,
+    sizes: controlledSizes,
+    defaultSizes,
     onResize,
     onResizeEnd,
     onResizeStart,
 }: SplitLayoutProps) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
+    const sizesRef = useRef<SplitLayoutSizes>({});
+    const isControlled = controlledSizes !== undefined;
 
-    const views = useMemo(() => normalizeViews(children), [children]);
-    const [sizes, setSizes] = useState<Record<string, number>>({});
+    const allViews = useMemo(
+        () => normalizeSplitLayoutViews(children, SplitLayoutView),
+        [children],
+    );
+
+    const [internalSizes, setInternalSizes] = useState<SplitLayoutSizes>({});
+    const [containerSize, setContainerSize] = useState(0);
+
+    const activeSizes = isControlled ? controlledSizes : internalSizes;
+    const visibleViews = useMemo(
+        () => filterVisibleSplitLayoutViews(allViews, containerSize),
+        [allViews, containerSize],
+    );
+
+    useEffect(() => {
+        sizesRef.current = activeSizes ?? {};
+    }, [activeSizes]);
 
     useLayoutEffect(() => {
         const container = containerRef.current;
 
-        if (!container || !views.length) {
+        if (!container) {
             return;
         }
 
-        const containerSize = getContainerSize(container, direction);
+        setContainerSize(getSplitLayoutContainerSize(container, direction));
+    }, [direction, children]);
 
-        setSizes((currentSizes) => {
-            if (Object.keys(currentSizes).length === views.length) {
-                return adjustSizesToContainer(currentSizes, views, containerSize);
+    useLayoutEffect(() => {
+        if (isControlled) {
+            return;
+        }
+
+        const container = containerRef.current;
+
+        if (!container || !visibleViews.length) {
+            return;
+        }
+
+        const nextContainerSize = getSplitLayoutContainerSize(container, direction);
+
+        setContainerSize(nextContainerSize);
+
+        setInternalSizes((currentSizes) => {
+            if (Object.keys(currentSizes).length > 0) {
+                return adjustSplitLayoutSizesToContainer(
+                    currentSizes,
+                    visibleViews,
+                    nextContainerSize,
+                    defaultSizes,
+                );
             }
 
-            return createInitialSizes(views, containerSize);
+            return createInitialSplitLayoutSizes(visibleViews, nextContainerSize, defaultSizes);
         });
-    }, [direction, views]);
+    }, [defaultSizes, direction, isControlled, visibleViews]);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -61,9 +111,20 @@ const SplitLayout = (({
         }
 
         const resizeObserver = new ResizeObserver(() => {
-            const containerSize = getContainerSize(container, direction);
+            const nextContainerSize = getSplitLayoutContainerSize(container, direction);
 
-            setSizes((currentSizes) => adjustSizesToContainer(currentSizes, views, containerSize));
+            setContainerSize(nextContainerSize);
+
+            if (!isControlled) {
+                setInternalSizes((currentSizes) =>
+                    adjustSplitLayoutSizesToContainer(
+                        currentSizes,
+                        filterVisibleSplitLayoutViews(allViews, nextContainerSize),
+                        nextContainerSize,
+                        defaultSizes,
+                    ),
+                );
+            }
         });
 
         resizeObserver.observe(container);
@@ -71,112 +132,80 @@ const SplitLayout = (({
         return () => {
             resizeObserver.disconnect();
         };
-    }, [direction, views]);
+    }, [allViews, defaultSizes, direction, isControlled]);
+
+    const updateSizes = useCallback(
+        (nextSizes: SplitLayoutSizes) => {
+            sizesRef.current = nextSizes;
+
+            if (!isControlled) {
+                setInternalSizes(nextSizes);
+            }
+        },
+        [isControlled],
+    );
 
     const handleResizeStart = useCallback(
         (handleIndex: number) => {
-            const currentView = views[handleIndex];
-            const nextView = views[handleIndex + 1];
+            const currentView = visibleViews[handleIndex];
+            const nextView = visibleViews[handleIndex + 1];
+            const currentSizes = sizesRef.current;
 
             if (!currentView || !nextView) {
                 return;
             }
 
-            if (typeof onResizeStart === 'function') {
-                onResizeStart(currentView.id, sizes[currentView.id] ?? 0, sizes);
-                onResizeStart(nextView.id, sizes[nextView.id] ?? 0, sizes);
-            }
+            emitSplitLayoutResize(onResizeStart, currentView.id, currentSizes);
+            emitSplitLayoutResize(onResizeStart, nextView.id, currentSizes);
         },
-        [onResizeStart, sizes, views],
+        [onResizeStart, visibleViews],
     );
 
     const handleResize = useCallback(
         (handleIndex: number, delta: number) => {
-            const currentView = views[handleIndex];
-            const nextView = views[handleIndex + 1];
+            const currentView = visibleViews[handleIndex];
+            const nextView = visibleViews[handleIndex + 1];
+            const currentSizes = sizesRef.current;
 
             if (!currentView || !nextView) {
                 return;
             }
 
-            setSizes((currentSizes) => {
-                const currentSize = currentSizes[currentView.id];
-                const nextSize = currentSizes[nextView.id];
+            const nextSizes = resizeSplitLayoutPair(currentSizes, currentView, nextView, delta);
 
-                if (currentSize === undefined || nextSize === undefined) {
-                    return currentSizes;
-                }
+            updateSizes(nextSizes);
 
-                const combinedSize = currentSize + nextSize;
-
-                let nextCurrentSize = clamp(
-                    currentSize + delta,
-                    currentView.minSize,
-                    currentView.maxSize,
-                );
-
-                let nextNextSize = combinedSize - nextCurrentSize;
-
-                if (nextNextSize < nextView.minSize) {
-                    nextNextSize = nextView.minSize;
-                    nextCurrentSize = combinedSize - nextNextSize;
-                }
-
-                if (nextView.maxSize !== undefined && nextNextSize > nextView.maxSize) {
-                    nextNextSize = nextView.maxSize;
-                    nextCurrentSize = combinedSize - nextNextSize;
-                }
-
-                nextCurrentSize = clamp(nextCurrentSize, currentView.minSize, currentView.maxSize);
-                nextNextSize = clamp(nextNextSize, nextView.minSize, nextView.maxSize);
-
-                const nextSizes = {
-                    ...currentSizes,
-                    [currentView.id]: nextCurrentSize,
-                    [nextView.id]: nextNextSize,
-                };
-
-                if (typeof onResize === 'function') {
-                    onResize(currentView.id, nextSizes[currentView.id] ?? 0, nextSizes);
-                    onResize(nextView.id, nextSizes[nextView.id] ?? 0, nextSizes);
-                }
-
-                return nextSizes;
-            });
+            emitSplitLayoutResize(onResize, currentView.id, nextSizes);
+            emitSplitLayoutResize(onResize, nextView.id, nextSizes);
         },
-        [onResize, views],
+        [onResize, updateSizes, visibleViews],
     );
 
     const handleResizeEnd = useCallback(
         (handleIndex: number) => {
-            const currentView = views[handleIndex];
-            const nextView = views[handleIndex + 1];
+            const currentView = visibleViews[handleIndex];
+            const nextView = visibleViews[handleIndex + 1];
+            const currentSizes = sizesRef.current;
 
             if (!currentView || !nextView) {
                 return;
             }
 
-            if (typeof onResizeEnd === 'function') {
-                onResizeEnd(currentView.id, sizes[currentView.id] ?? 0, sizes);
-                onResizeEnd(nextView.id, sizes[nextView.id] ?? 0, sizes);
-            }
+            emitSplitLayoutResize(onResizeEnd, currentView.id, currentSizes);
+            emitSplitLayoutResize(onResizeEnd, nextView.id, currentSizes);
         },
-        [onResizeEnd, sizes, views],
+        [onResizeEnd, visibleViews],
     );
 
-    const content = useMemo(
-        () =>
-            views.map((view, index) => (
+    return (
+        <StyledSplitLayout ref={containerRef} $direction={direction}>
+            {visibleViews.map((view, index) => (
                 <React.Fragment key={view.id}>
-                    <StyledSplitLayoutPane
-                        $direction={direction}
-                        $size={sizes[view.id]}
-                        $defaultSize={view.defaultSize}
-                    >
+                    <StyledSplitLayoutPane $direction={direction} $size={activeSizes?.[view.id]}>
                         {view.node}
                     </StyledSplitLayoutPane>
 
-                    {index < views.length - 1 && (
+                    {index < visibleViews.length - 1 && (
                         <ResizeHandle
                             direction={direction}
                             onDragStart={() => handleResizeStart(index)}
@@ -185,22 +214,12 @@ const SplitLayout = (({
                         />
                     )}
                 </React.Fragment>
-            )),
-        [direction, handleResize, handleResizeEnd, handleResizeStart, sizes, views],
-    );
-
-    return (
-        <StyledSplitLayout ref={containerRef} $direction={direction}>
-            {content}
+            ))}
         </StyledSplitLayout>
     );
 }) as SplitLayoutComponent;
 
-const SplitLayoutView: FC<SplitLayoutViewProps> = ({ children }) => children;
-
-SplitLayoutView.displayName = 'SplitLayout.View';
-
-SplitLayout.displayName = 'SplitLayout';
 SplitLayout.View = SplitLayoutView;
+SplitLayout.displayName = 'SplitLayout';
 
 export default SplitLayout;
