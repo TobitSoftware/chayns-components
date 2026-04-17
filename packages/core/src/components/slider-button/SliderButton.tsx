@@ -200,6 +200,7 @@ const SliderButton: FC<SliderButtonProps> = ({
 
                 setPopupId(otherItem.id);
                 setItemPosition(items.indexOf(otherItem));
+                onChange?.(otherItem.id);
                 return;
             }
 
@@ -407,13 +408,14 @@ const SliderButton: FC<SliderButtonProps> = ({
             position: middle,
             scrollLeft: 0,
         });
+        const hasMoreItems = items.length > shownItemsCount;
 
         if (nearestPoint >= 0 && nearestIndex >= 0) {
             void animation(nearestPoint);
 
             let id;
 
-            if (nearestIndex === shownItemsCount - 1) {
+            if (hasMoreItems && nearestIndex === shownItemsCount - 1) {
                 id = 'more';
             } else {
                 id = items[nearestIndex]?.id;
