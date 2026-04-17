@@ -63,27 +63,32 @@ export default async function imageUpload(file, options, _personId, _siteId) {
         body.append('File', file);
     }
 
-    const objectURL = URL.createObjectURL(file);
-    const img = new Image();
-    await new Promise((resolve) => {
-        img.onload = () => {
-            URL.revokeObjectURL(img.src);
-            resolve();
-        };
-        img.onerror = () => {
-            URL.revokeObjectURL(img.src);
-            resolve();
-        };
-        img.src = objectURL;
-    });
+    let url = `${IMAGE_SERVICE_API_V3_URL}/${owner}`;
 
-    const url =
-        file.size > 10 * 1024 * 1024 ||
-        file.type === 'image/avif' ||
-        img.naturalWidth > 4096 ||
-        img.naturalHeight > 4096
-            ? `${IMAGE_RESIZER_API_URL}/${owner}`
-            : `${IMAGE_SERVICE_API_V3_URL}/${owner}`;
+    if (typeof file !== 'string') {
+        const objectURL = URL.createObjectURL(file);
+        const img = new Image();
+        await new Promise((resolve) => {
+            img.onload = () => {
+                URL.revokeObjectURL(img.src);
+                resolve();
+            };
+            img.onerror = () => {
+                URL.revokeObjectURL(img.src);
+                resolve();
+            };
+            img.src = objectURL;
+        });
+
+        if (
+            file.size > 10 * 1024 * 1024 ||
+            file.type === 'image/avif' ||
+            img.naturalWidth > 4096 ||
+            img.naturalHeight > 4096
+        ) {
+            url = `${IMAGE_RESIZER_API_URL}/${owner}`;
+        }
+    }
 
     const response = await fetch(url, { method: 'POST', body, headers });
 
