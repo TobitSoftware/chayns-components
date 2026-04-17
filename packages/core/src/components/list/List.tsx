@@ -1,6 +1,54 @@
 import { AnimatePresence, MotionConfig } from 'motion/react';
 import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
-import ListItem, { type ListItemProps } from './list-item/ListItem';
+
+// to prevent import cycle with ListItem
+type ExpandableListItemProps = {
+    shouldHideIndicator?: boolean;
+    children?: ReactNode;
+};
+
+type ExpandableChildrenComponent = React.ComponentType<{ children?: ReactNode }> & {
+    hasExpandableChildren?: boolean;
+};
+
+const isListItemElement = (
+    child: ReactNode,
+): child is React.ReactElement<ExpandableListItemProps> =>
+    React.isValidElement<ExpandableListItemProps>(child) &&
+    (child.type as { displayName?: string }).displayName === 'ListItem';
+
+const hasExpandableChildrenMarker = (child: ReactNode): boolean =>
+    React.isValidElement(child) &&
+    Boolean((child.type as ExpandableChildrenComponent).hasExpandableChildren);
+
+const hasExpandableChildren = (node: ReactNode): boolean =>
+    React.Children.toArray(node).some((child) => {
+        if (
+            isListItemElement(child) &&
+            !child.props.shouldHideIndicator &&
+            child.props.children !== undefined
+        ) {
+            return true;
+        }
+
+        if (hasExpandableChildrenMarker(child)) {
+            return true;
+        }
+
+        if (
+            React.isValidElement<{ children?: ReactNode }>(child) &&
+            child.props.children !== undefined
+        ) {
+            return React.Children.toArray(child.props.children).some(
+                (nestedChild) =>
+                    isListItemElement(nestedChild) &&
+                    !nestedChild.props.shouldHideIndicator &&
+                    nestedChild.props.children !== undefined,
+            );
+        }
+
+        return false;
+    });
 
 interface IListContext {
     isAnyItemExpandable: boolean;
@@ -33,11 +81,6 @@ type ListProps = {
 const List: FC<ListProps> = ({ children, isWrapped = false }) => {
     'use memo';
 
-    const isListItemElement = (
-        child: ReactNode,
-    ): child is React.ReactElement<ListItemProps, typeof ListItem> =>
-        React.isValidElement(child) && child.type === ListItem;
-
     const [openItemUuid, setOpenItemUuid] = useState<IListContext['openItemUuid']>(undefined);
 
     const updateOpenItemUuid = useCallback<IListContext['updateOpenItemUuid']>(
@@ -52,21 +95,6 @@ const List: FC<ListProps> = ({ children, isWrapped = false }) => {
         },
         [setOpenItemUuid],
     );
-
-    const hasExpandableChildren = (node: ReactNode): boolean => {
-        let found = false;
-        React.Children.forEach(node, (child) => {
-            if (found) return;
-            if (
-                isListItemElement(child) &&
-                !child.props.shouldHideIndicator &&
-                child.props.children !== undefined
-            ) {
-                found = true;
-            }
-        });
-        return found;
-    };
 
     const providerValue = useMemo<IListContext>(
         () => ({
