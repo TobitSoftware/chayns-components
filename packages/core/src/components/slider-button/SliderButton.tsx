@@ -429,11 +429,13 @@ const SliderButton: FC<SliderButtonProps> = ({
                 }
             }
 
-            if (typeof onChange === 'function' && id && id !== 'more') {
-                onChange(id);
+            if (typeof onChange === 'function' && id) {
+                setPopupId(id);
+                setCurrentIndex(nearestIndex);
+                if (id !== 'more') onChange(id);
             }
         }
-    }, [animation, itemWidth, items, onChange, scope, shownItemsCount, snapPoints]);
+    }, [animation, itemWidth, items, onChange, scope, setPopupId, shownItemsCount, snapPoints]);
 
     return useMemo(
         () => (
