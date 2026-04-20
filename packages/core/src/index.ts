@@ -75,7 +75,16 @@ export {
     type ListItemElements,
     type ListItemProps,
     type ListItemRef,
+    type ListItemSize,
 } from './components/list/list-item/ListItem';
+export {
+    type ListItemMarkedForwardRefComponent,
+    type ListItemMarkedComponent,
+    type ListItemMetaProps,
+    LIST_ITEM_MARKER,
+    withListItemMarker,
+    withListItemMarkerForwardRef,
+} from './components/list/list-item/ListItem.utils';
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
 export type { MentionMember } from './components/mention-finder/MentionFinder';
 export { default as MultiActionButton } from './components/multi-action-button/MultiActionButton';
