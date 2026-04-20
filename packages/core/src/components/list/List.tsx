@@ -1,54 +1,6 @@
 import { AnimatePresence, MotionConfig } from 'motion/react';
 import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
-
-// to prevent import cycle with ListItem
-type ExpandableListItemProps = {
-    shouldHideIndicator?: boolean;
-    children?: ReactNode;
-};
-
-type ExpandableChildrenComponent = React.ComponentType<{ children?: ReactNode }> & {
-    hasExpandableChildren?: boolean;
-};
-
-const isListItemElement = (
-    child: ReactNode,
-): child is React.ReactElement<ExpandableListItemProps> =>
-    React.isValidElement<ExpandableListItemProps>(child) &&
-    (child.type as { displayName?: string }).displayName === 'ListItem';
-
-const hasExpandableChildrenMarker = (child: ReactNode): boolean =>
-    React.isValidElement(child) &&
-    Boolean((child.type as ExpandableChildrenComponent).hasExpandableChildren);
-
-const hasExpandableChildren = (node: ReactNode): boolean =>
-    React.Children.toArray(node).some((child) => {
-        if (
-            isListItemElement(child) &&
-            !child.props.shouldHideIndicator &&
-            child.props.children !== undefined
-        ) {
-            return true;
-        }
-
-        if (hasExpandableChildrenMarker(child)) {
-            return true;
-        }
-
-        if (
-            React.isValidElement<{ children?: ReactNode }>(child) &&
-            child.props.children !== undefined
-        ) {
-            return React.Children.toArray(child.props.children).some(
-                (nestedChild) =>
-                    isListItemElement(nestedChild) &&
-                    !nestedChild.props.shouldHideIndicator &&
-                    nestedChild.props.children !== undefined,
-            );
-        }
-
-        return false;
-    });
+import { shouldShowExpandIndicator } from './List.utils';
 
 interface IListContext {
     isAnyItemExpandable: boolean;
@@ -98,7 +50,7 @@ const List: FC<ListProps> = ({ children, isWrapped = false }) => {
 
     const providerValue = useMemo<IListContext>(
         () => ({
-            isAnyItemExpandable: hasExpandableChildren(children),
+            isAnyItemExpandable: shouldShowExpandIndicator(children),
             isWrapped,
             openItemUuid,
             updateOpenItemUuid,
