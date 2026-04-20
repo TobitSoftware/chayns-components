@@ -22,15 +22,11 @@ export const isMarkedListItemElement = (node: ReactNode): node is ReactElement<L
 export const shouldShowExpandIndicator = (node: ReactNode): boolean =>
     Children.toArray(node).some((child) => {
         if (isDirectListItemElement(child)) {
-            return (
-                child.props.isExpandable !== false &&
-                child.props.shouldHideIndicator !== true &&
-                child.props.children !== undefined
-            );
+            return child.props.shouldHideIndicator !== true && child.props.children !== undefined;
         }
 
         if (isMarkedListItemElement(child)) {
-            return child.props.isExpandable !== false && child.props.shouldHideIndicator !== true;
+            return child.props.isExpandable === true && child.props.shouldHideIndicator !== true;
         }
 
         if (isValidElement<{ children?: ReactNode }>(child) && child.props.children !== undefined) {

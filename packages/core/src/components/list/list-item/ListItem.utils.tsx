@@ -59,7 +59,7 @@ export const withListItemMarkerForwardRef = <P, R>(
     displayName: string,
 ): ListItemMarkedForwardRefComponent<P, R> => {
     const Component = forwardRef<R, P & ListItemMetaProps>((props, ref) => {
-        const { isExpandable = true, shouldHideIndicator = false, ...restProps } = props;
+        const { isExpandable = false, shouldHideIndicator = false, ...restProps } = props;
 
         return render(
             {
