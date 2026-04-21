@@ -1,38 +1,20 @@
 import { ReactNode } from 'react';
 
 export interface SplitLayoutProps {
-    children: ReactNode;
+    views: Record<string, SplitLayoutView>;
     direction?: SplitLayoutDirection;
-    sizes?: SplitLayoutSizes;
-    defaultSizes?: SplitLayoutSizes;
-    onResize?: SplitLayoutResizeCallback;
-    onResizeEnd?: SplitLayoutResizeCallback;
-    onResizeStart?: SplitLayoutResizeCallback;
+    handleSize?: number;
+    fullScreenViewId?: string;
+    onChange?: (id: string, size: number) => void;
 }
 
-export interface SplitLayoutViewProps {
-    id: string;
-    children: ReactNode;
-    defaultSize?: number;
+export interface SplitLayoutView {
+    component: ReactNode;
     minSize?: number;
     maxSize?: number;
-    visibleFrom?: number;
-    visibleUntil?: number;
-}
-
-export interface NormalizedSplitLayoutView {
-    id: string;
-    node: ReactNode;
+    collapseBreakpoint?: number;
     defaultSize?: number;
-    minSize: number;
-    maxSize?: number;
-    visibleFrom?: number;
-    visibleUntil?: number;
 }
-
-export type SplitLayoutSizes = Record<string, number>;
-
-export type SplitLayoutResizeCallback = (id: string, size: number, sizes: SplitLayoutSizes) => void;
 
 export enum SplitLayoutDirection {
     HORIZONTAL = 'HORIZONTAL',

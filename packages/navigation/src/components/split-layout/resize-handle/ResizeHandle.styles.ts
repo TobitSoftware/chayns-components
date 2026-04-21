@@ -2,13 +2,15 @@ import { css, styled } from 'styled-components';
 import { WithTheme } from '@chayns-components/core';
 import { SplitLayoutDirection } from '../SplitLayout.types';
 
-type StyledResizeHandleProps = WithTheme<{ $direction: SplitLayoutDirection }>;
+type StyledResizeHandleProps = WithTheme<{ $direction: SplitLayoutDirection; $size: number }>;
 
 export const StyledResizeHandle = styled.div<StyledResizeHandleProps>`
     position: relative;
     flex-shrink: 0;
-    width: ${({ $direction }) => ($direction === SplitLayoutDirection.HORIZONTAL ? '1px' : '100%')};
-    height: ${({ $direction }) => ($direction === SplitLayoutDirection.VERTICAL ? '1px' : '100%')};
+    width: ${({ $direction, $size }) =>
+        $direction === SplitLayoutDirection.HORIZONTAL ? `${$size}px` : '100%'};
+    height: ${({ $direction, $size }) =>
+        $direction === SplitLayoutDirection.VERTICAL ? `${$size}px` : '100%'};
 `;
 
 type StyledResizeHandleLineProps = WithTheme<unknown>;

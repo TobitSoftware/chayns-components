@@ -11,28 +11,33 @@ const meta: Meta<typeof SplitLayout> = {
 
 export default meta;
 
+const renderTestContent = (content: string) => (
+    <div
+        style={{
+            height: '100%',
+            width: '100%',
+            backgroundColor: '#' + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0'),
+        }}
+    >
+        {content}
+    </div>
+);
+
 const Template: StoryFn<typeof SplitLayout> = () => {
     return (
         <div style={{ width: '100%', height: '400px' }}>
-            <SplitLayout>
-                <SplitLayout.View id="sidebar" defaultSize={100} minSize={50} maxSize={420}>
-                    <div style={{ width: '100%', height: '100%', backgroundColor: 'red' }}>
-                        Left
-                    </div>
-                </SplitLayout.View>
-
-                <SplitLayout.View id="content" minSize={240}>
-                    <div style={{ width: '100%', height: '100%', backgroundColor: 'yellow' }}>
-                        Center
-                    </div>
-                </SplitLayout.View>
-
-                <SplitLayout.View id="details" defaultSize={100} minSize={50} maxSize={420}>
-                    <div style={{ width: '100%', height: '100%', backgroundColor: 'blue' }}>
-                        Right
-                    </div>
-                </SplitLayout.View>
-            </SplitLayout>
+            <SplitLayout
+                views={{
+                    '1': {
+                        component: renderTestContent('1'),
+                        minSize: 80,
+                        maxSize: 120,
+                        collapseBreakpoint: 450,
+                    },
+                    '2': { component: renderTestContent('2'), minSize: 80, maxSize: 120 },
+                    '3': { component: renderTestContent('3') },
+                }}
+            />
         </div>
     );
 };
@@ -40,19 +45,18 @@ const Template: StoryFn<typeof SplitLayout> = () => {
 const VerticalTemplate: StoryFn<typeof SplitLayout> = () => {
     return (
         <div style={{ width: '100%', height: '400px' }}>
-            <SplitLayout direction={SplitLayoutDirection.VERTICAL}>
-                <SplitLayout.View id="sidebar" defaultSize={160} minSize={120} maxSize={260}>
-                    <div style={{ width: '100%', height: '100%', backgroundColor: 'green' }}>
-                        Top
-                    </div>
-                </SplitLayout.View>
-
-                <SplitLayout.View id="content" minSize={120}>
-                    <div style={{ width: '100%', height: '100%', backgroundColor: 'purple' }}>
-                        Bottom
-                    </div>
-                </SplitLayout.View>
-            </SplitLayout>
+            <SplitLayout
+                direction={SplitLayoutDirection.VERTICAL}
+                views={{
+                    '1': {
+                        component: renderTestContent('1'),
+                        minSize: 80,
+                        maxSize: 120,
+                        collapseBreakpoint: 200,
+                    },
+                    '2': { component: renderTestContent('2') },
+                }}
+            />
         </div>
     );
 };

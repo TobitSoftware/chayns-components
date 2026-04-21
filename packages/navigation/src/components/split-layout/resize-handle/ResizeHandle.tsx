@@ -12,9 +12,16 @@ interface ResizeHandleProps {
     onDragStart?: () => void;
     onDragEnd?: () => void;
     direction: SplitLayoutDirection;
+    size: number;
 }
 
-const ResizeHandle: FC<ResizeHandleProps> = ({ onDrag, onDragStart, onDragEnd, direction }) => {
+const ResizeHandle: FC<ResizeHandleProps> = ({
+    onDrag,
+    onDragStart,
+    onDragEnd,
+    direction,
+    size,
+}) => {
     const handlePointerDown = useDragHandle({
         direction,
         onDrag,
@@ -23,7 +30,7 @@ const ResizeHandle: FC<ResizeHandleProps> = ({ onDrag, onDragStart, onDragEnd, d
     });
 
     return (
-        <StyledResizeHandle $direction={direction}>
+        <StyledResizeHandle $direction={direction} $size={size}>
             <StyledResizeHandleDrag $direction={direction} onPointerDown={handlePointerDown} />
             <StyledResizeHandleLine />
         </StyledResizeHandle>

@@ -39,11 +39,11 @@ export const StyledSplitLayoutPane = styled.div<StyledSplitLayoutPaneProps>`
             ? css`
                   min-width: 0;
                   height: 100%;
-                  width: ${$size ?? 0}px;
+                  width: ${$size ? `${$size}px` : '100%'};
               `
             : css`
                   min-height: 0;
                   width: 100%;
-                  height: ${$size ?? 0}px;
+                  height: ${$size ? `${$size}px` : '100%'};
               `}
 `;
