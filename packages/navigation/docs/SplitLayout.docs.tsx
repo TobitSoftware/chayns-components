@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { DynamicToolbar } from '@chayns-components/navigation';
+import { SplitLayout } from '@chayns-components/navigation';
 
 interface ComponentProps {}
 
 const Component: FC<ComponentProps> = () => {
-    return <DynamicToolbar activeItemId="chat" items={[]} />;
+    return <SplitLayout views={{}} />;
 };
 
 Component.displayName = 'Component';

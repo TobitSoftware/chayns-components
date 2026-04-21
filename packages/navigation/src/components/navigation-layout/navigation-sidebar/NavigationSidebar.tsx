@@ -1,0 +1,205 @@
+import React, {
+    FC,
+    useCallback,
+    useMemo,
+    useRef,
+    useState,
+    PointerEvent as ReactPointerEvent,
+    Fragment,
+} from 'react';
+import {
+    StyledMotionNavigationSidebar,
+    StyledMotionNavigationSidebarContentList,
+    StyledMotionNavigationSidebarContent,
+    StyledNavigationSidebarResizeHandle,
+    StyledMotionNavigationSidebarContentWrapper,
+    StyledMotionNavigationSidebarExternalContent,
+} from './NavigationSidebar.styles';
+import { NavigationSidebarProps } from './NavigationSidebar.types';
+import {
+    clampSideBarWidth,
+    getNearestSideBarWidth,
+    getSideBarCompactBreakpoint,
+    useGlobalUserSelect,
+} from './NavigationSidebar.utils';
+import { PanInfo } from 'motion';
+import SidebarGroup from './sidebar-group/SidebarGroup';
+import SidebarDivider from './sidebar-divider/SidebarDivider';
+import { NavigationLayoutGroup } from '../NavigationLayout.types';
+import { NavigationSidebarProvider } from './NavigationSidebar.context';
+
+const NavigationSidebar: FC<NavigationSidebarProps> = ({
+    color,
+    minWidth,
+    maxWidth,
+    topContent,
+    bottomContent,
+    groups,
+    selectedItemId,
+    onItemClick,
+    onSidebarOpen,
+    onSidebarClose,
+    shouldShowCollapsedLabel,
+    isMobile,
+}) => {
+    const [width, setWidth] = useState<number>(minWidth);
+    const [isDragging, setIsDragging] = useState<boolean>(false);
+    const dragStartWidthRef = useRef<number>(minWidth);
+
+    useGlobalUserSelect({ isDisabled: isDragging });
+
+    const isCompact = useMemo(
+        () => (isMobile ? false : width < getSideBarCompactBreakpoint({ minWidth, maxWidth })),
+        [isMobile, maxWidth, minWidth, width],
+    );
+
+    const handlePanStart = useCallback((): void => {
+        dragStartWidthRef.current = width;
+        setIsDragging(true);
+    }, [width]);
+
+    const handlePointerDown = useCallback((event: ReactPointerEvent<HTMLDivElement>): void => {
+        event.preventDefault();
+        event.stopPropagation();
+    }, []);
+
+    const handlePan = useCallback(
+        (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
+            setWidth(
+                clampSideBarWidth({
+                    width: dragStartWidthRef.current + info.offset.x,
+                    minWidth,
+                    maxWidth,
+                }),
+            );
+        },
+        [maxWidth, minWidth],
+    );
+
+    const handlePanEnd = useCallback(
+        (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
+            const nextWidth = clampSideBarWidth({
+                width: dragStartWidthRef.current + info.offset.x,
+                minWidth,
+                maxWidth,
+            });
+
+            const nearestWidth = getNearestSideBarWidth({
+                width: nextWidth,
+                minWidth,
+                maxWidth,
+            });
+
+            setIsDragging(false);
+            setWidth(nearestWidth);
+
+            dragStartWidthRef.current = nearestWidth;
+
+            if (typeof onSidebarOpen === 'function' && nearestWidth === maxWidth) {
+                onSidebarOpen();
+            }
+
+            if (typeof onSidebarClose === 'function' && nearestWidth === minWidth) {
+                onSidebarClose();
+            }
+        },
+        [maxWidth, minWidth, onSidebarClose, onSidebarOpen],
+    );
+
+    const { pinnedGroups, scrollableGroups } = useMemo(
+        () => ({
+            pinnedGroups: groups.filter(({ isPinned }) => isPinned),
+            scrollableGroups: groups.filter(({ isPinned }) => !isPinned),
+        }),
+        [groups],
+    );
+
+    const hasPinnedGroups = pinnedGroups.length > 0;
+    const hasScrollableGroups = scrollableGroups.length > 0;
+    const shouldShowCollapsedSidebarLabel = shouldShowCollapsedLabel && width === minWidth;
+
+    const contextValue = useMemo(
+        () => ({
+            color,
+            isCompact,
+            onItemClick,
+            selectedItemId,
+            shouldShowCollapsedLabel: shouldShowCollapsedSidebarLabel,
+        }),
+        [color, isCompact, onItemClick, selectedItemId, shouldShowCollapsedSidebarLabel],
+    );
+
+    const renderGroups = useCallback(
+        (groupsToRender: NavigationLayoutGroup[]) =>
+            groupsToRender.map(({ items, id, isReorderable }, index) => (
+                <Fragment key={id}>
+                    <SidebarGroup groupId={id} items={items} isReorderable={isReorderable} />
+
+                    {index < groupsToRender.length - 1 && <SidebarDivider color={color} />}
+                </Fragment>
+            )),
+        [color],
+    );
+
+    return (
+        <StyledMotionNavigationSidebar
+            $color={color}
+            $isMobile={isMobile}
+            initial={false}
+            animate={!isMobile ? { width } : {}}
+            transition={
+                isDragging
+                    ? {
+                          duration: 0,
+                      }
+                    : {
+                          type: 'spring',
+                          stiffness: 320,
+                          damping: 30,
+                      }
+            }
+            id="sidebar"
+            data-navigation-sidebar-root="true"
+        >
+            <NavigationSidebarProvider value={contextValue}>
+                <StyledMotionNavigationSidebarContent>
+                    {!!topContent && (
+                        <StyledMotionNavigationSidebarExternalContent>
+                            {topContent}
+                        </StyledMotionNavigationSidebarExternalContent>
+                    )}
+                    <StyledMotionNavigationSidebarContentWrapper>
+                        {hasPinnedGroups && (
+                            <StyledMotionNavigationSidebarContentList $isPinned>
+                                {renderGroups(pinnedGroups)}
+                            </StyledMotionNavigationSidebarContentList>
+                        )}
+                        {hasPinnedGroups && hasScrollableGroups && <SidebarDivider color={color} />}
+                        {hasScrollableGroups && (
+                            <StyledMotionNavigationSidebarContentList>
+                                {renderGroups(scrollableGroups)}
+                            </StyledMotionNavigationSidebarContentList>
+                        )}
+                    </StyledMotionNavigationSidebarContentWrapper>
+                    {!!bottomContent && (
+                        <StyledMotionNavigationSidebarExternalContent>
+                            {bottomContent}
+                        </StyledMotionNavigationSidebarExternalContent>
+                    )}
+                </StyledMotionNavigationSidebarContent>
+            </NavigationSidebarProvider>
+            {!isMobile && (
+                <StyledNavigationSidebarResizeHandle
+                    onPointerDown={handlePointerDown}
+                    onPanStart={handlePanStart}
+                    onPan={handlePan}
+                    onPanEnd={handlePanEnd}
+                />
+            )}
+        </StyledMotionNavigationSidebar>
+    );
+};
+
+NavigationSidebar.displayName = 'NavigationSidebar';
+
+export default NavigationSidebar;
