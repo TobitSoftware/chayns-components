@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, ReactHTML, ReactNode } from 'react';
 import {
     StyledBaseSkeleton,
     StyledMotionBaseSkeletonPulse,
@@ -16,11 +16,24 @@ import { useSkeletonContext } from '../skeleton-provider/SkeletonProvider';
 export interface BaseSkeletonProps extends BaseSkeletonConfig {
     width: number | string;
     height: number | string;
+    as?: keyof ReactHTML;
+    children?: ReactNode;
 }
 
 export const BaseSkeleton = forwardRef<HTMLDivElement, BaseSkeletonProps>(
     (
-        { baseColor, highlightColor, animationType, height, style, width, className, borderRadius },
+        {
+            baseColor,
+            highlightColor,
+            animationType,
+            height,
+            style,
+            width,
+            className,
+            borderRadius,
+            as,
+            children,
+        },
         ref,
     ) => {
         const values = useSkeletonContext();
@@ -29,6 +42,7 @@ export const BaseSkeleton = forwardRef<HTMLDivElement, BaseSkeletonProps>(
 
         return (
             <StyledBaseSkeleton
+                as={as}
                 ref={ref}
                 className={className}
                 style={style}
@@ -36,6 +50,7 @@ export const BaseSkeleton = forwardRef<HTMLDivElement, BaseSkeletonProps>(
                 $borderRadius={borderRadius ?? values.borderRadius}
                 $height={height}
                 $width={width}
+                $shouldUseNativeTag={!!as}
             >
                 {resolvedAnimationType === SkeletonAnimationType.SHIMMER && (
                     <StyledMotionBaseSkeletonShimmer
@@ -51,6 +66,7 @@ export const BaseSkeleton = forwardRef<HTMLDivElement, BaseSkeletonProps>(
                         transition={PULSE_TRANSITION}
                     />
                 )}
+                {children}
             </StyledBaseSkeleton>
         );
     },

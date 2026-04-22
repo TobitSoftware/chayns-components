@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { motion } from 'motion/react';
 import { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
@@ -7,6 +7,7 @@ type StyledBaseSkeletonProps = WithTheme<{
     $backgroundColor: string;
     $width: number | string;
     $height: number | string;
+    $shouldUseNativeTag: boolean;
 }>;
 
 export const StyledBaseSkeleton = styled.div<StyledBaseSkeletonProps>`
@@ -17,8 +18,16 @@ export const StyledBaseSkeleton = styled.div<StyledBaseSkeletonProps>`
 
     background-color: ${({ $backgroundColor }) => $backgroundColor};
 
-    height: ${({ $height }) => `${$height}${typeof $height === 'number' ? 'px' : ''}`};
     width: ${({ $width }) => `${$width}${typeof $width === 'number' ? 'px' : ''}`};
+
+    ${({ $shouldUseNativeTag, $height }) =>
+        $shouldUseNativeTag
+            ? css`
+                  color: transparent;
+              `
+            : css`
+                  height: ${$height}${typeof $height === 'number' ? 'px' : ''};
+              `}
 `;
 
 type StyledMotionBaseSkeletonShimmerProps = WithTheme<{
