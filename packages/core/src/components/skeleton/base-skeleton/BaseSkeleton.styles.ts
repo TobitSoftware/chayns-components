@@ -56,7 +56,7 @@ export const StyledMotionBaseSkeletonShimmer = styled(
     height: 100%;
 
     pointer-events: none;
-    border-radius: inherit;
+    border-radius: 0;
 
     will-change: transform;
 
@@ -70,6 +70,8 @@ type StyledMotionBaseSkeletonPulseProps = WithTheme<{
 export const StyledMotionBaseSkeletonPulse = styled(motion.div)<StyledMotionBaseSkeletonPulseProps>`
     width: 100%;
     height: 100%;
+
+    position: absolute;
 
     opacity: 0.06;
 
