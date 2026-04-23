@@ -62,6 +62,6 @@ const SkeletonProvider: FC<SkeletonProviderProps> = ({
     return <SkeletonContext.Provider value={value}>{children}</SkeletonContext.Provider>;
 };
 
-SkeletonProvider.displayName = 'SkeletonProvider';
+SkeletonProvider.displayName = 'Skeleton.Config';
 
 export default SkeletonProvider;

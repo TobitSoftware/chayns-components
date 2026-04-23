@@ -20,6 +20,8 @@ export const StyledBaseSkeleton = styled.div<StyledBaseSkeletonProps>`
 
     width: ${({ $width }) => `${$width}${typeof $width === 'number' ? 'px' : ''}`};
 
+    user-select: none;
+
     ${({ $shouldUseNativeTag, $height }) =>
         $shouldUseNativeTag
             ? css`

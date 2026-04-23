@@ -24,6 +24,18 @@ const H6Template: StoryFn<typeof Skeleton.H6> = (args) => <Skeleton.H6 {...args}
 
 const TextTemplate: StoryFn<typeof Skeleton.Text> = (args) => <Skeleton.Text {...args} />;
 
+const ButtonTemplate: StoryFn<typeof Skeleton.Button> = (args) => <Skeleton.Button {...args} />;
+
+const BadgeTemplate: StoryFn<typeof Skeleton.Badge> = (args) => <Skeleton.Badge {...args} />;
+
+const AccordionTemplate: StoryFn<typeof Skeleton.Accordion> = (args) => (
+    <Skeleton.Accordion {...args} />
+);
+
+const ListItemTemplate: StoryFn<typeof Skeleton.ListItem> = (args) => (
+    <Skeleton.ListItem {...args} />
+);
+
 export const General = BoxTemplate.bind({});
 
 General.args = {
@@ -44,6 +56,10 @@ export const H4 = H4Template.bind({});
 export const H5 = H5Template.bind({});
 export const H6 = H6Template.bind({});
 export const Text = TextTemplate.bind({});
+export const Button = ButtonTemplate.bind({});
+export const Badge = BadgeTemplate.bind({});
+export const Accordion = AccordionTemplate.bind({});
+export const ListItem = ListItemTemplate.bind({});
 
 Text.args = {
     lines: 3,

@@ -10,9 +10,13 @@ import {
     H6Skeleton,
 } from './variants/headline-skeleton/HeadlineSkeleton';
 import TextSkeleton from './variants/text-skeleton/TextSkeleton';
+import ButtonSkeleton from './variants/button-skeleton/ButtonSkeleton';
+import BadgeSkeleton from './variants/badge-skeleton/BadgeSkeleton';
+import ListItemSkeleton from './variants/list-item-skeleton/ListItemSkeleton';
+import AccordionSkeleton from './variants/accordion-skeleton/AccordionSkeleton';
 
 interface SkeletonNamespace {
-    Provider: typeof SkeletonProvider;
+    Config: typeof SkeletonProvider;
     Box: typeof BoxSkeleton;
     Circle: typeof CircleSkeleton;
     H1: typeof H1Skeleton;
@@ -22,10 +26,14 @@ interface SkeletonNamespace {
     H5: typeof H5Skeleton;
     H6: typeof H6Skeleton;
     Text: typeof TextSkeleton;
+    Button: typeof ButtonSkeleton;
+    Badge: typeof BadgeSkeleton;
+    ListItem: typeof ListItemSkeleton;
+    Accordion: typeof AccordionSkeleton;
 }
 
 const Skeleton: SkeletonNamespace = {
-    Provider: SkeletonProvider,
+    Config: SkeletonProvider,
     Box: BoxSkeleton,
     Circle: CircleSkeleton,
     H1: H1Skeleton,
@@ -35,6 +43,10 @@ const Skeleton: SkeletonNamespace = {
     H5: H5Skeleton,
     H6: H6Skeleton,
     Text: TextSkeleton,
+    Button: ButtonSkeleton,
+    Badge: BadgeSkeleton,
+    ListItem: ListItemSkeleton,
+    Accordion: AccordionSkeleton,
 };
 
 export default Skeleton;
