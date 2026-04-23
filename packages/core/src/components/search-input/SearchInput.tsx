@@ -101,11 +101,13 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
             if (typeof onActiveChange === 'function') {
                 onActiveChange(isSearchInputActive);
             }
+        }, [isSearchInputActive, onActiveChange]);
 
+        useEffect(() => {
             if (isSearchInputActive) {
                 inputRef.current?.focus();
             }
-        }, [isSearchInputActive, onActiveChange]);
+        }, [isSearchInputActive]);
 
         useEffect(() => {
             if (typeof isActive === 'boolean') {
