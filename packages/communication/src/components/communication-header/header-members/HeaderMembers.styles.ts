@@ -7,6 +7,21 @@ type StyledHeaderMembersProps = WithTheme<{ $isLoading?: boolean }>;
 export const StyledHeaderMembers = styled.div<StyledHeaderMembersProps>`
     width: 100%;
     opacity: ${({ $isLoading }) => ($isLoading ? 1 : 0.75)};
+
+    display: flex;
+    flex-direction: column;
+`;
+
+export const StyledHeaderMembersContent = styled.div`
+    width: 100%;
+    height: 100%;
+    gap: 12px;
+    overflow: hidden;
+
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 8px;
+    row-gap: 2px;
 `;
 
 export const StyledHeaderMembersFirstMember = styled.div`

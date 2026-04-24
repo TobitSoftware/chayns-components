@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, ReactNode, useMemo, useState } from 'react';
 import { HeaderMembersProps } from './HeaderMembers.types';
 import {
     StyledHeaderMembers,
@@ -6,15 +6,46 @@ import {
     StyledHeaderMembersFirstMember,
     StyledMotionIcon,
     StyledHeaderMembersIconWrapper,
+    StyledHeaderMembersContent,
 } from './HeaderMembers.styles';
 import { useCommunicationHeaderDate } from './HeaderMembers.hooks';
 import HeaderMember from './header-member/HeaderMember';
-import { Icon, Skeleton } from '@chayns-components/core';
+import { ExpandableContent, Icon, Skeleton } from '@chayns-components/core';
+
+interface Row {
+    prefix: ReactNode;
+    content: ReactNode;
+}
 
 const HeaderMembers: FC<HeaderMembersProps> = ({ from, to, date, cc, isLoading }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const formattedDate = useCommunicationHeaderDate(date);
+
+    // ToDo add textstrings
+    const rows = useMemo(() => {
+        const items: Row[] = [];
+
+        to?.forEach((member, index) => {
+            items.push({
+                prefix: index === 0 ? <div>An</div> : <div />,
+                content: (
+                    <HeaderMember actions={member.actions} id={member.id} name={member.name} />
+                ),
+            });
+        });
+
+        cc?.forEach((member, index) => {
+            items.push({
+                prefix: index === 0 ? <div>CC</div> : <div />,
+                content: (
+                    <HeaderMember actions={member.actions} id={member.id} name={member.name} />
+                ),
+            });
+        });
+
+        return items;
+    }, [cc, to]);
 
     if (isLoading) {
         return (
@@ -42,6 +73,17 @@ const HeaderMembers: FC<HeaderMembersProps> = ({ from, to, date, cc, isLoading }
                     </StyledMotionIcon>
                 </StyledHeaderMembersIconWrapper>
             </StyledHeaderMembersFirstMember>
+            <ExpandableContent isOpen={isOpen}>
+                <StyledHeaderMembersContent>
+                    {rows.map((row, i) => (
+                        <React.Fragment key={i}>
+                            {row.prefix}
+
+                            {row.content}
+                        </React.Fragment>
+                    ))}
+                </StyledHeaderMembersContent>
+            </ExpandableContent>
         </StyledHeaderMembers>
     );
 };
