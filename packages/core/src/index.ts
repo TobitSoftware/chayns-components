@@ -166,3 +166,5 @@ export type {
     IComboBoxItems as ComboBoxItems,
     ComboBoxRef,
 } from './components/combobox/ComboBox.types';
+export { default as Skeleton } from './components/skeleton';
+export { SkeletonAnimationType } from './components/skeleton/types';
