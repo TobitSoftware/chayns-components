@@ -4,14 +4,8 @@ import {
     StyledMotionBaseSkeletonPulse,
     StyledMotionBaseSkeletonShimmer,
 } from './BaseSkeleton.styles';
-import {
-    PULSE_ANIMATION,
-    PULSE_TRANSITION,
-    SHIMMER_ANIMATION,
-    SHIMMER_TRANSITION,
-} from './BaseSkeleton.constants';
 import { BaseSkeletonConfig, SkeletonAnimationType } from '../types';
-import { useSkeletonContext } from '../skeleton-provider/SkeletonProvider';
+import { useSkeletonAnimation, useSkeletonContext } from '../skeleton-provider/SkeletonProvider';
 
 export interface BaseSkeletonProps extends BaseSkeletonConfig {
     width: number | string;
@@ -37,6 +31,7 @@ export const BaseSkeleton = forwardRef<HTMLDivElement, BaseSkeletonProps>(
         ref,
     ) => {
         const values = useSkeletonContext();
+        const animationStyle = useSkeletonAnimation();
 
         const resolvedAnimationType = animationType ?? values.animationType;
 
@@ -55,15 +50,13 @@ export const BaseSkeleton = forwardRef<HTMLDivElement, BaseSkeletonProps>(
                 {resolvedAnimationType === SkeletonAnimationType.SHIMMER && (
                     <StyledMotionBaseSkeletonShimmer
                         $color={highlightColor ?? values.highlightColor}
-                        animate={SHIMMER_ANIMATION}
-                        transition={SHIMMER_TRANSITION}
+                        style={animationStyle}
                     />
                 )}
                 {resolvedAnimationType === SkeletonAnimationType.PULSE && (
                     <StyledMotionBaseSkeletonPulse
                         $color={highlightColor ?? values.highlightColor}
-                        animate={PULSE_ANIMATION}
-                        transition={PULSE_TRANSITION}
+                        style={animationStyle}
                     />
                 )}
                 {children}

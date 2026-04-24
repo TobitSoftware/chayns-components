@@ -1,12 +1,14 @@
-import React, { createContext, FC, ReactNode, useContext } from 'react';
+import React, { createContext, FC, ReactNode, useContext, useEffect } from 'react';
 import { ColorMode, useSite } from 'chayns-api';
 import { SkeletonAnimationType } from '../types';
+import { animate, useMotionValue, MotionValue, useTransform } from 'motion/react';
 
 export interface ISkeletonContext {
     animationType?: SkeletonAnimationType;
     borderRadius?: number | string;
     baseColor?: string;
     highlightColor?: string;
+    progress?: MotionValue<number>;
 }
 
 export const SkeletonContext = createContext<ISkeletonContext | undefined>(undefined);
@@ -21,6 +23,19 @@ export const useSkeletonConfig = ({
 }: ISkeletonContext) => {
     const { colorMode } = useSite();
 
+    const progress = useMotionValue(0);
+
+    useEffect(() => {
+        const controls = animate(progress, 1, {
+            duration: 2.4,
+            repeat: Infinity,
+            repeatType: 'loop',
+            ease: 'linear',
+        });
+
+        return controls.stop;
+    }, [progress]);
+
     const defaultHighlightColor =
         colorMode === ColorMode.Dark ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)';
 
@@ -31,7 +46,22 @@ export const useSkeletonConfig = ({
         borderRadius,
         baseColor: baseColor ?? defaultBaseColor,
         highlightColor: highlightColor ?? defaultHighlightColor,
+        progress,
     };
+};
+
+export const useSkeletonAnimation = () => {
+    const { animationType, progress } = useSkeletonContext();
+
+    const opacity = useTransform(progress, [0, 0.5, 1], [0.06, 0.18, 0.06]);
+
+    const x = useTransform(progress, [0, 1], ['-100%', '100%']);
+
+    if (animationType === SkeletonAnimationType.PULSE) {
+        return { opacity };
+    }
+
+    return { x };
 };
 
 export const useSkeletonContext = () => {
