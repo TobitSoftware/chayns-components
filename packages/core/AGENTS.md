@@ -1,8 +1,8 @@
 # @chayns-components/core
 
-React component package providing 44 documented components for chayns applications.
+React component package providing 45 documented components for chayns applications.
 
-Documented components: `Accordion`, `AmountControl`, `AnimatedNumber`, `Badge`, `Button`, `Checkbox`, `ComboBox`, `ContentCard`, `ContextMenu`, `ExpandableContent`, `FileInput`, `FileList`, `FileSelect`, `Filter`, `FilterButtons`, `GridImage`, `GroupedImage`, `HighlightSlider`, `Icon`, `Input`, `List`, `MentionFinder`, `MultiActionButton`, `NumberInput`, `Popup`, `ProgressBar`, `RadioButton`, `ScrollView`, `SearchBox`, `SearchInput`, `SelectButton`, `SetupWizard`, `SetupWizardItem`, `SharingBar`, `SharingButton`, `Signature`, `Slider`, `SliderButton`, `SmallWaitCursor`, `TagInput`, `TextArea`, `Tooltip`, `Truncation`, `VerificationBadge`.
+Documented components: `Accordion`, `AmountControl`, `AnimatedNumber`, `Badge`, `Button`, `Checkbox`, `ComboBox`, `ContentCard`, `ContextMenu`, `ExpandableContent`, `FileInput`, `FileList`, `FileSelect`, `Filter`, `FilterButtons`, `GridImage`, `GroupedImage`, `HighlightSlider`, `Icon`, `Input`, `List`, `MentionFinder`, `MultiActionButton`, `NumberInput`, `Popup`, `ProgressBar`, `RadioButton`, `ScrollView`, `SearchBox`, `SearchInput`, `SelectButton`, `SetupWizard`, `SetupWizardItem`, `SharingBar`, `SharingButton`, `Signature`, `Skeleton`, `Slider`, `SliderButton`, `SmallWaitCursor`, `TagInput`, `TextArea`, `Tooltip`, `Truncation`, `VerificationBadge`.
 
 ## Import
 
@@ -54,6 +54,7 @@ import { Accordion, AmountControl, AnimatedNumber } from '@chayns-components/cor
 - `SharingBar`
 - `SharingButton`
 - `Signature`
+- `Skeleton`
 - `Slider`
 - `SliderButton`
 - `SmallWaitCursor`
@@ -4267,6 +4268,120 @@ No additional exported types documented.
 ### Usage Notes
 
 - Import `Signature` directly from `@chayns-components/core` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+
+### Anti Patterns
+
+- Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+## Skeleton
+
+`Skeleton` is exported by `@chayns-components/core` and should be imported from the public package entry point.
+
+### Import
+
+```ts
+import { Skeleton } from '@chayns-components/core';
+```
+
+### Examples
+
+#### General
+
+```tsx
+<Skeleton
+    width={100}
+    height={100}
+/>
+```
+
+#### Circle
+
+```tsx
+<Skeleton
+    size={100}
+/>
+```
+
+#### H1
+
+```tsx
+<Skeleton />
+```
+
+#### H2
+
+```tsx
+<Skeleton />
+```
+
+#### H3
+
+```tsx
+<Skeleton />
+```
+
+#### H4
+
+```tsx
+<Skeleton />
+```
+
+#### H5
+
+```tsx
+<Skeleton />
+```
+
+#### H6
+
+```tsx
+<Skeleton />
+```
+
+#### Text
+
+```tsx
+<Skeleton
+    lines={3}
+    randomWithBounds={[50, 90]}
+/>
+```
+
+#### Button
+
+```tsx
+<Skeleton />
+```
+
+#### Badge
+
+```tsx
+<Skeleton />
+```
+
+#### Accordion
+
+```tsx
+<Skeleton />
+```
+
+#### List Item
+
+```tsx
+<Skeleton />
+```
+
+### Props
+
+No prop documentation available.
+
+### Types
+
+No additional exported types documented.
+
+### Usage Notes
+
+- Import `Skeleton` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
