@@ -22,6 +22,9 @@ export const StyledHeaderMembersContent = styled.div`
     grid-template-columns: max-content 1fr;
     column-gap: 8px;
     row-gap: 2px;
+
+    max-height: 160px;
+    overflow-y: auto;
 `;
 
 export const StyledHeaderMembersFirstMember = styled.div`

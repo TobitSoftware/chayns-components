@@ -16,8 +16,13 @@ export default {
             {
                 id: 'JAN-NIK96',
                 name: 'Jannik Weise',
-                actions: [{ icons: ['fa fa-pen'], label: 'Email schreiben', onClick: () => {} }],
+                actions: [
+                    { icons: ['fa fa-pen'], label: 'Email schreiben', onClick: () => {} },
+                    { icons: ['fa fa-copy'], label: 'Email kopieren', onClick: () => {} },
+                ],
             },
+        ],
+        cc: [
             {
                 id: '131-99998',
                 name: 'Luca Jesußek',

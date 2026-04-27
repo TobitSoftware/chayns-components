@@ -74,7 +74,7 @@ const HeaderMembers: FC<HeaderMembersProps> = ({ from, to, date, cc, isLoading }
                 </StyledHeaderMembersIconWrapper>
             </StyledHeaderMembersFirstMember>
             <ExpandableContent isOpen={isOpen}>
-                <StyledHeaderMembersContent>
+                <StyledHeaderMembersContent className="chayns-scrollbar">
                     {rows.map((row, i) => (
                         <React.Fragment key={i}>
                             {row.prefix}
