@@ -29,4 +29,20 @@ export default {
             },
         },
     },
+    communicationList: {
+        sort: {
+            today: {
+                stringName: '',
+                fallback: 'Heute',
+            },
+            yesterday: {
+                stringName: '',
+                fallback: 'Gestern',
+            },
+            older: {
+                stringName: '',
+                fallback: 'Letzte 7 Tage',
+            },
+        },
+    },
 } as const;
