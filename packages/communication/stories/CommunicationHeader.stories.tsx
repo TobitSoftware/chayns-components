@@ -29,6 +29,40 @@ export default {
                 actions: [{ icons: ['fa fa-pen'], label: 'Email schreiben', onClick: () => {} }],
             },
         ],
+        rightActions: [
+            {
+                id: 'print',
+                label: 'Drucken',
+                onClick: () => {},
+                icons: ['fa fa-print'],
+            },
+            {
+                id: 'delete',
+                label: 'Löschen',
+                onClick: () => {},
+                icons: ['fa fa-trash'],
+            },
+            {
+                id: 'reply',
+                label: 'Antworten',
+                onClick: () => {},
+                icons: ['fa fa-arrow-left'],
+            },
+            {
+                id: 'attachments',
+                label: 'Anhänge',
+                contextMenuItems: [
+                    {
+                        icons: ['fa fa-file'],
+                        text: 'image.png',
+                        key: 'sfetsg',
+                        onClick: () => {},
+                    },
+                ],
+                onClick: () => {},
+                icons: ['fa fa-paperclip'],
+            },
+        ],
         date: '2026-04-24T13:23:01.087Z',
     },
 } as Meta<typeof CommunicationHeader>;

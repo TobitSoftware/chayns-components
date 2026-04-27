@@ -23,6 +23,7 @@ export interface Action {
     icons: string[];
     onClick: VoidFunction;
     contextMenuItems?: ContextMenuItem[];
+    isDisabled?: boolean;
 }
 
 export interface Member {

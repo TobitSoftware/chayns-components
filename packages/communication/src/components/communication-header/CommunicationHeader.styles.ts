@@ -7,7 +7,7 @@ export const StyledCommunicationHeader = styled.div<WithTheme<unknown>>`
 
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
 
     border-bottom: ${({ theme }) => `1px solid rgba(${theme['text-rgb'] ?? ''}, 0.1)`};
 `;
