@@ -11,6 +11,8 @@ import {
 import { useCommunicationHeaderDate } from './HeaderMembers.hooks';
 import HeaderMember from './header-member/HeaderMember';
 import { ExpandableContent, Icon, Skeleton } from '@chayns-components/core';
+import { Translation } from '@chayns/textstrings';
+import textStrings from '../../../constants/textStrings';
 
 interface Row {
     prefix: ReactNode;
@@ -22,25 +24,34 @@ const HeaderMembers: FC<HeaderMembersProps> = ({ from, to, date, cc, isLoading }
 
     const formattedDate = useCommunicationHeaderDate(date);
 
-    // ToDo add textstrings
     const rows = useMemo(() => {
         const items: Row[] = [];
 
         to?.forEach((member, index) => {
             items.push({
-                prefix: index === 0 ? <div>An</div> : <div />,
-                content: (
-                    <HeaderMember actions={member.actions} id={member.id} name={member.name} />
-                ),
+                prefix:
+                    index === 0 ? (
+                        <Translation
+                            textString={textStrings.communicationHeader.headerMembers.to}
+                        />
+                    ) : (
+                        <div />
+                    ),
+                content: <HeaderMember actions={member.actions} name={member.name} />,
             });
         });
 
         cc?.forEach((member, index) => {
             items.push({
-                prefix: index === 0 ? <div>CC</div> : <div />,
-                content: (
-                    <HeaderMember actions={member.actions} id={member.id} name={member.name} />
-                ),
+                prefix:
+                    index === 0 ? (
+                        <Translation
+                            textString={textStrings.communicationHeader.headerMembers.cc}
+                        />
+                    ) : (
+                        <div />
+                    ),
+                content: <HeaderMember actions={member.actions} name={member.name} />,
             });
         });
 
@@ -62,7 +73,7 @@ const HeaderMembers: FC<HeaderMembersProps> = ({ from, to, date, cc, isLoading }
     return (
         <StyledHeaderMembers>
             <StyledHeaderMembersFirstMember>
-                <HeaderMember actions={from.actions} id={from.id} name={from.name} />
+                <HeaderMember actions={from.actions} name={from.name} />
                 <StyledHeaderMembersDate>{formattedDate}</StyledHeaderMembersDate>
                 <StyledHeaderMembersIconWrapper onClick={() => setIsOpen((prev) => !prev)}>
                     <StyledMotionIcon

@@ -4,6 +4,8 @@ import {
     DisplayItemType,
     SortType,
 } from './CommunicationList.types';
+import { getFixedT } from '@chayns/textstrings';
+import textStrings from '../../constants/textStrings';
 
 const LOADING_ITEMS: DisplayItem[] = [
     { id: 'loading-skeleton--1', type: DisplayItemType.SKELETON_ITEM },
@@ -47,15 +49,15 @@ const getDateGroupLabel = (date: Date): string => {
     const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
     if (diffInDays === 0) {
-        return 'Heute';
+        return getFixedT(textStrings.communicationList.sort.today);
     }
 
     if (diffInDays === 1) {
-        return 'Gestern';
+        return getFixedT(textStrings.communicationList.sort.yesterday);
     }
 
     if (diffInDays < 7) {
-        return 'Letzte 7 Tage';
+        return getFixedT(textStrings.communicationList.sort.older);
     }
 
     return new Intl.DateTimeFormat(undefined, {

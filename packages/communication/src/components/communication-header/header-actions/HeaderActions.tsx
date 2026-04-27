@@ -4,6 +4,8 @@ import { StyledHeaderActions, StyledHeaderActionsSide } from './HeaderActions.st
 import { HeaderActionsProps } from './HeaderActions.types';
 import HeaderAction from './header-action/HeaderAction';
 import { useElementWidth } from './HeaderActions.hooks';
+import { useTranslation } from '@chayns/textstrings';
+import textStrings from '../../../constants/textStrings';
 
 const ACTION_WIDTH = 24;
 const ACTION_GAP = 4;
@@ -21,11 +23,17 @@ const HeaderActions: FC<HeaderActionsProps> = ({
     const rightSideRef = useRef<HTMLDivElement | null>(null);
     const rightSideWidth = useElementWidth(rightSideRef);
 
+    const { t } = useTranslation();
+
     const left = useMemo(() => {
         const items = [
             <HeaderAction
                 key="read"
-                label={isRead ? 'unread' : 'read'}
+                label={
+                    isRead
+                        ? t(textStrings.communicationHeader.headerActions.unread)
+                        : t(textStrings.communicationHeader.headerActions.read)
+                }
                 icons={isRead ? ['fa fa-check', 'fa fa-slash'] : ['fa fa-check']}
                 onClick={() => onReadToggle(!isRead)}
                 shouldShowLabel
@@ -36,7 +44,7 @@ const HeaderActions: FC<HeaderActionsProps> = ({
             items.push(
                 <HeaderAction
                     key="teamtalk"
-                    label="TeamTalk"
+                    label={t(textStrings.communicationHeader.headerActions.teamTalk)}
                     icons={['fa fa-message-text']}
                     onClick={() => onTeamTalkToggle(!isTeamTalkActive)}
                     shouldShowLabel
@@ -46,7 +54,7 @@ const HeaderActions: FC<HeaderActionsProps> = ({
         }
 
         return items;
-    }, [isRead, isTeamTalkActive, onReadToggle, onTeamTalkToggle]);
+    }, [isRead, isTeamTalkActive, onReadToggle, onTeamTalkToggle, t]);
 
     const right = useMemo(() => {
         const prioritizedActions = rightActions.filter(
@@ -95,7 +103,7 @@ const HeaderActions: FC<HeaderActionsProps> = ({
             items.push(
                 <HeaderAction
                     key="more"
-                    label="Mehr"
+                    label={t(textStrings.communicationHeader.headerActions.more)}
                     icons={['fa fa-ellipsis-v']}
                     onClick={() => {}}
                     contextMenuItems={hiddenActions.map(
@@ -112,7 +120,7 @@ const HeaderActions: FC<HeaderActionsProps> = ({
         }
 
         return items;
-    }, [maxActionCount, rightActions, rightSideWidth]);
+    }, [maxActionCount, rightActions, rightSideWidth, t]);
 
     if (isLoading) {
         return (

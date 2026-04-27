@@ -4,6 +4,7 @@ import { StyledCommunicationHeader } from './CommunicationHeader.styles';
 import HeaderSubject from './header-subject/HeaderSubject';
 import HeaderMembers from './header-members/HeaderMembers';
 import HeaderActions from './header-actions/HeaderActions';
+import { TextStringProviderSSR } from '@chayns/textstrings';
 
 const CommunicationHeader: FC<CommunicationHeaderProps> = ({
     from,
@@ -20,10 +21,8 @@ const CommunicationHeader: FC<CommunicationHeaderProps> = ({
     maxActionCount,
     rightActions,
     isLoading,
-}) => {
-    const test = 0;
-
-    return (
+}) => (
+    <TextStringProviderSSR libraries="chayns-components-v5-communication" id="communication-header">
         <StyledCommunicationHeader>
             <HeaderSubject
                 isLoading={isLoading}
@@ -42,8 +41,8 @@ const CommunicationHeader: FC<CommunicationHeaderProps> = ({
                 onTeamTalkToggle={onTeamTalkToggle}
             />
         </StyledCommunicationHeader>
-    );
-};
+    </TextStringProviderSSR>
+);
 
 CommunicationHeader.displayName = 'CommunicationHeader';
 

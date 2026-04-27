@@ -3,7 +3,7 @@ import { Member } from '../../CommunicationHeader.types';
 import { StyledHeaderMember } from './HeaderMember.styles';
 import { ContextMenu } from '@chayns-components/core';
 
-const HeaderMember: FC<Member> = ({ name, id, actions }) => {
+const HeaderMember: FC<Omit<Member, 'id'>> = ({ name, actions }) => {
     const handleClick = () => {
         const firstAction = actions[0];
 
