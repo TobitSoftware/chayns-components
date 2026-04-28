@@ -8,3 +8,9 @@ export interface FileInputFileItem {
     url: string;
     name?: string;
 }
+
+export interface UploadedFile {
+    url: string;
+    size?: number;
+    name?: string;
+}

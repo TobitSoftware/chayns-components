@@ -7,7 +7,7 @@ import {
 import FilterButton from './filter-button/FilterButton';
 import { StyledFilterButton } from './FilterButtons.styles';
 import { AllButton } from './all-button/AllButton';
-import { TextstringProvider } from '@chayns-components/textstring';
+import { TextStringProviderSSR } from '@chayns/textstrings';
 
 export type FilterButtonsProps = {
     /**
@@ -95,17 +95,16 @@ const FilterButtons: FC<FilterButtonsProps> = ({
         }
 
         const array: ReactElement[] = [
-            <TextstringProvider libraryName="@chayns-components-core">
-                <AllButton
-                    count={allButtonCount}
-                    isSelected={
-                        selectedIds.includes('all') ||
-                        (Array.isArray(selectedIds) && selectedIds.length === 0)
-                    }
-                    size={size}
-                    onSelect={handleSelect}
-                />
-            </TextstringProvider>,
+            <AllButton
+                count={allButtonCount}
+                isSelected={
+                    selectedIds.includes('all') ||
+                    (Array.isArray(selectedIds) && selectedIds.length === 0)
+                }
+                key="all"
+                size={size}
+                onSelect={handleSelect}
+            />,
         ];
 
         items.forEach(({ icons, text, color, count, id, isDisabled }) => {
@@ -129,7 +128,14 @@ const FilterButtons: FC<FilterButtonsProps> = ({
         return array;
     }, [allCount, handleSelect, items, selectedIds, shouldCalcCountForAll, size]);
 
-    return useMemo(() => <StyledFilterButton>{reactItems}</StyledFilterButton>, [reactItems]);
+    return useMemo(
+        () => (
+            <TextStringProviderSSR libraries="chayns-components-v5-core" id="filter-buttons">
+                <StyledFilterButton>{reactItems}</StyledFilterButton>
+            </TextStringProviderSSR>
+        ),
+        [reactItems],
+    );
 };
 
 FilterButtons.displayName = 'FilterButtons';

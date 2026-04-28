@@ -16,7 +16,7 @@ import { usePersonFinder } from '../../../../PersonFinderProvider';
 import PersonFinderItem from './person-finder-item/PersonFinderItem';
 import { useErrorMessage, useOnlyFriends } from '../../../../../hooks/personFinder';
 import PersonFinderSmallItem from './person-finder-small-item/PersonFinderSmallItem';
-import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
+import { TextStringProviderSSR, Translation } from '@chayns/textstrings';
 import textStrings from '../../../../../constants/textStrings';
 
 export type PersonFinderGroupProps = {
@@ -75,53 +75,55 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
         event.stopPropagation();
     };
 
-    const ts = textStrings.components.personFinder.wrapper.body.group;
+    const ts = textStrings.personFinderGroup;
 
     return (
-        <StyledPersonFinderGroup onClick={handlePreventDefault}>
-            {shouldShowGroupName && (
-                <StyledPersonFinderGroupName className="person-finder-group-name">
-                    {groupName}
-                </StyledPersonFinderGroupName>
-            )}
-            {entries.length > 0 && (
-                <List>
-                    {entries.map((entry) =>
-                        typeof entry.id === 'number' ? (
-                            <PersonFinderSmallItem
-                                key={`person-finder-entry--${entry.id}`}
-                                entry={entry}
-                                onAdd={onAdd}
-                                onRemove={onRemove}
-                            />
-                        ) : (
-                            <PersonFinderItem
-                                key={`person-finder-entry--${entry.id}`}
-                                entry={entry}
-                                onAdd={onAdd}
-                                onRemove={onRemove}
-                            />
-                        ),
-                    )}
-                </List>
-            )}
-            {waitCursor}
-            {errorMessage}
-            {shouldShowLoadMoreButton && (
-                <StyledPersonFinderGroupButtonWrapper key={`more-button-wrapper--${filterKey}`}>
-                    <Button
-                        key={`more-button--${filterKey}`}
-                        shouldShowWaitCursor={loadingState === LoadingState.Pending}
-                        onClick={handleLoadMore}
-                    >
-                        <TextstringProvider libraryName="@chayns-components-person-finder">
-                            <Textstring textstring={ttsToITextString(ts.loadMore)} />{' '}
-                            {getGroupName(filterKey)}
-                        </TextstringProvider>
-                    </Button>
-                </StyledPersonFinderGroupButtonWrapper>
-            )}
-        </StyledPersonFinderGroup>
+        <TextStringProviderSSR
+            libraries="chayns-components-v5-person-finder"
+            id="person-finder-group"
+        >
+            <StyledPersonFinderGroup onClick={handlePreventDefault}>
+                {shouldShowGroupName && (
+                    <StyledPersonFinderGroupName className="person-finder-group-name">
+                        {groupName}
+                    </StyledPersonFinderGroupName>
+                )}
+                {entries.length > 0 && (
+                    <List>
+                        {entries.map((entry) =>
+                            typeof entry.id === 'number' ? (
+                                <PersonFinderSmallItem
+                                    key={`person-finder-entry--${entry.id}`}
+                                    entry={entry}
+                                    onAdd={onAdd}
+                                    onRemove={onRemove}
+                                />
+                            ) : (
+                                <PersonFinderItem
+                                    key={`person-finder-entry--${entry.id}`}
+                                    entry={entry}
+                                    onAdd={onAdd}
+                                    onRemove={onRemove}
+                                />
+                            ),
+                        )}
+                    </List>
+                )}
+                {waitCursor}
+                {errorMessage}
+                {shouldShowLoadMoreButton && (
+                    <StyledPersonFinderGroupButtonWrapper key={`more-button-wrapper--${filterKey}`}>
+                        <Button
+                            key={`more-button--${filterKey}`}
+                            shouldShowWaitCursor={loadingState === LoadingState.Pending}
+                            onClick={handleLoadMore}
+                        >
+                            <Translation textString={ts.loadMore} /> {getGroupName(filterKey)}
+                        </Button>
+                    </StyledPersonFinderGroupButtonWrapper>
+                )}
+            </StyledPersonFinderGroup>
+        </TextStringProviderSSR>
     );
 };
 

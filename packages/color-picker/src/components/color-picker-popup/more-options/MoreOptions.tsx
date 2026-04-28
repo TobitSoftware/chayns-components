@@ -9,7 +9,7 @@ import {
     StyledMoreOptionsInput,
     StyledMoreOptionsInputWrapper,
 } from './MoreOptions.styles';
-import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
+import { getFixedT } from '@chayns/textstrings';
 import textStrings from '../../../constants/textStrings';
 
 const MoreOptions = () => {
@@ -75,11 +75,7 @@ const MoreOptions = () => {
         }
     }, [selectedColor]);
 
-    const title = useTextstringValue({
-        textstring: ttsToITextString(
-            textStrings.components.colorPickerPopup.moreOptions.accordionTitle,
-        ),
-    });
+    const title = getFixedT(textStrings.colorPickerPopup.moreOptions.accordionTitle);
 
     return (
         <StyledMoreOptions>

@@ -21,7 +21,7 @@ import {
 import ComboBox from '../../combobox/ComboBox';
 import Checkbox from '../../checkbox/Checkbox';
 import { IComboBoxItem } from '../../combobox/ComboBox.types';
-import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
+import { TextStringProviderSSR, Translation } from '@chayns/textstrings';
 import textStrings from '../../../constants/textStrings';
 
 export type FilterContentProps = {
@@ -46,7 +46,7 @@ const FilterContent: FC<FilterContentProps> = ({
 
     const [sortTextWidth, setSortTextWidth] = useState(0);
 
-    const ts = textStrings.components.filter.filterContent;
+    const ts = textStrings.filter.filterContent;
 
     const handleSelectSortItem = useCallback(
         (item: IComboBoxItem | undefined) => {
@@ -77,15 +77,13 @@ const FilterContent: FC<FilterContentProps> = ({
 
     return useMemo(
         () => (
-            <TextstringProvider libraryName="@chayns-components-core">
+            <TextStringProviderSSR libraries="chayns-components-v5-core" id="filter-content">
                 <StyledFilterContent>
                     {searchConfig && (
                         <Input
                             ref={searchRef}
                             onChange={(ev) => searchConfig.onSearchChange(ev.target.value)}
-                            placeholder={
-                                <Textstring textstring={ttsToITextString(ts.input.placeholder)} />
-                            }
+                            placeholder={<Translation textString={ts.inputPlaceholder} />}
                             value={searchConfig.searchValue}
                             shouldShowClearIcon={searchConfig.searchValue.length > 0}
                             leftElement={<Icon icons={['fa fa-search']} />}
@@ -96,7 +94,7 @@ const FilterContent: FC<FilterContentProps> = ({
                     {sortConfig && (
                         <StyledFilterSort>
                             <StyledFilterSortText ref={sortTextRef}>
-                                <Textstring textstring={ttsToITextString(ts.sort)} />
+                                <Translation textString={ts.sort} />
                             </StyledFilterSortText>
                             <StyledFilterComboboxWrapper $textWidth={sortTextWidth}>
                                 <ComboBox
@@ -134,7 +132,7 @@ const FilterContent: FC<FilterContentProps> = ({
                         <Checkbox {...checkboxConfig} />
                     )}
                 </StyledFilterContent>
-            </TextstringProvider>
+            </TextStringProviderSSR>
         ),
         [
             checkboxConfig,
@@ -144,7 +142,7 @@ const FilterContent: FC<FilterContentProps> = ({
             searchConfig,
             sortConfig,
             sortTextWidth,
-            ts.input.placeholder,
+            ts.inputPlaceholder,
             ts.sort,
         ],
     );

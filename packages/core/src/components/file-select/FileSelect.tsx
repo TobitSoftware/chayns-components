@@ -1,7 +1,9 @@
 import { createDialog, DialogType } from 'chayns-api';
 import React, { DragEvent, FC, useCallback, useMemo } from 'react';
-import type { ImageDialogResult } from '../../types/fileInput';
-import { isValidFileType } from '../../utils/file';
+import { useTranslation } from '@chayns/textstrings';
+import textStrings from '../../constants/textStrings';
+import type { ImageDialogResult, UploadedFile } from '../../types/fileInput';
+import { isValidFileType } from '../../utils/fileType';
 import { selectFiles } from '../../utils/fileDialog';
 import Icon from '../icon/Icon';
 import {
@@ -10,6 +12,8 @@ import {
     StyledFileSelectText,
     StyledFileSelectWrapper,
 } from './FileSelect.styles';
+
+export type { UploadedFile } from '../../types/fileInput';
 
 enum DialogView {
     PIXABAY = 'pixabay',
@@ -21,12 +25,6 @@ type DialogInput = {
     initialView: DialogView;
     imageArrayBuffer?: File;
 };
-
-export interface UploadedFile {
-    url: string;
-    size?: number;
-    name?: string;
-}
 
 export type FileSelectProps = {
     /**
@@ -78,10 +76,15 @@ const FileSelect: FC<FileSelectProps> = ({
     isDisabled,
     maxFileSizeInMB,
     onAdd,
-    fileSelectionPlaceholder = 'Dateien hochladen',
+    fileSelectionPlaceholder,
     imageSelectPlaceholder,
     shouldPreventImageUpload = false,
 }) => {
+    const { t } = useTranslation();
+
+    const internalFileSelectionPlaceholder =
+        fileSelectionPlaceholder ?? t(textStrings.file.fileSelect.fileSelectionPlaceholder);
+
     const handleAddImages = useCallback(
         (images: UploadedFile[]) => {
             if (typeof onAdd === 'function') {
@@ -210,7 +213,9 @@ const FileSelect: FC<FileSelectProps> = ({
                         onDrop={handleDrop}
                     >
                         <Icon icons={fileSelectionIcons} />
-                        <StyledFileSelectText>{fileSelectionPlaceholder}</StyledFileSelectText>
+                        <StyledFileSelectText>
+                            {internalFileSelectionPlaceholder}
+                        </StyledFileSelectText>
                     </StyledFileSelectContainer>
                     {imageSelectPlaceholder && (
                         <StyledFileSelectContainer
@@ -227,7 +232,7 @@ const FileSelect: FC<FileSelectProps> = ({
         [
             isDisabled,
             fileSelectionIcons,
-            fileSelectionPlaceholder,
+            internalFileSelectionPlaceholder,
             imageSelectPlaceholder,
             imageSelectIcons,
             handleFileSelectionClick,

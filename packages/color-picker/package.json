@@ -71,7 +71,7 @@
     },
     "dependencies": {
         "@chayns-components/core": "^5.2.0",
-        "@chayns-components/textstring": "^5.0.61",
+        "@chayns/textstrings": "^1.0.0-rc.0",
         "@chayns/colors": "^2.0.2",
         "react-compiler-runtime": "^1.0.0"
     },

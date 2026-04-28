@@ -20,7 +20,7 @@ import {
     StyledTruncationClampWrapper,
     StyledTruncationPseudoContent,
 } from './Truncation.styles';
-import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
+import { TextStringProviderSSR, Translation } from '@chayns/textstrings';
 import textStrings from '../../constants/textStrings';
 
 export type TruncationProps = {
@@ -266,13 +266,12 @@ const Truncation: FC<TruncationProps> = ({
         return () => {};
     }, [originalSmallHeight, children]);
 
-    const ts = textStrings.components.truncation;
+    const ts = textStrings.truncation;
+    const internalMoreLabel = moreLabel ?? <Translation textString={ts.more} />;
+    const internalLessLabel = lessLabel ?? <Translation textString={ts.less} />;
 
-    const internalMoreLabel = moreLabel ?? <Textstring textstring={ttsToITextString(ts.more)} />;
-    const internalLessLabel = lessLabel ?? <Textstring textstring={ttsToITextString(ts.less)} />;
-
-    return useMemo(
-        () => (
+    return (
+        <TextStringProviderSSR libraries="chayns-components-v5-core" id="truncation">
             <StyledTruncation className="beta-chayns-truncation" ref={parentRef}>
                 <StyledTruncationPseudoContent ref={pseudoChildrenRef}>
                     {children}
@@ -292,29 +291,16 @@ const Truncation: FC<TruncationProps> = ({
                 />
                 {showClamp && (
                     <StyledTruncationClampWrapper $position={clampPosition}>
-                        <TextstringProvider libraryName="@chayns-components-core">
-                            <StyledTruncationClamp onClick={handleClampClick}>
-                                {internalIsOpen ? internalLessLabel : internalMoreLabel}
-                            </StyledTruncationClamp>
-                        </TextstringProvider>
+                        <StyledTruncationClamp onClick={handleClampClick}>
+                            {internalIsOpen ? internalLessLabel : internalMoreLabel}
+                        </StyledTruncationClamp>
                     </StyledTruncationClampWrapper>
                 )}
             </StyledTruncation>
-        ),
-        [
-            children,
-            clampPosition,
-            handleAnimationEnd,
-            handleClampClick,
-            hasSizeChanged,
-            internalIsOpen,
-            lessLabel,
-            moreLabel,
-            newCollapsedHeight,
-            originalHeight,
-            showClamp,
-        ],
+        </TextStringProviderSSR>
     );
 };
+
+Truncation.displayName = 'Truncation';
 
 export default Truncation;

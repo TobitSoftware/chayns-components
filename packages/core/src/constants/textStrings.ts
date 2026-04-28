@@ -1,35 +1,44 @@
 export default {
-    components: {
-        filter: {
-            filterContent: {
-                input: {
-                    placeholder: {
-                        stringName:
-                            'txt_chayns_components_core_components_filter_filterContent_input_placeholder',
-                        fallback: 'Suche',
-                    },
-                },
-                sort: {
-                    stringName: 'txt_chayns_components_core_components_filter_filterContent_sort',
-                    fallback: 'Sortierung',
-                },
+    file: {
+        fileInput: {
+            fileSelectionPlaceholder: {
+                stringName: '',
+                fallback: 'Dateien hochladen',
             },
         },
-        filterButtons: {
-            all: {
-                stringName: 'txt_chayns_components_core_components_filterButtons_all',
+        fileSelect: {
+            fileSelectionPlaceholder: {
+                stringName: '',
+                fallback: 'Dateien hochladen',
+            },
+        },
+    },
+    filter: {
+        allButton: {
+            label: {
+                stringName: '',
                 fallback: 'Alle',
             },
         },
-        truncation: {
-            less: {
-                stringName: 'txt_chayns_components_core_components_truncation_less',
-                fallback: 'Weniger',
+        filterContent: {
+            inputPlaceholder: {
+                stringName: '',
+                fallback: 'Suche',
             },
-            more: {
-                stringName: 'txt_chayns_components_core_components_truncation_more',
-                fallback: 'Mehr',
+            sort: {
+                stringName: '',
+                fallback: 'Sortierung',
             },
+        },
+    },
+    truncation: {
+        less: {
+            stringName: '',
+            fallback: 'Weniger',
+        },
+        more: {
+            stringName: '',
+            fallback: 'Mehr',
         },
     },
 } as const;

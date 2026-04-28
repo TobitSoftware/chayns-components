@@ -4,7 +4,7 @@ import type { Category } from '../../types/category';
 import EmojiPickerCategories from './emoji-picker-categories/EmojiPickerCategories';
 import EmojiPickerEmojis from './emoji-picker-emojis/EmojiPickerEmojis';
 import { StyledEmojiPicker } from './EmojiPicker.styles';
-import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
+import { TextStringProviderSSR, Translation } from '@chayns/textstrings';
 import textStrings from '../../constants/textStrings';
 
 export type EmojiPickerProps = {
@@ -38,29 +38,29 @@ const EmojiPicker: FC<EmojiPickerProps> = ({ accessToken, onSelect, personId }) 
         setSearchString(event.target.value);
     }, []);
 
-    const ts = textStrings.components.emojiPicker.input.placeholder;
+    const ts = textStrings.emojiPicker.placeholder;
     return (
-        <StyledEmojiPicker>
-            <TextstringProvider libraryName="@chayns-component-emoji-input">
+        <TextStringProviderSSR libraries="chayns-components-v5-emoji-input" id="emoji-picker">
+            <StyledEmojiPicker>
                 <Input
                     onChange={handleSearchChange}
-                    placeholder={<Textstring textstring={ttsToITextString(ts)} />}
+                    placeholder={<Translation textString={ts} />}
                     value={searchString}
                 />
-            </TextstringProvider>
-            <EmojiPickerEmojis
-                accessToken={accessToken}
-                onSelect={onSelect}
-                personId={personId}
-                searchString={searchString}
-                selectedCategory={selectedCategory}
-            />
-            <EmojiPickerCategories
-                onSelect={handleCategorySelect}
-                searchString={searchString}
-                selectedCategory={selectedCategory}
-            />
-        </StyledEmojiPicker>
+                <EmojiPickerEmojis
+                    accessToken={accessToken}
+                    onSelect={onSelect}
+                    personId={personId}
+                    searchString={searchString}
+                    selectedCategory={selectedCategory}
+                />
+                <EmojiPickerCategories
+                    onSelect={handleCategorySelect}
+                    searchString={searchString}
+                    selectedCategory={selectedCategory}
+                />
+            </StyledEmojiPicker>
+        </TextStringProviderSSR>
     );
 };
 

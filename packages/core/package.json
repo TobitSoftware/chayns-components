@@ -71,7 +71,7 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@chayns-components/textstring": "^5.0.61",
+        "@chayns/textstrings": "^1.0.0-rc.0",
         "@chayns/colors": "^2.0.2",
         "@chayns/uac-service": "~0.0.62",
         "clsx": "^2.1.1",

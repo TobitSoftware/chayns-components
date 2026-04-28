@@ -32,7 +32,7 @@ import {
     TrackBackground,
     TrackText,
 } from './Slider.styles';
-import { Textstring, ttsToITextString } from '@chayns-components/textstring';
+import { Translation } from '@chayns/textstrings';
 import textStrings from '../../constants/textStrings';
 
 export type SliderProps = {
@@ -273,13 +273,7 @@ const Slider = forwardRef<SliderRef, SliderProps>(
                         $color="white"
                         $baseFontSize={baseFontSize}
                     >
-                        {trackText ?? (
-                            <Textstring
-                                textstring={ttsToITextString(
-                                    textStrings.components.slider.tracktext,
-                                )}
-                            />
-                        )}
+                        {trackText ?? <Translation textString={textStrings.slider.trackText} />}
                     </TrackText>
                 </Track>
             </Container>

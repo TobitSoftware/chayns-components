@@ -1,4 +1,6 @@
-import { UploadedFile } from '../components/file-select/FileSelect';
+import type { UploadedFile } from '../types/fileInput';
+
+export { isValidFileType } from './fileType';
 
 export const hasDuplicate = <T>(
     items: T[],
@@ -37,24 +39,6 @@ export const getHumanSize = (bytes: number): string => {
     return `${size.toString().replace('.', ',')} ${FILE_SIZE_UNITS[unitIndex] ?? ''}`;
 };
 
-interface IsValidFileTypeOptions {
-    file: File;
-    types: string;
-}
-
-export const isValidFileType = ({ types, file }: IsValidFileTypeOptions) => {
-    const allowedTypesArray = types.split(',').map((type) => type.trim());
-    const fileType = file.type;
-
-    return allowedTypesArray.some((type) => {
-        if (type.endsWith('/*')) {
-            const baseType = type.slice(0, -2); // remove '/*'
-            return fileType.startsWith(baseType);
-        }
-        return fileType === type;
-    });
-};
-
 export const MIME_TYPE_MAPPING: Record<string, string> = {
     // Haupttypen
     'application/pdf': 'fa fa-file-pdf',
@@ -70,5 +54,10 @@ export const MIME_TYPE_MAPPING: Record<string, string> = {
 
 export const getIconByMimeType = (mimeType?: string): string => {
     const matchedType = Object.keys(MIME_TYPE_MAPPING).find((type) => mimeType?.startsWith(type));
-    return MIME_TYPE_MAPPING[matchedType!] || 'fa fa-file';
+
+    if (!matchedType) {
+        return 'fa fa-file';
+    }
+
+    return MIME_TYPE_MAPPING[matchedType] ?? 'fa fa-file';
 };

@@ -10,7 +10,7 @@ import {
     intervalToDuration,
 } from '../../utils/date';
 import textStrings from '../../constants/textStrings';
-import { Textstring, ttsToITextString } from '@chayns-components/textstring';
+import { Translation } from '@chayns/textstrings';
 
 export type TimerProps = {
     color: string;
@@ -56,11 +56,11 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
     }, []);
 
     const label = useMemo(() => {
-        let text: { stringName: string; fallback: string } = textStrings.components.timer.devalued;
+        let text = textStrings.timer.devalued;
         if (differenceInHours(refDate.current, devalueTime) > 0) {
-            text = textStrings.components.timer.future;
+            text = textStrings.timer.future;
         } else if (differenceInMinutes(refDate.current, devalueTime) > 0) {
-            text = textStrings.components.timer.devaluedWithMinutes;
+            text = textStrings.timer.devaluedWithMinutes;
         }
 
         const formatTime = (date: Date, formatString: string): string => {
@@ -80,8 +80,8 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
         });
 
         return (
-            <Textstring
-                textstring={ttsToITextString(text)}
+            <Translation
+                textString={text}
                 replacements={{
                     '##MINUTES##': minutesShowValue,
                     '##SECONDS##': secondsShowValue,

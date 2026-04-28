@@ -1,8 +1,12 @@
 import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useState } from 'react';
-import { filterDuplicateFile, filterDuplicateFileUrls, isValidFileType } from '../../utils/file';
+import { useTranslation } from '@chayns/textstrings';
+import { filterDuplicateFile, filterDuplicateFileUrls } from '../../utils/file';
+import { isValidFileType } from '../../utils/fileType';
+import textStrings from '../../constants/textStrings';
+import type { UploadedFile } from '../../types/fileInput';
 import { StyledFileInput } from './FileInput.styles';
 import FileList, { IFileItem } from '../file-list/FileList';
-import FileSelect, { UploadedFile } from '../file-select/FileSelect';
+import FileSelect from '../file-select/FileSelect';
 
 export const TSIMG_FILE_TYPES =
     'image/png, image/jpg, image/jpeg, image/gif, image/webp, image/svg+xml, image/avif';
@@ -82,14 +86,18 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             isDisabled,
             maxFileSizeInMB,
             onAdd,
-            fileSelectionPlaceholder = 'Dateien hochladen',
+            fileSelectionPlaceholder,
             imageSelectPlaceholder,
             shouldPreventImageUpload = false,
         },
         ref,
     ) => {
+        const { t } = useTranslation();
         const [internalFiles, setInternalFiles] = useState<File[]>([]);
         const [internalImages, setInternalImages] = useState<UploadedFile[]>([]);
+
+        const internalFileSelectionPlaceholder =
+            fileSelectionPlaceholder ?? t(textStrings.file.fileInput.fileSelectionPlaceholder);
 
         const handleInputClear = () => {
             setInternalFiles([]);
@@ -273,7 +281,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
                         maxFiles={maxFiles}
                         fileTypes={fileTypes}
                         fileSelectionIcons={fileSelectionIcons}
-                        fileSelectionPlaceholder={fileSelectionPlaceholder}
+                        fileSelectionPlaceholder={internalFileSelectionPlaceholder}
                         imageSelectIcons={imageSelectIcons}
                         imageSelectPlaceholder={imageSelectPlaceholder}
                         maxFileSizeInMB={maxFileSizeInMB}
@@ -288,7 +296,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
                 maxFiles,
                 fileTypes,
                 fileSelectionIcons,
-                fileSelectionPlaceholder,
+                internalFileSelectionPlaceholder,
                 imageSelectIcons,
                 imageSelectPlaceholder,
                 maxFileSizeInMB,
