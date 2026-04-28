@@ -3,13 +3,14 @@ import { CommunicationContentProps } from './CommunicationContent.types';
 import { StyledCommunicationContent } from './CommunicationContent.styles';
 import { useElementSize } from './CommunicationContent.hooks';
 import SideContent from './side-content/SideContent';
+import OverlayContent from './overlay-content/OverlayContent';
 
 const CommunicationContent: FC<CommunicationContentProps> = ({
     content,
     shouldShowContent = false,
     breakPoint = 700,
     children,
-    onChange,
+    onDragEnd,
     sideContentConfig,
     overlayContentConfig,
 }) => {
@@ -21,9 +22,17 @@ const CommunicationContent: FC<CommunicationContentProps> = ({
 
     return (
         <StyledCommunicationContent ref={ref}>
-            <SideContent onChange={onChange} config={sideContentConfig}>
-                {content}
-            </SideContent>
+            {!isOverlayMode && shouldShowContent && (
+                <SideContent onDragEnd={onDragEnd} config={sideContentConfig}>
+                    {content}
+                </SideContent>
+            )}
+
+            {isOverlayMode && shouldShowContent && (
+                <OverlayContent config={overlayContentConfig} height={height}>
+                    {content}
+                </OverlayContent>
+            )}
 
             {children}
         </StyledCommunicationContent>

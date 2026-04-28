@@ -9,7 +9,7 @@ export const StyledMotionSideContent = styled(motion.div)<WithTheme<unknown>>`
     border-right: ${({ theme }) => `1px solid rgba(${theme['text-rgb'] ?? ''}, 0.1)`};
 `;
 
-export const StyledSideContentHandle = styled.div`
+export const StyledMotionSideContentHandle = styled.div`
     height: 100%;
     position: absolute;
     top: 0;
@@ -17,4 +17,9 @@ export const StyledSideContentHandle = styled.div`
     width: 20px;
     transform: translateX(50%);
     cursor: col-resize;
+`;
+
+export const StyledMotionDrag = styled(motion.div)`
+    height: 100%;
+    width: 100%;
 `;

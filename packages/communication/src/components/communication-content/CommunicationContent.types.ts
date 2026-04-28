@@ -7,7 +7,7 @@ export interface CommunicationContentProps {
     breakPoint?: number;
     sideContentConfig?: SideContentConfig;
     overlayContentConfig?: OverlayContentConfig;
-    onChange?: (width: number) => void;
+    onDragEnd?: (width: number) => void;
 }
 
 export interface SideContentConfig {

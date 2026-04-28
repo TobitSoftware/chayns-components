@@ -1,55 +1,61 @@
-import React, { FC, ReactNode, useCallback, useState } from 'react';
-import { StyledMotionSideContent, StyledSideContentHandle } from './SideContent.styles';
+import React, { FC, ReactNode, useCallback, useRef, useState } from 'react';
+import {
+    StyledMotionDrag,
+    StyledMotionSideContent,
+    StyledMotionSideContentHandle,
+} from './SideContent.styles';
 import { CommunicationContentProps } from '../CommunicationContent.types';
-import { clamp, useDragHandle } from './SideContent.hooks';
+import { PanInfo } from 'motion/react';
 
 interface SideContentProps {
     children: ReactNode;
     config?: CommunicationContentProps['sideContentConfig'];
-    onChange?: CommunicationContentProps['onChange'];
+    onDragEnd?: CommunicationContentProps['onDragEnd'];
 }
 
-const DEFAULT_INITIAL_WIDTH = 360;
-const DEFAULT_MIN_WIDTH = 280;
-const DEFAULT_MAX_WIDTH = 520;
-
-const SideContent: FC<SideContentProps> = ({ children, config, onChange }) => {
-    const {
-        initialWidth = DEFAULT_INITIAL_WIDTH,
-        minWidth = DEFAULT_MIN_WIDTH,
-        maxWidth = DEFAULT_MAX_WIDTH,
-    } = config ?? {};
+const SideContent: FC<SideContentProps> = ({ children, config, onDragEnd }) => {
+    const { initialWidth = 360, minWidth = 280, maxWidth = 520 } = config ?? {};
 
     const [width, setWidth] = useState(initialWidth);
 
-    const handleChange = useCallback(
-        (deltaX: number) => {
-            setWidth((prev) => {
-                const newWidth = clamp(prev + deltaX, minWidth, maxWidth);
+    const dragStartWidthRef = useRef(minWidth);
 
-                if (typeof onChange === 'function') {
-                    // onChange(newWidth);
-                }
+    const handleDragStart = useCallback(() => {
+        dragStartWidthRef.current = width;
+    }, [width]);
 
-                return newWidth;
-            });
+    const handleDrag = useCallback(
+        (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+            const nextWidth = dragStartWidthRef.current + info.offset.x * 2;
+
+            const newWidth = Math.min(Math.max(nextWidth, minWidth), maxWidth);
+
+            setWidth(newWidth);
         },
-        [maxWidth, minWidth, onChange],
+        [maxWidth, minWidth],
     );
 
-    const handleMouseDown = useDragHandle(handleChange);
+    const handleDragEnd = useCallback(() => {
+        if (typeof onDragEnd === 'function') {
+            onDragEnd(width);
+        }
+    }, [onDragEnd, width]);
 
     return (
-        <StyledMotionSideContent
-            animate={{ width }}
-            initial={false}
-            transition={{
-                type: 'tween',
-                duration: 0,
-            }}
-        >
+        <StyledMotionSideContent animate={{ width }} transition={{ type: 'tween', duration: 0 }}>
             {children}
-            <StyledSideContentHandle onMouseDown={handleMouseDown} />
+            <StyledMotionSideContentHandle>
+                <StyledMotionDrag
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    style={{ x: '50%' }}
+                    dragElastic={0}
+                    dragMomentum={false}
+                    onDragStart={handleDragStart}
+                    onDrag={handleDrag}
+                    onDragEnd={handleDragEnd}
+                />
+            </StyledMotionSideContentHandle>
         </StyledMotionSideContent>
     );
 };
