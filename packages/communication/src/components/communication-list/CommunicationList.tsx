@@ -13,6 +13,7 @@ import { Skeleton } from '@chayns-components/core';
 import ListHeading from './list-heading/ListHeading';
 import { useDisplayedItems } from './CommunicationList.hooks';
 import { Virtuoso } from 'react-virtuoso';
+import { TextStringProviderSSR } from '@chayns/textstrings';
 
 const CommunicationList: FC<CommunicationListProps> = ({
     items,
@@ -61,18 +62,23 @@ const CommunicationList: FC<CommunicationListProps> = ({
     }
 
     return (
-        <StyledCommunicationList>
-            <Virtuoso
-                style={{ width: '100%', overflowX: 'hidden' }}
-                className="chayns-scrollbar"
-                totalCount={displayedItems.length}
-                endReached={onLoadMore}
-                increaseViewportBy={20}
-                defaultItemHeight={64}
-                data={displayedItems}
-                itemContent={internalItemRenderer}
-            />
-        </StyledCommunicationList>
+        <TextStringProviderSSR
+            libraries="chayns-components-v5-communication"
+            id="communication-list"
+        >
+            <StyledCommunicationList>
+                <Virtuoso
+                    style={{ width: '100%', overflowX: 'hidden' }}
+                    className="chayns-scrollbar"
+                    totalCount={displayedItems.length}
+                    endReached={onLoadMore}
+                    increaseViewportBy={20}
+                    defaultItemHeight={64}
+                    data={displayedItems}
+                    itemContent={internalItemRenderer}
+                />
+            </StyledCommunicationList>
+        </TextStringProviderSSR>
     );
 };
 
