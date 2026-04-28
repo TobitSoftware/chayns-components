@@ -2,7 +2,7 @@ import { Icon, Popup } from '@chayns-components/core';
 import React, { FC } from 'react';
 import { CodeHighlighterTheme } from '../../../types/codeHighlighter';
 import { StyledCopyToClipboard, StyledCopyToClipboardText } from './CopyToClipboard.styles';
-import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
+import { TextStringProviderSSR, Translation } from '@chayns/textstrings';
 import textStrings from '../../../constants/textStrings';
 
 export type CopyToClipboardProps = {
@@ -17,16 +17,14 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, text, theme
     };
 
     const popupContent = (
-        <TextstringProvider libraryName="@chayns-components-code-highlighter">
+        <TextStringProviderSSR
+            libraries="chayns-components-v5-code-highlighter"
+            id="code-highlighter"
+        >
             <span style={{ display: 'block', padding: '5px' }}>
-                <Textstring
-                    textstring={ttsToITextString(
-                        textStrings.components.codeHighlighter.copyToClipboard.copied,
-                    )}
-                    childrenTagName="p"
-                />
+                <Translation textString={textStrings.codeHighlighter.copied} tagName="p" />
             </span>
-        </TextstringProvider>
+        </TextStringProviderSSR>
     );
 
     return (
