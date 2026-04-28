@@ -16,7 +16,7 @@ const HeaderMember: FC<Omit<Member, 'id'>> = ({ name, actions }) => {
 
     if (actions.length > 1) {
         return (
-            <StyledHeaderMember>
+            <StyledHeaderMember $isContextMenu>
                 <ContextMenu
                     items={actions.map(({ onClick, label, icons }) => ({
                         onClick,
@@ -31,7 +31,11 @@ const HeaderMember: FC<Omit<Member, 'id'>> = ({ name, actions }) => {
         );
     }
 
-    return <StyledHeaderMember onClick={handleClick}>{name}</StyledHeaderMember>;
+    return (
+        <StyledHeaderMember onClick={handleClick}>
+            <span>{name}</span>
+        </StyledHeaderMember>
+    );
 };
 
 HeaderMember.displayName = 'HeaderMember';
