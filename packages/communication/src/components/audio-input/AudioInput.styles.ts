@@ -1,8 +1,12 @@
 import styled from 'styled-components';
 import { WithTheme } from '@chayns-components/core';
 import { motion } from 'motion/react';
+import { AudioInputPosition } from './AudioInput.types';
 
-type StyledMotionAudioInputProps = WithTheme<{ $backgroundColor: string }>;
+type StyledMotionAudioInputProps = WithTheme<{
+    $backgroundColor: string;
+    $position: AudioInputPosition;
+}>;
 
 export const StyledMotionAudioInput = styled(motion.div)<StyledMotionAudioInputProps>`
     height: 52px;
@@ -15,7 +19,7 @@ export const StyledMotionAudioInput = styled(motion.div)<StyledMotionAudioInputP
     display: flex;
     align-items: center;
     justify-content: space-between;
-    justify-self: end;
+    justify-self: ${({ $position }) => $position};
 
     background-color: ${({ $backgroundColor }) => $backgroundColor};
 `;

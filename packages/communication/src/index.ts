@@ -18,3 +18,4 @@ export type {
 
 // Enums
 export { SortType } from './components/communication-list/CommunicationList.types';
+export { AudioInputPosition } from './components/audio-input/AudioInput.types';

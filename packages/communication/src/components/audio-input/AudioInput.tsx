@@ -1,14 +1,25 @@
 import React, { FC, forwardRef, useCallback, useImperativeHandle } from 'react';
 import { Icon } from '@chayns-components/core';
 import { AnimatePresence } from 'motion/react';
-import { AudioInputProps, AudioInputRef } from './AudioInput.types';
+import { AudioInputPosition, AudioInputProps, AudioInputRef } from './AudioInput.types';
 import { StyledMotionAudioInput, StyledMotionAudioInputIconWrapper } from './AudioInput.styles';
 import { useAudioInput } from './AudioInput.hooks';
 import WaveForm from './wave-form/WaveForm';
 import { AUDIO_INPUT_ANIMATION } from './AudioInput.constants';
 
 const AudioInput: FC<AudioInputProps> = forwardRef<AudioInputRef, AudioInputProps>(
-    ({ onError, isMuted = false, onMuteChange, onStop, onStart, styleConfig }, ref) => {
+    (
+        {
+            onError,
+            isMuted = false,
+            onMuteChange,
+            onStop,
+            onStart,
+            styleConfig,
+            position = AudioInputPosition.RIGHT,
+        },
+        ref,
+    ) => {
         const { backgroundColor = 'var(--chayns-color--primary)', color = 'white' } =
             styleConfig ?? {};
 
@@ -46,6 +57,7 @@ const AudioInput: FC<AudioInputProps> = forwardRef<AudioInputRef, AudioInputProp
         return (
             <StyledMotionAudioInput
                 $backgroundColor={backgroundColor}
+                $position={position}
                 animate={{
                     width: isExpanded ? '100%' : '52px',
                 }}

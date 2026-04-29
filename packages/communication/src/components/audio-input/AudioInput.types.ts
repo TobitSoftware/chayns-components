@@ -7,6 +7,7 @@ export interface AudioInputProps {
     onError?: (error: unknown) => void;
 
     styleConfig?: AudioInputStyleConfig;
+    position?: AudioInputPosition;
 }
 
 export interface AudioInputRef {
@@ -18,4 +19,10 @@ export interface AudioInputRef {
 export interface AudioInputStyleConfig {
     backgroundColor?: string;
     color?: string;
+}
+
+export enum AudioInputPosition {
+    LEFT = 'left',
+    CENTER = 'center',
+    RIGHT = 'right',
 }
