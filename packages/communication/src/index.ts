@@ -11,7 +11,10 @@ export type {
     Member,
 } from './components/communication-header/CommunicationHeader.types';
 export type { CommunicationListItem } from './components/communication-list/CommunicationList.types';
-export type { AudioInputRef } from './components/audio-input/AudioInput.types';
+export type {
+    AudioInputRef,
+    AudioInputStyleConfig,
+} from './components/audio-input/AudioInput.types';
 
 // Enums
 export { SortType } from './components/communication-list/CommunicationList.types';
