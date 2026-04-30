@@ -72,7 +72,7 @@
     "dependencies": {
         "@chayns-components/core": "^5.2.0",
         "@chayns-components/emoji-input": "^5.2.0",
-        "@chayns/textstrings": "^1.0.0-rc.0",
+        "@chayns/textstrings": "^1.0.0-rc.1",
         "react-compiler-runtime": "^1.0.0",
         "react-virtuoso": "^4.18.6"
     },
