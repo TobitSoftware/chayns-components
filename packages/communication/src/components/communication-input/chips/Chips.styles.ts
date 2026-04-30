@@ -5,6 +5,8 @@ export const StyledChips = styled.div`
     position: relative;
     width: 100%;
     min-width: 0;
+
+    margin: 0 4px;
 `;
 
 export const StyledChipsScroll = styled.div`

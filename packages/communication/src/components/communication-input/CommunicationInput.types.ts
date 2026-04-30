@@ -1,34 +1,11 @@
-import { ChangeEventHandler, FocusEventHandler, ReactNode } from 'react';
 import { ContextMenuItem } from '@chayns-components/core';
+import { EmojiInputProps } from '@chayns-components/emoji-input';
+import { ReactNode } from 'react';
 
-export interface CommunicationInputProps {
-    value: string;
-    onChange: ChangeEventHandler<HTMLTextAreaElement>;
-    onBlur?: FocusEventHandler<HTMLDivElement | HTMLTextAreaElement>;
-    onFocus?: FocusEventHandler<HTMLDivElement | HTMLTextAreaElement>;
-
-    textType?: CommunicationInputTextType;
-
-    isDisabled?: boolean;
-
+export interface CommunicationInputProps extends EmojiInputProps {
     contextMenuItems?: ContextMenuItem[];
-
-    rightElement?: ReactNode;
-    isMultiLine?: boolean;
-
+    content?: ReactNode;
     chips?: Chip[];
-}
-
-export enum CommunicationInputTextType {
-    PLAIN = 'PLAIN',
-    MARKDOWN = 'MARKDOWN',
-}
-
-export interface CommunicationInputRef {
-    insertText: (text: string) => void;
-    setCursorPosition: (position?: number) => void;
-    focus: () => void;
-    blur: () => void;
 }
 
 export interface Chip {

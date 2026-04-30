@@ -8,7 +8,6 @@ export const StyledDynamicLayout = styled.div<StyledDynamicLayoutProps>`
 
     display: grid;
     align-items: center;
-    column-gap: 6px;
 
     grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas: ${({ $inputInBottomRow }) =>
