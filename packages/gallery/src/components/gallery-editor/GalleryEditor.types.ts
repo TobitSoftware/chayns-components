@@ -35,6 +35,16 @@ export interface GalleryEditorProps {
      */
     fileMinWidth?: number;
     /**
+     * Defines the icon that is shown in the add-file tile.
+     * @description
+     * The editor renders this icon inside the tile that opens the file picker for adding more items.
+     * @default 'fa fa-plus'
+     * @example
+     * <GalleryEditor addFileIcon="fa fa-image-circle-plus" files={files} />
+     * @optional
+     */
+    addFileIcon?: string;
+    /**
      * Provides already uploaded media items that should be merged into the editor state.
      * @description
      * These files represent the externally known uploaded baseline. The editor may additionally hold local pending uploads.

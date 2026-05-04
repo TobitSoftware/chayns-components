@@ -36,6 +36,16 @@ export interface GalleryProps {
      */
     fileMinWidth?: number;
     /**
+     * Defines the icon that is shown in the add-file tile in edit mode.
+     * @description
+     * The icon is forwarded to the editor and replaces the default plus icon on the add-tile.
+     * @default 'fa fa-plus'
+     * @example
+     * <Gallery addFileIcon="fa fa-image-circle-plus" isEditMode files={files} />
+     * @optional
+     */
+    addFileIcon?: string;
+    /**
      * Provides already known media items that should be rendered by the gallery.
      * @description
      * In read-only mode, these files are rendered directly from props. In edit mode, they are used as the external baseline

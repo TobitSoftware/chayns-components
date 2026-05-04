@@ -17,6 +17,7 @@ import type { GalleryEditorProps } from './GalleryEditor.types';
 
 const GalleryEditor: FC<GalleryEditorProps> = ({
     allowDragAndDrop = false,
+    addFileIcon = 'fa fa-plus',
     doubleFileDialogMessage = 'Diese Datei ist bereits vorhanden',
     fileMinWidth = 100,
     files,
@@ -251,8 +252,11 @@ const GalleryEditor: FC<GalleryEditorProps> = ({
             return items;
         }
 
-        return [...items, <AddFile key="add_file" onAdd={handleAddFiles} />];
-    }, [fileItems, handleAddFiles, handleDeleteFile, handleOpenFiles, maxFiles]);
+        return [
+            ...items,
+            <AddFile key="add_file" addFileIcon={addFileIcon} onAdd={handleAddFiles} />,
+        ];
+    }, [addFileIcon, fileItems, handleAddFiles, handleDeleteFile, handleOpenFiles, maxFiles]);
 
     return (
         <StyledGalleryEditor>

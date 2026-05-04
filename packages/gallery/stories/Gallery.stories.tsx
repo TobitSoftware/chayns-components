@@ -33,6 +33,8 @@ export const EditMode = Template.bind({});
 
 export const WrapperReadOnlySquare = Template.bind({});
 
+export const EditModeCustomAddIcon = Template.bind({});
+
 EditMode.args = {
     files: galleryStoryFiles.slice(0, 3),
     isEditMode: true,
@@ -42,4 +44,11 @@ EditMode.args = {
 WrapperReadOnlySquare.args = {
     files: galleryViewerSquareFiles,
     viewMode: GalleryViewMode.SQUARE,
+};
+
+EditModeCustomAddIcon.args = {
+    files: galleryStoryFiles.slice(0, 3),
+    isEditMode: true,
+    maxFiles: 6,
+    addFileIcon: 'fa fa-image-circle-plus',
 };

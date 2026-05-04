@@ -6,6 +6,7 @@ import { GalleryViewMode } from '../types/gallery';
 
 const Gallery: FC<GalleryProps> = ({
     allowDragAndDrop = false,
+    addFileIcon = 'fa fa-plus',
     doubleFileDialogMessage = 'Diese Datei ist bereits vorhanden',
     isEditMode = false,
     fileMinWidth = 100,
@@ -19,6 +20,7 @@ const Gallery: FC<GalleryProps> = ({
     isEditMode ? (
         <GalleryEditor
             allowDragAndDrop={allowDragAndDrop}
+            addFileIcon={addFileIcon}
             doubleFileDialogMessage={doubleFileDialogMessage}
             fileMinWidth={fileMinWidth}
             files={files}
