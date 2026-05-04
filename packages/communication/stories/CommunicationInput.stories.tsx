@@ -108,6 +108,11 @@ WithChips.args = {
     ),
 };
 
+WithAnimation.args = {
+    shouldUseInitialAnimation: true,
+    rightElement: <CommunicationButton icons={['fa ts-sidekick']} iconColor="white" />,
+};
+
 WithContent.args = {
     chips: [
         {

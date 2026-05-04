@@ -20,7 +20,9 @@ export const StyledMotionCommunicationInputWrapper = styled(
     motion.div,
 )<StyledMotionCommunicationInputWrapperProps>`
     position: absolute;
+    left: 0;
     bottom: 0;
+
     min-height: 48px;
     width: 100%;
 
@@ -84,4 +86,15 @@ export const StyledEmojiInputWrapper = styled.div<StyledEmojiInputWrapperProps>`
 
 export const StyledCommunicationInputRightWrapper = styled.div`
     margin: 2px 2px 2px 0;
+`;
+
+export const StyledInitialRightElementWrapper = styled.div`
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 2px;
 `;

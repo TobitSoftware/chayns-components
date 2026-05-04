@@ -13,6 +13,7 @@ import {
     StyledCommunicationInputRightWrapper,
     StyledCommunicationInputSpacer,
     StyledEmojiInputWrapper,
+    StyledInitialRightElementWrapper,
     StyledMotionCommunicationInputWrapper,
     StyledMotionIconWrapper,
 } from './CommunicationInput.styles';
@@ -57,10 +58,14 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
         const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
         const [isFullHeight, setIsFullHeight] = useState(false);
         const [shouldShowFullHeightToggle, setShouldShowFullHeightToggle] = useState(false);
+        const [hasStartedInitialAnimation, setHasStartedInitialAnimation] =
+            useState(!shouldUseInitialAnimation);
 
         const wrapperRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<ContextMenuRef>(null);
         const emojiInputRef = useRef<EmojiInputRef>(null);
+
+        const shouldShowInitialOnly = shouldUseInitialAnimation && !hasStartedInitialAnimation;
 
         const shouldShowInputInBottomRow = useMemo(() => {
             if (chips) {
@@ -116,14 +121,18 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
         }, []);
 
         useEffect(() => {
+            if (shouldShowInitialOnly) {
+                return;
+            }
+
             requestAnimationFrame(checkMultiLine);
             requestAnimationFrame(checkFullHeightToggle);
-        }, [checkFullHeightToggle, checkMultiLine]);
+        }, [checkFullHeightToggle, checkMultiLine, shouldShowInitialOnly]);
 
         useEffect(() => {
             const element = wrapperRef.current;
 
-            if (!element || isMultiLine) {
+            if (!element || isMultiLine || shouldShowInitialOnly) {
                 return undefined;
             }
 
@@ -137,7 +146,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             return () => {
                 resizeObserver.disconnect();
             };
-        }, [checkFullHeightToggle, checkMultiLine, isMultiLine]);
+        }, [checkFullHeightToggle, checkMultiLine, isMultiLine, shouldShowInitialOnly]);
 
         const leftElement = useMemo(() => {
             if (!contextMenuItems) {
@@ -188,7 +197,9 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             [onBlur],
         );
 
-        const handleStartAnimation = useCallback(() => {}, []);
+        const handleStartAnimation = useCallback(() => {
+            setHasStartedInitialAnimation(true);
+        }, []);
 
         useImperativeHandle(
             ref,
@@ -212,56 +223,81 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             [handleStartAnimation],
         );
 
+        const wrapperAnimation = useMemo(
+            () => ({
+                width: shouldShowInitialOnly ? 52 : '100%',
+                left: shouldShowInitialOnly ? '50%' : 0,
+                x: shouldShowInitialOnly ? '-50%' : 0,
+                borderRadius: shouldShowInitialOnly || !shouldShowRoundedCorners ? 26 : 8,
+            }),
+            [shouldShowInitialOnly, shouldShowRoundedCorners],
+        );
+
         return (
             <StyledCommunicationInput>
                 <StyledCommunicationInputSpacer />
                 <StyledMotionCommunicationInputWrapper
-                    animate={{
-                        borderRadius: shouldShowRoundedCorners ? 8 : 26,
+                    initial={wrapperAnimation}
+                    animate={wrapperAnimation}
+                    transition={{
+                        type: 'tween',
                     }}
                     $isFocused={isFocused}
                 >
-                    {content}
-                    <DynamicLayout
-                        shouldShowFullHeightToggle={shouldShowFullHeightToggle}
-                        shouldShowInputInBottomRow={shouldShowInputInBottomRow}
-                        isFullHeight={isFullHeight}
-                        onFullHeightToggle={(fullHeight) => setIsFullHeight(fullHeight)}
-                        leftElement={leftElement}
-                        rightElement={
-                            rightElement && (
-                                <StyledCommunicationInputRightWrapper>
-                                    {rightElement}
-                                </StyledCommunicationInputRightWrapper>
-                            )
-                        }
-                        chipsElement={<Chips chips={chips} />}
-                    >
-                        <StyledEmojiInputWrapper ref={wrapperRef} $isFullHeight={isFullHeight}>
-                            <EmojiInput
-                                value={value}
-                                onInput={onInput}
-                                inputId={inputId}
-                                ref={emojiInputRef}
-                                onBlur={handleBlur}
-                                height={height}
-                                maxHeight={isFullHeight ? 501 : maxHeight}
-                                isDisabled={isDisabled}
-                                accessToken={accessToken}
-                                onFocus={handleFocus}
-                                onKeyDown={onKeyDown}
-                                onCursorPositionChange={onCursorPositionChange}
-                                onPopupVisibilityChange={onPopupVisibilityChange}
-                                onPrefixElementRemove={onPrefixElementRemove}
-                                prefixElement={prefixElement}
-                                popupAlignment={popupAlignment}
-                                personId={personId}
-                                placeholder={placeholder}
-                                shouldHidePlaceholderOnFocus={shouldHidePlaceholderOnFocus}
-                                shouldPreventEmojiPicker={shouldPreventEmojiPicker}
-                            />
-                        </StyledEmojiInputWrapper>
-                    </DynamicLayout>
+                    {shouldShowInitialOnly ? (
+                        rightElement && (
+                            <StyledInitialRightElementWrapper>
+                                {rightElement}
+                            </StyledInitialRightElementWrapper>
+                        )
+                    ) : (
+                        <>
+                            {content}
+                            <DynamicLayout
+                                shouldShowFullHeightToggle={shouldShowFullHeightToggle}
+                                shouldShowInputInBottomRow={shouldShowInputInBottomRow}
+                                isFullHeight={isFullHeight}
+                                onFullHeightToggle={(fullHeight) => setIsFullHeight(fullHeight)}
+                                leftElement={leftElement}
+                                rightElement={
+                                    rightElement && (
+                                        <StyledCommunicationInputRightWrapper>
+                                            {rightElement}
+                                        </StyledCommunicationInputRightWrapper>
+                                    )
+                                }
+                                chipsElement={<Chips chips={chips} />}
+                            >
+                                <StyledEmojiInputWrapper
+                                    ref={wrapperRef}
+                                    $isFullHeight={isFullHeight}
+                                >
+                                    <EmojiInput
+                                        value={value}
+                                        onInput={onInput}
+                                        inputId={inputId}
+                                        ref={emojiInputRef}
+                                        onBlur={handleBlur}
+                                        height={height}
+                                        maxHeight={isFullHeight ? 501 : maxHeight}
+                                        isDisabled={isDisabled}
+                                        accessToken={accessToken}
+                                        onFocus={handleFocus}
+                                        onKeyDown={onKeyDown}
+                                        onCursorPositionChange={onCursorPositionChange}
+                                        onPopupVisibilityChange={onPopupVisibilityChange}
+                                        onPrefixElementRemove={onPrefixElementRemove}
+                                        prefixElement={prefixElement}
+                                        popupAlignment={popupAlignment}
+                                        personId={personId}
+                                        placeholder={placeholder}
+                                        shouldHidePlaceholderOnFocus={shouldHidePlaceholderOnFocus}
+                                        shouldPreventEmojiPicker={shouldPreventEmojiPicker}
+                                    />
+                                </StyledEmojiInputWrapper>
+                            </DynamicLayout>
+                        </>
+                    )}
                 </StyledMotionCommunicationInputWrapper>
             </StyledCommunicationInput>
         );
