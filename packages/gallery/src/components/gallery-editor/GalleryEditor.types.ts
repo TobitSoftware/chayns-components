@@ -1,4 +1,5 @@
 import type { FileItem } from '@chayns-components/core';
+import type { GalleryRef } from '../Gallery.types';
 
 /**
  * Props for the editable gallery component.
@@ -90,3 +91,5 @@ export interface GalleryEditorProps {
      */
     onRemove?: (file: FileItem) => void;
 }
+
+export type GalleryEditorRef = GalleryRef;

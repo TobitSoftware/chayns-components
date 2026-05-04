@@ -4,6 +4,15 @@ import type { GalleryViewMode } from '../types/gallery';
 /**
  * Props for the public Gallery wrapper component.
  */
+export type GalleryRef = {
+    /**
+     * Clears all locally managed gallery items in edit mode.
+     * @description
+     * When the gallery is rendered in read-only mode, calling this method only emits a console warning.
+     */
+    clear: () => void;
+};
+
 export interface GalleryProps {
     /**
      * Enables drag and drop while the component is used in edit mode.
