@@ -5,7 +5,7 @@ import { Icon } from '@chayns-components/core';
 
 const Chip: FC<IChip> = ({ label, onClick, onRemove, icons }) => (
     <StyledChip>
-        <StyledChipLabel onClick={onClick}>
+        <StyledChipLabel onClick={onClick} $isClickable={typeof onClick === 'function'}>
             {icons && <Icon icons={icons} size={13} />}
             <span>{label}</span>
         </StyledChipLabel>

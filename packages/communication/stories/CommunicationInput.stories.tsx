@@ -67,18 +67,23 @@ WithChips.args = {
     chips: [
         {
             label: 'Details',
+            onClick: () => {},
         },
         {
             label: 'Offene Punkte',
+            onClick: () => {},
         },
         {
             label: 'Statements',
+            onClick: () => {},
         },
         {
             label: 'Stimmungsanalyse',
+            onClick: () => {},
         },
         {
             label: 'Stimme zu!',
+            onClick: () => {},
         },
     ],
 };

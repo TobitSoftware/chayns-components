@@ -18,13 +18,19 @@ export const StyledChip = styled.div<WithTheme<unknown>>`
     padding: 6px;
 `;
 
-export const StyledChipLabel = styled.div`
+type StyledChipLabelProps = WithTheme<{
+    $isClickable: boolean;
+}>;
+
+export const StyledChipLabel = styled.div<StyledChipLabelProps>`
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
 
     white-space: nowrap;
+
+    cursor: ${({ $isClickable }) => ($isClickable ? 'pointer' : 'default')};
 
     .beta-chayns-icon {
         min-height: 0;
