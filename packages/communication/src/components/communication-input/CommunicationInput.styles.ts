@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { motion } from 'motion/react';
 import { WithTheme } from '@chayns-components/core';
+import { Size } from './CommunicationInput.types';
 
 export const StyledCommunicationInput = styled.div`
     width: 100%;
@@ -54,6 +55,7 @@ export const StyledMotionIconWrapper = styled(motion.div)`
 
 type StyledEmojiInputWrapperProps = WithTheme<{
     $isFullHeight: boolean;
+    $size: Size;
 }>;
 
 export const StyledEmojiInputWrapper = styled.div<StyledEmojiInputWrapperProps>`
@@ -61,6 +63,12 @@ export const StyledEmojiInputWrapper = styled.div<StyledEmojiInputWrapperProps>`
     min-height: 48px;
 
     align-content: end;
+
+    ${({ $size }) =>
+        $size === Size.MEDIUM &&
+        css`
+            font-size: 18px;
+        `}
 
     ${({ $isFullHeight }) =>
         $isFullHeight &&
@@ -79,6 +87,10 @@ export const StyledEmojiInputWrapper = styled.div<StyledEmojiInputWrapperProps>`
             > label {
                 left: 8px;
                 top: 14px;
+            }
+
+            div:nth-of-type(2n) {
+                height: ${({ $size }) => ($size === Size.MEDIUM ? 29 : 26)}px;
             }
         }
     }

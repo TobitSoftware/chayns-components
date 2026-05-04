@@ -124,7 +124,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                 return;
             }
 
-            setShouldShowFullHeightToggle(element.clientHeight > 66);
+            setShouldShowFullHeightToggle(element.clientHeight > 75);
         }, []);
 
         useEffect(() => {
@@ -283,6 +283,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                                 <StyledEmojiInputWrapper
                                     ref={wrapperRef}
                                     $isFullHeight={isFullHeight}
+                                    $size={size}
                                 >
                                     <EmojiInput
                                         value={value}
