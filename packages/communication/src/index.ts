@@ -4,6 +4,7 @@ export { default as CommunicationList } from './components/communication-list/Co
 export { default as CommunicationContent } from './components/communication-content/CommunicationContent';
 export { default as CommunicationInput } from './components/communication-input/CommunicationInput';
 export { default as AudioInput } from './components/audio-input/AudioInput';
+export { default as CommunicationButton } from './components/communication-button/CommunicationButton';
 
 // Types
 export type {
@@ -12,10 +13,7 @@ export type {
     Member,
 } from './components/communication-header/CommunicationHeader.types';
 export type { CommunicationListItem } from './components/communication-list/CommunicationList.types';
-export type {
-    CommunicationInputRef,
-    Chip,
-} from './components/communication-input/CommunicationInput.types';
+export type { Chip } from './components/communication-input/CommunicationInput.types';
 export type {
     AudioInputRef,
     AudioInputStyleConfig,
@@ -24,4 +22,3 @@ export type {
 // Enums
 export { SortType } from './components/communication-list/CommunicationList.types';
 export { AudioInputPosition } from './components/audio-input/AudioInput.types';
-export { CommunicationInputTextType } from './components/communication-input/CommunicationInput.types';

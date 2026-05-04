@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { Icon } from '@chayns-components/core';
 import React, { useState } from 'react';
-import { CommunicationInput } from '../src';
+import { CommunicationButton, CommunicationInput } from '../src';
 
 export default {
     title: 'Communication/CommunicationInput',
@@ -61,6 +61,7 @@ const Template: StoryFn<typeof CommunicationInput> = (args) => {
 export const General = Template.bind({});
 export const WithChips = Template.bind({});
 export const WithContent = Template.bind({});
+export const WithRightElement = Template.bind({});
 
 WithChips.args = {
     chips: [
@@ -95,4 +96,8 @@ WithContent.args = {
             Hier wird super Content angezeigt
         </div>
     ),
+};
+
+WithRightElement.args = {
+    rightElement: <CommunicationButton icons={['fa fa-thumbs-up']} personId="TKT-EEV5Q" />,
 };

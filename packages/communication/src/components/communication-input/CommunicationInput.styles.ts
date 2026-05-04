@@ -40,8 +40,8 @@ export const StyledMotionCommunicationInputWrapper = styled(
 export const StyledMotionIconWrapper = styled(motion.div)`
     cursor: pointer;
 
-    height: 36px;
-    width: 36px;
+    height: 48px;
+    width: 48px;
 
     display: flex;
     align-items: center;
@@ -65,4 +65,8 @@ export const StyledEmojiInputWrapper = styled.div<StyledEmojiInputWrapperProps>`
                 `6px ${$shouldShowInputInBottomRow ? 2 : 14}px 6px 6px`};
         }
     }
+`;
+
+export const StyledCommunicationInputRightWrapper = styled.div`
+    margin: 0 2px 0 6px;
 `;

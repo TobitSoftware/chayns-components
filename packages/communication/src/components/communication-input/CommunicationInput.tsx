@@ -9,13 +9,14 @@ import React, {
 } from 'react';
 import {
     StyledCommunicationInput,
+    StyledCommunicationInputRightWrapper,
     StyledCommunicationInputSpacer,
     StyledEmojiInputWrapper,
     StyledMotionCommunicationInputWrapper,
     StyledMotionIconWrapper,
 } from './CommunicationInput.styles';
 import { CommunicationInputProps } from './CommunicationInput.types';
-import { ContextMenu, Icon } from '@chayns-components/core';
+import { ContextMenu, ContextMenuRef, Icon } from '@chayns-components/core';
 import Chips from './chips/Chips';
 import DynamicLayout from './dynamic-layout/DynamicLayout';
 import { EmojiInput, EmojiInputRef } from '@chayns-components/emoji-input';
@@ -54,6 +55,7 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
         const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
 
         const wrapperRef = useRef<HTMLDivElement>(null);
+        const contextMenuRef = useRef<ContextMenuRef>(null);
 
         const shouldShowInputInBottomRow = useMemo(() => {
             if (chips) {
@@ -126,15 +128,24 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
             }
 
             return (
-                <ContextMenu
-                    items={contextMenuItems}
-                    onHide={() => setIsContextMenuOpen(false)}
-                    onShow={() => setIsContextMenuOpen(true)}
+                <StyledMotionIconWrapper
+                    onClick={() =>
+                        isContextMenuOpen
+                            ? contextMenuRef.current?.hide()
+                            : contextMenuRef.current?.show()
+                    }
+                    animate={{ rotate: isContextMenuOpen ? 45 : 0 }}
                 >
-                    <StyledMotionIconWrapper animate={{ rotate: isContextMenuOpen ? 45 : 0 }}>
+                    <ContextMenu
+                        shouldDisableClick
+                        items={contextMenuItems}
+                        onHide={() => setIsContextMenuOpen(false)}
+                        onShow={() => setIsContextMenuOpen(true)}
+                        ref={contextMenuRef}
+                    >
                         <Icon icons={['fa fa-plus']} size={20} />
-                    </StyledMotionIconWrapper>
-                </ContextMenu>
+                    </ContextMenu>
+                </StyledMotionIconWrapper>
             );
         }, [contextMenuItems, isContextMenuOpen]);
 
@@ -173,7 +184,13 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
                     <DynamicLayout
                         shouldShowInputInBottomRow={shouldShowInputInBottomRow}
                         leftElement={leftElement}
-                        rightElement={rightElement}
+                        rightElement={
+                            rightElement && (
+                                <StyledCommunicationInputRightWrapper>
+                                    {rightElement}
+                                </StyledCommunicationInputRightWrapper>
+                            )
+                        }
                         chipsElement={<Chips chips={chips} />}
                     >
                         <StyledEmojiInputWrapper
