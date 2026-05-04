@@ -31,7 +31,7 @@ const Template: StoryFn<typeof CommunicationInput> = (args) => {
     return (
         <div
             style={{
-                height: 500,
+                height: 800,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',

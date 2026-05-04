@@ -53,6 +53,8 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
         const [isMultiLine, setIsMultiLine] = useState(false);
         const [isFocused, setIsFocused] = useState(false);
         const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
+        const [isFullHeight, setIsFullHeight] = useState(false);
+        const [shouldShowFullHeightToggle, setShouldShowFullHeightToggle] = useState(false);
 
         const wrapperRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<ContextMenuRef>(null);
@@ -93,16 +95,27 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
                 return;
             }
 
-            const hasWrapped = element.clientHeight > 40;
+            const hasWrapped = element.clientHeight > 48;
 
             if (hasWrapped) {
                 setIsMultiLine(true);
             }
         }, [isMultiLine, value]);
 
+        const checkFullHeightToggle = useCallback(() => {
+            const element = wrapperRef.current;
+
+            if (!element) {
+                return;
+            }
+
+            setShouldShowFullHeightToggle(element.clientHeight > 66);
+        }, []);
+
         useEffect(() => {
             requestAnimationFrame(checkMultiLine);
-        }, [checkMultiLine]);
+            requestAnimationFrame(checkFullHeightToggle);
+        }, [checkFullHeightToggle, checkMultiLine]);
 
         useEffect(() => {
             const element = wrapperRef.current;
@@ -113,6 +126,7 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
 
             const resizeObserver = new ResizeObserver(() => {
                 requestAnimationFrame(checkMultiLine);
+                requestAnimationFrame(checkFullHeightToggle);
             });
 
             resizeObserver.observe(element);
@@ -120,7 +134,7 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
             return () => {
                 resizeObserver.disconnect();
             };
-        }, [checkMultiLine, isMultiLine]);
+        }, [checkFullHeightToggle, checkMultiLine, isMultiLine]);
 
         const leftElement = useMemo(() => {
             if (!contextMenuItems) {
@@ -182,7 +196,10 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
                 >
                     {content}
                     <DynamicLayout
+                        shouldShowFullHeightToggle={shouldShowFullHeightToggle}
                         shouldShowInputInBottomRow={shouldShowInputInBottomRow}
+                        isFullHeight={isFullHeight}
+                        onFullHeightToggle={(fullHeight) => setIsFullHeight(fullHeight)}
                         leftElement={leftElement}
                         rightElement={
                             rightElement && (
@@ -196,6 +213,7 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
                         <StyledEmojiInputWrapper
                             ref={wrapperRef}
                             $shouldShowInputInBottomRow={shouldShowInputInBottomRow}
+                            $isFullHeight={isFullHeight}
                         >
                             <EmojiInput
                                 value={value}
@@ -204,7 +222,7 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
                                 ref={ref}
                                 onBlur={handleBlur}
                                 height={height}
-                                maxHeight={maxHeight}
+                                maxHeight={isFullHeight ? 501 : maxHeight}
                                 isDisabled={isDisabled}
                                 accessToken={accessToken}
                                 onFocus={handleFocus}

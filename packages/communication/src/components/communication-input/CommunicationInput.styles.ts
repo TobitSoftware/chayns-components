@@ -26,6 +26,8 @@ export const StyledMotionCommunicationInputWrapper = styled(
 
     overflow: hidden;
 
+    align-content: space-between;
+
     border: 2px solid hsla(0, 0%, 45%, 0.4);
     background-color: ${({ theme }) => theme['000']};
 
@@ -50,15 +52,25 @@ export const StyledMotionIconWrapper = styled(motion.div)`
 
 type StyledEmojiInputWrapperProps = WithTheme<{
     $shouldShowInputInBottomRow: boolean;
+    $isFullHeight: boolean;
 }>;
 
 export const StyledEmojiInputWrapper = styled.div<StyledEmojiInputWrapperProps>`
     width: 100%;
+    min-height: 48px;
+
+    align-content: end;
+
+    ${({ $isFullHeight }) =>
+        $isFullHeight &&
+        css`
+            height: 513px;
+        `}
 
     > div {
         background-color: transparent;
         border: none;
-        min-height: 36px;
+        min-height: 48px;
 
         > div {
             padding: ${({ $shouldShowInputInBottomRow }) =>
