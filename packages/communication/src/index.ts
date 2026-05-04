@@ -18,7 +18,9 @@ export type {
     AudioInputRef,
     AudioInputStyleConfig,
 } from './components/audio-input/AudioInput.types';
+export type { CommunicationInputRef } from './components/communication-input/CommunicationInput.types';
 
 // Enums
 export { SortType } from './components/communication-list/CommunicationList.types';
 export { AudioInputPosition } from './components/audio-input/AudioInput.types';
+export { Size, CornerType } from './components/communication-input/CommunicationInput.types';

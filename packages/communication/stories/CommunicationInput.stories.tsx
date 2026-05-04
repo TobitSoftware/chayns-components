@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React, { useEffect, useRef, useState } from 'react';
-import { CommunicationButton, CommunicationInput } from '../src';
+import { CommunicationButton, CommunicationInput, CornerType, Size } from '../src';
 import { Icon } from '@chayns-components/core';
 import { CommunicationInputRef } from '../src/components/communication-input/CommunicationInput.types';
 
@@ -64,10 +64,12 @@ const Template: StoryFn<typeof CommunicationInput> = (args) => {
 };
 
 export const General = Template.bind({});
+export const Small = Template.bind({});
 export const WithChips = Template.bind({});
 export const WithContent = Template.bind({});
 export const WithAnimation = Template.bind({});
 export const WithRightElement = Template.bind({});
+export const WithRoundedCorners = Template.bind({});
 
 WithChips.args = {
     chips: [
@@ -106,6 +108,14 @@ WithChips.args = {
             <Icon icons={['fa fa-paper-plane']} />
         </div>
     ),
+};
+
+WithRoundedCorners.args = {
+    cornerType: CornerType.ROUNDED,
+};
+
+Small.args = {
+    size: Size.SMALL,
 };
 
 WithAnimation.args = {

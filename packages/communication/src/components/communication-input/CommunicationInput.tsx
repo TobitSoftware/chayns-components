@@ -1,12 +1,12 @@
 import React, {
+    FocusEvent,
     forwardRef,
     useCallback,
-    useMemo,
-    useState,
-    FocusEvent,
-    useRef,
     useEffect,
     useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
 } from 'react';
 import {
     StyledCommunicationInput,
@@ -17,7 +17,12 @@ import {
     StyledMotionCommunicationInputWrapper,
     StyledMotionIconWrapper,
 } from './CommunicationInput.styles';
-import { CommunicationInputProps, CommunicationInputRef } from './CommunicationInput.types';
+import {
+    CommunicationInputProps,
+    CommunicationInputRef,
+    CornerType,
+    Size,
+} from './CommunicationInput.types';
 import { ContextMenu, ContextMenuRef, Icon } from '@chayns-components/core';
 import Chips from './chips/Chips';
 import DynamicLayout from './dynamic-layout/DynamicLayout';
@@ -50,6 +55,8 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             shouldUseInitialAnimation,
             accessToken,
             content,
+            size = Size.MEDIUM,
+            cornerType = CornerType.DYNAMIC,
         },
         ref,
     ) => {
@@ -228,9 +235,13 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                 width: shouldShowInitialOnly ? 52 : '100%',
                 left: shouldShowInitialOnly ? '50%' : 0,
                 x: shouldShowInitialOnly ? '-50%' : 0,
-                borderRadius: shouldShowInitialOnly || !shouldShowRoundedCorners ? 26 : 8,
+                borderRadius:
+                    shouldShowInitialOnly ||
+                    (!shouldShowRoundedCorners && cornerType !== CornerType.ROUNDED)
+                        ? 26
+                        : 8,
             }),
-            [shouldShowInitialOnly, shouldShowRoundedCorners],
+            [cornerType, shouldShowInitialOnly, shouldShowRoundedCorners],
         );
 
         return (
@@ -241,6 +252,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                     animate={wrapperAnimation}
                     transition={{
                         type: 'tween',
+                        duration: 0.5,
                     }}
                     $isFocused={isFocused}
                 >

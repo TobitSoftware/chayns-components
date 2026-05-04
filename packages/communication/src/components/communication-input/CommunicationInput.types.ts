@@ -7,6 +7,8 @@ export interface CommunicationInputProps extends EmojiInputProps {
     content?: ReactNode;
     chips?: Chip[];
     shouldUseInitialAnimation?: boolean;
+    cornerType?: CornerType;
+    size?: Size;
 }
 
 export interface Chip {
@@ -18,4 +20,14 @@ export interface Chip {
 
 export interface CommunicationInputRef extends EmojiInputRef {
     startAnimation: () => void;
+}
+
+export enum Size {
+    SMALL = 'SMALL',
+    MEDIUM = 'MEDIUM',
+}
+
+export enum CornerType {
+    DYNAMIC = 'DYNAMIC',
+    ROUNDED = 'ROUNDED',
 }
