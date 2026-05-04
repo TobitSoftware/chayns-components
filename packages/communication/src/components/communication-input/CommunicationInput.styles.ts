@@ -51,7 +51,6 @@ export const StyledMotionIconWrapper = styled(motion.div)`
 `;
 
 type StyledEmojiInputWrapperProps = WithTheme<{
-    $shouldShowInputInBottomRow: boolean;
     $isFullHeight: boolean;
 }>;
 
@@ -73,12 +72,16 @@ export const StyledEmojiInputWrapper = styled.div<StyledEmojiInputWrapperProps>`
         min-height: 48px;
 
         > div {
-            padding: ${({ $shouldShowInputInBottomRow }) =>
-                `6px ${$shouldShowInputInBottomRow ? 2 : 14}px 6px 6px`};
+            padding: 6px 14px 6px 6px;
+
+            > label {
+                left: 8px;
+                top: 14px;
+            }
         }
     }
 `;
 
 export const StyledCommunicationInputRightWrapper = styled.div`
-    margin: 2px 2px 2px 6px;
+    margin: 2px 2px 2px 0;
 `;

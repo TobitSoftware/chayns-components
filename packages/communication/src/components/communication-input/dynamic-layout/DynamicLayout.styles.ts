@@ -35,6 +35,7 @@ export const StyledDynamicLayoutInput = styled(motion.div)`
     min-width: 0;
 `;
 
+// noinspection CssInvalidPropertyValue
 export const StyledDynamicLayoutLeft = styled.div`
     grid-area: left;
     align-self: end;
@@ -45,6 +46,7 @@ export const StyledDynamicLayoutChips = styled.div`
     min-width: 0;
 `;
 
+// noinspection CssInvalidPropertyValue
 export const StyledDynamicLayoutRight = styled.div`
     grid-area: right;
     align-self: end;

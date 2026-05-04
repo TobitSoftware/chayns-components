@@ -1,27 +1,14 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { Icon } from '@chayns-components/core';
 import React, { useState } from 'react';
 import { CommunicationButton, CommunicationInput } from '../src';
+import { Icon } from '@chayns-components/core';
 
 export default {
     title: 'Communication/CommunicationInput',
     component: CommunicationInput,
     args: {
+        placeholder: 'Nachricht schreiben',
         contextMenuItems: [{ key: 'copy', text: 'Copy', onClick: () => {}, icons: ['fa fa-copy'] }],
-        rightElement: (
-            <div
-                style={{
-                    padding: '6px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: 44,
-                    width: 44,
-                }}
-            >
-                <Icon icons={['fa fa-paper-plane']} />
-            </div>
-        ),
     },
 } as Meta<typeof CommunicationInput>;
 
@@ -86,6 +73,20 @@ WithChips.args = {
             onClick: () => {},
         },
     ],
+    rightElement: (
+        <div
+            style={{
+                padding: '6px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: 44,
+                width: 44,
+            }}
+        >
+            <Icon icons={['fa fa-paper-plane']} />
+        </div>
+    ),
 };
 
 WithContent.args = {

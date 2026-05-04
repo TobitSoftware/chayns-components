@@ -210,11 +210,7 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
                         }
                         chipsElement={<Chips chips={chips} />}
                     >
-                        <StyledEmojiInputWrapper
-                            ref={wrapperRef}
-                            $shouldShowInputInBottomRow={shouldShowInputInBottomRow}
-                            $isFullHeight={isFullHeight}
-                        >
+                        <StyledEmojiInputWrapper ref={wrapperRef} $isFullHeight={isFullHeight}>
                             <EmojiInput
                                 value={value}
                                 onInput={onInput}
