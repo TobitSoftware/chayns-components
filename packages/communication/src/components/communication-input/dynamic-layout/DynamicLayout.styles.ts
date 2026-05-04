@@ -13,12 +13,12 @@ export const StyledDynamicLayout = styled.div<StyledDynamicLayoutProps>`
     grid-template-areas: ${({ $inputInBottomRow }) =>
         $inputInBottomRow
             ? `
-                "left input right"
-              `
+            "left input right"
+          `
             : `
-                "input input input"
-                "left chips right"
-              `};
+            "input input input"
+            "left chips right"
+          `};
 `;
 
 export const StyledDynamicLayoutInput = styled(motion.div)`
@@ -28,6 +28,7 @@ export const StyledDynamicLayoutInput = styled(motion.div)`
 
 export const StyledDynamicLayoutLeft = styled.div`
     grid-area: left;
+    align-self: end;
 `;
 
 export const StyledDynamicLayoutChips = styled.div`
@@ -37,4 +38,5 @@ export const StyledDynamicLayoutChips = styled.div`
 
 export const StyledDynamicLayoutRight = styled.div`
     grid-area: right;
+    align-self: end;
 `;

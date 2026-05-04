@@ -15,8 +15,8 @@ export default {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    height: 48,
-                    width: 48,
+                    height: 44,
+                    width: 44,
                 }}
             >
                 <Icon icons={['fa fa-paper-plane']} />

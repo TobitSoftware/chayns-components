@@ -21,7 +21,7 @@ export const StyledMotionCommunicationInputWrapper = styled(
 )<StyledMotionCommunicationInputWrapperProps>`
     position: absolute;
     bottom: 0;
-    min-height: 52px;
+    min-height: 48px;
     width: 100%;
 
     overflow: hidden;
@@ -68,5 +68,5 @@ export const StyledEmojiInputWrapper = styled.div<StyledEmojiInputWrapperProps>`
 `;
 
 export const StyledCommunicationInputRightWrapper = styled.div`
-    margin: 0 2px 0 6px;
+    margin: 2px 2px 2px 6px;
 `;
