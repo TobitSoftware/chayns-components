@@ -6,6 +6,7 @@ import React, {
     FocusEvent,
     useRef,
     useEffect,
+    useImperativeHandle,
 } from 'react';
 import {
     StyledCommunicationInput,
@@ -15,13 +16,13 @@ import {
     StyledMotionCommunicationInputWrapper,
     StyledMotionIconWrapper,
 } from './CommunicationInput.styles';
-import { CommunicationInputProps } from './CommunicationInput.types';
+import { CommunicationInputProps, CommunicationInputRef } from './CommunicationInput.types';
 import { ContextMenu, ContextMenuRef, Icon } from '@chayns-components/core';
 import Chips from './chips/Chips';
 import DynamicLayout from './dynamic-layout/DynamicLayout';
-import { EmojiInput, EmojiInputRef } from '@chayns-components/emoji-input';
+import { EmojiInput, EmojiInputRef, ReplaceTextOptions } from '@chayns-components/emoji-input';
 
-const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
+const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputProps>(
     (
         {
             contextMenuItems,
@@ -45,6 +46,7 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
             shouldHidePlaceholderOnFocus,
             shouldPreventEmojiPicker,
             onKeyDown,
+            shouldUseInitialAnimation,
             accessToken,
             content,
         },
@@ -58,6 +60,7 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
 
         const wrapperRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<ContextMenuRef>(null);
+        const emojiInputRef = useRef<EmojiInputRef>(null);
 
         const shouldShowInputInBottomRow = useMemo(() => {
             if (chips) {
@@ -185,6 +188,30 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
             [onBlur],
         );
 
+        const handleStartAnimation = useCallback(() => {}, []);
+
+        useImperativeHandle(
+            ref,
+            () => ({
+                startAnimation: handleStartAnimation,
+                focus: () => emojiInputRef.current?.focus(),
+                setCursorPosition: (position?: number) =>
+                    emojiInputRef.current?.setCursorPosition(position),
+                blur: () => emojiInputRef.current?.blur(),
+                insertTextAtCursorPosition: (text: string) =>
+                    emojiInputRef.current?.insertTextAtCursorPosition(text),
+                replaceText: (
+                    searchText: string,
+                    replaceText: string,
+                    options?: ReplaceTextOptions,
+                ) => emojiInputRef.current?.replaceText(searchText, replaceText, options),
+                startProgress: (durationInSeconds: number) =>
+                    emojiInputRef.current?.startProgress(durationInSeconds),
+                stopProgress: () => emojiInputRef.current?.stopProgress(),
+            }),
+            [handleStartAnimation],
+        );
+
         return (
             <StyledCommunicationInput>
                 <StyledCommunicationInputSpacer />
@@ -215,7 +242,7 @@ const CommunicationInput = forwardRef<EmojiInputRef, CommunicationInputProps>(
                                 value={value}
                                 onInput={onInput}
                                 inputId={inputId}
-                                ref={ref}
+                                ref={emojiInputRef}
                                 onBlur={handleBlur}
                                 height={height}
                                 maxHeight={isFullHeight ? 501 : maxHeight}

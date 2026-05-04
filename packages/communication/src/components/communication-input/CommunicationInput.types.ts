@@ -1,11 +1,12 @@
 import { ContextMenuItem } from '@chayns-components/core';
-import { EmojiInputProps } from '@chayns-components/emoji-input';
+import { EmojiInputProps, EmojiInputRef } from '@chayns-components/emoji-input';
 import { ReactNode } from 'react';
 
 export interface CommunicationInputProps extends EmojiInputProps {
     contextMenuItems?: ContextMenuItem[];
     content?: ReactNode;
     chips?: Chip[];
+    shouldUseInitialAnimation?: boolean;
 }
 
 export interface Chip {
@@ -13,4 +14,8 @@ export interface Chip {
     icons?: string[];
     onRemove?: () => void;
     onClick?: () => void;
+}
+
+export interface CommunicationInputRef extends EmojiInputRef {
+    startAnimation: () => void;
 }

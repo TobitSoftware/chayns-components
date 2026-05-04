@@ -1,7 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CommunicationButton, CommunicationInput } from '../src';
 import { Icon } from '@chayns-components/core';
+import { CommunicationInputRef } from '../src/components/communication-input/CommunicationInput.types';
 
 export default {
     title: 'Communication/CommunicationInput',
@@ -14,6 +15,18 @@ export default {
 
 const Template: StoryFn<typeof CommunicationInput> = (args) => {
     const [value, setValue] = useState('');
+
+    const ref = useRef<CommunicationInputRef>(null);
+
+    useEffect(() => {
+        const timeout = window.setTimeout(() => {
+            ref.current?.startAnimation();
+        }, 3000);
+
+        return () => {
+            clearTimeout(timeout);
+        };
+    }, []);
 
     return (
         <div
@@ -40,7 +53,12 @@ const Template: StoryFn<typeof CommunicationInput> = (args) => {
                 Etiam tempor mollis ultrices.
             </p>
 
-            <CommunicationInput {...args} value={value} onInput={(ev, text) => setValue(text)} />
+            <CommunicationInput
+                {...args}
+                ref={ref}
+                value={value}
+                onInput={(ev, text) => setValue(text)}
+            />
         </div>
     );
 };
@@ -48,6 +66,7 @@ const Template: StoryFn<typeof CommunicationInput> = (args) => {
 export const General = Template.bind({});
 export const WithChips = Template.bind({});
 export const WithContent = Template.bind({});
+export const WithAnimation = Template.bind({});
 export const WithRightElement = Template.bind({});
 
 WithChips.args = {
