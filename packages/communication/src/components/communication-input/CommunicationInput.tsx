@@ -27,6 +27,7 @@ import { ContextMenu, ContextMenuRef, Icon } from '@chayns-components/core';
 import Chips from './chips/Chips';
 import DynamicLayout from './dynamic-layout/DynamicLayout';
 import { EmojiInput, EmojiInputRef, ReplaceTextOptions } from '@chayns-components/emoji-input';
+import { useCommunicationAnimationContext } from '../communication-animation-wrapper/CommunicationAnimationWrapper.context';
 
 const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputProps>(
     (
@@ -71,6 +72,8 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
         const wrapperRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<ContextMenuRef>(null);
         const emojiInputRef = useRef<EmojiInputRef>(null);
+
+        const { transition, state } = useCommunicationAnimationContext();
 
         const shouldShowInitialOnly = shouldUseInitialAnimation && !hasStartedInitialAnimation;
 
@@ -250,10 +253,12 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                 <StyledMotionCommunicationInputWrapper
                     initial={wrapperAnimation}
                     animate={wrapperAnimation}
-                    transition={{
-                        type: 'tween',
-                        duration: 0.5,
-                    }}
+                    transition={
+                        transition || {
+                            type: 'tween',
+                            duration: 0.5,
+                        }
+                    }
                     $isFocused={isFocused}
                 >
                     {shouldShowInitialOnly ? (

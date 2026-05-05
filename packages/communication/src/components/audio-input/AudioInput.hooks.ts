@@ -1,4 +1,5 @@
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { useCommunicationAnimationContext } from '../communication-animation-wrapper/CommunicationAnimationWrapper.context';
 
 const DEFAULT_AUDIO_CONSTRAINTS: MediaTrackConstraints = {
     echoCancellation: true,
@@ -41,6 +42,8 @@ export const useAudioInput = ({
     const [isActive, setIsActive] = useState(false);
     const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
 
+    const { open, close } = useCommunicationAnimationContext();
+
     const getStream = useCallback(() => streamRef.current, []);
 
     const applyMutedState = useCallback(
@@ -75,8 +78,15 @@ export const useAudioInput = ({
         audioContextRef.current = null;
 
         setIsActive(false);
-        onStop?.();
-    }, [cleanupAudioNodes, onStop]);
+
+        if (typeof close === 'function') {
+            close();
+        }
+
+        if (typeof onStop === 'function') {
+            onStop();
+        }
+    }, [cleanupAudioNodes, close, onStop]);
 
     const start = useCallback(async () => {
         try {
@@ -111,14 +121,20 @@ export const useAudioInput = ({
             setAnalyser(analyserNode);
             setIsActive(true);
 
-            onStart?.(stream);
+            if (typeof onStart === 'function') {
+                onStart(stream);
+            }
+
+            if (typeof open === 'function') {
+                open();
+            }
 
             return stream;
         } catch (error) {
             onError?.(error);
             return null;
         }
-    }, [applyMutedState, audioConstraints, onError, onStart]);
+    }, [applyMutedState, audioConstraints, onError, onStart, open]);
 
     useEffect(() => {
         applyMutedState(streamRef.current);
