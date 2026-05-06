@@ -15,6 +15,7 @@ import {
     CommunicationInputSize,
 } from './CommunicationInput.types';
 import { TargetAndTransition, Transition } from 'motion/react';
+import { AudioInputProps, AudioInputRef } from '../audio-input/AudioInput.types';
 
 interface UseCommunicationInputRefOptions {
     startInitialAnimation: VoidFunction;
@@ -26,11 +27,14 @@ export const useCommunicationInputRef = ({
     startInitialAnimation,
 }: UseCommunicationInputRefOptions) => {
     const emojiInputRef = useRef<EmojiInputRef>(null);
+    const audioInputRef = useRef<AudioInputRef>(null);
 
     useImperativeHandle(
         ref,
         () => ({
+            // CommunicationInput
             startAnimation: startInitialAnimation,
+            // EmojiInput
             focus: () => emojiInputRef.current?.focus(),
             setCursorPosition: (position?: number) =>
                 emojiInputRef.current?.setCursorPosition(position),
@@ -42,23 +46,30 @@ export const useCommunicationInputRef = ({
             startProgress: (durationInSeconds: number) =>
                 emojiInputRef.current?.startProgress(durationInSeconds),
             stopProgress: () => emojiInputRef.current?.stopProgress(),
+            // AudioInput
+            getStream: () => audioInputRef.current?.getStream(),
+            start: () => audioInputRef.current?.start(),
+            stop: () => audioInputRef.current?.stop(),
         }),
         [startInitialAnimation],
     );
 
-    return emojiInputRef;
+    return { emojiInputRef, audioInputRef };
 };
 
 interface UseCommunicationInputEventsOptions {
     inputConfig: EmojiInputProps;
+    audioInputConfig?: AudioInputProps;
     disableEvents: boolean;
 }
 
 export const useCommunicationInputEvents = ({
     inputConfig,
+    audioInputConfig,
     disableEvents,
 }: UseCommunicationInputEventsOptions) => {
     const [isFocused, setIsFocused] = useState(false);
+    const [isAudioInputOpen, setIsAudioInputOpen] = useState(false);
     const [isMultiLine, setIsMultiLine] = useState(false);
     const [isFullHeight, setIsFullHeight] = useState(false);
     const [shouldShowFullHeightToggle, setShouldShowFullHeightToggle] = useState(false);
@@ -86,6 +97,25 @@ export const useCommunicationInputEvents = ({
         },
         [inputConfig],
     );
+
+    const handleStart = useCallback(
+        (stream: MediaStream) => {
+            setIsAudioInputOpen(true);
+
+            if (typeof audioInputConfig?.onStart === 'function') {
+                audioInputConfig.onStart(stream);
+            }
+        },
+        [audioInputConfig],
+    );
+
+    const handleStop = useCallback(() => {
+        setIsAudioInputOpen(false);
+
+        if (typeof audioInputConfig?.onStop === 'function') {
+            audioInputConfig.onStop();
+        }
+    }, [audioInputConfig]);
 
     const checkMultiLine = useCallback(
         (element: HTMLDivElement) => {
@@ -157,15 +187,21 @@ export const useCommunicationInputEvents = ({
             isFocused,
             isMultiLine,
             isFullHeight,
+            isAudioInputOpen,
             shouldShowFullHeightToggle,
             onBlur: handleBlur,
             onFocus: handleFocus,
+            onStart: handleStart,
+            onStop: handleStop,
             onFullHeightToggle: toggleFullHeight,
             ref,
         }),
         [
             handleBlur,
             handleFocus,
+            handleStart,
+            handleStop,
+            isAudioInputOpen,
             isFocused,
             isFullHeight,
             isMultiLine,

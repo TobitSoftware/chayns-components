@@ -1,7 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    AudioInput,
     CommunicationButton,
     CommunicationInput,
     CommunicationInputSize,
@@ -129,7 +128,7 @@ Small.args = {
 };
 
 WithAudioInput.args = {
-    audioInputElement: <AudioInput />,
+    shouldUseAudioInput: true,
 };
 
 WithAnimation.args = {

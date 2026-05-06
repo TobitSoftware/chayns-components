@@ -1,6 +1,7 @@
 import { ContextMenuItem } from '@chayns-components/core';
 import { EmojiInputProps, EmojiInputRef } from '@chayns-components/emoji-input';
 import { ReactNode } from 'react';
+import { AudioInputProps, AudioInputRef } from '../audio-input/AudioInput.types';
 
 export interface CommunicationInputProps {
     size?: CommunicationInputSize;
@@ -10,8 +11,9 @@ export interface CommunicationInputProps {
     topContent?: ReactNode;
     rightElement?: ReactNode;
     inputConfig: EmojiInputProps;
+    audioInputConfig?: AudioInputProps;
     shouldUseInitialAnimation?: boolean;
-    audioInputElement?: ReactNode;
+    shouldUseAudioInput?: boolean;
 }
 
 export interface Chip {
@@ -21,7 +23,7 @@ export interface Chip {
     onClick?: () => void;
 }
 
-export interface CommunicationInputRef extends EmojiInputRef {
+export interface CommunicationInputRef extends EmojiInputRef, AudioInputRef {
     startAnimation: () => void;
 }
 

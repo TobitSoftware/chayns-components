@@ -2,8 +2,10 @@ import React, { forwardRef, useMemo, useRef, useState } from 'react';
 import {
     StyledCommunicationInput,
     StyledCommunicationInputSideElement,
+    StyledCommunicationInputWrapper,
     StyledMotionCommunicationInputEmojiInputWrapper,
     StyledMotionCommunicationInputInner,
+    StyledMotionCommunicationInputSpacer,
     StyledMotionIconWrapper,
 } from './CommunicationInput.styles';
 import {
@@ -22,6 +24,8 @@ import {
     useCommunicationInputStyles,
 } from './CommunicationInput.hooks';
 import Chips from './chips/Chips';
+import AudioInput from '../audio-input/AudioInput';
+import { AnimatePresence } from 'motion/react';
 
 const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputProps>(
     (
@@ -30,7 +34,8 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             cornerType = CommunicationInputCornerType.DYNAMIC,
             contextMenuItems,
             rightElement,
-            audioInputElement,
+            audioInputConfig,
+            shouldUseAudioInput,
             inputConfig,
             shouldUseInitialAnimation = false,
             chips,
@@ -51,7 +56,10 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             ref: wrapperRef,
             isMultiLine,
             isFocused,
-        } = useCommunicationInputEvents({ inputConfig, disableEvents: false });
+            onStop,
+            onStart,
+            isAudioInputOpen,
+        } = useCommunicationInputEvents({ inputConfig, audioInputConfig, disableEvents: false });
 
         const shouldShowInputInBottomRow = useMemo(() => {
             if (chips) {
@@ -73,7 +81,10 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                 borderRadius,
                 height: outerHeight,
             });
-        const emojiInputRef = useCommunicationInputRef({ ref, startInitialAnimation });
+        const { emojiInputRef, audioInputRef } = useCommunicationInputRef({
+            ref,
+            startInitialAnimation,
+        });
 
         const leftElement = useMemo(() => {
             if (!contextMenuItems) {
@@ -106,53 +117,75 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
 
         return (
             <StyledCommunicationInput $height={outerHeight}>
-                <StyledMotionCommunicationInputInner
-                    $isFocused={isFocused}
-                    animate={animate}
-                    initial={initial}
-                    transition={transition}
-                >
-                    {shouldShowOnlyRightElement ? (
-                        <StyledCommunicationInputSideElement $height={innerHeight}>
-                            {rightElement}
-                        </StyledCommunicationInputSideElement>
-                    ) : (
-                        <>
-                            {topContent}
-                            <DynamicLayout
-                                shouldShowInputInBottomRow={shouldShowInputInBottomRow}
-                                shouldShowFullHeightToggle={shouldShowFullHeightToggle}
-                                isFullHeight={isFullHeight}
-                                onFullHeightToggle={onFullHeightToggle}
-                                leftElement={leftElement}
-                                rightElement={
-                                    rightElement && (
-                                        <StyledCommunicationInputSideElement $height={innerHeight}>
-                                            {rightElement}
-                                        </StyledCommunicationInputSideElement>
-                                    )
-                                }
-                                chipsElement={<Chips chips={chips} />}
-                            >
-                                <StyledMotionCommunicationInputEmojiInputWrapper
-                                    ref={wrapperRef}
-                                    $height={innerHeight}
-                                    $fontSize={fontSize}
-                                    $size={size}
-                                    animate={{ height: isFullHeight ? 513 : 'auto' }}
+                <StyledCommunicationInputWrapper>
+                    <StyledMotionCommunicationInputInner
+                        $isFocused={isFocused}
+                        animate={animate}
+                        initial={initial}
+                        transition={transition}
+                    >
+                        {shouldShowOnlyRightElement ? (
+                            <StyledCommunicationInputSideElement $height={innerHeight}>
+                                {rightElement}
+                            </StyledCommunicationInputSideElement>
+                        ) : (
+                            <>
+                                {topContent}
+                                <DynamicLayout
+                                    shouldShowInputInBottomRow={shouldShowInputInBottomRow}
+                                    shouldShowFullHeightToggle={shouldShowFullHeightToggle}
+                                    isFullHeight={isFullHeight}
+                                    onFullHeightToggle={onFullHeightToggle}
+                                    leftElement={leftElement}
+                                    rightElement={
+                                        rightElement && (
+                                            <StyledCommunicationInputSideElement
+                                                $height={innerHeight}
+                                            >
+                                                {rightElement}
+                                            </StyledCommunicationInputSideElement>
+                                        )
+                                    }
+                                    chipsElement={<Chips chips={chips} />}
                                 >
-                                    <EmojiInput
-                                        {...inputConfig}
-                                        onBlur={onBlur}
-                                        onFocus={onFocus}
-                                        ref={emojiInputRef}
-                                    />
-                                </StyledMotionCommunicationInputEmojiInputWrapper>
-                            </DynamicLayout>
-                        </>
-                    )}
-                </StyledMotionCommunicationInputInner>
-                {audioInputElement}
+                                    <StyledMotionCommunicationInputEmojiInputWrapper
+                                        ref={wrapperRef}
+                                        $height={innerHeight}
+                                        $fontSize={fontSize}
+                                        $size={size}
+                                        animate={{ height: isFullHeight ? 513 : 'auto' }}
+                                    >
+                                        <EmojiInput
+                                            {...inputConfig}
+                                            onBlur={onBlur}
+                                            onFocus={onFocus}
+                                            ref={emojiInputRef}
+                                        />
+                                    </StyledMotionCommunicationInputEmojiInputWrapper>
+                                </DynamicLayout>
+                            </>
+                        )}
+                    </StyledMotionCommunicationInputInner>
+                </StyledCommunicationInputWrapper>
+                {shouldUseAudioInput && (
+                    <AnimatePresence initial={false}>
+                        {!isAudioInputOpen && (
+                            <StyledMotionCommunicationInputSpacer
+                                initial={{ width: 16 }}
+                                exit={{ width: 0 }}
+                                animate={{ width: 16 }}
+                            />
+                        )}
+                    </AnimatePresence>
+                )}
+                {shouldUseAudioInput && (
+                    <AudioInput
+                        {...audioInputConfig}
+                        onStart={onStart}
+                        onStop={onStop}
+                        ref={audioInputRef}
+                    />
+                )}
             </StyledCommunicationInput>
         );
     },
