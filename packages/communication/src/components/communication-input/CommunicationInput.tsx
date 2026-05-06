@@ -9,11 +9,11 @@ import React, {
     useState,
 } from 'react';
 import {
-    StyledCommunicationInput,
     StyledCommunicationInputRightWrapper,
     StyledCommunicationInputSpacer,
     StyledEmojiInputWrapper,
     StyledInitialRightElementWrapper,
+    StyledMotionCommunicationInput,
     StyledMotionCommunicationInputWrapper,
     StyledMotionIconWrapper,
 } from './CommunicationInput.styles';
@@ -28,6 +28,7 @@ import Chips from './chips/Chips';
 import DynamicLayout from './dynamic-layout/DynamicLayout';
 import { EmojiInput, EmojiInputRef, ReplaceTextOptions } from '@chayns-components/emoji-input';
 import { useCommunicationAnimationContext } from '../communication-animation-wrapper/CommunicationAnimationWrapper.context';
+import { AnimationState } from '../communication-animation-wrapper/CommunicationAnimationWrapper.types';
 
 const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputProps>(
     (
@@ -247,18 +248,25 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             [cornerType, shouldShowInitialOnly, shouldShowRoundedCorners],
         );
 
+        const shouldCollapse = [AnimationState.OPEN, AnimationState.OPENING].includes(state);
+
         return (
-            <StyledCommunicationInput>
+            <StyledMotionCommunicationInput
+            // initial={{ width: '100%' }}
+            // animate={
+            //     shouldCollapse
+            //         ? { width: 0, flexShrink: 1, opacity: 0 }
+            //         : { width: '100%', flexShrink: 1, opacity: 1 }
+            // }
+            >
                 <StyledCommunicationInputSpacer />
                 <StyledMotionCommunicationInputWrapper
                     initial={wrapperAnimation}
                     animate={wrapperAnimation}
-                    transition={
-                        transition || {
-                            type: 'tween',
-                            duration: 0.5,
-                        }
-                    }
+                    transition={{
+                        type: 'tween',
+                        duration: 0.5,
+                    }}
                     $isFocused={isFocused}
                 >
                     {shouldShowInitialOnly ? (
@@ -317,7 +325,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                         </>
                     )}
                 </StyledMotionCommunicationInputWrapper>
-            </StyledCommunicationInput>
+            </StyledMotionCommunicationInput>
         );
     },
 );

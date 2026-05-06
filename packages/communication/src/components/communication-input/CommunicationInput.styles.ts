@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { WithTheme } from '@chayns-components/core';
 import { Size } from './CommunicationInput.types';
 
-export const StyledCommunicationInput = styled.div`
+export const StyledMotionCommunicationInput = styled(motion.div)`
     width: 100%;
     position: relative;
 `;
