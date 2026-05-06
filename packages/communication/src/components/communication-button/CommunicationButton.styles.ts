@@ -1,15 +1,17 @@
 import styled, { css } from 'styled-components';
 import { WithTheme } from '@chayns-components/core';
 import { motion } from 'motion/react';
+import { CommunicationInputSize } from '../communication-input/CommunicationInput.types';
 
 type StyledCommunicationButtonProps = WithTheme<{
     $shouldFillBackground: boolean;
     $isDisabled?: boolean;
+    $size: CommunicationInputSize;
 }>;
 
 export const StyledCommunicationButton = styled.div<StyledCommunicationButtonProps>`
-    height: 44px;
-    width: 44px;
+    height: ${({ $size }) => ($size === CommunicationInputSize.MEDIUM ? 44 : 34)}px;
+    width: ${({ $size }) => ($size === CommunicationInputSize.MEDIUM ? 44 : 34)}px;
 
     border-radius: 50%;
 

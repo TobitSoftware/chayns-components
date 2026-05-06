@@ -6,7 +6,6 @@ import { StyledMotionAudioInput, StyledMotionAudioInputIconWrapper } from './Aud
 import { useAudioInput } from './AudioInput.hooks';
 import WaveForm from './wave-form/WaveForm';
 import { AUDIO_INPUT_ANIMATION } from './AudioInput.constants';
-import { useCommunicationAnimationContext } from '../communication-animation-wrapper/CommunicationAnimationWrapper.context';
 
 const AudioInput: FC<AudioInputProps> = forwardRef<AudioInputRef, AudioInputProps>(
     (
@@ -30,8 +29,6 @@ const AudioInput: FC<AudioInputProps> = forwardRef<AudioInputRef, AudioInputProp
             onStop,
             isMuted,
         });
-
-        const { transition } = useCommunicationAnimationContext();
 
         const isExpanded = isActive;
 
@@ -64,9 +61,7 @@ const AudioInput: FC<AudioInputProps> = forwardRef<AudioInputRef, AudioInputProp
                 animate={{
                     width: isExpanded ? '100%' : '52px',
                 }}
-                transition={
-                    transition || { duration: 0.25, ease: [0.2, 0.8, 0.2, 1], type: 'tween' }
-                }
+                transition={{ duration: 0.25, ease: [0.2, 0.8, 0.2, 1], type: 'tween' }}
             >
                 <StyledMotionAudioInputIconWrapper onClick={handleMainButtonClick}>
                     <Icon

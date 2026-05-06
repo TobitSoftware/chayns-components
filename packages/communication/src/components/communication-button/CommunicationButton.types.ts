@@ -1,3 +1,5 @@
+import { CommunicationInputSize } from '../communication-input/CommunicationInput.types';
+
 export interface CommunicationButtonProps {
     personId?: string;
     onClick?: () => void;
@@ -7,4 +9,5 @@ export interface CommunicationButtonProps {
     shouldFillBackground?: boolean;
     className?: string;
     iconColor?: string;
+    size?: CommunicationInputSize;
 }

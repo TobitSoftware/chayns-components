@@ -1,82 +1,57 @@
-import React, {
-    FocusEvent,
-    forwardRef,
-    useCallback,
-    useEffect,
-    useImperativeHandle,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import React, { forwardRef, useMemo, useRef, useState } from 'react';
 import {
-    StyledCommunicationInputRightWrapper,
-    StyledCommunicationInputSpacer,
-    StyledEmojiInputWrapper,
-    StyledInitialRightElementWrapper,
-    StyledMotionCommunicationInput,
-    StyledMotionCommunicationInputWrapper,
+    StyledCommunicationInput,
+    StyledCommunicationInputSideElement,
+    StyledMotionCommunicationInputEmojiInputWrapper,
+    StyledMotionCommunicationInputInner,
     StyledMotionIconWrapper,
 } from './CommunicationInput.styles';
 import {
     CommunicationInputProps,
     CommunicationInputRef,
-    CornerType,
-    Size,
+    CommunicationInputCornerType,
+    CommunicationInputSize,
 } from './CommunicationInput.types';
 import { ContextMenu, ContextMenuRef, Icon } from '@chayns-components/core';
-import Chips from './chips/Chips';
 import DynamicLayout from './dynamic-layout/DynamicLayout';
-import { EmojiInput, EmojiInputRef, ReplaceTextOptions } from '@chayns-components/emoji-input';
-import { useCommunicationAnimationContext } from '../communication-animation-wrapper/CommunicationAnimationWrapper.context';
-import { AnimationState } from '../communication-animation-wrapper/CommunicationAnimationWrapper.types';
+import { EmojiInput } from '@chayns-components/emoji-input';
+import {
+    useCommunicationInputAnimation,
+    useCommunicationInputEvents,
+    useCommunicationInputRef,
+    useCommunicationInputStyles,
+} from './CommunicationInput.hooks';
+import Chips from './chips/Chips';
 
 const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputProps>(
     (
         {
+            size = CommunicationInputSize.MEDIUM,
+            cornerType = CommunicationInputCornerType.DYNAMIC,
             contextMenuItems,
             rightElement,
-            onInput,
-            onFocus,
-            onBlur,
-            value,
+            audioInputElement,
+            inputConfig,
+            shouldUseInitialAnimation = false,
             chips,
-            isDisabled,
-            inputId,
-            prefixElement,
-            onPrefixElementRemove,
-            onPopupVisibilityChange,
-            personId,
-            placeholder,
-            popupAlignment,
-            onCursorPositionChange,
-            height,
-            maxHeight,
-            shouldHidePlaceholderOnFocus,
-            shouldPreventEmojiPicker,
-            onKeyDown,
-            shouldUseInitialAnimation,
-            accessToken,
-            content,
-            size = Size.MEDIUM,
-            cornerType = CornerType.DYNAMIC,
+            topContent,
         },
         ref,
     ) => {
-        const [isMultiLine, setIsMultiLine] = useState(false);
-        const [isFocused, setIsFocused] = useState(false);
         const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
-        const [isFullHeight, setIsFullHeight] = useState(false);
-        const [shouldShowFullHeightToggle, setShouldShowFullHeightToggle] = useState(false);
-        const [hasStartedInitialAnimation, setHasStartedInitialAnimation] =
-            useState(!shouldUseInitialAnimation);
 
-        const wrapperRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<ContextMenuRef>(null);
-        const emojiInputRef = useRef<EmojiInputRef>(null);
 
-        const { transition, state } = useCommunicationAnimationContext();
-
-        const shouldShowInitialOnly = shouldUseInitialAnimation && !hasStartedInitialAnimation;
+        const {
+            onFullHeightToggle,
+            shouldShowFullHeightToggle,
+            isFullHeight,
+            onBlur,
+            onFocus,
+            ref: wrapperRef,
+            isMultiLine,
+            isFocused,
+        } = useCommunicationInputEvents({ inputConfig, disableEvents: false });
 
         const shouldShowInputInBottomRow = useMemo(() => {
             if (chips) {
@@ -86,78 +61,19 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             return !isMultiLine;
         }, [chips, isMultiLine]);
 
-        const shouldShowRoundedCorners = useMemo(
-            () => isMultiLine || !shouldShowInputInBottomRow,
-            [isMultiLine, shouldShowInputInBottomRow],
-        );
-
-        const checkMultiLine = useCallback(() => {
-            const currentValue = value ?? '';
-
-            if (currentValue.length === 0 || currentValue === '<br>') {
-                setIsMultiLine(false);
-                return;
-            }
-
-            if (isMultiLine) {
-                return;
-            }
-
-            if (currentValue.includes('\n') || currentValue.includes('<br>')) {
-                setIsMultiLine(true);
-                return;
-            }
-
-            const element = wrapperRef.current;
-
-            if (!element) {
-                return;
-            }
-
-            const hasWrapped = element.clientHeight > 48;
-
-            if (hasWrapped) {
-                setIsMultiLine(true);
-            }
-        }, [isMultiLine, value]);
-
-        const checkFullHeightToggle = useCallback(() => {
-            const element = wrapperRef.current;
-
-            if (!element) {
-                return;
-            }
-
-            setShouldShowFullHeightToggle(element.clientHeight > 75);
-        }, []);
-
-        useEffect(() => {
-            if (shouldShowInitialOnly) {
-                return;
-            }
-
-            requestAnimationFrame(checkMultiLine);
-            requestAnimationFrame(checkFullHeightToggle);
-        }, [checkFullHeightToggle, checkMultiLine, shouldShowInitialOnly]);
-
-        useEffect(() => {
-            const element = wrapperRef.current;
-
-            if (!element || isMultiLine || shouldShowInitialOnly) {
-                return undefined;
-            }
-
-            const resizeObserver = new ResizeObserver(() => {
-                requestAnimationFrame(checkMultiLine);
-                requestAnimationFrame(checkFullHeightToggle);
+        const { borderRadius, outerHeight, innerHeight, fontSize } = useCommunicationInputStyles({
+            cornerType,
+            isMultiLine,
+            isInputInBottomRow: shouldShowInputInBottomRow,
+            size,
+        });
+        const { startInitialAnimation, initial, animate, transition, shouldShowOnlyRightElement } =
+            useCommunicationInputAnimation({
+                shouldUseInitialAnimation,
+                borderRadius,
+                height: outerHeight,
             });
-
-            resizeObserver.observe(element);
-
-            return () => {
-                resizeObserver.disconnect();
-            };
-        }, [checkFullHeightToggle, checkMultiLine, isMultiLine, shouldShowInitialOnly]);
+        const emojiInputRef = useCommunicationInputRef({ ref, startInitialAnimation });
 
         const leftElement = useMemo(() => {
             if (!contextMenuItems) {
@@ -165,167 +81,79 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             }
 
             return (
-                <StyledMotionIconWrapper
-                    onClick={() =>
-                        isContextMenuOpen
-                            ? contextMenuRef.current?.hide()
-                            : contextMenuRef.current?.show()
-                    }
-                    animate={{ rotate: isContextMenuOpen ? 45 : 0 }}
-                >
-                    <ContextMenu
-                        shouldDisableClick
-                        items={contextMenuItems}
-                        onHide={() => setIsContextMenuOpen(false)}
-                        onShow={() => setIsContextMenuOpen(true)}
-                        ref={contextMenuRef}
+                <StyledCommunicationInputSideElement $height={innerHeight}>
+                    <StyledMotionIconWrapper
+                        onClick={() =>
+                            isContextMenuOpen
+                                ? contextMenuRef.current?.hide()
+                                : contextMenuRef.current?.show()
+                        }
+                        animate={{ rotate: isContextMenuOpen ? 45 : 0 }}
                     >
-                        <Icon icons={['fa fa-plus']} size={20} />
-                    </ContextMenu>
-                </StyledMotionIconWrapper>
+                        <ContextMenu
+                            shouldDisableClick
+                            items={contextMenuItems}
+                            onHide={() => setIsContextMenuOpen(false)}
+                            onShow={() => setIsContextMenuOpen(true)}
+                            ref={contextMenuRef}
+                        >
+                            <Icon icons={['fa fa-plus']} size={fontSize} />
+                        </ContextMenu>
+                    </StyledMotionIconWrapper>
+                </StyledCommunicationInputSideElement>
             );
-        }, [contextMenuItems, isContextMenuOpen]);
-
-        const handleFocus = useCallback(
-            (event: FocusEvent<HTMLDivElement>) => {
-                setIsFocused(true);
-
-                if (typeof onFocus === 'function') {
-                    onFocus(event);
-                }
-            },
-            [onFocus],
-        );
-
-        const handleBlur = useCallback(
-            (event: FocusEvent<HTMLDivElement>) => {
-                setIsFocused(false);
-
-                if (typeof onBlur === 'function') {
-                    onBlur(event);
-                }
-            },
-            [onBlur],
-        );
-
-        const handleStartAnimation = useCallback(() => {
-            setHasStartedInitialAnimation(true);
-        }, []);
-
-        useImperativeHandle(
-            ref,
-            () => ({
-                startAnimation: handleStartAnimation,
-                focus: () => emojiInputRef.current?.focus(),
-                setCursorPosition: (position?: number) =>
-                    emojiInputRef.current?.setCursorPosition(position),
-                blur: () => emojiInputRef.current?.blur(),
-                insertTextAtCursorPosition: (text: string) =>
-                    emojiInputRef.current?.insertTextAtCursorPosition(text),
-                replaceText: (
-                    searchText: string,
-                    replaceText: string,
-                    options?: ReplaceTextOptions,
-                ) => emojiInputRef.current?.replaceText(searchText, replaceText, options),
-                startProgress: (durationInSeconds: number) =>
-                    emojiInputRef.current?.startProgress(durationInSeconds),
-                stopProgress: () => emojiInputRef.current?.stopProgress(),
-            }),
-            [handleStartAnimation],
-        );
-
-        const wrapperAnimation = useMemo(
-            () => ({
-                width: shouldShowInitialOnly ? 52 : '100%',
-                left: shouldShowInitialOnly ? '50%' : 0,
-                x: shouldShowInitialOnly ? '-50%' : 0,
-                borderRadius:
-                    shouldShowInitialOnly ||
-                    (!shouldShowRoundedCorners && cornerType !== CornerType.ROUNDED)
-                        ? 26
-                        : 8,
-            }),
-            [cornerType, shouldShowInitialOnly, shouldShowRoundedCorners],
-        );
-
-        const shouldCollapse = [AnimationState.OPEN, AnimationState.OPENING].includes(state);
+        }, [contextMenuItems, fontSize, innerHeight, isContextMenuOpen]);
 
         return (
-            <StyledMotionCommunicationInput
-            // initial={{ width: '100%' }}
-            // animate={
-            //     shouldCollapse
-            //         ? { width: 0, flexShrink: 1, opacity: 0 }
-            //         : { width: '100%', flexShrink: 1, opacity: 1 }
-            // }
-            >
-                <StyledCommunicationInputSpacer />
-                <StyledMotionCommunicationInputWrapper
-                    initial={wrapperAnimation}
-                    animate={wrapperAnimation}
-                    transition={{
-                        type: 'tween',
-                        duration: 0.5,
-                    }}
+            <StyledCommunicationInput $height={outerHeight}>
+                <StyledMotionCommunicationInputInner
                     $isFocused={isFocused}
+                    animate={animate}
+                    initial={initial}
+                    transition={transition}
                 >
-                    {shouldShowInitialOnly ? (
-                        rightElement && (
-                            <StyledInitialRightElementWrapper>
-                                {rightElement}
-                            </StyledInitialRightElementWrapper>
-                        )
+                    {shouldShowOnlyRightElement ? (
+                        <StyledCommunicationInputSideElement $height={innerHeight}>
+                            {rightElement}
+                        </StyledCommunicationInputSideElement>
                     ) : (
                         <>
-                            {content}
+                            {topContent}
                             <DynamicLayout
-                                shouldShowFullHeightToggle={shouldShowFullHeightToggle}
                                 shouldShowInputInBottomRow={shouldShowInputInBottomRow}
+                                shouldShowFullHeightToggle={shouldShowFullHeightToggle}
                                 isFullHeight={isFullHeight}
-                                onFullHeightToggle={(fullHeight) => setIsFullHeight(fullHeight)}
+                                onFullHeightToggle={onFullHeightToggle}
                                 leftElement={leftElement}
                                 rightElement={
                                     rightElement && (
-                                        <StyledCommunicationInputRightWrapper>
+                                        <StyledCommunicationInputSideElement $height={innerHeight}>
                                             {rightElement}
-                                        </StyledCommunicationInputRightWrapper>
+                                        </StyledCommunicationInputSideElement>
                                     )
                                 }
                                 chipsElement={<Chips chips={chips} />}
                             >
-                                <StyledEmojiInputWrapper
+                                <StyledMotionCommunicationInputEmojiInputWrapper
                                     ref={wrapperRef}
-                                    $isFullHeight={isFullHeight}
+                                    $height={innerHeight}
+                                    $fontSize={fontSize}
                                     $size={size}
+                                    animate={{ height: isFullHeight ? 513 : 'auto' }}
                                 >
                                     <EmojiInput
-                                        value={value}
-                                        onInput={onInput}
-                                        inputId={inputId}
+                                        {...inputConfig}
+                                        onBlur={onBlur}
+                                        onFocus={onFocus}
                                         ref={emojiInputRef}
-                                        onBlur={handleBlur}
-                                        height={height}
-                                        maxHeight={isFullHeight ? 501 : maxHeight}
-                                        isDisabled={isDisabled}
-                                        accessToken={accessToken}
-                                        onFocus={handleFocus}
-                                        onKeyDown={onKeyDown}
-                                        onCursorPositionChange={onCursorPositionChange}
-                                        onPopupVisibilityChange={onPopupVisibilityChange}
-                                        onPrefixElementRemove={onPrefixElementRemove}
-                                        prefixElement={prefixElement}
-                                        popupAlignment={popupAlignment}
-                                        personId={personId}
-                                        placeholder={placeholder}
-                                        shouldHidePlaceholderOnFocus={shouldHidePlaceholderOnFocus}
-                                        shouldPreventEmojiPicker={shouldPreventEmojiPicker}
                                     />
-                                </StyledEmojiInputWrapper>
+                                </StyledMotionCommunicationInputEmojiInputWrapper>
                             </DynamicLayout>
                         </>
                     )}
-                </StyledMotionCommunicationInputWrapper>
-            </StyledMotionCommunicationInput>
+                </StyledMotionCommunicationInputInner>
+                {audioInputElement}
+            </StyledCommunicationInput>
         );
     },
 );

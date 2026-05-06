@@ -1,5 +1,4 @@
-import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
-import { useCommunicationAnimationContext } from '../communication-animation-wrapper/CommunicationAnimationWrapper.context';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const DEFAULT_AUDIO_CONSTRAINTS: MediaTrackConstraints = {
     echoCancellation: true,
@@ -42,13 +41,12 @@ export const useAudioInput = ({
     const [isActive, setIsActive] = useState(false);
     const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
 
-    const { open, close } = useCommunicationAnimationContext();
-
     const getStream = useCallback(() => streamRef.current, []);
 
     const applyMutedState = useCallback(
         (stream: MediaStream | null) => {
             stream?.getAudioTracks().forEach((track) => {
+                // eslint-disable-next-line no-param-reassign
                 track.enabled = !isMuted;
             });
         },
@@ -79,14 +77,10 @@ export const useAudioInput = ({
 
         setIsActive(false);
 
-        if (typeof close === 'function') {
-            close();
-        }
-
         if (typeof onStop === 'function') {
             onStop();
         }
-    }, [cleanupAudioNodes, close, onStop]);
+    }, [cleanupAudioNodes, onStop]);
 
     const start = useCallback(async () => {
         try {
@@ -125,16 +119,12 @@ export const useAudioInput = ({
                 onStart(stream);
             }
 
-            if (typeof open === 'function') {
-                open();
-            }
-
             return stream;
         } catch (error) {
             onError?.(error);
             return null;
         }
-    }, [applyMutedState, audioConstraints, onError, onStart, open]);
+    }, [applyMutedState, audioConstraints, onError, onStart]);
 
     useEffect(() => {
         applyMutedState(streamRef.current);

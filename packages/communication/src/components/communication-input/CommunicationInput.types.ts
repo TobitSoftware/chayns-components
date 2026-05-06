@@ -2,13 +2,16 @@ import { ContextMenuItem } from '@chayns-components/core';
 import { EmojiInputProps, EmojiInputRef } from '@chayns-components/emoji-input';
 import { ReactNode } from 'react';
 
-export interface CommunicationInputProps extends EmojiInputProps {
-    contextMenuItems?: ContextMenuItem[];
-    content?: ReactNode;
+export interface CommunicationInputProps {
+    size?: CommunicationInputSize;
+    cornerType?: CommunicationInputCornerType;
     chips?: Chip[];
+    contextMenuItems?: ContextMenuItem[];
+    topContent?: ReactNode;
+    rightElement?: ReactNode;
+    inputConfig: EmojiInputProps;
     shouldUseInitialAnimation?: boolean;
-    cornerType?: CornerType;
-    size?: Size;
+    audioInputElement?: ReactNode;
 }
 
 export interface Chip {
@@ -22,12 +25,13 @@ export interface CommunicationInputRef extends EmojiInputRef {
     startAnimation: () => void;
 }
 
-export enum Size {
+export enum CommunicationInputSize {
     SMALL = 'SMALL',
     MEDIUM = 'MEDIUM',
 }
 
-export enum CornerType {
+export enum CommunicationInputCornerType {
     DYNAMIC = 'DYNAMIC',
     ROUNDED = 'ROUNDED',
+    ROUND = 'ROUND',
 }
