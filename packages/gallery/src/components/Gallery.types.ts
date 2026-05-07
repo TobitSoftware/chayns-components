@@ -4,6 +4,15 @@ import type { GalleryViewMode } from '../types/gallery';
 /**
  * Props for the public Gallery wrapper component.
  */
+export type GalleryRef = {
+    /**
+     * Clears all locally managed gallery items in edit mode.
+     * @description
+     * When the gallery is rendered in read-only mode, calling this method only emits a console warning.
+     */
+    clear: () => void;
+};
+
 export interface GalleryProps {
     /**
      * Enables drag and drop while the component is used in edit mode.
@@ -35,6 +44,16 @@ export interface GalleryProps {
      * @optional
      */
     fileMinWidth?: number;
+    /**
+     * Defines the icon that is shown in the add-file tile in edit mode.
+     * @description
+     * The icon is forwarded to the editor and replaces the default plus icon on the add-tile.
+     * @default 'fa fa-plus'
+     * @example
+     * <Gallery addFileIcon="fa fa-image-circle-plus" isEditMode files={files} />
+     * @optional
+     */
+    addFileIcon?: string;
     /**
      * Provides already known media items that should be rendered by the gallery.
      * @description

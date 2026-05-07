@@ -1,4 +1,5 @@
 import type { FileItem } from '@chayns-components/core';
+import type { GalleryRef } from '../Gallery.types';
 
 /**
  * Props for the editable gallery component.
@@ -34,6 +35,16 @@ export interface GalleryEditorProps {
      * @optional
      */
     fileMinWidth?: number;
+    /**
+     * Defines the icon that is shown in the add-file tile.
+     * @description
+     * The editor renders this icon inside the tile that opens the file picker for adding more items.
+     * @default 'fa fa-plus'
+     * @example
+     * <GalleryEditor addFileIcon="fa fa-image-circle-plus" files={files} />
+     * @optional
+     */
+    addFileIcon?: string;
     /**
      * Provides already uploaded media items that should be merged into the editor state.
      * @description
@@ -80,3 +91,5 @@ export interface GalleryEditorProps {
      */
     onRemove?: (file: FileItem) => void;
 }
+
+export type GalleryEditorRef = GalleryRef;

@@ -41,7 +41,14 @@ export const General = Template.bind({});
 
 export const ReachedMaxFiles = Template.bind({});
 
+export const CustomAddIcon = Template.bind({});
+
 ReachedMaxFiles.args = {
     files: galleryStoryFiles.slice(0, 4),
     maxFiles: 4,
+};
+
+CustomAddIcon.args = {
+    files: galleryStoryFiles.slice(0, 3),
+    addFileIcon: 'fa fa-image-circle-plus',
 };

@@ -63,6 +63,17 @@ import { Gallery } from '@chayns-components/gallery';
 />
 ```
 
+#### Edit Mode Custom Add Icon
+
+```tsx
+<Gallery
+    files={galleryStoryFiles.slice(0, 3)}
+    isEditMode
+    maxFiles={6}
+    addFileIcon={'fa fa-image-circle-plus'}
+/>
+```
+
 ### Props
 
 No prop documentation available.
@@ -110,6 +121,18 @@ import { GalleryEditor } from '@chayns-components/gallery';
     fileMinWidth={100}
     files={galleryStoryFiles.slice(0, 4)}
     maxFiles={4}
+/>
+```
+
+#### Custom Add Icon
+
+```tsx
+<GalleryEditor
+    allowDragAndDrop={false}
+    fileMinWidth={100}
+    files={galleryStoryFiles.slice(0, 3)}
+    maxFiles={6}
+    addFileIcon={'fa fa-image-circle-plus'}
 />
 ```
 

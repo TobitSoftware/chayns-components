@@ -207,10 +207,10 @@ const MapWrapper: FC<MapWrapperProps> = ({
                         mapTypeControl={false}
                         streetViewControl={false}
                     >
-                        <>
+                        <div>
                             {markerList}
                             {canPolyDraw && <Polygon path={polygonPath} options={polygonOptions} />}
-                        </>
+                        </div>
                     </Map>
                 </Wrapper>
             </StyledMapWrapper>
