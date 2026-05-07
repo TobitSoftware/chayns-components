@@ -19,6 +19,7 @@ import {
     CommunicationInputRef,
     CommunicationInputCornerType,
     CommunicationInputSize,
+    CommunicationInputDirection,
 } from './CommunicationInput.types';
 import { ContextMenu, ContextMenuRef, Icon } from '@chayns-components/core';
 import DynamicLayout from './dynamic-layout/DynamicLayout';
@@ -46,6 +47,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             shouldUseInitialAnimation = false,
             chips,
             topContent,
+            direction = CommunicationInputDirection.TOP,
         },
         ref,
     ) => {
@@ -126,6 +128,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             <StyledCommunicationInput $height={outerHeight}>
                 <StyledCommunicationInputWrapper>
                     <StyledMotionCommunicationInputInner
+                        $direction={direction}
                         $isFocused={isFocused}
                         animate={animate}
                         initial={initial}

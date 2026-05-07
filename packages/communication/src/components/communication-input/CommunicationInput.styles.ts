@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { WithTheme } from '@chayns-components/core';
 import { motion } from 'motion/react';
-import { CommunicationInputSize } from './CommunicationInput.types';
+import { CommunicationInputSize, CommunicationInputDirection } from './CommunicationInput.types';
 
 type StyledCommunicationInputProps = {
     $height: number;
@@ -22,6 +22,7 @@ export const StyledCommunicationInputWrapper = styled.div`
 
 type StyledMotionCommunicationInputInnerProps = WithTheme<{
     $isFocused: boolean;
+    $direction: CommunicationInputDirection;
 }>;
 
 export const StyledMotionCommunicationInputInner = styled(
@@ -33,7 +34,15 @@ export const StyledMotionCommunicationInputInner = styled(
     overflow: hidden;
 
     left: 0;
-    bottom: 0;
+
+    ${({ $direction }) =>
+        $direction === CommunicationInputDirection.TOP
+            ? css`
+                  bottom: 0;
+              `
+            : css`
+                  top: 0;
+              `}
 
     border: 2px solid hsla(0, 0%, 45%, 0.4);
     background-color: ${({ theme }) => theme['000']};

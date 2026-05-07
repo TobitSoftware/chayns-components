@@ -28,4 +28,5 @@ export { AudioInputPosition } from './components/audio-input/AudioInput.types';
 export {
     CommunicationInputSize,
     CommunicationInputCornerType,
+    CommunicationInputDirection,
 } from './components/communication-input/CommunicationInput.types';

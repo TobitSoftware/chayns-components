@@ -81,6 +81,14 @@ export interface CommunicationInputProps {
      * @optional
      */
     shouldUseAudioInput?: boolean;
+    /**
+     * Controls where the input expands when its size increases.
+     * @description
+     * Defines whether additional space is added above or below the input element.
+     * Use `TOP` to expand upwards and `BOTTOM` to expand downwards.
+     * @optional
+     */
+    direction?: CommunicationInputDirection;
 }
 
 export interface Chip {
@@ -131,4 +139,9 @@ export enum CommunicationInputCornerType {
     DYNAMIC = 'DYNAMIC',
     ROUNDED = 'ROUNDED',
     ROUND = 'ROUND',
+}
+
+export enum CommunicationInputDirection {
+    TOP = 'TOP',
+    BOTTOM = 'BOTTOM',
 }
