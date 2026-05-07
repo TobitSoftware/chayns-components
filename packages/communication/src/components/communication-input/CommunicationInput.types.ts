@@ -1,6 +1,6 @@
 import { ContextMenuItem } from '@chayns-components/core';
 import { EmojiInputProps, EmojiInputRef } from '@chayns-components/emoji-input';
-import { ReactNode } from 'react';
+import { ReactNode, RefObject } from 'react';
 import { AudioInputProps, AudioInputRef } from '../audio-input/AudioInput.types';
 
 export interface CommunicationInputProps {
@@ -89,6 +89,19 @@ export interface CommunicationInputProps {
      * @optional
      */
     direction?: CommunicationInputDirection;
+    /**
+     * Reference to the scrollable container that this component should interact with.
+     * @description
+     * When provided, the component will append an invisible spacer element to the end of the container
+     * to ensure that overlaying content (e.g. expanding elements) can be fully scrolled into view.
+     * The scroll position will be adjusted automatically to prevent visible jumps when the spacer size changes.
+     *
+     * Note: This works best with native scroll containers. When used with virtualized lists
+     * (e.g. custom scrollers), behavior depends on their internal scroll handling.
+     *
+     * @optional
+     */
+    scrollContainerRef?: RefObject<HTMLElement>;
 }
 
 export interface Chip {

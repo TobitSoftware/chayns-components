@@ -29,6 +29,7 @@ import {
     useCommunicationInputEvents,
     useCommunicationInputRef,
     useCommunicationInputStyles,
+    useScrollEndSpacer,
 } from './CommunicationInput.hooks';
 import Chips from './chips/Chips';
 import AudioInput from '../audio-input/AudioInput';
@@ -48,6 +49,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             chips,
             topContent,
             direction = CommunicationInputDirection.TOP,
+            scrollContainerRef,
         },
         ref,
     ) => {
@@ -95,6 +97,8 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             startInitialAnimation,
         });
 
+        const innerWrapperRef = useScrollEndSpacer({ scrollContainerRef, baseHeight: outerHeight });
+
         const leftElement = useMemo(() => {
             if (!contextMenuItems) {
                 return null;
@@ -128,6 +132,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             <StyledCommunicationInput $height={outerHeight}>
                 <StyledCommunicationInputWrapper>
                     <StyledMotionCommunicationInputInner
+                        ref={innerWrapperRef}
                         $direction={direction}
                         $isFocused={isFocused}
                         animate={animate}

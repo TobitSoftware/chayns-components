@@ -2,9 +2,11 @@ import { EmojiInputProps, EmojiInputRef, ReplaceTextOptions } from '@chayns-comp
 import {
     FocusEvent,
     ForwardedRef,
+    RefObject,
     useCallback,
     useEffect,
     useImperativeHandle,
+    useLayoutEffect,
     useMemo,
     useRef,
     useState,
@@ -334,4 +336,119 @@ export const useCommunicationInputAnimation = ({
         shouldUseInitialAnimation,
         startInitialAnimation,
     ]);
+};
+
+interface UseScrollEndSpacerOptions {
+    scrollContainerRef?: RefObject<HTMLElement | null>;
+    baseHeight: number;
+}
+
+export const useScrollEndSpacer = ({
+    scrollContainerRef,
+    baseHeight,
+}: UseScrollEndSpacerOptions) => {
+    const ref = useRef<HTMLDivElement>(null);
+    const spacerRef = useRef<HTMLDivElement | null>(null);
+    const previousExtraHeightRef = useRef(0);
+    const animationFrameRef = useRef<number | null>(null);
+
+    const [height, setHeight] = useState(0);
+
+    useLayoutEffect(() => {
+        const el = ref.current;
+
+        if (!el) {
+            return undefined;
+        }
+
+        const observer = new ResizeObserver((entries) => {
+            const entry = entries[0];
+
+            if (!entry) {
+                return;
+            }
+
+            setHeight(entry.contentRect.height);
+        });
+
+        observer.observe(el);
+
+        return () => observer.disconnect();
+    }, []);
+
+    useLayoutEffect(() => {
+        const scrollContainer = scrollContainerRef?.current;
+
+        if (!scrollContainer) {
+            return undefined;
+        }
+
+        if (animationFrameRef.current !== null) {
+            cancelAnimationFrame(animationFrameRef.current);
+            animationFrameRef.current = null;
+        }
+
+        const extraHeight = Math.max(0, height - baseHeight);
+        const previousExtraHeight = previousExtraHeightRef.current;
+
+        const isGrowing = extraHeight > previousExtraHeight;
+        const isShrinking = extraHeight < previousExtraHeight;
+
+        const previousScrollTop = scrollContainer.scrollTop;
+
+        const wasAtBottom =
+            scrollContainer.scrollTop + scrollContainer.clientHeight >=
+            scrollContainer.scrollHeight - 2;
+
+        let spacer = scrollContainer.querySelector<HTMLDivElement>(
+            '[data-scroll-end-spacer="scroll-end-spacer"]',
+        );
+
+        if (!spacer) {
+            spacer = document.createElement('div');
+            spacer.dataset.scrollEndSpacer = 'scroll-end-spacer';
+            spacer.style.width = '100%';
+            spacer.style.pointerEvents = 'none';
+            spacer.style.visibility = 'hidden';
+            spacer.style.flexShrink = '0';
+            spacer.style.overflowAnchor = 'none';
+            spacer.setAttribute('aria-hidden', 'true');
+
+            scrollContainer.appendChild(spacer);
+        }
+
+        spacerRef.current = spacer;
+        spacer.style.height = `${extraHeight}px`;
+
+        previousExtraHeightRef.current = extraHeight;
+
+        animationFrameRef.current = requestAnimationFrame(() => {
+            animationFrameRef.current = null;
+
+            if (isGrowing) {
+                scrollContainer.scrollTop = previousScrollTop;
+                return;
+            }
+
+            if (isShrinking && wasAtBottom) {
+                scrollContainer.scrollTop = scrollContainer.scrollHeight;
+            }
+        });
+
+        return undefined;
+    }, [scrollContainerRef, height, baseHeight]);
+
+    useLayoutEffect(
+        () => () => {
+            if (animationFrameRef.current !== null) {
+                cancelAnimationFrame(animationFrameRef.current);
+            }
+
+            spacerRef.current?.remove();
+            spacerRef.current = null;
+        },
+        [],
+    );
+
+    return ref;
 };
