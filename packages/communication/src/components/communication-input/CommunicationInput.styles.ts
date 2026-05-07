@@ -83,7 +83,8 @@ export const StyledMotionCommunicationInputEmojiInputWrapper = styled(
         min-height: ${({ $height }) => $height}px;
 
         > div {
-            padding: 6px 14px 6px 6px;
+            padding: ${({ $size }) =>
+                `6px ${$size === CommunicationInputSize.MEDIUM ? 14 : 10}px 6px 6px`};
 
             ${({ $size }) =>
                 $size === CommunicationInputSize.MEDIUM

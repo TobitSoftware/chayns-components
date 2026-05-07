@@ -1,12 +1,19 @@
 import styled from 'styled-components';
 import { WithTheme } from '@chayns-components/core';
 
-export const StyledChips = styled.div`
+type StyledChipsProps = { $height: number };
+
+export const StyledChips = styled.div<StyledChipsProps>`
     position: relative;
     width: 100%;
     min-width: 0;
 
+    height: ${({ $height }) => $height}px;
+
     margin: 0 4px;
+
+    display: flex;
+    align-items: center;
 `;
 
 export const StyledChipsScroll = styled.div`

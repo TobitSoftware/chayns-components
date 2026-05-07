@@ -1,16 +1,18 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Chip from './chip/Chip';
-import { CommunicationInputProps } from '../CommunicationInput.types';
+import { CommunicationInputProps, CommunicationInputSize } from '../CommunicationInput.types';
 import { StyledChips, StyledChipsArrow, StyledChipsFade, StyledChipsScroll } from './Chips.styles';
 import { Icon } from '@chayns-components/core';
 
 interface ChipsProps {
     chips: CommunicationInputProps['chips'];
+    size: CommunicationInputSize;
+    height: number;
 }
 
 const SCROLL_OFFSET = 120;
 
-const Chips: FC<ChipsProps> = ({ chips }) => {
+const Chips: FC<ChipsProps> = ({ chips, size, height }) => {
     const scrollRef = useRef<HTMLDivElement | null>(null);
 
     const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -65,6 +67,7 @@ const Chips: FC<ChipsProps> = ({ chips }) => {
         () =>
             chips?.map(({ label, onClick, onRemove, icons }) => (
                 <Chip
+                    size={size}
                     label={label}
                     onClick={onClick}
                     onRemove={onRemove}
@@ -72,7 +75,7 @@ const Chips: FC<ChipsProps> = ({ chips }) => {
                     key={label}
                 />
             )),
-        [chips],
+        [chips, size],
     );
 
     if (!chips) {
@@ -80,7 +83,7 @@ const Chips: FC<ChipsProps> = ({ chips }) => {
     }
 
     return (
-        <StyledChips>
+        <StyledChips $height={height}>
             {canScrollLeft && (
                 <>
                     <StyledChipsFade $side="left" />

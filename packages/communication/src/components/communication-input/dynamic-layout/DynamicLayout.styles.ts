@@ -44,6 +44,7 @@ export const StyledDynamicLayoutLeft = styled.div`
 export const StyledDynamicLayoutChips = styled.div`
     grid-area: chips;
     min-width: 0;
+    align-self: end;
 `;
 
 // noinspection CssInvalidPropertyValue

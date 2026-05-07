@@ -153,7 +153,9 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                                             </StyledCommunicationInputSideElement>
                                         )
                                     }
-                                    chipsElement={<Chips chips={chips} />}
+                                    chipsElement={
+                                        <Chips chips={chips} size={size} height={innerHeight} />
+                                    }
                                 >
                                     <StyledMotionCommunicationInputEmojiInputWrapper
                                         ref={wrapperRef}
