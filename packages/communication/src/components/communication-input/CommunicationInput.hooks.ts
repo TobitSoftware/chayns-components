@@ -47,8 +47,8 @@ export const useCommunicationInputRef = ({
                 emojiInputRef.current?.startProgress(durationInSeconds),
             stopProgress: () => emojiInputRef.current?.stopProgress(),
             // AudioInput
-            getStream: () => audioInputRef.current?.getStream(),
-            start: () => audioInputRef.current?.start(),
+            getStream: () => audioInputRef.current?.getStream() ?? null,
+            start: () => audioInputRef.current?.start() ?? Promise.resolve(null),
             stop: () => audioInputRef.current?.stop(),
         }),
         [startInitialAnimation],
@@ -236,7 +236,7 @@ export const useCommunicationInputStyles = ({
     isInputInBottomRow,
 }: UseCommunicationInputStylesOptions) =>
     useMemo(() => {
-        let borderRadius = 0;
+        let borderRadius: number;
         let fontSize = 16;
         let innerHeight = 48;
 
@@ -272,12 +272,14 @@ interface UseCommunicationInputAnimationOptions {
     shouldUseInitialAnimation: boolean;
     borderRadius: number;
     height: number;
+    isAudioInputOpen: boolean;
 }
 
 export const useCommunicationInputAnimation = ({
     shouldUseInitialAnimation,
     borderRadius,
     height,
+    isAudioInputOpen,
 }: UseCommunicationInputAnimationOptions) => {
     const [hasStartedInitialAnimation, setHasStartedInitialAnimation] = useState(false);
 
@@ -289,10 +291,12 @@ export const useCommunicationInputAnimation = ({
         const initial: TargetAndTransition = {
             borderRadius,
             width: '100%',
+            opacity: 1,
         };
         const animate: TargetAndTransition = {
             borderRadius,
             width: '100%',
+            opacity: 1,
         };
         const transition: Transition = {
             type: 'tween',
@@ -300,6 +304,7 @@ export const useCommunicationInputAnimation = ({
         };
 
         if (shouldUseInitialAnimation) {
+            // noinspection JSSuspiciousNameCombination - width equals height because the element uses aspect-ratio: 1 (circle)
             initial.width = height;
             initial.x = '-50%';
             initial.left = '50%';
@@ -307,6 +312,11 @@ export const useCommunicationInputAnimation = ({
             animate.width = hasStartedInitialAnimation ? '100%' : initial.width;
             animate.x = hasStartedInitialAnimation ? 0 : initial.x;
             animate.left = hasStartedInitialAnimation ? 0 : initial.left;
+        }
+
+        if (isAudioInputOpen) {
+            animate.opacity = 0;
+            animate.transition = { duration: 0.15 };
         }
 
         return {
@@ -320,6 +330,7 @@ export const useCommunicationInputAnimation = ({
         borderRadius,
         hasStartedInitialAnimation,
         height,
+        isAudioInputOpen,
         shouldUseInitialAnimation,
         startInitialAnimation,
     ]);

@@ -1,3 +1,9 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/**
+ * Intentional prop spreading:
+ * - pass-through config objects (EmojiInput, AudioInput)
+ * - avoids boilerplate mapping
+ */
 import React, { forwardRef, useMemo, useRef, useState } from 'react';
 import {
     StyledCommunicationInput,
@@ -80,6 +86,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                 shouldUseInitialAnimation,
                 borderRadius,
                 height: outerHeight,
+                isAudioInputOpen,
             });
         const { emojiInputRef, audioInputRef } = useCommunicationInputRef({
             ref,
@@ -172,8 +179,8 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                         {!isAudioInputOpen && (
                             <StyledMotionCommunicationInputSpacer
                                 initial={{ width: 16 }}
-                                exit={{ width: 0 }}
-                                animate={{ width: 16 }}
+                                exit={{ width: 0, transition: { delay: 0.15 } }}
+                                animate={{ width: 16, transition: { delay: 0.15 } }}
                             />
                         )}
                     </AnimatePresence>
@@ -181,6 +188,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                 {shouldUseAudioInput && (
                     <AudioInput
                         {...audioInputConfig}
+                        size={size}
                         onStart={onStart}
                         onStop={onStop}
                         ref={audioInputRef}

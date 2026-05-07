@@ -1,3 +1,5 @@
+import { CommunicationInputSize } from '../communication-input/CommunicationInput.types';
+
 export interface AudioInputProps {
     isMuted?: boolean;
     onMuteChange?: (isMuted: boolean) => void;
@@ -8,6 +10,8 @@ export interface AudioInputProps {
 
     styleConfig?: AudioInputStyleConfig;
     position?: AudioInputPosition;
+
+    size?: CommunicationInputSize;
 }
 
 export interface AudioInputRef {

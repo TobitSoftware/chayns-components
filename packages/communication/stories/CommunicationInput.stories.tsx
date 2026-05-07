@@ -18,14 +18,31 @@ export default {
     },
 } as Meta<typeof CommunicationInput>;
 
+const RIGHT_ELEMENT = (
+    <div
+        style={{
+            padding: '6px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: 44,
+            width: 44,
+        }}
+    >
+        <Icon icons={['fa fa-paper-plane']} />
+    </div>
+);
+
 const Template: StoryFn<typeof CommunicationInput> = (args) => {
     const [value, setValue] = useState('');
+    const [personId, setPersonId] = useState<string>();
 
     const ref = useRef<CommunicationInputRef>(null);
 
     useEffect(() => {
         const timeout = window.setTimeout(() => {
             ref.current?.startAnimation();
+            setPersonId('TKT-EEV5Q');
         }, 1500);
 
         return () => {
@@ -59,6 +76,14 @@ const Template: StoryFn<typeof CommunicationInput> = (args) => {
             </p>
 
             <CommunicationInput
+                rightElement={
+                    <CommunicationButton
+                        icons={['fa ts-sidekick']}
+                        iconColor="white"
+                        size={args.size}
+                        personId={personId}
+                    />
+                }
                 {...args}
                 ref={ref}
                 inputConfig={{
@@ -76,9 +101,12 @@ export const Small = Template.bind({});
 export const WithChips = Template.bind({});
 export const WithContent = Template.bind({});
 export const WithAnimation = Template.bind({});
-export const WithRightElement = Template.bind({});
 export const WithRoundedCorners = Template.bind({});
 export const WithAudioInput = Template.bind({});
+
+General.args = {
+    rightElement: null,
+};
 
 WithChips.args = {
     chips: [
@@ -103,37 +131,26 @@ WithChips.args = {
             onClick: () => {},
         },
     ],
-    rightElement: (
-        <div
-            style={{
-                padding: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 44,
-                width: 44,
-            }}
-        >
-            <Icon icons={['fa fa-paper-plane']} />
-        </div>
-    ),
+    rightElement: RIGHT_ELEMENT,
 };
 
 WithRoundedCorners.args = {
     cornerType: CommunicationInputCornerType.ROUNDED,
+    rightElement: RIGHT_ELEMENT,
 };
 
 Small.args = {
     size: CommunicationInputSize.SMALL,
+    rightElement: RIGHT_ELEMENT,
 };
 
 WithAudioInput.args = {
     shouldUseAudioInput: true,
+    rightElement: RIGHT_ELEMENT,
 };
 
 WithAnimation.args = {
     shouldUseInitialAnimation: true,
-    rightElement: <CommunicationButton icons={['fa ts-sidekick']} iconColor="white" />,
 };
 
 WithContent.args = {
@@ -149,8 +166,5 @@ WithContent.args = {
             Hier wird super Content angezeigt
         </div>
     ),
-};
-
-WithRightElement.args = {
-    rightElement: <CommunicationButton icons={['fa fa-thumbs-up']} personId="TKT-EEV5Q" />,
+    rightElement: RIGHT_ELEMENT,
 };

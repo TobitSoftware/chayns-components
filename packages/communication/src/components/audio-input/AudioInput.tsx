@@ -1,4 +1,4 @@
-import React, { FC, forwardRef, useCallback, useImperativeHandle } from 'react';
+import React, { forwardRef, useCallback, useImperativeHandle, useMemo } from 'react';
 import { Icon } from '@chayns-components/core';
 import { AnimatePresence } from 'motion/react';
 import { AudioInputPosition, AudioInputProps, AudioInputRef } from './AudioInput.types';
@@ -6,8 +6,9 @@ import { StyledMotionAudioInput, StyledMotionAudioInputIconWrapper } from './Aud
 import { useAudioInput } from './AudioInput.hooks';
 import WaveForm from './wave-form/WaveForm';
 import { AUDIO_INPUT_ANIMATION } from './AudioInput.constants';
+import { CommunicationInputSize } from '../communication-input/CommunicationInput.types';
 
-const AudioInput: FC<AudioInputProps> = forwardRef<AudioInputRef, AudioInputProps>(
+const AudioInput = forwardRef<AudioInputRef, AudioInputProps>(
     (
         {
             onError,
@@ -17,6 +18,7 @@ const AudioInput: FC<AudioInputProps> = forwardRef<AudioInputRef, AudioInputProp
             onStart,
             styleConfig,
             position = AudioInputPosition.RIGHT,
+            size = CommunicationInputSize.MEDIUM,
         },
         ref,
     ) => {
@@ -54,19 +56,28 @@ const AudioInput: FC<AudioInputProps> = forwardRef<AudioInputRef, AudioInputProp
             }
         }, [isActive, isMuted, onMuteChange, start]);
 
+        const sizes = useMemo(
+            () => ({
+                iconSize: size === CommunicationInputSize.MEDIUM ? 18 : 16,
+                size: size === CommunicationInputSize.MEDIUM ? 52 : 42,
+            }),
+            [size],
+        );
+
         return (
             <StyledMotionAudioInput
                 $backgroundColor={backgroundColor}
                 $position={position}
+                $size={size}
                 animate={{
-                    width: isExpanded ? '100%' : '52px',
+                    width: isExpanded ? '100%' : sizes.size,
                 }}
                 transition={{ duration: 0.25, ease: [0.2, 0.8, 0.2, 1], type: 'tween' }}
             >
                 <StyledMotionAudioInputIconWrapper onClick={handleMainButtonClick}>
                     <Icon
                         icons={isMuted ? ['fa fa-microphone', 'fa fa-slash'] : ['fa fa-microphone']}
-                        size={18}
+                        size={sizes.iconSize}
                         color={color}
                     />
                 </StyledMotionAudioInputIconWrapper>
@@ -83,7 +94,7 @@ const AudioInput: FC<AudioInputProps> = forwardRef<AudioInputRef, AudioInputProp
                             exit={AUDIO_INPUT_ANIMATION.exit}
                             transition={AUDIO_INPUT_ANIMATION.transition}
                         >
-                            <Icon icons={['fa fa-xmark']} size={18} color={color} />
+                            <Icon icons={['fa fa-xmark']} size={sizes.iconSize} color={color} />
                         </StyledMotionAudioInputIconWrapper>
                     )}
                 </AnimatePresence>

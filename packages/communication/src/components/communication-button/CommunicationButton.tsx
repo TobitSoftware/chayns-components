@@ -31,6 +31,7 @@ const CommunicationButton: FC<CommunicationButtonProps> = ({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     initial={{ opacity: 0 }}
+                    transition={{ duration: 0.2, type: 'tween' }}
                     src={`https://tsimg.cloud/${personId}/profile_w50.png`}
                 />
             )}
