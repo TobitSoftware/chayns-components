@@ -16,6 +16,9 @@ interface UseElementSizeOptions {
     shouldUseParentElement?: boolean;
 }
 
+const isSameRect = (a?: DOMRectReadOnly, b?: DOMRectReadOnly) =>
+    !!a && a.width === b.width && a.height === b.height && a.x === b.x && a.y === b.y;
+
 export const useElementSize = (
     ref: MutableRefObject<HTMLDivElement | HTMLLabelElement | null>,
     { shouldUseChildElement = false, shouldUseParentElement = false }: UseElementSizeOptions = {},
@@ -23,33 +26,49 @@ export const useElementSize = (
     const [size, setSize] = useState<DOMRectReadOnly>();
 
     useEffect(() => {
-        let target = ref.current as HTMLElement | null;
+        let target: HTMLElement | null = ref.current;
 
         if (shouldUseParentElement) {
-            target = ref.current?.parentElement as HTMLElement | null;
+            target = ref.current?.parentElement ?? null;
         }
 
         if (shouldUseChildElement) {
             target = ref.current?.firstElementChild as HTMLElement | null;
         }
 
-        if (!target) return () => {};
+        if (!target) return undefined;
 
-        const updateSize = () => setSize(target.getBoundingClientRect());
+        let frameId: number | undefined;
 
-        updateSize();
+        const updateSize = (nextSize: DOMRectReadOnly) => {
+            if (frameId) {
+                window.cancelAnimationFrame(frameId);
+            }
 
-        const observer = new ResizeObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.target === target) {
-                    setSize(entry.contentRect);
-                }
+            frameId = window.requestAnimationFrame(() => {
+                setSize((currentSize) =>
+                    isSameRect(currentSize, nextSize) ? currentSize : nextSize,
+                );
             });
+        };
+
+        updateSize(target.getBoundingClientRect());
+
+        const observer = new ResizeObserver(([entry]) => {
+            if (!entry || entry.target !== target) return;
+
+            updateSize(entry.contentRect);
         });
 
         observer.observe(target);
 
-        return () => observer.disconnect();
+        return () => {
+            if (frameId) {
+                window.cancelAnimationFrame(frameId);
+            }
+
+            observer.disconnect();
+        };
     }, [ref, shouldUseChildElement, shouldUseParentElement]);
 
     return size;
