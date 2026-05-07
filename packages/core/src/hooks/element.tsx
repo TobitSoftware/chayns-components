@@ -16,8 +16,11 @@ interface UseElementSizeOptions {
     shouldUseParentElement?: boolean;
 }
 
-const isSameRect = (a?: DOMRectReadOnly, b?: DOMRectReadOnly) =>
-    !!a && a.width === b.width && a.height === b.height && a.x === b.x && a.y === b.y;
+const isSameRect = (a?: DOMRectReadOnly, b?: DOMRectReadOnly) => {
+    if (!a || !b) return false;
+
+    return a.width === b.width && a.height === b.height && a.x === b.x && a.y === b.y;
+};
 
 export const useElementSize = (
     ref: MutableRefObject<HTMLDivElement | HTMLLabelElement | null>,
