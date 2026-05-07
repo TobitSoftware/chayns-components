@@ -258,20 +258,10 @@ No additional exported types documented.
 ### Import
 
 ```ts
-import { CommunicationInput } from '@chayns-components/communication';
+import { CommunicationInput, Icon } from '@chayns-components/communication';
 ```
 
 ### Examples
-
-#### General
-
-```tsx
-<CommunicationInput
-    placeholder={'Nachricht schreiben'}
-    contextMenuItems={[{ key: 'copy', text: 'Copy', onClick: () => {}, icons: ['fa fa-copy'] }]}
-    rightElement={null}
-/>
-```
 
 #### Small
 
@@ -280,18 +270,17 @@ import { CommunicationInput } from '@chayns-components/communication';
     placeholder={'Nachricht schreiben'}
     contextMenuItems={[{ key: 'copy', text: 'Copy', onClick: () => {}, icons: ['fa fa-copy'] }]}
     size={CommunicationInputSize.SMALL}
-    rightElement={<div
-            style={{
-                padding: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 44,
-                width: 44,
-            }}
-        >
-            <Icon icons={['fa fa-paper-plane']} />
-        </div>}
+    rightElement={<Icon icons={['fa fa-paper-plane']} />}
+/>
+```
+
+#### General
+
+```tsx
+<CommunicationInput
+    placeholder={'Nachricht schreiben'}
+    contextMenuItems={[{ key: 'copy', text: 'Copy', onClick: () => {}, icons: ['fa fa-copy'] }]}
+    rightElement={null}
 />
 ```
 
@@ -323,18 +312,7 @@ import { CommunicationInput } from '@chayns-components/communication';
                 onClick: () => {},
             },
         ]}
-    rightElement={<div
-            style={{
-                padding: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 44,
-                width: 44,
-            }}
-        >
-            <Icon icons={['fa fa-paper-plane']} />
-        </div>}
+    rightElement={<Icon icons={['fa fa-paper-plane']} />}
 />
 ```
 
@@ -354,18 +332,7 @@ import { CommunicationInput } from '@chayns-components/communication';
     topContent={<div style={{ padding: '6px', height: 50, backgroundColor: 'lightblue' }}>
                 Hier wird super Content angezeigt
             </div>}
-    rightElement={<div
-            style={{
-                padding: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 44,
-                width: 44,
-            }}
-        >
-            <Icon icons={['fa fa-paper-plane']} />
-        </div>}
+    rightElement={<Icon icons={['fa fa-paper-plane']} />}
 />
 ```
 
@@ -379,28 +346,6 @@ import { CommunicationInput } from '@chayns-components/communication';
 />
 ```
 
-#### With Rounded Corners
-
-```tsx
-<CommunicationInput
-    placeholder={'Nachricht schreiben'}
-    contextMenuItems={[{ key: 'copy', text: 'Copy', onClick: () => {}, icons: ['fa fa-copy'] }]}
-    cornerType={CommunicationInputCornerType.ROUNDED}
-    rightElement={<div
-            style={{
-                padding: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 44,
-                width: 44,
-            }}
-        >
-            <Icon icons={['fa fa-paper-plane']} />
-        </div>}
-/>
-```
-
 #### With Audio Input
 
 ```tsx
@@ -408,18 +353,36 @@ import { CommunicationInput } from '@chayns-components/communication';
     placeholder={'Nachricht schreiben'}
     contextMenuItems={[{ key: 'copy', text: 'Copy', onClick: () => {}, icons: ['fa fa-copy'] }]}
     shouldUseAudioInput
-    rightElement={<div
-            style={{
-                padding: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 44,
-                width: 44,
-            }}
-        >
-            <Icon icons={['fa fa-paper-plane']} />
-        </div>}
+    rightElement={<Icon icons={['fa fa-paper-plane']} />}
+/>
+```
+
+#### Down Direction
+
+```tsx
+<CommunicationInput
+    placeholder={'Nachricht schreiben'}
+    contextMenuItems={[{ key: 'copy', text: 'Copy', onClick: () => {}, icons: ['fa fa-copy'] }]}
+/>
+```
+
+#### With Rounded Corners
+
+```tsx
+<CommunicationInput
+    placeholder={'Nachricht schreiben'}
+    contextMenuItems={[{ key: 'copy', text: 'Copy', onClick: () => {}, icons: ['fa fa-copy'] }]}
+    cornerType={CommunicationInputCornerType.ROUNDED}
+    rightElement={<Icon icons={['fa fa-paper-plane']} />}
+/>
+```
+
+#### Dynamic Scroll
+
+```tsx
+<CommunicationInput
+    placeholder={'Nachricht schreiben'}
+    contextMenuItems={[{ key: 'copy', text: 'Copy', onClick: () => {}, icons: ['fa fa-copy'] }]}
 />
 ```
 
