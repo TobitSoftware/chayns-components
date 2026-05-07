@@ -60,11 +60,20 @@ const cloneWithTabIndex = (node: ReactNode): ReactNode => {
 
     const element = node as ReactElement;
 
-    const tmpChildren = (element.props as { children: ReactNode[] }).children;
+    if (element.type === React.Fragment) {
+        const children = Children.map(element.props.children, cloneWithTabIndex);
 
-    const children = tmpChildren ? Children.map(tmpChildren, cloneWithTabIndex) : tmpChildren;
+        return cloneElement(element, {
+            ...element.props,
+            children,
+        });
+    }
 
-    if ((element.type as unknown as { displayName: string }).displayName === 'Button') {
+    const children = element.props.children
+        ? Children.map(element.props.children, cloneWithTabIndex)
+        : element.props.children;
+
+    if ((element.type as any).displayName === 'Button') {
         return (
             // eslint-disable-next-line react/button-has-type
             <button tabIndex={-1}>{children}</button>
