@@ -1,4 +1,4 @@
-import type { FileItem, Image, Video } from '@chayns-components/core';
+import type { FileItem, Video } from '@chayns-components/core';
 
 export type GalleryMediaFile = FileItem['file'];
 
@@ -28,7 +28,7 @@ export const getMediaPreviewUrl = (
         return file.thumbnailUrl;
     }
 
-    return (file as Image).meta?.preview;
+    return file.meta?.preview;
 };
 
 export const isImageServiceUrl = (url: string): boolean => {

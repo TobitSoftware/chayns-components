@@ -12,12 +12,14 @@ import {
 import { GalleryViewMode } from '../../types/gallery';
 import { GALLERY_VIEWER_MAX_VISIBLE_ITEMS } from './GalleryViewer.constants';
 
+const EMPTY_FILE_ITEMS: FileItem[] = [];
+
 const GalleryViewer: FC<GalleryViewerProps> = ({
     files,
     shouldLoadImages = true,
     viewMode = GalleryViewMode.GRID,
 }) => {
-    const fileItems = files ?? [];
+    const fileItems = files ?? EMPTY_FILE_ITEMS;
     const ratio = getGalleryRatio(fileItems);
 
     const handleOpenFiles = useCallback(
