@@ -57,7 +57,7 @@
     "devDependencies": {
         "@babel/cli": "^7.28.6",
         "@babel/core": "^7.29.0",
-        "@babel/preset-env": "^7.29.5",
+        "@babel/preset-env": "^7.29.0",
         "@babel/preset-react": "^7.28.5",
         "@babel/preset-typescript": "^7.28.5",
         "@types/react": "^18.3.28",
@@ -69,7 +69,7 @@
         "lerna": "^8.2.4",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "styled-components": "^6.4.1",
+        "styled-components": "^6.3.9",
         "typescript": "^5.9.3"
     },
     "dependencies": {
@@ -77,7 +77,7 @@
         "@chayns-components/textstring": "^5.2.5-alpha.0",
         "emojilib": "^3.0.12",
         "react-compiler-runtime": "^1.0.0",
-        "unicode-emoji-json": "^0.9.0"
+        "unicode-emoji-json": "^0.8.0"
     },
     "peerDependencies": {
         "chayns-api": ">=2.2.0",
