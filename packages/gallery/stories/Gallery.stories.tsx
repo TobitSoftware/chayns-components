@@ -1,16 +1,10 @@
 import { action } from '@storybook/addon-actions';
 import { Meta, StoryFn } from '@storybook/react';
-import type { FileItem } from '@chayns-components/core';
+import { Button, type FileItem } from '@chayns-components/core';
 import React, { useEffect, useState } from 'react';
 import Gallery from '../src/components/Gallery';
 import { GalleryViewMode } from '../src/types/gallery';
 import { galleryPreviewFiles, galleryStoryFiles, galleryViewerSquareFiles } from './storyData';
-
-const STORY_SURFACE_STYLE: React.CSSProperties = {
-    maxWidth: '420px',
-    padding: '16px',
-    background: '#f5f6f8',
-};
 
 export default {
     title: 'Gallery/Gallery',
@@ -75,15 +69,13 @@ const Template: StoryFn<typeof Gallery> = (args) => {
     };
 
     return (
-        <div style={STORY_SURFACE_STYLE}>
-            <Gallery
-                {...args}
-                files={files}
-                onAdd={handleAdd}
-                onRemove={handleRemove}
-                onFileCountChange={handleFileCountChange}
-            />
-        </div>
+        <Gallery
+            {...args}
+            files={files}
+            onAdd={handleAdd}
+            onRemove={handleRemove}
+            onFileCountChange={handleFileCountChange}
+        />
     );
 };
 
@@ -95,16 +87,10 @@ const DeferredLoadTemplate: StoryFn<typeof Gallery> = (args) => {
     }, [args.shouldLoadImages]);
 
     return (
-        <div style={STORY_SURFACE_STYLE}>
-            <button
-                type="button"
-                onClick={() => setShouldLoadImages(true)}
-                style={{ marginBottom: 12 }}
-            >
-                Bilder laden
-            </button>
+        <>
+            <Button onClick={() => setShouldLoadImages(true)}>Bilder laden</Button>
             <Gallery {...args} shouldLoadImages={shouldLoadImages} files={galleryPreviewFiles} />
-        </div>
+        </>
     );
 };
 

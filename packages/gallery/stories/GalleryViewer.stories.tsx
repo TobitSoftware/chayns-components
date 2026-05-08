@@ -1,4 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { Button } from '@chayns-components/core';
 import React, { useEffect, useState } from 'react';
 import GalleryViewer from '../src/components/gallery-viewer/GalleryViewer';
 import { GalleryViewMode } from '../src/types/gallery';
@@ -8,12 +9,6 @@ import {
     galleryViewerSquareFiles,
     galleryVideoFiles,
 } from './storyData';
-
-const STORY_SURFACE_STYLE: React.CSSProperties = {
-    maxWidth: '420px',
-    padding: '16px',
-    background: '#f5f6f8',
-};
 
 export default {
     title: 'Gallery/GalleryViewer',
@@ -42,11 +37,7 @@ export default {
     },
 } as Meta<typeof GalleryViewer>;
 
-const Template: StoryFn<typeof GalleryViewer> = (args) => (
-    <div style={STORY_SURFACE_STYLE}>
-        <GalleryViewer {...args} />
-    </div>
-);
+const Template: StoryFn<typeof GalleryViewer> = (args) => <GalleryViewer {...args} />;
 
 const DeferredLoadTemplate: StoryFn<typeof GalleryViewer> = (args) => {
     const [shouldLoadImages, setShouldLoadImages] = useState(args.shouldLoadImages ?? false);
@@ -56,20 +47,14 @@ const DeferredLoadTemplate: StoryFn<typeof GalleryViewer> = (args) => {
     }, [args.shouldLoadImages]);
 
     return (
-        <div style={STORY_SURFACE_STYLE}>
-            <button
-                type="button"
-                onClick={() => setShouldLoadImages(true)}
-                style={{ marginBottom: 12 }}
-            >
-                Bilder laden
-            </button>
+        <>
+            <Button onClick={() => setShouldLoadImages(true)}>Bilder laden</Button>
             <GalleryViewer
                 {...args}
                 files={galleryPreviewFiles}
                 shouldLoadImages={shouldLoadImages}
             />
-        </div>
+        </>
     );
 };
 
