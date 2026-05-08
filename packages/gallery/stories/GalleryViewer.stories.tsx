@@ -10,6 +10,12 @@ import {
     galleryVideoFiles,
 } from './storyData';
 
+const GALLERY_VIEW_MODE_OPTIONS = [GalleryViewMode.SQUARE, GalleryViewMode.GRID];
+const GALLERY_VIEW_MODE_LABELS = {
+    [GalleryViewMode.SQUARE]: 'Square',
+    [GalleryViewMode.GRID]: 'Grid',
+};
+
 export default {
     title: 'Gallery/GalleryViewer',
     component: GalleryViewer,
@@ -27,7 +33,8 @@ export default {
         shouldLoadImages: { control: 'boolean' },
         viewMode: {
             control: { type: 'inline-radio' },
-            options: Object.values(GalleryViewMode),
+            options: GALLERY_VIEW_MODE_OPTIONS,
+            labels: GALLERY_VIEW_MODE_LABELS,
         },
     },
     args: {
@@ -95,6 +102,10 @@ DeferredLoadPreviewFirst.args = {
 };
 
 export const VideoFocus = Template.bind({});
+
+General.args = {
+    files: galleryStoryFiles.slice(0, 3),
+};
 
 VideoFocus.args = {
     files: galleryVideoFiles,

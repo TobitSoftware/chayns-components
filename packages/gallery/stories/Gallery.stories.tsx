@@ -6,6 +6,12 @@ import Gallery from '../src/components/Gallery';
 import { GalleryViewMode } from '../src/types/gallery';
 import { galleryPreviewFiles, galleryStoryFiles, galleryViewerSquareFiles } from './storyData';
 
+const GALLERY_VIEW_MODE_OPTIONS = [GalleryViewMode.SQUARE, GalleryViewMode.GRID];
+const GALLERY_VIEW_MODE_LABELS = {
+    [GalleryViewMode.SQUARE]: 'Square',
+    [GalleryViewMode.GRID]: 'Grid',
+};
+
 export default {
     title: 'Gallery/Gallery',
     component: Gallery,
@@ -32,7 +38,8 @@ export default {
         shouldLoadImages: { control: 'boolean' },
         viewMode: {
             control: { type: 'inline-radio' },
-            options: Object.values(GalleryViewMode),
+            options: GALLERY_VIEW_MODE_OPTIONS,
+            labels: GALLERY_VIEW_MODE_LABELS,
         },
     },
     args: {
@@ -105,6 +112,10 @@ export const EditMode = Template.bind({});
 export const EditModeMaxFilesReached = Template.bind({});
 
 export const EditModeCustomAddIcon = Template.bind({});
+
+General.args = {
+    files: galleryStoryFiles.slice(0, 3),
+};
 
 ReadOnlySquare.args = {
     files: galleryViewerSquareFiles,
