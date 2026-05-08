@@ -2,9 +2,8 @@ import { Icon, selectFiles } from '@chayns-components/core';
 import React, { FC, memo, useCallback } from 'react';
 import { StyledAddFile, StyledAddFIleIconWrapper } from './AddFile.styles';
 import type { AddFileProps } from './AddFile.types';
-import { DEFAULT_ADD_FILE_ICON } from './AddFile.constants';
 
-const AddFile: FC<AddFileProps> = ({ addFileIcon = DEFAULT_ADD_FILE_ICON, onAdd }) => {
+const AddFile: FC<AddFileProps> = ({ addFileIcon = 'fa fa-plus', onAdd }) => {
     const openSelectDialog = useCallback(async () => {
         const files = await selectFiles({
             multiple: true,

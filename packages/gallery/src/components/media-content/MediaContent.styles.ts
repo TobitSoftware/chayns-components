@@ -1,5 +1,10 @@
 import type { WithTheme } from '@chayns-components/core';
 import styled from 'styled-components';
+import {
+    MEDIA_CONTENT_IMAGE_FADE_DURATION_MS,
+    MEDIA_CONTENT_PREVIEW_BLUR,
+    MEDIA_CONTENT_PREVIEW_SCALE,
+} from './MediaContent.constants';
 
 export const StyledMediaContentVideoWrapper = styled.div<{ $ratio: number }>`
     display: flex;
@@ -29,6 +34,7 @@ const StyledMediaContentLayer = styled.img<StyledMediaContentImageProps>`
     width: 100%;
     height: 100%;
     object-fit: cover;
+    pointer-events: none;
 `;
 
 export const StyledMediaContentPreviewImage = styled(StyledMediaContentLayer)`
@@ -36,11 +42,11 @@ export const StyledMediaContentPreviewImage = styled(StyledMediaContentLayer)`
     box-shadow: 0 0 0 1px
         rgba(${({ theme }: StyledMediaContentImageProps) => theme['009-rgb']}, 0.08) inset;
     z-index: 1;
-    filter: blur(16px);
-    transform: scale(1.05);
+    filter: ${MEDIA_CONTENT_PREVIEW_BLUR};
+    transform: scale(${MEDIA_CONTENT_PREVIEW_SCALE});
     transition:
-        opacity 0.18s ease,
-        filter 0.18s ease;
+        opacity ${MEDIA_CONTENT_IMAGE_FADE_DURATION_MS}ms ease,
+        filter ${MEDIA_CONTENT_IMAGE_FADE_DURATION_MS}ms ease;
 `;
 
 export const StyledMediaContentImage = styled(StyledMediaContentLayer)`
@@ -48,7 +54,7 @@ export const StyledMediaContentImage = styled(StyledMediaContentLayer)`
     box-shadow: 0 0 0 1px
         rgba(${({ theme }: StyledMediaContentImageProps) => theme['009-rgb']}, 0.08) inset;
     z-index: 2;
-    transition: opacity 0.18s ease;
+    transition: opacity ${MEDIA_CONTENT_IMAGE_FADE_DURATION_MS}ms ease;
 `;
 
 export const StyledMediaContentVideo = styled.video<StyledMediaContentVideoProps>`
@@ -60,6 +66,7 @@ export const StyledMediaContentVideo = styled.video<StyledMediaContentVideoProps
     width: 100%;
     height: 100%;
     object-fit: cover;
+    pointer-events: none;
 `;
 
 export const StyledMediaContentPlayIcon = styled.div`

@@ -1,5 +1,5 @@
 import type { FileItem } from '@chayns-components/core';
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback } from 'react';
 import GalleryViewerItem from './gallery-viewer-item/GalleryViewerItem';
 import { StyledGalleryViewer, StyledGalleryViewerItemWrapper } from './GalleryViewer.styles';
 import type { GalleryViewerProps } from './GalleryViewer.types';
@@ -17,9 +17,8 @@ const GalleryViewer: FC<GalleryViewerProps> = ({
     shouldLoadImages = true,
     viewMode = GalleryViewMode.GRID,
 }) => {
-    const fileItems = useMemo(() => files ?? [], [files]);
-
-    const ratio = useMemo(() => getGalleryRatio(fileItems), [fileItems]);
+    const fileItems = files ?? [];
+    const ratio = getGalleryRatio(fileItems);
 
     const handleOpenFiles = useCallback(
         (file: FileItem) => {
@@ -28,10 +27,7 @@ const GalleryViewer: FC<GalleryViewerProps> = ({
         [fileItems],
     );
 
-    const visibleItems = useMemo(
-        () => fileItems.slice(0, GALLERY_VIEWER_MAX_VISIBLE_ITEMS),
-        [fileItems],
-    );
+    const visibleItems = fileItems.slice(0, GALLERY_VIEWER_MAX_VISIBLE_ITEMS);
 
     return (
         <StyledGalleryViewer>

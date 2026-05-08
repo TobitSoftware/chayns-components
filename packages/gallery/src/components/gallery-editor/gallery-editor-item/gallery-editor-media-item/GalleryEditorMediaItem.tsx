@@ -2,6 +2,7 @@ import React, { FC, memo } from 'react';
 import MediaContent from '../../../media-content/MediaContent';
 import { StyledMotionGalleryEditorMediaItem } from './GalleryEditorMediaItem.styles';
 import type { GalleryEditorMediaItemProps } from './GalleryEditorMediaItem.types';
+import { GALLERY_EDITOR_MEDIA_FADE_DURATION_S } from '../../GalleryEditor.constants';
 
 const GalleryEditorMediaItem: FC<GalleryEditorMediaItemProps> = ({
     fileItem,
@@ -14,7 +15,7 @@ const GalleryEditorMediaItem: FC<GalleryEditorMediaItemProps> = ({
         animate={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 3.2 }}
+        transition={{ duration: GALLERY_EDITOR_MEDIA_FADE_DURATION_S }}
     >
         {fileItem.uploadedFile && (
             <MediaContent

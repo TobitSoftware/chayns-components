@@ -1,5 +1,5 @@
 import { Icon } from '@chayns-components/core';
-import React, { FC, memo, useEffect, useMemo, useState } from 'react';
+import React, { FC, memo, useLayoutEffect, useRef, useState } from 'react';
 import {
     StyledMediaContentImage,
     StyledMediaContentImageWrapper,
@@ -9,8 +9,12 @@ import {
     StyledMediaContentVideoWrapper,
 } from './MediaContent.styles';
 import type { MediaContentProps } from './MediaContent.types';
-import { DEFAULT_MEDIA_CONTENT_PLAY_ICON_SIZE } from './MediaContent.constants';
 import { getMediaPreviewUrl, getMediaSourceUrl, isVideoFile } from './MediaContent.utils';
+import {
+    MEDIA_CONTENT_IMAGE_FADE_DURATION_MS,
+    MEDIA_CONTENT_PREVIEW_BLUR,
+    MEDIA_CONTENT_PREVIEW_SCALE,
+} from './MediaContent.constants';
 
 const MediaContent: FC<MediaContentProps> = ({
     file,
@@ -18,19 +22,32 @@ const MediaContent: FC<MediaContentProps> = ({
     ratio,
     onClick,
     shouldLoadImages = true,
-    playIconSize = DEFAULT_MEDIA_CONTENT_PLAY_ICON_SIZE,
+    playIconSize = 50,
 }) => {
-    const isVideo = useMemo(() => isVideoFile(file), [file]);
-    const finalSourceUrl = useMemo(() => getMediaSourceUrl(file), [file]);
-    const previewSourceUrl = useMemo(
-        () => getMediaPreviewUrl(file, previewUrl),
-        [file, previewUrl],
-    );
+    const isVideo = isVideoFile(file);
+    const finalSourceUrl = getMediaSourceUrl(file);
+    const previewSourceUrl = getMediaPreviewUrl(file, previewUrl);
     const [hasLoadedFinalMedia, setHasLoadedFinalMedia] = useState(false);
+    const imageRef = useRef<HTMLImageElement>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         setHasLoadedFinalMedia(false);
-    }, [finalSourceUrl, shouldLoadImages, previewSourceUrl]);
+    }, [finalSourceUrl]);
+
+    useLayoutEffect(() => {
+        if (!shouldLoadImages) {
+            return;
+        }
+
+        if (!isVideo && imageRef.current?.complete && imageRef.current.naturalWidth > 0) {
+            setHasLoadedFinalMedia(true);
+        }
+
+        if (isVideo && videoRef.current?.readyState && videoRef.current.readyState >= 2) {
+            setHasLoadedFinalMedia(true);
+        }
+    }, [isVideo, shouldLoadImages, finalSourceUrl]);
 
     if (isVideo) {
         return (
@@ -39,13 +56,22 @@ const MediaContent: FC<MediaContentProps> = ({
                     <Icon size={playIconSize} icons={['fa fa-play']} />
                 </StyledMediaContentPlayIcon>
                 <StyledMediaContentVideo
+                    ref={videoRef}
                     poster={previewSourceUrl}
                     preload={shouldLoadImages ? 'metadata' : 'none'}
                     onLoadedData={() => setHasLoadedFinalMedia(true)}
+                    key={finalSourceUrl}
                     style={{
-                        filter: previewSourceUrl && !hasLoadedFinalMedia ? 'blur(16px)' : undefined,
+                        filter:
+                            previewSourceUrl && !hasLoadedFinalMedia
+                                ? MEDIA_CONTENT_PREVIEW_BLUR
+                                : undefined,
                         transform:
-                            previewSourceUrl && !hasLoadedFinalMedia ? 'scale(1.05)' : undefined,
+                            previewSourceUrl && !hasLoadedFinalMedia
+                                ? `scale(${MEDIA_CONTENT_PREVIEW_SCALE})`
+                                : undefined,
+                        opacity: 1,
+                        transition: `opacity ${MEDIA_CONTENT_IMAGE_FADE_DURATION_MS}ms ease, filter ${MEDIA_CONTENT_IMAGE_FADE_DURATION_MS}ms ease, transform ${MEDIA_CONTENT_IMAGE_FADE_DURATION_MS}ms ease`,
                     }}
                 >
                     {shouldLoadImages && <source src={finalSourceUrl} type="video/mp4" />}
@@ -55,8 +81,7 @@ const MediaContent: FC<MediaContentProps> = ({
     }
 
     const shouldRenderFinalImage = shouldLoadImages && Boolean(finalSourceUrl);
-    const shouldShowPreview =
-        Boolean(previewSourceUrl) && (!shouldRenderFinalImage || !hasLoadedFinalMedia);
+    const shouldShowPreview = Boolean(previewSourceUrl);
 
     return (
         <StyledMediaContentImageWrapper onClick={onClick} $ratio={ratio}>
@@ -66,16 +91,22 @@ const MediaContent: FC<MediaContentProps> = ({
                     src={previewSourceUrl}
                     alt=""
                     aria-hidden="true"
+                    style={{
+                        opacity: shouldLoadImages && hasLoadedFinalMedia ? 0 : 1,
+                    }}
                 />
             )}
             {shouldRenderFinalImage && (
                 <StyledMediaContentImage
+                    ref={imageRef}
                     draggable={false}
                     src={finalSourceUrl}
+                    key={finalSourceUrl}
                     alt=""
                     onLoad={() => setHasLoadedFinalMedia(true)}
                     style={{
                         opacity: hasLoadedFinalMedia || !previewSourceUrl ? 1 : 0,
+                        transition: `opacity ${MEDIA_CONTENT_IMAGE_FADE_DURATION_MS}ms ease`,
                     }}
                 />
             )}
