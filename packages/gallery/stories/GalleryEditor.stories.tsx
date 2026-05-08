@@ -11,13 +11,6 @@ const STORY_SURFACE_STYLE: React.CSSProperties = {
     background: '#f5f6f8',
 };
 
-const STORY_NOTE_STYLE: React.CSSProperties = {
-    margin: '0 0 12px',
-    fontSize: '14px',
-    lineHeight: 1.5,
-    color: '#4c5561',
-};
-
 export default {
     title: 'Gallery/GalleryEditor',
     component: GalleryEditor,
@@ -78,10 +71,6 @@ const Template: StoryFn<typeof GalleryEditor> = ({ files: initialFiles, ...args 
 
     return (
         <div style={STORY_SURFACE_STYLE}>
-            <p style={STORY_NOTE_STYLE}>
-                Der Editor zeigt Upload- und Preview-Zustände gemeinsam. Hier lassen sich Drag and
-                Drop, Max-Files und der Preview-first-Ladepfad gut ablesen.
-            </p>
             <GalleryEditor
                 {...args}
                 files={files}
@@ -102,10 +91,6 @@ const DeferredLoadTemplate: StoryFn<typeof GalleryEditor> = (args) => {
 
     return (
         <div style={STORY_SURFACE_STYLE}>
-            <p style={STORY_NOTE_STYLE}>
-                Die Vorschau wird sofort angezeigt. Das finale Bild wird erst geladen, wenn die
-                externe Freigabe erfolgt.
-            </p>
             <button
                 type="button"
                 onClick={() => setShouldLoadImages(true)}

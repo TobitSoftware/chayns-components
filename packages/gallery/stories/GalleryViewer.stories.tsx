@@ -15,13 +15,6 @@ const STORY_SURFACE_STYLE: React.CSSProperties = {
     background: '#f5f6f8',
 };
 
-const STORY_NOTE_STYLE: React.CSSProperties = {
-    margin: '0 0 12px',
-    fontSize: '14px',
-    lineHeight: 1.5,
-    color: '#4c5561',
-};
-
 export default {
     title: 'Gallery/GalleryViewer',
     component: GalleryViewer,
@@ -51,10 +44,6 @@ export default {
 
 const Template: StoryFn<typeof GalleryViewer> = (args) => (
     <div style={STORY_SURFACE_STYLE}>
-        <p style={STORY_NOTE_STYLE}>
-            Der Viewer zeigt nur bereits bekannte Dateien. Die sichtbare Anordnung bleibt in allen
-            Varianten identisch, nur die Medienladung kann über `shouldLoadImages` verzögert werden.
-        </p>
         <GalleryViewer {...args} />
     </div>
 );
@@ -68,10 +57,6 @@ const DeferredLoadTemplate: StoryFn<typeof GalleryViewer> = (args) => {
 
     return (
         <div style={STORY_SURFACE_STYLE}>
-            <p style={STORY_NOTE_STYLE}>
-                Der Button simuliert die externe Freigabe des finalen Bildladens, wie es z. B. in
-                einer virtuellen Chat-Message-Liste passieren würde.
-            </p>
             <button
                 type="button"
                 onClick={() => setShouldLoadImages(true)}

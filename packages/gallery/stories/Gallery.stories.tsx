@@ -12,13 +12,6 @@ const STORY_SURFACE_STYLE: React.CSSProperties = {
     background: '#f5f6f8',
 };
 
-const STORY_NOTE_STYLE: React.CSSProperties = {
-    margin: '0 0 12px',
-    fontSize: '14px',
-    lineHeight: 1.5,
-    color: '#4c5561',
-};
-
 export default {
     title: 'Gallery/Gallery',
     component: Gallery,
@@ -83,10 +76,6 @@ const Template: StoryFn<typeof Gallery> = (args) => {
 
     return (
         <div style={STORY_SURFACE_STYLE}>
-            <p style={STORY_NOTE_STYLE}>
-                Diese Story nutzt dieselbe Public API wie der reale Einsatz. Über die Controls
-                kannst du zwischen Read-only, Edit Mode und verzögertem Laden umschalten.
-            </p>
             <Gallery
                 {...args}
                 files={files}
@@ -107,10 +96,6 @@ const DeferredLoadTemplate: StoryFn<typeof Gallery> = (args) => {
 
     return (
         <div style={STORY_SURFACE_STYLE}>
-            <p style={STORY_NOTE_STYLE}>
-                Die Gallery zeigt zuerst nur die Preview. Mit dem Button wird die finale Bildladung
-                freigegeben, ohne dass sich Layout oder Reihenfolge ändern.
-            </p>
             <button
                 type="button"
                 onClick={() => setShouldLoadImages(true)}
