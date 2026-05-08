@@ -9,6 +9,7 @@ export type MediaContentSize = {
 
 const IMAGE_SERVICE_ORIGINS = new Set(['https://tsimg.cloud', 'https://tsimg.space']);
 const IMAGE_SERVICE_PARAM_PATTERN = /^(?:m(?:scale|crop|shortedgescale)|[whsbd]\d+)$/i;
+const IMAGE_SERVICE_RESIZE_OVERSCAN = 1.25;
 
 export const isVideoFile = (file: GalleryMediaFile): file is Video => 'thumbnailUrl' in file;
 
@@ -71,8 +72,11 @@ export const hasImageServiceTransformParameters = (url: string): boolean => {
 const buildImageServiceParameterSegment = (size: MediaContentSize, devicePixelRatio: number) => {
     const scaleFactor =
         Number.isFinite(devicePixelRatio) && devicePixelRatio > 0 ? devicePixelRatio : 1;
-    const width = Math.max(1, Math.round(size.width * scaleFactor));
-    const height = Math.max(1, Math.round(size.height * scaleFactor));
+    const width = Math.max(1, Math.ceil(size.width * scaleFactor * IMAGE_SERVICE_RESIZE_OVERSCAN));
+    const height = Math.max(
+        1,
+        Math.ceil(size.height * scaleFactor * IMAGE_SERVICE_RESIZE_OVERSCAN),
+    );
 
     return `w${width}-h${height}`;
 };
