@@ -1,6 +1,6 @@
 import { Icon } from '@chayns-components/core';
 import { AnimatePresence } from 'motion/react';
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import {
     StyledGalleryEditorItem,
     StyledGalleryEditorItemDeleteButton,
@@ -12,6 +12,7 @@ import type { GalleryEditorItemProps } from './GalleryEditorItem.types';
 const GalleryEditorItem: FC<GalleryEditorItemProps> = ({
     fileItem,
     handleDeleteFile,
+    shouldLoadImages = true,
     ratio = 1,
     onClick,
 }) => {
@@ -30,6 +31,8 @@ const GalleryEditorItem: FC<GalleryEditorItemProps> = ({
                 fileItem={fileItem}
                 ratio={ratio}
                 openSelectedFile={onClick}
+                previewUrl={fileItem.previewUrl}
+                shouldLoadImages={shouldLoadImages}
             />
         );
 
@@ -45,4 +48,4 @@ const GalleryEditorItem: FC<GalleryEditorItemProps> = ({
 
 GalleryEditorItem.displayName = 'GalleryEditorItem';
 
-export default GalleryEditorItem;
+export default memo(GalleryEditorItem);

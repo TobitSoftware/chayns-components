@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import MediaContent from '../../../media-content/MediaContent';
 import { StyledMotionGalleryEditorMediaItem } from './GalleryEditorMediaItem.styles';
 import type { GalleryEditorMediaItemProps } from './GalleryEditorMediaItem.types';
@@ -6,6 +6,8 @@ import type { GalleryEditorMediaItemProps } from './GalleryEditorMediaItem.types
 const GalleryEditorMediaItem: FC<GalleryEditorMediaItemProps> = ({
     fileItem,
     openSelectedFile,
+    previewUrl,
+    shouldLoadImages = true,
     ratio,
 }) => (
     <StyledMotionGalleryEditorMediaItem
@@ -19,7 +21,9 @@ const GalleryEditorMediaItem: FC<GalleryEditorMediaItemProps> = ({
                 file={fileItem.uploadedFile}
                 onClick={() => openSelectedFile(fileItem)}
                 playIconSize={30}
+                previewUrl={previewUrl}
                 ratio={ratio}
+                shouldLoadImages={shouldLoadImages}
             />
         )}
     </StyledMotionGalleryEditorMediaItem>
@@ -27,4 +31,4 @@ const GalleryEditorMediaItem: FC<GalleryEditorMediaItemProps> = ({
 
 GalleryEditorMediaItem.displayName = 'GalleryEditorMediaItem';
 
-export default GalleryEditorMediaItem;
+export default memo(GalleryEditorMediaItem);

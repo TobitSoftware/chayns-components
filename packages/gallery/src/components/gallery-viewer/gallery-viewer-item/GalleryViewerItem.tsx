@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import MediaContent from '../../media-content/MediaContent';
 import {
     StyledGalleryViewerItem,
@@ -8,12 +8,18 @@ import type { GalleryViewerItemProps } from './GalleryViewerItem.types';
 
 const GalleryViewerItem: FC<GalleryViewerItemProps> = ({
     fileItem,
+    shouldLoadImages = true,
     ratio = 1,
     remainingItemsLength,
     onClick,
 }) => (
     <StyledGalleryViewerItem>
-        <MediaContent file={fileItem.file} onClick={() => onClick(fileItem)} ratio={ratio} />
+        <MediaContent
+            file={fileItem.file}
+            onClick={() => onClick(fileItem)}
+            ratio={ratio}
+            shouldLoadImages={shouldLoadImages}
+        />
         {remainingItemsLength && (
             <StyledGalleryViewerMoreItemsIndicator onClick={() => onClick(fileItem)}>
                 <p>{`+ ${remainingItemsLength - 3}`}</p>
@@ -24,4 +30,4 @@ const GalleryViewerItem: FC<GalleryViewerItemProps> = ({
 
 GalleryViewerItem.displayName = 'GalleryViewerItem';
 
-export default GalleryViewerItem;
+export default memo(GalleryViewerItem);

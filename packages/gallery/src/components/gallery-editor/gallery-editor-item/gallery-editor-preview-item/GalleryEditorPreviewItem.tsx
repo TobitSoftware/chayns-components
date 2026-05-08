@@ -1,5 +1,5 @@
 import { SmallWaitCursor } from '@chayns-components/core';
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import {
     StyledGalleryEditorPreviewItemImage,
     StyledGalleryEditorPreviewItemImageWrapper,
@@ -30,4 +30,4 @@ const GalleryEditorPreviewItem: FC<GalleryEditorPreviewItemProps> = ({ fileItem,
 
 GalleryEditorPreviewItem.displayName = 'GalleryEditorPreviewItem';
 
-export default GalleryEditorPreviewItem;
+export default memo(GalleryEditorPreviewItem);

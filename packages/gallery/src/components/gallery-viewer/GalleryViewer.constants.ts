@@ -1,0 +1,1 @@
+export const GALLERY_VIEWER_MAX_VISIBLE_ITEMS = 4;

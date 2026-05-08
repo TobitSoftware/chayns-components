@@ -17,29 +17,42 @@ import React, {
 } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { filterDuplicateFile, generatePreviewUrl, generateVideoThumbnail } from '../../utils/file';
-import { openFiles, mapFilesToInternalItems } from '../../utils/gallery';
+import { openFiles } from '../../utils/gallery';
 import AddFile from './add-file/AddFile';
 import GalleryEditorItem from './gallery-editor-item/GalleryEditorItem';
 import { StyledGalleryEditor, StyledGalleryEditorGrid } from './GalleryEditor.styles';
 import type { GalleryEditorProps, GalleryEditorRef } from './GalleryEditor.types';
+import {
+    mapExternalFilesIntoInternalItems,
+    mergeExternalFilesWithInternalState,
+    getPendingPreviewFileItems,
+    getPendingUploadFileItems,
+} from './GalleryEditor.utils';
+import {
+    DEFAULT_GALLERY_EDITOR_ADD_FILE_ICON,
+    DEFAULT_GALLERY_EDITOR_ALLOW_DRAG_AND_DROP,
+    DEFAULT_GALLERY_EDITOR_DOUBLE_FILE_DIALOG_MESSAGE,
+    DEFAULT_GALLERY_EDITOR_FILE_MIN_WIDTH,
+} from './GalleryEditor.constants';
 
 const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
     (
         {
-            allowDragAndDrop = false,
-            addFileIcon = 'fa fa-plus',
-            doubleFileDialogMessage = 'Diese Datei ist bereits vorhanden',
-            fileMinWidth = 100,
+            allowDragAndDrop = DEFAULT_GALLERY_EDITOR_ALLOW_DRAG_AND_DROP,
+            addFileIcon = DEFAULT_GALLERY_EDITOR_ADD_FILE_ICON,
+            doubleFileDialogMessage = DEFAULT_GALLERY_EDITOR_DOUBLE_FILE_DIALOG_MESSAGE,
+            fileMinWidth = DEFAULT_GALLERY_EDITOR_FILE_MIN_WIDTH,
             files,
             maxFiles,
             onAdd,
             onFileCountChange,
             onRemove,
+            shouldLoadImages = true,
         },
         ref,
     ) => {
         const [fileItems, setFileItems] = useState<InternalFileItem[]>(() =>
-            mapFilesToInternalItems(files),
+            mapExternalFilesIntoInternalItems(files),
         );
 
         const handleClear = useCallback(() => {
@@ -68,6 +81,10 @@ const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
         const handleUploadFileCallback = useCallback(
             (file: InternalFileItem, uploadedFile: Video | Image) => {
                 setFileItems((prevState) => {
+                    const duplicateItem = prevState.find(
+                        (prevFile) => prevFile.uploadedFile?.url === uploadedFile.url,
+                    );
+
                     const updatedState = prevState.map((prevFile) => {
                         if (prevFile.uploadedFile?.url === uploadedFile.url) {
                             callDuplicateFileDialog();
@@ -76,18 +93,11 @@ const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
                         }
 
                         if (prevFile.id === file.id) {
-                            if (typeof onAdd === 'function') {
-                                const prevElement = prevState.find(
-                                    ({ uploadedFile: nextUploadedFile }) =>
-                                        nextUploadedFile?.url === uploadedFile?.url,
-                                );
-
-                                if (!prevElement) {
-                                    onAdd({
-                                        file: uploadedFile,
-                                        id: file.id,
-                                    });
-                                }
+                            if (typeof onAdd === 'function' && !duplicateItem) {
+                                onAdd({
+                                    file: uploadedFile,
+                                    id: file.id,
+                                });
                             }
 
                             return {
@@ -108,53 +118,48 @@ const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
 
         const handleAddFiles = useCallback(
             (filesToAdd: File[]) => {
-                const newFileItems: InternalFileItem[] = [];
+                setFileItems((prevState) => {
+                    const newFileItems: InternalFileItem[] = [];
 
-                filesToAdd.forEach((file) => {
-                    if (file && !filterDuplicateFile({ files: fileItems, newFile: file })) {
-                        newFileItems.push({
-                            id: uuidv4(),
-                            file,
-                            state: 'none',
-                        });
-                    }
+                    filesToAdd.forEach((file) => {
+                        if (file && !filterDuplicateFile({ files: prevState, newFile: file })) {
+                            newFileItems.push({
+                                id: uuidv4(),
+                                file,
+                                state: 'none',
+                            });
+                        }
+                    });
+
+                    const limitedFileItems = maxFiles
+                        ? newFileItems.slice(0, Math.max(maxFiles - prevState.length, 0))
+                        : newFileItems;
+
+                    return [...prevState, ...limitedFileItems];
                 });
-
-                let limitedFileItems = newFileItems;
-
-                if (maxFiles) {
-                    limitedFileItems = newFileItems.slice(
-                        0,
-                        Math.max(maxFiles - fileItems.length, 0),
-                    );
-                }
-
-                setFileItems((prevState) => [...prevState, ...limitedFileItems]);
             },
-            [fileItems, maxFiles],
+            [maxFiles],
         );
 
         const handleDeleteFile = useCallback(
             (id?: string) => {
                 let fileToDelete: FileItem | undefined;
 
-                const filteredFiles = fileItems.filter((file) => {
-                    if (file.id === id && file.uploadedFile) {
-                        fileToDelete = { file: file.uploadedFile, id };
-                    }
+                setFileItems((prevState) =>
+                    prevState.filter((file) => {
+                        if (file.id === id && file.uploadedFile) {
+                            fileToDelete = { file: file.uploadedFile, id };
+                        }
 
-                    return file.id !== id;
-                });
+                        return file.id !== id;
+                    }),
+                );
 
-                setFileItems(filteredFiles);
-
-                if (!fileToDelete || typeof onRemove !== 'function') {
-                    return;
+                if (fileToDelete && typeof onRemove === 'function') {
+                    onRemove(fileToDelete);
                 }
-
-                onRemove(fileToDelete);
             },
-            [fileItems, onRemove],
+            [onRemove],
         );
 
         const handleDrop = useCallback(
@@ -191,15 +196,13 @@ const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
             }
         }, [fileItems.length, onFileCountChange]);
 
+        const filesToGeneratePreview = useMemo(
+            () => getPendingPreviewFileItems(fileItems),
+            [fileItems],
+        );
+        const filesToUpload = useMemo(() => getPendingUploadFileItems(fileItems), [fileItems]);
+
         useEffect(() => {
-            const filesToGeneratePreview = fileItems.filter(
-                (file) => file.file && !file.previewUrl && (file.state === 'none' || !file.state),
-            );
-
-            const filesToUpload = fileItems.filter(
-                (file) => file.file && !file.uploadedFile && file.state !== 'uploading',
-            );
-
             filesToGeneratePreview.forEach((file) => {
                 if (!file.file) {
                     return;
@@ -236,35 +239,18 @@ const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
                     callback: (uploadedFile) => handleUploadFileCallback(file, uploadedFile),
                 });
             });
-        }, [fileItems, handlePreviewUrlCallback, handleUploadFileCallback]);
+        }, [
+            filesToGeneratePreview,
+            filesToUpload,
+            handlePreviewUrlCallback,
+            handleUploadFileCallback,
+        ]);
 
         useEffect(() => {
-            const externalFileItems = mapFilesToInternalItems(files);
+            const externalFileItems = mapExternalFilesIntoInternalItems(files);
 
             setFileItems((prevState) => {
-                // Keep local-only items such as pending uploads while refreshing known external media.
-                const updatedItems = prevState.map((prevItem) => {
-                    const matchingItem = externalFileItems.find(
-                        (item) =>
-                            item.uploadedFile &&
-                            item.uploadedFile.url ===
-                                (prevItem.uploadedFile && prevItem.uploadedFile.url),
-                    );
-
-                    return matchingItem || prevItem;
-                });
-
-                return updatedItems.concat(
-                    externalFileItems.filter(
-                        (newItem) =>
-                            !prevState.some(
-                                (prevItem) =>
-                                    prevItem.uploadedFile &&
-                                    newItem.uploadedFile &&
-                                    prevItem.uploadedFile.url === newItem.uploadedFile.url,
-                            ),
-                    ),
-                );
+                return mergeExternalFilesWithInternalState(prevState, externalFileItems);
             });
         }, [files]);
 
@@ -275,6 +261,7 @@ const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
                     fileItem={file}
                     onClick={handleOpenFiles}
                     handleDeleteFile={handleDeleteFile}
+                    shouldLoadImages={shouldLoadImages}
                 />
             ));
 
@@ -286,7 +273,15 @@ const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
                 ...items,
                 <AddFile key="add_file" addFileIcon={addFileIcon} onAdd={handleAddFiles} />,
             ];
-        }, [addFileIcon, fileItems, handleAddFiles, handleDeleteFile, handleOpenFiles, maxFiles]);
+        }, [
+            addFileIcon,
+            fileItems,
+            handleAddFiles,
+            handleDeleteFile,
+            handleOpenFiles,
+            maxFiles,
+            shouldLoadImages,
+        ]);
 
         return (
             <StyledGalleryEditor>

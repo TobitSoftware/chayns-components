@@ -13,6 +13,14 @@ export interface GalleryViewerItemProps {
      */
     fileItem: FileItem;
     /**
+     * Controls whether the item may load the final media source immediately.
+     * @description
+     * The item forwards this flag to the shared media renderer so preview-first rendering can be controlled by the parent gallery.
+     * @default true
+     * @optional
+     */
+    shouldLoadImages?: boolean;
+    /**
      * Defines the aspect ratio that should be reserved for the tile.
      * @description
      * Use this prop to reserve a deterministic tile height for stable read-only rendering.

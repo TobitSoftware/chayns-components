@@ -10,9 +10,14 @@ import {
     openKnownFiles,
 } from '../../utils/gallery';
 import { GalleryViewMode } from '../../types/gallery';
+import { GALLERY_VIEWER_MAX_VISIBLE_ITEMS } from './GalleryViewer.constants';
 
-const GalleryViewer: FC<GalleryViewerProps> = ({ files, viewMode = GalleryViewMode.GRID }) => {
-    const fileItems = files ?? [];
+const GalleryViewer: FC<GalleryViewerProps> = ({
+    files,
+    shouldLoadImages = true,
+    viewMode = GalleryViewMode.GRID,
+}) => {
+    const fileItems = useMemo(() => files ?? [], [files]);
 
     const ratio = useMemo(() => getGalleryRatio(fileItems), [fileItems]);
 
@@ -23,7 +28,10 @@ const GalleryViewer: FC<GalleryViewerProps> = ({ files, viewMode = GalleryViewMo
         [fileItems],
     );
 
-    const visibleItems = fileItems.slice(0, 4);
+    const visibleItems = useMemo(
+        () => fileItems.slice(0, GALLERY_VIEWER_MAX_VISIBLE_ITEMS),
+        [fileItems],
+    );
 
     return (
         <StyledGalleryViewer>
@@ -38,8 +46,11 @@ const GalleryViewer: FC<GalleryViewerProps> = ({ files, viewMode = GalleryViewMo
                         fileItem={file}
                         onClick={handleOpenFiles}
                         ratio={getReadOnlyItemRatio({ fileItems, index, viewMode })}
+                        shouldLoadImages={shouldLoadImages}
                         remainingItemsLength={
-                            fileItems.length > 4 && index === 3 ? fileItems.length : undefined
+                            fileItems.length > GALLERY_VIEWER_MAX_VISIBLE_ITEMS && index === 3
+                                ? fileItems.length
+                                : undefined
                         }
                     />
                 ))}
