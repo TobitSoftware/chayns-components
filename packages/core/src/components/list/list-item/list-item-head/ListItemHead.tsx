@@ -25,11 +25,6 @@ import {
     StyledMotionListItemHeadHoverItem,
     StyledMotionListItemHeadHoverItemWrapper,
 } from './ListItemHead.styles';
-import {
-    LIST_ITEM_HEAD_HTML_TAG,
-    LIST_ITEM_HEAD_INDICATOR_HTML_TAG,
-    LIST_ITEM_HEAD_TITLE_HTML_TAG,
-} from '../../../../constants/list';
 import ListItemTitle from './list-item-title/ListItemTitle';
 import ListItemSubtitle from './list-item-subtitle/ListItemSubtitle';
 import ListItemRightElement from './list-item-right-element/ListItemRightElement';
@@ -210,7 +205,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     return (
         <StyledListItemHead
-            as={shouldDisableAnimation ? undefined : motion[LIST_ITEM_HEAD_HTML_TAG]}
+            as={shouldDisableAnimation ? undefined : motion.div}
             animate={
                 shouldDisableAnimation
                     ? undefined
@@ -232,11 +227,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             <StyledListItemHeadLeftWrapper>
                 {isAnyItemExpandable && (
                     <StyledListItemHeadIndicator
-                        as={
-                            shouldDisableAnimation
-                                ? undefined
-                                : motion[LIST_ITEM_HEAD_INDICATOR_HTML_TAG]
-                        }
+                        as={shouldDisableAnimation ? undefined : motion.div}
                         animate={shouldDisableAnimation ? undefined : { rotate: isOpen ? 90 : 0 }}
                         initial={shouldDisableAnimation ? undefined : false}
                         transition={shouldDisableAnimation ? undefined : { type: 'tween' }}
@@ -253,11 +244,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             >
                 <LayoutGroup>
                     <StyledListItemHeadTitle
-                        as={
-                            shouldDisableAnimation
-                                ? undefined
-                                : motion[LIST_ITEM_HEAD_TITLE_HTML_TAG]
-                        }
+                        as={shouldDisableAnimation ? undefined : motion.div}
                         layout="position"
                     >
                         <ListItemTitle

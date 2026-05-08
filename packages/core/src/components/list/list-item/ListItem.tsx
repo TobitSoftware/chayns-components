@@ -22,7 +22,6 @@ import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
 import { StyledListItem, StyledListItemTooltip } from './ListItem.styles';
 import Tooltip from '../../tooltip/Tooltip';
-import { LIST_ITEM_HTML_TAG } from '../../../constants/list';
 
 export type ListItemElements = [ReactNode, ...ReactNode[]];
 
@@ -322,7 +321,7 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
 
         return (
             <StyledListItem
-                as={shouldDisableAnimation ? undefined : motion[LIST_ITEM_HTML_TAG]}
+                as={shouldDisableAnimation ? undefined : motion.div}
                 animate={shouldDisableAnimation ? undefined : { height: 'auto', opacity: 1 }}
                 className="beta-chayns-list-item"
                 exit={shouldDisableAnimation ? undefined : { height: 0, opacity: 0 }}
