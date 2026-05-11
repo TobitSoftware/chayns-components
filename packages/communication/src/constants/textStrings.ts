@@ -52,6 +52,34 @@ export default {
             },
         },
     },
+    communicationMessage: {
+        agreeMessage: {
+            text: {
+                stringName:
+                    'txt_chayns_components_v5_communication_communicationMessage_agreeMessage_text',
+                fallback: 'Stimme zu.',
+            },
+        },
+        dateMessage: {
+            today: {
+                stringName:
+                    'txt_chayns_components_v5_communication_communicationMessage_dateMessage_today',
+                fallback: 'Heute',
+            },
+            yesterday: {
+                stringName:
+                    'txt_chayns_components_v5_communication_communicationMessage_dateMessage_yesterday',
+                fallback: 'Gestern',
+            },
+        },
+        textMessage: {
+            delete: {
+                stringName:
+                    'txt_chayns_components_v5_communication_communicationMessage_textMessage_delete',
+                fallback: 'Diese Nachricht wurde gelöscht.',
+            },
+        },
+    },
     CommunicationTeamTalkHeader: {
         add: {
             stringName: 'txt_chayns_components_v5_communication_CommunicationTeamTalkHeader_add',

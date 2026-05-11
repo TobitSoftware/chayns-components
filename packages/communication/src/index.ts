@@ -6,6 +6,7 @@ export { default as CommunicationInput } from './components/communication-input/
 export { default as AudioInput } from './components/audio-input/AudioInput';
 export { default as CommunicationButton } from './components/communication-button/CommunicationButton';
 export { default as CommunicationTeamTalkHeader } from './components/communication-team-talk-header/CommunicationTeamTalkHeader';
+export { default as CommunicationMessage } from './components/communication-message/variants';
 
 // Types
 export type {
@@ -14,6 +15,10 @@ export type {
     Member,
 } from './components/communication-header/CommunicationHeader.types';
 export type { CommunicationListItem } from './components/communication-list/CommunicationList.types';
+export type {
+    MessageMetaData,
+    MessageMetaDataFile,
+} from './components/communication-message/CommunicationMessage.types';
 export type {
     Chip,
     CommunicationInputRef,
@@ -25,6 +30,7 @@ export type {
 
 // Enums
 export { SortType } from './components/communication-list/CommunicationList.types';
+export { CommunicationMessageAlignment } from './components/communication-message/CommunicationMessage.types';
 export { AudioInputPosition } from './components/audio-input/AudioInput.types';
 export {
     CommunicationInputSize,
