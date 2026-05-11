@@ -5,6 +5,7 @@ export { default as CommunicationContent } from './components/communication-cont
 export { default as CommunicationInput } from './components/communication-input/CommunicationInput';
 export { default as AudioInput } from './components/audio-input/AudioInput';
 export { default as CommunicationButton } from './components/communication-button/CommunicationButton';
+export { default as CommunicationTeamTalkHeader } from './components/communication-team-talk-header/CommunicationTeamTalkHeader';
 
 // Types
 export type {

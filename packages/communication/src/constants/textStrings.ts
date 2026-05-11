@@ -52,4 +52,30 @@ export default {
             },
         },
     },
+    CommunicationTeamTalkHeader: {
+        add: {
+            stringName: 'txt_chayns_components_v5_communication_CommunicationTeamTalkHeader_add',
+            fallback: 'Personen hinzufügen',
+        },
+        agree: {
+            stringName: 'txt_chayns_components_v5_communication_CommunicationTeamTalkHeader_agree',
+            fallback: 'Stimme zu',
+        },
+        hint: {
+            heading: {
+                stringName:
+                    'txt_chayns_components_v5_communication_CommunicationTeamTalkHeader_hint_heading',
+                fallback: 'Externe Nachricht',
+            },
+            text: {
+                stringName:
+                    'txt_chayns_components_v5_communication_CommunicationTeamTalkHeader_hint_text',
+                fallback: 'TeamTalk ist nur intern sichtbar',
+            },
+        },
+        leave: {
+            stringName: 'txt_chayns_components_v5_communication_CommunicationTeamTalkHeader_leave',
+            fallback: 'Verlassen',
+        },
+    },
 } as const;
