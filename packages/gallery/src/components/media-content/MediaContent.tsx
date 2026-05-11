@@ -1,5 +1,5 @@
 import { Icon } from '@chayns-components/core';
-import React, { FC, memo, useLayoutEffect, useRef, useState } from 'react';
+import React, { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 import {
     StyledMediaContentImage,
     StyledMediaContentImageWrapper,
@@ -9,8 +9,14 @@ import {
     StyledMediaContentVideoWrapper,
 } from './MediaContent.styles';
 import type { MediaContentProps } from './MediaContent.types';
-import { getMediaPreviewUrl, getMediaSourceUrl, isVideoFile } from './MediaContent.utils';
+import {
+    getMediaPreviewUrl,
+    getMediaSourceUrl,
+    getResponsiveImageServiceUrl,
+    isVideoFile,
+} from './MediaContent.utils';
 import { MEDIA_CONTENT_IMAGE_FADE_DURATION_MS } from './MediaContent.constants';
+import useMediaContentSize from './useMediaContentSize';
 
 const MediaContent: FC<MediaContentProps> = ({
     file,
@@ -24,10 +30,25 @@ const MediaContent: FC<MediaContentProps> = ({
     const sourceKey = getMediaSourceUrl(file);
     const previewSourceUrl = getMediaPreviewUrl(file, previewUrl);
     const [hasLoadedFinalMedia, setHasLoadedFinalMedia] = useState(false);
+    const [resolvedFinalSourceUrl, setResolvedFinalSourceUrl] = useState<string>();
+    const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
     const imageRef = useRef<HTMLImageElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
-    const finalSourceUrl = sourceKey;
-    const displayPreviewUrl = previewSourceUrl;
+    const renderSize = useMediaContentSize(containerElement);
+    const devicePixelRatio =
+        typeof window !== 'undefined' &&
+        Number.isFinite(window.devicePixelRatio) &&
+        window.devicePixelRatio > 0
+            ? window.devicePixelRatio
+            : 1;
+    const displayPreviewUrl = useMemo(
+        () =>
+            previewSourceUrl
+                ? getResponsiveImageServiceUrl(previewSourceUrl, renderSize, devicePixelRatio)
+                : undefined,
+        [devicePixelRatio, previewSourceUrl, renderSize],
+    );
+    const finalSourceUrl = isVideo ? sourceKey : resolvedFinalSourceUrl;
     const shouldHidePreview = shouldLoadImages && hasLoadedFinalMedia;
     const previewLayerStyle = {
         opacity: shouldHidePreview ? 0 : 1,
@@ -38,12 +59,33 @@ const MediaContent: FC<MediaContentProps> = ({
         transition: `opacity ${MEDIA_CONTENT_IMAGE_FADE_DURATION_MS}ms ease`,
     };
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         setHasLoadedFinalMedia(false);
     }, [sourceKey]);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (!shouldLoadImages) {
+            setResolvedFinalSourceUrl(undefined);
+            return;
+        }
+
+        if (isVideo) {
+            setResolvedFinalSourceUrl(sourceKey);
+            return;
+        }
+
+        if (!renderSize) {
+            setResolvedFinalSourceUrl(undefined);
+            return;
+        }
+
+        setResolvedFinalSourceUrl(
+            getResponsiveImageServiceUrl(sourceKey, renderSize, devicePixelRatio),
+        );
+    }, [devicePixelRatio, isVideo, renderSize, shouldLoadImages, sourceKey]);
+
+    useEffect(() => {
+        if (!shouldLoadImages || !finalSourceUrl) {
             return;
         }
 
@@ -61,7 +103,11 @@ const MediaContent: FC<MediaContentProps> = ({
 
     if (isVideo) {
         return (
-            <StyledMediaContentVideoWrapper onClick={onClick} $ratio={ratio}>
+            <StyledMediaContentVideoWrapper
+                ref={setContainerElement}
+                onClick={onClick}
+                $ratio={ratio}
+            >
                 {displayPreviewUrl && (
                     <StyledMediaContentPreviewImage
                         draggable={false}
@@ -90,7 +136,7 @@ const MediaContent: FC<MediaContentProps> = ({
     }
 
     return (
-        <StyledMediaContentImageWrapper onClick={onClick} $ratio={ratio}>
+        <StyledMediaContentImageWrapper ref={setContainerElement} onClick={onClick} $ratio={ratio}>
             {shouldShowPreview && (
                 <StyledMediaContentPreviewImage
                     draggable={false}
