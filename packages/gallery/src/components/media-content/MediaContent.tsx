@@ -1,5 +1,5 @@
 import { Icon } from '@chayns-components/core';
-import React, { FC, memo, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, memo, useLayoutEffect, useRef, useState } from 'react';
 import {
     StyledMediaContentImage,
     StyledMediaContentImageWrapper,
@@ -9,20 +9,8 @@ import {
     StyledMediaContentVideoWrapper,
 } from './MediaContent.styles';
 import type { MediaContentProps } from './MediaContent.types';
-import {
-    getMediaPreviewUrl,
-    getMediaSourceUrl,
-    getResponsiveImageServiceUrl,
-    isVideoFile,
-} from './MediaContent.utils';
-import {
-    MEDIA_CONTENT_IMAGE_FADE_DURATION_MS,
-    MEDIA_CONTENT_IMAGE_BLUR_REMOVE_DELAY_MS,
-    MEDIA_CONTENT_IMAGE_BLUR_REMOVE_DURATION_MS,
-    MEDIA_CONTENT_PREVIEW_BLUR,
-    MEDIA_CONTENT_PREVIEW_SCALE,
-} from './MediaContent.constants';
-import useMediaContentSize from './useMediaContentSize';
+import { getMediaPreviewUrl, getMediaSourceUrl, isVideoFile } from './MediaContent.utils';
+import { MEDIA_CONTENT_IMAGE_FADE_DURATION_MS } from './MediaContent.constants';
 
 const MediaContent: FC<MediaContentProps> = ({
     file,
@@ -38,29 +26,17 @@ const MediaContent: FC<MediaContentProps> = ({
     const [hasLoadedFinalMedia, setHasLoadedFinalMedia] = useState(false);
     const imageRef = useRef<HTMLImageElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
-    const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
-    const renderSize = useMediaContentSize(containerElement);
-    const devicePixelRatio =
-        typeof window !== 'undefined' &&
-        Number.isFinite(window.devicePixelRatio) &&
-        window.devicePixelRatio > 0
-            ? window.devicePixelRatio
-            : 1;
-
-    const finalSourceUrl = useMemo(
-        () =>
-            isVideo
-                ? sourceKey
-                : getResponsiveImageServiceUrl(sourceKey, renderSize, devicePixelRatio),
-        [devicePixelRatio, isVideo, renderSize, sourceKey],
-    );
-    const displayPreviewUrl = useMemo(
-        () =>
-            previewSourceUrl
-                ? getResponsiveImageServiceUrl(previewSourceUrl, renderSize, devicePixelRatio)
-                : undefined,
-        [devicePixelRatio, previewSourceUrl, renderSize],
-    );
+    const finalSourceUrl = sourceKey;
+    const displayPreviewUrl = previewSourceUrl;
+    const shouldHidePreview = shouldLoadImages && hasLoadedFinalMedia;
+    const previewLayerStyle = {
+        opacity: shouldHidePreview ? 0 : 1,
+        filter: shouldHidePreview ? 'blur(0px)' : undefined,
+    };
+    const finalMediaStyle = {
+        opacity: hasLoadedFinalMedia || !displayPreviewUrl ? 1 : 0,
+        transition: `opacity ${MEDIA_CONTENT_IMAGE_FADE_DURATION_MS}ms ease`,
+    };
 
     useLayoutEffect(() => {
         setHasLoadedFinalMedia(false);
@@ -85,20 +61,14 @@ const MediaContent: FC<MediaContentProps> = ({
 
     if (isVideo) {
         return (
-            <StyledMediaContentVideoWrapper
-                ref={setContainerElement}
-                onClick={onClick}
-                $ratio={ratio}
-            >
+            <StyledMediaContentVideoWrapper onClick={onClick} $ratio={ratio}>
                 {displayPreviewUrl && (
                     <StyledMediaContentPreviewImage
                         draggable={false}
                         src={displayPreviewUrl}
                         alt=""
                         aria-hidden="true"
-                        style={{
-                            opacity: shouldLoadImages && hasLoadedFinalMedia ? 0 : 1,
-                        }}
+                        style={previewLayerStyle}
                     />
                 )}
                 <StyledMediaContentPlayIcon>
@@ -110,18 +80,7 @@ const MediaContent: FC<MediaContentProps> = ({
                         poster={displayPreviewUrl}
                         preload="metadata"
                         onLoadedData={() => setHasLoadedFinalMedia(true)}
-                        style={{
-                            filter:
-                                displayPreviewUrl && !hasLoadedFinalMedia
-                                    ? MEDIA_CONTENT_PREVIEW_BLUR
-                                    : 'none',
-                            transform:
-                                displayPreviewUrl && !hasLoadedFinalMedia
-                                    ? `scale(${MEDIA_CONTENT_PREVIEW_SCALE})`
-                                    : 'none',
-                            opacity: hasLoadedFinalMedia || !displayPreviewUrl ? 1 : 0,
-                            transition: `opacity ${MEDIA_CONTENT_IMAGE_FADE_DURATION_MS}ms ease, filter ${MEDIA_CONTENT_IMAGE_BLUR_REMOVE_DURATION_MS}ms ease ${MEDIA_CONTENT_IMAGE_BLUR_REMOVE_DELAY_MS}ms, transform ${MEDIA_CONTENT_IMAGE_BLUR_REMOVE_DURATION_MS}ms ease ${MEDIA_CONTENT_IMAGE_BLUR_REMOVE_DELAY_MS}ms`,
-                        }}
+                        style={finalMediaStyle}
                     >
                         <source src={finalSourceUrl} type="video/mp4" />
                     </StyledMediaContentVideo>
@@ -131,16 +90,14 @@ const MediaContent: FC<MediaContentProps> = ({
     }
 
     return (
-        <StyledMediaContentImageWrapper ref={setContainerElement} onClick={onClick} $ratio={ratio}>
+        <StyledMediaContentImageWrapper onClick={onClick} $ratio={ratio}>
             {shouldShowPreview && (
                 <StyledMediaContentPreviewImage
                     draggable={false}
                     src={displayPreviewUrl}
                     alt=""
                     aria-hidden="true"
-                    style={{
-                        opacity: shouldLoadImages && hasLoadedFinalMedia ? 0 : 1,
-                    }}
+                    style={previewLayerStyle}
                 />
             )}
             {shouldRenderFinalImage && (
@@ -150,18 +107,7 @@ const MediaContent: FC<MediaContentProps> = ({
                     src={finalSourceUrl}
                     alt=""
                     onLoad={() => setHasLoadedFinalMedia(true)}
-                    style={{
-                        filter:
-                            displayPreviewUrl && !hasLoadedFinalMedia
-                                ? MEDIA_CONTENT_PREVIEW_BLUR
-                                : 'none',
-                        transform:
-                            displayPreviewUrl && !hasLoadedFinalMedia
-                                ? `scale(${MEDIA_CONTENT_PREVIEW_SCALE})`
-                                : 'none',
-                        opacity: hasLoadedFinalMedia || !displayPreviewUrl ? 1 : 0,
-                        transition: `opacity ${MEDIA_CONTENT_IMAGE_FADE_DURATION_MS}ms ease, filter ${MEDIA_CONTENT_IMAGE_BLUR_REMOVE_DURATION_MS}ms ease ${MEDIA_CONTENT_IMAGE_BLUR_REMOVE_DELAY_MS}ms, transform ${MEDIA_CONTENT_IMAGE_BLUR_REMOVE_DURATION_MS}ms ease ${MEDIA_CONTENT_IMAGE_BLUR_REMOVE_DELAY_MS}ms`,
-                    }}
+                    style={finalMediaStyle}
                 />
             )}
         </StyledMediaContentImageWrapper>

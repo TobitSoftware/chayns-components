@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useCallback } from 'react';
 import MediaContent from '../../media-content/MediaContent';
 import {
     StyledGalleryViewerItem,
@@ -12,21 +12,25 @@ const GalleryViewerItem: FC<GalleryViewerItemProps> = ({
     ratio = 1,
     remainingItemsLength,
     onClick,
-}) => (
-    <StyledGalleryViewerItem>
-        <MediaContent
-            file={fileItem.file}
-            onClick={() => onClick(fileItem)}
-            ratio={ratio}
-            shouldLoadImages={shouldLoadImages}
-        />
-        {remainingItemsLength && (
-            <StyledGalleryViewerMoreItemsIndicator onClick={() => onClick(fileItem)}>
-                <p>{`+ ${remainingItemsLength - 3}`}</p>
-            </StyledGalleryViewerMoreItemsIndicator>
-        )}
-    </StyledGalleryViewerItem>
-);
+}) => {
+    const handleClick = useCallback(() => onClick(fileItem), [fileItem, onClick]);
+
+    return (
+        <StyledGalleryViewerItem>
+            <MediaContent
+                file={fileItem.file}
+                onClick={handleClick}
+                ratio={ratio}
+                shouldLoadImages={shouldLoadImages}
+            />
+            {remainingItemsLength && (
+                <StyledGalleryViewerMoreItemsIndicator onClick={handleClick}>
+                    <p>{`+ ${remainingItemsLength - 3}`}</p>
+                </StyledGalleryViewerMoreItemsIndicator>
+            )}
+        </StyledGalleryViewerItem>
+    );
+};
 
 GalleryViewerItem.displayName = 'GalleryViewerItem';
 

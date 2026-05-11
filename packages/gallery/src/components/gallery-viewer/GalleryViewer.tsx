@@ -1,5 +1,5 @@
 import type { FileItem } from '@chayns-components/core';
-import React, { FC, useCallback } from 'react';
+import React, { FC, memo, useCallback } from 'react';
 import GalleryViewerItem from './gallery-viewer-item/GalleryViewerItem';
 import { StyledGalleryViewer, StyledGalleryViewerItemWrapper } from './GalleryViewer.styles';
 import type { GalleryViewerProps } from './GalleryViewer.types';
@@ -59,4 +59,4 @@ const GalleryViewer: FC<GalleryViewerProps> = ({
 
 GalleryViewer.displayName = 'GalleryViewer';
 
-export default GalleryViewer;
+export default memo(GalleryViewer);
