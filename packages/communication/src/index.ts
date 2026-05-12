@@ -18,6 +18,10 @@ export type { CommunicationListItem } from './components/communication-list/Comm
 export type {
     MessageMetaData,
     MessageMetaDataFile,
+    MessageMetaDataFileFile,
+    MessageMetaDataImageFile,
+    MessageMetaDataVideoFile,
+    MessageMetaDataPlugin,
 } from './components/communication-message/CommunicationMessage.types';
 export type {
     Chip,

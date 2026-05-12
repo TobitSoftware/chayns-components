@@ -3,7 +3,6 @@ import React from 'react';
 import { CommunicationMessage, CommunicationMessageAlignment } from '../src';
 import BaseCommunicationMessage from '../src/components/communication-message/CommunicationMessage';
 import { CommunicationMessageStatus } from '../src/components/communication-message/CommunicationMessage.types';
-import { Button, Checkbox } from '@chayns-components/core';
 
 const TEST_PLUGIN = (
     <div
