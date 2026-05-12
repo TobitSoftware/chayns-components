@@ -1,8 +1,8 @@
 # @chayns-components/communication
 
-React component package providing 6 documented components for chayns applications.
+React component package providing 8 documented components for chayns applications.
 
-Documented components: `AudioInput`, `CommunicationButton`, `CommunicationContent`, `CommunicationHeader`, `CommunicationInput`, `CommunicationList`.
+Documented components: `AudioInput`, `CommunicationButton`, `CommunicationContent`, `CommunicationHeader`, `CommunicationInput`, `CommunicationList`, `CommunicationMessage`, `CommunicationTeamTalkHeader`.
 
 ## Import
 
@@ -24,6 +24,8 @@ import { AudioInput, CommunicationButton, CommunicationContent } from '@chayns-c
 - `CommunicationHeader`
 - `CommunicationInput`
 - `CommunicationList`
+- `CommunicationMessage`
+- `CommunicationTeamTalkHeader`
 
 ## AudioInput
 
@@ -566,6 +568,282 @@ No additional exported types documented.
 ### Usage Notes
 
 - Import `CommunicationList` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+
+### Anti Patterns
+
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
+## CommunicationMessage
+
+`CommunicationMessage` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
+
+### Import
+
+```ts
+import { CommunicationMessage } from '@chayns-components/communication';
+```
+
+### Examples
+
+#### System Message
+
+```tsx
+<CommunicationMessage
+    metadata={{
+                id: 'message',
+                status: CommunicationMessageStatus.DELIVERED,
+                author: {
+                    name: 'Michael Gesenhues',
+                    id: 'MIC-HEAL1',
+                    imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+                },
+                creationTime: new Date().toISOString(),
+            }}
+    alignment={CommunicationMessageAlignment.RIGHT}
+    content={'Michael Gesenhues hat Jannik Weise hinzugefügt'}
+/>
+```
+
+#### Date Message
+
+```tsx
+<CommunicationMessage
+    metadata={{
+                id: 'message',
+                status: CommunicationMessageStatus.DELIVERED,
+                author: {
+                    name: 'Michael Gesenhues',
+                    id: 'MIC-HEAL1',
+                    imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+                },
+                creationTime: new Date().toISOString(),
+            }}
+    alignment={CommunicationMessageAlignment.RIGHT}
+    date={new Date().toISOString()}
+/>
+```
+
+#### Plugin Message
+
+```tsx
+<CommunicationMessage
+    metadata={{
+                id: 'message',
+                status: CommunicationMessageStatus.DELIVERED,
+                author: {
+                    name: 'Michael Gesenhues',
+                    id: 'MIC-HEAL1',
+                    imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+                },
+                creationTime: new Date().toISOString(),
+            }}
+    alignment={CommunicationMessageAlignment.RIGHT}
+    content={<div
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 8,
+                color: 'white',
+                fontFamily: 'sans-serif',
+            }}
+        >
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 12,
+                }}
+            >
+                <img
+                    src="https://tsimg.cloud/JAN-NIK96/profile_w200-h200.png"
+                    alt=""
+                    style={{
+                        width: 40,
+                        height: 40,
+                        objectFit: 'cover',
+                    }}
+                />
+                <span
+                    style={{
+                        fontSize: 24,
+                    }}
+                >
+                    →
+                </span>
+                <img
+                    src="https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png"
+                    alt=""
+                    style={{
+                        width: 40,
+                        height: 40,
+                        objectFit: 'cover',
+                    }}
+                />
+            </div>
+            <div
+                style={{
+                    fontSize: 24,
+                    fontWeight: 600,
+                }}
+            >
+                1,00 €
+            </div>
+            <div
+                style={{
+                    fontSize: 14,
+                }}
+            >
+                Test-Buchung
+            </div>
+        </div>}
+/>
+```
+
+#### Text Message
+
+```tsx
+<CommunicationMessage
+    metadata={{
+                id: 'message',
+                status: CommunicationMessageStatus.DELIVERED,
+                author: {
+                    name: 'Michael Gesenhues',
+                    id: 'MIC-HEAL1',
+                    imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+                },
+                creationTime: new Date().toISOString(),
+            }}
+    alignment={CommunicationMessageAlignment.RIGHT}
+    options={[
+            {
+                key: 'delete',
+                icons: ['fa fa-trash'],
+                text: 'Löschen',
+                onClick: () => {},
+            },
+        ]}
+    content={<div>
+                <CommunicationMessage.Preview
+                    metadata={{
+                        id: 'message',
+                        status: CommunicationMessageStatus.DELIVERED,
+                        author: {
+                            name: 'Jannik Weise',
+                            id: 'JAN-NIK96',
+                            imageUrl: 'https://tsimg.cloud/JAN-NIK96/profile_w200-h200.png',
+                        },
+                        plainText: 'An dieser Stelle würde ich einen Context benutzen.',
+                        creationTime: new Date().toISOString(),
+                    }}
+                    onClick={() => {}}
+                />
+                <p>Ja stimmt. Das ist hier die bessere Wahl. 👍</p>
+            </div>}
+/>
+```
+
+#### Deleted Message
+
+```tsx
+<CommunicationMessage
+    metadata={{
+            id: 'message',
+            status: CommunicationMessageStatus.DELIVERED,
+            author: {
+                name: 'Michael Gesenhues',
+                id: 'MIC-HEAL1',
+                imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+            },
+            creationTime: new Date().toISOString(),
+            deletionTime: new Date().toISOString(),
+        }}
+    alignment={CommunicationMessageAlignment.RIGHT}
+/>
+```
+
+#### Agree Message
+
+```tsx
+<CommunicationMessage
+    metadata={{
+                id: 'message',
+                status: CommunicationMessageStatus.DELIVERED,
+                author: {
+                    name: 'Michael Gesenhues',
+                    id: 'MIC-HEAL1',
+                    imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+                },
+                creationTime: new Date().toISOString(),
+            }}
+    alignment={CommunicationMessageAlignment.RIGHT}
+/>
+```
+
+#### Preview Message
+
+```tsx
+<CommunicationMessage
+    metadata={{
+            id: 'message',
+            status: CommunicationMessageStatus.DELIVERED,
+            author: {
+                name: 'Michael Gesenhues',
+                id: 'MIC-HEAL1',
+                imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+            },
+            creationTime: new Date().toISOString(),
+        }}
+    alignment={CommunicationMessageAlignment.RIGHT}
+    onClick={() => {}}
+/>
+```
+
+### Props
+
+No prop documentation available.
+
+### Types
+
+No additional exported types documented.
+
+### Usage Notes
+
+- Import `CommunicationMessage` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+
+### Anti Patterns
+
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
+## CommunicationTeamTalkHeader
+
+`CommunicationTeamTalkHeader` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
+
+### Import
+
+```ts
+import { CommunicationTeamTalkHeader } from '@chayns-components/communication';
+```
+
+### Examples
+
+#### General
+
+```tsx
+<CommunicationTeamTalkHeader />
+```
+
+### Props
+
+No prop documentation available.
+
+### Types
+
+No additional exported types documented.
+
+### Usage Notes
+
+- Import `CommunicationTeamTalkHeader` directly from `@chayns-components/communication` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
