@@ -80,6 +80,24 @@ export default {
             },
         },
     },
+    previewMessage: {
+        file: {
+            stringName: '',
+            fallback: 'Datei',
+        },
+        image: {
+            stringName: '',
+            fallback: 'Bild',
+        },
+        video: {
+            stringName: '',
+            fallback: 'Video',
+        },
+        plugin: {
+            stringName: '',
+            fallback: 'Plugin',
+        },
+    },
     CommunicationTeamTalkHeader: {
         add: {
             stringName: 'txt_chayns_components_v5_communication_CommunicationTeamTalkHeader_add',

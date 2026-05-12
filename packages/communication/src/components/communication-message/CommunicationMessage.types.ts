@@ -25,10 +25,32 @@ export interface CommunicationMessageProps {
     options?: ContextMenuItem[];
 }
 
-export interface MessageMetaDataFile {
+export interface MessageMetaDataImageFile {
     previewUrl: string;
-    type: 'image' | 'video' | 'file';
+    type: 'image';
 }
+
+export interface MessageMetaDataVideoFile {
+    previewUrl: string;
+    type: 'video';
+}
+
+export interface MessageMetaDataFileFile {
+    fileName: string;
+    type: 'file';
+}
+
+export interface MessageMetaDataPlugin {
+    icon?: string;
+    name: string;
+}
+
+export type CombinedPreviewFile = MessageMetaDataImageFile | MessageMetaDataVideoFile;
+
+export type MessageMetaDataFile =
+    | MessageMetaDataImageFile
+    | MessageMetaDataVideoFile
+    | MessageMetaDataFileFile;
 
 export interface MessageMetaData {
     id: string;
@@ -40,7 +62,7 @@ export interface MessageMetaData {
         imageUrl: string;
     };
     status: CommunicationMessageStatus;
-    pluginId?: string;
+    plugin?: MessageMetaDataPlugin;
     files?: MessageMetaDataFile[];
     plainText?: string;
 }

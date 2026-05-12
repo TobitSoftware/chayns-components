@@ -21,12 +21,12 @@ export const StyledCommunicationMessage = styled.div<StyledCommunicationMessageP
         switch ($alignment) {
             case CommunicationMessageAlignment.LEFT:
                 return css`
-                    background-color: ${theme['000']};
+                    background-color: ${theme['102']};
                     margin: 0 44px 0 22px;
                 `;
             case CommunicationMessageAlignment.RIGHT:
                 return css`
-                    background-color: ${theme['102']};
+                    background-color: ${theme['000']};
                     margin: 0 22px 0 44px;
                 `;
             case CommunicationMessageAlignment.CENTER:
