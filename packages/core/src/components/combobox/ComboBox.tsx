@@ -11,7 +11,6 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { calculateMaxComboBoxItemWidth } from '../../utils/calculate';
 import { useIsTouch } from '../../utils/environment';
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import Icon from '../icon/Icon';
@@ -34,6 +33,7 @@ import DropdownBodyWrapper from '../dropdown-body-wrapper/DropdownBodyWrapper';
 import { DropdownDirection } from '../../types/dropdown';
 import { useElementSize } from '../../hooks/element';
 import { ComboBoxProps, ComboBoxRef, ComboBoxSize, IComboBoxItem } from './ComboBox.types';
+import { getComboBoxWidthResult } from './ComboBox.utils';
 
 const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
     (
@@ -74,7 +74,6 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
         const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
         const isInputFocused = useRef(false);
-
         const styledComboBoxElementRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement | null>(null);
 
@@ -84,16 +83,50 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
 
         const functions = useFunctions();
         const values = useValues();
-
         const isTouch = useIsTouch();
-
         const areaProvider = useContext(AreaContext);
 
         useEffect(() => {
-            if (shouldUseFullWidth && parentSize) {
-                setMinWidth(parentSize.width);
+            if (!parentSize) {
+                return;
             }
-        }, [parentSize, shouldUseFullWidth]);
+
+            const { minWidth: calculatedMinWidth, bodyMinWidth: calculatedBodyMinWidth } =
+                getComboBoxWidthResult({
+                    functions,
+                    internalSelectedItem,
+                    lists,
+                    parentWidth: parentSize.width,
+                    placeholder,
+                    prefix,
+                    prefixMinWidth,
+                    selectedItem,
+                    shouldDropDownUseMaxItemWidth,
+                    shouldShowBigImage,
+                    shouldShowClearIcon,
+                    shouldUseCurrentItemWidth,
+                    shouldUseFullWidth,
+                    values,
+                });
+
+            setMinWidth(calculatedMinWidth);
+            setBodyMinWidth(calculatedBodyMinWidth);
+        }, [
+            functions,
+            internalSelectedItem,
+            lists,
+            parentSize,
+            placeholder,
+            prefix,
+            prefixMinWidth,
+            selectedItem,
+            shouldDropDownUseMaxItemWidth,
+            shouldShowBigImage,
+            shouldShowClearIcon,
+            shouldUseCurrentItemWidth,
+            shouldUseFullWidth,
+            values,
+        ]);
 
         const shouldChangeColor = useMemo(
             () => areaProvider.shouldChangeColor ?? false,
@@ -254,7 +287,6 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                     const focusedElement = children[newIndex] as HTMLDivElement;
 
                     focusedElement.tabIndex = 0;
-
                     focusedElement.focus();
                 } else if (e.key === 'Enter' && focusedIndex !== null) {
                     const element = contentRef.current?.children[focusedIndex];
@@ -283,103 +315,6 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
 
             return () => document.removeEventListener('keydown', handleKeyDown);
         }, [focusedIndex, handleSetSelectedItem, isAnimating, lists]);
-
-        /**
-         * This function calculates the greatest width
-         */
-        useEffect(() => {
-            const allItems = lists.flatMap((list) => list.list);
-
-            let maxItemWidth = calculateMaxComboBoxItemWidth({
-                list: [
-                    ...allItems,
-                    { text: placeholder, value: 'placeholder' },
-                    ...(selectedItem ? [selectedItem] : []),
-                ],
-                functions,
-                shouldShowBigImage,
-                values,
-            });
-
-            if (shouldDropDownUseMaxItemWidth) {
-                maxItemWidth += 20 + 2 + 1; // 20px padding (left and right), 2px border, 1px puffer for rounding errors
-
-                setBodyMinWidth(maxItemWidth);
-                setMinWidth(maxItemWidth);
-
-                return;
-            }
-
-            const parentWidth =
-                styledComboBoxElementRef.current?.parentElement?.getBoundingClientRect().width ?? 0;
-
-            const paddingWidth = 20 + 2 + 40 + (shouldShowClearIcon ? 40 : 0) + 1; // padding + border + arrow icon + optional clear icon + 1px puffer for rounding errors
-
-            let prefixWidth = 0;
-
-            if (prefix) {
-                const prefixTextWidth = calculateMaxComboBoxItemWidth({
-                    list: [{ text: prefix, value: 'prefix' }],
-                    functions,
-                    values,
-                });
-
-                prefixWidth = Math.max(prefixTextWidth + 5, 32);
-            }
-
-            const calculatedWidth = maxItemWidth + paddingWidth + prefixWidth;
-
-            let tmpMinWidth = calculatedWidth;
-            let tmpBodyMinWidth = calculatedWidth;
-
-            // Full width settings
-            if (shouldUseFullWidth) {
-                tmpMinWidth = parentWidth;
-
-                tmpBodyMinWidth =
-                    parentWidth < calculatedWidth - 20 ? calculatedWidth - 20 : parentWidth;
-            }
-            // Current item width settings
-            else if (shouldUseCurrentItemWidth && internalSelectedItem) {
-                const internalSelectedItemWidth = calculateMaxComboBoxItemWidth({
-                    list: [internalSelectedItem],
-                    functions,
-                    shouldShowBigImage,
-                    values,
-                });
-
-                const itemWidth = internalSelectedItemWidth + paddingWidth + prefixWidth;
-
-                tmpMinWidth = itemWidth;
-
-                tmpBodyMinWidth =
-                    itemWidth < calculatedWidth - 20 ? calculatedWidth - 20 : itemWidth;
-            }
-
-            if (tmpMinWidth > parentWidth) {
-                tmpMinWidth = parentWidth;
-            }
-
-            if (tmpBodyMinWidth > parentWidth) {
-                tmpBodyMinWidth = parentWidth;
-            }
-
-            setMinWidth(tmpMinWidth);
-            setBodyMinWidth(shouldUseCurrentItemWidth ? tmpMinWidth : tmpBodyMinWidth);
-        }, [
-            functions,
-            internalSelectedItem,
-            lists,
-            placeholder,
-            prefix,
-            selectedItem,
-            shouldDropDownUseMaxItemWidth,
-            shouldShowBigImage,
-            shouldShowClearIcon,
-            shouldUseCurrentItemWidth,
-            shouldUseFullWidth,
-            values,
-        ]);
 
         /**
          * This function sets the external selected item
@@ -494,7 +429,6 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                     ref={styledComboBoxElementRef}
                     $minWidth={minWidth}
                     $shouldUseFullWidth={shouldUseFullWidth}
-                    $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
                 >
                     <StyledComboBoxHeader
                         $direction={direction}
@@ -578,7 +512,6 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                             maxHeight={maxHeight}
                         >
                             <StyledComboBoxBody
-                                $shouldUseCurrentItemWidth={shouldUseCurrentItemWidth}
                                 $maxHeight={maxHeight}
                                 $minWidth={bodyWidth ?? bodyMinWidth}
                                 className="chayns-scrollbar"
@@ -592,41 +525,40 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                 </StyledComboBox>
             ),
             [
-                minWidth,
-                shouldUseFullWidth,
-                shouldUseCurrentItemWidth,
+                bodyMinWidth,
+                bodyWidth,
+                comboBoxGroups,
+                container,
+                contentHeight,
                 direction,
+                handleClear,
+                handleClose,
                 handleHeaderClick,
+                handleInputBlur,
+                handleInputFocus,
+                inputValue,
+                internalSelectedItem,
                 isAnimating,
-                isTouch,
-                size,
-                shouldShowTransparentBackground,
                 isDisabled,
-                shouldChangeColor,
-                shouldShowBigImage,
+                isTouch,
+                maxHeight,
+                minWidth,
+                onInputChange,
+                placeholderIcon,
+                placeholderImageUrl,
+                placeholderText,
                 prefix,
                 prefixMinWidth,
                 selectedItem,
-                internalSelectedItem,
-                placeholderImageUrl,
-                shouldShowRoundPlaceholderImage,
-                placeholderIcon,
-                inputValue,
-                onInputChange,
-                handleInputBlur,
-                handleInputFocus,
-                placeholderText,
-                shouldShowClearIcon,
-                handleClear,
+                shouldChangeColor,
                 shouldDisableActions,
-                bodyWidth,
-                contentHeight,
                 shouldCaptureEvents,
-                handleClose,
-                container,
-                bodyMinWidth,
-                maxHeight,
-                comboBoxGroups,
+                shouldShowBigImage,
+                shouldShowClearIcon,
+                shouldShowRoundPlaceholderImage,
+                shouldShowTransparentBackground,
+                shouldUseFullWidth,
+                size,
             ],
         );
     },
