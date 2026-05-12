@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
+import { FILTER_CONTENT_ROW_GAP_PX } from './FilterContent.constants';
 
 type StyledFilterContentProps = WithTheme<unknown>;
 
@@ -13,42 +14,22 @@ export const StyledFilterContent = styled.div<StyledFilterContentProps>`
     gap: 10px;
 `;
 
-export const StyledFilterSort = styled.div`
+export const StyledFilterContentLabeledRow = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    gap: ${FILTER_CONTENT_ROW_GAP_PX}px;
+    width: 100%;
+    min-width: 0;
 `;
 
-export const StyledFilterSortText = styled.div`
+export const StyledFilterContentLabel = styled.div`
     flex: 0 0 auto;
+    white-space: nowrap;
 `;
 
-type StyledFilterComboboxWrapperProps = WithTheme<{
-    $textWidth: number;
-}>;
-
-export const StyledFilterComboboxWrapper = styled.div<StyledFilterComboboxWrapperProps>`
+export const StyledFilterContentControlWrapper = styled.div`
     display: flex;
-    justify-content: end;
-    
-    width: ${({ $textWidth }) => `calc(100% - ${$textWidth}px)`}}
-`;
-
-export const StyledFilterComboboxInline = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-`;
-
-export const StyledFilterComboboxInlineLabel = styled.div`
-    flex: 0 0 auto;
-`;
-
-export const StyledFilterComboboxInlineComboboxWrapper = styled.div`
-    display: flex;
-    justify-content: end;
     flex: 1 1 auto;
     min-width: 0;
+    justify-content: flex-end;
 `;
