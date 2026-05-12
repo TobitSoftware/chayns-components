@@ -29,9 +29,7 @@ import { Gallery, GalleryEditor, GalleryViewer } from '@chayns-components/galler
 
 ## Gallery
 
-Die Wrapper-Komponente entscheidet zwischen Viewer und Editor und steuert das optionale verzögerte
-Laden der finalen Medien. Die Stories zeigen die typischen Einsatzfälle sowie die neue
-Preview-first-Ladelogik.
+Die Wrapper-Komponente entscheidet zwischen Viewer und Editor und steuert das optionale verzögerte Laden der finalen Medien. Die Stories zeigen die typischen Einsatzfälle sowie die neue Preview-first-Ladelogik.
 
 ### Import
 
@@ -122,18 +120,14 @@ No additional exported types documented.
 ### Usage Notes
 
 - Import `Gallery` directly from `@chayns-components/gallery` instead of internal source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the
-  public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the public package export.
 ## GalleryEditor
 
-Der Editor verwaltet lokale und externe Medien, unterstützt Drag-and-Drop und kann die endgültige
-Medienladung über `shouldLoadImages` verzögern.
+Der Editor verwaltet lokale und externe Medien, unterstützt Drag-and-Drop und kann die endgültige Medienladung über `shouldLoadImages` verzögern.
 
 ### Import
 
@@ -238,20 +232,15 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `GalleryEditor` directly from `@chayns-components/gallery` instead of internal source
-  paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `GalleryEditor` directly from `@chayns-components/gallery` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the
-  public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the public package export.
 ## GalleryViewer
 
-Der read-only Viewer rendert bekannte Medien im Grid- oder Square-Layout und unterstützt das
-verzögerte Laden finaler Medien über `shouldLoadImages`.
+Der read-only Viewer rendert bekannte Medien im Grid- oder Square-Layout und unterstützt das verzögerte Laden finaler Medien über `shouldLoadImages`.
 
 ### Import
 
@@ -284,7 +273,11 @@ import { GalleryViewer } from '@chayns-components/gallery';
 #### Mixed Media
 
 ```tsx
-<GalleryViewer files={galleryStoryFiles} shouldLoadImages viewMode={GalleryViewMode.GRID} />
+<GalleryViewer
+    files={galleryStoryFiles}
+    shouldLoadImages
+    viewMode={GalleryViewMode.GRID}
+/>
 ```
 
 #### Single Item Fallback Ratio
@@ -292,14 +285,14 @@ import { GalleryViewer } from '@chayns-components/gallery';
 ```tsx
 <GalleryViewer
     files={[
-        {
-            id: 'single-fallback-image',
-            file: {
-                id: 'fallback-1',
-                url: 'https://picsum.photos/id/1025/1200/900',
+            {
+                id: 'single-fallback-image',
+                file: {
+                    id: 'fallback-1',
+                    url: 'https://picsum.photos/id/1025/1200/900',
+                },
             },
-        },
-    ]}
+        ]}
     shouldLoadImages
     viewMode={GalleryViewMode.GRID}
 />
@@ -318,7 +311,11 @@ import { GalleryViewer } from '@chayns-components/gallery';
 #### Video Focus
 
 ```tsx
-<GalleryViewer files={galleryVideoFiles} shouldLoadImages viewMode={GalleryViewMode.GRID} />
+<GalleryViewer
+    files={galleryVideoFiles}
+    shouldLoadImages
+    viewMode={GalleryViewMode.GRID}
+/>
 ```
 
 ### Props
@@ -331,12 +328,9 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `GalleryViewer` directly from `@chayns-components/gallery` instead of internal source
-  paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `GalleryViewer` directly from `@chayns-components/gallery` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the
-  public package export.
+- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the public package export.
