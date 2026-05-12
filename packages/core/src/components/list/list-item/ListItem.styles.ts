@@ -1,9 +1,9 @@
+import type { HTMLMotionProps } from 'motion/react';
 import styled, { css } from 'styled-components';
-import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
+import type { Theme } from '../../color-scheme-provider/ColorSchemeProvider';
 import { CSSProperties } from 'react';
-import { LIST_ITEM_HTML_TAG } from '../../../constants/list';
 
-type StyledListItemProps = WithTheme<{
+type StyledListItemProps = HTMLMotionProps<'div'> & {
     $backgroundColor?: CSSProperties['backgroundColor'];
     $isClickable: boolean;
     $isInAccordion: boolean;
@@ -15,9 +15,9 @@ type StyledListItemProps = WithTheme<{
     $shouldHideBottomLine: boolean;
     $shouldHideIndicator: boolean;
     $shouldShowSeparatorBelow: boolean;
-}>;
+};
 
-export const StyledListItem = styled[LIST_ITEM_HTML_TAG]<StyledListItemProps>`
+export const StyledListItem = styled.div<StyledListItemProps>`
     overflow: hidden;
     transition: background-color 0.3s ease;
 
@@ -27,7 +27,15 @@ export const StyledListItem = styled[LIST_ITEM_HTML_TAG]<StyledListItemProps>`
             padding-left: ${$shouldHideIndicator ? '16px' : '8px'};
         `}
 
-    ${({ $isInAccordion, $isOpen, $shouldChangeColor, $shouldForceBackground, theme }) =>
+    ${({
+        $isInAccordion,
+        $isOpen,
+        $shouldChangeColor,
+        $shouldForceBackground,
+        theme,
+    }: StyledListItemProps & {
+        theme: Theme;
+    }) =>
         ((!$isInAccordion && $isOpen) || $shouldForceBackground) &&
         css`
             background-color: rgba(
@@ -43,7 +51,14 @@ export const StyledListItem = styled[LIST_ITEM_HTML_TAG]<StyledListItemProps>`
             background-color: ${$backgroundColor} !important;
         `}
 
-    ${({ $isClickable, $isInAccordion, $shouldChangeColor, theme }) =>
+    ${({
+        $isClickable,
+        $isInAccordion,
+        $shouldChangeColor,
+        theme,
+    }: StyledListItemProps & {
+        theme: Theme;
+    }) =>
         $isClickable &&
         !$isInAccordion &&
         css`
@@ -63,7 +78,7 @@ export const StyledListItem = styled[LIST_ITEM_HTML_TAG]<StyledListItemProps>`
         $shouldForceBottomLine,
         $shouldShowSeparatorBelow,
         theme,
-    }: StyledListItemProps) => {
+    }: StyledListItemProps & { theme: Theme }) => {
         if (
             $shouldShowSeparatorBelow ||
             ((!$isOpen || $isWrapped || $isInAccordion) &&

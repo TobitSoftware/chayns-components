@@ -1,5 +1,5 @@
 import type { FileItem } from '@chayns-components/core';
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, memo, useCallback } from 'react';
 import GalleryViewerItem from './gallery-viewer-item/GalleryViewerItem';
 import { StyledGalleryViewer, StyledGalleryViewerItemWrapper } from './GalleryViewer.styles';
 import type { GalleryViewerProps } from './GalleryViewer.types';
@@ -10,11 +10,17 @@ import {
     openKnownFiles,
 } from '../../utils/gallery';
 import { GalleryViewMode } from '../../types/gallery';
+import { GALLERY_VIEWER_MAX_VISIBLE_ITEMS } from './GalleryViewer.constants';
 
-const GalleryViewer: FC<GalleryViewerProps> = ({ files, viewMode = GalleryViewMode.GRID }) => {
-    const fileItems = files ?? [];
+const EMPTY_FILE_ITEMS: FileItem[] = [];
 
-    const ratio = useMemo(() => getGalleryRatio(fileItems), [fileItems]);
+const GalleryViewer: FC<GalleryViewerProps> = ({
+    files,
+    shouldLoadImages = true,
+    viewMode = GalleryViewMode.GRID,
+}) => {
+    const fileItems = files ?? EMPTY_FILE_ITEMS;
+    const ratio = getGalleryRatio(fileItems);
 
     const handleOpenFiles = useCallback(
         (file: FileItem) => {
@@ -23,7 +29,7 @@ const GalleryViewer: FC<GalleryViewerProps> = ({ files, viewMode = GalleryViewMo
         [fileItems],
     );
 
-    const visibleItems = fileItems.slice(0, 4);
+    const visibleItems = fileItems.slice(0, GALLERY_VIEWER_MAX_VISIBLE_ITEMS);
 
     return (
         <StyledGalleryViewer>
@@ -38,8 +44,11 @@ const GalleryViewer: FC<GalleryViewerProps> = ({ files, viewMode = GalleryViewMo
                         fileItem={file}
                         onClick={handleOpenFiles}
                         ratio={getReadOnlyItemRatio({ fileItems, index, viewMode })}
+                        shouldLoadImages={shouldLoadImages}
                         remainingItemsLength={
-                            fileItems.length > 4 && index === 3 ? fileItems.length : undefined
+                            fileItems.length > GALLERY_VIEWER_MAX_VISIBLE_ITEMS && index === 3
+                                ? fileItems.length
+                                : undefined
                         }
                     />
                 ))}
@@ -50,4 +59,4 @@ const GalleryViewer: FC<GalleryViewerProps> = ({ files, viewMode = GalleryViewMo
 
 GalleryViewer.displayName = 'GalleryViewer';
 
-export default GalleryViewer;
+export default memo(GalleryViewer);

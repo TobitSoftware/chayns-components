@@ -13,6 +13,14 @@ export interface GalleryEditorMediaItemProps {
      */
     fileItem: InternalFileItem;
     /**
+     * Controls whether the media renderer may load the final uploaded source immediately.
+     * @description
+     * When disabled, the shared media renderer keeps showing the preview until the parent gallery allows the final load.
+     * @default true
+     * @optional
+     */
+    shouldLoadImages?: boolean;
+    /**
      * Is called when the media tile is selected.
      * @description
      * The editor uses this callback to open the uploaded media in the slideshow flow.
@@ -28,4 +36,11 @@ export interface GalleryEditorMediaItemProps {
      * <GalleryEditorMediaItem fileItem={fileItem} openSelectedFile={handleOpen} ratio={1.5} />
      */
     ratio: number;
+    /**
+     * Provides an optional preview source that can be shown before the final uploaded media loads.
+     * @description
+     * This is typically the local base64 preview generated while the file is still being uploaded.
+     * @optional
+     */
+    previewUrl?: string;
 }

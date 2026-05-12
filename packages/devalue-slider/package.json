@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/devalue-slider",
-    "version": "5.2.4-alpha.0",
+    "version": "5.2.5",
     "description": "A slider to devalue something.",
     "siteEffects": false,
     "browserslist": [
@@ -52,15 +52,15 @@
         "url": "https://github.com/TobitSoftware/chayns-components/issues"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.2.4-alpha.0",
-        "@chayns-components/textstring": "^5.0.61",
+        "@chayns-components/core": "^5.2.5",
+        "@chayns-components/textstring": "^5.2.5",
         "@react-hook/size": "^2.1.2",
         "react-compiler-runtime": "^1.0.0"
     },
     "devDependencies": {
         "@babel/cli": "^7.28.6",
         "@babel/core": "^7.29.0",
-        "@babel/preset-env": "^7.29.0",
+        "@babel/preset-env": "^7.29.5",
         "@babel/preset-react": "^7.28.5",
         "@babel/preset-typescript": "^7.28.5",
         "@types/react": "^18.3.28",

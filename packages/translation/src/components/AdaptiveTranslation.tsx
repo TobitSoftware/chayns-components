@@ -25,7 +25,7 @@ type AdaptiveTranslationProps = {
     /**
      * The HTML tag of the children.
      */
-    tagName?: keyof HTMLElementTagNameMap;
+    tagName?: keyof JSX.IntrinsicElements;
     /**
      * The text that should be translated. Only active if the children is type of function.
      */

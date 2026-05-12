@@ -1,33 +1,87 @@
 import { Meta, StoryFn } from '@storybook/react';
-import React from 'react';
+import { Button } from '@chayns-components/core';
+import React, { useEffect, useState } from 'react';
 import GalleryViewer from '../src/components/gallery-viewer/GalleryViewer';
 import { GalleryViewMode } from '../src/types/gallery';
-import { galleryStoryFiles, galleryViewerSquareFiles } from './storyData';
+import {
+    galleryPreviewFiles,
+    galleryStoryFiles,
+    galleryViewerSquareFiles,
+    galleryVideoFiles,
+} from './storyData';
+
+const GALLERY_VIEW_MODE_OPTIONS = [GalleryViewMode.SQUARE, GalleryViewMode.GRID];
+const GALLERY_VIEW_MODE_LABELS = {
+    [GalleryViewMode.SQUARE]: 'Square',
+    [GalleryViewMode.GRID]: 'Grid',
+};
 
 export default {
     title: 'Gallery/GalleryViewer',
     component: GalleryViewer,
+    tags: ['autodocs'],
+    parameters: {
+        docs: {
+            description: {
+                component:
+                    'Der read-only Viewer rendert bekannte Medien im Grid- oder Square-Layout und unterstützt das verzögerte Laden finaler Medien über `shouldLoadImages`.',
+            },
+        },
+    },
+    argTypes: {
+        files: { control: false },
+        shouldLoadImages: { control: 'boolean' },
+        viewMode: {
+            control: { type: 'inline-radio' },
+            options: GALLERY_VIEW_MODE_OPTIONS,
+            labels: GALLERY_VIEW_MODE_LABELS,
+        },
+    },
     args: {
         files: galleryStoryFiles,
+        shouldLoadImages: true,
         viewMode: GalleryViewMode.GRID,
     },
 } as Meta<typeof GalleryViewer>;
 
-const Template: StoryFn<typeof GalleryViewer> = (args) => (
-    <div style={{ maxWidth: '420px' }}>
-        <GalleryViewer {...args} />
-    </div>
-);
+const Template: StoryFn<typeof GalleryViewer> = (args) => <GalleryViewer {...args} />;
+
+const DeferredLoadTemplate: StoryFn<typeof GalleryViewer> = (args) => {
+    const [shouldLoadImages, setShouldLoadImages] = useState(args.shouldLoadImages ?? false);
+
+    useEffect(() => {
+        setShouldLoadImages(args.shouldLoadImages ?? false);
+    }, [args.shouldLoadImages]);
+
+    return (
+        <>
+            <Button onClick={() => setShouldLoadImages(true)}>Bilder laden</Button>
+            <GalleryViewer
+                {...args}
+                files={galleryPreviewFiles}
+                shouldLoadImages={shouldLoadImages}
+            />
+        </>
+    );
+};
 
 export const General = Template.bind({});
 
 export const SquareMode = Template.bind({});
 
+export const MixedMedia = Template.bind({});
+
 export const SingleItemFallbackRatio = Template.bind({});
+
+export const DeferredLoadPreviewFirst = DeferredLoadTemplate.bind({});
 
 SquareMode.args = {
     files: galleryViewerSquareFiles,
     viewMode: GalleryViewMode.SQUARE,
+};
+
+MixedMedia.args = {
+    files: galleryStoryFiles,
 };
 
 SingleItemFallbackRatio.args = {
@@ -40,4 +94,19 @@ SingleItemFallbackRatio.args = {
             },
         },
     ],
+};
+
+DeferredLoadPreviewFirst.args = {
+    shouldLoadImages: false,
+    files: galleryPreviewFiles,
+};
+
+export const VideoFocus = Template.bind({});
+
+General.args = {
+    files: galleryStoryFiles.slice(0, 3),
+};
+
+VideoFocus.args = {
+    files: galleryVideoFiles,
 };

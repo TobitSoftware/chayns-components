@@ -14,7 +14,10 @@ import { Gallery, GalleryEditor, GalleryViewer } from '@chayns-components/galler
 
 ```tsx
 <Gallery
-    files={galleryStoryFiles}
+    files={galleryStoryFiles.slice(0, 3)}
+    isEditMode={false}
+    shouldLoadImages
+    viewMode={GalleryViewMode.GRID}
 />
 ```
 
@@ -26,7 +29,9 @@ import { Gallery, GalleryEditor, GalleryViewer } from '@chayns-components/galler
 
 ## Gallery
 
-`Gallery` is exported by `@chayns-components/gallery` and should be imported from the public package entry point.
+Die Wrapper-Komponente entscheidet zwischen Viewer und Editor und steuert das optionale verzögerte
+Laden der finalen Medien. Die Stories zeigen die typischen Einsatzfälle sowie die neue
+Preview-first-Ladelogik.
 
 ### Import
 
@@ -40,7 +45,32 @@ import { Gallery } from '@chayns-components/gallery';
 
 ```tsx
 <Gallery
+    files={galleryStoryFiles.slice(0, 3)}
+    isEditMode={false}
+    shouldLoadImages
+    viewMode={GalleryViewMode.GRID}
+/>
+```
+
+#### Read Only Square
+
+```tsx
+<Gallery
+    files={galleryViewerSquareFiles}
+    isEditMode={false}
+    shouldLoadImages
+    viewMode={GalleryViewMode.SQUARE}
+/>
+```
+
+#### Deferred Load Preview First
+
+```tsx
+<Gallery
     files={galleryStoryFiles}
+    isEditMode={false}
+    shouldLoadImages={false}
+    viewMode={GalleryViewMode.GRID}
 />
 ```
 
@@ -48,18 +78,23 @@ import { Gallery } from '@chayns-components/gallery';
 
 ```tsx
 <Gallery
-    files={galleryStoryFiles.slice(0, 3)}
+    files={galleryPreviewFiles.slice(0, 3)}
     isEditMode
+    shouldLoadImages
+    viewMode={GalleryViewMode.GRID}
     maxFiles={6}
 />
 ```
 
-#### Wrapper Read Only Square
+#### Edit Mode Max Files Reached
 
 ```tsx
 <Gallery
-    files={galleryViewerSquareFiles}
-    viewMode={GalleryViewMode.SQUARE}
+    files={galleryPreviewFiles.slice(0, 4)}
+    isEditMode
+    shouldLoadImages
+    viewMode={GalleryViewMode.GRID}
+    maxFiles={4}
 />
 ```
 
@@ -67,8 +102,10 @@ import { Gallery } from '@chayns-components/gallery';
 
 ```tsx
 <Gallery
-    files={galleryStoryFiles.slice(0, 3)}
+    files={galleryPreviewFiles.slice(0, 3)}
     isEditMode
+    shouldLoadImages
+    viewMode={GalleryViewMode.GRID}
     maxFiles={6}
     addFileIcon={'fa fa-image-circle-plus'}
 />
@@ -85,14 +122,18 @@ No additional exported types documented.
 ### Usage Notes
 
 - Import `Gallery` directly from `@chayns-components/gallery` instead of internal source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use
+  case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the public package export.
+- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the
+  public package export.
+
 ## GalleryEditor
 
-`GalleryEditor` is exported by `@chayns-components/gallery` and should be imported from the public package entry point.
+Der Editor verwaltet lokale und externe Medien, unterstützt Drag-and-Drop und kann die endgültige
+Medienladung über `shouldLoadImages` verzögern.
 
 ### Import
 
@@ -110,17 +151,31 @@ import { GalleryEditor } from '@chayns-components/gallery';
     fileMinWidth={100}
     files={galleryStoryFiles.slice(0, 3)}
     maxFiles={6}
+    shouldLoadImages
 />
 ```
 
-#### Reached Max Files
+#### Dense Layout
+
+```tsx
+<GalleryEditor
+    allowDragAndDrop={false}
+    fileMinWidth={140}
+    files={galleryPreviewFiles.slice(0, 4)}
+    maxFiles={6}
+    shouldLoadImages
+/>
+```
+
+#### Max Files Reached
 
 ```tsx
 <GalleryEditor
     allowDragAndDrop={false}
     fileMinWidth={100}
-    files={galleryStoryFiles.slice(0, 4)}
+    files={galleryPreviewFiles.slice(0, 4)}
     maxFiles={4}
+    shouldLoadImages
 />
 ```
 
@@ -130,9 +185,46 @@ import { GalleryEditor } from '@chayns-components/gallery';
 <GalleryEditor
     allowDragAndDrop={false}
     fileMinWidth={100}
-    files={galleryStoryFiles.slice(0, 3)}
+    files={galleryPreviewFiles.slice(0, 3)}
     maxFiles={6}
+    shouldLoadImages
     addFileIcon={'fa fa-image-circle-plus'}
+/>
+```
+
+#### Drag And Drop Enabled
+
+```tsx
+<GalleryEditor
+    allowDragAndDrop
+    fileMinWidth={100}
+    files={galleryPreviewFiles.slice(0, 3)}
+    maxFiles={6}
+    shouldLoadImages
+/>
+```
+
+#### Deferred Load Preview First
+
+```tsx
+<GalleryEditor
+    allowDragAndDrop={false}
+    fileMinWidth={100}
+    files={galleryPreviewFiles.slice(0, 4)}
+    maxFiles={6}
+    shouldLoadImages={false}
+/>
+```
+
+#### Video And Images
+
+```tsx
+<GalleryEditor
+    allowDragAndDrop={false}
+    fileMinWidth={100}
+    files={[...galleryStoryFiles.slice(0, 3), ...galleryVideoFiles]}
+    maxFiles={6}
+    shouldLoadImages
 />
 ```
 
@@ -146,15 +238,20 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `GalleryEditor` directly from `@chayns-components/gallery` instead of internal source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Import `GalleryEditor` directly from `@chayns-components/gallery` instead of internal source
+  paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use
+  case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the public package export.
+- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the
+  public package export.
+
 ## GalleryViewer
 
-`GalleryViewer` is exported by `@chayns-components/gallery` and should be imported from the public package entry point.
+Der read-only Viewer rendert bekannte Medien im Grid- oder Square-Layout und unterstützt das
+verzögerte Laden finaler Medien über `shouldLoadImages`.
 
 ### Import
 
@@ -168,7 +265,8 @@ import { GalleryViewer } from '@chayns-components/gallery';
 
 ```tsx
 <GalleryViewer
-    files={galleryStoryFiles}
+    files={galleryStoryFiles.slice(0, 3)}
+    shouldLoadImages
     viewMode={GalleryViewMode.GRID}
 />
 ```
@@ -178,8 +276,15 @@ import { GalleryViewer } from '@chayns-components/gallery';
 ```tsx
 <GalleryViewer
     files={galleryViewerSquareFiles}
+    shouldLoadImages
     viewMode={GalleryViewMode.SQUARE}
 />
+```
+
+#### Mixed Media
+
+```tsx
+<GalleryViewer files={galleryStoryFiles} shouldLoadImages viewMode={GalleryViewMode.GRID} />
 ```
 
 #### Single Item Fallback Ratio
@@ -187,16 +292,33 @@ import { GalleryViewer } from '@chayns-components/gallery';
 ```tsx
 <GalleryViewer
     files={[
-            {
-                id: 'single-fallback-image',
-                file: {
-                    id: 'fallback-1',
-                    url: 'https://picsum.photos/id/1025/1200/900',
-                },
+        {
+            id: 'single-fallback-image',
+            file: {
+                id: 'fallback-1',
+                url: 'https://picsum.photos/id/1025/1200/900',
             },
-        ]}
+        },
+    ]}
+    shouldLoadImages
     viewMode={GalleryViewMode.GRID}
 />
+```
+
+#### Deferred Load Preview First
+
+```tsx
+<GalleryViewer
+    files={galleryPreviewFiles}
+    shouldLoadImages={false}
+    viewMode={GalleryViewMode.GRID}
+/>
+```
+
+#### Video Focus
+
+```tsx
+<GalleryViewer files={galleryVideoFiles} shouldLoadImages viewMode={GalleryViewMode.GRID} />
 ```
 
 ### Props
@@ -209,9 +331,12 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `GalleryViewer` directly from `@chayns-components/gallery` instead of internal source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Import `GalleryViewer` directly from `@chayns-components/gallery` instead of internal source
+  paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use
+  case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the public package export.
+- Avoid imports from internal paths such as `@chayns-components/gallery/src/...`; always use the
+  public package export.

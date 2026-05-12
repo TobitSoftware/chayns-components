@@ -13,6 +13,14 @@ export interface MediaContentProps {
      */
     file: FileItem['file'];
     /**
+     * Provides an optional preview source that can be displayed while the final media is still loading.
+     * @description
+     * This preview can be a base64 data URL or any low-resolution fallback image.
+     * When provided, the component shows the preview first and swaps to the final image once it has finished loading.
+     * @optional
+     */
+    previewUrl?: string;
+    /**
      * Defines the aspect ratio that should be reserved for the media.
      * @description
      * The surrounding tile uses this value to reserve a deterministic media height before the asset finishes loading.
@@ -20,6 +28,14 @@ export interface MediaContentProps {
      * <MediaContent file={file.file} onClick={handleOpen} ratio={1.5} />
      */
     ratio: number;
+    /**
+     * Controls whether the final media source may be loaded immediately.
+     * @description
+     * When set to `false`, only the preview source is rendered until this flag becomes `true`.
+     * @default true
+     * @optional
+     */
+    shouldLoadImages?: boolean;
     /**
      * Is called when the media tile is selected.
      * @description

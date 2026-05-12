@@ -13,6 +13,14 @@ export interface GalleryEditorItemProps {
      */
     fileItem: InternalFileItem;
     /**
+     * Controls whether the item may load the final media source immediately.
+     * @description
+     * The item forwards this flag to the shared media renderer so uploaded media can stay on the preview until loading is allowed.
+     * @default true
+     * @optional
+     */
+    shouldLoadImages?: boolean;
+    /**
      * Is called when the delete button is clicked in edit mode.
      * @description
      * The callback receives the internal item identifier so the editor can remove the item from its local state.

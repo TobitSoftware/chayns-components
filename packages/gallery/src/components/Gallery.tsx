@@ -18,6 +18,7 @@ const Gallery = forwardRef<GalleryRef, GalleryProps>(
             onAdd,
             onFileCountChange,
             onRemove,
+            shouldLoadImages = true,
             viewMode = GalleryViewMode.GRID,
         },
         ref,
@@ -53,9 +54,10 @@ const Gallery = forwardRef<GalleryRef, GalleryProps>(
                 onAdd={onAdd}
                 onFileCountChange={onFileCountChange}
                 onRemove={onRemove}
+                shouldLoadImages={shouldLoadImages}
             />
         ) : (
-            <GalleryViewer files={files} viewMode={viewMode} />
+            <GalleryViewer files={files} shouldLoadImages={shouldLoadImages} viewMode={viewMode} />
         );
     },
 );

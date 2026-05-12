@@ -85,6 +85,18 @@ export interface GalleryProps {
      */
     maxFiles?: number;
     /**
+     * Controls when the gallery is allowed to load the final media assets.
+     * @description
+     * When set to `true`, the gallery loads the actual images immediately as before.
+     * When set to `false`, the gallery keeps rendering previews first and delays the final media load until this flag becomes `true`.
+     * This setting applies to the whole gallery wrapper and is intended for external loading control such as virtualized message lists.
+     * @default true
+     * @example
+     * <Gallery files={files} shouldLoadImages={false} />
+     * @optional
+     */
+    shouldLoadImages?: boolean;
+    /**
      * Is called after a file has been uploaded successfully in edit mode.
      * @description
      * The callback receives the uploaded file representation that should be merged into the consuming state.

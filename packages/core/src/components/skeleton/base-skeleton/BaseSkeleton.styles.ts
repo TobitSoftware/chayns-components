@@ -1,14 +1,13 @@
 import styled, { css } from 'styled-components';
 import { motion } from 'motion/react';
-import { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
-type StyledBaseSkeletonProps = WithTheme<{
+type StyledBaseSkeletonProps = {
     $borderRadius: number | string;
     $backgroundColor: string;
     $width: number | string;
     $height: number | string;
     $shouldUseNativeTag: boolean;
-}>;
+};
 
 export const StyledBaseSkeleton = styled.div<StyledBaseSkeletonProps>`
     position: relative;
@@ -34,9 +33,9 @@ export const StyledBaseSkeleton = styled.div<StyledBaseSkeletonProps>`
               `}
 `;
 
-type StyledMotionBaseSkeletonShimmerProps = WithTheme<{
+type StyledMotionBaseSkeletonShimmerProps = {
     $color: string;
-}>;
+};
 
 export const StyledMotionBaseSkeletonShimmer = styled(
     motion.div,
@@ -65,9 +64,9 @@ export const StyledMotionBaseSkeletonShimmer = styled(
     opacity: 0.06;
 `;
 
-type StyledMotionBaseSkeletonPulseProps = WithTheme<{
+type StyledMotionBaseSkeletonPulseProps = {
     $color: string;
-}>;
+};
 
 export const StyledMotionBaseSkeletonPulse = styled(motion.div)<StyledMotionBaseSkeletonPulseProps>`
     width: 100%;

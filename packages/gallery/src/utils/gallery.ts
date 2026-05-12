@@ -76,7 +76,7 @@ export const openFiles = (fileItems: InternalFileItem[], file: InternalFileItem)
         startIndex = fileItems.findIndex((item) => item.id === file.id);
 
         const items: OpenMediaItem[] = fileItems.map((item) => ({
-            url: item.uploadedFile?.url.replace('_0.mp4', '.mp4') ?? '',
+            url: item.uploadedFile?.url ?? '',
             mediaType:
                 item.uploadedFile && 'thumbnailUrl' in item.uploadedFile
                     ? MediaType.VIDEO
@@ -123,7 +123,7 @@ export const openKnownFiles = (fileItems: FileItem[], file: FileItem) => {
         );
 
         const items: OpenMediaItem[] = fileItems.map((item) => ({
-            url: item.file.url.replace('_0.mp4', '.mp4'),
+            url: item.file.url,
             mediaType: 'thumbnailUrl' in item.file ? MediaType.VIDEO : MediaType.IMAGE,
         }));
 

@@ -55,6 +55,17 @@ export interface GalleryEditorProps {
      */
     files?: FileItem[];
     /**
+     * Controls whether the editor may load the final media assets immediately.
+     * @description
+     * When set to `true`, the editor behaves like the current implementation and loads the final media immediately.
+     * When set to `false`, uploaded media keeps rendering previews first and delays the final image load until this flag becomes `true`.
+     * @default true
+     * @example
+     * <GalleryEditor files={files} shouldLoadImages={false} />
+     * @optional
+     */
+    shouldLoadImages?: boolean;
+    /**
      * Limits how many files can be managed by the editor.
      * @description
      * After the limit is reached, the add-tile is hidden and additional file selection is ignored.
