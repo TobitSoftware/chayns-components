@@ -1,4 +1,13 @@
-import React, { FC, ReactNode, ReactPortal, useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+    forwardRef,
+    ReactNode,
+    ReactPortal,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useRef,
+    useState,
+} from 'react';
 import {
     StyledDropdownBodyWrapper,
     StyledDropdownBodyWrapperContent,
@@ -67,202 +76,214 @@ interface DropdownBodyWrapperProps {
     shouldCaptureEvents?: boolean;
 }
 
-const DropdownBodyWrapper: FC<DropdownBodyWrapperProps> = ({
-    anchorElement,
-    bodyWidth,
-    children,
-    container: containerProp,
-    contentHeight = 0,
-    direction = DropdownDirection.BOTTOM_RIGHT,
-    maxHeight = 300,
-    minBodyWidth = 0,
-    onClose,
-    onOutsideClick,
-    onMeasure,
-    shouldCaptureEvents = true,
-    shouldShowDropdown,
-}) => {
-    const isInChaynsWalletRef = useRef(false);
+const DropdownBodyWrapper = forwardRef<HTMLDivElement, DropdownBodyWrapperProps>(
+    (
+        {
+            anchorElement,
+            bodyWidth,
+            children,
+            container: containerProp,
+            contentHeight = 0,
+            direction = DropdownDirection.BOTTOM_RIGHT,
+            maxHeight,
+            minBodyWidth = 0,
+            onClose,
+            onOutsideClick,
+            onMeasure,
+            shouldCaptureEvents = true,
+            shouldShowDropdown,
+        },
+        ref,
+    ) => {
+        const isInChaynsWalletRef = useRef(false);
 
-    const [measuredContentHeight, setMeasuredContentHeight] = useState<number>(0);
-    const [measuredContentWidth, setMeasuredContentWidth] = useState<number>(0);
-    const [portal, setPortal] = useState<ReactPortal>();
+        const [measuredContentHeight, setMeasuredContentHeight] = useState<number>(0);
+        const [measuredContentWidth, setMeasuredContentWidth] = useState<number>(0);
+        const [portal, setPortal] = useState<ReactPortal>();
 
-    const ref = useRef<HTMLDivElement>(null);
-    const shouldPreventClickRef = useRef<boolean>(false);
-    const touchTimeoutRef = useRef<number | undefined>(undefined);
+        const contentRef = useRef<HTMLDivElement>(null);
+        const shouldPreventClickRef = useRef<boolean>(false);
+        const touchTimeoutRef = useRef<number | undefined>(undefined);
 
-    const container = useContainer({ anchorElement, container: containerProp });
+        const container = useContainer({ anchorElement, container: containerProp });
 
-    const { transform, width, coordinates } = useDropdown({
-        anchorElement,
-        container,
-        contentHeight,
-        contentWidth: bodyWidth ?? measuredContentWidth,
-        direction,
-        shouldShowDropdown,
-    });
+        const { transform, width, coordinates } = useDropdown({
+            anchorElement,
+            container,
+            contentHeight,
+            contentWidth: bodyWidth ?? measuredContentWidth,
+            direction,
+            shouldShowDropdown,
+        });
 
-    const handleClose = useCallback(() => {
-        if (typeof onClose === 'function') {
-            onClose();
-        }
-    }, [onClose]);
+        const handleClose = useCallback(() => {
+            if (typeof onClose === 'function') {
+                onClose();
+            }
+        }, [onClose]);
 
-    /**
-     * This function closes the body
-     */
-    const handleClick = useCallback(
-        (event: MouseEvent) => {
+        /**
+         * This function closes the body
+         */
+        const handleClick = useCallback(
+            (event: MouseEvent) => {
+                if (
+                    contentRef.current &&
+                    shouldShowDropdown &&
+                    !anchorElement.contains(event.target as Node) &&
+                    !contentRef.current.contains(event.target as Node)
+                ) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const shouldPreventCloseOnClick = onOutsideClick?.() ?? false;
+
+                    if (!shouldPreventClickRef.current && !shouldPreventCloseOnClick) {
+                        handleClose();
+                    }
+                }
+
+                shouldPreventClickRef.current = false;
+            },
+            [anchorElement, handleClose, onOutsideClick, shouldShowDropdown],
+        );
+
+        const handleContentMeasure = useCallback(
+            (measurements: DropdownMeasurements) => {
+                // Measurements are only needed if the content is shown in the chayns wallet. To prevent
+                // unnecessary renders, we only set the height if the content is shown in the wallet.
+                if (isInChaynsWalletRef.current) {
+                    setMeasuredContentHeight(measurements.height);
+                }
+
+                setMeasuredContentWidth(measurements.width);
+
+                if (typeof onMeasure === 'function') {
+                    onMeasure(measurements);
+                }
+            },
+            [onMeasure],
+        );
+
+        const handleTouchEnd = useCallback(() => {
+            clearTimeout(touchTimeoutRef.current);
+        }, []);
+
+        const handleTouchStart = useCallback(() => {
+            touchTimeoutRef.current = window.setTimeout(() => {
+                shouldPreventClickRef.current = true;
+            }, 500);
+        }, []);
+
+        /**
+         * This hook listens for clicks
+         */
+        useDropdownListener({
+            onClick: handleClick,
+            onClose: handleClose,
+            onTouchEnd: handleTouchEnd,
+            onTouchStart: handleTouchStart,
+            shouldCaptureEvents,
+        });
+
+        useEffect(() => {
+            const isBottomDirection = [
+                DropdownDirection.BOTTOM,
+                DropdownDirection.BOTTOM_LEFT,
+                DropdownDirection.BOTTOM_RIGHT,
+            ].includes(direction);
+
+            const reservationWrapperElement = anchorElement.closest<HTMLDivElement>(
+                ContainerAnchor.RESERVATION_WRAPPER,
+            );
+
+            isInChaynsWalletRef.current =
+                !!(
+                    reservationWrapperElement && reservationWrapperElement.contains(anchorElement)
+                ) || true;
+
+            // This effect checks if additional space is needed to show dropdown content in chayns cards.
             if (
-                ref.current &&
-                shouldShowDropdown &&
-                !anchorElement.contains(event.target as Node) &&
-                !ref.current.contains(event.target as Node)
+                isBottomDirection &&
+                isInChaynsWalletRef.current &&
+                measuredContentHeight > 0 &&
+                reservationWrapperElement &&
+                shouldShowDropdown
             ) {
-                event.preventDefault();
-                event.stopPropagation();
+                const availableHeight =
+                    window.innerHeight - anchorElement.getBoundingClientRect().bottom;
 
-                const shouldPreventCloseOnClick = onOutsideClick?.() ?? false;
+                // If the content height is greater than the available height, we need to add additional space.
+                // This is to ensure that the dropdown content is fully visible. The 16 pixels are a buffer for shadows.
+                const additionalNeededSpace = measuredContentHeight + 16 - availableHeight;
 
-                if (!shouldPreventClickRef.current && !shouldPreventCloseOnClick) {
-                    handleClose();
+                if (additionalNeededSpace > 0) {
+                    // Add margin bottom to the reservation wrapper to ensure the dropdown content is fully visible.
+                    reservationWrapperElement.style.marginBottom = `${additionalNeededSpace}px`;
+                } else {
+                    // Reset the margin bottom if no additional space is needed.
+                    reservationWrapperElement.style.marginBottom = '0px';
                 }
             }
 
-            shouldPreventClickRef.current = false;
-        },
-        [anchorElement, handleClose, onOutsideClick, shouldShowDropdown],
-    );
-
-    const handleContentMeasure = useCallback(
-        (measurements: DropdownMeasurements) => {
-            // Measurements are only needed if the content is shown in the chayns wallet. To prevent
-            // unnecessary renders, we only set the height if the content is shown in the wallet.
-            if (isInChaynsWalletRef.current) {
-                setMeasuredContentHeight(measurements.height);
-            }
-
-            setMeasuredContentWidth(measurements.width);
-
-            if (typeof onMeasure === 'function') {
-                onMeasure(measurements);
-            }
-        },
-        [onMeasure],
-    );
-
-    const handleTouchEnd = useCallback(() => {
-        clearTimeout(touchTimeoutRef.current);
-    }, []);
-
-    const handleTouchStart = useCallback(() => {
-        touchTimeoutRef.current = window.setTimeout(() => {
-            shouldPreventClickRef.current = true;
-        }, 500);
-    }, []);
-
-    /**
-     * This hook listens for clicks
-     */
-    useDropdownListener({
-        onClick: handleClick,
-        onClose: handleClose,
-        onTouchEnd: handleTouchEnd,
-        onTouchStart: handleTouchStart,
-        shouldCaptureEvents,
-    });
-
-    useEffect(() => {
-        const isBottomDirection = [
-            DropdownDirection.BOTTOM,
-            DropdownDirection.BOTTOM_LEFT,
-            DropdownDirection.BOTTOM_RIGHT,
-        ].includes(direction);
-
-        const reservationWrapperElement = anchorElement.closest<HTMLDivElement>(
-            ContainerAnchor.RESERVATION_WRAPPER,
-        );
-
-        isInChaynsWalletRef.current =
-            !!(reservationWrapperElement && reservationWrapperElement.contains(anchorElement)) ||
-            true;
-
-        // This effect checks if additional space is needed to show dropdown content in chayns cards.
-        if (
-            isBottomDirection &&
-            isInChaynsWalletRef.current &&
-            measuredContentHeight > 0 &&
-            reservationWrapperElement &&
-            shouldShowDropdown
-        ) {
-            const availableHeight =
-                window.innerHeight - anchorElement.getBoundingClientRect().bottom;
-
-            // If the content height is greater than the available height, we need to add additional space.
-            // This is to ensure that the dropdown content is fully visible. The 16 pixels are a buffer for shadows.
-            const additionalNeededSpace = measuredContentHeight + 16 - availableHeight;
-
-            if (additionalNeededSpace > 0) {
-                // Add margin bottom to the reservation wrapper to ensure the dropdown content is fully visible.
-                reservationWrapperElement.style.marginBottom = `${additionalNeededSpace}px`;
-            } else {
-                // Reset the margin bottom if no additional space is needed.
+            if (isInChaynsWalletRef.current && reservationWrapperElement && !shouldShowDropdown) {
+                // Reset the margin bottom when the dropdown is closed.
                 reservationWrapperElement.style.marginBottom = '0px';
             }
-        }
 
-        if (isInChaynsWalletRef.current && reservationWrapperElement && !shouldShowDropdown) {
-            // Reset the margin bottom when the dropdown is closed.
-            reservationWrapperElement.style.marginBottom = '0px';
-        }
+            return () => {
+                if (reservationWrapperElement) {
+                    reservationWrapperElement.style.marginBottom = '0px';
+                }
+            };
+        }, [anchorElement, direction, measuredContentHeight, shouldShowDropdown]);
 
-        return () => {
-            if (reservationWrapperElement) {
-                reservationWrapperElement.style.marginBottom = '0px';
-            }
-        };
-    }, [anchorElement, direction, measuredContentHeight, shouldShowDropdown]);
+        useEffect(() => {
+            if (!container) return;
 
-    useEffect(() => {
-        if (!container) return;
-
-        setPortal(() =>
-            createPortal(
-                <DelayedDropdownContent
-                    coordinates={coordinates}
-                    onMeasure={handleContentMeasure}
-                    shouldShowContent={shouldShowDropdown}
-                    transform={transform}
-                >
-                    <StyledDropdownBodyWrapperContent
-                        $width={width}
-                        $minWidth={minBodyWidth}
-                        $maxHeight={maxHeight}
-                        $direction={direction}
-                        ref={ref}
+            setPortal(() =>
+                createPortal(
+                    <DelayedDropdownContent
+                        coordinates={coordinates}
+                        onMeasure={handleContentMeasure}
+                        shouldShowContent={shouldShowDropdown}
+                        transform={transform}
                     >
-                        {children}
-                    </StyledDropdownBodyWrapperContent>
-                </DelayedDropdownContent>,
-                container,
-            ),
-        );
-    }, [
-        children,
-        container,
-        coordinates,
-        direction,
-        handleContentMeasure,
-        maxHeight,
-        minBodyWidth,
-        shouldShowDropdown,
-        transform,
-        width,
-    ]);
+                        <StyledDropdownBodyWrapperContent
+                            $width={width}
+                            $minWidth={minBodyWidth}
+                            $maxHeight={maxHeight}
+                            $direction={direction}
+                            ref={contentRef}
+                            className={
+                                typeof maxHeight === 'number' ? 'chayns-scrollbar' : undefined
+                            }
+                            tabIndex={0}
+                        >
+                            {children}
+                        </StyledDropdownBodyWrapperContent>
+                    </DelayedDropdownContent>,
+                    container,
+                ),
+            );
+        }, [
+            children,
+            container,
+            coordinates,
+            direction,
+            handleContentMeasure,
+            maxHeight,
+            minBodyWidth,
+            shouldShowDropdown,
+            transform,
+            width,
+        ]);
 
-    return <StyledDropdownBodyWrapper>{portal}</StyledDropdownBodyWrapper>;
-};
+        useImperativeHandle(ref, () => contentRef.current!, []);
+
+        return <StyledDropdownBodyWrapper>{portal}</StyledDropdownBodyWrapper>;
+    },
+);
 
 DropdownBodyWrapper.displayName = 'DropdownBodyWrapper';
 

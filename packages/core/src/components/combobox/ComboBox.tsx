@@ -509,7 +509,6 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                             container={container}
                             shouldShowDropdown={isAnimating}
                             minBodyWidth={bodyWidth ?? bodyMinWidth}
-                            maxHeight={maxHeight}
                         >
                             <StyledComboBoxBody
                                 $maxHeight={maxHeight}

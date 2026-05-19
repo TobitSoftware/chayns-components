@@ -810,7 +810,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             anchorElement={boxRef.current}
                             container={container}
                             direction={dropdownDirection}
-                            maxHeight={300}
                             onClose={handleClose}
                             onOutsideClick={handleDropdownOutsideClick}
                             shouldShowDropdown={shouldShowDropdown}
