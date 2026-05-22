@@ -1,10 +1,23 @@
 import styled from 'styled-components';
 
-export const StyledSocialPluginContent = styled.div``;
+export const StyledSocialPluginContent = styled.div`
+    width: 100%;
+`;
 
 export const StyledSocialPluginContentComments = styled.div`
     min-height: 300px;
-    max-width: 500px;
+    max-height: 500px;
+
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    margin: 8px 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
 `;
 
 type StyledSocialPluginContentRightElementProps = {

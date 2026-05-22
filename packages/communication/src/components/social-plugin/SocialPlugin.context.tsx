@@ -6,12 +6,14 @@ import React, {
     useContext,
     useEffect,
     useMemo,
+    useRef,
     useState,
 } from 'react';
 import { Comment } from './SocialPlugin.types';
 import { getPosting } from '../../api/posting/get';
 import { postReaction } from '../../api/reaction/post';
 import { deleteReaction } from '../../api/reaction/delete';
+import { getComments } from '../../api/comments/get';
 
 interface ISocialPluginContext {
     // Global
@@ -62,21 +64,29 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
     const [likeCount, setLikeCount] = useState(0);
     const [commentCount, setCommentCount] = useState(0);
 
-    useEffect(() => {
-        void getPosting({ postingId, commentType }).then(({ status, data }) => {
-            if (status === 200 && data) {
-                setCommentCount(data.commentCount);
-                setLikeCount(data.likeCount);
-                setHasLiked(data.userHasReacted);
-            }
-        });
+    const commentSkipRef = useRef(0);
+
+    const handleLoadComments = useCallback(() => {
+        void getComments({ postingId, commentType, skip: commentSkipRef.current }).then(
+            ({ status, data }) => {
+                if (status === 200 && data) {
+                    setComments((prev) => {
+                        const newComments = prev.concat(data);
+
+                        commentSkipRef.current = newComments.length;
+
+                        return newComments;
+                    });
+                }
+            },
+        );
     }, [commentType, postingId]);
 
     const handleAddComment = useCallback((comment: Comment) => {
         setComments((prev) => prev.concat([comment]));
     }, []);
 
-    const handleDeleteComment = useCallback((_id: Comment['id']) => {}, []);
+    const handleDeleteComment = useCallback((id: Comment['id']) => {}, []);
 
     const handleLike = useCallback(() => {
         if (hasLiked) {
@@ -103,6 +113,19 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
             }
         });
     }, [commentType, hasLiked, postingId]);
+
+    // Initial loading
+    useEffect(() => {
+        void getPosting({ postingId, commentType }).then(({ status, data }) => {
+            if (status === 200 && data) {
+                setCommentCount(data.commentCount);
+                setLikeCount(data.likeCount);
+                setHasLiked(data.userHasReacted);
+            }
+        });
+
+        handleLoadComments();
+    }, [commentType, handleLoadComments, postingId]);
 
     const value = useMemo(
         () => ({

@@ -1,3 +1,5 @@
 import styled from 'styled-components';
 
-export const StyledSocialPlugin = styled.div``;
+export const StyledSocialPlugin = styled.div`
+    width: 100%;
+`;

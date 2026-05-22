@@ -12,6 +12,9 @@ import {
     CommunicationInputCornerType,
     CommunicationInputSize,
 } from '../../communication-input/CommunicationInput.types';
+import { useSocialPlugin } from '../SocialPlugin.context';
+import SocialPluginMessage from './social-plugin-message/SocialPluginMessage';
+import { sortComments } from '../SocialPlugin.utils';
 
 interface SocialPluginContentProps {
     shouldShowComments: boolean;
@@ -21,6 +24,8 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
     const [value, setValue] = useState('');
 
     const { t } = useTranslation();
+
+    const { comments } = useSocialPlugin();
 
     const canSend = useMemo(() => {
         const checkValue = value.replaceAll('<br>', '').trim();
@@ -43,11 +48,44 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
         [canSend, handleSend],
     );
 
+    const messages = useMemo(
+        () =>
+            sortComments(comments).map(
+                ({
+                    comments: childComments,
+                    id,
+                    parentCommentId,
+                    text,
+                    creationTime,
+                    firstName,
+                    lastName,
+                    personId,
+                    deletionTime,
+                    imageUrl,
+                }) => (
+                    <SocialPluginMessage
+                        key={id}
+                        id={id}
+                        comments={childComments}
+                        personId={personId}
+                        creationTime={creationTime}
+                        deletionTime={deletionTime}
+                        firstName={firstName}
+                        lastName={lastName}
+                        text={text}
+                        parentCommentId={parentCommentId}
+                        imageUrl={imageUrl}
+                    />
+                ),
+            ),
+        [comments],
+    );
+
     return (
         <ExpandableContent isOpen={shouldShowComments}>
             <StyledSocialPluginContent>
                 <StyledSocialPluginContentComments className="chayns-scrollbar">
-                    t
+                    {messages}
                 </StyledSocialPluginContentComments>
                 <CommunicationInput
                     inputConfig={{

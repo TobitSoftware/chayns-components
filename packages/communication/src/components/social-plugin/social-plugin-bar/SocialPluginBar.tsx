@@ -37,12 +37,12 @@ const SocialPluginBar: FC<SocialPluginBarProps> = ({ link, onCommentVisibilityCh
                     likeLabel = t(textStrings.socialPlugin.bar.footer.likedByYouAndOnePerson);
                 } else {
                     likeLabel = t(textStrings.socialPlugin.bar.footer.likedByYouAndMultiplePeople, {
-                        '##count##': likeCount - 1,
+                        count: likeCount - 1,
                     });
                 }
             } else {
                 likeLabel = t(textStrings.socialPlugin.bar.footer.likedByMultiplePeople, {
-                    '##count##': likeCount - 1,
+                    count: likeCount - 1,
                 });
             }
         }
@@ -52,7 +52,7 @@ const SocialPluginBar: FC<SocialPluginBarProps> = ({ link, onCommentVisibilityCh
                 commentCount === 1
                     ? t(textStrings.socialPlugin.bar.footer.oneComment)
                     : t(textStrings.socialPlugin.bar.footer.multipleComments, {
-                          '##count##': commentCount,
+                          count: commentCount,
                       });
         }
 
