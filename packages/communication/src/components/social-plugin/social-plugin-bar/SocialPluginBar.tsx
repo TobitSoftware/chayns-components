@@ -21,7 +21,7 @@ interface SocialPluginBarProps {
 const SocialPluginBar: FC<SocialPluginBarProps> = ({ link, onCommentVisibilityChange }) => {
     const { t } = useTranslation();
 
-    const { likeCount, hasLiked, commentCount } = useSocialPlugin();
+    const { likeCount, hasLiked, commentCount, like, dislike } = useSocialPlugin();
 
     const label = useMemo(() => {
         let likeLabel = '';
@@ -59,7 +59,13 @@ const SocialPluginBar: FC<SocialPluginBarProps> = ({ link, onCommentVisibilityCh
         return [likeLabel, commentLabel].filter(Boolean).join(', ');
     }, [likeCount, commentCount, hasLiked, t]);
 
-    const handleLike = useCallback(() => {}, []);
+    const handleLike = useCallback(() => {
+        if (hasLiked) {
+            dislike();
+        } else {
+            like();
+        }
+    }, [dislike, hasLiked, like]);
 
     return (
         <StyledSocialPluginBar>

@@ -10,6 +10,8 @@ import React, {
 } from 'react';
 import { Comment } from './SocialPlugin.types';
 import { getPosting } from '../../api/posting/get';
+import { postReaction } from '../../api/reaction/post';
+import { deleteReaction } from '../../api/reaction/delete';
 
 interface ISocialPluginContext {
     // Global
@@ -19,12 +21,14 @@ interface ISocialPluginContext {
     // Comments
     comments: Comment[];
     commentCount: number;
-    addComment?: (comment: Comment) => void;
-    deleteComment?: (id: Comment['id']) => void;
+    addComment: (comment: Comment) => void;
+    deleteComment: (id: Comment['id']) => void;
 
     // Likes
     likeCount: number;
     hasLiked: boolean;
+    like: VoidFunction;
+    dislike: VoidFunction;
 }
 
 export const SocialPluginContext = createContext<ISocialPluginContext>({
@@ -34,6 +38,8 @@ export const SocialPluginContext = createContext<ISocialPluginContext>({
     hasLiked: false,
     addComment: () => {},
     deleteComment: () => {},
+    dislike: () => {},
+    like: () => {},
 });
 
 SocialPluginContext.displayName = 'SocialPluginContext';
@@ -70,7 +76,33 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
         setComments((prev) => prev.concat([comment]));
     }, []);
 
-    const handleDeleteComment = useCallback((id: Comment['id']) => {}, []);
+    const handleDeleteComment = useCallback((_id: Comment['id']) => {}, []);
+
+    const handleLike = useCallback(() => {
+        if (hasLiked) {
+            return;
+        }
+
+        void postReaction({ postingId, commentType }).then(({ status }) => {
+            if (status === 200) {
+                setHasLiked(true);
+                setLikeCount((prev) => prev + 1);
+            }
+        });
+    }, [commentType, hasLiked, postingId]);
+
+    const handleDislike = useCallback(() => {
+        if (!hasLiked) {
+            return;
+        }
+
+        void deleteReaction({ postingId, commentType }).then(({ status }) => {
+            if (status === 200) {
+                setHasLiked(false);
+                setLikeCount((prev) => Math.max(prev - 1, 0));
+            }
+        });
+    }, [commentType, hasLiked, postingId]);
 
     const value = useMemo(
         () => ({
@@ -80,6 +112,8 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
             hasLiked,
             commentCount,
             likeCount,
+            like: handleLike,
+            dislike: handleDislike,
             addComment: handleAddComment,
             deleteComment: handleDeleteComment,
         }),
@@ -90,6 +124,8 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
             hasLiked,
             commentCount,
             likeCount,
+            handleLike,
+            handleDislike,
             handleAddComment,
             handleDeleteComment,
         ],
