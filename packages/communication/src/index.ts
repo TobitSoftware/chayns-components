@@ -7,6 +7,7 @@ export { default as AudioInput } from './components/audio-input/AudioInput';
 export { default as CommunicationButton } from './components/communication-button/CommunicationButton';
 export { default as CommunicationTeamTalkHeader } from './components/communication-team-talk-header/CommunicationTeamTalkHeader';
 export { default as CommunicationMessage } from './components/communication-message/variants';
+export { default as SocialPlugin } from './components/social-plugin/SocialPlugin';
 
 // Types
 export type {

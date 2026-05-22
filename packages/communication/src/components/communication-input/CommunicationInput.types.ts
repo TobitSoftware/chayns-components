@@ -67,6 +67,14 @@ export interface CommunicationInputProps {
      */
     audioInputConfig?: AudioInputProps;
     /**
+     * Disables the full height toggle of the input.
+     * @description
+     * Use this to disable the input full height toggle.
+     * @optional
+     * @default false
+     */
+    shouldDisableFullHeight?: boolean;
+    /**
      * Enables the initial reveal animation of the input.
      * @description
      * Use this to animate the input from a more compact state when it first appears.

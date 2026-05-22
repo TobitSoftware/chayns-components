@@ -50,6 +50,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             topContent,
             direction = CommunicationInputDirection.TOP,
             scrollContainerRef,
+            shouldDisableFullHeight = false,
         },
         ref,
     ) => {
@@ -148,7 +149,9 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                                 {topContent}
                                 <DynamicLayout
                                     shouldShowInputInBottomRow={shouldShowInputInBottomRow}
-                                    shouldShowFullHeightToggle={shouldShowFullHeightToggle}
+                                    shouldShowFullHeightToggle={
+                                        shouldDisableFullHeight ? false : shouldShowFullHeightToggle
+                                    }
                                     isFullHeight={isFullHeight}
                                     onFullHeightToggle={onFullHeightToggle}
                                     leftElement={leftElement}

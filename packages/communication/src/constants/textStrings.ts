@@ -98,6 +98,26 @@ export default {
             fallback: 'Plugin',
         },
     },
+    socialPlugin: {
+        bar: {
+            like: {
+                stringName: '',
+                fallback: 'Gefällt mir',
+            },
+            comment: {
+                stringName: '',
+                fallback: 'Kommentieren',
+            },
+        },
+        content: {
+            input: {
+                placeholder: {
+                    stringName: '',
+                    fallback: 'Kommentieren',
+                },
+            },
+        },
+    },
     CommunicationTeamTalkHeader: {
         add: {
             stringName: 'txt_chayns_components_v5_communication_CommunicationTeamTalkHeader_add',
