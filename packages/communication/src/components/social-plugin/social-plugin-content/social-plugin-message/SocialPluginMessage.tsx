@@ -1,5 +1,8 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
 import {
+    StyledMessageContent,
+    StyledMessageContentImage,
+    StyledMessageContentText,
     StyledSocialPluginMessage,
     StyledSocialPluginMessageChildMessage,
     StyledSocialPluginMessageChildMessageLine,
@@ -58,6 +61,18 @@ const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
         [creationTime, deletionTime, firstName, id, lastName, personId],
     );
 
+    const renderContent = useCallback(
+        (rawText?: string, rawImage?: string) => (
+            <StyledMessageContent>
+                {typeof rawImage === 'string' && <StyledMessageContentImage src={rawImage} />}
+                {typeof rawText === 'string' && (
+                    <StyledMessageContentText>{rawText}</StyledMessageContentText>
+                )}
+            </StyledMessageContent>
+        ),
+        [],
+    );
+
     const childMessages = useMemo(
         () =>
             sortComments(comments ?? []).map((childComment) => (
@@ -75,7 +90,7 @@ const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
                             },
                             status: CommunicationMessageStatus.SEND,
                         }}
-                        content={text}
+                        content={renderContent(childComment.text, childComment.imageUrl)}
                         alignment={CommunicationMessageAlignment.LEFT}
                         shouldShowAuthorImage
                         shouldShowAuthorName
@@ -84,7 +99,7 @@ const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
                     />
                 </StyledSocialPluginMessageChildMessage>
             )),
-        [comments, text],
+        [comments, renderContent],
     );
 
     return (
@@ -92,7 +107,7 @@ const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
             <StyledSocialPluginMessageParentMessage>
                 <CommunicationMessage.Text
                     metadata={metadata}
-                    content={text}
+                    content={renderContent(text, imageUrl)}
                     alignment={CommunicationMessageAlignment.LEFT}
                     shouldShowAuthorImage
                     shouldShowAuthorName

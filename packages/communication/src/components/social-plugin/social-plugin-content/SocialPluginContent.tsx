@@ -1,7 +1,8 @@
-import React, { FC, useCallback, useState, KeyboardEvent, useMemo } from 'react';
+import React, { FC, useCallback, useState, KeyboardEvent, useMemo, useRef } from 'react';
 import {
     StyledSocialPluginContent,
     StyledSocialPluginContentComments,
+    StyledSocialPluginContentCommentsInner,
     StyledSocialPluginContentRightElement,
 } from './SocialPluginContent.styles';
 import { ExpandableContent, Icon } from '@chayns-components/core';
@@ -22,6 +23,8 @@ interface SocialPluginContentProps {
 
 const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments }) => {
     const [value, setValue] = useState('');
+
+    const listRef = useRef<HTMLDivElement>(null);
 
     const { t } = useTranslation();
 
@@ -84,8 +87,10 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
     return (
         <ExpandableContent isOpen={shouldShowComments}>
             <StyledSocialPluginContent>
-                <StyledSocialPluginContentComments className="chayns-scrollbar">
-                    {messages}
+                <StyledSocialPluginContentComments className="chayns-scrollbar" ref={listRef}>
+                    <StyledSocialPluginContentCommentsInner>
+                        {messages}
+                    </StyledSocialPluginContentCommentsInner>
                 </StyledSocialPluginContentComments>
                 <CommunicationInput
                     inputConfig={{
@@ -95,6 +100,7 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
                         maxHeight: 200,
                         value,
                     }}
+                    scrollContainerRef={listRef}
                     shouldDisableFullHeight
                     cornerType={CommunicationInputCornerType.ROUNDED}
                     size={CommunicationInputSize.SMALL}

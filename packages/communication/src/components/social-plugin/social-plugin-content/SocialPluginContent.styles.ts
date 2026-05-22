@@ -9,15 +9,18 @@ export const StyledSocialPluginContentComments = styled.div`
     max-height: 500px;
 
     width: 100%;
-
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-
     margin: 8px 0;
 
     overflow-y: auto;
     overflow-x: hidden;
+`;
+
+export const StyledSocialPluginContentCommentsInner = styled.div`
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 `;
 
 type StyledSocialPluginContentRightElementProps = {

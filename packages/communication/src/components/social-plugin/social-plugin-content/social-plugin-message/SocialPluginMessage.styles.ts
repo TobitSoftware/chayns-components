@@ -48,3 +48,18 @@ export const StyledSocialPluginMessageChildMessageSubLine = styled.div<WithTheme
 
     background-color: rgba(${({ theme }) => theme['text-rgb']}, 0.25);
 `;
+
+export const StyledMessageContent = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+export const StyledMessageContentImage = styled.img`
+    display: flex;
+    flex-direction: column;
+`;
+
+export const StyledMessageContentText = styled.p`
+    display: flex;
+    flex-direction: column;
+`;
