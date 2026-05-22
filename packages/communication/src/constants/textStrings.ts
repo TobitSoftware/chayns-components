@@ -108,6 +108,36 @@ export default {
                 stringName: '',
                 fallback: 'Kommentieren',
             },
+            footer: {
+                likedByYou: {
+                    stringName: '',
+                    fallback: 'Gefällt Dir',
+                },
+                likedByOnePerson: {
+                    stringName: '',
+                    fallback: 'Gefällt einer Person',
+                },
+                likedByMultiplePeople: {
+                    stringName: '',
+                    fallback: 'Gefällt ##count## Personen',
+                },
+                likedByYouAndOnePerson: {
+                    stringName: '',
+                    fallback: 'Gefällt Dir und einer weiteren Person',
+                },
+                likedByYouAndMultiplePeople: {
+                    stringName: '',
+                    fallback: 'Gefällt Dir und ##count## weiteren Personen',
+                },
+                oneComment: {
+                    stringName: '',
+                    fallback: '1 Kommentar',
+                },
+                multipleComments: {
+                    stringName: '',
+                    fallback: '##count## Kommentare',
+                },
+            },
         },
         content: {
             input: {

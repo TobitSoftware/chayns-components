@@ -6,11 +6,11 @@ import SocialPluginBar from './social-plugin-bar/SocialPluginBar';
 import { TextStringProviderSSR } from '@chayns/textstrings';
 import SocialPluginContent from './social-plugin-content/SocialPluginContent';
 
-const SocialPlugin: FC<SocialPluginProps> = ({ link }) => {
+const SocialPlugin: FC<SocialPluginProps> = ({ link, postingId, commentType }) => {
     const [shouldShowComments, setShouldSHowComments] = useState(false);
 
     return (
-        <SocialPluginProvider>
+        <SocialPluginProvider commentType={commentType} postingId={postingId}>
             <TextStringProviderSSR
                 libraries="chayns-components-v5-communication"
                 id="social-plugin"

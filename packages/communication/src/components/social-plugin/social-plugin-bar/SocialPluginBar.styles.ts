@@ -7,7 +7,7 @@ export const StyledSocialPluginBar = styled.div`
     flex-direction: column;
 `;
 
-export const StyledSocialPluginBarCommentCount = styled.div``;
+export const StyledSocialPluginBarCommentCount = styled.footer``;
 
 export const StyledSocialPluginBarDivider = styled.div<WithTheme<unknown>>`
     width: 100%;
