@@ -29,7 +29,10 @@ import { useSocialPlugin } from '../SocialPlugin.context';
 import SocialPluginMessage from './social-plugin-message/SocialPluginMessage';
 import { sortComments } from '../SocialPlugin.utils';
 import PreviewMessage from '../../communication-message/preview-message/PreviewMessage';
-import { generateImagePreviewUrl } from './SocialPluginContent.utils';
+import {
+    generateImagePreviewUrl,
+    scheduleScrollElementToBottom,
+} from './SocialPluginContent.utils';
 
 interface SocialPluginContentProps {
     shouldShowComments: boolean;
@@ -47,15 +50,12 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
     const { comments, addComment, replyMetadata, setReplyMetadata } = useSocialPlugin();
 
     useEffect(() => {
-        requestAnimationFrame(() => {
-            console.log(listRef.current?.scrollHeight, listRef.current?.scrollTop);
-            if (listRef.current) {
-                listRef.current.scrollTop = listRef.current.scrollHeight;
+        if (!shouldShowComments) {
+            return undefined;
+        }
 
-                console.log(listRef.current?.scrollHeight, listRef.current?.scrollTop);
-            }
-        });
-    }, []);
+        return scheduleScrollElementToBottom(listRef.current);
+    }, [comments, shouldShowComments]);
 
     const canSend = useMemo(() => {
         const checkValue = value.replaceAll('<br>', '').trim();
@@ -194,11 +194,17 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
                 setImage(internalFile);
 
                 const uploadCallback = (uploadedFile: Image) => {
-                    setImage((prev) => ({
-                        ...prev!,
-                        state: 'uploaded',
-                        uploadedFile,
-                    }));
+                    setImage((prev) => {
+                        if (!prev) {
+                            return prev;
+                        }
+
+                        return {
+                            ...prev,
+                            state: 'uploaded',
+                            uploadedFile,
+                        };
+                    });
                 };
 
                 await uploadFile({
