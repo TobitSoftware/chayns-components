@@ -23,6 +23,15 @@ export const StyledSocialPluginContentCommentsInner = styled.div`
     gap: 16px;
 `;
 
+export const StyledSocialPluginContentTopContent = styled.div`
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+`;
+
 type StyledSocialPluginContentRightElementProps = {
     $isDisabled?: boolean;
 };
@@ -38,4 +47,28 @@ export const StyledSocialPluginContentRightElement = styled.div<StyledSocialPlug
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+export const StyledSocialPluginImageWrapper = styled.div`
+    height: 54px;
+    width: 54px;
+
+    position: relative;
+
+    border-radius: 3px;
+`;
+
+export const StyledSocialPluginImageXmark = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    cursor: pointer;
+`;
+
+export const StyledSocialPluginImage = styled.img`
+    height: 100%;
+    width: 100%;
+
+    object-fit: cover;
 `;

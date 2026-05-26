@@ -10,10 +10,29 @@ import React, {
     useState,
 } from 'react';
 import { Comment } from './SocialPlugin.types';
+import { insertCommentIntoComments, removeCommentFromComments } from './SocialPlugin.utils';
 import { getPosting } from '../../api/posting/get';
 import { postReaction } from '../../api/reaction/post';
 import { deleteReaction } from '../../api/reaction/delete';
 import { getComments } from '../../api/comments/get';
+import { deleteComment } from '../../api/comments/delete';
+import {
+    createDialog,
+    DialogButtonType,
+    DialogType,
+    getUser,
+    login,
+    useSite,
+    useUser,
+} from 'chayns-api';
+import { postComment } from '../../api/comments/post';
+import { MessageMetaData } from '../communication-message/CommunicationMessage.types';
+
+interface AddCommentOptions {
+    text: string;
+    parentCommentId?: Comment['id'];
+    imageUrl?: string;
+}
 
 interface ISocialPluginContext {
     // Global
@@ -23,7 +42,7 @@ interface ISocialPluginContext {
     // Comments
     comments: Comment[];
     commentCount: number;
-    addComment: (comment: Comment) => void;
+    addComment: (comment: AddCommentOptions) => Promise<boolean>;
     deleteComment: (id: Comment['id']) => void;
 
     // Likes
@@ -31,6 +50,10 @@ interface ISocialPluginContext {
     hasLiked: boolean;
     like: VoidFunction;
     dislike: VoidFunction;
+
+    // Reply
+    replyMetadata?: MessageMetaData;
+    setReplyMetadata: (metadata?: MessageMetaData) => void;
 }
 
 export const SocialPluginContext = createContext<ISocialPluginContext>({
@@ -38,10 +61,11 @@ export const SocialPluginContext = createContext<ISocialPluginContext>({
     commentCount: 0,
     likeCount: 0,
     hasLiked: false,
-    addComment: () => {},
+    addComment: () => Promise.resolve(false),
     deleteComment: () => {},
     dislike: () => {},
     like: () => {},
+    setReplyMetadata: () => {},
 });
 
 SocialPluginContext.displayName = 'SocialPluginContext';
@@ -63,8 +87,12 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
     const [hasLiked, setHasLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
     const [commentCount, setCommentCount] = useState(0);
+    const [replyMetadata, setReplyMetadata] = useState<MessageMetaData>();
 
     const commentSkipRef = useRef(0);
+
+    const { personId, lastName, firstName } = useUser();
+    const { locationId } = useSite();
 
     const handleLoadComments = useCallback(() => {
         void getComments({ postingId, commentType, skip: commentSkipRef.current }).then(
@@ -82,11 +110,82 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
         );
     }, [commentType, postingId]);
 
-    const handleAddComment = useCallback((comment: Comment) => {
-        setComments((prev) => prev.concat([comment]));
-    }, []);
+    const handleAddComment = useCallback(
+        async ({ parentCommentId, text, imageUrl }: AddCommentOptions): Promise<boolean> => {
+            if (!personId) {
+                const { token } = await login();
 
-    const handleDeleteComment = useCallback((id: Comment['id']) => {}, []);
+                if (!token) {
+                    return false;
+                }
+            }
+
+            const { status, data } = await postComment({
+                postingId,
+                commentType,
+                text,
+                parentCommentId,
+                imageUrl,
+            });
+
+            if (status !== 200 || !data) {
+                return false;
+            }
+
+            const currentPersonId = getUser()?.personId ?? personId;
+
+            if (!currentPersonId) {
+                return false;
+            }
+
+            const newComment: Comment = {
+                id: data,
+                parentCommentId,
+                imageUrl,
+                text,
+                creationTime: new Date().toISOString(),
+                commentTypeId: commentType,
+                personId: currentPersonId,
+                lastName: lastName ?? '',
+                firstName: firstName ?? '',
+                originalPostingId: postingId,
+                reactions: [],
+                locationId,
+            };
+
+            setComments((prev) =>
+                insertCommentIntoComments({
+                    comments: prev,
+                    newComment,
+                    parentCommentId,
+                }),
+            );
+            setCommentCount((prev) => prev + 1);
+
+            return true;
+        },
+        [commentType, firstName, lastName, locationId, personId, postingId],
+    );
+
+    const handleDeleteComment = useCallback((id: Comment['id']) => {
+        void createDialog({
+            type: DialogType.CONFIRM,
+            text: 'Möchtest du den Kommentar wirklich löschen?',
+        })
+            .open()
+            .then(({ buttonType }) => {
+                if (buttonType === DialogButtonType.OK) {
+                    void deleteComment({ id }).then(({ status }) => {
+                        if (status === 200) {
+                            setComments((prev) =>
+                                removeCommentFromComments({ comments: prev, id }),
+                            );
+                            setCommentCount((prev) => Math.max(prev - 1, 0));
+                        }
+                    });
+                }
+            });
+    }, []);
 
     const handleLike = useCallback(() => {
         if (hasLiked) {
@@ -135,6 +234,8 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
             hasLiked,
             commentCount,
             likeCount,
+            replyMetadata,
+            setReplyMetadata: (metadata?: MessageMetaData) => setReplyMetadata(metadata),
             like: handleLike,
             dislike: handleDislike,
             addComment: handleAddComment,
@@ -147,6 +248,7 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
             hasLiked,
             commentCount,
             likeCount,
+            replyMetadata,
             handleLike,
             handleDislike,
             handleAddComment,

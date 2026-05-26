@@ -46,6 +46,7 @@ export const postComment = async ({
 
     const response = await fetch(`${COMMENT_API_BASE_URL}Comment`, {
         headers: {
+            'Content-Type': 'application/json',
             Accept: 'application/json',
             Authorization: `bearer ${accessToken}`,
         },

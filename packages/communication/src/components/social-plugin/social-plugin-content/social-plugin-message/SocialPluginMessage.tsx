@@ -16,8 +16,12 @@ import CommunicationMessage from '../../../communication-message/variants';
 import {
     CommunicationMessageAlignment,
     CommunicationMessageStatus,
+    MessageMetaData,
 } from '../../../communication-message/CommunicationMessage.types';
 import { sortComments } from '../../SocialPlugin.utils';
+import { getMessageOptions, getMetadata } from './SocialPluginMessage.utils';
+import { useIsAdminMode, usePage, useSite, useUser } from 'chayns-api';
+import { useSocialPlugin } from '../../SocialPlugin.context';
 
 interface SocialPluginMessageProps {
     id: Comment['id'];
@@ -32,6 +36,13 @@ interface SocialPluginMessageProps {
     lastName: Comment['lastName'];
 }
 
+const renderContent = (text?: string, imageUrl?: string) => (
+    <StyledMessageContent>
+        {typeof imageUrl === 'string' && <StyledMessageContentImage src={imageUrl} />}
+        {typeof text === 'string' && <StyledMessageContentText>{text}</StyledMessageContentText>}
+    </StyledMessageContent>
+);
+
 const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
     comments,
     parentCommentId,
@@ -44,62 +55,76 @@ const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
     imageUrl,
     personId,
 }) => {
-    const t = 0;
+    const isAdminMode = useIsAdminMode();
+
+    const { deleteComment, setReplyMetadata } = useSocialPlugin();
 
     const metadata = useMemo(
-        () => ({
-            id: String(id),
-            creationTime,
-            deletionTime,
-            author: {
-                id: personId,
-                name: `${firstName} ${lastName}`,
-                imageUrl: `https://tsimg.cloud/${personId}/profile_w200-h200.png`,
-            },
-            status: CommunicationMessageStatus.SEND,
-        }),
-        [creationTime, deletionTime, firstName, id, lastName, personId],
+        () =>
+            getMetadata({
+                imageUrl,
+                id,
+                lastName,
+                firstName,
+                text,
+                creationTime,
+                deletionTime,
+                personId,
+            }),
+        [creationTime, deletionTime, firstName, id, imageUrl, lastName, personId, text],
     );
 
-    const renderContent = useCallback(
-        (rawText?: string, rawImage?: string) => (
-            <StyledMessageContent>
-                {typeof rawImage === 'string' && <StyledMessageContentImage src={rawImage} />}
-                {typeof rawText === 'string' && (
-                    <StyledMessageContentText>{rawText}</StyledMessageContentText>
-                )}
-            </StyledMessageContent>
-        ),
-        [],
+    const handleDelete = useCallback(
+        (messageId: Comment['id']) => {
+            deleteComment(messageId);
+        },
+        [deleteComment],
+    );
+
+    const handleReply = useCallback(
+        (messageMetadata: MessageMetaData) => {
+            setReplyMetadata(messageMetadata);
+        },
+        [setReplyMetadata],
     );
 
     const childMessages = useMemo(
         () =>
-            sortComments(comments ?? []).map((childComment) => (
-                <StyledSocialPluginMessageChildMessage key={childComment.id}>
-                    <StyledSocialPluginMessageChildMessageSubLine />
-                    <CommunicationMessage.Text
-                        metadata={{
-                            id: String(childComment.id),
-                            creationTime: childComment.creationTime,
-                            deletionTime: childComment.deletionTime,
-                            author: {
-                                id: childComment.personId,
-                                name: `${childComment.firstName} ${childComment.lastName}`,
-                                imageUrl: `https://tsimg.cloud/${childComment.personId}/profile_w200-h200.png`,
-                            },
-                            status: CommunicationMessageStatus.SEND,
-                        }}
-                        content={renderContent(childComment.text, childComment.imageUrl)}
-                        alignment={CommunicationMessageAlignment.LEFT}
-                        shouldShowAuthorImage
-                        shouldShowAuthorName
-                        shouldShowTimestamp={false}
-                        shouldShowStatus={false}
-                    />
-                </StyledSocialPluginMessageChildMessage>
-            )),
-        [comments, renderContent],
+            sortComments(comments ?? []).map((childComment) => {
+                const childMetadata = getMetadata({
+                    id: childComment.id,
+                    personId: childComment.personId,
+                    deletionTime: childComment.deletionTime,
+                    creationTime: childComment.creationTime,
+                    firstName: childComment.firstName,
+                    text: childComment.text,
+                    lastName: childComment.lastName,
+                    imageUrl: childComment.imageUrl,
+                });
+
+                return (
+                    <StyledSocialPluginMessageChildMessage key={childComment.id}>
+                        <StyledSocialPluginMessageChildMessageSubLine />
+                        <CommunicationMessage.Text
+                            metadata={childMetadata}
+                            options={getMessageOptions({
+                                isAdminMode,
+                                isChildComment: true,
+                                metadata: childMetadata,
+                                onDelete: handleDelete,
+                                onReply: handleReply,
+                            })}
+                            content={renderContent(childComment.text, childComment.imageUrl)}
+                            alignment={CommunicationMessageAlignment.LEFT}
+                            shouldShowAuthorImage
+                            shouldShowAuthorName
+                            shouldShowTimestamp={false}
+                            shouldShowStatus={false}
+                        />
+                    </StyledSocialPluginMessageChildMessage>
+                );
+            }),
+        [comments, handleDelete, handleReply, isAdminMode],
     );
 
     return (
@@ -107,6 +132,12 @@ const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
             <StyledSocialPluginMessageParentMessage>
                 <CommunicationMessage.Text
                     metadata={metadata}
+                    options={getMessageOptions({
+                        isAdminMode,
+                        metadata,
+                        onDelete: handleDelete,
+                        onReply: handleReply,
+                    })}
                     content={renderContent(text, imageUrl)}
                     alignment={CommunicationMessageAlignment.LEFT}
                     shouldShowAuthorImage
