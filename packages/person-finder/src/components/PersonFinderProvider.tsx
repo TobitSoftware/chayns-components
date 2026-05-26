@@ -21,6 +21,7 @@ import {
     PersonFinderEntry,
     PersonFinderFilterTypes,
     Priority,
+    RelationMode,
     ThrottledFunction,
     UACEntry,
     UACFilter,
@@ -31,6 +32,8 @@ import { deleteFriends } from '../api/friends/delete';
 import { filterDataByKeys, loadData } from '../utils/personFinder';
 import { Tag } from '@chayns-components/core/lib/types/types/tagInput';
 import { getUACGroups, getUsersByGroups } from '../utils/uac';
+import { TextstringProvider } from '@chayns-components/textstring';
+import { PERSON_FINDER_TEXTSTRING_LIBRARY_NAME } from '../constants/textStrings';
 
 const THROTTLE_INTERVAL = 500;
 
@@ -92,6 +95,7 @@ type PersonFinderProviderProps = {
     shouldShowOwnUser?: boolean;
     uacFilter?: UACFilter[];
     entries?: PersonEntry[];
+    relationMode?: RelationMode;
 };
 
 const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
@@ -103,6 +107,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     shouldShowOwnUser = false,
     uacFilter,
     entries,
+    relationMode,
 }) => {
     const [data, setData] = useState<IPersonFinderContext['data']>();
     const [friends, setFriends] = useState<PersonEntry[]>();
@@ -168,6 +173,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 searchString: search ?? '',
                 filter: [key],
                 skipMap: { [key]: current.skip },
+                relationMode,
             })
                 .then((result) => {
                     const newData = result?.[key];
@@ -180,7 +186,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                     updateLoadingState(key, LoadingState.Success);
                 });
         },
-        [updateLoadingState, data, search, appendData],
+        [updateLoadingState, data, search, relationMode, appendData],
     );
 
     const addFriend = useCallback((personId: string) => {
@@ -255,6 +261,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                     searchString,
                     filter,
                     skipMap: {},
+                    relationMode,
                 });
 
                 if (requestTimestamp < latestHandledRequestRef.current) {
@@ -510,7 +517,9 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
     return (
         <PersonFinderContext.Provider value={providerValue}>
-            {children}
+            <TextstringProvider libraryName={PERSON_FINDER_TEXTSTRING_LIBRARY_NAME}>
+                {children}
+            </TextstringProvider>
         </PersonFinderContext.Provider>
     );
 };

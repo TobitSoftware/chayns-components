@@ -1,8 +1,8 @@
 import { getAccessToken } from 'chayns-api';
-import { PersonEntryResult } from '../../types/personFinder';
+import { PersonEntryResult, RelationMode } from '../../types/personFinder';
 
 const URL =
-    'https://relations.chayns.net/relations/v2/person?skip=##skip##&take=##take##&query=##search##';
+    'https://relations.chayns.net/relations/v2/person?skip=##skip##&take=##take##&query=##search##&scoreForSite=##scoreForSite##';
 
 interface GetPersonResult {
     list: PersonEntryResult[];
@@ -13,9 +13,15 @@ interface GetPersonsOptions {
     search: string;
     skip: number;
     take?: number;
+    relationMode?: RelationMode;
 }
 
-export const getPersons = async ({ search, skip, take = 20 }: GetPersonsOptions) => {
+export const getPersons = async ({
+    search,
+    skip,
+    take = 20,
+    relationMode = RelationMode.PERSON,
+}: GetPersonsOptions) => {
     const { accessToken } = await getAccessToken();
 
     if (!accessToken) {
@@ -32,7 +38,8 @@ export const getPersons = async ({ search, skip, take = 20 }: GetPersonsOptions)
     const response = await fetch(
         URL.replace('##search##', search)
             .replace('##skip##', skip.toString())
-            .replace('##take##', take?.toString()),
+            .replace('##take##', take?.toString())
+            .replace('##scoreForSite##', relationMode === RelationMode.SITE ? '1' : '0'),
         requestInit,
     );
 

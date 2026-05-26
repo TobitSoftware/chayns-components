@@ -5,7 +5,7 @@ import {
     PersonFinderEntry,
     PersonFinderFilterTypes,
 } from '../../../../../types/personFinder';
-import { getGroupName } from '../../../../../utils/personFinder';
+import { getGroupName, getPersonFinderTextstringValue } from '../../../../../utils/personFinder';
 import {
     StyledPersonFinderGroup,
     StyledPersonFinderGroupButtonWrapper,
@@ -16,14 +16,12 @@ import { usePersonFinder } from '../../../../PersonFinderProvider';
 import PersonFinderItem from './person-finder-item/PersonFinderItem';
 import { useErrorMessage, useOnlyFriends } from '../../../../../hooks/personFinder';
 import PersonFinderSmallItem from './person-finder-small-item/PersonFinderSmallItem';
-import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
 import textStrings from '../../../../../constants/textStrings';
 
 export type PersonFinderGroupProps = {
     filterKey: PersonFinderFilterTypes;
     entries: PersonFinderEntry[];
     count: number;
-    search: string;
     shouldShowGroupName: boolean;
     onAdd: (id: string) => void;
     onRemove: (id: string) => void;
@@ -114,10 +112,7 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
                         shouldShowWaitCursor={loadingState === LoadingState.Pending}
                         onClick={handleLoadMore}
                     >
-                        <TextstringProvider libraryName="@chayns-components-person-finder">
-                            <Textstring textstring={ttsToITextString(ts.loadMore)} />{' '}
-                            {getGroupName(filterKey)}
-                        </TextstringProvider>
+                        {getPersonFinderTextstringValue({ textstring: ts.loadMore })} {groupName}
                     </Button>
                 </StyledPersonFinderGroupButtonWrapper>
             )}

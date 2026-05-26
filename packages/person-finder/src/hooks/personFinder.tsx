@@ -6,10 +6,15 @@ import {
     SiteEntry,
     UACEntry,
 } from '../types/personFinder';
-import { isSiteEntry } from '../utils/personFinder';
+import {
+    formatLastOnline,
+    getPersonFinderTextstringValue,
+    isSiteEntry,
+} from '../utils/personFinder';
 import { VerificationBadge } from '@chayns-components/core';
 import { usePersonFinder } from '../components/PersonFinderProvider';
 import { StyledPersonFinderGroupErrorMessage } from '../components/person-finder/person-finder-wrapper/person-finder-body/person-finder-group/PersonFinderGroup.styles';
+import textStrings from '../constants/textStrings';
 
 export const useClosestElementAbove = (containerRef: RefObject<HTMLElement>, itemClass: string) => {
     const [closestElement, setClosestElement] = useState<HTMLElement | null>(null);
@@ -54,16 +59,32 @@ export const useClosestElementAbove = (containerRef: RefObject<HTMLElement>, ite
 
 export const usePersonFinderItem = (entry: PersonFinderEntry) => {
     const isSite = isSiteEntry(entry as PersonEntry | SiteEntry);
+    const ts = textStrings.components.personFinder;
 
-    const { url, commonSites, name, firstName, lastName, id, isVerified } = entry as PersonEntry &
-        SiteEntry;
+    const { url, commonSites, name, firstName, lastName, id, isVerified, lastOnlineTime } =
+        entry as PersonEntry & SiteEntry;
 
     const imageUrl = `https://sub60.tobit.com/${isSite ? 'l' : 'u'}/${id as string}?size=120`;
     const titleElement = isVerified && <VerificationBadge />;
     const title = isSite ? name : `${(firstName as string) ?? ''} ${(lastName as string) ?? ''}`;
-    const subtitle = isSite
-        ? url
-        : `chaynsID: ${id as string}${commonSites ? ` - ${commonSites as number} gemeinsame Sites` : ''}`;
+
+    let subtitle = getPersonFinderTextstringValue({
+        textstring: ts.wrapper.item.chaynsId,
+        replacements: { id: id as string },
+    });
+
+    if (lastOnlineTime) {
+        subtitle += ` - ${formatLastOnline(new Date(lastOnlineTime))}`;
+    } else if (commonSites) {
+        subtitle += ` - ${getPersonFinderTextstringValue({
+            textstring: ts.wrapper.item.commonSites,
+            replacements: { count: commonSites as number },
+        })}`;
+    }
+
+    if (isSite) {
+        subtitle = url;
+    }
 
     return {
         isSite,
@@ -121,34 +142,43 @@ export const useErrorMessage = ({
     entries,
     groupName,
     areOnlyFriendsGiven,
-}: UseErrorMessageOptions) =>
-    useMemo(() => {
-        if (search.length <= 2 && !areOnlyFriendsGiven) {
+}: UseErrorMessageOptions) => {
+    const ts = textStrings.components.personFinder.wrapper.body.group.errorMessage;
+
+    if (search.length <= 2 && !areOnlyFriendsGiven) {
+        return (
+            <StyledPersonFinderGroupErrorMessage>
+                {getPersonFinderTextstringValue({ textstring: ts.minSearchLength })}
+            </StyledPersonFinderGroupErrorMessage>
+        );
+    }
+
+    if (entries.length === 0) {
+        if (loadingState === LoadingState.Error && search.length) {
             return (
                 <StyledPersonFinderGroupErrorMessage>
-                    Gib einen Suchbegriff mit mindestens drei Zeichen ein.
+                    {getPersonFinderTextstringValue({
+                        textstring: ts.noResults,
+                        replacements: {
+                            groupName,
+                            search,
+                        },
+                    })}
                 </StyledPersonFinderGroupErrorMessage>
             );
         }
 
-        if (entries.length === 0) {
-            if (loadingState === LoadingState.Error && search.length) {
-                return (
-                    <StyledPersonFinderGroupErrorMessage>
-                        Es konnten keine {groupName} zu der Suche &#34;
-                        {search}&#34; gefunden werden.
-                    </StyledPersonFinderGroupErrorMessage>
-                );
-            }
-
-            if (search.length === 0) {
-                return (
-                    <StyledPersonFinderGroupErrorMessage>
-                        Gib einen Suchbegriff ein, um nach {groupName} zu suchen.
-                    </StyledPersonFinderGroupErrorMessage>
-                );
-            }
+        if (search.length === 0) {
+            return (
+                <StyledPersonFinderGroupErrorMessage>
+                    {getPersonFinderTextstringValue({
+                        textstring: ts.emptySearch,
+                        replacements: { groupName },
+                    })}
+                </StyledPersonFinderGroupErrorMessage>
+            );
         }
+    }
 
-        return null;
-    }, [areOnlyFriendsGiven, entries.length, groupName, loadingState, search]);
+    return null;
+};

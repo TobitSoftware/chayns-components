@@ -24,6 +24,7 @@ import {
     PersonFinderEntry,
     PersonFinderFilterTypes,
     Priority,
+    RelationMode,
     SiteEntry,
 } from '../../../types/personFinder';
 import { StyledPersonFinder, StyledPersonFinderLeftElement } from './PersonFinderWrapper.styles';

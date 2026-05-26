@@ -5,6 +5,7 @@ import {
     PersonFinderEntry,
     PersonFinderFilterTypes,
     Priority,
+    RelationMode,
     UACFilter,
 } from '../../types/personFinder';
 import PersonFinderProvider from '../PersonFinderProvider';
@@ -37,6 +38,10 @@ export type PersonFinderProps = PersonFinderWrapperProps & {
      * A list of entries that should be searched.
      */
     entries?: PersonEntry[];
+    /**
+     * Determines whether persons are searched and sorted from the user's perspective or from a site's perspective.
+     */
+    relationMode?: RelationMode;
 };
 
 const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
@@ -64,6 +69,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             shouldShowOwnUser = false,
             shouldDisableRemove = false,
             shouldRenderInline = false,
+            relationMode = RelationMode.PERSON,
         },
         ref,
     ) => {
@@ -83,6 +89,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                 shouldShowOwnUser={shouldShowOwnUser}
                 uacFilter={uacFilter}
                 entries={entries}
+                relationMode={relationMode}
             >
                 <AreaProvider shouldChangeColor={false} shouldDisableListItemPadding>
                     <div className="beta-chayns-person-finder" ref={personFinderRef}>

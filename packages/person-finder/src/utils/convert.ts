@@ -14,7 +14,14 @@ export const convertSiteEntry = (entries: SiteEntryResult[]): SiteEntry[] =>
         type: PersonFinderFilterTypes.SITE,
     }));
 
-export const convertPersonEntry = (entries: PersonEntryResult[]): PersonEntry[] =>
+interface ConvertPersonEntryOptions {
+    shouldShowLastOnlineTime?: boolean;
+}
+
+export const convertPersonEntry = (
+    entries: PersonEntryResult[],
+    { shouldShowLastOnlineTime }: ConvertPersonEntryOptions = {},
+): PersonEntry[] =>
     entries.map((entry) => ({
         id: entry.personId,
         firstName: entry.firstName,
@@ -22,4 +29,5 @@ export const convertPersonEntry = (entries: PersonEntryResult[]): PersonEntry[] 
         commonSites: entry.relationCount,
         isVerified: entry.verified,
         type: PersonFinderFilterTypes.PERSON,
+        lastOnlineTime: shouldShowLastOnlineTime ? entry.signOfLife : undefined,
     }));

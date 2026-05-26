@@ -9,6 +9,11 @@ export enum Priority {
     NORMAL,
 }
 
+export enum RelationMode {
+    PERSON = 'person',
+    SITE = 'site',
+}
+
 export interface PersonFinderData {
     searchString: string;
     count: number;
@@ -47,6 +52,7 @@ export interface PersonEntry {
     commonSites: number;
     isVerified: boolean;
     type: PersonFinderFilterTypes.PERSON;
+    lastOnlineTime?: Date;
 }
 
 export interface SiteEntry {
