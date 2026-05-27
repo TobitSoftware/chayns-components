@@ -331,11 +331,12 @@ const Accordion: FC<AccordionProps> = ({
             $bottomBorderColor={colors?.borderBottomColor}
             onKeyDown={(e) => {
                 if (
-                    e.key === 'Enter' &&
+                    (e.key === 'Enter' || e.key === ' ') &&
                     (e.target as HTMLDivElement).className.includes('beta-chayns-accordion') &&
                     shouldIndex
                 ) {
                     e.preventDefault();
+                    e.stopPropagation();
                     handleHeadClick();
                 }
             }}
