@@ -45,4 +45,5 @@ type StyledSocialPluginBarItemTextProps = {
 
 export const StyledSocialPluginBarItemText = styled.div<StyledSocialPluginBarItemTextProps>`
     font-weight: ${({ $shouldHighlight }) => ($shouldHighlight ? 'bold' : 'normal')};
+    line-height: 1;
 `;

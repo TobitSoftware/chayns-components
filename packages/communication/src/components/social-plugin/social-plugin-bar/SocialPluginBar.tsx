@@ -74,7 +74,10 @@ const SocialPluginBar: FC<SocialPluginBarProps> = ({ link, onCommentVisibilityCh
             <StyledSocialPluginBarItems>
                 <StyledSocialPluginBarItemsSide>
                     <StyledSocialPluginBarItem onClick={handleLike}>
-                        <Icon icons={['fa fa-thumbs-up']} />
+                        <Icon
+                            icons={[`${hasLiked ? 'fas' : 'fa'} fa-thumbs-up`]}
+                            color={hasLiked ? 'var(--chayns-color--primary)' : undefined}
+                        />
                         <StyledSocialPluginBarItemText $shouldHighlight={hasLiked}>
                             {t(textStrings.socialPlugin.bar.like)}
                         </StyledSocialPluginBarItemText>
