@@ -23,6 +23,8 @@ export interface CommunicationMessageProps {
     alignment: CommunicationMessageAlignment;
 
     options?: ContextMenuItem[];
+
+    timestampFormatter?: (date: Date) => string;
 }
 
 export interface MessageMetaDataImageFile {

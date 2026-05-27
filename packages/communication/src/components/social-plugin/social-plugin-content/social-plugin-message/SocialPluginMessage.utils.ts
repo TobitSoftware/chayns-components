@@ -4,7 +4,9 @@ import {
     MessageMetaData,
 } from '../../../communication-message/CommunicationMessage.types';
 import { ContextMenuItem } from '@chayns-components/core';
-import { getUser } from 'chayns-api';
+import { getLanguage, getUser } from 'chayns-api';
+import { getFixedT } from '@chayns/textstrings';
+import textStrings from '../../../../constants/textStrings';
 
 interface GetMetadataOptions {
     id: Comment['id'];
@@ -69,7 +71,7 @@ export const getMessageOptions = ({
 
     if (!isChildComment) {
         items.push({
-            text: 'Antworten',
+            text: getFixedT(textStrings.socialPlugin.content.message.options.reply),
             key: 'reply',
             onClick: () => onReply(metadata),
             icons: ['fa fa-reply'],
@@ -78,7 +80,7 @@ export const getMessageOptions = ({
 
     if (isAdminMode || (personId && personId === metadata.author.id)) {
         items.push({
-            text: 'Löschen',
+            text: getFixedT(textStrings.socialPlugin.content.message.options.delete),
             key: 'delete',
             onClick: () => onDelete(Number(metadata.id)),
             icons: ['fa fa-trash'],
@@ -86,4 +88,55 @@ export const getMessageOptions = ({
     }
 
     return items;
+};
+export const formatCommentDate = (date: Date): string => {
+    const { active } = getLanguage();
+
+    const now = new Date();
+
+    const diffMs = now.getTime() - date.getTime();
+
+    const minute = 1000 * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+    const week = day * 7;
+    const month = day * 30;
+    const year = day * 365;
+
+    const rtf = new Intl.RelativeTimeFormat(active ?? 'de', {
+        numeric: 'always',
+    });
+
+    if (diffMs < minute) {
+        return getFixedT(textStrings.socialPlugin.content.message.timestampSeconds);
+    }
+
+    if (diffMs < hour) {
+        const minutes = Math.floor(diffMs / minute);
+        return rtf.format(-minutes, 'minute');
+    }
+
+    if (diffMs < day) {
+        const hours = Math.floor(diffMs / hour);
+        return rtf.format(-hours, 'hour');
+    }
+
+    if (diffMs < week) {
+        const days = Math.floor(diffMs / day);
+        return rtf.format(-days, 'day');
+    }
+
+    if (diffMs < month) {
+        const weeks = Math.floor(diffMs / week);
+        return rtf.format(-weeks, 'week');
+    }
+
+    if (diffMs < year) {
+        const months = Math.floor(diffMs / month);
+        return rtf.format(-months, 'month');
+    }
+
+    const years = Math.floor(diffMs / year);
+
+    return rtf.format(-years, 'year');
 };

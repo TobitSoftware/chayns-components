@@ -14,12 +14,13 @@ const PluginMessage: FC<
         | 'shouldShowAuthorName'
         | 'shouldShowAuthorImage'
     >
-> = ({ metadata, options, content }) => (
+> = ({ metadata, options, content, timestampFormatter }) => (
     <CommunicationMessage
         metadata={metadata}
         content={content}
         options={options}
         alignment={CommunicationMessageAlignment.CENTER}
+        timestampFormatter={timestampFormatter}
         shouldShowStatus={false}
         shouldShowAuthorName={false}
         shouldShowTimestamp

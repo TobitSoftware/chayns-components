@@ -15,12 +15,11 @@ import { Comment } from '../../SocialPlugin.types';
 import CommunicationMessage from '../../../communication-message/variants';
 import {
     CommunicationMessageAlignment,
-    CommunicationMessageStatus,
     MessageMetaData,
 } from '../../../communication-message/CommunicationMessage.types';
 import { sortComments } from '../../SocialPlugin.utils';
-import { getMessageOptions, getMetadata } from './SocialPluginMessage.utils';
-import { useIsAdminMode, usePage, useSite, useUser } from 'chayns-api';
+import { formatCommentDate, getMessageOptions, getMetadata } from './SocialPluginMessage.utils';
+import { useIsAdminMode } from 'chayns-api';
 import { useSocialPlugin } from '../../SocialPlugin.context';
 import { replaceEmojis } from '../../../../utils/emojione';
 
@@ -29,7 +28,6 @@ interface SocialPluginMessageProps {
     personId: Comment['personId'];
     text: Comment['text'];
     imageUrl: Comment['imageUrl'];
-    parentCommentId: Comment['parentCommentId'];
     creationTime: Comment['creationTime'];
     deletionTime: Comment['deletionTime'];
     comments: Comment['comments'];
@@ -46,7 +44,6 @@ const renderContent = (text?: string, imageUrl?: string) => (
 
 const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
     comments,
-    parentCommentId,
     id,
     firstName,
     lastName,
@@ -121,8 +118,9 @@ const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
                             alignment={CommunicationMessageAlignment.LEFT}
                             shouldShowAuthorImage
                             shouldShowAuthorName
-                            shouldShowTimestamp={false}
+                            shouldShowTimestamp
                             shouldShowStatus={false}
+                            timestampFormatter={formatCommentDate}
                         />
                     </StyledSocialPluginMessageChildMessage>
                 );
@@ -145,8 +143,9 @@ const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
                     alignment={CommunicationMessageAlignment.LEFT}
                     shouldShowAuthorImage
                     shouldShowAuthorName
-                    shouldShowTimestamp={false}
+                    shouldShowTimestamp
                     shouldShowStatus={false}
+                    timestampFormatter={formatCommentDate}
                 />
             </StyledSocialPluginMessageParentMessage>
             {Array.isArray(comments) && comments.length > 0 && (

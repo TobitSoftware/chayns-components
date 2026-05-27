@@ -116,7 +116,6 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
                 ({
                     comments: childComments,
                     id,
-                    parentCommentId,
                     text,
                     creationTime,
                     firstName,
@@ -135,7 +134,6 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
                         firstName={firstName}
                         lastName={lastName}
                         text={replaceEmojis(text)}
-                        parentCommentId={parentCommentId}
                         imageUrl={imageUrl}
                     />
                 ),
@@ -221,12 +219,12 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
         () => [
             {
                 key: 'image',
-                text: 'Bild hinzufügen',
+                text: t(textStrings.socialPlugin.content.input.options.image),
                 onClick: handleAddImage,
                 icons: ['fa fa-image'],
             },
         ],
-        [handleAddImage],
+        [handleAddImage, t],
     );
 
     return (

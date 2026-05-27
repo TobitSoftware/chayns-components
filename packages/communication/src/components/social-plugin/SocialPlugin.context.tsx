@@ -27,6 +27,8 @@ import {
 } from 'chayns-api';
 import { postComment } from '../../api/comments/post';
 import { MessageMetaData } from '../communication-message/CommunicationMessage.types';
+import { useTranslation } from '@chayns/textstrings';
+import textStrings from '../../constants/textStrings';
 
 interface AddCommentOptions {
     text: string;
@@ -93,6 +95,7 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
 
     const { personId, lastName, firstName } = useUser();
     const { locationId } = useSite();
+    const { t } = useTranslation();
 
     const handleLoadComments = useCallback(() => {
         void getComments({ postingId, commentType, skip: commentSkipRef.current }).then(
@@ -161,23 +164,26 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
         [commentType, firstName, lastName, locationId, personId, postingId],
     );
 
-    const handleDeleteComment = useCallback((id: Comment['id']) => {
-        void createDialog({
-            type: DialogType.CONFIRM,
-            text: 'Möchtest du den Kommentar wirklich löschen?',
-        })
-            .open()
-            .then(({ buttonType }) => {
-                if (buttonType === DialogButtonType.OK) {
-                    void deleteComment({ id }).then(({ status }) => {
-                        if (status === 200) {
-                            setComments((prev) => markCommentAsDeleted(prev, id));
-                            setCommentCount((prev) => Math.max(prev - 1, 0));
-                        }
-                    });
-                }
-            });
-    }, []);
+    const handleDeleteComment = useCallback(
+        (id: Comment['id']) => {
+            void createDialog({
+                type: DialogType.CONFIRM,
+                text: t(textStrings.socialPlugin.content.dialog.delete),
+            })
+                .open()
+                .then(({ buttonType }) => {
+                    if (buttonType === DialogButtonType.OK) {
+                        void deleteComment({ id }).then(({ status }) => {
+                            if (status === 200) {
+                                setComments((prev) => markCommentAsDeleted(prev, id));
+                                setCommentCount((prev) => Math.max(prev - 1, 0));
+                            }
+                        });
+                    }
+                });
+        },
+        [t],
+    );
 
     const handleLike = useCallback(() => {
         if (hasLiked) {

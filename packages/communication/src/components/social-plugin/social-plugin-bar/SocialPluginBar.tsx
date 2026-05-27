@@ -91,7 +91,7 @@ const SocialPluginBar: FC<SocialPluginBarProps> = ({ link, onCommentVisibilityCh
                 </StyledSocialPluginBarItemsSide>
                 <StyledSocialPluginBarItemsSide>
                     <SharingBar
-                        label="Teilen"
+                        label={t(textStrings.socialPlugin.bar.share)}
                         link={link}
                         popupAlignment={ContextMenuAlignment.TopLeft}
                     />

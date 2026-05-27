@@ -14,6 +14,7 @@ const AgreeMessage: FC<Omit<CommunicationMessageProps, 'content'>> = ({
     shouldShowTimestamp,
     metadata,
     options,
+    timestampFormatter,
 }) => {
     const { t } = useTranslation();
 
@@ -29,6 +30,7 @@ const AgreeMessage: FC<Omit<CommunicationMessageProps, 'content'>> = ({
             options={options}
             shouldShowAuthorImage={shouldShowAuthorImage}
             shouldShowTimestamp={shouldShowTimestamp}
+            timestampFormatter={timestampFormatter}
             content={
                 <StyledAgreeMessage>
                     <Icon icons={['fa fa-thumbs-up']} size={15} />

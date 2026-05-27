@@ -30,6 +30,7 @@ const CommunicationMessage: FC<CommunicationMessageProps> = ({
     shouldShowAuthorName = true,
     shouldShowTimestamp = true,
     shouldShowStatus = true,
+    timestampFormatter,
     alignment,
 }) => {
     const contextMenuRef = useRef<ContextMenuRef>(null);
@@ -50,14 +51,18 @@ const CommunicationMessage: FC<CommunicationMessageProps> = ({
         onLongPress: () => contextMenuRef.current?.show(),
     });
 
-    const formattedDate = useMemo(
-        () =>
-            new Intl.DateTimeFormat(language, {
-                hour: '2-digit',
-                minute: '2-digit',
-            }).format(new Date(metadata.creationTime)),
-        [metadata.creationTime, language],
-    );
+    const formattedDate = useMemo(() => {
+        const date = new Date(metadata.creationTime);
+
+        if (typeof timestampFormatter === 'function') {
+            return timestampFormatter(date);
+        }
+
+        return new Intl.DateTimeFormat(language, {
+            hour: '2-digit',
+            minute: '2-digit',
+        }).format(date);
+    }, [metadata.creationTime, timestampFormatter, language]);
 
     const statusElement = useMemo(() => {
         if (!shouldShowStatus) {

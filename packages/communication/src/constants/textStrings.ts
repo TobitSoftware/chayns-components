@@ -171,13 +171,50 @@ export default {
                 stringName: 'txt_chayns_components_v5_communication_socialPlugin_bar_like',
                 fallback: 'Gefällt mir',
             },
+            share: {
+                stringName: 'txt_chayns_components_v5_communication_socialPlugin_bar_share',
+                fallback: 'Teilen',
+            },
         },
         content: {
+            dialog: {
+                delete: {
+                    stringName:
+                        'txt_chayns_components_v5_communication_socialPlugin_content_dialog_delete',
+                    fallback: 'Möchtest du den Kommentar wirklich löschen?',
+                },
+            },
             input: {
+                options: {
+                    image: {
+                        stringName:
+                            'txt_chayns_components_v5_communication_socialPlugin_content_input_options_image',
+                        fallback: 'Bild hinzufügen',
+                    },
+                },
                 placeholder: {
                     stringName:
                         'txt_chayns_components_v5_communication_socialPlugin_content_input_placeholder',
                     fallback: 'Kommentieren',
+                },
+            },
+            message: {
+                options: {
+                    delete: {
+                        stringName:
+                            'txt_chayns_components_v5_communication_socialPlugin_content_message_options_delete',
+                        fallback: 'Löschen',
+                    },
+                    reply: {
+                        stringName:
+                            'txt_chayns_components_v5_communication_socialPlugin_content_message_options_reply',
+                        fallback: 'Antworten',
+                    },
+                },
+                timestampSeconds: {
+                    stringName:
+                        'txt_chayns_components_v5_communication_socialPlugin_content_message_timestampSeconds',
+                    fallback: 'vor wenigen Sekunden',
                 },
             },
         },

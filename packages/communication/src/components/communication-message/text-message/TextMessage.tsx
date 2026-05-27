@@ -9,6 +9,7 @@ const TextMessage: FC<CommunicationMessageProps> = ({
     shouldShowAuthorImage,
     shouldShowTimestamp,
     content,
+    timestampFormatter,
     alignment,
     options,
 }) => (
@@ -16,6 +17,7 @@ const TextMessage: FC<CommunicationMessageProps> = ({
         metadata={metadata}
         content={content}
         alignment={alignment}
+        timestampFormatter={timestampFormatter}
         shouldShowStatus={shouldShowStatus}
         shouldShowTimestamp={shouldShowTimestamp}
         shouldShowAuthorName={shouldShowAuthorName}
