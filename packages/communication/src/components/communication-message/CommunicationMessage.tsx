@@ -86,6 +86,17 @@ const CommunicationMessage: FC<CommunicationMessageProps> = ({
         );
     }, [metadata.status, shouldShowStatus]);
 
+    const optionsAnimation = useMemo(() => {
+        const initialRight = alignment === CommunicationMessageAlignment.RIGHT ? 10 : 0;
+        const animatedRight = alignment === CommunicationMessageAlignment.RIGHT ? 16 : 6;
+
+        return {
+            initial: { opacity: 0, right: initialRight },
+            animate: { opacity: isTouch ? 0 : 1, right: animatedRight },
+            exit: { opacity: 0, right: initialRight },
+        };
+    }, [alignment, isTouch]);
+
     return (
         <StyledCommunicationMessage
             $alignment={alignment}
@@ -99,9 +110,9 @@ const CommunicationMessage: FC<CommunicationMessageProps> = ({
             <AnimatePresence>
                 {shouldShowContextMenu && (
                     <StyledMotionCommunicationMessageContextMenu
-                        initial={{ opacity: 0, right: 16 }}
-                        exit={{ opacity: 0, right: 16 }}
-                        animate={{ opacity: isTouch ? 0 : 1, right: 24 }}
+                        initial={optionsAnimation.initial}
+                        exit={optionsAnimation.exit}
+                        animate={optionsAnimation.animate}
                     >
                         <ContextMenu items={options ?? []} ref={contextMenuRef} />
                     </StyledMotionCommunicationMessageContextMenu>
