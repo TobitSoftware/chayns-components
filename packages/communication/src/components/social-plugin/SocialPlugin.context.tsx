@@ -46,6 +46,7 @@ interface ISocialPluginContext {
     commentCount: number;
     addComment: (comment: AddCommentOptions) => Promise<Comment['id'] | undefined>;
     deleteComment: (id: Comment['id']) => void;
+    loadComments: () => Promise<boolean>;
 
     // Likes
     likeCount: number;
@@ -64,6 +65,7 @@ export const SocialPluginContext = createContext<ISocialPluginContext>({
     likeCount: 0,
     hasLiked: false,
     addComment: () => Promise.resolve(undefined),
+    loadComments: () => Promise.resolve(true),
     deleteComment: () => {},
     dislike: () => {},
     like: () => {},
@@ -97,20 +99,24 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
     const { locationId } = useSite();
     const { t } = useTranslation();
 
-    const handleLoadComments = useCallback(() => {
-        void getComments({ postingId, commentType, skip: commentSkipRef.current }).then(
-            ({ status, data }) => {
-                if (status === 200 && data) {
-                    setComments((prev) => {
-                        const newComments = mergeComments(prev, data);
+    const handleLoadComments = useCallback(async () => {
+        const { status, data } = await getComments({
+            postingId,
+            commentType,
+            skip: commentSkipRef.current,
+        });
 
-                        commentSkipRef.current = newComments.length;
+        if (status === 200 && data) {
+            setComments((prev) => {
+                const newComments = mergeComments(prev, data);
 
-                        return newComments;
-                    });
-                }
-            },
-        );
+                commentSkipRef.current = newComments.length;
+
+                return newComments;
+            });
+        }
+
+        return true;
     }, [commentType, postingId]);
 
     const handleAddComment = useCallback(
@@ -221,7 +227,7 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
             }
         });
 
-        handleLoadComments();
+        void handleLoadComments();
     }, [commentType, handleLoadComments, postingId]);
 
     const value = useMemo(
@@ -234,6 +240,7 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
             likeCount,
             replyMetadata,
             setReplyMetadata: (metadata?: MessageMetaData) => setReplyMetadata(metadata),
+            loadComments: handleLoadComments,
             like: handleLike,
             dislike: handleDislike,
             addComment: handleAddComment,
@@ -247,6 +254,7 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
             commentCount,
             likeCount,
             replyMetadata,
+            handleLoadComments,
             handleLike,
             handleDislike,
             handleAddComment,

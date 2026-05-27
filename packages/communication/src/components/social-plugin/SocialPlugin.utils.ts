@@ -6,6 +6,9 @@ export const sortComments = (comments: Comment[]): Comment[] =>
             new Date(left.creationTime).getTime() - new Date(right.creationTime).getTime(),
     );
 
+export const countComments = (comments: Comment[]): number =>
+    comments.reduce((total, comment) => total + 1 + countComments(comment.comments ?? []), 0);
+
 const parseUtcDateString = (value?: string): string | undefined => {
     if (!value) return undefined;
 
@@ -48,15 +51,15 @@ export const mergeComments = (
     collectComments(incomingComments);
 
     const rootComments: Comment[] = [];
-    const comments = Array.from(commentMap.values());
-
-    comments.forEach((comment) => {
-        comment.comments = [];
-    });
+    const comments: Comment[] = Array.from(commentMap.values()).map((comment) => ({
+        ...comment,
+        comments: [],
+    }));
+    const rebuiltCommentMap = new Map(comments.map((comment) => [comment.id, comment]));
 
     comments.forEach((comment) => {
         if (comment.parentCommentId) {
-            const parentComment = commentMap.get(comment.parentCommentId);
+            const parentComment = rebuiltCommentMap.get(comment.parentCommentId);
 
             if (parentComment) {
                 parentComment.comments?.push(comment);

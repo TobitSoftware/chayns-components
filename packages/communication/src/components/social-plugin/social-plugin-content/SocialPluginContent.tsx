@@ -1,4 +1,13 @@
-import React, { FC, useCallback, useMemo, useRef, useState, KeyboardEvent, useEffect } from 'react';
+import React, {
+    FC,
+    useCallback,
+    useMemo,
+    useRef,
+    useState,
+    KeyboardEvent,
+    useEffect,
+    useLayoutEffect,
+} from 'react';
 import {
     StyledSocialPluginContent,
     StyledSocialPluginContentComments,
@@ -27,10 +36,11 @@ import {
 } from '../../communication-input/CommunicationInput.types';
 import { useSocialPlugin } from '../SocialPlugin.context';
 import SocialPluginMessage from './social-plugin-message/SocialPluginMessage';
-import { sortComments } from '../SocialPlugin.utils';
+import { countComments, sortComments } from '../SocialPlugin.utils';
 import PreviewMessage from '../../communication-message/preview-message/PreviewMessage';
 import {
     generateImagePreviewUrl,
+    restoreScrollPositionAfterPrepend,
     scheduleScrollElementToBottom,
     scrollToComment,
 } from './SocialPluginContent.utils';
@@ -46,10 +56,15 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
     const [image, setImage] = useState<InternalFileItem>();
 
     const listRef = useRef<HTMLDivElement>(null);
+    const pendingRequestRef = useRef(false);
+    const previousScrollHeightRef = useRef(0);
+    const previousScrollTopRef = useRef(0);
+    const shouldRestoreScrollPositionRef = useRef(false);
 
     const { t } = useTranslation();
 
-    const { comments, addComment, replyMetadata, setReplyMetadata } = useSocialPlugin();
+    const { comments, commentCount, addComment, replyMetadata, setReplyMetadata, loadComments } =
+        useSocialPlugin();
 
     useEffect(() => {
         if (!shouldShowComments) {
@@ -57,7 +72,21 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
         }
 
         return scheduleScrollElementToBottom(listRef.current);
-    }, [comments, shouldShowComments]);
+    }, [shouldShowComments]);
+
+    const restorePendingScrollPosition = useCallback(() => {
+        if (!shouldRestoreScrollPositionRef.current) {
+            return;
+        }
+
+        restoreScrollPositionAfterPrepend(
+            listRef.current,
+            previousScrollHeightRef.current,
+            previousScrollTopRef.current,
+        );
+
+        shouldRestoreScrollPositionRef.current = false;
+    }, []);
 
     const canSend = useMemo(() => {
         const checkValue = value.replaceAll('<br>', '').trim();
@@ -115,9 +144,16 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
         [canSend, handleSend],
     );
 
+    const sortedComments = useMemo(() => sortComments(comments), [comments]);
+
+    const hasLoadedAllComments = useMemo(
+        () => countComments(sortedComments) >= commentCount,
+        [commentCount, sortedComments],
+    );
+
     const messages = useMemo(
         () =>
-            sortComments(comments).map(
+            sortedComments.map(
                 ({
                     comments: childComments,
                     id,
@@ -143,7 +179,7 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
                     />
                 ),
             ),
-        [comments],
+        [sortedComments],
     );
 
     const topContent = useMemo(() => {
@@ -231,6 +267,53 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
         ],
         [handleAddImage, t],
     );
+
+    useEffect(() => {
+        const element = listRef.current;
+
+        if (!element) {
+            return undefined;
+        }
+
+        const handleScroll = () => {
+            if (element.scrollTop > 10 || pendingRequestRef.current || hasLoadedAllComments) {
+                return;
+            }
+
+            pendingRequestRef.current = true;
+            previousScrollHeightRef.current = element.scrollHeight;
+            previousScrollTopRef.current = element.scrollTop;
+            shouldRestoreScrollPositionRef.current = true;
+
+            void loadComments()
+                .then((success) => {
+                    pendingRequestRef.current = !success;
+
+                    if (!success) {
+                        shouldRestoreScrollPositionRef.current = false;
+                        return;
+                    }
+
+                    requestAnimationFrame(() => {
+                        restorePendingScrollPosition();
+                    });
+                })
+                .catch(() => {
+                    pendingRequestRef.current = false;
+                    shouldRestoreScrollPositionRef.current = false;
+                });
+        };
+
+        element.addEventListener('scroll', handleScroll);
+
+        return () => {
+            element.removeEventListener('scroll', handleScroll);
+        };
+    }, [hasLoadedAllComments, loadComments, restorePendingScrollPosition]);
+
+    useLayoutEffect(() => {
+        restorePendingScrollPosition();
+    }, [comments, restorePendingScrollPosition]);
 
     return (
         <ExpandableContent isOpen={shouldShowComments}>

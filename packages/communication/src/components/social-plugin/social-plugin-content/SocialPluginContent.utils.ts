@@ -27,7 +27,9 @@ export const scrollElementToBottom = (element: HTMLDivElement | null): void => {
         return;
     }
 
-    element.scrollTop = element.scrollHeight;
+    element.scrollTo({
+        top: element.scrollHeight,
+    });
 };
 
 export const scheduleScrollElementToBottom = (element: HTMLDivElement | null): VoidFunction => {
@@ -45,6 +47,20 @@ export const scheduleScrollElementToBottom = (element: HTMLDivElement | null): V
     };
 };
 
+export const restoreScrollPositionAfterPrepend = (
+    element: HTMLDivElement | null,
+    previousScrollHeight: number,
+    previousScrollTop: number,
+): void => {
+    if (!element) {
+        return;
+    }
+
+    element.scrollTo({
+        top: previousScrollTop + (element.scrollHeight - previousScrollHeight),
+    });
+};
+
 export const scrollToComment = (commentId: Comment['id'], element: Element): void => {
     const target = element.querySelector<HTMLElement>(`[data-comment-id="${commentId}"]`);
 
@@ -52,8 +68,11 @@ export const scrollToComment = (commentId: Comment['id'], element: Element): voi
         return;
     }
 
-    target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-    });
+    const wrapper = target.parentElement;
+
+    if (!wrapper) {
+        return;
+    }
+
+    element.scrollTo(0, wrapper.offsetTop - target.offsetTop);
 };
