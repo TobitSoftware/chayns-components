@@ -46,7 +46,7 @@ const CommunicationMessage: FC<CommunicationMessageProps> = ({
         onTouchStart,
         shouldShowContextMenu,
     } = useMessageInteraction({
-        isEnabled: Array.isArray(options),
+        isEnabled: Array.isArray(options) && options.length > 0,
         onLongPress: () => contextMenuRef.current?.show(),
     });
 
