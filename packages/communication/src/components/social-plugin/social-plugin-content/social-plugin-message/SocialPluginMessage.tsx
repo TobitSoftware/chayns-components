@@ -22,6 +22,7 @@ import { sortComments } from '../../SocialPlugin.utils';
 import { getMessageOptions, getMetadata } from './SocialPluginMessage.utils';
 import { useIsAdminMode, usePage, useSite, useUser } from 'chayns-api';
 import { useSocialPlugin } from '../../SocialPlugin.context';
+import { replaceEmojis } from '../../../../utils/emojione';
 
 interface SocialPluginMessageProps {
     id: Comment['id'];
@@ -91,13 +92,15 @@ const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
     const childMessages = useMemo(
         () =>
             sortComments(comments ?? []).map((childComment) => {
+                const replacedText = replaceEmojis(childComment.text);
+
                 const childMetadata = getMetadata({
                     id: childComment.id,
                     personId: childComment.personId,
                     deletionTime: childComment.deletionTime,
                     creationTime: childComment.creationTime,
                     firstName: childComment.firstName,
-                    text: childComment.text,
+                    text: replacedText,
                     lastName: childComment.lastName,
                     imageUrl: childComment.imageUrl,
                 });
@@ -114,7 +117,7 @@ const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
                                 onDelete: handleDelete,
                                 onReply: handleReply,
                             })}
-                            content={renderContent(childComment.text, childComment.imageUrl)}
+                            content={renderContent(replacedText, childComment.imageUrl)}
                             alignment={CommunicationMessageAlignment.LEFT}
                             shouldShowAuthorImage
                             shouldShowAuthorName

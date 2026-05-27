@@ -33,6 +33,7 @@ import {
     generateImagePreviewUrl,
     scheduleScrollElementToBottom,
 } from './SocialPluginContent.utils';
+import { replaceEmojis } from '../../../utils/emojione';
 
 interface SocialPluginContentProps {
     shouldShowComments: boolean;
@@ -133,7 +134,7 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
                         deletionTime={deletionTime}
                         firstName={firstName}
                         lastName={lastName}
-                        text={text}
+                        text={replaceEmojis(text)}
                         parentCommentId={parentCommentId}
                         imageUrl={imageUrl}
                     />
