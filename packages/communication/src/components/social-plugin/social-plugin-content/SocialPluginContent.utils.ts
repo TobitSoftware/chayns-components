@@ -1,3 +1,5 @@
+import { Comment } from '../SocialPlugin.types';
+
 export const generateImagePreviewUrl = (file: File): Promise<string> =>
     new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -41,4 +43,17 @@ export const scheduleScrollElementToBottom = (element: HTMLDivElement | null): V
         cancelAnimationFrame(outerAnimationFrameId);
         cancelAnimationFrame(innerAnimationFrameId);
     };
+};
+
+export const scrollToComment = (commentId: Comment['id'], element: Element): void => {
+    const target = element.querySelector<HTMLElement>(`[data-comment-id="${commentId}"]`);
+
+    if (!target) {
+        return;
+    }
+
+    target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+    });
 };

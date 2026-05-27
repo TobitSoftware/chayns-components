@@ -44,7 +44,7 @@ interface ISocialPluginContext {
     // Comments
     comments: Comment[];
     commentCount: number;
-    addComment: (comment: AddCommentOptions) => Promise<boolean>;
+    addComment: (comment: AddCommentOptions) => Promise<Comment['id'] | undefined>;
     deleteComment: (id: Comment['id']) => void;
 
     // Likes
@@ -63,7 +63,7 @@ export const SocialPluginContext = createContext<ISocialPluginContext>({
     commentCount: 0,
     likeCount: 0,
     hasLiked: false,
-    addComment: () => Promise.resolve(false),
+    addComment: () => Promise.resolve(undefined),
     deleteComment: () => {},
     dislike: () => {},
     like: () => {},
@@ -114,12 +114,12 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
     }, [commentType, postingId]);
 
     const handleAddComment = useCallback(
-        async ({ parentCommentId, text, imageUrl }: AddCommentOptions): Promise<boolean> => {
+        async ({ parentCommentId, text, imageUrl }: AddCommentOptions) => {
             if (!personId) {
                 const { token } = await login();
 
                 if (!token) {
-                    return false;
+                    return undefined;
                 }
             }
 
@@ -132,13 +132,13 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
             });
 
             if (status !== 200 || !data) {
-                return false;
+                return undefined;
             }
 
             const currentPersonId = getUser()?.personId ?? personId;
 
             if (!currentPersonId) {
-                return false;
+                return undefined;
             }
 
             const newComment: Comment = {
@@ -159,7 +159,7 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
             setComments((prev) => mergeComments(prev, [newComment]));
             setCommentCount((prev) => prev + 1);
 
-            return true;
+            return data;
         },
         [commentType, firstName, lastName, locationId, personId, postingId],
     );

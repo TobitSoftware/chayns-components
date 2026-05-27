@@ -32,6 +32,7 @@ import PreviewMessage from '../../communication-message/preview-message/PreviewM
 import {
     generateImagePreviewUrl,
     scheduleScrollElementToBottom,
+    scrollToComment,
 } from './SocialPluginContent.utils';
 import { replaceEmojis } from '../../../utils/emojione';
 
@@ -77,13 +78,17 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
             parentCommentId: replyMetadata ? Number(replyMetadata.id) : undefined,
             text: value,
             imageUrl: image?.uploadedFile?.url,
-        }).then((success) => {
+        }).then((id) => {
             setIsSending(false);
 
-            if (success) {
+            if (id) {
                 setValue('');
                 setImage(undefined);
                 setReplyMetadata(undefined);
+
+                if (listRef.current) {
+                    scrollToComment(id, listRef.current);
+                }
             }
         });
     }, [

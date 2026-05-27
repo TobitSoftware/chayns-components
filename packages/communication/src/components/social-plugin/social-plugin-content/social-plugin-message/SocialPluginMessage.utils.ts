@@ -89,6 +89,7 @@ export const getMessageOptions = ({
 
     return items;
 };
+
 export const formatCommentDate = (date: Date): string => {
     const { active } = getLanguage();
 

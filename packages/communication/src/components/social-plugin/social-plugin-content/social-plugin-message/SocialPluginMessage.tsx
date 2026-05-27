@@ -103,7 +103,10 @@ const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
                 });
 
                 return (
-                    <StyledSocialPluginMessageChildMessage key={childComment.id}>
+                    <StyledSocialPluginMessageChildMessage
+                        key={childComment.id}
+                        data-comment-id={childComment.id}
+                    >
                         <StyledSocialPluginMessageChildMessageSubLine />
                         <CommunicationMessage.Text
                             metadata={childMetadata}
@@ -129,7 +132,7 @@ const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
     );
 
     return (
-        <StyledSocialPluginMessage>
+        <StyledSocialPluginMessage data-comment-id={id}>
             <StyledSocialPluginMessageParentMessage>
                 <CommunicationMessage.Text
                     metadata={metadata}
