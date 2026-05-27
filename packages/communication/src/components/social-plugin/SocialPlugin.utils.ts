@@ -6,6 +6,19 @@ export const sortComments = (comments: Comment[]): Comment[] =>
             new Date(left.creationTime).getTime() - new Date(right.creationTime).getTime(),
     );
 
+const parseUtcDateString = (value?: string): string | undefined => {
+    if (!value) return undefined;
+
+    return new Date(value.endsWith('Z') ? value : `${value}Z`).toISOString();
+};
+
+const normalizeComment = (comment: Comment): Comment => ({
+    ...comment,
+    creationTime: parseUtcDateString(comment.creationTime) ?? comment.creationTime,
+    deletionTime: parseUtcDateString(comment.deletionTime),
+    lastModified: parseUtcDateString(comment.lastModified),
+});
+
 export const mergeComments = (
     currentComments: Comment[],
     incomingComments: Comment[],
@@ -14,7 +27,8 @@ export const mergeComments = (
 
     const collectComments = (comments: Comment[]) => {
         comments.forEach((comment) => {
-            const { comments: childComments, ...commentWithoutChildren } = comment;
+            const { comments: childComments, ...commentWithoutChildren } =
+                normalizeComment(comment);
 
             const existingComment = commentMap.get(comment.id);
 
@@ -45,8 +59,7 @@ export const mergeComments = (
             const parentComment = commentMap.get(comment.parentCommentId);
 
             if (parentComment) {
-                parentComment.comments ??= [];
-                parentComment.comments.push(comment);
+                parentComment.comments?.push(comment);
                 return;
             }
         }
