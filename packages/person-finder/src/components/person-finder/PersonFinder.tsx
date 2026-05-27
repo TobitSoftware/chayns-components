@@ -56,7 +56,8 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             filterTypes = uacFilter || entries
                 ? [PersonFinderFilterTypes.PERSON]
                 : DEFAULT_FILTER_TYPES,
-            friendsPriority = Priority.HIGH,
+            relationMode = RelationMode.PERSON,
+            friendsPriority = relationMode === RelationMode.SITE ? Priority.NORMAL : Priority.HIGH,
             leftElement,
             maxEntries,
             onAdd,
@@ -69,7 +70,6 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             shouldShowOwnUser = false,
             shouldDisableRemove = false,
             shouldRenderInline = false,
-            relationMode = RelationMode.PERSON,
         },
         ref,
     ) => {
