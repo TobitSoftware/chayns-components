@@ -10,7 +10,7 @@ import React, {
     useState,
 } from 'react';
 import { Comment } from './SocialPlugin.types';
-import { insertCommentIntoComments, removeCommentFromComments } from './SocialPlugin.utils';
+import { markCommentAsDeleted, mergeComments } from './SocialPlugin.utils';
 import { getPosting } from '../../api/posting/get';
 import { postReaction } from '../../api/reaction/post';
 import { deleteReaction } from '../../api/reaction/delete';
@@ -99,7 +99,7 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
             ({ status, data }) => {
                 if (status === 200 && data) {
                     setComments((prev) => {
-                        const newComments = prev.concat(data);
+                        const newComments = mergeComments(prev, data);
 
                         commentSkipRef.current = newComments.length;
 
@@ -153,13 +153,7 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
                 locationId,
             };
 
-            setComments((prev) =>
-                insertCommentIntoComments({
-                    comments: prev,
-                    newComment,
-                    parentCommentId,
-                }),
-            );
+            setComments((prev) => mergeComments(prev, [newComment]));
             setCommentCount((prev) => prev + 1);
 
             return true;
@@ -177,9 +171,7 @@ const SocialPluginProvider: FC<SocialPluginProviderProps> = ({
                 if (buttonType === DialogButtonType.OK) {
                     void deleteComment({ id }).then(({ status }) => {
                         if (status === 200) {
-                            setComments((prev) =>
-                                removeCommentFromComments({ comments: prev, id }),
-                            );
+                            setComments((prev) => markCommentAsDeleted(prev, id));
                             setCommentCount((prev) => Math.max(prev - 1, 0));
                         }
                     });

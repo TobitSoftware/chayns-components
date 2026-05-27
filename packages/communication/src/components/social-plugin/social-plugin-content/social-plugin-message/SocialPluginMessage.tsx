@@ -149,7 +149,7 @@ const SocialPluginMessage: FC<SocialPluginMessageProps> = ({
                     shouldShowStatus={false}
                 />
             </StyledSocialPluginMessageParentMessage>
-            {Array.isArray(comments) && (
+            {Array.isArray(comments) && comments.length > 0 && (
                 <StyledSocialPluginMessageChildMessageWrapper>
                     <StyledSocialPluginMessageChildMessageLine />
                     <StyledSocialPluginMessageChildMessages>
