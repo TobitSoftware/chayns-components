@@ -80,74 +80,6 @@ export default {
             },
         },
     },
-    previewMessage: {
-        file: {
-            stringName: '',
-            fallback: 'Datei',
-        },
-        image: {
-            stringName: '',
-            fallback: 'Bild',
-        },
-        video: {
-            stringName: '',
-            fallback: 'Video',
-        },
-        plugin: {
-            stringName: '',
-            fallback: 'Plugin',
-        },
-    },
-    socialPlugin: {
-        bar: {
-            like: {
-                stringName: '',
-                fallback: 'Gefällt mir',
-            },
-            comment: {
-                stringName: '',
-                fallback: 'Kommentieren',
-            },
-            footer: {
-                likedByYou: {
-                    stringName: '',
-                    fallback: 'Gefällt Dir',
-                },
-                likedByOnePerson: {
-                    stringName: '',
-                    fallback: 'Gefällt einer Person',
-                },
-                likedByMultiplePeople: {
-                    stringName: '',
-                    fallback: 'Gefällt ##count## Personen',
-                },
-                likedByYouAndOnePerson: {
-                    stringName: '',
-                    fallback: 'Gefällt Dir und einer weiteren Person',
-                },
-                likedByYouAndMultiplePeople: {
-                    stringName: '',
-                    fallback: 'Gefällt Dir und ##count## weiteren Personen',
-                },
-                oneComment: {
-                    stringName: '',
-                    fallback: '1 Kommentar',
-                },
-                multipleComments: {
-                    stringName: '',
-                    fallback: '##count## Kommentare',
-                },
-            },
-        },
-        content: {
-            input: {
-                placeholder: {
-                    stringName: '',
-                    fallback: 'Kommentieren',
-                },
-            },
-        },
-    },
     CommunicationTeamTalkHeader: {
         add: {
             stringName: 'txt_chayns_components_v5_communication_CommunicationTeamTalkHeader_add',
@@ -172,6 +104,82 @@ export default {
         leave: {
             stringName: 'txt_chayns_components_v5_communication_CommunicationTeamTalkHeader_leave',
             fallback: 'Verlassen',
+        },
+    },
+    previewMessage: {
+        file: {
+            stringName: 'txt_chayns_components_v5_communication_previewMessage_file',
+            fallback: 'Datei',
+        },
+        image: {
+            stringName: 'txt_chayns_components_v5_communication_previewMessage_image',
+            fallback: 'Bild',
+        },
+        plugin: {
+            stringName: 'txt_chayns_components_v5_communication_previewMessage_plugin',
+            fallback: 'Plugin',
+        },
+        video: {
+            stringName: 'txt_chayns_components_v5_communication_previewMessage_video',
+            fallback: 'Video',
+        },
+    },
+    socialPlugin: {
+        bar: {
+            comment: {
+                stringName: 'txt_chayns_components_v5_communication_socialPlugin_bar_comment',
+                fallback: 'Kommentieren',
+            },
+            footer: {
+                likedByMultiplePeople: {
+                    stringName:
+                        'txt_chayns_components_v5_communication_socialPlugin_bar_footer_likedByMultiplePeople',
+                    fallback: 'Gefällt ##count## Personen',
+                },
+                likedByOnePerson: {
+                    stringName:
+                        'txt_chayns_components_v5_communication_socialPlugin_bar_footer_likedByOnePerson',
+                    fallback: 'Gefällt einer Person',
+                },
+                likedByYou: {
+                    stringName:
+                        'txt_chayns_components_v5_communication_socialPlugin_bar_footer_likedByYou',
+                    fallback: 'Gefällt Dir',
+                },
+                likedByYouAndMultiplePeople: {
+                    stringName:
+                        'txt_chayns_components_v5_communication_socialPlugin_bar_footer_likedByYouAndMultiplePeople',
+                    fallback: 'Gefällt Dir und ##count## weiteren Personen',
+                },
+                likedByYouAndOnePerson: {
+                    stringName:
+                        'txt_chayns_components_v5_communication_socialPlugin_bar_footer_likedByYouAndOnePerson',
+                    fallback: 'Gefällt Dir und einer weiteren Person',
+                },
+                multipleComments: {
+                    stringName:
+                        'txt_chayns_components_v5_communication_socialPlugin_bar_footer_multipleComments',
+                    fallback: '##count## Kommentare',
+                },
+                oneComment: {
+                    stringName:
+                        'txt_chayns_components_v5_communication_socialPlugin_bar_footer_oneComment',
+                    fallback: '1 Kommentar',
+                },
+            },
+            like: {
+                stringName: 'txt_chayns_components_v5_communication_socialPlugin_bar_like',
+                fallback: 'Gefällt mir',
+            },
+        },
+        content: {
+            input: {
+                placeholder: {
+                    stringName:
+                        'txt_chayns_components_v5_communication_socialPlugin_content_input_placeholder',
+                    fallback: 'Kommentieren',
+                },
+            },
         },
     },
 } as const;
