@@ -437,6 +437,22 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             return;
         }
 
+        if (
+            relationMode === RelationMode.SITE &&
+            filterTypes.includes(PersonFinderFilterTypes.PERSON)
+        ) {
+            void getUsersByGroups([{ groupId: -1 }]).then((users) => {
+                setData({
+                    person: {
+                        entries: users,
+                        searchString: '',
+                        skip: users.length,
+                        count: users.length,
+                    },
+                });
+            });
+        }
+
         if (uacFilter) {
             void getUsersByGroups(uacFilter).then((users) => {
                 setUacUsers(users);
@@ -473,7 +489,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 },
             });
         }
-    }, [entries, filterTypes, friends, friendsPriority, search, uacFilter]);
+    }, [entries, filterTypes, friends, friendsPriority, relationMode, search, uacFilter]);
 
     const providerValue = useMemo<IPersonFinderContext>(
         () => ({

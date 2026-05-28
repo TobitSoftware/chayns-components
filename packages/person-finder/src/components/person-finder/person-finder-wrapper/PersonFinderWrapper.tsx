@@ -104,6 +104,10 @@ export type PersonFinderWrapperProps = {
      * Whether the remove action should be disabled.
      */
     shouldDisableRemove?: boolean;
+    /**
+     * Determines whether persons are searched and sorted from the user's perspective or from a site's perspective.
+     */
+    relationMode?: RelationMode;
 };
 
 const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps>(
@@ -124,6 +128,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             shouldAllowMultiple,
             shouldHideResultsOnAdd,
             shouldRenderInline,
+            relationMode,
         },
         ref,
     ) => {
@@ -269,17 +274,31 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
         const showBody = useMemo(() => {
             const extraMobileCheck = isTouch ? isFocused : true;
 
+            const check = shouldShowBody && extraMobileCheck;
+
+            if (relationMode === RelationMode.SITE) {
+                return check;
+            }
+
             if (
                 filterTypes?.length === 1 &&
                 (filterTypes.includes(PersonFinderFilterTypes.SITE) ||
                     (filterTypes.includes(PersonFinderFilterTypes.PERSON) &&
                         friendsPriority !== Priority.HIGH))
             ) {
-                return shouldShowBody && extraMobileCheck && !!search && search?.length > 2;
+                return check && !!search && search?.length > 2;
             }
 
-            return shouldShowBody && extraMobileCheck;
-        }, [filterTypes, friendsPriority, isFocused, isTouch, search, shouldShowBody]);
+            return check;
+        }, [
+            filterTypes,
+            friendsPriority,
+            isFocused,
+            isTouch,
+            search,
+            shouldShowBody,
+            relationMode,
+        ]);
 
         const content = useMemo(() => {
             const body = (

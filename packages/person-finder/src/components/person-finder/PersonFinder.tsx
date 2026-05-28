@@ -10,8 +10,8 @@ import {
 } from '../../types/personFinder';
 import PersonFinderProvider from '../PersonFinderProvider';
 import PersonFinderWrapper, {
-    PersonFinderWrapperProps,
     PersonFinderRef,
+    PersonFinderWrapperProps,
 } from './person-finder-wrapper/PersonFinderWrapper';
 import { AreaProvider } from '@chayns-components/core';
 
@@ -38,10 +38,6 @@ export type PersonFinderProps = PersonFinderWrapperProps & {
      * A list of entries that should be searched.
      */
     entries?: PersonEntry[];
-    /**
-     * Determines whether persons are searched and sorted from the user's perspective or from a site's perspective.
-     */
-    relationMode?: RelationMode;
 };
 
 const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
@@ -51,12 +47,12 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             dropdownDirection,
             defaultEntries,
             excludedEntryIds,
+            relationMode = RelationMode.PERSON,
             uacFilter,
             entries,
             filterTypes = uacFilter || entries
                 ? [PersonFinderFilterTypes.PERSON]
                 : DEFAULT_FILTER_TYPES,
-            relationMode = RelationMode.PERSON,
             friendsPriority = relationMode === RelationMode.SITE ? Priority.NORMAL : Priority.HIGH,
             leftElement,
             maxEntries,
@@ -100,6 +96,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                             filterTypes={filterTypes}
                             maxEntries={maxEntries}
                             onAdd={onAdd}
+                            relationMode={relationMode}
                             shouldDisableRemove={shouldDisableRemove}
                             onDropdownHide={onDropdownHide}
                             onDropdownShow={onDropdownShow}

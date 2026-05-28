@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import PersonFinder from '../src/components/person-finder/PersonFinder';
 import React from 'react';
-import { PersonFinderFilterTypes } from '../src';
+import { PersonFinderFilterTypes, RelationMode } from '../src';
 
 export default {
     title: 'PersonFinder/PersonFinder',
@@ -21,6 +21,8 @@ export const WithUACFilter = Template.bind({});
 
 export const WithOwnEntries = Template.bind({});
 
+export const SiteMode = Template.bind({});
+
 RenderedInline.args = {
     shouldRenderInline: true,
 };
@@ -31,6 +33,11 @@ UACGroups.args = {
 
 WithUACFilter.args = {
     uacFilter: [{ groupId: -1 }],
+};
+
+SiteMode.args = {
+    filterTypes: [PersonFinderFilterTypes.PERSON],
+    relationMode: RelationMode.SITE,
 };
 
 WithOwnEntries.args = {
