@@ -91,6 +91,15 @@ import { PersonFinder } from '@chayns-components/person-finder';
 />
 ```
 
+#### Site Mode
+
+```tsx
+<PersonFinder
+    filterTypes={[PersonFinderFilterTypes.PERSON]}
+    relationMode={RelationMode.SITE}
+/>
+```
+
 ### Props
 
 No prop documentation available.
