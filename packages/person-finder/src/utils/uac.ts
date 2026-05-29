@@ -1,6 +1,11 @@
 import { getAccessToken, getLanguage, getSite, getUser } from 'chayns-api';
 import { UacServiceClient } from '@chayns/uac-service';
-import { PersonEntry, PersonFinderFilterTypes, UACEntry, UACFilter } from '../types/personFinder';
+import {
+    PersonEntry,
+    PersonFinderFilterTypes,
+    UACEntry,
+    UACFilter,
+} from '../components/person-finder/PersonFinder.types';
 
 export const client = new UacServiceClient({
     getToken: async () => (await getAccessToken()).accessToken || '',

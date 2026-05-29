@@ -3,7 +3,7 @@ import { FinderProps, FinderRef } from './Finder.types';
 import FinderInner from './finder-inner/FinderInner';
 import { FinderConfigContext } from './Finder.context';
 
-const FinderComponent = <E extends { id: string }, P extends PropsWithChildren>(
+const FinderComponent = <E extends { id: string | number }, P extends PropsWithChildren>(
     { Context, Provider, ...props }: FinderProps<E, P>,
     ref: React.ForwardedRef<FinderRef>,
 ) => {
@@ -31,8 +31,8 @@ const FinderComponent = <E extends { id: string }, P extends PropsWithChildren>(
     );
 };
 
-export const Finder = forwardRef(FinderComponent) as <
-    E extends { id: string },
+const Finder = forwardRef(FinderComponent) as <
+    E extends { id: string | number },
     P extends PropsWithChildren,
 >(
     props: FinderProps<E, P> & React.RefAttributes<FinderRef>,

@@ -1,6 +1,6 @@
 import { FinderFilter, FinderData } from '../../../Finder.types';
 
-export interface FinderGroupProps<E extends { id: string }> {
+export interface FinderGroupProps<E extends { id: string | number }> {
     entries: E[];
     filterKey: FinderFilter['key'];
     count: FinderData<E>['count'];

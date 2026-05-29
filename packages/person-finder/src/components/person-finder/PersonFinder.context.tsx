@@ -1,102 +1,58 @@
-import React, {
-    createContext,
-    Dispatch,
-    FC,
-    ReactNode,
-    SetStateAction,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
-import throttle from 'lodash.throttle';
+import React, { createContext, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-    DefaultEntry,
+    type FinderContext,
+    type FinderFilter,
     LoadingState,
+    type Tag,
+} from '@chayns-components/core';
+import {
     LoadingStateMap,
     PersonEntry,
+    PersonFinderContextValue,
     PersonFinderData,
+    PersonFinderDataMap,
     PersonFinderEntry,
+    PersonFinderFilter,
     PersonFinderFilterTypes,
+    PersonFinderProviderProps,
     Priority,
     RelationMode,
     ThrottledFunction,
     UACEntry,
-    UACFilter,
-} from '../types/personFinder';
-import { getFriends } from '../api/friends/get';
-import { postFriends } from '../api/friends/post';
-import { deleteFriends } from '../api/friends/delete';
-import { filterDataByKeys, loadData } from '../utils/personFinder';
-import { Tag } from '@chayns-components/core/lib/types/types/tagInput';
-import { getUACGroups, getUsersByGroups } from '../utils/uac';
+} from './PersonFinder.types';
+import { postFriends } from '../../api/friends/post';
+import { deleteFriends } from '../../api/friends/delete';
+import { getFriends } from '../../api/friends/get';
+import throttle from 'lodash.throttle';
+import { getUACGroups, getUsersByGroups } from '../../utils/uac';
 import { TextstringProvider } from '@chayns-components/textstring';
-import { PERSON_FINDER_TEXTSTRING_LIBRARY_NAME } from '../constants/textStrings';
+import { PERSON_FINDER_TEXTSTRING_LIBRARY_NAME } from '../../constants/textStrings';
+import PersonFinderSmallItem from './person-finder-small-item/PersonFinderSmallItem';
+import PersonFinderItem from './person-finder-item/PersonFinderItem';
+import { filterDataByKeys, getGroupName, loadData } from './PersonFinder.utils';
+
+export const PersonFinderContext = createContext<PersonFinderContextValue | null>(null);
 
 const THROTTLE_INTERVAL = 500;
 
-interface IPersonFinderContext {
-    // Data
-    data?: { [key: string]: PersonFinderData };
-    updateData?: (key: PersonFinderFilterTypes, personFinderData: PersonFinderData) => void;
+const isPersonFinderFilterType = (key: string): key is PersonFinderFilterTypes =>
+    Object.values(PersonFinderFilterTypes).includes(key as PersonFinderFilterTypes);
 
-    // Tags
-    tags?: Tag[];
-    setTags?: Dispatch<SetStateAction<Tag[]>>;
+const normalizeFilterKeys = (filterKeys: FinderFilter['key'][]): PersonFinderFilterTypes[] =>
+    filterKeys.filter(isPersonFinderFilterType);
 
-    // Friends
-    friends?: PersonEntry[];
-    addFriend?: (personId: string) => void;
-    removeFriend?: (personId: string) => void;
+const getTagText = (entry: PersonFinderEntry): string => {
+    if ('name' in entry) {
+        return entry.name;
+    }
 
-    // Filter
-    activeFilter?: PersonFinderFilterTypes[];
-    updateActiveFilter?: (filter: PersonFinderFilterTypes[]) => void;
-
-    // Search
-    search?: string;
-    updateSearch?: (value: string) => void;
-
-    // Loading
-    loadMore?: (key: PersonFinderFilterTypes) => void;
-    loadingState?: LoadingStateMap;
-    updateLoadingState?: (key: PersonFinderFilterTypes, state: LoadingState) => void;
-}
-
-export const PersonFinderContext = createContext<IPersonFinderContext>({
-    data: undefined,
-    updateData: undefined,
-    friends: undefined,
-    addFriend: undefined,
-    removeFriend: undefined,
-    activeFilter: undefined,
-    updateActiveFilter: undefined,
-    search: undefined,
-    updateSearch: undefined,
-    loadMore: undefined,
-    loadingState: undefined,
-    updateLoadingState: undefined,
-    tags: undefined,
-    setTags: undefined,
-});
-
-PersonFinderContext.displayName = 'PersonFinderContext';
-
-export const usePersonFinder = () => useContext(PersonFinderContext);
-
-type PersonFinderProviderProps = {
-    children: ReactNode;
-    friendsPriority: Priority;
-    filterTypes: PersonFinderFilterTypes[];
-    defaultEntries?: DefaultEntry[];
-    excludedEntryIds?: PersonFinderEntry['id'][];
-    shouldShowOwnUser?: boolean;
-    uacFilter?: UACFilter[];
-    entries?: PersonEntry[];
-    relationMode?: RelationMode;
+    return [entry.firstName, entry.lastName].filter(Boolean).join(' ').trim();
 };
+
+const findEntryById = (data: PersonFinderDataMap, id: string): PersonFinderEntry | undefined =>
+    Object.values(data)
+        .flatMap(({ entries }) => entries)
+        .find((entry) => String(entry.id) === id);
 
 const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     children,
@@ -104,33 +60,120 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     filterTypes,
     defaultEntries,
     excludedEntryIds,
+    maxEntries = Infinity,
+    onAdd,
+    onRemove,
     shouldShowOwnUser = false,
+    shouldHideResultsOnAdd,
     uacFilter,
     entries,
     relationMode,
 }) => {
-    const [data, setData] = useState<IPersonFinderContext['data']>();
+    const [data, setData] = useState<PersonFinderDataMap>({});
     const [friends, setFriends] = useState<PersonEntry[]>();
     const [uacUsers, setUacUsers] = useState<PersonEntry[]>();
-    const [activeFilter, setActiveFilter] = useState<IPersonFinderContext['activeFilter']>();
-    const [search, setSearch] = useState('');
-    const [tags, setTags] = useState<Tag[]>(
+    const [activeFilter, setActiveFilter] = useState<
+        FinderContext<PersonFinderEntry>['activeFilter']
+    >([]);
+    const [searchString, setSearchString] = useState('');
+    const [tags, setTagsState] = useState<Tag[]>(
         defaultEntries?.map(({ id, name }) => ({ id, text: name })) ?? [],
     );
     const [loadingState, setLoadingState] = useState<LoadingStateMap>({
         [PersonFinderFilterTypes.PERSON]: LoadingState.None,
         [PersonFinderFilterTypes.SITE]: LoadingState.None,
+        [PersonFinderFilterTypes.UAC]: LoadingState.None,
     });
 
-    const dataRef = useRef<IPersonFinderContext['data']>();
+    const dataRef = useRef<PersonFinderDataMap>({});
 
-    const updateActiveFilter = useCallback((filter: IPersonFinderContext['activeFilter']) => {
-        setActiveFilter(filter);
+    const updateActiveFilter = useCallback<FinderContext<PersonFinderEntry>['setActiveFilter']>(
+        (filter) => {
+            setActiveFilter(filter);
+        },
+        [],
+    );
+
+    const normalizedActiveFilter = useMemo(() => normalizeFilterKeys(activeFilter), [activeFilter]);
+
+    const setTags = useCallback<FinderContext<PersonFinderEntry>['setTags']>((nextTags) => {
+        setTagsState(nextTags);
     }, []);
 
-    const updateData = useCallback((key: PersonFinderFilterTypes, newData: PersonFinderData) => {
-        setData((prevState) => ({ ...prevState, [key]: newData }));
-    }, []);
+    const updateSearch = useCallback<FinderContext<PersonFinderEntry>['setSearchString']>(
+        (value) => {
+            setSearchString(value);
+        },
+        [],
+    );
+
+    const handleRemove = useCallback(
+        (id: string) => {
+            const nextTags = tags.filter((tag) => tag.id !== id);
+
+            if (nextTags.length === tags.length) {
+                return;
+            }
+
+            setTags(nextTags);
+            onRemove?.(id);
+        },
+        [onRemove, setTags, tags],
+    );
+
+    const handleAdd = useCallback(
+        (id: string) => {
+            const selectedEntry = findEntryById(data, id);
+
+            if (!selectedEntry || tags.some((tag) => tag.id === id) || tags.length >= maxEntries) {
+                return;
+            }
+
+            setTags([
+                ...tags,
+                {
+                    id,
+                    text: getTagText(selectedEntry),
+                },
+            ]);
+
+            onAdd?.(selectedEntry);
+
+            void shouldHideResultsOnAdd;
+        },
+        [data, maxEntries, onAdd, setTags, shouldHideResultsOnAdd, tags],
+    );
+
+    const itemRenderer = useCallback(
+        (entry: PersonFinderEntry) =>
+            typeof entry.id === 'number' ? (
+                <PersonFinderSmallItem
+                    key={`person-finder-entry--${entry.id}`}
+                    entry={entry}
+                    onAdd={handleAdd}
+                    onRemove={handleRemove}
+                />
+            ) : (
+                <PersonFinderItem
+                    key={`person-finder-entry--${entry.id}`}
+                    entry={entry}
+                    onAdd={handleAdd}
+                    onRemove={handleRemove}
+                />
+            ),
+        [handleAdd, handleRemove],
+    );
+
+    const updateData = useCallback<FinderContext<PersonFinderEntry>['updateData']>(
+        (key, newData) => {
+            if (!isPersonFinderFilterType(key)) {
+                return;
+            }
+
+            setData((prevState) => ({ ...prevState, [key]: newData }));
+        },
+        [],
+    );
 
     const appendData = useCallback((key: PersonFinderFilterTypes, newData: PersonFinderData) => {
         setData((prevState) => {
@@ -153,15 +196,15 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         }));
     }, []);
 
-    const updateSearch = useCallback((value: string) => {
-        setSearch(value);
-    }, []);
+    const loadMore = useCallback<FinderContext<PersonFinderEntry>['loadMore']>(
+        (key) => {
+            if (!isPersonFinderFilterType(key)) {
+                return;
+            }
 
-    const loadMore = useCallback(
-        (key: PersonFinderFilterTypes) => {
             updateLoadingState(key, LoadingState.Pending);
 
-            const current = data?.[key];
+            const current = data[key];
 
             if (!current) {
                 updateLoadingState(key, LoadingState.Error);
@@ -170,7 +213,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             }
 
             void loadData({
-                searchString: search ?? '',
+                searchString,
                 filter: [key],
                 skipMap: { [key]: current.skip },
                 relationMode,
@@ -186,7 +229,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                     updateLoadingState(key, LoadingState.Success);
                 });
         },
-        [updateLoadingState, data, search, relationMode, appendData],
+        [updateLoadingState, data, searchString, relationMode, appendData],
     );
 
     const addFriend = useCallback((personId: string) => {
@@ -250,7 +293,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
                 if (!args) return;
 
-                const { search: searchString, filter } = args;
+                const { search: requestSearchString, filter } = args;
                 const requestTimestamp = Date.now();
 
                 filter.forEach((key) => {
@@ -258,7 +301,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 });
 
                 const result = await loadData({
-                    searchString,
+                    searchString: requestSearchString,
                     filter,
                     skipMap: {},
                     relationMode,
@@ -292,8 +335,10 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                                 (f) =>
                                     f.firstName
                                         ?.toLowerCase()
-                                        .includes(searchString.toLowerCase()) ||
-                                    f.lastName?.toLowerCase().includes(searchString.toLowerCase()),
+                                        .includes(requestSearchString.toLowerCase()) ||
+                                    f.lastName
+                                        ?.toLowerCase()
+                                        .includes(requestSearchString.toLowerCase()),
                             );
 
                         const otherEntries = value.entries.filter(
@@ -335,12 +380,12 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                     const uacEntries = tmpData[key].entries as UACEntry[];
 
                     const filteredEntries = uacEntries.filter(({ name }) =>
-                        name.toLowerCase().includes(search.toLowerCase()),
+                        name.toLowerCase().includes(searchString.toLowerCase()),
                     );
 
                     updateData(key, {
                         entries: filteredEntries,
-                        searchString: search,
+                        searchString,
                         count: filteredEntries.length,
                         skip: filteredEntries.length,
                     });
@@ -352,11 +397,11 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 }
             });
         },
-        [search, updateData, updateLoadingState],
+        [searchString, updateData, updateLoadingState],
     );
 
     const searchLocal = useCallback(() => {
-        if (search.length < 3) {
+        if (searchString.length < 3) {
             return;
         }
 
@@ -368,15 +413,15 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
         entriesToSearch?.forEach((entry) => {
             if (
-                entry.firstName?.toLowerCase().includes(search.toLowerCase()) ||
-                entry.lastName?.toLowerCase().includes(search.toLowerCase()) ||
+                entry.firstName?.toLowerCase().includes(searchString.toLowerCase()) ||
+                entry.lastName?.toLowerCase().includes(searchString.toLowerCase()) ||
                 [entry.firstName, entry.lastName]
                     .filter(Boolean)
                     .join(' ')
                     .toLowerCase()
                     .trim()
-                    .includes(search.toLowerCase().trim()) ||
-                entry.id.toLowerCase().includes(search.toLowerCase())
+                    .includes(searchString.toLowerCase().trim()) ||
+                entry.id.toLowerCase().includes(searchString.toLowerCase())
             ) {
                 searchedUsers.push(entry);
             }
@@ -384,7 +429,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
         updateData(PersonFinderFilterTypes.PERSON, {
             entries: searchedUsers,
-            searchString: search,
+            searchString,
             count: searchedUsers.length,
             skip: searchedUsers.length,
         });
@@ -393,26 +438,29 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             PersonFinderFilterTypes.PERSON,
             searchedUsers.length === 0 ? LoadingState.Error : LoadingState.Success,
         );
-    }, [entries, search, uacUsers, updateData, updateLoadingState]);
+    }, [entries, searchString, uacUsers, updateData, updateLoadingState]);
 
     useEffect(() => {
-        if (!search) return;
+        if (!searchString) {
+            return;
+        }
 
-        const active = activeFilter ?? filterTypes;
+        const active = normalizedActiveFilter.length > 0 ? normalizedActiveFilter : filterTypes;
 
         if (uacFilter || entries) {
             searchLocal();
-        } else if (active?.includes(PersonFinderFilterTypes.UAC)) {
+        } else if (active.includes(PersonFinderFilterTypes.UAC)) {
             searchData({ filter: [PersonFinderFilterTypes.UAC] });
         } else {
-            latestArgsRef.current = { search, filter: active };
+            latestArgsRef.current = { search: searchString, filter: active };
 
             throttledRequest();
         }
     }, [
         filterTypes,
-        search,
+        searchString,
         activeFilter,
+        normalizedActiveFilter,
         friends,
         friendsPriority,
         updateData,
@@ -461,7 +509,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             return;
         }
 
-        if (filterTypes.includes(PersonFinderFilterTypes.UAC) && search === '') {
+        if (filterTypes.includes(PersonFinderFilterTypes.UAC) && searchString === '') {
             void getUACGroups().then((result) => {
                 setData({
                     uac: {
@@ -478,7 +526,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             friendsPriority === Priority.HIGH &&
             filterTypes.includes(PersonFinderFilterTypes.PERSON) &&
             friends &&
-            search === ''
+            searchString === ''
         ) {
             setData({
                 person: {
@@ -489,25 +537,31 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 },
             });
         }
-    }, [entries, filterTypes, friends, friendsPriority, relationMode, search, uacFilter]);
+    }, [entries, filterTypes, friends, friendsPriority, relationMode, searchString, uacFilter]);
 
-    const providerValue = useMemo<IPersonFinderContext>(
+    const filter = useMemo<PersonFinderFilter[]>(
+        () => filterTypes.map((key) => ({ key, label: getGroupName(key) })),
+        [filterTypes],
+    );
+
+    const providerValue = useMemo<PersonFinderContextValue>(
         () => ({
-            data: filterDataByKeys(data, activeFilter, {
+            data: filterDataByKeys(data, normalizedActiveFilter, {
                 excludedEntryIds,
                 shouldShowOwnUser: uacFilter ? false : shouldShowOwnUser,
             }),
             updateData,
+            filter,
             activeFilter,
-            updateActiveFilter,
+            setActiveFilter: updateActiveFilter,
+            searchString,
+            setSearchString: updateSearch,
+            loadMore,
+            loadingState,
+            itemRenderer,
             friends,
             addFriend,
             removeFriend,
-            search,
-            updateSearch,
-            loadMore,
-            loadingState,
-            updateLoadingState,
             setTags,
             tags,
         }),
@@ -516,18 +570,21 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             addFriend,
             data,
             excludedEntryIds,
+            filter,
             friends,
+            itemRenderer,
             loadMore,
             loadingState,
+            normalizedActiveFilter,
             removeFriend,
-            search,
+            searchString,
             shouldShowOwnUser,
             tags,
             uacFilter,
             updateActiveFilter,
             updateData,
-            updateLoadingState,
             updateSearch,
+            setTags,
         ],
     );
 

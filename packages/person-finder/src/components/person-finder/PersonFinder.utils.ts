@@ -6,13 +6,13 @@ import {
     PersonFinderFilterTypes,
     RelationMode,
     SiteEntry,
-} from '../types/personFinder';
+} from './PersonFinder.types';
+import textStrings, { PERSON_FINDER_TEXTSTRING_LIBRARY_NAME } from '../../constants/textStrings';
 import { getTextstringValue, ttsToITextString } from '@chayns-components/textstring';
-import { getPersons } from '../api/person/get';
-import { getSites } from '../api/site/get';
-import { convertPersonEntry, convertSiteEntry } from './convert';
+import { getPersons } from '../../api/person/get';
+import { convertPersonEntry, convertSiteEntry } from '../../utils/convert';
+import { getSites } from '../../api/site/get';
 import { getUser } from 'chayns-api';
-import textStrings, { PERSON_FINDER_TEXTSTRING_LIBRARY_NAME } from '../constants/textStrings';
 
 interface GetPersonFinderTextstringValueOptions {
     textstring: {
@@ -30,12 +30,12 @@ const normalizeTextstringReplacements = (
     }
 
     return Object.entries(replacements).reduce<Record<string, string>>((acc, [key, value]) => {
+        // eslint-disable-next-line no-param-reassign
         acc[`##${key}##`] = value?.toString() ?? '';
 
         return acc;
     }, {});
 };
-
 export const getPersonFinderTextstringValue = ({
     textstring,
     replacements,
@@ -45,7 +45,6 @@ export const getPersonFinderTextstringValue = ({
         textstring: ttsToITextString(textstring),
         replacements: normalizeTextstringReplacements(replacements),
     });
-
 export const getGroupName = (key: string) => {
     const groupNames: Partial<
         Record<PersonFinderFilterTypes, { stringName: string; fallback: string }>
@@ -63,7 +62,6 @@ export const getGroupName = (key: string) => {
 
     return getPersonFinderTextstringValue({ textstring });
 };
-
 export const isSiteEntry = (entry: PersonEntry | SiteEntry): entry is SiteEntry =>
     'name' in entry && !('firstName' in entry);
 
@@ -134,18 +132,6 @@ export const filterDataByKeys = (
         return { ...acc, [key]: filteredEntry };
     }, {});
 };
-
-export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
-
-export const destructureData = (
-    data: Record<string, PersonFinderData> | undefined,
-    filterType: string,
-) => ({
-    count: data?.[filterType]?.count ?? 0,
-    skip: data?.[filterType]?.skip ?? 0,
-    searchString: data?.[filterType]?.searchString ?? '',
-    entries: data?.[filterType]?.entries ?? [],
-});
 
 interface LoadDataOptions {
     searchString: string;
@@ -233,7 +219,6 @@ export const loadData = async ({
         };
     }, {});
 };
-
 export const formatLastOnline = (date: Date): string => {
     const ts = textStrings.components.personFinder.lastOnline;
     const now = new Date();

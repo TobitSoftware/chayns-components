@@ -1,5 +1,5 @@
 import { getAccessToken } from 'chayns-api';
-import { PersonEntryResult, RelationMode } from '../../types/personFinder';
+import { PersonEntryResult, RelationMode } from '../../components/person-finder/PersonFinder.types';
 
 const URL =
     'https://relations.chayns.net/relations/v2/person?skip=##skip##&take=##take##&query=##search##&scoreForSite=##scoreForSite##';

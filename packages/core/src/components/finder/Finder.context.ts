@@ -5,7 +5,7 @@ export const FinderConfigContext = createContext<{
     Context: Context<FinderContext<{ id: string }> | null>;
 } | null>(null);
 
-export const useFinderContext = <E extends { id: string }>() => {
+export const useFinderContext = <E extends { id: string | number }>() => {
     const config = useContext(FinderConfigContext);
 
     if (!config) {

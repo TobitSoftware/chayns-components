@@ -4,7 +4,7 @@ import {
     PersonFinderFilterTypes,
     SiteEntry,
     SiteEntryResult,
-} from '../types/personFinder';
+} from '../components/person-finder/PersonFinder.types';
 
 export const convertSiteEntry = (entries: SiteEntryResult[]): SiteEntry[] =>
     entries.map((entry) => ({

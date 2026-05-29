@@ -3,14 +3,14 @@ import { DropdownDirection } from '../../types/dropdown';
 import { Tag } from '../../types/tagInput';
 
 export interface FinderProps<
-    E extends { id: string },
+    E extends { id: string | number },
     P extends PropsWithChildren,
 > extends FinderInnerProps {
     Context: Context<FinderContext<E> | null>;
     Provider: ComponentType<P>;
 }
 
-export interface FinderContext<E extends { id: string }> {
+export interface FinderContext<E extends { id: string | number }> {
     // Data
     data: { [key: FinderFilter['key']]: FinderData<E> };
     updateData: (key: FinderFilter['key'], data: FinderData<E>) => void;

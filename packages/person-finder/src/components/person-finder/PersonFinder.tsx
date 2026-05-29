@@ -1,46 +1,25 @@
-import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import React, { type Context, forwardRef } from 'react';
 import {
-    DefaultEntry,
-    PersonEntry,
-    PersonFinderEntry,
+    AreaProvider,
+    InputType,
+    Finder,
+    type FinderContext,
+    FinderRef,
+    getFinderProviderType,
+} from '@chayns-components/core';
+import {
+    type PersonFinderEntry,
+    type PersonFinderProps,
+    type PersonFinderProviderProps,
     PersonFinderFilterTypes,
     Priority,
     RelationMode,
-    UACFilter,
-} from '../../types/personFinder';
-import PersonFinderProvider from '../PersonFinderProvider';
-import PersonFinderWrapper, {
-    PersonFinderRef,
-    PersonFinderWrapperProps,
-} from './person-finder-wrapper/PersonFinderWrapper';
-import { AreaProvider } from '@chayns-components/core';
+} from './PersonFinder.types';
+import PersonFinderProvider, { PersonFinderContext } from './PersonFinder.context';
 
 const DEFAULT_FILTER_TYPES = [PersonFinderFilterTypes.PERSON, PersonFinderFilterTypes.SITE];
 
-export type PersonFinderProps = PersonFinderWrapperProps & {
-    /**
-     * Sites and persons that are selected by default.
-     */
-    defaultEntries?: DefaultEntry[];
-    /**
-     * Entry ids to exclude from the results
-     */
-    excludedEntryIds?: PersonFinderEntry['id'][];
-    /**
-     * Whether the own user should be shown in the results. By default, it is not shown.
-     */
-    shouldShowOwnUser?: boolean;
-    /**
-     * Optional filter to search member of uac group. Only works with groups of the current Site and if the user is manager.
-     */
-    uacFilter?: UACFilter[];
-    /**
-     * A list of entries that should be searched.
-     */
-    entries?: PersonEntry[];
-};
-
-const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
+const PersonFinder = forwardRef<FinderRef, PersonFinderProps>(
     (
         {
             container,
@@ -68,50 +47,42 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             shouldRenderInline = false,
         },
         ref,
-    ) => {
-        const personFinderRef = useRef<HTMLDivElement>(null);
-        const innerRef = useRef<PersonFinderRef>(null);
-
-        useImperativeHandle(ref, () => ({
-            clear: () => innerRef.current?.clear(),
-        }));
-
-        return (
-            <PersonFinderProvider
-                friendsPriority={friendsPriority}
-                defaultEntries={defaultEntries}
-                filterTypes={filterTypes}
-                excludedEntryIds={excludedEntryIds}
-                shouldShowOwnUser={shouldShowOwnUser}
-                uacFilter={uacFilter}
-                entries={entries}
-                relationMode={relationMode}
-            >
-                <AreaProvider shouldChangeColor={false} shouldDisableListItemPadding>
-                    <div className="beta-chayns-person-finder" ref={personFinderRef}>
-                        <PersonFinderWrapper
-                            ref={innerRef}
-                            container={container}
-                            dropdownDirection={dropdownDirection}
-                            filterTypes={filterTypes}
-                            maxEntries={maxEntries}
-                            onAdd={onAdd}
-                            relationMode={relationMode}
-                            shouldDisableRemove={shouldDisableRemove}
-                            onDropdownHide={onDropdownHide}
-                            onDropdownShow={onDropdownShow}
-                            leftElement={leftElement}
-                            onRemove={onRemove}
-                            placeholder={placeholder}
-                            shouldAllowMultiple={shouldAllowMultiple}
-                            shouldHideResultsOnAdd={shouldHideResultsOnAdd}
-                            shouldRenderInline={shouldRenderInline}
-                        />
-                    </div>
-                </AreaProvider>
-            </PersonFinderProvider>
-        );
-    },
+    ) => (
+        <AreaProvider shouldChangeColor={false} shouldDisableListItemPadding>
+            <Finder<PersonFinderEntry, PersonFinderProviderProps>
+                Context={
+                    PersonFinderContext as unknown as Context<FinderContext<PersonFinderEntry> | null>
+                }
+                Provider={getFinderProviderType(
+                    <PersonFinderProvider
+                        friendsPriority={friendsPriority}
+                        defaultEntries={defaultEntries}
+                        filterTypes={filterTypes}
+                        excludedEntryIds={excludedEntryIds}
+                        maxEntries={maxEntries}
+                        onAdd={onAdd}
+                        onRemove={onRemove}
+                        shouldShowOwnUser={shouldShowOwnUser}
+                        shouldHideResultsOnAdd={shouldHideResultsOnAdd}
+                        uacFilter={uacFilter}
+                        entries={entries}
+                        relationMode={relationMode}
+                    />,
+                )}
+                ref={ref}
+                container={container}
+                dropdownDirection={dropdownDirection}
+                placeholder={placeholder}
+                shouldAllowMultiple={shouldAllowMultiple}
+                leftElement={leftElement}
+                shouldRenderInline={shouldRenderInline}
+                onDropdownHide={onDropdownHide}
+                onDropdownShow={onDropdownShow}
+                shouldDisableRemove={shouldDisableRemove}
+                inputType={InputType.TagInput}
+            />
+        </AreaProvider>
+    ),
 );
 
 PersonFinder.displayName = 'PersonFinder';

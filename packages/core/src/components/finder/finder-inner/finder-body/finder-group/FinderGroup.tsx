@@ -19,7 +19,7 @@ const handlePreventDefault = (event: MouseEvent) => {
     event.stopPropagation();
 };
 
-const FinderGroup = <E extends { id: string }>({
+const FinderGroup = <E extends { id: string | number }>({
     entries,
     filterKey,
     shouldDisplayName,

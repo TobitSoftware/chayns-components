@@ -177,3 +177,4 @@ export {
     LoadingState,
     InputType,
 } from './components/finder/Finder.types';
+export { getFinderProviderType } from './components/finder/Finder.utils';
