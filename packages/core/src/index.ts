@@ -67,7 +67,7 @@ export { default as FilterButtons } from './components/filter-buttons/FilterButt
 export { default as GridImage } from './components/grid-image/GridImage';
 export { default as GroupedImage } from './components/grouped-image/GroupedImage';
 export { default as Icon, type IconProps } from './components/icon/Icon';
-export { default as Input, InputSize } from './components/input/Input';
+export { default as Input, InputSize, type InputRef } from './components/input/Input';
 export { default as List } from './components/list/List';
 export { default as ListItemContent } from './components/list/list-item/list-item-content/ListItemContent';
 export {
@@ -168,3 +168,12 @@ export type {
 } from './components/combobox/ComboBox.types';
 export { default as Skeleton } from './components/skeleton';
 export { SkeletonAnimationType } from './components/skeleton/types';
+export { default as Finder } from './components/finder/Finder';
+export {
+    type FinderFilter,
+    type FinderContext,
+    type FinderRef,
+    type FinderData,
+    LoadingState,
+    InputType,
+} from './components/finder/Finder.types';

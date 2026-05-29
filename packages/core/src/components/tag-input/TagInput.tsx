@@ -74,6 +74,7 @@ export type TagInputProps = {
 
 export interface TagInputRef {
     blur: () => void;
+    focus: () => void;
     getUnsavedTagText: Tag['text'] | undefined;
     resetValue: () => void;
 }
@@ -118,6 +119,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             ref,
             () => ({
                 blur: () => inputRef.current?.blur(),
+                focus: () => inputRef.current?.focus(),
                 getUnsavedTagText: currentValue !== '' ? currentValue : undefined,
                 resetValue: handleResetValue,
             }),
