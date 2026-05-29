@@ -12,8 +12,11 @@ import React, {
     useMemo,
     useRef,
     useState,
+    KeyboardEvent,
+    FocusEvent,
 } from 'react';
 import { useUuid } from '../../hooks/uuid';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import type { InputProps } from '../input/Input';
 import AccordionBody from './accordion-body/AccordionBody';
@@ -160,6 +163,11 @@ export type AccordionProps = {
      * Whether the accordion should be indexed.
      */
     shouldIndex?: boolean;
+    /**
+     * Enables keyboard-only focus highlighting. The highlighting is only visible while the
+     * user navigates with the keyboard and is reset on mouse movement or click.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const Accordion: FC<AccordionProps> = ({
@@ -193,6 +201,7 @@ const Accordion: FC<AccordionProps> = ({
     colors,
     shouldIndex = false,
     onBodyAnimationComplete,
+    shouldEnableKeyboardHighlighting = false,
 }) => {
     const {
         isWrapped: groupIsWrapped,
@@ -200,6 +209,10 @@ const Accordion: FC<AccordionProps> = ({
         accordionGroupUuid,
         accordionUuids,
         updateOpenAccordionUuid,
+        activeAccordionUuid,
+        updateActiveAccordionUuid,
+        registerAccordionUuid,
+        unregisterAccordionUuid,
     } = useContext(AccordionGroupContext);
     const { isWrapped: isParentWrapped } = useContext(AccordionContext);
 
@@ -210,6 +223,7 @@ const Accordion: FC<AccordionProps> = ({
     );
 
     const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(isDefaultOpen ?? isOpened);
+    const [isGroupFocusWithin, setIsGroupFocusWithin] = useState(false);
 
     const uuid = useUuid();
 
@@ -227,6 +241,31 @@ const Accordion: FC<AccordionProps> = ({
     const isOpenRef = useRef(isOpen);
     const onCloseRef = useRef(onClose);
     const onOpenRef = useRef(onOpen);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+    const isKeyboardFocusable = shouldIndex || shouldEnableKeyboardHighlighting;
+
+    const isInKeyboardNavigationGroup =
+        isKeyboardFocusable &&
+        typeof updateActiveAccordionUuid === 'function' &&
+        typeof accordionGroupUuid === 'string';
+
+    useEffect(() => {
+        if (
+            typeof accordionGroupUuid === 'string' &&
+            typeof registerAccordionUuid === 'function' &&
+            typeof unregisterAccordionUuid === 'function'
+        ) {
+            registerAccordionUuid(uuid);
+
+            return () => {
+                unregisterAccordionUuid(uuid);
+            };
+        }
+
+        return undefined;
+    }, [accordionGroupUuid, registerAccordionUuid, unregisterAccordionUuid, uuid]);
 
     const isLastAccordion = useMemo(
         () => (accordionUuids ? accordionUuids[accordionUuids.length - 1] === uuid : false),
@@ -244,12 +283,16 @@ const Accordion: FC<AccordionProps> = ({
             return;
         }
 
+        if (isKeyboardFocusable && typeof updateActiveAccordionUuid === 'function') {
+            updateActiveAccordionUuid(uuid);
+        }
+
         if (typeof updateOpenAccordionUuid === 'function') {
             updateOpenAccordionUuid(uuid);
         }
 
         setIsAccordionOpen((currentIsAccordionOpen) => !currentIsAccordionOpen);
-    }, [isDisabled, updateOpenAccordionUuid, uuid]);
+    }, [isDisabled, isKeyboardFocusable, updateActiveAccordionUuid, updateOpenAccordionUuid, uuid]);
 
     useEffect(() => {
         if (isDisabled && isOpen) {
@@ -313,6 +356,133 @@ const Accordion: FC<AccordionProps> = ({
         return isOpen ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 };
     }, [isOpen, shouldSkipAnimation]);
 
+    const tabIndex = useMemo(() => {
+        if (isInKeyboardNavigationGroup) {
+            const effectiveActiveAccordionUuid = isGroupFocusWithin
+                ? activeAccordionUuid
+                : undefined;
+            const isGroupTabStop =
+                effectiveActiveAccordionUuid != null
+                    ? effectiveActiveAccordionUuid === uuid
+                    : accordionUuids?.[0] === uuid;
+            return isGroupTabStop ? 0 : -1;
+        }
+        if (isKeyboardFocusable) {
+            return 0;
+        }
+        return -1;
+    }, [
+        accordionUuids,
+        activeAccordionUuid,
+        isGroupFocusWithin,
+        isInKeyboardNavigationGroup,
+        isKeyboardFocusable,
+        uuid,
+    ]);
+
+    const handleKeyDown = useCallback(
+        (e: KeyboardEvent<HTMLDivElement>) => {
+            const isCurrentAccordionTarget = e.currentTarget === e.target;
+
+            if (
+                isCurrentAccordionTarget &&
+                isInKeyboardNavigationGroup &&
+                accordionUuids?.length &&
+                (e.key === 'ArrowDown' || e.key === 'ArrowUp')
+            ) {
+                const currentIndex = accordionUuids.indexOf(uuid);
+
+                if (currentIndex !== -1) {
+                    const nextIndex =
+                        e.key === 'ArrowDown'
+                            ? (currentIndex + 1) % accordionUuids.length
+                            : (currentIndex - 1 + accordionUuids.length) % accordionUuids.length;
+                    const nextAccordionUuid = accordionUuids[nextIndex];
+
+                    if (nextAccordionUuid && nextAccordionUuid !== uuid) {
+                        const nextAccordionElement = document.querySelector<HTMLDivElement>(
+                            `[data-uuid="${accordionGroupUuid}---${nextAccordionUuid}"]`,
+                        );
+
+                        if (nextAccordionElement) {
+                            updateActiveAccordionUuid(nextAccordionUuid);
+                            nextAccordionElement.focus();
+                            return;
+                        }
+                    }
+                }
+            }
+
+            if (
+                isCurrentAccordionTarget &&
+                (e.key === 'Enter' || e.key === ' ') &&
+                isKeyboardFocusable
+            ) {
+                handleHeadClick();
+            }
+        },
+        [
+            accordionGroupUuid,
+            accordionUuids,
+            handleHeadClick,
+            isInKeyboardNavigationGroup,
+            isKeyboardFocusable,
+            updateActiveAccordionUuid,
+            uuid,
+        ],
+    );
+
+    const handleFocus = useCallback(
+        (e: FocusEvent<HTMLDivElement>) => {
+            if (
+                e.currentTarget === e.target &&
+                isInKeyboardNavigationGroup &&
+                typeof updateActiveAccordionUuid === 'function'
+            ) {
+                setIsGroupFocusWithin(true);
+                updateActiveAccordionUuid(uuid);
+            }
+        },
+        [isInKeyboardNavigationGroup, updateActiveAccordionUuid, uuid],
+    );
+
+    const handleBlur = useCallback(
+        (e: FocusEvent<HTMLDivElement>) => {
+            if (
+                isInKeyboardNavigationGroup &&
+                typeof updateActiveAccordionUuid === 'function' &&
+                typeof accordionGroupUuid === 'string'
+            ) {
+                const nextFocusedElement = e.relatedTarget as Node | null;
+                const currentGroupElement = e.currentTarget as HTMLElement;
+
+                if (!nextFocusedElement || !currentGroupElement.contains(nextFocusedElement)) {
+                    setIsGroupFocusWithin(false);
+                    updateActiveAccordionUuid(undefined);
+                }
+            }
+        },
+        [accordionGroupUuid, isInKeyboardNavigationGroup, updateActiveAccordionUuid],
+    );
+
+    useEffect(() => {
+        if (!isInKeyboardNavigationGroup) {
+            setIsGroupFocusWithin(false);
+        } else if (
+            activeAccordionUuid == null &&
+            typeof updateActiveAccordionUuid === 'function' &&
+            accordionUuids?.[0] === uuid
+        ) {
+            updateActiveAccordionUuid(uuid);
+        }
+    }, [
+        accordionUuids,
+        activeAccordionUuid,
+        isInKeyboardNavigationGroup,
+        updateActiveAccordionUuid,
+        uuid,
+    ]);
+
     return (
         <StyledMotionAccordion
             animate={{ height: 'auto', opacity: 1 }}
@@ -321,7 +491,7 @@ const Accordion: FC<AccordionProps> = ({
             exit={{ height: 0, opacity: 0 }}
             initial={initialAnimation}
             $isOpen={isOpen}
-            tabIndex={shouldIndex ? 0 : -1}
+            tabIndex={tabIndex}
             $shouldShowLines={!isLastAccordion || !isWrapped}
             $isParentWrapped={isParentWrapped}
             $isWrapped={isWrapped}
@@ -329,17 +499,11 @@ const Accordion: FC<AccordionProps> = ({
             $shouldHideBackground={shouldHideBackground}
             $shouldHideBottomLine={shouldHideBottomLine}
             $bottomBorderColor={colors?.borderBottomColor}
-            onKeyDown={(e) => {
-                if (
-                    (e.key === 'Enter' || e.key === ' ') &&
-                    (e.target as HTMLDivElement).className.includes('beta-chayns-accordion') &&
-                    shouldIndex
-                ) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleHeadClick();
-                }
-            }}
+            $shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+            onKeyDown={handleKeyDown}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             onMouseEnter={onHoverStart}
             onMouseLeave={onHoverEnd}
             transition={{ duration: shouldSkipAnimation ? 0 : 0.25 }}

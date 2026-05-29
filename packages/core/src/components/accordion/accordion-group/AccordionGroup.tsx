@@ -15,7 +15,9 @@ import { useUuid } from '../../../hooks/uuid';
 import { AreaContext } from '../../area-provider/AreaContextProvider';
 
 type IUpdateOpenAccordionUuid = (uuid: string, options?: { shouldOnlyOpen?: boolean }) => void;
-type IUpdateAccordionUuids = (uuids: string[]) => void;
+type IUpdateActiveAccordionUuid = (uuid?: string) => void;
+type IRegisterAccordionUuid = (uuid: string) => void;
+type IUnregisterAccordionUuid = (uuid: string) => void;
 
 interface IAccordionGroupContext {
     isWrapped?: boolean;
@@ -23,7 +25,10 @@ interface IAccordionGroupContext {
     setOpenAccordionUuid?: Dispatch<SetStateAction<string | undefined>>;
     updateOpenAccordionUuid?: IUpdateOpenAccordionUuid;
     accordionUuids?: string[];
-    updateAccordionUuids?: IUpdateAccordionUuids;
+    registerAccordionUuid?: IRegisterAccordionUuid;
+    unregisterAccordionUuid?: IUnregisterAccordionUuid;
+    activeAccordionUuid?: string;
+    updateActiveAccordionUuid?: IUpdateActiveAccordionUuid;
     accordionGroupUuid?: string;
 }
 
@@ -33,7 +38,10 @@ export const AccordionGroupContext = React.createContext<IAccordionGroupContext>
     setOpenAccordionUuid: undefined,
     updateOpenAccordionUuid: undefined,
     accordionUuids: undefined,
-    updateAccordionUuids: undefined,
+    registerAccordionUuid: undefined,
+    unregisterAccordionUuid: undefined,
+    activeAccordionUuid: undefined,
+    updateActiveAccordionUuid: undefined,
     accordionGroupUuid: undefined,
 });
 
@@ -64,18 +72,14 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
     const [openAccordionUuid, setOpenAccordionUuid] =
         useState<IAccordionGroupContext['openAccordionUuid']>(undefined);
     const [accordionUuids, setAccordionUuids] = useState<string[]>();
+    const [activeAccordionUuid, setActiveAccordionUuid] =
+        useState<IAccordionGroupContext['activeAccordionUuid']>(undefined);
 
     const accordionGroupId = useUuid();
 
     const isInitialRenderRef = useRef(true);
 
-    const updateAccordionUuids = useCallback((uuids: string[]) => {
-        setAccordionUuids(uuids);
-    }, []);
-
     const areaProvider = useContext(AreaContext);
-
-    const childrenCount = React.Children.count(children);
 
     const shouldWrap = areaProvider.shouldChangeColor ? true : isWrapped;
 
@@ -92,24 +96,56 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
         [setOpenAccordionUuid],
     );
 
+    const sortAccordionUuidsByDom = useCallback(
+        (uuids: string[]) => {
+            if (typeof document === 'undefined') return uuids;
+
+            const domOrderedUuids = Array.from(
+                document.querySelectorAll<HTMLElement>(`[data-uuid^="${accordionGroupId}---"]`),
+            )
+                .map((element) => element.getAttribute('data-uuid')?.split('---')[1])
+                .filter((uuid): uuid is string => Boolean(uuid));
+
+            return domOrderedUuids.filter((uuid) => uuids.includes(uuid));
+        },
+        [accordionGroupId],
+    );
+
+    const registerAccordionUuid = useCallback<IRegisterAccordionUuid>(
+        (uuid) => {
+            setAccordionUuids((currentAccordionUuids = []) => {
+                const nextAccordionUuids = currentAccordionUuids.includes(uuid)
+                    ? currentAccordionUuids
+                    : [...currentAccordionUuids, uuid];
+
+                return sortAccordionUuidsByDom(nextAccordionUuids);
+            });
+        },
+        [sortAccordionUuidsByDom],
+    );
+
+    const unregisterAccordionUuid = useCallback<IUnregisterAccordionUuid>((uuid) => {
+        setAccordionUuids((currentAccordionUuids = []) =>
+            currentAccordionUuids.filter((currentUuid) => currentUuid !== uuid),
+        );
+    }, []);
+
+    const updateActiveAccordionUuid = useCallback<IUpdateActiveAccordionUuid>((uuid) => {
+        setActiveAccordionUuid(uuid);
+    }, []);
+
     useEffect(() => {
-        if (childrenCount === 0) return;
+        if (!accordionUuids?.length) {
+            setActiveAccordionUuid(undefined);
+            return;
+        }
 
-        const elements = document.querySelectorAll('[data-uuid]');
-        const elementUuids = Array.from(elements).map((el) => el.getAttribute('data-uuid'));
-
-        const result: string[] = [];
-
-        elementUuids.forEach((elementUuid) => {
-            const [groupUuid, accordionUuid] = (elementUuid ?? '').split('---');
-
-            if (groupUuid === accordionGroupId && typeof accordionUuid === 'string') {
-                result.push(accordionUuid);
-            }
-        });
-
-        updateAccordionUuids(result);
-    }, [accordionGroupId, childrenCount, updateAccordionUuids]);
+        setActiveAccordionUuid((currentActiveAccordionUuid) =>
+            currentActiveAccordionUuid && accordionUuids.includes(currentActiveAccordionUuid)
+                ? currentActiveAccordionUuid
+                : undefined,
+        );
+    }, [accordionUuids]);
 
     useEffect(() => {
         if (isInitialRenderRef.current) {
@@ -129,8 +165,11 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
             openAccordionUuid,
             setOpenAccordionUuid,
             updateOpenAccordionUuid,
-            updateAccordionUuids,
             accordionUuids,
+            registerAccordionUuid,
+            unregisterAccordionUuid,
+            activeAccordionUuid,
+            updateActiveAccordionUuid,
             accordionGroupUuid: accordionGroupId,
         }),
         [
@@ -138,8 +177,11 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
             accordionUuids,
             shouldWrap,
             openAccordionUuid,
-            updateAccordionUuids,
+            registerAccordionUuid,
+            unregisterAccordionUuid,
             updateOpenAccordionUuid,
+            activeAccordionUuid,
+            updateActiveAccordionUuid,
         ],
     );
 

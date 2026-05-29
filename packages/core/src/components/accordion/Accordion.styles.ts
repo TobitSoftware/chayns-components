@@ -11,6 +11,8 @@ type StyledMotionAccordionProps = WithTheme<{
     $shouldShowLines?: boolean;
     $shouldHideBottomLine: boolean;
     $bottomBorderColor?: string;
+    $shouldEnableKeyboardHighlighting?: boolean;
+    $shouldShowKeyboardHighlighting?: boolean;
 }>;
 
 export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionProps>`
@@ -87,13 +89,48 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
             : css`
                   margin: 0;
               `}
-    ${({ $isWrapped, $shouldHideBackground, theme }: StyledMotionAccordionProps) =>
+    ${({
+        $isWrapped,
+        $shouldHideBackground,
+        theme,
+        $shouldEnableKeyboardHighlighting,
+    }: StyledMotionAccordionProps) =>
         !$isWrapped &&
         !$shouldHideBackground &&
         css`
-            &:hover,
+            &:hover {
+                background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
+            }
+            ${!$shouldEnableKeyboardHighlighting
+                ? css`
+                      &:focus-visible {
+                          background-color: rgba(
+                              ${theme['100-rgb']},
+                              ${theme.cardBackgroundOpacity}
+                          );
+                      }
+                  `
+                : null}
+        `};
+
+    ${({
+        $shouldEnableKeyboardHighlighting,
+        $shouldShowKeyboardHighlighting,
+        $shouldHideBackground,
+        theme,
+    }: StyledMotionAccordionProps) =>
+        $shouldEnableKeyboardHighlighting &&
+        $shouldShowKeyboardHighlighting &&
+        !$shouldHideBackground &&
+        css`
             &:focus-visible {
                 background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
+                transition: none;
+                outline: none;
+                box-shadow:
+                    inset 0 0 0 2px var(--focus-color),
+                    var(--focus-shadow);
+                border-radius: var(--focus-border-radius);
             }
         `};
 `;
