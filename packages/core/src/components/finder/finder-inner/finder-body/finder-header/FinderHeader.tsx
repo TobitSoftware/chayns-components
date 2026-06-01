@@ -18,6 +18,7 @@ const FinderHeader: FC<FinderHeaderProps> = ({
     shouldUseShadow,
     shouldDisplayNames,
     currentFilterName,
+    shouldHideFilterButtons = false,
 }) => {
     const { activeFilter, filter, setActiveFilter } = useFinderContext();
 
@@ -27,21 +28,26 @@ const FinderHeader: FC<FinderHeaderProps> = ({
 
     const filterButtons = filter.map(({ key, label }) => ({ id: key, text: label }));
 
-    if (filter.length <= 1) {
+    const shouldShowFilters = filter.length > 1 && !shouldHideFilterButtons;
+    const shouldShowGroupName = shouldDisplayNames && currentFilterName !== '';
+
+    if (!shouldShowFilters && !shouldShowGroupName) {
         return null;
     }
 
     return (
         <StyledFinderHeader $shouldUseShadow={shouldUseShadow} onClick={handlePreventDefault}>
-            <StyledFinderHeaderFilter>
-                <FilterButtons
-                    size={FilterButtonSize.Small}
-                    items={filterButtons}
-                    onSelect={handleFilterSelect}
-                    selectedItemIds={activeFilter}
-                />
-            </StyledFinderHeaderFilter>
-            {shouldDisplayNames && (
+            {shouldShowFilters && (
+                <StyledFinderHeaderFilter>
+                    <FilterButtons
+                        size={FilterButtonSize.Small}
+                        items={filterButtons}
+                        onSelect={handleFilterSelect}
+                        selectedItemIds={activeFilter}
+                    />
+                </StyledFinderHeaderFilter>
+            )}
+            {shouldShowGroupName && (
                 <StyledFinderHeaderGroupName>{currentFilterName}</StyledFinderHeaderGroupName>
             )}
         </StyledFinderHeader>

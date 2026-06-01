@@ -1,4 +1,12 @@
-import { Context, PropsWithChildren, type ReactElement, ReactNode } from 'react';
+import {
+    ChangeEventHandler,
+    Context,
+    FocusEventHandler,
+    KeyboardEventHandler,
+    PropsWithChildren,
+    type ReactElement,
+    ReactNode,
+} from 'react';
 import { DropdownDirection } from '../../types/dropdown';
 import { Tag } from '../../types/tagInput';
 
@@ -36,6 +44,10 @@ export interface FinderContext<E extends { id: string | number }> {
     itemRenderer: (item: E) => ReactNode;
     resetInputSignal: number;
     closeDropdownSignal: number;
+    emptyStateRenderer?: () => ReactNode;
+    removeTag?: (id: string) => void;
+    shouldHideFilterButtons?: boolean;
+    shouldShowContent?: boolean;
 }
 
 export interface FinderInnerProps {
@@ -56,6 +68,14 @@ export interface FinderInnerProps {
      */
     leftElement?: ReactElement;
     /**
+     * An element that should be displayed on the right side of the input.
+     */
+    rightElement?: ReactElement;
+    /**
+     * Whether the input should be marked as invalid.
+     */
+    isInvalid?: boolean;
+    /**
      * Function to be executed if the dropdown is hidden.
      */
     onDropdownHide?: () => void;
@@ -63,6 +83,26 @@ export interface FinderInnerProps {
      * Function to be executed if the dropdown is shown.
      */
     onDropdownShow?: () => void;
+    /**
+     * Function to be executed if the input is blurred.
+     */
+    onInputBlur?: FocusEventHandler<HTMLInputElement>;
+    /**
+     * Function to be executed when the input value changes.
+     */
+    onInputChange?: ChangeEventHandler<HTMLInputElement>;
+    /**
+     * Function to be executed if the input is focused.
+     */
+    onInputFocus?: FocusEventHandler<HTMLInputElement>;
+    /**
+     * Function to be executed when a key is pressed inside the finder.
+     */
+    onInputKeyDown?: KeyboardEventHandler<HTMLInputElement>;
+    /**
+     * Function to be executed when a tag is added inside a tag input.
+     */
+    onTagAdd?: (tag: Tag) => Promise<boolean> | boolean | void;
     /**
      * The placeholder that should be displayed.
      */
@@ -83,6 +123,10 @@ export interface FinderInnerProps {
      * @optional
      */
     shouldRenderInline?: boolean;
+    /**
+     * Whether clicking the right element should toggle the dropdown.
+     */
+    shouldToggleOnRightElementClick?: boolean;
     /**
      * Whether the remove action should be disabled.
      */
@@ -117,4 +161,5 @@ export interface FinderRef {
     focus: () => void;
     blur: () => void;
     clear: () => void;
+    clearInput: () => void;
 }

@@ -1,5 +1,5 @@
 import React, { FC, MouseEvent, useCallback, useMemo } from 'react';
-import type { ISearchBoxItem, ISearchBoxItems } from '../../../types/searchBox';
+import type { ISearchBoxItem } from '../../../types/searchBox';
 import {
     StyledSearchBoxItem,
     StyledSearchBoxItemImage,
@@ -7,13 +7,13 @@ import {
 } from './SearchBoxItem.styles';
 
 export type SearchBoxItemProps = {
-    onSelect: (item: ISearchBoxItem, groupName?: ISearchBoxItems['groupName']) => void;
+    onSelect: (
+        item: ISearchBoxItem & { plainText: string; shouldUseInputValueAsId?: boolean },
+    ) => void;
     id: ISearchBoxItem['id'];
     text: ISearchBoxItem['text'];
     imageUrl?: ISearchBoxItem['imageUrl'];
     shouldShowRoundImage?: boolean;
-    groupName?: ISearchBoxItems['groupName'];
-    tabIndex: number;
 };
 
 const SearchBoxItem: FC<SearchBoxItemProps> = ({
@@ -22,28 +22,20 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
     imageUrl,
     shouldShowRoundImage,
     onSelect,
-    groupName,
-    tabIndex,
 }) => {
     const handleClick = useCallback(
         (event: MouseEvent) => {
             event.preventDefault();
             event.stopPropagation();
 
-            onSelect({ id: id === 'input-value' ? text : id, text, imageUrl }, groupName);
+            onSelect({ id, imageUrl, plainText: text, text });
         },
-        [onSelect, id, text, imageUrl, groupName],
+        [onSelect, id, text, imageUrl],
     );
-
-    let idString = `search-box-item__${id}`;
-
-    if (groupName) {
-        idString = `_${groupName}`;
-    }
 
     return useMemo(
         () => (
-            <StyledSearchBoxItem id={idString} onClick={handleClick} tabIndex={tabIndex}>
+            <StyledSearchBoxItem data-finder-selectable="true" onClick={handleClick} tabIndex={-1}>
                 {imageUrl && (
                     <StyledSearchBoxItemImage
                         src={imageUrl}
@@ -53,7 +45,7 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
                 <StyledSearchBoxItemText dangerouslySetInnerHTML={{ __html: text }} />
             </StyledSearchBoxItem>
         ),
-        [handleClick, idString, imageUrl, shouldShowRoundImage, text, tabIndex],
+        [handleClick, imageUrl, shouldShowRoundImage, text],
     );
 };
 

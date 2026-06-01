@@ -31,7 +31,12 @@ const PersonFinderSmallItem: FC<PersonFinderSmallItemProps> = ({ entry, onAdd, o
     };
 
     return (
-        <StyledPersonFinderSmallItem onClick={handleClick} $isSelected={isSelected}>
+        <StyledPersonFinderSmallItem
+            data-finder-selectable="true"
+            onClick={handleClick}
+            tabIndex={-1}
+            $isSelected={isSelected}
+        >
             {title}
         </StyledPersonFinderSmallItem>
     );

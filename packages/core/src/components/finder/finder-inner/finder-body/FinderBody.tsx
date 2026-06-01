@@ -10,7 +10,7 @@ import { FinderData } from '../../Finder.types';
 const FinderBody = forwardRef<HTMLDivElement, FinderBodyProps>(({ shouldRenderInline }, ref) => {
     const [isScrollTop, setIsScrollTop] = useState(true);
 
-    const { activeFilter, data } = useFinderContext();
+    const { activeFilter, data, emptyStateRenderer, shouldHideFilterButtons } = useFinderContext();
     const { getGroupName } = useFinderFilter();
 
     const contentRef = useRef<HTMLDivElement>(null);
@@ -28,7 +28,9 @@ const FinderBody = forwardRef<HTMLDivElement, FinderBodyProps>(({ shouldRenderIn
     const content = useMemo(
         () =>
             Object.entries(data ?? {}).map(([key, singleData], index) => {
-                const { count, entries } = singleData as FinderData<{ id: string }>;
+                const entries = Array.isArray(singleData?.entries) ? singleData.entries : [];
+                const count =
+                    typeof singleData?.count === 'number' ? singleData.count : entries.length;
 
                 return (
                     <FinderGroup
@@ -43,9 +45,18 @@ const FinderBody = forwardRef<HTMLDivElement, FinderBodyProps>(({ shouldRenderIn
         [data, shouldDisplayNames],
     );
 
+    const hasEntries = useMemo(
+        () =>
+            Object.values(data ?? {}).some(
+                (singleData) => Array.isArray(singleData?.entries) && singleData.entries.length > 0,
+            ),
+        [data],
+    );
+
     return (
         <StyledFinderBody ref={ref} $shouldRenderInline={shouldRenderInline}>
             <FinderHeader
+                shouldHideFilterButtons={shouldHideFilterButtons}
                 shouldDisplayNames={shouldDisplayNames}
                 shouldUseShadow={!isScrollTop && !shouldRenderInline}
                 currentFilterName={currentFilterName ?? defaultGroupName}
@@ -55,7 +66,7 @@ const FinderBody = forwardRef<HTMLDivElement, FinderBodyProps>(({ shouldRenderIn
                 className="chayns-scrollbar"
                 onScroll={handleContentScroll}
             >
-                {content}
+                {hasEntries ? content : emptyStateRenderer?.()}
             </StyledFinderBodyContent>
         </StyledFinderBody>
     );

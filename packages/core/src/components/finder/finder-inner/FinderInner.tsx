@@ -1,6 +1,9 @@
 import React, {
     type ChangeEvent,
+    cloneElement,
     forwardRef,
+    KeyboardEvent,
+    MouseEvent,
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -34,7 +37,15 @@ const FinderInner = forwardRef<FinderRef, FinderInnerProps>(
             shouldAllowMultiple,
             onDropdownHide,
             onDropdownShow,
+            onInputBlur,
+            onInputChange,
+            onInputFocus,
+            onInputKeyDown,
+            onTagAdd,
+            isInvalid,
+            rightElement,
             shouldDisableRemove,
+            shouldToggleOnRightElementClick,
             dropdownDirection,
             leftElement = DEFAULT_LEFT_ELEMENT,
             container,
@@ -43,6 +54,7 @@ const FinderInner = forwardRef<FinderRef, FinderInnerProps>(
     ) => {
         const [isFocused, setIsFocused] = useState(false);
         const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+        const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
         const wrapperRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement>(null);
@@ -60,40 +72,69 @@ const FinderInner = forwardRef<FinderRef, FinderInnerProps>(
             data,
             resetInputSignal,
             closeDropdownSignal,
+            removeTag,
+            shouldShowContent,
         } = useFinderContext();
 
         const handleClose = useCallback(() => {
             setIsDropdownOpen(false);
+            setFocusedIndex(null);
         }, []);
 
         const handleOpen = useCallback(() => {
             setIsDropdownOpen(true);
         }, []);
 
-        const handleBlur = useCallback(() => {
-            setIsFocused(false);
-        }, []);
+        const handleBlur = useCallback(
+            (event: React.FocusEvent<HTMLInputElement>) => {
+                setIsFocused(false);
 
-        const handleFocus = useCallback(() => {
-            setIsFocused(true);
-        }, []);
+                if (typeof onInputBlur === 'function') {
+                    onInputBlur(event);
+                }
+            },
+            [onInputBlur],
+        );
+
+        const handleFocus = useCallback(
+            (event: React.FocusEvent<HTMLInputElement>) => {
+                setIsFocused(true);
+
+                if (typeof onInputFocus === 'function') {
+                    onInputFocus(event);
+                }
+            },
+            [onInputFocus],
+        );
 
         const handleChange = useCallback(
             (event: ChangeEvent<HTMLInputElement>) => {
                 setSearchString(event.target.value);
+
+                if (typeof onInputChange === 'function') {
+                    onInputChange(event);
+                }
             },
-            [setSearchString],
+            [onInputChange, setSearchString],
         );
 
         const handleRemove = useCallback(
             (id: string) => {
-                if (typeof setTags !== 'function' || shouldDisableRemove) {
+                if (shouldDisableRemove) {
                     return;
                 }
 
-                setTags(tags.filter((entry) => entry.id !== id));
+                if (typeof removeTag === 'function') {
+                    removeTag(id);
+
+                    return;
+                }
+
+                if (typeof setTags === 'function') {
+                    setTags(tags.filter((entry) => entry.id !== id));
+                }
             },
-            [setTags, shouldDisableRemove, tags],
+            [removeTag, setTags, shouldDisableRemove, tags],
         );
 
         const handleClear = useCallback(() => {
@@ -104,8 +145,17 @@ const FinderInner = forwardRef<FinderRef, FinderInnerProps>(
             tagInputRef.current?.resetValue();
             setSearchString('');
 
-            setTags([]);
-        }, [setSearchString, setTags, shouldDisableRemove]);
+            if (typeof removeTag === 'function') {
+                tags.forEach((tag) => removeTag(tag.id));
+            } else {
+                setTags([]);
+            }
+        }, [removeTag, setSearchString, setTags, shouldDisableRemove, tags]);
+
+        const handleClearInput = useCallback(() => {
+            tagInputRef.current?.resetValue();
+            setSearchString('');
+        }, [setSearchString]);
 
         const handleDropdownOutsideClick = useCallback(() => {
             tagInputRef.current?.blur();
@@ -142,15 +192,113 @@ const FinderInner = forwardRef<FinderRef, FinderInnerProps>(
                 blur: () => (inputRef.current ?? tagInputRef.current)?.blur(),
                 focus: () => (inputRef.current ?? tagInputRef.current)?.focus(),
                 clear: () => handleClear(),
+                clearInput: () => handleClearInput(),
             }),
-            [handleClear],
+            [handleClear, handleClearInput],
         );
 
         const shouldShowBody = useMemo(() => {
             const mobileCheck = isTouch ? isFocused : true;
+            const shouldShowFinderContent =
+                shouldShowContent ?? (hasEntries(data) || searchString.length >= 3);
 
-            return mobileCheck && isDropdownOpen && (hasEntries(data) || searchString.length >= 3);
-        }, [data, isDropdownOpen, isFocused, isTouch, searchString.length]);
+            return mobileCheck && isDropdownOpen && shouldShowFinderContent;
+        }, [data, isDropdownOpen, isFocused, isTouch, searchString.length, shouldShowContent]);
+
+        const getSelectableElements = useCallback(
+            () =>
+                Array.from(
+                    contentRef.current?.querySelectorAll<HTMLElement>(
+                        '[data-finder-selectable="true"]',
+                    ) ?? [],
+                ),
+            [],
+        );
+
+        const focusSelectableElement = useCallback(
+            (nextIndex: number) => {
+                const selectableElements = getSelectableElements();
+
+                selectableElements.forEach((element, index) => {
+                    element.tabIndex = index === nextIndex ? 0 : -1;
+                });
+
+                const nextElement = selectableElements[nextIndex];
+
+                if (!nextElement) {
+                    return;
+                }
+
+                nextElement.focus();
+                nextElement.scrollIntoView({ block: 'nearest' });
+                setFocusedIndex(nextIndex);
+            },
+            [getSelectableElements],
+        );
+
+        const handleFinderKeyDown = useCallback(
+            (event: KeyboardEvent<HTMLDivElement>) => {
+                if (typeof onInputKeyDown === 'function') {
+                    onInputKeyDown(event as unknown as React.KeyboardEvent<HTMLInputElement>);
+                }
+
+                if (event.defaultPrevented) {
+                    return;
+                }
+
+                if (event.key === 'Escape') {
+                    handleClose();
+
+                    return;
+                }
+
+                if (!shouldShowBody) {
+                    return;
+                }
+
+                const selectableElements = getSelectableElements();
+
+                if (selectableElements.length === 0) {
+                    return;
+                }
+
+                if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                    event.preventDefault();
+
+                    const nextIndex =
+                        focusedIndex !== null
+                            ? (focusedIndex +
+                                  (event.key === 'ArrowUp' ? -1 : 1) +
+                                  selectableElements.length) %
+                              selectableElements.length
+                            : 0;
+
+                    focusSelectableElement(nextIndex);
+
+                    return;
+                }
+
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const nextIndex = focusedIndex ?? 0;
+                    const nextElement = selectableElements[nextIndex];
+
+                    if (nextElement) {
+                        nextElement.click();
+                    }
+                }
+            },
+            [
+                focusSelectableElement,
+                focusedIndex,
+                getSelectableElements,
+                handleClose,
+                onInputKeyDown,
+                shouldShowBody,
+            ],
+        );
 
         const content = useMemo(() => {
             const body = <FinderBody ref={contentRef} shouldRenderInline={shouldRenderInline} />;
@@ -184,11 +332,41 @@ const FinderInner = forwardRef<FinderRef, FinderInnerProps>(
             shouldShowBody,
         ]);
 
+        const resolvedRightElement = useMemo(() => {
+            if (!rightElement || !shouldToggleOnRightElementClick) {
+                return rightElement;
+            }
+
+            return cloneElement(rightElement, {
+                onClick: (event: MouseEvent) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const originalClick = rightElement.props.onClick as
+                        | ((event: MouseEvent) => void)
+                        | undefined;
+
+                    if (typeof originalClick === 'function') {
+                        originalClick(event);
+                    }
+
+                    setIsDropdownOpen((currentState) => !currentState);
+                },
+            });
+        }, [rightElement, shouldToggleOnRightElementClick]);
+
+        useEffect(() => {
+            if (!shouldShowBody) {
+                setFocusedIndex(null);
+            }
+        }, [shouldShowBody]);
+
         const inputElement = useMemo(() => {
             if (inputType === InputType.TagInput) {
                 return (
                     <TagInput
                         leftElement={leftElement}
+                        onAdd={onTagAdd}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         onFocus={handleFocus}
@@ -205,12 +383,14 @@ const FinderInner = forwardRef<FinderRef, FinderInnerProps>(
             if (inputType === InputType.Input) {
                 return (
                     <Input
+                        isInvalid={isInvalid}
                         leftElement={leftElement}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         onFocus={handleFocus}
                         placeholder={placeholder}
                         ref={inputRef}
+                        rightElement={resolvedRightElement}
                         value={searchString}
                     />
                 );
@@ -223,15 +403,23 @@ const FinderInner = forwardRef<FinderRef, FinderInnerProps>(
             handleFocus,
             handleRemove,
             inputType,
+            isInvalid,
             leftElement,
+            onTagAdd,
             placeholder,
+            resolvedRightElement,
             searchString,
             shouldAllowMultiple,
             tags,
         ]);
 
         return (
-            <StyledFinderInner ref={wrapperRef} key={keyRef.current} onFocus={handleOpen}>
+            <StyledFinderInner
+                ref={wrapperRef}
+                key={keyRef.current}
+                onFocus={handleOpen}
+                onKeyDown={handleFinderKeyDown}
+            >
                 {inputElement}
                 {content}
             </StyledFinderInner>

@@ -59,7 +59,12 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd, onRemove })
     );
 
     return (
-        <StyledPersonFinderItem onClick={handleClick} $isSelected={isSelected}>
+        <StyledPersonFinderItem
+            data-finder-selectable="true"
+            onClick={handleClick}
+            tabIndex={-1}
+            $isSelected={isSelected}
+        >
             <ListItem
                 title={title}
                 subtitle={subtitle}
