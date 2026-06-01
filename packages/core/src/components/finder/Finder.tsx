@@ -1,4 +1,4 @@
-import React, { ComponentType, forwardRef, PropsWithChildren, useMemo } from 'react';
+import React, { cloneElement, forwardRef, isValidElement, PropsWithChildren, useMemo } from 'react';
 import { FinderProps, FinderRef } from './Finder.types';
 import FinderInner from './finder-inner/FinderInner';
 import { FinderConfigContext } from './Finder.context';
@@ -14,19 +14,14 @@ const FinderComponent = <E extends { id: string | number }, P extends PropsWithC
         [Context],
     );
 
-    if (!Context || !Provider) {
+    if (!Context || !Provider || !isValidElement(Provider)) {
         return null;
     }
-
-    const ProviderWithTypes = Provider as ComponentType<PropsWithChildren>;
 
     return (
         // @ts-expect-error type is correct and can't be parsed
         <FinderConfigContext.Provider value={value}>
-            <ProviderWithTypes>
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <FinderInner ref={ref} {...props} />
-            </ProviderWithTypes>
+            {cloneElement(Provider, undefined, <FinderInner ref={ref} {...props} />)}
         </FinderConfigContext.Provider>
     );
 };

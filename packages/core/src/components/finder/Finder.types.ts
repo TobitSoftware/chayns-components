@@ -1,4 +1,4 @@
-import { ComponentType, Context, PropsWithChildren, type ReactElement, ReactNode } from 'react';
+import { Context, PropsWithChildren, type ReactElement, ReactNode } from 'react';
 import { DropdownDirection } from '../../types/dropdown';
 import { Tag } from '../../types/tagInput';
 
@@ -7,7 +7,7 @@ export interface FinderProps<
     P extends PropsWithChildren,
 > extends FinderInnerProps {
     Context: Context<FinderContext<E> | null>;
-    Provider: ComponentType<P>;
+    Provider: ReactElement<P>;
 }
 
 export interface FinderContext<E extends { id: string | number }> {
@@ -34,6 +34,8 @@ export interface FinderContext<E extends { id: string | number }> {
 
     // Render
     itemRenderer: (item: E) => ReactNode;
+    resetInputSignal: number;
+    closeDropdownSignal: number;
 }
 
 export interface FinderInnerProps {

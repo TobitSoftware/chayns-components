@@ -1,4 +1,5 @@
-import { ComponentType, ReactNode } from 'react';
+import { PropsWithChildren, type ReactElement } from 'react';
 
-export const getFinderProviderType = <P>(Provider: ReactNode) =>
-    Provider as unknown as ComponentType<P>;
+export const getFinderProviderType = <P extends PropsWithChildren>(
+    Provider: ReactElement<P>,
+): ReactElement<P> => Provider;

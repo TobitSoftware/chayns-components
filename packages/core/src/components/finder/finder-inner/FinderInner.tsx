@@ -52,7 +52,15 @@ const FinderInner = forwardRef<FinderRef, FinderInnerProps>(
 
         const { isTouch } = useDevice();
 
-        const { tags, setTags, searchString, setSearchString, data } = useFinderContext();
+        const {
+            tags,
+            setTags,
+            searchString,
+            setSearchString,
+            data,
+            resetInputSignal,
+            closeDropdownSignal,
+        } = useFinderContext();
 
         const handleClose = useCallback(() => {
             setIsDropdownOpen(false);
@@ -115,6 +123,18 @@ const FinderInner = forwardRef<FinderRef, FinderInnerProps>(
                 onDropdownHide();
             }
         }, [isDropdownOpen, onDropdownHide, onDropdownShow]);
+
+        useEffect(() => {
+            tagInputRef.current?.resetValue();
+        }, [resetInputSignal]);
+
+        useEffect(() => {
+            if (closeDropdownSignal < 1) {
+                return;
+            }
+
+            handleClose();
+        }, [closeDropdownSignal, handleClose]);
 
         useImperativeHandle(
             ref,

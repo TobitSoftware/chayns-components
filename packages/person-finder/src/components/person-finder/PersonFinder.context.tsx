@@ -84,6 +84,8 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         [PersonFinderFilterTypes.SITE]: LoadingState.None,
         [PersonFinderFilterTypes.UAC]: LoadingState.None,
     });
+    const [resetInputSignal, setResetInputSignal] = useState(0);
+    const [closeDropdownSignal, setCloseDropdownSignal] = useState(0);
 
     const dataRef = useRef<PersonFinderDataMap>({});
 
@@ -116,7 +118,10 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             }
 
             setTags(nextTags);
-            onRemove?.(id);
+
+            if (typeof onRemove === 'function') {
+                onRemove(id);
+            }
         },
         [onRemove, setTags, tags],
     );
@@ -137,9 +142,16 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 },
             ]);
 
-            onAdd?.(selectedEntry);
+            if (typeof onAdd === 'function') {
+                onAdd(selectedEntry);
+            }
 
-            void shouldHideResultsOnAdd;
+            setSearchString('');
+            setResetInputSignal((prev) => prev + 1);
+
+            if (shouldHideResultsOnAdd) {
+                setCloseDropdownSignal((prev) => prev + 1);
+            }
         },
         [data, maxEntries, onAdd, setTags, shouldHideResultsOnAdd, tags],
     );
@@ -559,6 +571,8 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             loadMore,
             loadingState,
             itemRenderer,
+            resetInputSignal,
+            closeDropdownSignal,
             friends,
             addFriend,
             removeFriend,
@@ -575,8 +589,10 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             itemRenderer,
             loadMore,
             loadingState,
+            closeDropdownSignal,
             normalizedActiveFilter,
             removeFriend,
+            resetInputSignal,
             searchString,
             shouldShowOwnUser,
             tags,
