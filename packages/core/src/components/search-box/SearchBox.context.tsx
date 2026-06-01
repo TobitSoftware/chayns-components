@@ -52,8 +52,7 @@ export type SearchBoxContextValue = FinderContext<SearchBoxEntry> & {
 export const SearchBoxContext = createContext<SearchBoxContextValue | null>(null);
 
 const DEFAULT_GROUP_KEY = '__default__';
-const INPUT_VALUE_GROUP_KEY = '__input-value__';
-
+const INPUT_VALUE_ID = '__input-value__';
 const stripHighlightTags = (value: string) => value.replace(/<\/?b>/g, '');
 
 const getGroupKey = (groupName: string | undefined, index: number) =>
@@ -173,26 +172,49 @@ const SearchBoxProvider: FC<SearchBoxProviderProps> = ({
             };
         });
 
+        const normalizedSearchString = searchString.trim();
         const hasRegularEntries = Object.values(nextData).some(({ entries }) => entries.length > 0);
 
         if (
             shouldAddInputToList &&
-            searchString.trim() !== '' &&
+            normalizedSearchString !== '' &&
             !(hintText && !hasRegularEntries)
         ) {
-            nextData[INPUT_VALUE_GROUP_KEY] = {
-                count: 1,
-                entries: [
-                    {
-                        id: searchString,
-                        imageUrl: undefined,
-                        plainText: searchString,
-                        shouldUseInputValueAsId: true,
-                        text: `<b>${searchString}</b>`,
-                    },
-                ],
+            const inputEntry: SearchBoxEntry = {
+                id: INPUT_VALUE_ID,
+                imageUrl: undefined,
+                plainText: normalizedSearchString,
+                shouldUseInputValueAsId: true,
+                text: `<b>${normalizedSearchString}</b>`,
+            };
+
+            const targetKey =
+                Object.keys(nextData)[Object.keys(nextData).length - 1] ??
+                getGroupKey(visibleLists[0]?.groupName, 0);
+            const existingGroup = nextData[targetKey];
+            const existingEntries = existingGroup?.entries ?? [];
+            const deduplicatedEntries = [...existingEntries, inputEntry].reduce<SearchBoxEntry[]>(
+                (entries, entry) => {
+                    const existingEntryIndex = entries.findIndex(
+                        ({ id }) => String(id) === String(entry.id),
+                    );
+
+                    if (existingEntryIndex >= 0) {
+                        entries.splice(existingEntryIndex, 1);
+                    }
+
+                    entries.push(entry);
+
+                    return entries;
+                },
+                [],
+            );
+
+            nextData[targetKey] = {
+                count: deduplicatedEntries.length,
+                entries: deduplicatedEntries,
                 searchString,
-                skip: 1,
+                skip: deduplicatedEntries.length,
             };
         }
 
@@ -235,7 +257,7 @@ const SearchBoxProvider: FC<SearchBoxProviderProps> = ({
     const itemRenderer = useCallback(
         (item: SearchBoxEntry) => (
             <SearchBoxItem
-                key={`search-box-item-${item.id}-${item.text}`}
+                key={`search-box-item-${item.id}`}
                 id={String(item.id)}
                 imageUrl={item.imageUrl}
                 onSelect={handleSelect}
