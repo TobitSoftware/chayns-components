@@ -41,6 +41,7 @@ const SharingButton: FunctionComponent<SharingButtonProps> = ({
                 alignment={alignment}
                 container={container}
                 ref={contextMenuRef}
+                shouldDisableClick
                 onShow={handleOnShow}
                 onHide={handleOnHide}
             >
