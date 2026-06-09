@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { AnimatePresence } from 'motion/react';
 import React, { FC, MouseEventHandler, useMemo } from 'react';
 import { useTheme } from 'styled-components';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import {
@@ -26,6 +27,7 @@ const Button: FC<ButtonProps> = ({
     shouldShowTextAsRobotoMedium = true,
     buttonDesign,
     tapDuration = 0.5,
+    shouldEnableKeyboardHighlighting = false,
 }) => {
     const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
         if (shouldStopPropagation) {
@@ -40,6 +42,10 @@ const Button: FC<ButtonProps> = ({
     const theme = useTheme() as Theme;
 
     const effectiveButtonDesign = (buttonDesign ?? theme.buttonDesign) as number;
+
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting && !isDisabled,
+    );
 
     const iconColor = useMemo(() => {
         if (isSecondary) {
@@ -99,6 +105,7 @@ const Button: FC<ButtonProps> = ({
             $shouldShowTextAsRobotoMedium={shouldShowTextAsRobotoMedium}
             $shouldShowAsSelectButton={shouldShowAsSelectButton}
             $shouldShowWaitCursor={shouldShowWaitCursor}
+            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
             className={buttonClasses}
             disabled={isDisabled}
             $isDisabled={isDisabled}
