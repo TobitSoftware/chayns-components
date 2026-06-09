@@ -73,7 +73,24 @@ export const escapeHTML = (text: string) => {
     return text.replace(/[&<>"']/g, (match) => escaped[match] ?? match);
 };
 
-export const convertEmojisToUnicode = (text: string, regShortnames: RegExp, shortNameList: { [p: string]: string }): string => {
+export interface AsciiSmileyConversion {
+    /** The original ASCII smiley as it appeared in the input (e.g. ":-)"). */
+    original: string;
+    /** The resulting Unicode emoji (e.g. "🙂"). */
+    emoji: string;
+}
+
+export interface ConvertEmojisToUnicodeOptions {
+    /**     * Optional callback invoked for every ASCII smiley that was successfully     * converted to its Unicode emoji counterpart. Conversions are reported in     * the order they were processed. Used by the `EmojiInput` component to     * enable the "Backspace reverts the last auto-converted smiley" UX.     */
+    onAsciiConversion?: (conversion: AsciiSmileyConversion) => void;
+}
+
+export const convertEmojisToUnicode = (
+    text: string,
+    regShortnames: RegExp,
+    shortNameList: { [p: string]: string },
+    options?: ConvertEmojisToUnicodeOptions,
+): string => {
     let result = text;
 
     result = result.replace(/https?:\/\/.*?(?=$|\s)/gi, (fullMatch) =>
@@ -101,7 +118,13 @@ export const convertEmojisToUnicode = (text: string, regShortnames: RegExp, shor
             const unicode = asciiList[unescapeHTML(m3)];
 
             if (unicode) {
-                return (m2 as string) + convert(unicode.toUpperCase());
+                const emoji = convert(unicode.toUpperCase());
+
+                if (typeof options?.onAsciiConversion === 'function') {
+                    options.onAsciiConversion({ original: m3, emoji });
+                }
+
+                return (m2 as string) + emoji;
             }
         }
 
