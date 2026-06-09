@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { keyboardFocusHighlightingRingCss } from '../styles/keyboardFocusHighlighting.styles';
 
 type StyledMotionAccordionProps = WithTheme<{
     $isOpen: boolean;
@@ -117,20 +118,14 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
         $shouldEnableKeyboardHighlighting,
         $shouldShowKeyboardHighlighting,
         $shouldHideBackground,
-        theme,
     }: StyledMotionAccordionProps) =>
         $shouldEnableKeyboardHighlighting &&
         $shouldShowKeyboardHighlighting &&
         !$shouldHideBackground &&
         css`
             &:focus-visible {
-                background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
                 transition: none;
-                outline: none;
-                box-shadow:
-                    inset 0 0 0 2px var(--focus-color),
-                    var(--focus-shadow);
-                border-radius: var(--focus-border-radius);
+                ${keyboardFocusHighlightingRingCss}
             }
         `};
 `;

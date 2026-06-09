@@ -11,7 +11,7 @@ export const useKeyboardFocusHighlighting = (isEnabled: boolean): boolean => {
         const canListen = isEnabled && typeof window !== 'undefined';
 
         const enableKeyboardNavigation = () => {
-            setIsKeyboardNavigation((current) => (current ? current : true));
+            setIsKeyboardNavigation(true);
         };
 
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -21,7 +21,7 @@ export const useKeyboardFocusHighlighting = (isEnabled: boolean): boolean => {
         };
 
         const handleFocusIn = (event: FocusEvent) => {
-            const target = event.target;
+            const { target } = event;
 
             // Fallback for first tab-focus when the keydown was not observed.
             if (
@@ -42,7 +42,6 @@ export const useKeyboardFocusHighlighting = (isEnabled: boolean): boolean => {
             window.addEventListener('focusin', handleFocusIn);
             window.addEventListener('mousedown', disableKeyboardNavigation);
             window.addEventListener('mousemove', disableKeyboardNavigation);
-            window.addEventListener('click', disableKeyboardNavigation);
         } else {
             setIsKeyboardNavigation(false);
         }
@@ -53,7 +52,6 @@ export const useKeyboardFocusHighlighting = (isEnabled: boolean): boolean => {
                 window.removeEventListener('focusin', handleFocusIn);
                 window.removeEventListener('mousedown', disableKeyboardNavigation);
                 window.removeEventListener('mousemove', disableKeyboardNavigation);
-                window.removeEventListener('click', disableKeyboardNavigation);
             }
         };
     }, [isEnabled]);

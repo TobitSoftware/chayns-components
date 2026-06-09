@@ -1,14 +1,7 @@
 import { AnimatePresence } from 'motion/react';
-import React, {
-    ChangeEvent,
-    FC,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { checkForValidAmount } from '../../utils/amountControl';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import Icon from '../icon/Icon';
 import {
     StyledAmountControl,
@@ -54,6 +47,11 @@ export type AmountControlProps = {
      */
     onChange?: (amount: number) => void;
     /**
+     * Enables keyboard-only focus highlighting. The highlighting is only visible while the
+     * user navigates with the keyboard and is reset on mouse movement or click.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * Whether the label should be displayed even if an amount is selected.
      */
     shouldForceLabel?: boolean;
@@ -84,15 +82,21 @@ const AmountControl: FC<AmountControlProps> = ({
     maxAmount,
     minAmount = 0,
     onChange,
+    shouldEnableKeyboardHighlighting = false,
     shouldForceLabel = false,
     shouldShowAddIconOnMinAmount = false,
     shouldShowIcon = true,
     shouldShowWideInput = false,
     step: stepProp = 1,
 }) => {
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting && !isDisabled,
+    );
+
     const [amountValue, setAmountValue] = useState(minAmount);
     const [inputValue, setInputValue] = useState(minAmount.toString());
     const [displayState, setDisplayState] = useState<DisplayState>('default');
+    const [isEditing, setIsEditing] = useState(false);
 
     const step = useMemo(
         () => (Number.isSafeInteger(stepProp) && stepProp >= 1 ? stepProp : 1),
@@ -185,6 +189,10 @@ const AmountControl: FC<AmountControlProps> = ({
     }, [displayState, maxAmount, minAmount, onChange, step]);
 
     const handleFirstAmount = useCallback(() => {
+        if (isDisabled) {
+            return;
+        }
+
         if (amountValue !== minAmount) {
             return;
         }
@@ -195,17 +203,19 @@ const AmountControl: FC<AmountControlProps> = ({
 
         setAmountValue(minAmount + step);
         setInputValue((minAmount + step).toString());
-    }, [amountValue, minAmount, onChange, step]);
+    }, [amountValue, isDisabled, minAmount, onChange, step]);
 
-    const handleDeleteIconClick = useCallback(() => {
-        if (inputValue === '0') {
-            window.setTimeout(() => {
-                inputRef.current?.focus();
-            }, 500);
-        } else {
-            handleAmountRemove();
+    const handlePseudoInputClick = useCallback(() => {
+        if (isDisabled) {
+            return;
         }
-    }, [handleAmountRemove, inputValue]);
+
+        setIsEditing(true);
+
+        window.requestAnimationFrame(() => {
+            inputRef.current?.focus();
+        });
+    }, [isDisabled]);
 
     const handleInputBlur = useCallback(() => {
         const checkedValue = checkForValidAmount({
@@ -216,6 +226,7 @@ const AmountControl: FC<AmountControlProps> = ({
 
         setAmountValue(checkedValue);
         setInputValue(checkedValue.toString());
+        setIsEditing(false);
 
         if (typeof onChange === 'function') {
             onChange(checkedValue);
@@ -249,12 +260,19 @@ const AmountControl: FC<AmountControlProps> = ({
         inputLabel = label;
     }
 
+    const shouldShowPseudoInput =
+        !isEditing &&
+        (inputValue === '0' ||
+            (shouldForceLabel && typeof label === 'string') ||
+            inputLabel === label);
+
     return useMemo(
         () => (
             <StyledAmountControl onClick={handleFirstAmount} $isDisabled={isDisabled}>
                 <AnimatePresence initial={false}>
                     {['normal'].includes(displayState) && (
                         <StyledMotionAmountControlButton
+                            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                             key="left_button"
                             initial={{ width: 0, opacity: 0, padding: 0 }}
                             animate={{
@@ -265,20 +283,19 @@ const AmountControl: FC<AmountControlProps> = ({
                             exit={{ width: 0, opacity: 0, padding: 0 }}
                             transition={{ duration: 0.2, type: 'tween' }}
                             onClick={handleAmountRemove}
-                            disabled={amountValue !== 0 && amountValue <= minAmount}
-                            $isDisabled={amountValue !== 0 && amountValue <= minAmount}
+                            disabled={isDisabled || (amountValue !== 0 && amountValue <= minAmount)}
+                            $isDisabled={
+                                isDisabled || (amountValue !== 0 && amountValue <= minAmount)
+                            }
                         >
                             <Icon icons={['fa fa-minus']} size={14} color="white" />
                         </StyledMotionAmountControlButton>
                     )}
                 </AnimatePresence>
                 <StyledInputWrapper>
-                    {displayState === 'maxAmount' ||
-                    inputValue === '0' ||
-                    (shouldForceLabel && typeof label === 'string') ||
-                    inputLabel === label ? (
+                    {shouldShowPseudoInput ? (
                         <StyledAmountControlPseudoInput
-                            onClick={handleDeleteIconClick}
+                            onClick={handlePseudoInputClick}
                             $shouldShowWideInput={shouldShowWideInput}
                             $shouldShowRightIcon={!['maxAmount'].includes(displayState)}
                         >
@@ -291,6 +308,9 @@ const AmountControl: FC<AmountControlProps> = ({
                             $shouldShowIcon={shouldShowIcon}
                             $shouldShowWideInput={shouldShowWideInput}
                             $hasFocus={hasFocus}
+                            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                            disabled={isDisabled}
+                            onFocus={() => setIsEditing(true)}
                             onBlur={handleInputBlur}
                             onChange={handleInputChange}
                             value={inputLabel}
@@ -299,6 +319,7 @@ const AmountControl: FC<AmountControlProps> = ({
                 </StyledInputWrapper>
                 <AnimatePresence initial={false}>
                     <StyledMotionAmountControlButton
+                        $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                         key="right_button"
                         initial={{ width: 0, opacity: 0, padding: 0 }}
                         animate={{
@@ -312,8 +333,8 @@ const AmountControl: FC<AmountControlProps> = ({
                         onClick={
                             displayState === 'maxAmount' ? handleAmountRemove : handleAmountAdd
                         }
-                        disabled={maxAmount ? amountValue >= maxAmount : false}
-                        $isDisabled={maxAmount ? amountValue >= maxAmount : false}
+                        disabled={isDisabled || (maxAmount ? amountValue >= maxAmount : false)}
+                        $isDisabled={isDisabled || (maxAmount ? amountValue >= maxAmount : false)}
                     >
                         <Icon
                             icons={
@@ -333,21 +354,20 @@ const AmountControl: FC<AmountControlProps> = ({
             displayState,
             handleAmountAdd,
             handleAmountRemove,
-            handleDeleteIconClick,
             handleFirstAmount,
             handleInputBlur,
             handleInputChange,
+            handlePseudoInputClick,
             hasFocus,
             icon,
             iconColor,
             inputLabel,
-            inputValue,
             isDisabled,
-            label,
             maxAmount,
             minAmount,
-            shouldForceLabel,
             shouldShowIcon,
+            shouldShowKeyboardHighlighting,
+            shouldShowPseudoInput,
             shouldShowWideInput,
         ],
     );
