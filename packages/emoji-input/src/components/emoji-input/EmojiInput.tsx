@@ -23,7 +23,11 @@ import React, {
 } from 'react';
 import type { PopupAlignment } from '../../constants/alignment';
 import { convertEmojisToUnicode, escapeHTML } from '../../utils/emoji';
-import { insertTextAtCursorPosition, replaceText } from '../../utils/insert';
+import {
+    insertTextAtCursorPosition,
+    replaceText,
+    revertAsciiSmileyConversion,
+} from '../../utils/insert';
 import {
     getCharCodeThatWillBeDeleted,
     insertInvisibleCursorMarker,
@@ -49,6 +53,8 @@ import PrefixElement from './prefix-element/PrefixElement';
 import { loadEmojiShortList } from '../../utils/asyncEmojiData';
 import { scrollCursorIntoView } from '../../utils/scroll';
 import { useCursorPosition } from '../../hooks/cursor';
+
+const MODIFIER_KEYS = new Set(['Shift', 'Control', 'Alt', 'Meta', 'CapsLock']);
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
@@ -197,6 +203,13 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const shouldDeleteOneMoreBackwards = useRef(false);
         const shouldDeleteOneMoreForwards = useRef(false);
 
+        /** * Tracks the most recently auto-converted ASCII smiley so the next * Backspace keystroke can revert it (Word/IntelliJ-style autocorrect undo). * The ref is invalidated as soon as the user presses any non-modifier key * other than Backspace (see `handleKeyDown`). */
+        const lastAsciiConversionRef = useRef<{
+            original: string;
+            emoji: string;
+            plainTextCursorPos: number;
+        } | null>(null);
+
         const savedCursorPositionRef = useRef<number>(0);
 
         const valueRef = useRef(value);
@@ -242,10 +255,15 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     return;
                 }
 
+                const conversions: { original: string; emoji: string }[] = [];
+
                 let newInnerHTML = convertEmojisToUnicode(
                     html,
                     emojiRegShortNames,
                     emojiShortNames,
+                    {
+                        onAsciiConversion: (conv) => conversions.push(conv),
+                    },
                 );
 
                 newInnerHTML = convertTextToHTML(newInnerHTML);
@@ -256,6 +274,21 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     editorRef.current.innerHTML = newInnerHTML;
 
                     restoreSelection(editorRef.current);
+
+                    // Remember the LAST ASCII conversion so Backspace can revert it.
+                    // Older conversions are dropped on purpose: only the smiley the
+                    // user just produced should be undoable.
+                    if (conversions.length > 0) {
+                        const lastConv = conversions[conversions.length - 1];
+                        const pos = getCurrentCursorPosition(editorRef.current);
+                        if (pos !== null) {
+                            lastAsciiConversionRef.current = {
+                                original: lastConv!.original,
+                                emoji: lastConv!.emoji,
+                                plainTextCursorPos: pos,
+                            };
+                        }
+                    }
                 }
             },
             [emojiRegShortNames, emojiShortNames],
@@ -355,6 +388,48 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     event.stopPropagation();
 
                     return;
+                }
+
+                // --- Backspace-revert for the most recent auto-conversion ---
+                // If the user presses Backspace immediately after an ASCII smiley
+                // was auto-converted (and the cursor is still at the post-conversion
+                // position), we revert the emoji back to the original text and wrap
+                // it in a protection span so it does not get re-converted.
+                if (
+                    event.key === 'Backspace' &&
+                    !event.ctrlKey &&
+                    !event.metaKey &&
+                    lastAsciiConversionRef.current &&
+                    editorRef.current
+                ) {
+                    const { original, emoji, plainTextCursorPos } = lastAsciiConversionRef.current;
+                    const currentPos = getCurrentCursorPosition(editorRef.current);
+
+                    if (currentPos === plainTextCursorPos) {
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        const didRevert = revertAsciiSmileyConversion({
+                            editorElement: editorRef.current,
+                            original,
+                            emoji,
+                        });
+
+                        lastAsciiConversionRef.current = null;
+
+                        if (didRevert) {
+                            // Notify React + downstream consumers via a synthetic input event
+                            const newEvent = new Event('input', { bubbles: true });
+                            editorRef.current.dispatchEvent(newEvent);
+                            return;
+                        }
+                    } else {
+                        // Cursor moved away from the just-converted emoji -> drop tracker
+                        lastAsciiConversionRef.current = null;
+                    }
+                } else if (!MODIFIER_KEYS.has(event.key)) {
+                    // Any other actual keystroke invalidates the revert window
+                    lastAsciiConversionRef.current = null;
                 }
 
                 if (event.key === 'Enter' && isPopupVisible) {

@@ -10,3 +10,5 @@ export const HTML_NER_REPLACE_REGEX =
     /<nerReplace\s*(?:prefix="(.*?)")?\s*type="(.*?)"\s*value="(.*?)">(.*?)<\/nerReplace>/gi;
 export const HTML_BOLD_REGEX = /<b>(.+?)<\/b>/g;
 export const HTML_A_TAG_REGEX = /(?:<|&lt;)a\b[^>]*?(?:>|&gt;)(.*?)(?:<|&lt;)\/a(?:>|&gt;)/g;
+
+export const HTML_NO_EMOJI_REGEX = /<span class="no-emoji-convert">([\s\S]*?)<\/span>/g;
