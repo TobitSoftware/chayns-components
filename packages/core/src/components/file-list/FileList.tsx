@@ -1,4 +1,5 @@
 import React, { FC, useMemo } from 'react';
+import { TextstringProvider } from '@chayns-components/textstring';
 import List from '../list/List';
 import { StyledFileList } from './FileList.styles';
 import FileItem from './file-item/FileItem';
@@ -46,9 +47,11 @@ const FileList: FC<FileListProps> = ({ files, onRemove, shouldAllowDownload }) =
 
     return useMemo(
         () => (
-            <StyledFileList>
-                <List>{content}</List>
-            </StyledFileList>
+            <TextstringProvider libraryName="@chayns-components-core">
+                <StyledFileList>
+                    <List>{content}</List>
+                </StyledFileList>
+            </TextstringProvider>
         ),
         [content],
     );
