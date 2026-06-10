@@ -34,4 +34,8 @@ export type FilterContentProps = {
      * Whether the search input should receive focus when the filter opens.
      */
     shouldAutoFocus: boolean;
+    /**
+     * Enables keyboard-only focus highlighting for controls that support it.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };

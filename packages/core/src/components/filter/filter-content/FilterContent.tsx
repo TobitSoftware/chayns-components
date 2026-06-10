@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 import {
     StyledFilterContentControlWrapper,
@@ -23,6 +24,7 @@ const FilterContent: FC<FilterContentProps> = ({
     checkboxConfig,
     comboboxConfig,
     shouldAutoFocus,
+    shouldEnableKeyboardHighlighting = false,
 }) => {
     const searchRef = useRef<InputRef>(null);
 
@@ -66,7 +68,15 @@ const FilterContent: FC<FilterContentProps> = ({
                         />
                     )}
                     {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                    {filterButtonConfig && <FilterButtons {...filterButtonConfig} />}
+                    {filterButtonConfig && (
+                        <FilterButtons
+                            {...filterButtonConfig}
+                            shouldEnableKeyboardHighlighting={
+                                filterButtonConfig.shouldEnableKeyboardHighlighting ??
+                                shouldEnableKeyboardHighlighting
+                            }
+                        />
+                    )}
                     {sortConfig && (
                         <StyledFilterContentLabeledRow>
                             <StyledFilterContentLabel>
@@ -81,6 +91,9 @@ const FilterContent: FC<FilterContentProps> = ({
                                         value: sortConfig.selectedItem.id,
                                     }}
                                     onSelect={handleSelectSortItem}
+                                    shouldEnableKeyboardHighlighting={
+                                        shouldEnableKeyboardHighlighting
+                                    }
                                 />
                             </StyledFilterContentControlWrapper>
                         </StyledFilterContentLabeledRow>
@@ -92,13 +105,25 @@ const FilterContent: FC<FilterContentProps> = ({
                             </StyledFilterContentLabel>
                             <StyledFilterContentControlWrapper>
                                 {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                                <ComboBox {...comboboxConfig} />
+                                <ComboBox
+                                    {...comboboxConfig}
+                                    shouldEnableKeyboardHighlighting={
+                                        comboboxConfig.shouldEnableKeyboardHighlighting ??
+                                        shouldEnableKeyboardHighlighting
+                                    }
+                                />
                             </StyledFilterContentControlWrapper>
                         </StyledFilterContentLabeledRow>
                     )}
                     {checkboxConfig && (
                         // eslint-disable-next-line react/jsx-props-no-spreading
-                        <Checkbox {...checkboxConfig} />
+                        <Checkbox
+                            {...checkboxConfig}
+                            shouldEnableKeyboardHighlighting={
+                                checkboxConfig.shouldEnableKeyboardHighlighting ??
+                                shouldEnableKeyboardHighlighting
+                            }
+                        />
                     )}
                 </StyledFilterContent>
             </TextstringProvider>
@@ -109,6 +134,7 @@ const FilterContent: FC<FilterContentProps> = ({
             filterButtonConfig,
             handleSelectSortItem,
             searchConfig,
+            shouldEnableKeyboardHighlighting,
             sortConfig,
             ts.input.placeholder,
             ts.sort,

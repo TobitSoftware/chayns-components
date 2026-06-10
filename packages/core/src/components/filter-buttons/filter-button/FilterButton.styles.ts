@@ -3,11 +3,13 @@ import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
+import { keyboardFocusHighlightingRingCss } from '../../styles/keyboardFocusHighlighting.styles';
 
 type StyledFilterButtonItemProps = WithTheme<{
     $size: FilterButtonSize;
     $isSelected: boolean;
     $isDisabled?: boolean;
+    $shouldShowKeyboardHighlighting?: boolean;
 }>;
 
 export const StyledFilterButtonItem = styled.div<StyledFilterButtonItemProps>`
@@ -30,6 +32,14 @@ export const StyledFilterButtonItem = styled.div<StyledFilterButtonItemProps>`
                 opacity: 0.2;
             `}
     }
+
+    ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus-visible {
+                ${keyboardFocusHighlightingRingCss}
+            }
+        `}
 `;
 
 export const StyledFilterButtonItemLabel = styled.div`
