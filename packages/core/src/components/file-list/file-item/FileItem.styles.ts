@@ -2,6 +2,15 @@ import styled from 'styled-components';
 import { keyboardFocusHighlightingRingCss } from '../../styles/keyboardFocusHighlighting.styles';
 
 export const StyledFileItem = styled.div``;
+export const StyledFileItemIcon = styled.div`
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    background-color: transparent;
+    border-radius: 3px;
+    padding: 6px;
+    transition: background-color 0.3s ease;
+`;
 
 export const StyledFileItemKeyboardWrapper = styled.div`
     &:focus-visible {

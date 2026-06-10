@@ -1,6 +1,8 @@
 import React, { FC, KeyboardEventHandler, useCallback, useMemo } from 'react';
 import { getHumanSize, getIconByMimeType } from '../../../utils/file';
 import Icon from '../../icon/Icon';
+import ContextMenu from '../../context-menu/ContextMenu';
+import type { ContextMenuItem } from '../../context-menu/ContextMenu.types';
 import ListItem from '../../list/list-item/ListItem';
 import type { IFileItem } from '../FileList';
 import {
@@ -8,7 +10,10 @@ import {
     StyledFileItemActions,
     StyledFileItemKeyboardWrapper,
     StyledFileItemRemoveButton,
+    StyledFileItemIcon,
 } from './FileItem.styles';
+import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
+import textStrings from '../../../constants/textStrings';
 
 export type FileItemProps = IFileItem & {
     onRemove?: (name: string) => void;
@@ -105,6 +110,58 @@ const FileItem: FC<FileItemProps> = ({
         }
     }, [name, source]);
 
+    const canDownload = shouldAllowDownload && !!source;
+    const canRemove = typeof onRemove === 'function';
+
+    const downloadText = useTextstringValue({
+        textstring: ttsToITextString(textStrings.components.fileItem.download),
+    });
+    const removeText = useTextstringValue({
+        textstring: ttsToITextString(textStrings.components.fileItem.remove),
+    });
+
+    const rightElement = useMemo(() => {
+        // Both actions available → show as ContextMenu
+        if (canDownload && canRemove) {
+            const items: ContextMenuItem[] = [
+                {
+                    icons: ['fa fa-download'],
+                    key: 'download',
+                    onClick: handleDownload,
+                    text: downloadText,
+                },
+                {
+                    icons: ['fa fa-trash'],
+                    key: 'remove',
+                    onClick: () => onRemove(id),
+                    text: removeText,
+                },
+            ];
+
+            return <ContextMenu items={items} />;
+        }
+
+        // Only download
+        if (canDownload) {
+            return (
+                <StyledFileItemIcon onClick={handleDownload}>
+                    <Icon icons={['fa fa-download']} />
+                </StyledFileItemIcon>
+            );
+        }
+
+        // Only remove
+        if (canRemove) {
+            return (
+                <StyledFileItemIcon onClick={() => onRemove(id)}>
+                    <Icon icons={['ts-wrong']} />
+                </StyledFileItemIcon>
+            );
+        }
+
+        return undefined;
+    }, [canDownload, canRemove, downloadText, handleDownload, id, onRemove, removeText]);
+
     return useMemo(
         () => (
             <StyledFileItem>
@@ -116,39 +173,12 @@ const FileItem: FC<FileItemProps> = ({
                         title={name}
                         subtitle={humanFileSize}
                         icons={[icon]}
-                        rightElements={
-                            <StyledFileItemActions>
-                                {shouldAllowDownload && source && (
-                                    <Icon icons={['fa fa-download']} onClick={handleDownload} />
-                                )}
-                                {typeof onRemove === 'function' && (
-                                    <StyledFileItemRemoveButton
-                                        onKeyDown={handleRemoveKeyDown}
-                                        tabIndex={0}
-                                        role="button"
-                                        aria-label={`Datei ${name} entfernen`}
-                                    >
-                                        <Icon icons={['ts-wrong']} onClick={handleRemove} />
-                                    </StyledFileItemRemoveButton>
-                                )}
-                            </StyledFileItemActions>
-                        }
+                        rightElements={rightElement}
                     />
                 </StyledFileItemKeyboardWrapper>
             </StyledFileItem>
         ),
-        [
-            handleDownload,
-            handleItemKeyDown,
-            handleRemove,
-            handleRemoveKeyDown,
-            humanFileSize,
-            icon,
-            name,
-            onRemove,
-            shouldAllowDownload,
-            source,
-        ],
+        [handleItemKeyDown, humanFileSize, icon, name, rightElement],
     );
 };
 
