@@ -1,9 +1,11 @@
 import styled, { css } from 'styled-components';
 import { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { keyboardFocusHighlightingRingCss } from '../styles/keyboardFocusHighlighting.styles';
 
 type StyledContextMenuProps = WithTheme<{
     $isActive: boolean;
     $shouldAddHoverEffect: boolean;
+    $shouldShowWrapperKeyboardHighlighting: boolean;
     $shouldUseDefaultTriggerStyles: boolean;
 }>;
 
@@ -35,6 +37,19 @@ export const StyledContextMenu = styled.span<StyledContextMenuProps>`
         css`
             &:hover {
                 background-color: ${theme['201']};
+            }
+        `}
+
+    ${({ $shouldShowWrapperKeyboardHighlighting }: StyledContextMenuProps) =>
+        $shouldShowWrapperKeyboardHighlighting &&
+        css`
+            &:focus-visible {
+                outline: none;
+                box-shadow: none;
+            }
+
+            &:focus-visible > * {
+                ${keyboardFocusHighlightingRingCss}
             }
         `}
 `;

@@ -144,6 +144,12 @@ export type ContextMenuProps = {
      */
     shouldShowHoverEffect?: boolean;
     /**
+     * Enables keyboard-only focus highlighting for the trigger.
+     * @default false
+     * @optional
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * Inline styles applied to the trigger wrapper.
      * @optional
      */

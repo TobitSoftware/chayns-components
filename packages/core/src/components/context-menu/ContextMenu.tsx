@@ -3,6 +3,8 @@ import { AnimatePresence } from 'motion/react';
 import React, {
     forwardRef,
     isValidElement,
+    KeyboardEventHandler,
+    MouseEvent,
     MouseEventHandler,
     ReactPortal,
     useCallback,
@@ -25,6 +27,7 @@ import {
 } from './ContextMenu.types';
 import { SelectDialogResult } from '../../types/general';
 import { getDefaultFocusedIndex } from './ContextMenu.utils';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
     (
@@ -42,6 +45,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             shouldDisableClick = false,
             shouldHidePopupArrow = false,
             shouldShowHoverEffect = false,
+            shouldEnableKeyboardHighlighting = false,
             shouldUseDefaultTriggerStyles = true,
             style,
             yOffset = 0,
@@ -63,13 +67,21 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         const [isContentShown, setIsContentShown] = useState(false);
         const [portal, setPortal] = useState<ReactPortal>();
         const [isHovered, setIsHovered] = useState(false);
+        const [shouldUseFocusableWrapper, setShouldUseFocusableWrapper] = useState(false);
 
         const uuid = useUuid();
 
         const contextMenuContentRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<HTMLSpanElement>(null);
+        const shouldSkipNextContextMenuOpenRef = useRef(false);
+        const shouldPreventNextNativeContextMenuRef = useRef(false);
 
         const isTouch = useIsTouch();
+        const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+            shouldEnableKeyboardHighlighting && !shouldDisableClick,
+        );
+        const shouldShowWrapperKeyboardHighlighting =
+            shouldShowKeyboardHighlighting && shouldUseFocusableWrapper;
 
         useEffect(() => {
             if (isContentShown) {
@@ -209,19 +221,106 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             [handleShow, shouldDisableClick],
         );
 
-        const handleDocumentClick = useCallback<EventListener>(
+        const handleKeyDown = useCallback<KeyboardEventHandler<HTMLSpanElement>>(
             (event) => {
+                if (shouldDisableClick) {
+                    return;
+                }
+
+                const isContextMenuShortcut =
+                    event.key === 'ContextMenu' || (event.key === 'F10' && event.shiftKey);
+
+                if (isContextMenuShortcut) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    shouldSkipNextContextMenuOpenRef.current = true;
+                    void handleShow();
+                    return;
+                }
+
+                if (shouldUseFocusableWrapper && event.key === 'Enter') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    void handleShow();
+                }
+            },
+            [handleShow, shouldDisableClick, shouldUseFocusableWrapper],
+        );
+
+        const handleContextMenu = useCallback(
+            (event: MouseEvent<HTMLSpanElement>) => {
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (shouldDisableClick) {
+                    return;
+                }
+
+                if (shouldSkipNextContextMenuOpenRef.current) {
+                    shouldSkipNextContextMenuOpenRef.current = false;
+                    return;
+                }
+
+                void handleShow();
+            },
+            [handleShow, shouldDisableClick],
+        );
+
+        useEffect(() => {
+            const handleGlobalKeyDown = (event: KeyboardEvent) => {
+                if (shouldDisableClick || !contextMenuRef.current) {
+                    return;
+                }
+
+                const isContextMenuShortcut =
+                    event.key === 'ContextMenu' || (event.key === 'F10' && event.shiftKey);
+
+                if (!isContextMenuShortcut) {
+                    return;
+                }
+
+                const { activeElement } = document;
+
                 if (
-                    !shouldCloseOnPopupClick &&
-                    contextMenuContentRef.current?.contains(event.target as Node)
+                    !(activeElement instanceof HTMLElement) ||
+                    activeElement === document.body ||
+                    activeElement === document.documentElement
                 ) {
                     return;
                 }
 
-                handleHide();
-            },
-            [handleHide, shouldCloseOnPopupClick],
-        );
+                const shouldOpenFromFocusedParent =
+                    activeElement.contains(contextMenuRef.current) &&
+                    !contextMenuRef.current.contains(activeElement);
+
+                if (!shouldOpenFromFocusedParent) {
+                    return;
+                }
+
+                event.preventDefault();
+                event.stopPropagation();
+                shouldPreventNextNativeContextMenuRef.current = true;
+                void handleShow();
+            };
+
+            const handleNativeContextMenuCapture = (event: Event) => {
+                if (!shouldPreventNextNativeContextMenuRef.current) {
+                    return;
+                }
+
+                shouldPreventNextNativeContextMenuRef.current = false;
+                event.preventDefault();
+                event.stopPropagation();
+            };
+
+            document.addEventListener('keydown', handleGlobalKeyDown, true);
+            document.addEventListener('contextmenu', handleNativeContextMenuCapture, true);
+
+            return () => {
+                document.removeEventListener('keydown', handleGlobalKeyDown, true);
+                document.removeEventListener('contextmenu', handleNativeContextMenuCapture, true);
+            };
+        }, [handleShow, shouldDisableClick]);
 
         useImperativeHandle(
             ref,
@@ -233,6 +332,17 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         );
 
         useEffect(() => {
+            const handleDocumentClick = (event: PointerEvent) => {
+                if (
+                    !shouldCloseOnPopupClick &&
+                    contextMenuContentRef.current?.contains(event.target as Node)
+                ) {
+                    return;
+                }
+
+                handleHide();
+            };
+
             if (isContentShown) {
                 document.addEventListener('click', handleDocumentClick, true);
                 window.addEventListener('blur', handleHide);
@@ -248,7 +358,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                 document.removeEventListener('click', handleDocumentClick, true);
                 window.removeEventListener('blur', handleHide);
             };
-        }, [handleDocumentClick, handleHide, isContentShown, onHide, onShow]);
+        }, [handleHide, isContentShown, onHide, onShow, shouldCloseOnPopupClick]);
 
         useEffect(() => {
             if (!newContainer) {
@@ -305,6 +415,21 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             handleHide,
         ]);
 
+        useEffect(() => {
+            if (!contextMenuRef.current) {
+                return;
+            }
+
+            const focusableChildSelector =
+                'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]), [contenteditable="true"]';
+
+            const hasFocusableChild = Boolean(
+                contextMenuRef.current.querySelector(focusableChildSelector),
+            );
+
+            setShouldUseFocusableWrapper(!hasFocusableChild);
+        }, [children]);
+
         return (
             <>
                 <StyledContextMenu
@@ -315,9 +440,17 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     }
                     $isActive={isContentShown && shouldShowHoverEffect}
                     $shouldAddHoverEffect={!isTouch && shouldShowHoverEffect}
+                    $shouldShowWrapperKeyboardHighlighting={shouldShowWrapperKeyboardHighlighting}
                     $shouldUseDefaultTriggerStyles={shouldUseDefaultTriggerStyles}
                     onClick={handleClick}
+                    onContextMenuCapture={handleContextMenu}
+                    onContextMenu={handleContextMenu}
+                    onKeyDown={handleKeyDown}
                     ref={contextMenuRef}
+                    tabIndex={shouldUseFocusableWrapper ? 0 : undefined}
+                    role={shouldUseFocusableWrapper ? 'button' : undefined}
+                    aria-haspopup={shouldUseFocusableWrapper ? 'menu' : undefined}
+                    aria-expanded={shouldUseFocusableWrapper ? isContentShown : undefined}
                     style={style}
                 >
                     {children}
