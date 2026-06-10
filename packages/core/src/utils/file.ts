@@ -1,4 +1,4 @@
-import { UploadedFile } from '../components/file-select/FileSelect';
+import type { UploadedFile } from '../components/file-select/FileSelect';
 
 export const hasDuplicate = <T>(
     items: T[],

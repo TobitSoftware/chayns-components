@@ -67,6 +67,10 @@ export type FileInputProps = {
      * Whether to show a download icon for files that have a `source` set.
      */
     shouldAllowDownload?: boolean;
+    /**
+     * Enables keyboard-only focus highlighting for the file selection trigger.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 export type FileInputRef = {
@@ -90,6 +94,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             imageSelectPlaceholder,
             shouldPreventImageUpload = false,
             shouldAllowDownload,
+            shouldEnableKeyboardHighlighting = false,
         },
         ref,
     ) => {
@@ -277,6 +282,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
                 <StyledFileInput>
                     <FileSelect
                         shouldPreventImageUpload={shouldPreventImageUpload}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                         maxFiles={maxFiles}
                         fileTypes={fileTypes}
                         fileSelectionIcons={fileSelectionIcons}
@@ -296,6 +302,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             ),
             [
                 shouldPreventImageUpload,
+                shouldEnableKeyboardHighlighting,
                 maxFiles,
                 fileTypes,
                 fileSelectionIcons,

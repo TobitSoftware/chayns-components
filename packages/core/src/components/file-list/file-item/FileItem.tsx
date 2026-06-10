@@ -1,9 +1,14 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, KeyboardEventHandler, useCallback, useMemo } from 'react';
 import { getHumanSize, getIconByMimeType } from '../../../utils/file';
 import Icon from '../../icon/Icon';
 import ListItem from '../../list/list-item/ListItem';
 import type { IFileItem } from '../FileList';
-import { StyledFileItem } from './FileItem.styles';
+import {
+    StyledFileItem,
+    StyledFileItemActions,
+    StyledFileItemKeyboardWrapper,
+    StyledFileItemRemoveButton,
+} from './FileItem.styles';
 
 export type FileItemProps = IFileItem & {
     onRemove?: (name: string) => void;
@@ -19,6 +24,33 @@ const FileItem: FC<FileItemProps> = ({
     source,
     shouldAllowDownload,
 }) => {
+    const handleRemove = useCallback(() => {
+        if (typeof onRemove === 'function') {
+            onRemove(id);
+        }
+    }, [id, onRemove]);
+
+    const handleItemKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (event.key === 'Delete') {
+                event.preventDefault();
+                handleRemove();
+            }
+        },
+        [handleRemove],
+    );
+
+    const handleRemoveKeyDown = useCallback<KeyboardEventHandler<HTMLSpanElement>>(
+        (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                event.stopPropagation();
+                handleRemove();
+            }
+        },
+        [handleRemove],
+    );
+
     const humanFileSize = useMemo(() => {
         if (typeof size === 'number') {
             return getHumanSize(size);
@@ -76,24 +108,47 @@ const FileItem: FC<FileItemProps> = ({
     return useMemo(
         () => (
             <StyledFileItem>
-                <ListItem
-                    title={name}
-                    subtitle={humanFileSize}
-                    icons={[icon]}
-                    rightElements={
-                        <span style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                            {shouldAllowDownload && source && (
-                                <Icon icons={['fa fa-download']} onClick={handleDownload} />
-                            )}
-                            {typeof onRemove === 'function' && (
-                                <Icon icons={['ts-wrong']} onClick={() => onRemove(id)} />
-                            )}
-                        </span>
-                    }
-                />
+                <StyledFileItemKeyboardWrapper
+                    onKeyDown={handleItemKeyDown}
+                    tabIndex={typeof onRemove === 'function' ? 0 : -1}
+                >
+                    <ListItem
+                        title={name}
+                        subtitle={humanFileSize}
+                        icons={[icon]}
+                        rightElements={
+                            <StyledFileItemActions>
+                                {shouldAllowDownload && source && (
+                                    <Icon icons={['fa fa-download']} onClick={handleDownload} />
+                                )}
+                                {typeof onRemove === 'function' && (
+                                    <StyledFileItemRemoveButton
+                                        onKeyDown={handleRemoveKeyDown}
+                                        tabIndex={0}
+                                        role="button"
+                                        aria-label={`Datei ${name} entfernen`}
+                                    >
+                                        <Icon icons={['ts-wrong']} onClick={handleRemove} />
+                                    </StyledFileItemRemoveButton>
+                                )}
+                            </StyledFileItemActions>
+                        }
+                    />
+                </StyledFileItemKeyboardWrapper>
             </StyledFileItem>
         ),
-        [handleDownload, humanFileSize, icon, id, name, onRemove, shouldAllowDownload, source],
+        [
+            handleDownload,
+            handleItemKeyDown,
+            handleRemove,
+            handleRemoveKeyDown,
+            humanFileSize,
+            icon,
+            name,
+            onRemove,
+            shouldAllowDownload,
+            source,
+        ],
     );
 };
 
