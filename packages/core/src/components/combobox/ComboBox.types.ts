@@ -240,6 +240,11 @@ export type ComboBoxProps = {
      */
     size?: ComboBoxSize;
     /**
+     * Enables the shared keyboard-only focus ring for the combobox header.
+     * @default false
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * Optional min width for the prefix element.
      * @default undefined
      */

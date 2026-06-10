@@ -1,6 +1,7 @@
 import { useFunctions, useValues } from 'chayns-api';
 import React, {
     FocusEventHandler,
+    KeyboardEventHandler,
     forwardRef,
     Fragment,
     useCallback,
@@ -34,6 +35,7 @@ import { DropdownDirection } from '../../types/dropdown';
 import { useElementSize } from '../../hooks/element';
 import { ComboBoxProps, ComboBoxRef, ComboBoxSize, IComboBoxItem } from './ComboBox.types';
 import { getComboBoxWidthResult } from './ComboBox.utils';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
     (
@@ -64,6 +66,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             shouldShowTransparentBackground = false,
             inputValue,
             shouldDropDownUseMaxItemWidth = false,
+            shouldEnableKeyboardHighlighting = false,
         },
         ref,
     ) => {
@@ -75,6 +78,8 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
 
         const isInputFocused = useRef(false);
         const styledComboBoxElementRef = useRef<HTMLDivElement>(null);
+        const comboBoxHeaderRef = useRef<HTMLDivElement>(null);
+        const comboBoxInputRef = useRef<HTMLInputElement>(null);
         const contentRef = useRef<HTMLDivElement | null>(null);
 
         const parentSize = useElementSize(styledComboBoxElementRef, {
@@ -131,6 +136,10 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
         const shouldChangeColor = useMemo(
             () => areaProvider.shouldChangeColor ?? false,
             [areaProvider.shouldChangeColor],
+        );
+
+        const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+            shouldEnableKeyboardHighlighting && !isDisabled,
         );
 
         const shouldDisableActions = useMemo(() => {
@@ -200,6 +209,18 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             setIsAnimating(false);
         }, [onHide]);
 
+        const restoreTriggerFocus = useCallback(() => {
+            // Delay is needed so focus happens after dropdown close/render cycle.
+            requestAnimationFrame(() => {
+                if (typeof inputValue === 'string') {
+                    comboBoxInputRef.current?.focus();
+                    return;
+                }
+
+                comboBoxHeaderRef.current?.focus();
+            });
+        }, [inputValue]);
+
         /**
          * This function sets the selected item
          */
@@ -218,6 +239,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
 
                             setInternalSelectedItem(itemToSelect);
                             handleClose();
+                            restoreTriggerFocus();
                         });
 
                         return;
@@ -226,8 +248,9 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
 
                 setInternalSelectedItem(itemToSelect);
                 handleClose();
+                restoreTriggerFocus();
             },
-            [handleClose, onSelect],
+            [handleClose, onSelect, restoreTriggerFocus],
         );
 
         const handleClear = useCallback(
@@ -243,6 +266,13 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
         useEffect(() => {
             const handleKeyDown = (e: KeyboardEvent) => {
                 if (!isAnimating) return;
+
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    handleClose();
+                    restoreTriggerFocus();
+                    return;
+                }
 
                 if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                     e.preventDefault();
@@ -314,7 +344,14 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             document.addEventListener('keydown', handleKeyDown);
 
             return () => document.removeEventListener('keydown', handleKeyDown);
-        }, [focusedIndex, handleSetSelectedItem, isAnimating, lists]);
+        }, [
+            focusedIndex,
+            handleClose,
+            handleSetSelectedItem,
+            isAnimating,
+            lists,
+            restoreTriggerFocus,
+        ]);
 
         /**
          * This function sets the external selected item
@@ -386,6 +423,34 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             }
         }, [handleClose, handleOpen, isAnimating, isDisabled]);
 
+        const handleHeaderKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
+            (event) => {
+                if (isDisabled || typeof inputValue === 'string') {
+                    return;
+                }
+
+                if (event.key === 'Escape' && isAnimating) {
+                    event.preventDefault();
+                    handleClose();
+                    restoreTriggerFocus();
+                    return;
+                }
+
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    handleHeaderClick();
+                }
+            },
+            [
+                handleClose,
+                handleHeaderClick,
+                inputValue,
+                isAnimating,
+                isDisabled,
+                restoreTriggerFocus,
+            ],
+        );
+
         useImperativeHandle(
             ref,
             () => ({
@@ -431,6 +496,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                     $shouldUseFullWidth={shouldUseFullWidth}
                 >
                     <StyledComboBoxHeader
+                        ref={comboBoxHeaderRef}
                         $direction={direction}
                         onClick={handleHeaderClick}
                         $isOpen={isAnimating}
@@ -440,6 +506,12 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                         $isDisabled={isDisabled}
                         $shouldChangeColor={shouldChangeColor}
                         $shouldShowBigImage={shouldShowBigImage}
+                        onKeyDown={handleHeaderKeyDown}
+                        tabIndex={!isDisabled && typeof inputValue !== 'string' ? 0 : undefined}
+                        role={!isDisabled && typeof inputValue !== 'string' ? 'button' : undefined}
+                        aria-expanded={
+                            !isDisabled && typeof inputValue !== 'string' ? isAnimating : undefined
+                        }
                     >
                         <StyledComboBoxPrefixAndPlaceholderWrapper>
                             {prefix && (
@@ -460,6 +532,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                                 {placeholderIcon && <Icon icons={placeholderIcon} />}
                                 {typeof inputValue === 'string' ? (
                                     <StyledComboBoxInput
+                                        ref={comboBoxInputRef}
                                         disabled={isDisabled}
                                         value={inputValue}
                                         onChange={onInputChange}
@@ -533,6 +606,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                 handleClear,
                 handleClose,
                 handleHeaderClick,
+                handleHeaderKeyDown,
                 handleInputBlur,
                 handleInputFocus,
                 inputValue,
@@ -552,6 +626,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                 shouldChangeColor,
                 shouldDisableActions,
                 shouldCaptureEvents,
+                shouldShowKeyboardHighlighting,
                 shouldShowBigImage,
                 shouldShowClearIcon,
                 shouldShowRoundPlaceholderImage,
