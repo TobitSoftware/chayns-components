@@ -506,6 +506,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                         $isDisabled={isDisabled}
                         $shouldChangeColor={shouldChangeColor}
                         $shouldShowBigImage={shouldShowBigImage}
+                        $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                         onKeyDown={handleHeaderKeyDown}
                         tabIndex={!isDisabled && typeof inputValue !== 'string' ? 0 : undefined}
                         role={!isDisabled && typeof inputValue !== 'string' ? 'button' : undefined}
