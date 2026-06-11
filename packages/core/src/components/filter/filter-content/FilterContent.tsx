@@ -1,37 +1,20 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 import {
-    StyledFilterComboboxInline,
-    StyledFilterComboboxInlineComboboxWrapper,
-    StyledFilterComboboxInlineLabel,
-    StyledFilterComboboxWrapper,
+    StyledFilterContentControlWrapper,
+    StyledFilterContentLabel,
+    StyledFilterContentLabeledRow,
     StyledFilterContent,
-    StyledFilterSort,
-    StyledFilterSortText,
 } from './FilterContent.styles';
 import Input, { InputRef } from '../../input/Input';
 import Icon from '../../icon/Icon';
 import FilterButtons from '../../filter-buttons/FilterButtons';
-import {
-    CheckboxConfig,
-    ComboboxConfig,
-    FilterButtonConfig,
-    SearchConfig,
-    SortConfig,
-} from '../../../types/filter';
 import ComboBox from '../../combobox/ComboBox';
 import Checkbox from '../../checkbox/Checkbox';
-import { IComboBoxItem } from '../../combobox/ComboBox.types';
 import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
 import textStrings from '../../../constants/textStrings';
-
-export type FilterContentProps = {
-    searchConfig?: SearchConfig;
-    filterButtonConfig?: FilterButtonConfig;
-    sortConfig?: SortConfig;
-    checkboxConfig?: CheckboxConfig;
-    comboboxConfig?: ComboboxConfig;
-    shouldAutoFocus: boolean;
-};
+import type { IComboBoxItem } from '../../combobox/ComboBox.types';
+import type { FilterContentProps } from './FilterContent.types';
+import { getSortComboBoxLists } from './FilterContent.utils';
 
 const FilterContent: FC<FilterContentProps> = ({
     searchConfig,
@@ -41,10 +24,7 @@ const FilterContent: FC<FilterContentProps> = ({
     comboboxConfig,
     shouldAutoFocus,
 }) => {
-    const sortTextRef = useRef<HTMLDivElement>(null);
     const searchRef = useRef<InputRef>(null);
-
-    const [sortTextWidth, setSortTextWidth] = useState(0);
 
     const ts = textStrings.components.filter.filterContent;
 
@@ -62,12 +42,6 @@ const FilterContent: FC<FilterContentProps> = ({
         },
         [sortConfig],
     );
-
-    useEffect(() => {
-        if (sortTextRef.current) {
-            setSortTextWidth(sortTextRef.current.clientWidth + 20);
-        }
-    }, []);
 
     useEffect(() => {
         if (shouldAutoFocus) {
@@ -94,20 +68,13 @@ const FilterContent: FC<FilterContentProps> = ({
                     {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                     {filterButtonConfig && <FilterButtons {...filterButtonConfig} />}
                     {sortConfig && (
-                        <StyledFilterSort>
-                            <StyledFilterSortText ref={sortTextRef}>
+                        <StyledFilterContentLabeledRow>
+                            <StyledFilterContentLabel>
                                 <Textstring textstring={ttsToITextString(ts.sort)} />
-                            </StyledFilterSortText>
-                            <StyledFilterComboboxWrapper $textWidth={sortTextWidth}>
+                            </StyledFilterContentLabel>
+                            <StyledFilterContentControlWrapper>
                                 <ComboBox
-                                    lists={[
-                                        {
-                                            list: sortConfig.items.map(({ text, id }) => ({
-                                                text,
-                                                value: id,
-                                            })),
-                                        },
-                                    ]}
+                                    lists={getSortComboBoxLists(sortConfig)}
                                     placeholder=""
                                     selectedItem={{
                                         text: sortConfig.selectedItem.text,
@@ -115,19 +82,19 @@ const FilterContent: FC<FilterContentProps> = ({
                                     }}
                                     onSelect={handleSelectSortItem}
                                 />
-                            </StyledFilterComboboxWrapper>
-                        </StyledFilterSort>
+                            </StyledFilterContentControlWrapper>
+                        </StyledFilterContentLabeledRow>
                     )}
                     {comboboxConfig && (
-                        <StyledFilterComboboxInline>
-                            <StyledFilterComboboxInlineLabel>
+                        <StyledFilterContentLabeledRow>
+                            <StyledFilterContentLabel>
                                 {comboboxConfig.label}
-                            </StyledFilterComboboxInlineLabel>
-                            <StyledFilterComboboxInlineComboboxWrapper>
+                            </StyledFilterContentLabel>
+                            <StyledFilterContentControlWrapper>
                                 {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                                <ComboBox shouldUseCurrentItemWidth {...comboboxConfig} />
-                            </StyledFilterComboboxInlineComboboxWrapper>
-                        </StyledFilterComboboxInline>
+                                <ComboBox {...comboboxConfig} />
+                            </StyledFilterContentControlWrapper>
+                        </StyledFilterContentLabeledRow>
                     )}
                     {checkboxConfig && (
                         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -143,7 +110,6 @@ const FilterContent: FC<FilterContentProps> = ({
             handleSelectSortItem,
             searchConfig,
             sortConfig,
-            sortTextWidth,
             ts.input.placeholder,
             ts.sort,
         ],

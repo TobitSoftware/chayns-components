@@ -226,3 +226,17 @@ export const useIsMeasuredClone = <T extends HTMLElement>() => {
 
     return [isClone, ref] as const;
 };
+
+export const useIsInsideDialog = <T extends HTMLElement>(ref: MutableRefObject<T | null>) => {
+    const [isInsideDialog, setIsInsideDialog] = useState(false);
+
+    useEffect(() => {
+        if (!ref.current) {
+            return;
+        }
+
+        setIsInsideDialog(ref.current.closest('.dialog-inner') !== null);
+    }, [ref]);
+
+    return isInsideDialog;
+};

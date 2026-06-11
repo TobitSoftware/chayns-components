@@ -1,7 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React, { useState } from 'react';
-import { FileListItem } from '../src';
 import FileInput from '../src/components/file-input/FileInput';
+import { IFileItem } from '../src/components/file-list/FileList';
+import { UploadedFile } from '../src/components/file-select/FileSelect';
 
 export default {
     title: 'Core/FileInput',
@@ -12,7 +13,7 @@ export default {
 const Template: StoryFn<typeof FileInput> = ({ ...args }) => {
     const [internalFiles, setInternalFiles] = useState(args.files);
 
-    const handleRemove = (file: string | FileListItem | File) => {
+    const handleRemove = (file: File | IFileItem | UploadedFile) => {
         if (typeof file !== 'string' && 'id' in file) {
             setInternalFiles((prevState) => prevState?.filter(({ id }) => id !== file.id));
         }

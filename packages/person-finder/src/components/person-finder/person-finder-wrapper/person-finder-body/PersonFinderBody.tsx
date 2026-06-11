@@ -35,7 +35,7 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
         const content = useMemo(
             () =>
                 Object.entries(data ?? {}).map(([key, singleData], index) => {
-                    const { count, entries, searchString } = singleData;
+                    const { count, entries } = singleData;
 
                     return (
                         <PersonFinderGroup
@@ -45,7 +45,6 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
                             onRemove={onRemove}
                             entries={entries}
                             count={count}
-                            search={searchString}
                             shouldShowGroupName={shouldShowGroupNames && index !== 0}
                         />
                     );

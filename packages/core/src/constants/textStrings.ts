@@ -31,5 +31,15 @@ export default {
                 fallback: 'Mehr',
             },
         },
+        fileItem: {
+            download: {
+                stringName: 'txt_chayns_components_core_components_fileItem_download',
+                fallback: 'Download',
+            },
+            remove: {
+                stringName: 'txt_chayns_components_core_components_fileItem_remove',
+                fallback: 'Entfernen',
+            },
+        },
     },
 } as const;

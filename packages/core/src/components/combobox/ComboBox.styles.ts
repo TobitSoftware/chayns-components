@@ -6,34 +6,33 @@ import { ComboBoxProps, ComboBoxSize } from './ComboBox.types';
 type StyledComboBoxProps = WithTheme<{
     $minWidth?: number;
     $shouldUseFullWidth: ComboBoxProps['shouldUseFullWidth'];
-    $shouldUseCurrentItemWidth: ComboBoxProps['shouldUseCurrentItemWidth'];
 }>;
 
 export const StyledComboBox = styled.div<StyledComboBoxProps>`
+    min-width: 0;
     user-select: none;
     position: relative;
 
-    ${({ $shouldUseFullWidth, $minWidth, $shouldUseCurrentItemWidth }) => {
-        if (typeof $minWidth !== 'number') {
-            return css`
-                width: fit-content;
-            `;
-        }
-
+    ${({ $shouldUseFullWidth, $minWidth }) => {
         if ($shouldUseFullWidth) {
             return css`
-                min-width: ${$minWidth}px;
                 width: 100%;
+                max-width: 100%;
+                min-width: ${typeof $minWidth === 'number' ? `${$minWidth}px` : '0'};
             `;
         }
 
-        if ($shouldUseCurrentItemWidth) {
-            return '';
+        if (typeof $minWidth === 'number') {
+            return css`
+                width: fit-content;
+                max-width: 100%;
+                min-width: ${$minWidth}px;
+            `;
         }
 
         return css`
-            min-width: ${$minWidth}px;
-            max-width: ${$minWidth}px;
+            width: fit-content;
+            max-width: 100%;
         `;
     }}
 `;
@@ -51,6 +50,7 @@ type StyledComboBoxHeaderProps = WithTheme<{
 
 export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     display: flex;
+    min-width: 0;
     border: 1px solid transparent;
     cursor: ${({ $isDisabled }) => (!$isDisabled ? 'pointer' : 'default')};
     justify-content: space-between;
@@ -173,6 +173,7 @@ export const StyledComboBoxInput = styled.input`
     border: none;
     background-color: transparent;
     width: 100%;
+    min-width: 0;
 `;
 
 type StyledComboBoxPlaceholderImageProps = WithTheme<{
@@ -237,7 +238,6 @@ export const StyledComboBoxIconWrapper = styled.div<StyledComboBoxIconWrapperPro
 `;
 
 type StyledComboBoxBodyProps = WithTheme<{
-    $shouldUseCurrentItemWidth: boolean;
     $maxHeight: number;
     $minWidth: number;
 }>;
@@ -246,6 +246,7 @@ export const StyledComboBoxBody = styled.div<StyledComboBoxBodyProps>`
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    min-width: ${({ $minWidth }) => $minWidth}px;
 
     overflow-x: hidden;
     overflow-y: auto;

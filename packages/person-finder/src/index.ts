@@ -3,6 +3,7 @@ export { type PersonFinderRef } from './components/person-finder/person-finder-w
 export {
     PersonFinderFilterTypes,
     Priority,
+    RelationMode,
     type PersonEntry,
     type DefaultEntry,
     type SiteEntry,

@@ -18,7 +18,8 @@ import { PersonFinder } from '@chayns-components/person-finder';
 
 ## PersonFinder
 
-`PersonFinder` is exported by `@chayns-components/person-finder` and should be imported from the public package entry point.
+`PersonFinder` is exported by `@chayns-components/person-finder` and should be imported from the
+public package entry point.
 
 ### Import
 
@@ -37,25 +38,19 @@ import { PersonFinder } from '@chayns-components/person-finder';
 #### Rendered Inline
 
 ```tsx
-<PersonFinder
-    shouldRenderInline
-/>
+<PersonFinder shouldRenderInline />
 ```
 
 #### UACGroups
 
 ```tsx
-<PersonFinder
-    filterTypes={[PersonFinderFilterTypes.UAC]}
-/>
+<PersonFinder filterTypes={[PersonFinderFilterTypes.UAC]} />
 ```
 
 #### With UACFilter
 
 ```tsx
-<PersonFinder
-    uacFilter={[{ groupId: -1 }]}
-/>
+<PersonFinder uacFilter={[{ groupId: -1 }]} />
 ```
 
 #### With Own Entries
@@ -63,32 +58,38 @@ import { PersonFinder } from '@chayns-components/person-finder';
 ```tsx
 <PersonFinder
     entries={[
-            {
-                type: PersonFinderFilterTypes.PERSON,
-                id: 'test1',
-                firstName: 'Test',
-                lastName: '1',
-                isVerified: false,
-                commonSites: 0,
-            },
-            {
-                type: PersonFinderFilterTypes.PERSON,
-                id: 'test2',
-                firstName: 'Test',
-                lastName: '2',
-                isVerified: false,
-                commonSites: 0,
-            },
-            {
-                type: PersonFinderFilterTypes.PERSON,
-                id: 'test3',
-                firstName: 'Test',
-                lastName: '3',
-                isVerified: false,
-                commonSites: 0,
-            },
-        ]}
+        {
+            type: PersonFinderFilterTypes.PERSON,
+            id: 'test1',
+            firstName: 'Test',
+            lastName: '1',
+            isVerified: false,
+            commonSites: 0,
+        },
+        {
+            type: PersonFinderFilterTypes.PERSON,
+            id: 'test2',
+            firstName: 'Test',
+            lastName: '2',
+            isVerified: false,
+            commonSites: 0,
+        },
+        {
+            type: PersonFinderFilterTypes.PERSON,
+            id: 'test3',
+            firstName: 'Test',
+            lastName: '3',
+            isVerified: false,
+            commonSites: 0,
+        },
+    ]}
 />
+```
+
+#### Site Mode
+
+```tsx
+<PersonFinder filterTypes={[PersonFinderFilterTypes.PERSON]} relationMode={RelationMode.SITE} />
 ```
 
 ### Props
@@ -101,9 +102,12 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `PersonFinder` directly from `@chayns-components/person-finder` instead of internal source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Import `PersonFinder` directly from `@chayns-components/person-finder` instead of internal source
+  paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use
+  case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/person-finder/src/...`; always use the public package export.
+- Avoid imports from internal paths such as `@chayns-components/person-finder/src/...`; always use
+  the public package export.

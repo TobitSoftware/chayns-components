@@ -63,6 +63,10 @@ export type FileInputProps = {
      * Whether the image upload should be prevented.
      */
     shouldPreventImageUpload?: boolean;
+    /**
+     * Whether to show a download icon for files that have a `source` set.
+     */
+    shouldAllowDownload?: boolean;
 };
 
 export type FileInputRef = {
@@ -85,6 +89,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             fileSelectionPlaceholder = 'Dateien hochladen',
             imageSelectPlaceholder,
             shouldPreventImageUpload = false,
+            shouldAllowDownload,
         },
         ref,
     ) => {
@@ -242,11 +247,12 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
         }, [internalFiles.length, internalImages.length, isDisabled, maxFiles, onMaxFilesReached]);
 
         const filesToDisplay: IFileItem[] = useMemo(() => {
-            const items: IFileItem[] = internalFiles.map(({ type, name, size }) => ({
-                id: name,
-                name,
-                size,
-                mimeType: type,
+            const items: IFileItem[] = internalFiles.map((file) => ({
+                id: file.name,
+                name: file.name,
+                size: file.size,
+                mimeType: file.type,
+                source: file,
             }));
 
             internalImages.forEach((image) => {
@@ -255,6 +261,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
                     name: image.name ?? image.url,
                     size: image.size ?? 0,
                     mimeType: 'image/png',
+                    source: image.url,
                 });
             });
 
@@ -280,7 +287,11 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
                         isDisabled={internalIsDisabled}
                         onAdd={handleAdd}
                     />
-                    <FileList files={filesToDisplay} onRemove={handleDeleteFile} />
+                    <FileList
+                        files={filesToDisplay}
+                        onRemove={handleDeleteFile}
+                        shouldAllowDownload={shouldAllowDownload}
+                    />
                 </StyledFileInput>
             ),
             [
@@ -296,6 +307,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
                 handleAdd,
                 filesToDisplay,
                 handleDeleteFile,
+                shouldAllowDownload,
             ],
         );
     },

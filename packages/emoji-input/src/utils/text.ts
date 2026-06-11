@@ -7,6 +7,7 @@ import {
     HTML_LC_MENTION_REGEX,
     HTML_NER_IGNORE_REGEX,
     HTML_NER_REPLACE_REGEX,
+    HTML_NO_EMOJI_REGEX,
 } from '../constants/regex';
 import { escapeHTML, unescapeHTML } from './emoji';
 
@@ -48,6 +49,11 @@ export const convertTextToHTML = (text: string) => {
 
 export const convertHTMLToText = (text: string, { preserveSpaces = false } = {}) => {
     let result = text;
+
+    // Unwrap "no-emoji-convert" protection spans so the plain-text
+    // representation does not leak the marker HTML to consumers.
+    // The protection itself is only relevant inside the live editor DOM.
+    result = result.replace(HTML_NO_EMOJI_REGEX, '$1');
 
     result = result
         .replace(HTML_A_TAG_REGEX, '$1')

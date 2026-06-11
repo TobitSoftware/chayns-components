@@ -5,12 +5,13 @@ import {
     PersonFinderEntry,
     PersonFinderFilterTypes,
     Priority,
+    RelationMode,
     UACFilter,
 } from '../../types/personFinder';
 import PersonFinderProvider from '../PersonFinderProvider';
 import PersonFinderWrapper, {
-    PersonFinderWrapperProps,
     PersonFinderRef,
+    PersonFinderWrapperProps,
 } from './person-finder-wrapper/PersonFinderWrapper';
 import { AreaProvider } from '@chayns-components/core';
 
@@ -46,12 +47,13 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             dropdownDirection,
             defaultEntries,
             excludedEntryIds,
+            relationMode = RelationMode.PERSON,
             uacFilter,
             entries,
             filterTypes = uacFilter || entries
                 ? [PersonFinderFilterTypes.PERSON]
                 : DEFAULT_FILTER_TYPES,
-            friendsPriority = Priority.HIGH,
+            friendsPriority = relationMode === RelationMode.SITE ? Priority.NORMAL : Priority.HIGH,
             leftElement,
             maxEntries,
             onAdd,
@@ -83,6 +85,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                 shouldShowOwnUser={shouldShowOwnUser}
                 uacFilter={uacFilter}
                 entries={entries}
+                relationMode={relationMode}
             >
                 <AreaProvider shouldChangeColor={false} shouldDisableListItemPadding>
                     <div className="beta-chayns-person-finder" ref={personFinderRef}>
@@ -93,6 +96,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                             filterTypes={filterTypes}
                             maxEntries={maxEntries}
                             onAdd={onAdd}
+                            relationMode={relationMode}
                             shouldDisableRemove={shouldDisableRemove}
                             onDropdownHide={onDropdownHide}
                             onDropdownShow={onDropdownShow}
