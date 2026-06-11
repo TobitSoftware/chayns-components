@@ -3,6 +3,7 @@ import { StyledHighlightSlider } from './HighlightSlider.styles';
 import HighlightSliderItem, {
     HighlightSliderItemColors,
 } from './highlight-slider-item/HighlightSliderItem';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 const DEFAULT_HIGHLIGHT_SLIDER_COLORS: HighlightSliderItemColors = {
     backgroundColor: '#E0E0E0',
@@ -30,6 +31,10 @@ export type HighlightSliderProps = {
      * Function to be executed if the index has changed.
      */
     onIndexChange?: (index: number) => void;
+    /**
+     * Enables keyboard-only focus highlighting for interactive slider items.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const HighlightSlider: FC<HighlightSliderProps> = ({
@@ -38,7 +43,13 @@ const HighlightSlider: FC<HighlightSliderProps> = ({
     onIndexChange,
     currentIndex,
     duration = 10,
+    shouldEnableKeyboardHighlighting = false,
 }) => {
+    const isInteractive = typeof onIndexChange === 'function';
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting && isInteractive,
+    );
+
     const handleFinish = useCallback(
         (index: number) => {
             if (typeof onIndexChange === 'function') {
@@ -69,9 +80,22 @@ const HighlightSlider: FC<HighlightSliderProps> = ({
                     isFinished={currentIndex > index}
                     onClick={handleClick}
                     onFinish={handleFinish}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                    shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                    isInteractive={isInteractive}
                 />
             )),
-        [colors, count, currentIndex, duration, handleClick, handleFinish],
+        [
+            colors,
+            count,
+            currentIndex,
+            duration,
+            handleClick,
+            handleFinish,
+            shouldEnableKeyboardHighlighting,
+            shouldShowKeyboardHighlighting,
+            isInteractive,
+        ],
     );
 
     return <StyledHighlightSlider>{content}</StyledHighlightSlider>;
