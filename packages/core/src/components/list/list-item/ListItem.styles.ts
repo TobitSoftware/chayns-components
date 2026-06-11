@@ -15,6 +15,8 @@ type StyledListItemProps = HTMLMotionProps<'div'> & {
     $shouldHideBottomLine: boolean;
     $shouldHideIndicator: boolean;
     $shouldShowSeparatorBelow: boolean;
+    $isInDialog: boolean;
+    $isSelected: boolean;
 };
 
 export const StyledListItem = styled.div<StyledListItemProps>`
@@ -33,13 +35,15 @@ export const StyledListItem = styled.div<StyledListItemProps>`
         $shouldChangeColor,
         $shouldForceBackground,
         theme,
+        $isInDialog,
+        $isSelected,
     }: StyledListItemProps & {
         theme: Theme;
     }) =>
-        ((!$isInAccordion && $isOpen) || $shouldForceBackground) &&
+        ((!$isInAccordion && $isOpen) || $shouldForceBackground || $isSelected) &&
         css`
             background-color: rgba(
-                ${$shouldChangeColor ? theme['102-rgb'] : theme['100-rgb']},
+                ${$shouldChangeColor || $isInDialog ? theme['102-rgb'] : theme['100-rgb']},
                 ${theme.cardBackgroundOpacity}
             );
         `}
@@ -55,6 +59,7 @@ export const StyledListItem = styled.div<StyledListItemProps>`
         $isClickable,
         $isInAccordion,
         $shouldChangeColor,
+        $isInDialog,
         theme,
     }: StyledListItemProps & {
         theme: Theme;
@@ -64,7 +69,7 @@ export const StyledListItem = styled.div<StyledListItemProps>`
         css`
             &&:hover {
                 background-color: rgba(
-                    ${$shouldChangeColor ? theme['102-rgb'] : theme['100-rgb']},
+                    ${$shouldChangeColor || $isInDialog ? theme['102-rgb'] : theme['100-rgb']},
                     ${theme.cardBackgroundOpacity}
                 );
             }
