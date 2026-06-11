@@ -1,4 +1,13 @@
-import React, { CSSProperties, FC, MouseEventHandler, ReactNode, SyntheticEvent } from 'react';
+import React, {
+    CSSProperties,
+    FC,
+    KeyboardEventHandler,
+    MouseEvent,
+    MouseEventHandler,
+    ReactNode,
+    SyntheticEvent,
+    useCallback,
+} from 'react';
 import {
     StyledCornerElement,
     StyledCornerImage,
@@ -8,6 +17,7 @@ import {
 import CareOfClipPath from './clip-paths/CareOfClipPath';
 import { useUuid } from '../../hooks/uuid';
 import SecondImageClipPath from './clip-paths/SecondImageClipPath';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 interface GroupedImageProps {
     /**
@@ -46,6 +56,10 @@ interface GroupedImageProps {
      * Optional handler for image load errors.
      */
     onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
+    /**
+     * Enables keyboard-only focus highlighting for clickable grouped images.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 const GroupedImage: FC<GroupedImageProps> = ({
@@ -58,11 +72,31 @@ const GroupedImage: FC<GroupedImageProps> = ({
     shouldShowRoundImage = false,
     cornerElement,
     onImageError,
+    shouldEnableKeyboardHighlighting = false,
 }) => {
     const hasCornerImage = Boolean(cornerImage);
     const hasCornerElement = Boolean(cornerElement);
     const hasMultipleImages = images.length > 1;
     const uuid = useUuid();
+    const isClickable = typeof onClick === 'function';
+    const isKeyboardFocusable = isClickable && shouldEnableKeyboardHighlighting;
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
+    const handleKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (!isClickable) {
+                return;
+            }
+
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onClick?.(event as unknown as MouseEvent<HTMLDivElement>);
+            }
+        },
+        [isClickable, onClick],
+    );
 
     const imageElements = images.slice(0, 2).map((src, index) => (
         <StyledGroupImageElement
@@ -97,7 +131,14 @@ const GroupedImage: FC<GroupedImageProps> = ({
     ));
 
     return (
-        <StyledGroupedImage onClick={onClick} $height={height}>
+        <StyledGroupedImage
+            onClick={isClickable ? onClick : undefined}
+            onKeyDown={isKeyboardFocusable ? handleKeyDown : undefined}
+            tabIndex={isKeyboardFocusable ? 0 : -1}
+            role={isClickable ? 'button' : undefined}
+            $height={height}
+            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+        >
             {hasCornerImage && (
                 <CareOfClipPath
                     height={height}
