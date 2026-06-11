@@ -59,6 +59,7 @@ export const StyledListItem = styled.div<StyledListItemProps>`
         $isClickable,
         $isInAccordion,
         $shouldChangeColor,
+        $isInDialog,
         theme,
     }: StyledListItemProps & {
         theme: Theme;
@@ -68,7 +69,7 @@ export const StyledListItem = styled.div<StyledListItemProps>`
         css`
             &&:hover {
                 background-color: rgba(
-                    ${$shouldChangeColor ? theme['102-rgb'] : theme['100-rgb']},
+                    ${$shouldChangeColor || $isInDialog ? theme['102-rgb'] : theme['100-rgb']},
                     ${theme.cardBackgroundOpacity}
                 );
             }
