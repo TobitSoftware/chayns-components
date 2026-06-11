@@ -22,6 +22,7 @@ import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
 import { StyledListItem, StyledListItemTooltip } from './ListItem.styles';
 import Tooltip from '../../tooltip/Tooltip';
+import { useIsInsideDialog } from '../../../hooks/element';
 
 export type ListItemElements = [ReactNode, ...ReactNode[]];
 
@@ -81,6 +82,10 @@ export type ListItemProps = {
      * Whether the ListItem locks disabled but has full functionality.
      */
     isTitleGreyed?: boolean;
+    /**
+     * Whether the item is selected.
+     */
+    isSelected?: boolean;
     /**
      * Elements that are displayed on the left side of the header. If multiple
      * elements are specified, they are displayed one aside the other.
@@ -232,6 +237,7 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             titleElement,
             shouldDisableAnimation = false,
             cornerElement,
+            isSelected = false,
         },
         ref,
     ) => {
@@ -245,6 +251,8 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
         const isInitialRenderRef = useRef(true);
 
         const listItemRef = useRef<HTMLDivElement>(null);
+
+        const isInDialog = useIsInsideDialog<HTMLDivElement>(listItemRef);
 
         const uuid = useUuid();
 
@@ -339,6 +347,8 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
                 }
                 $isOpen={isItemOpen}
                 $isWrapped={isWrapped}
+                $isInDialog={isInDialog}
+                $isSelected={isSelected}
                 $shouldChangeColor={areaProvider.shouldChangeColor}
                 $shouldForceBackground={shouldForceBackground}
                 $shouldForceBottomLine={shouldForceBottomLine}
