@@ -1,29 +1,79 @@
-import { useMemo } from 'react';
-import { calculateMasonryLayout } from './Masonry.utils';
+import { Children, ReactNode, useMemo } from 'react';
+import { MasonryChild, MasonryItemProps, MasonryLayoutItem } from './Masonry.types';
+import {
+    calculateColumnCount,
+    calculateRowSpan,
+    getMasonryItemKey,
+    packMasonryGrid,
+} from './Masonry.utils';
+
+interface UseMasonryItemsParams {
+    children: ReactNode;
+}
+
+export const useMasonryItems = ({ children }: UseMasonryItemsParams) =>
+    useMemo(() => Children.toArray(children) as MasonryChild[], [children]);
 
 interface UseMasonryLayoutParams {
-    itemKeys: string[];
+    items: MasonryChild[];
     itemHeights: Record<string, number>;
-    containerWidth: number;
+    columnCount: number;
+    columnWidth: number;
+    rowHeight: number;
     gap: number;
-    minColumnWidth: number;
 }
 
 export const useMasonryLayout = ({
-    itemKeys,
+    items,
     itemHeights,
-    containerWidth,
+    columnCount,
+    columnWidth,
+    rowHeight,
     gap,
-    minColumnWidth,
 }: UseMasonryLayoutParams) =>
+    useMemo(() => {
+        const layoutItems: MasonryLayoutItem[] = items.map((item, index) => {
+            const key = getMasonryItemKey(item as React.ReactElement<MasonryItemProps>, index);
+
+            const height = itemHeights[key] ?? rowHeight;
+
+            return {
+                key,
+                columns: item.props.columns ?? 1,
+                rows: calculateRowSpan({
+                    height,
+                    rowHeight,
+                    gap,
+                }),
+            };
+        });
+
+        return packMasonryGrid({
+            items: layoutItems,
+            columnCount,
+            columnWidth,
+            rowHeight,
+            gap,
+        });
+    }, [items, itemHeights, columnCount, columnWidth, rowHeight, gap]);
+
+interface UseMasonryColumnCountParams {
+    containerWidth: number;
+    columnWidth: number;
+    gap: number;
+}
+
+export const useMasonryColumnCount = ({
+    containerWidth,
+    columnWidth,
+    gap,
+}: UseMasonryColumnCountParams) =>
     useMemo(
         () =>
-            calculateMasonryLayout({
-                itemKeys,
-                itemHeights,
+            calculateColumnCount({
                 containerWidth,
+                columnWidth,
                 gap,
-                minColumnWidth,
             }),
-        [itemKeys, itemHeights, containerWidth, gap, minColumnWidth],
+        [containerWidth, columnWidth, gap],
     );

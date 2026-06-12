@@ -1,27 +1,39 @@
-import React, { Children, FC, ReactElement, useCallback, useMemo, useRef, useState } from 'react';
+import React, { FC, useCallback, useMemo, useRef, useState } from 'react';
 import { AnimatePresence } from 'motion/react';
-import { MasonryProps } from './Masonry.types';
-import { StyledMasonry } from './Masonry.styles';
-import { MasonryItem } from './masonry-item/MasonryItem';
-import { useMasonryLayout } from './Masonry.hooks';
 import { useElementSize } from '../../hooks/element';
+import { MasonryComponent, MasonryItemProps, MasonryProps } from './Masonry.types';
+import { MasonryContext } from './Masonry.context';
+import { StyledMasonry } from './Masonry.styles';
+import { useMasonryColumnCount, useMasonryItems, useMasonryLayout } from './Masonry.hooks';
+import { getMasonryItemKey } from './Masonry.utils';
+import MasonryItem, { InternalMasonryItem } from './masonry-item/MasonryItem';
 
-const getItemKey = (item: ReactElement, index: number) =>
-    item.key != null ? String(item.key) : String(index);
+const MasonryBase: FC<MasonryProps> = ({ children, gap = 8, columnWidth = 80, rowHeight = 80 }) => {
+    const ref = useRef<HTMLDivElement | null>(null);
+    const size = useElementSize(ref);
 
-const Masonry: FC<MasonryProps> = ({ children, gap = 16, minColumnWidth = 260 }) => {
-    const containerRef = useRef<HTMLDivElement | null>(null);
-    const containerSize = useElementSize(containerRef);
-
-    const containerWidth = containerSize?.width ?? 0;
+    const containerWidth = size?.width ?? 0;
 
     const [itemHeights, setItemHeights] = useState<Record<string, number>>({});
 
-    const items = useMemo(() => Children.toArray(children) as ReactElement[], [children]);
+    const items = useMasonryItems({ children });
 
-    const itemKeys = useMemo(() => items.map(getItemKey), [items]);
+    const columnCount = useMasonryColumnCount({
+        containerWidth,
+        columnWidth,
+        gap,
+    });
 
-    const handleHeightChange = useCallback((key: string, height: number) => {
+    const layout = useMasonryLayout({
+        items,
+        itemHeights,
+        columnCount,
+        columnWidth,
+        rowHeight,
+        gap,
+    });
+
+    const registerItem = useCallback((key: string, height: number) => {
         setItemHeights((currentHeights) => {
             if (currentHeights[key] === height) {
                 return currentHeights;
@@ -34,36 +46,51 @@ const Masonry: FC<MasonryProps> = ({ children, gap = 16, minColumnWidth = 260 })
         });
     }, []);
 
-    const { layouts, containerHeight } = useMasonryLayout({
-        itemKeys,
-        itemHeights,
-        containerWidth,
-        gap,
-        minColumnWidth,
-    });
+    const contextValue = useMemo(
+        () => ({
+            registerItem,
+        }),
+        [registerItem],
+    );
 
     return (
-        <StyledMasonry ref={containerRef} $height={containerHeight}>
-            <AnimatePresence>
-                {items.map((item, index) => {
-                    const itemKey = getItemKey(item, index);
+        <MasonryContext.Provider value={contextValue}>
+            <StyledMasonry ref={ref} $height={layout.height}>
+                <AnimatePresence>
+                    {items.map((item, index) => {
+                        const key = getMasonryItemKey(
+                            item as React.ReactElement<MasonryItemProps>,
+                            index,
+                        );
 
-                    return (
-                        <MasonryItem
-                            key={itemKey}
-                            itemKey={itemKey}
-                            layout={layouts[itemKey]}
-                            onHeightChange={handleHeightChange}
-                        >
-                            {item}
-                        </MasonryItem>
-                    );
-                })}
-            </AnimatePresence>
-        </StyledMasonry>
+                        const packedItem = layout.items[key];
+
+                        if (!packedItem) {
+                            return null;
+                        }
+
+                        return (
+                            <InternalMasonryItem
+                                key={key}
+                                itemKey={key}
+                                x={packedItem.x}
+                                y={packedItem.y}
+                                width={packedItem.width}
+                            >
+                                {item.props.children}
+                            </InternalMasonryItem>
+                        );
+                    })}
+                </AnimatePresence>
+            </StyledMasonry>
+        </MasonryContext.Provider>
     );
 };
 
-Masonry.displayName = 'Masonry';
+MasonryBase.displayName = 'Masonry';
+
+const Masonry = Object.assign(MasonryBase, {
+    Item: MasonryItem,
+}) as MasonryComponent;
 
 export default Masonry;

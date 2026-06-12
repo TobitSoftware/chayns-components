@@ -1,26 +1,26 @@
-import React, { FC, ReactElement, useEffect, useRef } from 'react';
-import { MasonryItemLayout } from '../Masonry.types';
+import React, { FC, useEffect, useRef } from 'react';
+import { InternalMasonryItemProps, MasonryItemProps } from '../Masonry.types';
+import { useMasonryContext } from '../Masonry.context';
 import { StyledMasonryItem } from './MasonryItem.styles';
 
-interface MasonryItemProps {
-    children: ReactElement;
-    itemKey: string;
-    layout?: MasonryItemLayout;
-    onHeightChange: (key: string, height: number) => void;
-}
+const MasonryItem: FC<MasonryItemProps> = ({ children }) => <>{children}</>;
 
-export const MasonryItem: FC<MasonryItemProps> = ({
+export const InternalMasonryItem: FC<InternalMasonryItemProps> = ({
     children,
     itemKey,
-    layout,
-    onHeightChange,
+    x,
+    y,
+    width,
 }) => {
     const ref = useRef<HTMLDivElement | null>(null);
+    const { registerItem } = useMasonryContext();
 
     useEffect(() => {
         const element = ref.current;
 
-        if (!element) return undefined;
+        if (!element) {
+            return undefined;
+        }
 
         let frameId: number | undefined;
 
@@ -30,7 +30,7 @@ export const MasonryItem: FC<MasonryItemProps> = ({
             }
 
             frameId = window.requestAnimationFrame(() => {
-                onHeightChange(itemKey, element.getBoundingClientRect().height);
+                registerItem(itemKey, element.getBoundingClientRect().height);
             });
         };
 
@@ -47,7 +47,7 @@ export const MasonryItem: FC<MasonryItemProps> = ({
 
             observer.disconnect();
         };
-    }, [itemKey, onHeightChange]);
+    }, [itemKey, registerItem, width]);
 
     return (
         <StyledMasonryItem
@@ -59,9 +59,9 @@ export const MasonryItem: FC<MasonryItemProps> = ({
             animate={{
                 opacity: 1,
                 scale: 1,
-                x: layout?.x ?? 0,
-                y: layout?.y ?? 0,
-                width: layout?.width ?? 0,
+                x,
+                y,
+                width,
             }}
             exit={{
                 opacity: 0,
@@ -71,10 +71,14 @@ export const MasonryItem: FC<MasonryItemProps> = ({
                 type: 'spring',
                 stiffness: 320,
                 damping: 34,
-                mass: 0.8,
+                mass: 0.85,
             }}
         >
             {children}
         </StyledMasonryItem>
     );
 };
+
+MasonryItem.displayName = 'Masonry.Item';
+
+export default MasonryItem;
