@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { InputSize } from './Input';
 import { CSSProperties } from 'react';
+import { keyboardFocusHighlightingRingCss } from '../styles/keyboardFocusHighlighting.styles';
 
 type StyledInputProps = WithTheme<{ $isDisabled?: boolean }>;
 
@@ -20,6 +21,7 @@ type StyledInputContentWrapperProps = WithTheme<{
     $size: InputSize;
     $shouldShowTransparentBackground: boolean;
     $borderColor?: CSSProperties['borderColor'];
+    $shouldShowKeyboardHighlighting: boolean;
 }>;
 
 export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
@@ -96,6 +98,15 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
             border-right: none;
         `;
     }}
+
+    ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus-within {
+                transition: none;
+                ${keyboardFocusHighlightingRingCss}
+            }
+        `}
 `;
 
 type StyledInputContentProps = WithTheme<{ $shouldShowOnlyBottomBorder?: boolean }>;
@@ -167,6 +178,7 @@ export const StyledInputLabel = styled.label<StyledInputLabelProps>`
 type StyledMotionInputClearIconProps = WithTheme<{
     $shouldShowOnlyBottomBorder?: boolean;
     $size: InputSize;
+    $shouldShowKeyboardHighlighting: boolean;
 }>;
 
 export const StyledMotionInputClearIcon = styled(motion.div)<StyledMotionInputClearIconProps>`
@@ -179,6 +191,15 @@ export const StyledMotionInputClearIcon = styled(motion.div)<StyledMotionInputCl
     height: ${({ $size }) => ($size === 'medium' ? '40px' : '30px')};
     justify-content: center;
     width: ${({ $size }) => ($size === 'medium' ? '40px' : '30px')};
+
+    ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus-visible {
+                transition: none;
+                ${keyboardFocusHighlightingRingCss}
+            }
+        `}
 `;
 
 export const StyledInputIconWrapper = styled.div`
