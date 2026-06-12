@@ -368,7 +368,11 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                         {type === FilterType.ONLY_COMBOBOX && comboboxElement}
                     </StyledFilterHead>
                     {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
-                        <StyledFilterContentWrapper ref={contentRef}>
+                        <StyledFilterContentWrapper
+                            ref={contentRef}
+                            inert={!isOpen ? 'true' : undefined}
+                            aria-hidden={!isOpen}
+                        >
                             <ExpandableContent isOpen={isOpen}>
                                 <FilterContent
                                     shouldAutoFocus={shouldFocus}
