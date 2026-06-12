@@ -1,9 +1,10 @@
 import clsx from 'clsx';
-import React, { FC, MouseEventHandler } from 'react';
+import React, { FC, KeyboardEventHandler, MouseEventHandler } from 'react';
 import { getStackSizeFactor } from '../../utils/icon';
 import { StyledIcon, StyledIconWrapper } from './Icon.styles';
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 export type IconProps = {
     /**
@@ -100,6 +101,10 @@ export type IconProps = {
      * Optional tab index for the icon.
      */
     tabIndex?: number;
+    /**
+     * Enables keyboard-only focus highlighting for clickable icons.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const Icon: FC<IconProps> = ({
@@ -113,8 +118,13 @@ const Icon: FC<IconProps> = ({
     tabIndex,
     size = 15,
     shouldStopPropagation,
+    shouldEnableKeyboardHighlighting = false,
 }) => {
     const theme = useTheme() as Theme;
+    const isClickable = typeof onClick === 'function' && !isDisabled;
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting && isClickable,
+    );
 
     const handleClick: MouseEventHandler<HTMLSpanElement> = (event) => {
         if (shouldStopPropagation) {
@@ -133,6 +143,17 @@ const Icon: FC<IconProps> = ({
 
         if (typeof onDoubleClick === 'function') {
             onDoubleClick(event);
+        }
+    };
+
+    const handleKeyDown: KeyboardEventHandler<HTMLSpanElement> = (event) => {
+        if (!isClickable) {
+            return;
+        }
+
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            handleClick(event);
         }
     };
 
@@ -156,16 +177,19 @@ const Icon: FC<IconProps> = ({
 
     return (
         <StyledIconWrapper
-            tabIndex={tabIndex}
+            tabIndex={shouldEnableKeyboardHighlighting && isClickable ? (tabIndex ?? 0) : tabIndex}
             className={wrapperClasses}
             $isDisabled={isDisabled}
-            onClick={typeof onClick === 'function' && !isDisabled ? handleClick : undefined}
-            $isOnClick={typeof onClick === 'function' && !isDisabled}
+            onClick={isClickable ? handleClick : undefined}
+            $isOnClick={isClickable}
             onDoubleClick={
                 typeof onDoubleClick === 'function' && !isDisabled ? handleDoubleClick : undefined
             }
             onMouseDown={typeof onMouseDown === 'function' && !isDisabled ? onMouseDown : undefined}
+            onKeyDown={shouldEnableKeyboardHighlighting ? handleKeyDown : undefined}
+            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
             $size={size}
+            role={isClickable ? 'button' : undefined}
         >
             {icons.map((icon) => {
                 const stackSizeFactor = getStackSizeFactor(icon);
