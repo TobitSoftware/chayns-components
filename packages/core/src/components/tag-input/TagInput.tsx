@@ -28,6 +28,7 @@ import {
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import { useCursorRepaint } from '../../hooks/resize';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 export type TagInputProps = {
     /**
@@ -50,6 +51,10 @@ export type TagInputProps = {
      * Function to be executed when the input is focused.
      */
     onFocus?: FocusEventHandler;
+    /**
+     * Enables keyboard-only focus highlighting.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
     /**
      * Function to be executed when a tag is removed.
      */
@@ -89,6 +94,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             onRemove,
             placeholder,
             shouldAllowMultiple = true,
+            shouldEnableKeyboardHighlighting = false,
             shouldPreventEnter,
             tags,
         },
@@ -112,6 +118,10 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
         const shouldChangeColor = useMemo(
             () => areaProvider.shouldChangeColor ?? false,
             [areaProvider.shouldChangeColor],
+        );
+
+        const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+            shouldEnableKeyboardHighlighting,
         );
 
         useImperativeHandle(
@@ -269,7 +279,10 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
 
         return useMemo(
             () => (
-                <StyledTagInput $shouldChangeColor={shouldChangeColor}>
+                <StyledTagInput
+                    $shouldChangeColor={shouldChangeColor}
+                    $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                >
                     {leftElement && (
                         <StyledTagInputIconWrapper>{leftElement}</StyledTagInputIconWrapper>
                     )}
@@ -298,6 +311,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                 placeholder,
                 shouldChangeColor,
                 shouldShowInput,
+                shouldShowKeyboardHighlighting,
                 tags,
             ],
         );

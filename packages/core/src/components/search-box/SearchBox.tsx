@@ -127,6 +127,10 @@ export type SearchBoxProps = {
      */
     tagInputSettings?: TagInputSettings;
     /**
+     * Enables keyboard-only focus highlighting.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * A text that should be displayed if no results are found.
      */
     hintText?: string;
@@ -155,6 +159,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             shouldShowRoundImage,
             shouldShowToggleIcon = false,
             tagInputSettings,
+            shouldEnableKeyboardHighlighting = false,
         },
         ref,
     ) => {
@@ -787,6 +792,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                                 placeholder={placeholder}
                                 ref={tagInputRef}
                                 shouldAllowMultiple={tagInputSettings.shouldAllowMultiple}
+                                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                                 shouldPreventEnter
                                 tags={tagInputSettings.tags}
                             />
@@ -801,6 +807,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                                 placeholder={placeholder}
                                 ref={inputRef}
                                 rightElement={rightElement}
+                                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                                 value={value}
                             />
                         )}
@@ -849,6 +856,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 rightElement,
                 shouldHideFilterButtons,
                 shouldShowDropdown,
+                shouldEnableKeyboardHighlighting,
                 tagInputSettings,
                 uuid,
                 value,
