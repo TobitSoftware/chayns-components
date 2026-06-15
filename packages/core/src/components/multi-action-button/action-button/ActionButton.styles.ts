@@ -17,6 +17,7 @@ type StyledActionButtonProps = WithTheme<{
     $height: number;
     $statusType?: MultiActionButtonStatusType;
     $shouldUseContentWidth?: boolean;
+    $shouldShowKeyboardHighlighting?: boolean;
 }>;
 
 const pulse = (color1: string, color2: string) => keyframes`
@@ -191,6 +192,18 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
         css`
             &:hover:not(:disabled) {
                 background-color: ${`color-mix(in srgb, ${$backgroundColor || theme?.primary || '#000'} 85%, black)`};
+            }
+        `}
+
+    ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus-visible {
+                transition: none;
+                outline: solid 2px color-mix(in srgb, currentColor 70%, transparent);
+                box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.3);
+                outline-offset: 1px;
+                color: white;
             }
         `}
 `;

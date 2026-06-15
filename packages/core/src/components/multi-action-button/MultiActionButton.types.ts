@@ -228,6 +228,13 @@ export type MultiActionButtonProps = {
      */
     shouldUseFullWidth?: boolean;
     /**
+     * Enables keyboard-only focus highlighting for interactive action buttons.
+     * @description When enabled, focus ring styles are only shown for keyboard navigation.
+     * @default false
+     * @optional
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * Optional width override for the whole button.
      * @description Can be a fixed number or a MotionValue for external animations. When omitted,
      * the width is driven by the content unless `shouldUseFullWidth` is true.

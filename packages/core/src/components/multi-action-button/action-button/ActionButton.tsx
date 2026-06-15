@@ -1,5 +1,5 @@
 import { AnimatePresence } from 'motion/react';
-import React, { FC, MouseEvent } from 'react';
+import React, { FC, FocusEventHandler, MouseEvent } from 'react';
 import Icon from '../../icon/Icon';
 import Tooltip from '../../tooltip/Tooltip';
 import {
@@ -28,9 +28,12 @@ export type ActionButtonProps = {
     onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
+    onFocus?: FocusEventHandler<HTMLButtonElement>;
+    onBlur?: FocusEventHandler<HTMLButtonElement>;
     showLabel: boolean;
     shouldUseContentWidth: boolean;
     height: number;
+    shouldShowKeyboardHighlighting?: boolean;
 };
 
 /**
@@ -50,9 +53,12 @@ const ActionButton: FC<ActionButtonProps> = ({
     onClick,
     onMouseEnter,
     onMouseLeave,
+    onFocus,
+    onBlur,
     showLabel,
     shouldUseContentWidth,
     height,
+    shouldShowKeyboardHighlighting = false,
 }) => {
     const isPrimary = actionType === 'primary';
     const isSecondary = actionType === 'secondary';
@@ -106,9 +112,12 @@ const ActionButton: FC<ActionButtonProps> = ({
             $height={height}
             $statusType={action.status?.type}
             $shouldUseContentWidth={shouldUseContentWidth}
+            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
             onClick={onClick}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
+            onFocus={onFocus}
+            onBlur={onBlur}
             type="button"
         >
             {shouldShowDisabledReason && disabledReason ? (
