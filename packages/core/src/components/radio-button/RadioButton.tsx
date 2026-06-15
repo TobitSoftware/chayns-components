@@ -22,6 +22,7 @@ import {
     StyledRadioButtonWrapper,
 } from './RadioButton.styles';
 import { getHeightOfSingleTextLine } from '../../utils/calculate';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 export type RadioButtonProps = {
     /**
@@ -52,6 +53,10 @@ export type RadioButtonProps = {
      * Whether the RadioButton should be displayed centered to the label or at the top
      */
     shouldShowCentered?: boolean;
+    /**
+     * Enables keyboard-only focus highlighting.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const RadioButton: FC<RadioButtonProps> = ({
@@ -62,6 +67,7 @@ const RadioButton: FC<RadioButtonProps> = ({
     rightElement,
     shouldShowCentered = true,
     isDisabled = false,
+    shouldEnableKeyboardHighlighting = false,
 }) => {
     const {
         selectedRadioButtonId,
@@ -69,6 +75,7 @@ const RadioButton: FC<RadioButtonProps> = ({
         radioButtonRightElements,
         updateHasRightElement,
         radioButtonsCanBeUnchecked,
+        shouldEnableKeyboardHighlighting: shouldEnableKeyboardHighlightingFromGroup,
     } = useContext(RadioButtonGroupContext);
 
     const [internalIsChecked, setInternalIsChecked] = useState(false);
@@ -83,6 +90,13 @@ const RadioButton: FC<RadioButtonProps> = ({
     const isMarked = isInGroup ? selectedRadioButtonId === id : internalIsChecked;
 
     const uncheckable = radioButtonsCanBeUnchecked;
+
+    const effectiveShouldEnableKeyboardHighlighting =
+        shouldEnableKeyboardHighlightingFromGroup ?? shouldEnableKeyboardHighlighting;
+
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        effectiveShouldEnableKeyboardHighlighting && !isDisabled,
+    );
 
     useEffect(() => {
         if (radioButtonRootRef.current && !shouldShowCentered) {
@@ -123,6 +137,16 @@ const RadioButton: FC<RadioButtonProps> = ({
     const handleMouseLeave = () => {
         setIsHovered(false);
     };
+
+    const handleKeyDown = useCallback(
+        (event: React.KeyboardEvent<HTMLInputElement>) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                handleClick();
+            }
+        },
+        [handleClick],
+    );
 
     const radioButtonRightElementMargin: RadioButtonRightElementMargin = useMemo(() => {
         if (!radioButtonRightElements) {
@@ -183,7 +207,22 @@ const RadioButton: FC<RadioButtonProps> = ({
                 $isDisabled={isDisabled}
                 $radioButtonRightElementMargin={radioButtonRightElementMargin}
             >
-                <StyledRadioButtonWrapper ref={radioButtonRootRef}>
+                <StyledRadioButtonWrapper
+                    ref={radioButtonRootRef}
+                    $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                >
+                    <StyledRadioButtonCheckBox
+                        onClick={handleClick}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                        onKeyDown={handleKeyDown}
+                        disabled={isDisabled}
+                        $isDisabled={isDisabled}
+                        $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                        type="radio"
+                        checked={isMarked}
+                        onChange={() => {}}
+                    />
                     <StyledRadioButtonPseudoCheckBox
                         $isDisabled={isDisabled}
                         $isChecked={isMarked}
@@ -202,16 +241,6 @@ const RadioButton: FC<RadioButtonProps> = ({
                             $isDisabled={isDisabled}
                         />
                     </StyledRadioButtonPseudoCheckBox>
-                    <StyledRadioButtonCheckBox
-                        onClick={handleClick}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                        disabled={isDisabled}
-                        $isDisabled={isDisabled}
-                        type="radio"
-                        checked={isMarked}
-                        onChange={() => {}}
-                    />
                     <StyledLabelWrapper>
                         {label && (
                             <StyledRadioButtonLabel
@@ -245,6 +274,7 @@ const RadioButton: FC<RadioButtonProps> = ({
         [
             children,
             handleClick,
+            handleKeyDown,
             handleMouseEnter,
             isDisabled,
             isHovered,
@@ -254,6 +284,7 @@ const RadioButton: FC<RadioButtonProps> = ({
             radioButtonTop,
             rightElement,
             shouldShowCentered,
+            shouldShowKeyboardHighlighting,
             shouldShowRightElement,
         ],
     );
