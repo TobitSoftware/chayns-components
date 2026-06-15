@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import { motion } from 'motion/react';
-import { keyboardFocusHighlightingRingCss } from '../styles/keyboardFocusHighlighting.styles';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 export const StyledFilter = styled.div``;
 

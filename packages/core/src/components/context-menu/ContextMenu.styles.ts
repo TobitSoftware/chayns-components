@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../styles/keyboardFocusHighlighting.styles';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledContextMenuProps = WithTheme<{
     $isActive: boolean;

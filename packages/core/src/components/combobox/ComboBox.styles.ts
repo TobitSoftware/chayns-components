@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import { DropdownDirection } from '../../types/dropdown';
 import { ComboBoxProps, ComboBoxSize } from './ComboBox.types';
-import { keyboardFocusHighlightingRingCss } from '../styles/keyboardFocusHighlighting.styles';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledComboBoxProps = WithTheme<{
     $minWidth?: number;

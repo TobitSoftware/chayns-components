@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../../styles/keyboardFocusHighlighting.styles';
+import { keyboardFocusHighlightingRingCss } from '../../../utils/keyboardFocusHighlighting.styles';
 
 type StyledFilterButtonItemProps = WithTheme<{
     $size: FilterButtonSize;

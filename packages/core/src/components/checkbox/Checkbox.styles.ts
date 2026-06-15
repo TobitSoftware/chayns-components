@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import type { CSSProperties } from 'react';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../styles/keyboardFocusHighlighting.styles';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 import type { CheckboxProps } from './Checkbox';
 
 export const StyledCheckbox = styled.div`

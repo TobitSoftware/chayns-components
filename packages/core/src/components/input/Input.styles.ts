@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { InputSize } from './Input';
 import { CSSProperties } from 'react';
-import { keyboardFocusHighlightingRingCss } from '../styles/keyboardFocusHighlighting.styles';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledInputProps = WithTheme<{ $isDisabled?: boolean }>;
 

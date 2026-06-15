@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { CSSProperties } from 'react';
 import { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../styles/keyboardFocusHighlighting.styles';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledGroupedImageProps = WithTheme<{
     $height: CSSProperties['height'];

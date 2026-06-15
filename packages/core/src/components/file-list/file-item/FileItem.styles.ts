@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { keyboardFocusHighlightingRingCss } from '../../styles/keyboardFocusHighlighting.styles';
+import { keyboardFocusHighlightingRingCss } from '../../../utils/keyboardFocusHighlighting.styles';
 
 export const StyledFileItem = styled.div``;
 export const StyledFileItemIcon = styled.div`

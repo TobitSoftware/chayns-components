@@ -2,7 +2,7 @@ import type { HTMLMotionProps } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { Theme } from '../../color-scheme-provider/ColorSchemeProvider';
 import { CSSProperties } from 'react';
-import { keyboardFocusHighlightingRingCss } from '../../styles/keyboardFocusHighlighting.styles';
+import { keyboardFocusHighlightingRingCss } from '../../../utils/keyboardFocusHighlighting.styles';
 
 type StyledListItemProps = HTMLMotionProps<'div'> & {
     $backgroundColor?: CSSProperties['backgroundColor'];
