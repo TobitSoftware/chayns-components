@@ -50,6 +50,10 @@ export type SelectButtonProps = {
      */
     shouldShowSearch?: boolean;
     /**
+     * Enables keyboard-only focus highlighting.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * The title of the dialog.
      */
     title?: string;
@@ -68,6 +72,7 @@ const SelectButton: FC<SelectButtonProps> = ({
     shouldShowSearch,
     selectAllText,
     title,
+    shouldEnableKeyboardHighlighting = false,
 }) => {
     const itemList = useMemo(() => {
         const items: DialogSelectListItemType[] = [];
@@ -146,6 +151,7 @@ const SelectButton: FC<SelectButtonProps> = ({
                 isDisabled={isDisabled}
                 isSecondary
                 shouldShowTextAsRobotoMedium={false}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             >
                 {internalButtonText}
             </Button>

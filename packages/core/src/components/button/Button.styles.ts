@@ -74,12 +74,18 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
     user-select: none;
     width: fit-content;
 
-    ${({ $shouldShowKeyboardHighlighting }) =>
+    ${({ $shouldShowKeyboardHighlighting, $shouldShowAsSelectButton, $isSecondary }) =>
         $shouldShowKeyboardHighlighting &&
         css`
             &:focus-visible {
                 transition: none;
                 ${keyboardFocusHighlightingRingCss}
+
+                ${($shouldShowAsSelectButton || $isSecondary) &&
+                css`
+                    color: var(--chayns-color--text);
+                    outline: solid 2px color-mix(in srgb, white 70%, transparent);
+                `}
             }
         `}
 
