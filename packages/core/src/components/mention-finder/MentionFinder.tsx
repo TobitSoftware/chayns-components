@@ -68,6 +68,22 @@ export type MentionFinderProps = {
 
 const DRAG_CLOSE_THRESHOLD_IN_PX = 60;
 
+const isTextInputElement = (
+    element: HTMLElement | null,
+): element is HTMLInputElement | HTMLTextAreaElement => {
+    if (!element) {
+        return false;
+    }
+
+    const tagName = element.tagName.toLowerCase();
+
+    return (
+        (tagName === 'input' && (element as HTMLInputElement).type !== 'button') ||
+        tagName === 'textarea' ||
+        element.isContentEditable
+    );
+};
+
 const findTouchByIdentifier = (touchList: TouchList, identifier: number | null) => {
     if (identifier === null) {
         return null;
@@ -99,6 +115,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
 
     const popupRef = useRef<HTMLDivElement>(null);
     const listRef = useRef<HTMLDivElement>(null);
+    const inputElementRef = useRef<HTMLElement | null>(null);
     const dragStartYRef = useRef<number | null>(null);
     const hasTriggeredDragCloseRef = useRef(false);
     const activePointerIdRef = useRef<number | null>(null);
@@ -137,6 +154,12 @@ const MentionFinder: FC<MentionFinderProps> = ({
 
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
+            const targetElement = event.target as HTMLElement | null;
+
+            if (isTextInputElement(targetElement)) {
+                inputElementRef.current = targetElement;
+            }
+
             if ((event.key === 'ArrowUp' || event.key === 'ArrowDown') && shouldRenderPopup) {
                 event.preventDefault();
 
@@ -177,6 +200,10 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 event.preventDefault();
                 event.stopPropagation();
                 setShouldShowPopup(false);
+
+                window.requestAnimationFrame(() => {
+                    inputElementRef.current?.focus();
+                });
             }
         },
         [activeMember, filteredMembers, focusedIndex, fullMatch, onSelect, shouldRenderPopup],
@@ -232,6 +259,18 @@ const MentionFinder: FC<MentionFinderProps> = ({
         hasTriggeredDragCloseRef.current = false;
         setShouldShowPopup(true);
     }, [inputValue]);
+
+    useEffect(() => {
+        if (!shouldRenderPopup) {
+            return;
+        }
+
+        const activeElement = document.activeElement as HTMLElement | null;
+
+        if (isTextInputElement(activeElement)) {
+            inputElementRef.current = activeElement;
+        }
+    }, [shouldRenderPopup]);
 
     useEffect(() => {
         if (shouldShowPopup) {
