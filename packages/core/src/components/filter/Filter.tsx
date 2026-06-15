@@ -334,7 +334,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                         )}
                         {type === FilterType.ONLY_SEARCH && searchConfig && (
                             <StyledFilterSearch>
-                                <SearchInput // TODO: Add Keyboard Highlighting
+                                <SearchInput
                                     onActiveChange={(isActive) => {
                                         setIsSearchActive(isActive);
                                         setIsOpen(isActive);
@@ -343,6 +343,9 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                                     isActive={isSearchActive}
                                     value={searchConfig.searchValue}
                                     onChange={(ev) => searchConfig.onSearchChange(ev.target.value)}
+                                    shouldEnableKeyboardHighlighting={
+                                        shouldEnableKeyboardHighlighting
+                                    }
                                 />
                             </StyledFilterSearch>
                         )}
