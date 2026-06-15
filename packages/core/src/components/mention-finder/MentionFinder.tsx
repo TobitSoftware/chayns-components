@@ -12,6 +12,7 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { MentionFinderPopupAlignment } from '../../constants/mentionFinder';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import MentionFinderItem from './mention-finder-item/MentionFinderItem';
 import {
     StyledMentionFinder,
@@ -59,6 +60,10 @@ export type MentionFinderProps = {
      * Selector for the container to render the overlay into (defaults to closest dialog, thread, page provider or tapp)
      */
     overlayContainerSelector?: string;
+    /**
+     * Enables keyboard-only focus highlighting for mention items.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const DRAG_CLOSE_THRESHOLD_IN_PX = 60;
@@ -86,6 +91,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
     enableDragHandle = false,
     dragCloseThresholdInPx = DRAG_CLOSE_THRESHOLD_IN_PX,
     overlayContainerSelector,
+    shouldEnableKeyboardHighlighting = false,
 }) => {
     const [activeMember, setActiveMember] = useState(members[0]);
     const [focusedIndex, setFocusedIndex] = useState(0);
@@ -102,6 +108,10 @@ const MentionFinder: FC<MentionFinderProps> = ({
     const [dragOffset, setDragOffset] = useState(0);
     const [dragProgress, setDragProgress] = useState(0);
     const [overlayContainer, setOverlayContainer] = useState<Element | null>(null);
+
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
 
     const [fullMatch, searchString] = useMemo(() => {
         // eslint-disable-next-line no-irregular-whitespace
@@ -122,6 +132,8 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 : members,
         [members, searchString],
     );
+
+    const shouldRenderPopup = shouldShowPopup && !!fullMatch && filteredMembers.length > 0;
 
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
@@ -163,7 +175,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 }
             }
         },
-        [activeMember, filteredMembers, focusedIndex, fullMatch, onSelect],
+        [activeMember, filteredMembers, focusedIndex, fullMatch, onSelect, shouldRenderPopup],
     );
 
     const handleMemberClick = useCallback(
@@ -198,9 +210,16 @@ const MentionFinder: FC<MentionFinderProps> = ({
                     member={member}
                     onClick={handleMemberClick}
                     onHover={handleMemberHover}
+                    shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                 />
             )),
-        [activeMember, filteredMembers, handleMemberClick, handleMemberHover],
+        [
+            activeMember,
+            filteredMembers,
+            handleMemberClick,
+            handleMemberHover,
+            shouldShowKeyboardHighlighting,
+        ],
     );
 
     useEffect(() => {
@@ -456,8 +475,6 @@ const MentionFinder: FC<MentionFinderProps> = ({
         handleDragTouchEnd,
         handleDragTouchCancel,
     ]);
-
-    const shouldRenderPopup = shouldShowPopup && fullMatch && items.length > 0;
 
     useEffect(() => {
         if (!enableDragHandle || !shouldRenderPopup) {

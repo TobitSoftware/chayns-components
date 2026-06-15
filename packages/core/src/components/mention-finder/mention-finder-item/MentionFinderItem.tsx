@@ -13,9 +13,16 @@ export type MentionFinderItemProps = {
     member: MentionMember;
     onClick: (member: MentionMember) => void;
     onHover: (member: MentionMember) => void;
+    shouldShowKeyboardHighlighting?: boolean;
 };
 
-const MentionFinderItem: FC<MentionFinderItemProps> = ({ isActive, member, onClick, onHover }) => {
+const MentionFinderItem: FC<MentionFinderItemProps> = ({
+    isActive,
+    member,
+    onClick,
+    onHover,
+    shouldShowKeyboardHighlighting = false,
+}) => {
     const handleItemClick = useCallback(() => onClick(member), [member, onClick]);
 
     const handleItemMouseEnter = useCallback(() => onHover(member), [member, onHover]);
@@ -26,6 +33,7 @@ const MentionFinderItem: FC<MentionFinderItemProps> = ({ isActive, member, onCli
             onClick={handleItemClick}
             onMouseEnter={handleItemMouseEnter}
             $isActive={isActive}
+            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
         >
             <StyledMentionFinderItemImage
                 src={member.imageUrl}
