@@ -61,6 +61,10 @@ export type NumberInputProps = {
      * NOTE: If you pass a stringified number, it will be formatted to the selected format
      */
     value?: string;
+    /**
+     * Enables keyboard-only focus highlighting.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const NumberInput: FC<NumberInputProps> = ({
@@ -77,6 +81,7 @@ const NumberInput: FC<NumberInputProps> = ({
     onChange,
     shouldShowOnlyBottomBorder,
     minNumber = -Infinity,
+    shouldEnableKeyboardHighlighting = false,
 }) => {
     'use memo';
 
@@ -255,6 +260,7 @@ const NumberInput: FC<NumberInputProps> = ({
             isDisabled={isDisabled}
             isInvalid={typeof isInvalid === 'boolean' ? isInvalid : isValueInvalid}
             shouldShowCenteredContent={shouldShowOnlyBottomBorder}
+            shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
         />
     );
 };
