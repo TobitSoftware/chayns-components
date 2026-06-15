@@ -19,6 +19,7 @@ import {
     StyledListItemHead,
     StyledListItemHeadContent,
     StyledListItemHeadIndicator,
+    StyledListItemHeadLeftElements,
     StyledListItemHeadLeftWrapper,
     StyledListItemHeadSubtitle,
     StyledListItemHeadTitle,
@@ -61,6 +62,7 @@ type ListItemHeadProps = {
     cornerElement?: ReactNode;
     onTitleWidthChange: (titleWidth: number, titleMaxWidth: number) => void;
     onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
+    shouldAllowElementFocus?: boolean;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -91,6 +93,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     cornerElement,
     onTitleWidthChange,
     onImageError,
+    shouldAllowElementFocus = true,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
     const [titleMaxWidth, setTitleMaxWidth] = useState(0);
@@ -98,6 +101,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     const longPressTimeoutRef = useRef<number>();
     const resizeSkipRef = useRef(true);
+    const leftElementRef = useRef<HTMLDivElement>(null);
 
     const theme = useTheme() as Theme;
 
@@ -203,6 +207,46 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         return <StyledUnicodeIcon $icon={internalIcon} className={internalIconStyle} />;
     }, [theme.accordionIcon, theme.iconStyle]);
 
+    useEffect(() => {
+        const leftElementWrapper = leftElementRef.current;
+
+        if (!leftElementWrapper) {
+            return;
+        }
+
+        const focusableElements = Array.from(
+            leftElementWrapper.querySelectorAll<HTMLElement>(
+                'a[href], button, input, select, textarea, [tabindex], [contenteditable="true"]',
+            ),
+        );
+
+        focusableElements.forEach((element) => {
+            const currentElement = element;
+            const datasetKey = 'listItemLeftElementOriginalTabIndex';
+
+            if (shouldAllowElementFocus) {
+                const originalTabIndex = currentElement.dataset[datasetKey];
+
+                if (typeof originalTabIndex === 'string') {
+                    if (originalTabIndex === '') {
+                        currentElement.removeAttribute('tabindex');
+                    } else {
+                        currentElement.setAttribute('tabindex', originalTabIndex);
+                    }
+
+                    delete currentElement.dataset[datasetKey];
+                }
+            } else {
+                if (typeof currentElement.dataset[datasetKey] !== 'string') {
+                    currentElement.dataset[datasetKey] =
+                        currentElement.getAttribute('tabindex') ?? '';
+                }
+
+                currentElement.setAttribute('tabindex', '-1');
+            }
+        });
+    }, [leftElements, shouldAllowElementFocus]);
+
     return (
         <StyledListItemHead
             as={shouldDisableAnimation ? undefined : motion.div}
@@ -235,7 +279,11 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                         {isExpandable && !shouldHideIndicator && expandIcon}
                     </StyledListItemHeadIndicator>
                 )}
-                {leftElements}
+                {leftElements && (
+                    <StyledListItemHeadLeftElements ref={leftElementRef} data-left-element="true">
+                        {leftElements}
+                    </StyledListItemHeadLeftElements>
+                )}
                 {iconOrImageElement}
             </StyledListItemHeadLeftWrapper>
             <StyledListItemHeadContent
@@ -255,6 +303,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                             rightElements={rightElements}
                             onTitleWidthChange={handleTitleWidthChange}
                             onResize={handleShowTooltipResize}
+                            shouldAllowRightElementFocus={shouldAllowElementFocus}
                         />
                     </StyledListItemHeadTitle>
                     {shouldShowSubtitleRow && (
@@ -263,12 +312,16 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                                 subtitle={subtitle}
                                 isOpen={isOpen}
                                 rightElements={rightElements}
+                                shouldAllowRightElementFocus={shouldAllowElementFocus}
                             />
                         </StyledListItemHeadSubtitle>
                     )}
                 </LayoutGroup>
             </StyledListItemHeadContent>
-            <ListItemRightElement rightElements={rightElements} />
+            <ListItemRightElement
+                rightElements={rightElements}
+                shouldAllowFocus={shouldAllowElementFocus}
+            />
             {hoverItem && (
                 <StyledMotionListItemHeadHoverItemWrapper
                     className="beta-chayns-list-item-hover-item"

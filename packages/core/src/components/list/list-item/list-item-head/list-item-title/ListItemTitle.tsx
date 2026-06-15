@@ -17,6 +17,7 @@ type ListItemTitleProps = {
     isOpen: boolean;
     onResize?: (entries: ResizeObserverEntry[]) => void;
     onTitleWidthChange: (width: number) => void;
+    shouldAllowRightElementFocus?: boolean;
 };
 
 const ListItemTitle: FC<ListItemTitleProps> = ({
@@ -27,6 +28,7 @@ const ListItemTitle: FC<ListItemTitleProps> = ({
     isOpen,
     onResize,
     onTitleWidthChange,
+    shouldAllowRightElementFocus = true,
 }) => {
     const titleWrapperRef = useRef<HTMLDivElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -84,6 +86,46 @@ const ListItemTitle: FC<ListItemTitleProps> = ({
         return false;
     }, [topElement]);
 
+    useEffect(() => {
+        const topElementWrapper = topElementWrapperRef.current;
+
+        if (!topElementWrapper) {
+            return;
+        }
+
+        const focusableElements = Array.from(
+            topElementWrapper.querySelectorAll<HTMLElement>(
+                'a[href], button, input, select, textarea, [tabindex], [contenteditable="true"]',
+            ),
+        );
+
+        focusableElements.forEach((element) => {
+            const currentElement = element;
+            const datasetKey = 'listItemRightElementOriginalTabIndex';
+
+            if (shouldAllowRightElementFocus) {
+                const originalTabIndex = currentElement.dataset[datasetKey];
+
+                if (typeof originalTabIndex === 'string') {
+                    if (originalTabIndex === '') {
+                        currentElement.removeAttribute('tabindex');
+                    } else {
+                        currentElement.setAttribute('tabindex', originalTabIndex);
+                    }
+
+                    delete currentElement.dataset[datasetKey];
+                }
+            } else {
+                if (typeof currentElement.dataset[datasetKey] !== 'string') {
+                    currentElement.dataset[datasetKey] =
+                        currentElement.getAttribute('tabindex') ?? '';
+                }
+
+                currentElement.setAttribute('tabindex', '-1');
+            }
+        });
+    }, [shouldAllowRightElementFocus, topElement]);
+
     return (
         <StyledListItemTitle ref={wrapperRef}>
             <StyledListItemTitleLeftWrapper>
@@ -100,6 +142,7 @@ const ListItemTitle: FC<ListItemTitleProps> = ({
             </StyledListItemTitleLeftWrapper>
             {topElement && (
                 <StyledListItemTopRightElement
+                    data-right-element="true"
                     ref={topElementWrapperRef}
                     onClick={shouldPreventRightElementClick ? handlePreventClick : undefined}
                 >

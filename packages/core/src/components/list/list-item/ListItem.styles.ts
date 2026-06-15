@@ -2,6 +2,7 @@ import type { HTMLMotionProps } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { Theme } from '../../color-scheme-provider/ColorSchemeProvider';
 import { CSSProperties } from 'react';
+import { keyboardFocusHighlightingRingCss } from '../../styles/keyboardFocusHighlighting.styles';
 
 type StyledListItemProps = HTMLMotionProps<'div'> & {
     $backgroundColor?: CSSProperties['backgroundColor'];
@@ -113,6 +114,14 @@ export const StyledListItem = styled.div<StyledListItemProps>`
         css`
             padding-left: 26px;
         `}
+
+    &[data-should-show-keyboard-highlighting='true']:focus-visible {
+        transition: none;
+        ${keyboardFocusHighlightingRingCss}
+        color: var(--chayns-color--text);
+        outline: solid 2px color-mix(in srgb, white 70%, transparent);
+        overflow: visible;
+    }
 `;
 
 export const StyledListItemTooltip = styled.div`
