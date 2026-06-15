@@ -173,6 +173,10 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 if (fullMatch && activeMember) {
                     onSelect({ fullMatch, member: activeMember });
                 }
+            } else if (event.key === 'Escape' && shouldRenderPopup) {
+                event.preventDefault();
+                event.stopPropagation();
+                setShouldShowPopup(false);
             }
         },
         [activeMember, filteredMembers, focusedIndex, fullMatch, onSelect, shouldRenderPopup],
