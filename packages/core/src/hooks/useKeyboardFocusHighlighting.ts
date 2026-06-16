@@ -24,9 +24,16 @@ export const useKeyboardFocusHighlighting = (isEnabledProp?: boolean): boolean =
         };
 
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Tab') {
-                enableKeyboardNavigation();
+            // Ignore pure modifier presses, but treat any real keyboard interaction as keyboard navigation.
+            if (event.ctrlKey || event.altKey || event.metaKey) {
+                return;
             }
+
+            if (['Shift', 'Control', 'Alt', 'Meta'].includes(event.key)) {
+                return;
+            }
+
+            enableKeyboardNavigation();
         };
 
         const handleFocusIn = (event: FocusEvent) => {
