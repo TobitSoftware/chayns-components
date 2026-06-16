@@ -11,10 +11,14 @@ export type SharingContextMenuProps = {
      * The link that should be shared.
      */
     link: string;
-} & Omit<ContextMenuProps, 'items'>;
+    /**
+     * Enables keyboard-only focus highlighting for the context menu trigger.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+} & Omit<ContextMenuProps, 'items' | 'shouldEnableKeyboardHighlighting'>;
 
 const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
-    ({ link, children, ...contextMenuProps }, ref) => {
+    ({ link, children, shouldEnableKeyboardHighlighting = false, ...contextMenuProps }, ref) => {
         const isTouch = useIsTouch();
 
         const handleImageDownload = useCallback(() => {
@@ -122,7 +126,12 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
 
         return (
             // eslint-disable-next-line react/jsx-props-no-spreading
-            <ContextMenu items={contextMenuItems} ref={ref} {...contextMenuProps}>
+            <ContextMenu
+                items={contextMenuItems}
+                ref={ref}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                {...contextMenuProps}
+            >
                 {children}
             </ContextMenu>
         );
