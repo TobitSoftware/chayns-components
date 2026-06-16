@@ -316,6 +316,15 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             [handleHide],
         );
 
+        const handleDocumentKeyDown = useCallback(
+            (event: KeyboardEvent) => {
+                if (event.key === 'Escape') {
+                    handleHide();
+                }
+            },
+            [handleHide],
+        );
+
         useImperativeHandle(
             ref,
             () => ({
@@ -335,11 +344,21 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 window.addEventListener('blur', handleHide);
             }
 
+            document.addEventListener('keydown', handleDocumentKeyDown);
+
             return () => {
                 document.removeEventListener('click', handleDocumentClick, true);
                 window.removeEventListener('blur', handleHide);
+                document.removeEventListener('keydown', handleDocumentKeyDown);
             };
-        }, [handleDocumentClick, handleHide, isControlled, isPopupOpen, shouldBeOpen]);
+        }, [
+            handleDocumentClick,
+            handleDocumentKeyDown,
+            handleHide,
+            isControlled,
+            isPopupOpen,
+            shouldBeOpen,
+        ]);
 
         useEffect(() => {
             if (previousIsVisibleRef.current === isPopupOpen) {
