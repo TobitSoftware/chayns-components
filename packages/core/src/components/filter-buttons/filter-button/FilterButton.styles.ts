@@ -7,6 +7,7 @@ import { keyboardFocusHighlightingRingCss } from '../../../utils/keyboardFocusHi
 
 type StyledFilterButtonItemProps = WithTheme<{
     $size: FilterButtonSize;
+    $shape: FilterButtonItemShape;
     $isSelected: boolean;
     $isDisabled?: boolean;
     $shouldShowKeyboardHighlighting?: boolean;
@@ -33,11 +34,12 @@ export const StyledFilterButtonItem = styled.div<StyledFilterButtonItemProps>`
             `}
     }
 
-    ${({ $shouldShowKeyboardHighlighting }) =>
+    ${({ $shouldShowKeyboardHighlighting, $shape }) =>
         $shouldShowKeyboardHighlighting &&
         css`
             &:focus-visible {
-                ${keyboardFocusHighlightingRingCss}
+                ${keyboardFocusHighlightingRingCss};
+                border-radius: ${$shape === FilterButtonItemShape.Round ? 100 : 3}px;
             }
         `}
 `;

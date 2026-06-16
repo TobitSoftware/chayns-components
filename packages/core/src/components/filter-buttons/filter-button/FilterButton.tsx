@@ -105,6 +105,7 @@ const FilterButton: FC<FilterButtonProps> = ({
         () => (
             <StyledFilterButtonItem
                 ref={buttonRef}
+                $shape={shape}
                 $isSelected={isSelected}
                 $isDisabled={isDisabled}
                 $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
@@ -148,7 +149,6 @@ const FilterButton: FC<FilterButtonProps> = ({
             icons,
             isDisabled,
             isSelected,
-            onFocus,
             shape,
             shouldEnableKeyboardHighlighting,
             shouldShowKeyboardHighlighting,
