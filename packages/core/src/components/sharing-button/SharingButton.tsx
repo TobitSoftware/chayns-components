@@ -9,7 +9,7 @@ import { ButtonProps } from '../button/Button.types';
 
 export type SharingButtonProps = PropsWithChildren<
     Pick<SharingContextMenuProps, 'link' | 'alignment' | 'container'> &
-        Pick<ButtonProps, 'isDisabled'>
+        Pick<ButtonProps, 'isDisabled' | 'shouldEnableKeyboardHighlighting'>
 >;
 
 const SharingButton: FunctionComponent<SharingButtonProps> = ({
@@ -18,6 +18,7 @@ const SharingButton: FunctionComponent<SharingButtonProps> = ({
     container,
     children,
     isDisabled,
+    shouldEnableKeyboardHighlighting = false,
 }) => {
     const contextMenuRef = React.useRef<ContextMenuRef>(null);
     const [isButtonDisabled, setIsButtonDisabled] = React.useState(false);
@@ -45,7 +46,11 @@ const SharingButton: FunctionComponent<SharingButtonProps> = ({
                 onShow={handleOnShow}
                 onHide={handleOnHide}
             >
-                <Button onClick={handleButtonClick} isDisabled={isButtonDisabled || isDisabled}>
+                <Button
+                    onClick={handleButtonClick}
+                    isDisabled={isButtonDisabled || isDisabled}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                >
                     {children}
                 </Button>
             </SharingContextMenu>
