@@ -1,9 +1,17 @@
 import { setRefreshScrollEnabled } from 'chayns-api';
 import { AnimatePresence, useAnimate } from 'motion/react';
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+    FC,
+    KeyboardEventHandler,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { useElementSize } from '../../hooks/element';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { PopupRef } from '../../types/popup';
-import type { SliderButtonItem } from '../../types/slider-button';
 import { calculateBiggestWidth } from '../../utils/calculate';
 import { getNearestPoint, getThumbPosition } from '../../utils/sliderButton';
 import Icon from '../icon/Icon';
@@ -19,34 +27,9 @@ import {
 } from './SliderButton.styles';
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
-
-export type SliderButtonProps = {
-    /**
-     * Whether the button is disabled and cannot be clicked anymore.
-     */
-    isDisabled?: boolean;
-    /**
-     * Displays the button in the secondary style.
-     */
-    isSecondary?: boolean;
-    /**
-     * The items that should be displayed in the slider button.
-     */
-    items: SliderButtonItem[];
-    /**
-     * Function to be executed when a button is selected. The id of the selected button is passed as an argument.
-     * @param id
-     */
-    onChange?: (id: string) => void;
-    /**
-     * The id of the button that should be selected.
-     */
-    selectedButtonId?: string;
-    /**
-     *
-     */
-    isRounded?: boolean;
-};
+import { SliderButtonProps } from './SliderButton.types';
+import { useSliderButtonPopupKeyboard } from './useSliderButtonPopupKeyboard';
+import { useSliderButtonThumbKeyboard } from './useSliderButtonThumbKeyboard';
 
 const SliderButton: FC<SliderButtonProps> = ({
     isDisabled,
@@ -55,6 +38,7 @@ const SliderButton: FC<SliderButtonProps> = ({
     onChange,
     selectedButtonId,
     isRounded = false,
+    shouldEnableKeyboardHighlighting = false,
 }) => {
     const [dragRange, setDragRange] = useState({ left: 0, right: 0 });
     const [shownItemsCount, setShownItemsCount] = useState(items.length);
@@ -62,14 +46,19 @@ const SliderButton: FC<SliderButtonProps> = ({
     const [currentId, setCurrentId] = useState('');
     const [currentPopupId, setCurrentPopupId] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     const sliderButtonRef = useRef<HTMLDivElement>(null);
     const sliderButtonWrapperRef = useRef<HTMLDivElement>(null);
     const popupRef = useRef<PopupRef>(null);
+    const popupItemRefs = useRef<Array<HTMLDivElement | null>>([]);
 
     const [scope, animate] = useAnimate();
 
     const theme = useTheme() as Theme;
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting && !isDisabled,
+    );
 
     const initialItemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
     const elementSize = useElementSize(sliderButtonRef);
@@ -255,6 +244,35 @@ const SliderButton: FC<SliderButtonProps> = ({
         return color;
     }, [isSecondary, theme]);
 
+    const popupItems = useMemo(() => items.slice(shownItemsCount - 1), [items, shownItemsCount]);
+
+    const focusThumb = useCallback(() => {
+        const thumb = sliderButtonRef.current?.querySelector(
+            '[data-slider-button-thumb="true"]',
+        ) as HTMLDivElement | null;
+
+        thumb?.focus();
+    }, []);
+
+    const { handlePopupKeyDown } = useSliderButtonPopupKeyboard({
+        isPopupOpen,
+        popupItems,
+        currentPopupId,
+        shownItemsCount,
+        popupItemRefs,
+        popupRef,
+        focusThumb,
+        onSelectPopupItem: handleClick,
+    });
+
+    const { handleThumbKeyDown } = useSliderButtonThumbKeyboard({
+        currentId,
+        currentIndex,
+        shownItemsCount,
+        items,
+        onSelectThumbItem: handleClick,
+    });
+
     const buttons = useMemo(() => {
         if (items.length > shownItemsCount) {
             const newItems = items.slice(0, shownItemsCount - 1);
@@ -271,10 +289,16 @@ const SliderButton: FC<SliderButtonProps> = ({
                 </StyledSliderButtonItem>
             ));
 
-            const popupContent = otherItems.map(({ id, text }) => (
+            const popupContent = otherItems.map(({ id, text }, popupIndex) => (
                 <StyledSliderButtonPopupContentItem
                     key={`slider-button-${id}`}
                     onClick={() => handleClick(id, newItems.length)}
+                    onKeyDown={handlePopupKeyDown}
+                    ref={(element: HTMLDivElement | null) => {
+                        popupItemRefs.current[popupIndex] = element;
+                    }}
+                    tabIndex={0}
+                    role="button"
                     $isSelected={id === currentPopupId}
                 >
                     {text}
@@ -291,8 +315,15 @@ const SliderButton: FC<SliderButtonProps> = ({
                 >
                     <Popup
                         ref={popupRef}
+                        onShow={() => {
+                            setIsPopupOpen(true);
+                        }}
+                        onHide={() => {
+                            setIsPopupOpen(false);
+                            popupItemRefs.current = [];
+                        }}
                         content={
-                            <StyledSliderButtonPopupContent>
+                            <StyledSliderButtonPopupContent onKeyDown={handlePopupKeyDown}>
                                 {popupContent}
                             </StyledSliderButtonPopupContent>
                         }
@@ -313,7 +344,15 @@ const SliderButton: FC<SliderButtonProps> = ({
                 {text}
             </StyledSliderButtonItem>
         ));
-    }, [currentPopupId, handleClick, isSecondary, itemWidth, items, shownItemsCount]);
+    }, [
+        currentPopupId,
+        handleClick,
+        handlePopupKeyDown,
+        isSecondary,
+        itemWidth,
+        items,
+        shownItemsCount,
+    ]);
 
     const pseudoButtons = useMemo(() => {
         if (items.length > shownItemsCount) {
@@ -458,6 +497,15 @@ const SliderButton: FC<SliderButtonProps> = ({
                     onDragStart={handleDragStart}
                     onClick={() => handleClick(currentId, currentIndex)}
                     style={{ backgroundColor: thumbBackgroundColor }}
+                    data-slider-button-thumb="true"
+                    tabIndex={shouldEnableKeyboardHighlighting && !isDisabled ? 0 : undefined}
+                    role={shouldEnableKeyboardHighlighting && !isDisabled ? 'button' : undefined}
+                    onKeyDown={
+                        shouldEnableKeyboardHighlighting && !isDisabled
+                            ? handleThumbKeyDown
+                            : undefined
+                    }
+                    $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                 />
                 <StyledSliderButtonWrapper
                     $isRounded={isRounded}
@@ -483,12 +531,15 @@ const SliderButton: FC<SliderButtonProps> = ({
             handleClick,
             handleDragEnd,
             handleDragStart,
+            handleThumbKeyDown,
             isDisabled,
             isRounded,
             isSliderBigger,
             itemWidth,
             pseudoButtons,
             scope,
+            shouldEnableKeyboardHighlighting,
+            shouldShowKeyboardHighlighting,
             thumbBackgroundColor,
         ],
     );
