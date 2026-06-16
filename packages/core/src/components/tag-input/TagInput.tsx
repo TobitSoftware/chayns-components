@@ -20,6 +20,7 @@ import Badge from '../badge/Badge';
 import Icon from '../icon/Icon';
 import {
     StyledTagInput,
+    StyledTagInputTagFocusWrapper,
     StyledTagInputIconWrapper,
     StyledTagInputTagInput,
     StyledTagInputTagWrapper,
@@ -124,6 +125,9 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             shouldEnableKeyboardHighlighting,
         );
 
+        const shouldShowTagHighlighting =
+            shouldShowKeyboardHighlighting && typeof selectedId === 'string';
+
         useImperativeHandle(
             ref,
             () => ({
@@ -134,9 +138,96 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             [currentValue],
         );
 
+        const handleRemoveTag = useCallback(
+            (id: string, currentTags: Tag[]) => {
+                const removedTagIndex = currentTags.findIndex((tag) => tag.id === id);
+
+                if (typeof onRemove === 'function') {
+                    onRemove(id);
+                }
+
+                if (removedTagIndex < 0) {
+                    setSelectedId(undefined);
+                    return;
+                }
+
+                setSelectedId(
+                    currentTags[removedTagIndex + 1]?.id ?? currentTags[removedTagIndex - 1]?.id,
+                );
+            },
+            [onRemove],
+        );
+
         const handleKeyDown = useCallback(
-            (event: KeyboardEvent) => {
-                if (event.key === 'Enter' && !shouldPreventEnter) {
+            (event: KeyboardEvent<HTMLInputElement>) => {
+                const visibleTags = shouldAllowMultiple ? (tags ?? []) : (tags ?? []).slice(0, 1);
+                const selectedTagIndex = visibleTags.findIndex((tag) => tag.id === selectedId);
+                const selectedTag =
+                    selectedTagIndex >= 0 ? visibleTags[selectedTagIndex] : undefined;
+                const isSpaceKey = event.key === ' ';
+                const isEnterKey = event.key === 'Enter';
+                const isDeleteKey = event.key === 'Delete';
+
+                if (currentValue === '' && visibleTags.length > 0) {
+                    if (event.key === 'ArrowLeft') {
+                        event.preventDefault();
+
+                        if (!selectedId) {
+                            setSelectedId(visibleTags[visibleTags.length - 1]?.id);
+                            return;
+                        }
+
+                        if (selectedTagIndex <= 0) {
+                            setSelectedId(undefined);
+                            return;
+                        }
+
+                        setSelectedId(visibleTags[selectedTagIndex - 1]?.id);
+                        return;
+                    }
+
+                    if (event.key === 'ArrowRight') {
+                        event.preventDefault();
+
+                        if (!selectedId || selectedTagIndex < 0) {
+                            return;
+                        }
+
+                        if (selectedTagIndex >= visibleTags.length - 1) {
+                            setSelectedId(undefined);
+                            return;
+                        }
+
+                        setSelectedId(visibleTags[selectedTagIndex + 1]?.id);
+                        return;
+                    }
+
+                    if (event.key === 'Home') {
+                        event.preventDefault();
+                        setSelectedId(visibleTags[0]?.id);
+                        return;
+                    }
+
+                    if (event.key === 'End') {
+                        event.preventDefault();
+                        setSelectedId(visibleTags[visibleTags.length - 1]?.id);
+                        return;
+                    }
+
+                    if (isEnterKey || isSpaceKey || event.key === 'Backspace' || isDeleteKey) {
+                        event.preventDefault();
+
+                        if (!selectedTag) {
+                            setSelectedId(visibleTags[visibleTags.length - 1]?.id);
+                            return;
+                        }
+
+                        handleRemoveTag(selectedTag.id, visibleTags);
+                        return;
+                    }
+                }
+
+                if (isEnterKey && !shouldPreventEnter) {
                     setCurrentValue((prevValue) => {
                         if (!prevValue) {
                             return '';
@@ -167,41 +258,11 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                         return '';
                     });
                 }
-
-                if (event.key === 'Backspace' && currentValue === '') {
-                    if (!selectedId) {
-                        if (!tags) {
-                            return;
-                        }
-
-                        const newSelectedId = tags[tags.length - 1]?.id;
-
-                        setSelectedId(newSelectedId);
-
-                        return;
-                    }
-
-                    if (!tags) {
-                        return;
-                    }
-
-                    const removedId = tags[tags.length - 1]?.id;
-
-                    if (!removedId) {
-                        return;
-                    }
-
-                    if (typeof onRemove === 'function') {
-                        onRemove(removedId);
-                    }
-
-                    setSelectedId(undefined);
-                }
             },
             [
                 currentValue,
                 onAdd,
-                onRemove,
+                handleRemoveTag,
                 selectedId,
                 shouldAllowMultiple,
                 shouldPreventEnter,
@@ -226,11 +287,9 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
 
         const handleIconClick = useCallback(
             (id: string) => {
-                if (typeof onRemove === 'function') {
-                    onRemove(id);
-                }
+                handleRemoveTag(id, shouldAllowMultiple ? (tags ?? []) : (tags ?? []).slice(0, 1));
             },
-            [onRemove],
+            [handleRemoveTag, shouldAllowMultiple, tags],
         );
 
         const content = useMemo(() => {
@@ -242,35 +301,49 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
 
             (shouldAllowMultiple ? tags : tags.slice(0, 1)).forEach(
                 ({ text, id, rightElement }) => {
-                    items.push(
-                        <Badge
-                            key={`tag-input-${id}`}
-                            backgroundColor={
-                                id === selectedId
-                                    ? ((theme['206'] as string) ?? undefined)
-                                    : undefined
-                            }
-                        >
-                            <StyledTagInputTagWrapper>
-                                <StyledTagInputTagWrapperText>{text}</StyledTagInputTagWrapperText>
-                                {rightElement}
-                                <Icon
-                                    icons={['ts-wrong']}
-                                    onClick={(event) => {
-                                        event.preventDefault();
-                                        event.stopPropagation();
+                    const isSelected = id === selectedId;
 
-                                        handleIconClick(id);
-                                    }}
-                                />
-                            </StyledTagInputTagWrapper>
-                        </Badge>,
+                    items.push(
+                        <StyledTagInputTagFocusWrapper
+                            $isSelected={isSelected}
+                            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                            key={`tag-input-${id}`}
+                        >
+                            <Badge
+                                backgroundColor={
+                                    isSelected ? ((theme['206'] as string) ?? undefined) : undefined
+                                }
+                            >
+                                <StyledTagInputTagWrapper>
+                                    <StyledTagInputTagWrapperText>
+                                        {text}
+                                    </StyledTagInputTagWrapperText>
+                                    {rightElement}
+                                    <Icon
+                                        icons={['ts-wrong']}
+                                        onClick={(event) => {
+                                            event.preventDefault();
+                                            event.stopPropagation();
+
+                                            handleIconClick(id);
+                                        }}
+                                    />
+                                </StyledTagInputTagWrapper>
+                            </Badge>
+                        </StyledTagInputTagFocusWrapper>,
                     );
                 },
             );
 
             return items;
-        }, [tags, shouldAllowMultiple, selectedId, theme, handleIconClick]);
+        }, [
+            tags,
+            shouldAllowMultiple,
+            selectedId,
+            shouldShowKeyboardHighlighting,
+            theme,
+            handleIconClick,
+        ]);
 
         const shouldShowInput = useMemo(
             () => shouldAllowMultiple || (tags?.length ?? 0) < 1,
@@ -282,6 +355,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                 <StyledTagInput
                     $shouldChangeColor={shouldChangeColor}
                     $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                    $shouldShowTagHighlighting={shouldShowTagHighlighting}
                 >
                     {leftElement && (
                         <StyledTagInputIconWrapper>{leftElement}</StyledTagInputIconWrapper>
@@ -312,6 +386,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                 shouldChangeColor,
                 shouldShowInput,
                 shouldShowKeyboardHighlighting,
+                shouldShowTagHighlighting,
                 tags,
             ],
         );

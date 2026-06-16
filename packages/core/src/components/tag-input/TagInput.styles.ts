@@ -5,7 +5,13 @@ import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighl
 type StyledTagInputProps = WithTheme<{
     $shouldChangeColor: boolean;
     $shouldShowKeyboardHighlighting: boolean;
+    $shouldShowTagHighlighting: boolean;
 }>;
+
+type StyledTagInputTagFocusWrapperProps = {
+    $isSelected: boolean;
+    $shouldShowKeyboardHighlighting: boolean;
+};
 
 export const StyledTagInput = styled.div<StyledTagInputProps>`
     display: flex;
@@ -18,8 +24,9 @@ export const StyledTagInput = styled.div<StyledTagInputProps>`
         theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
     border: 1px solid rgba(160, 160, 160, 0.3);
 
-    ${({ $shouldShowKeyboardHighlighting }) =>
+    ${({ $shouldShowKeyboardHighlighting, $shouldShowTagHighlighting }) =>
         $shouldShowKeyboardHighlighting &&
+        !$shouldShowTagHighlighting &&
         css`
             &:focus-within {
                 transition: none;
@@ -32,6 +39,24 @@ export const StyledTagInputTagWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 4px;
+`;
+
+export const StyledTagInputTagFocusWrapper = styled.div<StyledTagInputTagFocusWrapperProps>`
+    display: inline-flex;
+
+    ${({ $isSelected, $shouldShowKeyboardHighlighting }) =>
+        $isSelected &&
+        $shouldShowKeyboardHighlighting &&
+        css`
+            ${StyledTagInput}:focus-within & > .beta-chayns-badge {
+                transition: none;
+                ${keyboardFocusHighlightingRingCss}
+                border-radius: 999px;
+                outline-offset: 0;
+                color: inherit;
+                outline: solid 2px color-mix(in srgb, white 70%, transparent);
+            }
+        `}
 `;
 
 export const StyledTagInputTagWrapperText = styled.p`

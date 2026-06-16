@@ -29,3 +29,8 @@ const Template: StoryFn<typeof TagInput> = (args) => {
 };
 
 export const General = Template.bind({});
+
+export const WithKeyboardHighlighting = Template.bind({});
+WithKeyboardHighlighting.args = {
+    shouldEnableKeyboardHighlighting: true,
+};

@@ -12,7 +12,14 @@ const Component: FC = () => {
         setTags((prevState) => prevState.filter((tag) => tag.id !== id));
     };
 
-    return <TagInput tags={tags} onAdd={handleAdd} onRemove={handleRemove} />;
+    return (
+        <TagInput
+            shouldEnableKeyboardHighlighting
+            tags={tags}
+            onAdd={handleAdd}
+            onRemove={handleRemove}
+        />
+    );
 };
 
 Component.displayName = 'Component';
