@@ -1,4 +1,5 @@
-import React, { FC, MouseEventHandler, useCallback, useRef } from 'react';
+import React, { FC, KeyboardEventHandler, MouseEventHandler, useCallback, useRef } from 'react';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import Icon from '../icon/Icon';
 import {
     StyledSharingBar,
@@ -25,20 +26,61 @@ export type SharingBarProps = {
      * The alignment of the sharing options.
      */
     popupAlignment: ContextMenuAlignment;
+    /**
+     * Enables keyboard-only focus highlighting and keyboard interaction.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
-const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment, container }) => {
+const SharingBar: FC<SharingBarProps> = ({
+    label,
+    link,
+    popupAlignment,
+    container,
+    shouldEnableKeyboardHighlighting = false,
+}) => {
     const contextMenuRef = useRef<{ hide: VoidFunction; show: VoidFunction }>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
 
-    const handleSharingBarClick = useCallback<MouseEventHandler<HTMLDivElement>>((event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
+    const showContextMenu = useCallback(() => {
         contextMenuRef.current?.show();
     }, []);
 
+    const handleSharingBarClick = useCallback<MouseEventHandler<HTMLDivElement>>(
+        (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            showContextMenu();
+        },
+        [showContextMenu],
+    );
+
+    const handleKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (event.key !== 'Enter' && event.key !== ' ') {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            showContextMenu();
+        },
+        [showContextMenu],
+    );
+
     return (
-        <StyledSharingBar onClick={handleSharingBarClick}>
+        <StyledSharingBar
+            onClick={handleSharingBarClick}
+            onKeyDown={shouldEnableKeyboardHighlighting ? handleKeyDown : undefined}
+            tabIndex={shouldEnableKeyboardHighlighting ? 0 : undefined}
+            role={shouldEnableKeyboardHighlighting ? 'button' : undefined}
+            data-should-show-keyboard-highlighting={
+                shouldShowKeyboardHighlighting ? 'true' : undefined
+            }
+        >
             <StyledSharingBarIconWrapper>
                 <Icon icons={['fa-solid fa-share-nodes']} />
             </StyledSharingBarIconWrapper>
