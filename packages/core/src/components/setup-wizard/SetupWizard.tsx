@@ -53,7 +53,7 @@ export type SetupWizardProps = {
 };
 
 const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(
-    ({ children, isWrapped, shouldEnableKeyboardHighlighting = false }, ref) => {
+    ({ children, isWrapped, shouldEnableKeyboardHighlighting }, ref) => {
         const [selectedId, setSelectedId] = useState<SetupWizardContextProps['selectedId']>(0);
         const [activeId, setActiveId] = useState<SetupWizardContextProps['activeId']>(0);
         const [allIds, setAllIds] = useState<number[]>([]);

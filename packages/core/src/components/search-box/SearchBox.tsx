@@ -159,7 +159,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             shouldShowRoundImage,
             shouldShowToggleIcon = false,
             tagInputSettings,
-            shouldEnableKeyboardHighlighting = false,
+            shouldEnableKeyboardHighlighting,
         },
         ref,
     ) => {

@@ -213,7 +213,7 @@ const Input = forwardRef<InputRef, InputProps>(
             id,
             shouldShowTransparentBackground = false,
             autoComplete,
-            shouldEnableKeyboardHighlighting = false,
+            shouldEnableKeyboardHighlighting,
         },
         ref,
     ) => {

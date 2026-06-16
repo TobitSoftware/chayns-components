@@ -95,7 +95,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             onRemove,
             placeholder,
             shouldAllowMultiple = true,
-            shouldEnableKeyboardHighlighting = false,
+            shouldEnableKeyboardHighlighting,
             shouldPreventEnter,
             tags,
         },

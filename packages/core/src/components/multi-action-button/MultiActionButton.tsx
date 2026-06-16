@@ -98,7 +98,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     secondaryContextMenu,
     shouldAutoCollapse = false,
     shouldUseFullWidth,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
     width,
 }) => {
     const [isExtendedByClick, setIsExtendedByClick] = useState(false);

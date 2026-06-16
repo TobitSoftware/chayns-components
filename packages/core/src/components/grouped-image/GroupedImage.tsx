@@ -72,7 +72,7 @@ const GroupedImage: FC<GroupedImageProps> = ({
     shouldShowRoundImage = false,
     cornerElement,
     onImageError,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const hasCornerImage = Boolean(cornerImage);
     const hasCornerElement = Boolean(cornerElement);

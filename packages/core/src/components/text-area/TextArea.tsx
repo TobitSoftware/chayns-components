@@ -101,7 +101,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             maxHeight = '120px',
             minHeight = '41px',
             colors,
-            shouldEnableKeyboardHighlighting = false,
+            shouldEnableKeyboardHighlighting,
         },
         ref,
     ) => {

@@ -68,6 +68,7 @@ const PageProvider: FC<PageProviderProps> = ({
     shouldUseUsableHeight = false,
     iconColor,
     customVariables,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const { runtimeEnvironment } = useEnvironment();
 
@@ -95,6 +96,7 @@ const PageProvider: FC<PageProviderProps> = ({
                 style={shouldUseUsableHeight ? { ...style, height: '100%' } : style}
                 customVariables={customVariables}
                 iconColor={iconColor}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             >
                 {children}
             </ColorSchemeProvider>

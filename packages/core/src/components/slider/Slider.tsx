@@ -190,7 +190,7 @@ const Slider: FC<SliderProps> = ({
     onChange,
     onSelect,
     shouldHighlightSteps = false,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
     shouldShowThumbLabel = false,
     step = 1,
     thumbLabelFormatter,

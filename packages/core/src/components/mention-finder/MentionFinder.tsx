@@ -107,7 +107,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
     enableDragHandle = false,
     dragCloseThresholdInPx = DRAG_CLOSE_THRESHOLD_IN_PX,
     overlayContainerSelector,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const [activeMember, setActiveMember] = useState(members[0]);
     const [focusedIndex, setFocusedIndex] = useState(0);

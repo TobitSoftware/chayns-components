@@ -81,7 +81,7 @@ const NumberInput: FC<NumberInputProps> = ({
     onChange,
     shouldShowOnlyBottomBorder,
     minNumber = -Infinity,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     'use memo';
 

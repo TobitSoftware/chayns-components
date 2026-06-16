@@ -67,7 +67,7 @@ const RadioButton: FC<RadioButtonProps> = ({
     rightElement,
     shouldShowCentered = true,
     isDisabled = false,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const {
         selectedRadioButtonId,

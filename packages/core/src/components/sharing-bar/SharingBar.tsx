@@ -37,7 +37,7 @@ const SharingBar: FC<SharingBarProps> = ({
     link,
     popupAlignment,
     container,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const contextMenuRef = useRef<{ hide: VoidFunction; show: VoidFunction }>(null);
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(

@@ -62,7 +62,7 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
             onSubscribe,
             buttonText,
             isDisabled,
-            shouldEnableKeyboardHighlighting = false,
+            shouldEnableKeyboardHighlighting,
         },
         ref,
     ) => {

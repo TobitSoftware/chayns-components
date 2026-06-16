@@ -34,7 +34,7 @@ const HighlightSliderItem: FC<HighlightSliderItemProps> = ({
     onClick,
     duration,
     isInteractive,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
     shouldShowKeyboardHighlighting = false,
 }) => {
     const uuid = useUuid();

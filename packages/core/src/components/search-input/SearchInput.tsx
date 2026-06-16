@@ -84,7 +84,7 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
             shouldUseAbsolutePositioning = false,
             size = InputSize.Medium,
             value,
-            shouldEnableKeyboardHighlighting = false,
+            shouldEnableKeyboardHighlighting,
             width: widthValue,
         },
         ref,

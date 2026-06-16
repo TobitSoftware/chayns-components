@@ -72,7 +72,7 @@ const SelectButton: FC<SelectButtonProps> = ({
     shouldShowSearch,
     selectAllText,
     title,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const itemList = useMemo(() => {
         const items: DialogSelectListItemType[] = [];

@@ -1,10 +1,19 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return */
+import { useContext, useEffect, useState } from 'react';
+import {
+    ColorSchemeContext,
+    type ColorSchemeContextProps,
+} from '../components/color-scheme-provider/ColorSchemeProvider';
 
 /**
  * Tracks whether focus highlighting should be visible for keyboard navigation.
  * Keyboard mode is enabled via Tab and reset by mouse interaction.
  */
-export const useKeyboardFocusHighlighting = (isEnabled: boolean): boolean => {
+export const useKeyboardFocusHighlighting = (isEnabledProp?: boolean): boolean => {
+    const colorScheme = useContext<ColorSchemeContextProps | undefined>(ColorSchemeContext);
+    const contextIsEnabled: boolean = colorScheme?.shouldEnableKeyboardHighlighting === true;
+    const isEnabled: boolean = isEnabledProp === true || contextIsEnabled;
+
     const [isKeyboardNavigation, setIsKeyboardNavigation] = useState(false);
 
     useEffect(() => {
@@ -56,5 +65,5 @@ export const useKeyboardFocusHighlighting = (isEnabled: boolean): boolean => {
         };
     }, [isEnabled]);
 
-    return isEnabled && isKeyboardNavigation;
+    return Boolean(isEnabled && isKeyboardNavigation);
 };

@@ -18,7 +18,7 @@ const SharingButton: FunctionComponent<SharingButtonProps> = ({
     container,
     children,
     isDisabled,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const contextMenuRef = React.useRef<ContextMenuRef>(null);
     const [isButtonDisabled, setIsButtonDisabled] = React.useState(false);

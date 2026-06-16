@@ -43,7 +43,7 @@ const HighlightSlider: FC<HighlightSliderProps> = ({
     onIndexChange,
     currentIndex,
     duration = 10,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const isInteractive = typeof onIndexChange === 'function';
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(

@@ -38,7 +38,7 @@ const SliderButton: FC<SliderButtonProps> = ({
     onChange,
     selectedButtonId,
     isRounded = false,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const [dragRange, setDragRange] = useState({ left: 0, right: 0 });
     const [shownItemsCount, setShownItemsCount] = useState(items.length);

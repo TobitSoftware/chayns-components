@@ -18,7 +18,7 @@ export type SharingContextMenuProps = {
 } & Omit<ContextMenuProps, 'items' | 'shouldEnableKeyboardHighlighting'>;
 
 const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
-    ({ link, children, shouldEnableKeyboardHighlighting = false, ...contextMenuProps }, ref) => {
+    ({ link, children, shouldEnableKeyboardHighlighting, ...contextMenuProps }, ref) => {
         const isTouch = useIsTouch();
 
         const handleImageDownload = useCallback(() => {

@@ -49,11 +49,7 @@ type ListProps = {
     shouldEnableKeyboardHighlighting?: boolean;
 };
 
-const List: FC<ListProps> = ({
-    children,
-    isWrapped = false,
-    shouldEnableKeyboardHighlighting = false,
-}) => {
+const List: FC<ListProps> = ({ children, isWrapped = false, shouldEnableKeyboardHighlighting }) => {
     'use memo';
 
     const [openItemUuid, setOpenItemUuid] = useState<IListContext['openItemUuid']>(undefined);

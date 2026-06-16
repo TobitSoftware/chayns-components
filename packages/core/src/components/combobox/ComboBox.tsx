@@ -66,7 +66,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             shouldShowTransparentBackground = false,
             inputValue,
             shouldDropDownUseMaxItemWidth = false,
-            shouldEnableKeyboardHighlighting = false,
+            shouldEnableKeyboardHighlighting,
         },
         ref,
     ) => {
