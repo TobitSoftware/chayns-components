@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { TextAreaProps } from './TextArea';
 import { motion } from 'motion/react';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledTextAreaProps = WithTheme<{ $isDisabled?: boolean }>;
 
@@ -30,6 +31,13 @@ export const StyledTextAreaContentWrapper = styled.div<StyledTextAreaContentWrap
             $borderColor ?? ($isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)')};
     width: 100%;
     display: flex;
+
+    &[data-should-show-keyboard-highlighting='true'] {
+        &:focus-within {
+            transition: none;
+            ${keyboardFocusHighlightingRingCss}
+        }
+    }
 `;
 
 export const StyledTextAreaContent = styled.div`
