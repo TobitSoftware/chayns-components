@@ -82,6 +82,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         );
         const shouldShowWrapperKeyboardHighlighting =
             shouldShowKeyboardHighlighting && shouldUseFocusableWrapper;
+        const shouldUseKeyboardFocusableWrapper = shouldUseFocusableWrapper && !shouldDisableClick;
 
         useEffect(() => {
             if (isContentShown) {
@@ -447,10 +448,10 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     onContextMenu={handleContextMenu}
                     onKeyDown={handleKeyDown}
                     ref={contextMenuRef}
-                    tabIndex={shouldUseFocusableWrapper ? 0 : undefined}
-                    role={shouldUseFocusableWrapper ? 'button' : undefined}
-                    aria-haspopup={shouldUseFocusableWrapper ? 'menu' : undefined}
-                    aria-expanded={shouldUseFocusableWrapper ? isContentShown : undefined}
+                    tabIndex={shouldUseKeyboardFocusableWrapper ? 0 : undefined}
+                    role={shouldUseKeyboardFocusableWrapper ? 'button' : undefined}
+                    aria-haspopup={shouldUseKeyboardFocusableWrapper ? 'menu' : undefined}
+                    aria-expanded={shouldUseKeyboardFocusableWrapper ? isContentShown : undefined}
                     style={style}
                 >
                     {children}

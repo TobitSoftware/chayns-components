@@ -60,6 +60,10 @@ const SharingBar: FC<SharingBarProps> = ({
 
     const handleKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
         (event) => {
+            if (event.currentTarget !== event.target) {
+                return;
+            }
+
             if (event.key !== 'Enter' && event.key !== ' ') {
                 return;
             }
@@ -89,6 +93,7 @@ const SharingBar: FC<SharingBarProps> = ({
                 ref={contextMenuRef}
                 alignment={popupAlignment}
                 container={container}
+                shouldDisableClick
             >
                 {null}
             </SharingContextMenu>
