@@ -27,6 +27,10 @@ export type SignatureProps = {
      */
     isDisabled?: boolean;
     /**
+     * Enables keyboard-only focus highlighting for interactive controls.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * Function to be executed when the signature is edited.
      */
     onEdit?: (signatureUrl: string) => void;
@@ -50,7 +54,18 @@ interface SignatureDialogResult {
 }
 
 const Signature = forwardRef<SignatureRef, SignatureProps>(
-    ({ onEdit, onRemove, onUnsubscribe, onSubscribe, buttonText, isDisabled }, ref) => {
+    (
+        {
+            onEdit,
+            onRemove,
+            onUnsubscribe,
+            onSubscribe,
+            buttonText,
+            isDisabled,
+            shouldEnableKeyboardHighlighting = false,
+        },
+        ref,
+    ) => {
         const [signatureUrl, setSignatureUrl] = useState<string | undefined>(undefined);
         const [hasSubscribed, setHasSubscribed] = useState(false);
 
@@ -140,14 +155,23 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
         return (
             <StyledSignature>
                 {!hasSubscribed ? (
-                    <Button isDisabled={isDisabled} onClick={handleClick}>
+                    <Button
+                        isDisabled={isDisabled}
+                        onClick={handleClick}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                    >
                         {buttonText}
                     </Button>
                 ) : (
                     <StyledSignatureImageWrapper>
                         <StyledSignatureImage src={signatureUrl} />
                         <StyledSignatureDeleteIconWrapper>
-                            <Icon icons={['ts-wrong']} size={20} onClick={handleUnSubscribe} />
+                            <Icon
+                                icons={['ts-wrong']}
+                                size={20}
+                                onClick={handleUnSubscribe}
+                                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                            />
                         </StyledSignatureDeleteIconWrapper>
                     </StyledSignatureImageWrapper>
                 )}
