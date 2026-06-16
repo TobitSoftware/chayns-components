@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import { ClampPosition } from '../../types/truncation';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 export const StyledTruncation = styled.div`
     position: relative;
@@ -43,7 +44,29 @@ export const StyledTruncationClampWrapper = styled.div<StyledTruncationClampWrap
     }}
 `;
 
+type StyledTruncationClampProps = {
+    $shouldShowKeyboardHighlighting: boolean;
+};
+
+export const StyledTruncationClampFocusWrapper = styled.div<StyledTruncationClampProps>`
+    display: inline-block;
+    border-radius: 3px;
+
+    ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus-within {
+                transition: none;
+                ${keyboardFocusHighlightingRingCss};
+                color: inherit;
+                outline: 2px solid rgba(255, 255, 255, 0.7);
+            }
+        `}
+`;
+
 export const StyledTruncationClamp = styled.a`
     cursor: pointer;
     z-index: 2;
+    display: inline-block;
+    line-height: 1.2;
 `;
