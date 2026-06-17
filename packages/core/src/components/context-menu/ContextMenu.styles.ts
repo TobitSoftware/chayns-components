@@ -1,6 +1,9 @@
 import styled, { css } from 'styled-components';
 import { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
+import {
+    keyboardFocusHighlightingCircleRingCss,
+    keyboardFocusHighlightingRingCss,
+} from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledContextMenuProps = WithTheme<{
     $isActive: boolean;
@@ -13,6 +16,7 @@ export const StyledContextMenu = styled.span<StyledContextMenuProps>`
     align-items: center;
     cursor: pointer;
     display: flex;
+    position: relative;
 
     ${({ $isActive, $shouldUseDefaultTriggerStyles, theme }: StyledContextMenuProps) =>
         $shouldUseDefaultTriggerStyles
@@ -40,16 +44,43 @@ export const StyledContextMenu = styled.span<StyledContextMenuProps>`
             }
         `}
 
-    ${({ $shouldShowWrapperKeyboardHighlighting }: StyledContextMenuProps) =>
+    ${({
+        $shouldShowWrapperKeyboardHighlighting,
+        $shouldUseDefaultTriggerStyles,
+    }: StyledContextMenuProps) =>
         $shouldShowWrapperKeyboardHighlighting &&
-        css`
-            &:focus-visible {
-                outline: none;
-                box-shadow: none;
-            }
+        ($shouldUseDefaultTriggerStyles
+            ? css`
+                  &:focus-visible {
+                      outline: none;
+                      box-shadow: none;
+                  }
 
-            &:focus-visible > * {
-                ${keyboardFocusHighlightingRingCss}
-            }
-        `}
+                  &:focus-visible > .beta-chayns-icon {
+                      position: relative;
+                      color: inherit;
+                  }
+
+                  &:focus-visible > .beta-chayns-icon::after {
+                      ${keyboardFocusHighlightingCircleRingCss};
+                      content: '';
+                      position: absolute;
+                      top: 50%;
+                      left: 50%;
+                      width: calc(100% + 8px);
+                      height: calc(100% + 8px);
+                      transform: translate(-50%, -50%);
+                      pointer-events: none;
+                  }
+              `
+            : css`
+                  &:focus-visible {
+                      outline: none;
+                      box-shadow: none;
+                  }
+
+                  &:focus-visible > * {
+                      ${keyboardFocusHighlightingRingCss}
+                  }
+              `)}
 `;
