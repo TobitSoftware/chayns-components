@@ -230,6 +230,8 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 const isContextMenuShortcut =
                     event.key === 'ContextMenu' || (event.key === 'F10' && event.shiftKey);
+                const isActivationKey =
+                    event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar';
 
                 if (isContextMenuShortcut) {
                     event.preventDefault();
@@ -239,7 +241,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     return;
                 }
 
-                if (shouldUseFocusableWrapper && event.key === 'Enter') {
+                if (shouldUseFocusableWrapper && isActivationKey) {
                     event.preventDefault();
                     event.stopPropagation();
                     void handleShow();
