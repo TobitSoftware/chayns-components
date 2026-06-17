@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
+import { keyboardFocusHighlightingCircleRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledIconWrapperProps = {
     $isDisabled?: boolean;
@@ -21,11 +21,24 @@ export const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
     transition: opacity 0.3s ease;
     min-width: ${({ $size }) => `${$size}px`};
 
-    ${({ $shouldShowKeyboardHighlighting }) =>
+    ${({ $shouldShowKeyboardHighlighting, $size }) =>
         $shouldShowKeyboardHighlighting &&
         css`
             &:focus-visible {
-                ${keyboardFocusHighlightingRingCss}
+                outline: none;
+                color: inherit;
+            }
+
+            &:focus-visible::after {
+                ${keyboardFocusHighlightingCircleRingCss};
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: ${$size + 14}px;
+                height: ${$size + 14}px;
+                transform: translate(-50%, -50%);
+                pointer-events: none;
             }
         `}
 

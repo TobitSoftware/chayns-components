@@ -16,6 +16,7 @@ import React, {
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import { StyledInputRightElement } from '../input/Input.styles';
 import {
+    StyledRightElementWrapper,
     StyledTextArea,
     StyledTextAreaContent,
     StyledTextAreaContentWrapper,
@@ -203,10 +204,18 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                                 </StyledTextAreaLabel>
                             </StyledTextAreaLabelWrapper>
                         </StyledTextAreaContent>
-                        {rightElement && shouldShowBorder && rightElement}
+                        {rightElement && shouldShowBorder && (
+                            <StyledInputRightElement $isInline>
+                                <StyledRightElementWrapper>
+                                    {rightElement}
+                                </StyledRightElementWrapper>
+                            </StyledInputRightElement>
+                        )}
                     </StyledTextAreaContentWrapper>
                     {rightElement && !shouldShowBorder && (
-                        <StyledInputRightElement>{rightElement}</StyledInputRightElement>
+                        <StyledInputRightElement $isInline>
+                            <StyledRightElementWrapper>{rightElement}</StyledRightElementWrapper>
+                        </StyledInputRightElement>
                     )}
                 </StyledTextArea>
             ),

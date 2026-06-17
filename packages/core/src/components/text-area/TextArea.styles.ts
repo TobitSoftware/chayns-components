@@ -94,3 +94,10 @@ export const StyledTextAreaLabel = styled.label<StyledTextAreaLabelProps>`
     cursor: text;
     text-overflow: ellipsis;
 `;
+
+export const StyledRightElementWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+`;

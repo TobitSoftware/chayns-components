@@ -424,7 +424,11 @@ const Input = forwardRef<InputRef, InputProps>(
                                 />
                             </StyledMotionInputClearIcon>
                         )}
-                        {rightElement && shouldShowBorder && rightElement}
+                        {rightElement && shouldShowBorder && (
+                            <StyledInputRightElement $isInline>
+                                {rightElement}
+                            </StyledInputRightElement>
+                        )}
                     </StyledInputContentWrapper>
                     {rightElement && !shouldShowBorder && (
                         <StyledInputRightElement>{rightElement}</StyledInputRightElement>

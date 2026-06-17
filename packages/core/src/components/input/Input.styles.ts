@@ -210,9 +210,24 @@ export const StyledInputIconWrapper = styled.div`
     margin-left: 10px;
 `;
 
-export const StyledInputRightElement = styled.div`
-    border-bottom-right-radius: 3px;
-    border-top-right-radius: 3px;
-    overflow: hidden;
+type StyledInputRightElementProps = {
+    $isInline?: boolean;
+};
+
+export const StyledInputRightElement = styled.div<StyledInputRightElementProps>`
     flex: 0 0 auto;
+    overflow: hidden;
+    min-width: 28px;
+    text-align: center;
+
+    ${({ $isInline }) =>
+        !$isInline &&
+        css`
+            border-bottom-right-radius: 3px;
+            border-top-right-radius: 3px;
+        `}
+
+    .beta-chayns-icon:focus-visible::after {
+        transform: translate(-50%, -50%) scale(0.78);
+    }
 `;
