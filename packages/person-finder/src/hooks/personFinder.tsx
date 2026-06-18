@@ -3,6 +3,8 @@ import {
     LoadingState,
     PersonEntry,
     PersonFinderEntry,
+    PersonFinderFilterTypes,
+    RelationMode,
     SiteEntry,
     UACEntry,
 } from '../types/personFinder';
@@ -12,7 +14,7 @@ import {
     isSiteEntry,
 } from '../utils/personFinder';
 import { VerificationBadge } from '@chayns-components/core';
-import { usePersonFinder } from '../components/PersonFinderProvider';
+import { IPersonFinderContext, usePersonFinder } from '../components/PersonFinderProvider';
 import { StyledPersonFinderGroupErrorMessage } from '../components/person-finder/person-finder-wrapper/person-finder-body/person-finder-group/PersonFinderGroup.styles';
 import textStrings from '../constants/textStrings';
 
@@ -132,6 +134,7 @@ interface UseErrorMessageOptions {
     loadingState: LoadingState;
     search: string;
     entries: PersonFinderEntry[];
+    filterKey: PersonFinderFilterTypes;
     groupName?: string;
     areOnlyFriendsGiven?: boolean;
 }
@@ -140,12 +143,19 @@ export const useErrorMessage = ({
     loadingState,
     search,
     entries,
+    filterKey,
     groupName,
     areOnlyFriendsGiven,
 }: UseErrorMessageOptions) => {
     const ts = textStrings.components.personFinder.wrapper.body.group.errorMessage;
+    const { relationMode } = usePersonFinder() as IPersonFinderContext;
 
-    if (search.length <= 2 && !areOnlyFriendsGiven) {
+    const shouldHideMinSearchLengthMessage =
+        relationMode === RelationMode.SITE &&
+        filterKey === PersonFinderFilterTypes.PERSON &&
+        entries.length > 0;
+
+    if (search.length <= 2 && !areOnlyFriendsGiven && !shouldHideMinSearchLengthMessage) {
         return (
             <StyledPersonFinderGroupErrorMessage>
                 {getPersonFinderTextstringValue({ textstring: ts.minSearchLength })}

@@ -36,8 +36,14 @@ import { TextstringProvider } from '@chayns-components/textstring';
 import { PERSON_FINDER_TEXTSTRING_LIBRARY_NAME } from '../constants/textStrings';
 
 const THROTTLE_INTERVAL = 500;
+const PAGE_SIZE = 20;
 
-interface IPersonFinderContext {
+type GetUsersByGroupsResult = {
+    users: PersonEntry[];
+    count: number;
+};
+
+export interface IPersonFinderContext {
     // Data
     data?: { [key: string]: PersonFinderData };
     updateData?: (key: PersonFinderFilterTypes, personFinderData: PersonFinderData) => void;
@@ -63,6 +69,8 @@ interface IPersonFinderContext {
     loadMore?: (key: PersonFinderFilterTypes) => void;
     loadingState?: LoadingStateMap;
     updateLoadingState?: (key: PersonFinderFilterTypes, state: LoadingState) => void;
+
+    relationMode?: RelationMode;
 }
 
 export const PersonFinderContext = createContext<IPersonFinderContext>({
@@ -80,6 +88,7 @@ export const PersonFinderContext = createContext<IPersonFinderContext>({
     updateLoadingState: undefined,
     tags: undefined,
     setTags: undefined,
+    relationMode: undefined,
 });
 
 PersonFinderContext.displayName = 'PersonFinderContext';
@@ -109,6 +118,14 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     entries,
     relationMode,
 }) => {
+    const getPagedUsersByGroups = useCallback(
+        getUsersByGroups as unknown as (
+            uacFilter: UACFilter[],
+            options?: { skip?: number; take?: number },
+        ) => Promise<GetUsersByGroupsResult>,
+        [],
+    );
+
     const [data, setData] = useState<IPersonFinderContext['data']>();
     const [friends, setFriends] = useState<PersonEntry[]>();
     const [uacUsers, setUacUsers] = useState<PersonEntry[]>();
@@ -169,6 +186,34 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 return;
             }
 
+            if (
+                relationMode === RelationMode.SITE &&
+                key === PersonFinderFilterTypes.PERSON &&
+                search === ''
+            ) {
+                void getPagedUsersByGroups([{ groupId: -1 }], {
+                    skip: current.skip,
+                    take: PAGE_SIZE,
+                })
+                    .then((result: GetUsersByGroupsResult) => {
+                        const { users, count } = result;
+
+                        if (users.length > 0) {
+                            appendData(key, {
+                                entries: users,
+                                searchString: '',
+                                skip: current.skip + users.length,
+                                count,
+                            });
+                        }
+                    })
+                    .finally(() => {
+                        updateLoadingState(key, LoadingState.Success);
+                    });
+
+                return;
+            }
+
             void loadData({
                 searchString: search ?? '',
                 filter: [key],
@@ -186,7 +231,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                     updateLoadingState(key, LoadingState.Success);
                 });
         },
-        [updateLoadingState, data, search, relationMode, appendData],
+        [appendData, data, getPagedUsersByGroups, relationMode, search, updateLoadingState],
     );
 
     const addFriend = useCallback((personId: string) => {
@@ -441,20 +486,26 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             relationMode === RelationMode.SITE &&
             filterTypes.includes(PersonFinderFilterTypes.PERSON)
         ) {
-            void getUsersByGroups([{ groupId: -1 }]).then((users) => {
-                setData({
-                    person: {
-                        entries: users,
-                        searchString: '',
-                        skip: users.length,
-                        count: users.length,
-                    },
-                });
-            });
+            void getPagedUsersByGroups([{ groupId: -1 }], { skip: 0, take: PAGE_SIZE }).then(
+                (result: GetUsersByGroupsResult) => {
+                    const { users, count } = result;
+
+                    setData({
+                        person: {
+                            entries: users,
+                            searchString: '',
+                            skip: users.length,
+                            count,
+                        },
+                    });
+                },
+            );
         }
 
         if (uacFilter) {
-            void getUsersByGroups(uacFilter).then((users) => {
+            void getPagedUsersByGroups(uacFilter).then((result: GetUsersByGroupsResult) => {
+                const { users } = result;
+
                 setUacUsers(users);
             });
 
@@ -489,7 +540,16 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 },
             });
         }
-    }, [entries, filterTypes, friends, friendsPriority, relationMode, search, uacFilter]);
+    }, [
+        entries,
+        filterTypes,
+        friends,
+        friendsPriority,
+        getPagedUsersByGroups,
+        relationMode,
+        search,
+        uacFilter,
+    ]);
 
     const providerValue = useMemo<IPersonFinderContext>(
         () => ({
@@ -510,6 +570,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             updateLoadingState,
             setTags,
             tags,
+            relationMode,
         }),
         [
             activeFilter,
@@ -528,6 +589,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             updateData,
             updateLoadingState,
             updateSearch,
+            relationMode,
         ],
     );
 

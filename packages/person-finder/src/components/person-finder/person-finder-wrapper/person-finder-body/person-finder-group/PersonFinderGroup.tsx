@@ -57,6 +57,7 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
     const errorMessage = useErrorMessage({
         areOnlyFriendsGiven,
         entries,
+        filterKey,
         loadingState,
         search: search ?? '',
         groupName,

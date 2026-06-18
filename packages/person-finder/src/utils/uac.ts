@@ -2,6 +2,16 @@ import { getAccessToken, getLanguage, getSite, getUser } from 'chayns-api';
 import { UacServiceClient } from '@chayns/uac-service';
 import { PersonEntry, PersonFinderFilterTypes, UACEntry, UACFilter } from '../types/personFinder';
 
+interface GetUsersByGroupsOptions {
+    skip?: number;
+    take?: number;
+}
+
+interface GetUsersByGroupsResult {
+    users: PersonEntry[];
+    count: number;
+}
+
 export const client = new UacServiceClient({
     getToken: async () => (await getAccessToken()).accessToken || '',
     getDefaultSiteId: () => getSite().id,
@@ -19,12 +29,20 @@ export const getUACGroups = async (): Promise<UACEntry[]> => {
     }));
 };
 
-export const getUsersByGroups = async (uacFilter: UACFilter[]): Promise<PersonEntry[]> => {
+export const getUsersByGroups = async (
+    uacFilter: UACFilter[],
+    options: GetUsersByGroupsOptions = {},
+): Promise<GetUsersByGroupsResult> => {
+    const siteId = getSite().id;
+    const { skip, take } = options;
+
     const groupResults = await Promise.all(
         uacFilter.map(async ({ groupId }) => {
             const users = await client.getGroupMembers({
                 groupId,
-                siteId: getSite().id,
+                siteId,
+                skip,
+                take,
             });
 
             return users.map(({ personId, firstname, lastname }) => ({
@@ -42,5 +60,22 @@ export const getUsersByGroups = async (uacFilter: UACFilter[]): Promise<PersonEn
         .flat()
         .reduce<Map<string, PersonEntry>>((map, user) => map.set(user.id, user), new Map());
 
-    return [...(unique.values() as unknown as PersonEntry[])];
+    let count = unique.size;
+
+    const firstFilter = uacFilter[0];
+
+    if (firstFilter && (skip !== undefined || take !== undefined) && uacFilter.length === 1) {
+        const group = await client.getUserGroup({
+            groupId: firstFilter.groupId,
+            siteId,
+            countUsers: true,
+        });
+
+        count = group.userCount ?? unique.size;
+    }
+
+    return {
+        users: [...(unique.values() as unknown as PersonEntry[])],
+        count,
+    };
 };
