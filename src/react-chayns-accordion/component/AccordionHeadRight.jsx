@@ -8,10 +8,10 @@ const OPEN = 2;
 const CLOSE = 1;
 
 const AccordionHeadRight = ({
-    right,
+    right = null,
     onSearch,
     onSearchEnter,
-    searchPlaceholder,
+    searchPlaceholder = '',
     searchValue,
     state,
 }) => {
@@ -110,15 +110,6 @@ AccordionHeadRight.propTypes = {
     searchPlaceholder: PropTypes.string,
     searchValue: PropTypes.string,
     state: PropTypes.oneOf([OPEN, CLOSE]),
-};
-
-AccordionHeadRight.defaultProps = {
-    right: null,
-    onSearch: null,
-    onSearchEnter: null,
-    searchPlaceholder: '',
-    searchValue: undefined,
-    state: null,
 };
 
 AccordionHeadRight.displayName = 'AccordionHeadRight';
