@@ -1,10 +1,8 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../../../utils/keyboardFocusHighlighting.styles';
 
 type StyledMentionFinderItemProps = WithTheme<{
     $isActive: boolean;
-    $shouldShowKeyboardHighlighting?: boolean;
 }>;
 
 export const StyledMentionFinderItem = styled.div<StyledMentionFinderItemProps>`
@@ -22,15 +20,6 @@ export const StyledMentionFinderItem = styled.div<StyledMentionFinderItemProps>`
         $isActive &&
         css`
             background-color: ${theme['102']} !important;
-        `}
-
-    ${({ $shouldShowKeyboardHighlighting }) =>
-        $shouldShowKeyboardHighlighting &&
-        css`
-            &:focus-visible {
-                transition: none;
-                ${keyboardFocusHighlightingRingCss}
-            }
         `}
 `;
 
