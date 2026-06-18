@@ -27,7 +27,7 @@ const Button: FC<ButtonProps> = ({
     shouldShowTextAsRobotoMedium = true,
     buttonDesign,
     tapDuration = 0.5,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
         if (shouldStopPropagation) {

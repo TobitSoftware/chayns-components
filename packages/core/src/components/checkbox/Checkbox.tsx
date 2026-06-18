@@ -92,7 +92,7 @@ const Checkbox: FC<CheckboxProps> = ({
     colors,
     shouldShowCentered = false,
     shouldChangeOnLabelClick = true,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const [isActive, setIsActive] = useState(isChecked ?? false);
     const [checkboxTop, setCheckboxTop] = useState<number | undefined>(undefined);

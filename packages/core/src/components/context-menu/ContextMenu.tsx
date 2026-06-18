@@ -45,7 +45,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             shouldDisableClick = false,
             shouldHidePopupArrow = false,
             shouldShowHoverEffect = false,
-            shouldEnableKeyboardHighlighting = false,
+            shouldEnableKeyboardHighlighting,
             shouldUseDefaultTriggerStyles = true,
             style,
             yOffset = 0,

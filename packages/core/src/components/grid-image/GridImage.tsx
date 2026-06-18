@@ -49,7 +49,7 @@ const GridImage: FC<GridImageProps> = ({
     shouldShowRoundImage,
     size,
     onClick,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const [hasLoadedLeftImage, setHasLoadedLeftImage] = useState(false);
     const [hasLoadedTopRightImage, setHasLoadedTopRightImage] = useState(false);

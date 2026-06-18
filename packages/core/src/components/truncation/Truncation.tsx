@@ -71,7 +71,7 @@ const Truncation: FC<TruncationProps> = ({
     lessLabel,
     onChange,
     children,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlighting,

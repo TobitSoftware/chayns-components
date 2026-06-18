@@ -118,7 +118,7 @@ const Icon: FC<IconProps> = ({
     tabIndex,
     size = 15,
     shouldStopPropagation,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const theme = useTheme() as Theme;
     const isClickable = typeof onClick === 'function' && !isDisabled;

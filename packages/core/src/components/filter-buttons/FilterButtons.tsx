@@ -47,7 +47,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
     items,
     shouldCalcCountForAll = false,
     size = FilterButtonSize.Normal,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const [selectedIds, setSelectedIds] = useState<string[]>(['all']);
     const [focusedId, setFocusedId] = useState<string>('all');

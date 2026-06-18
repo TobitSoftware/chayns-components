@@ -82,7 +82,7 @@ const AmountControl: FC<AmountControlProps> = ({
     maxAmount,
     minAmount = 0,
     onChange,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
     shouldForceLabel = false,
     shouldShowAddIconOnMinAmount = false,
     shouldShowIcon = true,

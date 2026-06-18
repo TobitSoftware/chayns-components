@@ -24,7 +24,7 @@ const FilterContent: FC<FilterContentProps> = ({
     checkboxConfig,
     comboboxConfig,
     shouldAutoFocus,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const searchRef = useRef<InputRef>(null);
 

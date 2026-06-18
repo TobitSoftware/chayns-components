@@ -46,7 +46,7 @@ const FilterButton: FC<FilterButtonProps> = ({
     isSelected,
     id,
     isDisabled,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
     tabIndex,
     onFocus,
     onArrowNavigate,

@@ -12,7 +12,7 @@ import {
 export const useKeyboardFocusHighlighting = (isEnabledProp?: boolean): boolean => {
     const colorScheme = useContext<ColorSchemeContextProps | undefined>(ColorSchemeContext);
     const contextIsEnabled: boolean = colorScheme?.shouldEnableKeyboardHighlighting === true;
-    const isEnabled: boolean = isEnabledProp === true || contextIsEnabled;
+    const isEnabled: boolean = isEnabledProp ?? contextIsEnabled;
 
     const [isKeyboardNavigation, setIsKeyboardNavigation] = useState(false);
 

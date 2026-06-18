@@ -94,7 +94,7 @@ const FileInput = forwardRef<FileInputRef, FileInputProps>(
             imageSelectPlaceholder,
             shouldPreventImageUpload = false,
             shouldAllowDownload,
-            shouldEnableKeyboardHighlighting = false,
+            shouldEnableKeyboardHighlighting,
         },
         ref,
     ) => {

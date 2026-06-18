@@ -86,7 +86,7 @@ const FileSelect: FC<FileSelectProps> = ({
     fileSelectionPlaceholder = 'Dateien hochladen',
     imageSelectPlaceholder,
     shouldPreventImageUpload = false,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlighting && !isDisabled,

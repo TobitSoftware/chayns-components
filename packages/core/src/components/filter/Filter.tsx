@@ -73,7 +73,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             comboboxConfig,
             onActiveChange,
             rightIcons,
-            shouldEnableKeyboardHighlighting = false,
+            shouldEnableKeyboardHighlighting,
         },
         ref,
     ) => {

@@ -201,7 +201,7 @@ const Accordion: FC<AccordionProps> = ({
     colors,
     shouldIndex = false,
     onBodyAnimationComplete,
-    shouldEnableKeyboardHighlighting = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const {
         isWrapped: groupIsWrapped,
