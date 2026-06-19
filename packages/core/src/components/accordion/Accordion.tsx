@@ -428,27 +428,44 @@ const Accordion: FC<AccordionProps> = ({
 
             if (
                 isCurrentAccordionTarget &&
-                isInKeyboardNavigationGroup &&
-                (e.key === 'Escape' || e.key === 'ArrowLeft') &&
-                typeof updateActiveAccordionUuid === 'function'
+                e.key === 'ArrowRight' &&
+                isKeyboardFocusable &&
+                !isOpen
             ) {
                 e.preventDefault();
-                updateActiveAccordionUuid(undefined);
-                // Verlasse die Group und fokussiere das Parent-Accordion
-                let parentAccordion =
-                    e.currentTarget.parentElement?.closest<HTMLElement>('.beta-chayns-accordion');
-                while (parentAccordion) {
-                    const parentGroupId = parentAccordion
-                        .getAttribute('data-uuid')
-                        ?.split('---')[0];
-                    if (parentGroupId !== accordionGroupUuid) {
-                        parentAccordion.focus();
-                        break;
-                    }
-                    parentAccordion =
-                        parentAccordion.parentElement?.closest<HTMLElement>(
+                handleHeadClick();
+            }
+
+            if (isCurrentAccordionTarget && (e.key === 'Escape' || e.key === 'ArrowLeft')) {
+                if (isOpen && isKeyboardFocusable) {
+                    e.preventDefault();
+                    handleHeadClick();
+                    return;
+                }
+
+                if (
+                    isInKeyboardNavigationGroup &&
+                    typeof updateActiveAccordionUuid === 'function'
+                ) {
+                    e.preventDefault();
+                    updateActiveAccordionUuid(undefined);
+                    let parentAccordion =
+                        e.currentTarget.parentElement?.closest<HTMLElement>(
                             '.beta-chayns-accordion',
                         );
+                    while (parentAccordion) {
+                        const parentGroupId = parentAccordion
+                            .getAttribute('data-uuid')
+                            ?.split('---')[0];
+                        if (parentGroupId !== accordionGroupUuid) {
+                            parentAccordion.focus();
+                            break;
+                        }
+                        parentAccordion =
+                            parentAccordion.parentElement?.closest<HTMLElement>(
+                                '.beta-chayns-accordion',
+                            );
+                    }
                 }
             }
         },
@@ -458,6 +475,7 @@ const Accordion: FC<AccordionProps> = ({
             handleHeadClick,
             isInKeyboardNavigationGroup,
             isKeyboardFocusable,
+            isOpen,
             updateActiveAccordionUuid,
             uuid,
         ],

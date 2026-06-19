@@ -7,9 +7,9 @@ type StyledMotionAccordionBodyProps = WithTheme<{
 }>;
 
 export const StyledMotionAccordionBody = styled(motion.div)<StyledMotionAccordionBodyProps>`
-    /* Keep vertical clipping for collapse animation, allow horizontal focus ring to be visible */
-    overflow-x: visible;
-    overflow-y: hidden;
+    /* overflow: clip erlaubt overflow-clip-margin, sodass der Fokusring sichtbar bleibt */
+    overflow: clip;
+    overflow-clip-margin: 4px;
     transition: none !important;
 
     ${({ $maxHeight }) =>
