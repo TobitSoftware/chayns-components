@@ -168,3 +168,4 @@ export type {
 } from './components/combobox/ComboBox.types';
 export { default as Skeleton } from './components/skeleton';
 export { SkeletonAnimationType } from './components/skeleton/types';
+export { default as Masonry } from './components/masonry/Masonry';
