@@ -1,5 +1,6 @@
 import { AnimatePresence, MotionConfig } from 'motion/react';
 import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
+import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 import { useUuid } from '../../hooks/uuid';
 import { shouldShowExpandIndicator } from './List.utils';
 
@@ -8,7 +9,7 @@ interface IListContext {
     isWrapped: boolean;
     openItemUuid: string | undefined;
     updateOpenItemUuid: (uuid: string, options?: { shouldOnlyOpen?: boolean }) => void;
-    shouldEnableKeyboardHighlighting: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
     listGroupUuid?: string;
     listItemUuids?: string[];
     registerListItemUuid?: (uuid: string) => void;
@@ -51,6 +52,10 @@ type ListProps = {
 
 const List: FC<ListProps> = ({ children, isWrapped = false, shouldEnableKeyboardHighlighting }) => {
     'use memo';
+
+    const colorScheme = useColorScheme();
+    const shouldEnableKeyboardHighlightingEffective =
+        shouldEnableKeyboardHighlighting ?? colorScheme?.shouldEnableKeyboardHighlighting ?? false;
 
     const [openItemUuid, setOpenItemUuid] = useState<IListContext['openItemUuid']>(undefined);
     const [listItemUuids, setListItemUuids] = useState<string[]>();
@@ -118,7 +123,7 @@ const List: FC<ListProps> = ({ children, isWrapped = false, shouldEnableKeyboard
             isWrapped,
             openItemUuid,
             updateOpenItemUuid,
-            shouldEnableKeyboardHighlighting,
+            shouldEnableKeyboardHighlighting: shouldEnableKeyboardHighlightingEffective,
             listGroupUuid,
             listItemUuids,
             registerListItemUuid,
@@ -131,7 +136,7 @@ const List: FC<ListProps> = ({ children, isWrapped = false, shouldEnableKeyboard
             isWrapped,
             openItemUuid,
             updateOpenItemUuid,
-            shouldEnableKeyboardHighlighting,
+            shouldEnableKeyboardHighlightingEffective,
             listGroupUuid,
             listItemUuids,
             registerListItemUuid,

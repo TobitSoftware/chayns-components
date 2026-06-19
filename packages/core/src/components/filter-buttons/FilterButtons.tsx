@@ -134,7 +134,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
 
                 const nextItem = keyboardNavigationItems[nextIndex];
 
-                if (!nextItem.isDisabled) {
+                if (nextItem && !nextItem.isDisabled) {
                     setFocusedId(nextItem.id);
                     buttonRefs.current[nextItem.id]?.focus();
                     return;

@@ -1,16 +1,9 @@
 import { setRefreshScrollEnabled } from 'chayns-api';
 import { AnimatePresence, useAnimate } from 'motion/react';
-import React, {
-    FC,
-    KeyboardEventHandler,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useElementSize } from '../../hooks/element';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
+import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 import { PopupRef } from '../../types/popup';
 import { calculateBiggestWidth } from '../../utils/calculate';
 import { getNearestPoint, getThumbPosition } from '../../utils/sliderButton';
@@ -56,8 +49,12 @@ const SliderButton: FC<SliderButtonProps> = ({
     const [scope, animate] = useAnimate();
 
     const theme = useTheme() as Theme;
+    const colorScheme = useColorScheme();
+    const shouldEnableKeyboardHighlightingEffective =
+        shouldEnableKeyboardHighlighting ?? colorScheme?.shouldEnableKeyboardHighlighting ?? false;
+
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
-        shouldEnableKeyboardHighlighting && !isDisabled,
+        shouldEnableKeyboardHighlightingEffective && !isDisabled,
     );
 
     const initialItemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
@@ -498,10 +495,16 @@ const SliderButton: FC<SliderButtonProps> = ({
                     onClick={() => handleClick(currentId, currentIndex)}
                     style={{ backgroundColor: thumbBackgroundColor }}
                     data-slider-button-thumb="true"
-                    tabIndex={shouldEnableKeyboardHighlighting && !isDisabled ? 0 : undefined}
-                    role={shouldEnableKeyboardHighlighting && !isDisabled ? 'button' : undefined}
+                    tabIndex={
+                        shouldEnableKeyboardHighlightingEffective && !isDisabled ? 0 : undefined
+                    }
+                    role={
+                        shouldEnableKeyboardHighlightingEffective && !isDisabled
+                            ? 'button'
+                            : undefined
+                    }
                     onKeyDown={
-                        shouldEnableKeyboardHighlighting && !isDisabled
+                        shouldEnableKeyboardHighlightingEffective && !isDisabled
                             ? handleThumbKeyDown
                             : undefined
                     }
@@ -538,7 +541,7 @@ const SliderButton: FC<SliderButtonProps> = ({
             itemWidth,
             pseudoButtons,
             scope,
-            shouldEnableKeyboardHighlighting,
+            shouldEnableKeyboardHighlightingEffective,
             shouldShowKeyboardHighlighting,
             thumbBackgroundColor,
         ],

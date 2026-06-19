@@ -18,6 +18,7 @@ import React, {
 import { useUuid } from '../../hooks/uuid';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { AreaContext } from '../area-provider/AreaContextProvider';
+import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { InputProps } from '../input/Input';
 import AccordionBody from './accordion-body/AccordionBody';
 import { AccordionGroupContext } from './accordion-group/AccordionGroup';
@@ -217,6 +218,10 @@ const Accordion: FC<AccordionProps> = ({
     const { isWrapped: isParentWrapped } = useContext(AccordionContext);
 
     const { isWrapped: contextIsWrapped } = useContext(AccordionWrappedContext);
+    const colorScheme = useColorScheme();
+    const shouldEnableKeyboardHighlightingEffective =
+        shouldEnableKeyboardHighlighting ?? colorScheme?.shouldEnableKeyboardHighlighting ?? false;
+
     const isWrapped = useMemo(
         () => groupIsWrapped ?? contextIsWrapped,
         [contextIsWrapped, groupIsWrapped],
@@ -242,9 +247,9 @@ const Accordion: FC<AccordionProps> = ({
     const onCloseRef = useRef(onClose);
     const onOpenRef = useRef(onOpen);
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
-        shouldEnableKeyboardHighlighting,
+        shouldEnableKeyboardHighlightingEffective,
     );
-    const isKeyboardFocusable = shouldIndex || shouldEnableKeyboardHighlighting;
+    const isKeyboardFocusable = shouldIndex || shouldEnableKeyboardHighlightingEffective;
 
     const isInKeyboardNavigationGroup =
         isKeyboardFocusable &&
@@ -499,7 +504,7 @@ const Accordion: FC<AccordionProps> = ({
             $shouldHideBackground={shouldHideBackground}
             $shouldHideBottomLine={shouldHideBottomLine}
             $bottomBorderColor={colors?.borderBottomColor}
-            $shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+            $shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlightingEffective}
             $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
             onKeyDown={handleKeyDown}
             onFocus={handleFocus}

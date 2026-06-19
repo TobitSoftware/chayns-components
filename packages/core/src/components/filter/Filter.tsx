@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, react/jsx-props-no-spreading */
 import React, {
     forwardRef,
     isValidElement,
@@ -35,10 +36,11 @@ import {
 } from '../../types/filter';
 import SearchInput from '../search-input/SearchInput';
 import ContextMenu from '../context-menu/ContextMenu';
+import type { ContextMenuItem, ContextMenuRef } from '../context-menu/ContextMenu.types';
 import Checkbox from '../checkbox/Checkbox';
 import { InputRef } from '../input/Input';
-import type { ContextMenuItem, ContextMenuRef } from '../context-menu/ContextMenu.types';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
+import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export interface FilterRightIcon {
     icons: string[];
@@ -86,9 +88,15 @@ const Filter = forwardRef<FilterRef, FilterProps>(
         const filterRef = useRef<HTMLDivElement | null>(null);
         const searchRef = useRef<InputRef | null>(null);
 
+        const colorScheme = useColorScheme();
+        const shouldEnableKeyboardHighlightingEffective =
+            shouldEnableKeyboardHighlighting ??
+            colorScheme?.shouldEnableKeyboardHighlighting ??
+            false;
+
         const contextMenuRef = useRef<ContextMenuRef>(null);
         const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
-            shouldEnableKeyboardHighlighting,
+            shouldEnableKeyboardHighlightingEffective,
         );
 
         const type = useMemo(() => {
@@ -166,6 +174,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             setIsOpen(false);
 
             if (type === FilterType.ONLY_SORT && contextMenuRef.current) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
                 contextMenuRef.current.hide();
             }
 
@@ -192,6 +201,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             }
 
             if (type === FilterType.ONLY_SORT && contextMenuRef.current) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
                 contextMenuRef.current.hide();
             }
 
@@ -234,8 +244,8 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                     onKeyDown={handleIconKeyDown}
                     $isOpen={isOpen}
                     ref={iconRef}
-                    role={shouldEnableKeyboardHighlighting ? 'button' : undefined}
-                    tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
+                    role={shouldEnableKeyboardHighlightingEffective ? 'button' : undefined}
+                    tabIndex={shouldEnableKeyboardHighlightingEffective ? 0 : -1}
                     $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                     $shouldShowRoundedHoverEffect={shouldShowRoundedHoverEffect}
                 >
@@ -247,7 +257,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 handleIconKeyDown,
                 icons,
                 isOpen,
-                shouldEnableKeyboardHighlighting,
+                shouldEnableKeyboardHighlightingEffective,
                 shouldShowKeyboardHighlighting,
                 shouldShowRoundedHoverEffect,
             ],
@@ -275,16 +285,16 @@ const Filter = forwardRef<FilterRef, FilterProps>(
             }
 
             return (
-                // eslint-disable-next-line react/jsx-props-no-spreading
                 <ComboBox
+                    // eslint-disable-next-line react/jsx-props-no-spreading
                     {...comboboxConfig}
                     shouldEnableKeyboardHighlighting={
                         comboboxConfig.shouldEnableKeyboardHighlighting ??
-                        shouldEnableKeyboardHighlighting
+                        shouldEnableKeyboardHighlightingEffective
                     }
                 />
             );
-        }, [comboboxConfig, shouldEnableKeyboardHighlighting]);
+        }, [comboboxConfig, shouldEnableKeyboardHighlightingEffective]);
 
         return useMemo(
             () => (
@@ -314,11 +324,13 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                                             }}
                                             $isOpen={false}
                                             role={
-                                                shouldEnableKeyboardHighlighting
+                                                shouldEnableKeyboardHighlightingEffective
                                                     ? 'button'
                                                     : undefined
                                             }
-                                            tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
+                                            tabIndex={
+                                                shouldEnableKeyboardHighlightingEffective ? 0 : -1
+                                            }
                                             $shouldShowKeyboardHighlighting={
                                                 shouldShowKeyboardHighlighting
                                             }
@@ -344,7 +356,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                                     value={searchConfig.searchValue}
                                     onChange={(ev) => searchConfig.onSearchChange(ev.target.value)}
                                     shouldEnableKeyboardHighlighting={
-                                        shouldEnableKeyboardHighlighting
+                                        shouldEnableKeyboardHighlightingEffective
                                     }
                                 />
                             </StyledFilterSearch>
@@ -353,18 +365,20 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                             <ContextMenu
                                 ref={contextMenuRef}
                                 items={sortItems}
-                                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                                shouldEnableKeyboardHighlighting={
+                                    shouldEnableKeyboardHighlightingEffective
+                                }
                             >
                                 {iconElement}
                             </ContextMenu>
                         )}
                         {type === FilterType.ONLY_CHECKBOX && checkboxConfig && (
-                            // eslint-disable-next-line react/jsx-props-no-spreading
                             <Checkbox
+                                // eslint-disable-next-line react/jsx-props-no-spreading
                                 {...checkboxConfig}
                                 shouldEnableKeyboardHighlighting={
                                     checkboxConfig.shouldEnableKeyboardHighlighting ??
-                                    shouldEnableKeyboardHighlighting
+                                    shouldEnableKeyboardHighlightingEffective
                                 }
                             />
                         )}
@@ -385,7 +399,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                                     checkboxConfig={checkboxConfig}
                                     comboboxConfig={comboboxConfig}
                                     shouldEnableKeyboardHighlighting={
-                                        shouldEnableKeyboardHighlighting
+                                        shouldEnableKeyboardHighlightingEffective
                                     }
                                 />
                             </ExpandableContent>
@@ -405,7 +419,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                 checkboxConfig,
                 isOpen,
                 shouldFocus,
-                shouldEnableKeyboardHighlighting,
+                shouldEnableKeyboardHighlightingEffective,
                 filterButtonConfig,
                 comboboxConfig,
                 comboboxElement,

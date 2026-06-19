@@ -1,5 +1,6 @@
 import React, { FC, KeyboardEventHandler, MouseEventHandler, useCallback, useRef } from 'react';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
+import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import {
     StyledSharingBar,
@@ -39,9 +40,13 @@ const SharingBar: FC<SharingBarProps> = ({
     container,
     shouldEnableKeyboardHighlighting,
 }) => {
+    const colorScheme = useColorScheme();
+    const shouldEnableKeyboardHighlightingEffective =
+        shouldEnableKeyboardHighlighting ?? colorScheme?.shouldEnableKeyboardHighlighting ?? false;
+
     const contextMenuRef = useRef<{ hide: VoidFunction; show: VoidFunction }>(null);
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
-        shouldEnableKeyboardHighlighting,
+        shouldEnableKeyboardHighlightingEffective,
     );
 
     const showContextMenu = useCallback(() => {
@@ -78,9 +83,9 @@ const SharingBar: FC<SharingBarProps> = ({
     return (
         <StyledSharingBar
             onClick={handleSharingBarClick}
-            onKeyDown={shouldEnableKeyboardHighlighting ? handleKeyDown : undefined}
-            tabIndex={shouldEnableKeyboardHighlighting ? 0 : undefined}
-            role={shouldEnableKeyboardHighlighting ? 'button' : undefined}
+            onKeyDown={shouldEnableKeyboardHighlightingEffective ? handleKeyDown : undefined}
+            tabIndex={shouldEnableKeyboardHighlightingEffective ? 0 : undefined}
+            role={shouldEnableKeyboardHighlightingEffective ? 'button' : undefined}
             data-should-show-keyboard-highlighting={
                 shouldShowKeyboardHighlighting ? 'true' : undefined
             }
