@@ -8,6 +8,7 @@ export { default as CommunicationButton } from './components/communication-butto
 export { default as CommunicationTeamTalkHeader } from './components/communication-team-talk-header/CommunicationTeamTalkHeader';
 export { default as CommunicationMessage } from './components/communication-message/variants';
 export { default as SocialPlugin } from './components/social-plugin/SocialPlugin';
+export { default as CommunicationFileList } from './components/communication-file-list/CommunicationFileList';
 
 // Types
 export type {
@@ -32,6 +33,11 @@ export type {
     AudioInputRef,
     AudioInputStyleConfig,
 } from './components/audio-input/AudioInput.types';
+export type {
+    CommunicationFile,
+    CommunicationFileListProps,
+    CommunicationFileStatus,
+} from './components/communication-file-list/CommunicationFileList.types';
 
 // Enums
 export { SortType } from './components/communication-list/CommunicationList.types';
