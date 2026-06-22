@@ -173,16 +173,17 @@ export const handleVerticalListGroupNavigation = ({
     listGroupUuid?: string;
     updateActiveListItemUuid?: (uuid?: string) => void;
 }) => {
+    const isTab = event.key === 'Tab';
+    const isShiftTab = isTab && event.shiftKey;
+
     if (
         !isCurrentListItemTarget ||
         !isInKeyboardNavigationGroup ||
         !listItemUuids?.length ||
-        (event.key !== 'ArrowDown' && event.key !== 'ArrowUp')
+        (event.key !== 'ArrowDown' && event.key !== 'ArrowUp' && !isTab)
     ) {
         return false;
     }
-
-    event.preventDefault();
 
     const currentIndex = listItemUuids.indexOf(currentUuid);
 
@@ -190,10 +191,23 @@ export const handleVerticalListGroupNavigation = ({
         return true;
     }
 
-    const nextIndex =
-        event.key === 'ArrowDown'
-            ? (currentIndex + 1) % listItemUuids.length
-            : (currentIndex - 1 + listItemUuids.length) % listItemUuids.length;
+    const isBackward = event.key === 'ArrowUp' || isShiftTab;
+
+    // For Tab at the boundaries, let the browser handle natural tab order
+    if (isTab) {
+        const isAtStart = currentIndex === 0;
+        const isAtEnd = currentIndex === listItemUuids.length - 1;
+
+        if ((isShiftTab && isAtStart) || (!isShiftTab && isAtEnd)) {
+            return false;
+        }
+    }
+
+    event.preventDefault();
+
+    const nextIndex = isBackward
+        ? (currentIndex - 1 + listItemUuids.length) % listItemUuids.length
+        : (currentIndex + 1) % listItemUuids.length;
 
     const nextListItemUuid = listItemUuids[nextIndex];
 
