@@ -36,8 +36,11 @@ export type {
 export type {
     CommunicationFile,
     CommunicationFileListProps,
-    CommunicationFileStatus,
+    CommunicationImage,
+    CommunicationVideo,
+    BaseCommunicationFile,
 } from './components/communication-file-list/CommunicationFileList.types';
+export { CommunicationLoadingState } from './components/communication-file-list/CommunicationFileList.types';
 
 // Enums
 export { SortType } from './components/communication-list/CommunicationList.types';

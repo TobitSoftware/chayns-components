@@ -1,19 +1,41 @@
 import React from 'react';
-import { CommunicationFile } from '../../CommunicationFileList.types';
-import { StyledImage } from './CommunicationImageItem.styles';
+import { SmallWaitCursor, SmallWaitCursorSize, Icon } from '@chayns-components/core';
+import { CommunicationImage, CommunicationLoadingState } from '../../CommunicationFileList.types';
+import {
+    StyledImage,
+    StyledImageContainer,
+    StyledRemoveButton,
+    StyledLoadingOverlay,
+} from './CommunicationImageItem.styles';
 
 interface Props {
-    file: CommunicationFile;
+    file: CommunicationImage;
+    onRemove?: (fileId: string) => void;
 }
 
-const CommunicationImageItem = ({ file }: Props) => {
-    if (!file.previewUrl && !file.url) {
+const CommunicationImageItem = ({ file, onRemove }: Props) => {
+    const isUploading = file.loadingState === CommunicationLoadingState.uploading;
+    const displayUrl = isUploading ? file.thumbnail : file.url;
+
+    if (!displayUrl) {
         return null;
     }
 
-    const imageSrc = file.previewUrl || file.url;
-
-    return <StyledImage src={imageSrc} alt={file.name} loading="lazy" />;
+    return (
+        <StyledImageContainer>
+            <StyledImage src={displayUrl} alt="" loading="lazy" />
+            {isUploading && (
+                <StyledLoadingOverlay>
+                    <SmallWaitCursor size={SmallWaitCursorSize.Small} />
+                </StyledLoadingOverlay>
+            )}
+            {onRemove && (
+                <StyledRemoveButton onClick={() => onRemove(file.id)} title="Entfernen">
+                    <Icon icons={['fa fa-times']} />
+                </StyledRemoveButton>
+            )}
+        </StyledImageContainer>
+    );
 };
 
 export default CommunicationImageItem;

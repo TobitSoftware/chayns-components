@@ -1,28 +1,28 @@
 import React from 'react';
-import { CommunicationFile } from '../CommunicationFileList.types';
+import {
+    CommunicationFile,
+    CommunicationImage,
+    CommunicationVideo,
+} from '../CommunicationFileList.types';
 import CommunicationDocumentItem from './communication-document-item/CommunicationDocumentItem';
 import CommunicationImageItem from './communication-image-item/CommunicationImageItem';
 import CommunicationVideoItem from './communication-video-item/CommunicationVideoItem';
 
 interface Props {
-    file: CommunicationFile;
+    file: CommunicationFile | CommunicationImage | CommunicationVideo;
+    onRemove?: (fileId: string) => void;
 }
 
-const CommunicationFileItem = ({ file }: Props) => {
-    // Show preview if provided and file is uploading
-    if (file.status === 'uploading' && file.preview) {
-        return <>{file.preview}</>;
+const CommunicationFileItem = ({ file, onRemove }: Props) => {
+    if (file.type === 'image') {
+        return <CommunicationImageItem file={file} onRemove={onRemove} />;
     }
 
-    if (file.mimeType.startsWith('image/')) {
-        return <CommunicationImageItem file={file} />;
+    if (file.type === 'video') {
+        return <CommunicationVideoItem file={file} onRemove={onRemove} />;
     }
 
-    if (file.mimeType.startsWith('video/')) {
-        return <CommunicationVideoItem file={file} />;
-    }
-
-    return <CommunicationDocumentItem file={file} />;
+    return <CommunicationDocumentItem file={file} onRemove={onRemove} />;
 };
 
 export default CommunicationFileItem;
