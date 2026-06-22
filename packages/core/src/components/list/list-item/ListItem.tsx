@@ -419,18 +419,32 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
                     return;
                 }
 
-                if (
-                    isCurrentListItemTarget &&
-                    shouldEnableKeyboardHighlighting &&
-                    (event.key === 'Enter' || event.key === ' ')
-                ) {
-                    event.preventDefault();
-                    handleHeadClick(event as unknown as React.MouseEvent<HTMLDivElement>);
+                if (isCurrentListItemTarget && shouldEnableKeyboardHighlighting) {
+                    if (isExpandable) {
+                        if (event.key === 'ArrowRight' && !isItemOpen) {
+                            event.preventDefault();
+                            handleHeadClick(event as unknown as React.MouseEvent<HTMLDivElement>);
+                            return;
+                        }
+
+                        if (event.key === 'ArrowLeft' && isItemOpen) {
+                            event.preventDefault();
+                            handleHeadClick(event as unknown as React.MouseEvent<HTMLDivElement>);
+                            return;
+                        }
+                    }
+
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        handleHeadClick(event as unknown as React.MouseEvent<HTMLDivElement>);
+                    }
                 }
             },
             [
                 handleHeadClick,
+                isExpandable,
                 isInKeyboardNavigationGroup,
+                isItemOpen,
                 listGroupUuid,
                 listItemUuids,
                 shouldEnableKeyboardHighlighting,
