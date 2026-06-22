@@ -4664,6 +4664,18 @@ import { TagInput } from '@chayns-components/core';
 />
 ```
 
+#### With Keyboard Highlighting
+
+```tsx
+<TagInput
+    tags={[
+                { id: 'pizza', text: 'Pizza' },
+                { id: 'nudeln', text: 'Nudeln' },
+            ]}
+    shouldEnableKeyboardHighlighting
+/>
+```
+
 ### Props
 
 No prop documentation available.
