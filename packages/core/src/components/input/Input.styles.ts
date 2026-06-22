@@ -102,8 +102,8 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
     ${({ $shouldShowKeyboardHighlighting }) =>
         $shouldShowKeyboardHighlighting &&
         css`
-            /* Only show highlighting when the input field itself is focused, not when child elements (icons) are focused */
-            &:has(> input:focus-visible) {
+            /* Show highlighting when the input field is focused */
+            &:has(input:focus-visible) {
                 transition: none;
                 ${keyboardFocusHighlightingRingCss}
             }

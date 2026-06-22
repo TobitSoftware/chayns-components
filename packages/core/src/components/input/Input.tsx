@@ -410,11 +410,11 @@ const Input = forwardRef<InputRef, InputProps>(
                                 onClick={handleClearIconClick}
                                 onKeyDown={handleClearIconKeyDown}
                                 tabIndex={
-                                    shouldEnableKeyboardHighlighting && hasValue && !isDisabled
+                                    shouldShowKeyboardHighlighting && hasValue && !isDisabled
                                         ? 0
                                         : -1
                                 }
-                                role={shouldEnableKeyboardHighlighting ? 'button' : undefined}
+                                role={shouldShowKeyboardHighlighting ? 'button' : undefined}
                                 aria-hidden={!hasValue}
                                 transition={{ type: 'tween' }}
                             >
