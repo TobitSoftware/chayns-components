@@ -95,6 +95,7 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
 
         const inputRef = useRef<InputRef>(null);
         const pseudoRef = useRef<HTMLDivElement>(null);
+        const iconTriggerRef = useRef<HTMLDivElement>(null);
 
         const parentWidth = useElementSize(pseudoRef);
 
@@ -125,6 +126,21 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                 }
             },
             [handleIconTriggerClick],
+        );
+
+        const handleInputKeyDown = useCallback(
+            (event: React.KeyboardEvent<HTMLInputElement>) => {
+                if (event.key === 'Escape') {
+                    event.preventDefault();
+                    setIsSearchInputActive(false);
+                    iconTriggerRef.current?.focus();
+                }
+
+                if (typeof onKeyDown === 'function') {
+                    onKeyDown(event);
+                }
+            },
+            [onActiveChange, onKeyDown],
         );
 
         useEffect(() => {
@@ -180,7 +196,7 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                                 >
                                     <Input
                                         onChange={onChange}
-                                        onKeyDown={onKeyDown}
+                                        onKeyDown={handleInputKeyDown}
                                         placeholder={placeholder}
                                         ref={inputRef}
                                         shouldEnableKeyboardHighlighting={
@@ -193,6 +209,7 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                                 </StyledMotionSearchInputContentWrapper>
                             )}
                             <StyledSearchInputIconTrigger
+                                ref={iconTriggerRef}
                                 id={
                                     isSearchInputActive
                                         ? 'search-input-backIcon'
@@ -227,6 +244,7 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                             <StyledMotionSearchInputIconWrapper>
                                 <AnimatePresence initial={false}>
                                     <StyledSearchInputIconTrigger
+                                        ref={iconTriggerRef}
                                         id={
                                             isSearchInputActive
                                                 ? 'search-input-backIcon'
@@ -285,7 +303,7 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                                                 />
                                             }
                                             onChange={onChange}
-                                            onKeyDown={onKeyDown}
+                                            onKeyDown={handleInputKeyDown}
                                             placeholder={placeholder}
                                             ref={inputRef}
                                             shouldEnableKeyboardHighlighting={

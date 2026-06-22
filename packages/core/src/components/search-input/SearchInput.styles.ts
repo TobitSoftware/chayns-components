@@ -93,6 +93,7 @@ export const StyledSearchInputIconTrigger = styled.div<StyledSearchInputIconTrig
             &:focus-visible {
                 transition: none;
                 ${keyboardFocusHighlightingRingCss}
+                border-radius: 50%;
                 box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.35);
                 outline-offset: 2px;
             }
