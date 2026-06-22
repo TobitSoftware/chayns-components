@@ -361,29 +361,7 @@ const Accordion: FC<AccordionProps> = ({
         return isOpen ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 };
     }, [isOpen, shouldSkipAnimation]);
 
-    const tabIndex = useMemo(() => {
-        if (isInKeyboardNavigationGroup) {
-            const effectiveActiveAccordionUuid = isGroupFocusWithin
-                ? activeAccordionUuid
-                : undefined;
-            const isGroupTabStop =
-                effectiveActiveAccordionUuid != null
-                    ? effectiveActiveAccordionUuid === uuid
-                    : accordionUuids?.[0] === uuid;
-            return isGroupTabStop ? 0 : -1;
-        }
-        if (isKeyboardFocusable) {
-            return 0;
-        }
-        return -1;
-    }, [
-        accordionUuids,
-        activeAccordionUuid,
-        isGroupFocusWithin,
-        isInKeyboardNavigationGroup,
-        isKeyboardFocusable,
-        uuid,
-    ]);
+    const tabIndex = useMemo(() => (isKeyboardFocusable ? 0 : -1), [isKeyboardFocusable]);
 
     const handleKeyDown = useCallback(
         (e: KeyboardEvent<HTMLDivElement>) => {
