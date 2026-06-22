@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/core",
-    "version": "5.3.11-alpha.0",
+    "version": "5.3.12-alpha.0",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
