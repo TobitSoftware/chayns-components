@@ -321,6 +321,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                                     {rightElement}
                                     <Icon
                                         icons={['ts-wrong']}
+                                        shouldEnableKeyboardHighlighting={false}
                                         onClick={(event) => {
                                             event.preventDefault();
                                             event.stopPropagation();
