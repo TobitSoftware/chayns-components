@@ -578,6 +578,7 @@ const Accordion: FC<AccordionProps> = ({
                         onTitleInputChange={onTitleInputChange}
                         titleInputProps={titleInputProps}
                         titleColor={colors?.titleColor}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlightingEffective}
                     />
                     <AnimatePresence initial={false}>
                         {(isOpen || shouldRenderClosed) && (

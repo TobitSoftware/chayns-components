@@ -11,6 +11,12 @@ export const StyledMotionAccordionHead = styled(motion.div)<StyledMotionAccordio
     display: flex;
     overflow: hidden;
     padding: 4px 0;
+
+    &:focus-within {
+        overflow: visible;
+        position: relative;
+        z-index: 1;
+    }
 `;
 
 export const StyledMotionIconWrapper = styled(motion.div)`
@@ -33,6 +39,10 @@ export const StyledMotionContentWrapper = styled(motion.div)<StyledMotionContent
     height: 100%;
     overflow: hidden;
     margin-right: 10px;
+
+    &:focus-within {
+        overflow: visible;
+    }
 
     ${({ $isWrapped }) =>
         $isWrapped &&
@@ -98,6 +108,10 @@ export const StyledRightWrapper = styled.div<StyledRightWrapperProps>`
     margin-right: 5px;
     overflow: hidden;
     position: relative;
+
+    &:focus-within {
+        overflow: visible;
+    }
 `;
 
 export const StyledMotionSearchWrapper = styled(motion.div)`
