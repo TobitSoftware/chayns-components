@@ -228,6 +228,10 @@ export const StyledInputRightElement = styled.div<StyledInputRightElementProps>`
             border-top-right-radius: 3px;
         `}
 
+    &:has(*:focus-visible) {
+        overflow: visible;
+    }
+
     .beta-chayns-icon:focus-visible::after {
         transform: translate(-50%, -50%) scale(0.78);
     }
