@@ -209,6 +209,22 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             setIsAnimating(false);
         }, [onHide]);
 
+        const handleContainerBlur = useCallback(
+            (event: React.FocusEvent<HTMLDivElement>) => {
+                const nextFocusedElement = event.relatedTarget as Node | null;
+                const currentContainer = event.currentTarget as HTMLElement;
+
+                if (
+                    !nextFocusedElement ||
+                    (!currentContainer.contains(nextFocusedElement) &&
+                        !contentRef.current?.contains(nextFocusedElement))
+                ) {
+                    handleClose();
+                }
+            },
+            [handleClose],
+        );
+
         const restoreTriggerFocus = useCallback(() => {
             // Delay is needed so focus happens after dropdown close/render cycle.
             requestAnimationFrame(() => {
@@ -494,6 +510,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                     ref={styledComboBoxElementRef}
                     $minWidth={minWidth}
                     $shouldUseFullWidth={shouldUseFullWidth}
+                    onBlur={handleContainerBlur}
                 >
                     <StyledComboBoxHeader
                         ref={comboBoxHeaderRef}

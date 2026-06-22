@@ -110,6 +110,22 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             setIsContentShown(false);
         }, []);
 
+        const handleContainerBlur = useCallback(
+            (event: React.FocusEvent<HTMLSpanElement>) => {
+                const nextFocusedElement = event.relatedTarget as Node | null;
+                const currentContainer = event.currentTarget as HTMLElement;
+
+                if (
+                    !nextFocusedElement ||
+                    (!currentContainer.contains(nextFocusedElement) &&
+                        !contextMenuContentRef.current?.contains(nextFocusedElement))
+                ) {
+                    handleHide();
+                }
+            },
+            [handleHide],
+        );
+
         useEffect(() => {
             if (!isContentShown) return () => {};
 
@@ -449,6 +465,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     onContextMenuCapture={handleContextMenu}
                     onContextMenu={handleContextMenu}
                     onKeyDown={handleKeyDown}
+                    onBlur={handleContainerBlur}
                     ref={contextMenuRef}
                     tabIndex={shouldUseKeyboardFocusableWrapper ? 0 : undefined}
                     role={shouldUseKeyboardFocusableWrapper ? 'button' : undefined}

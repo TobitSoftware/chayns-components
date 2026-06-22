@@ -542,6 +542,24 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             return hasFocusRef.current && isTouch;
         }, [isTouch]);
 
+        const handleContainerBlur = useCallback(
+            (event: React.FocusEvent<HTMLDivElement>) => {
+                const nextFocusedElement = event.relatedTarget as Node | null;
+                const currentContainer = event.currentTarget as HTMLElement;
+
+                // Check if focus is moving outside the SearchBox container
+                // Also check the dropdown content (contentRef) since it's rendered in a portal
+                if (
+                    !nextFocusedElement ||
+                    (!currentContainer.contains(nextFocusedElement) &&
+                        !contentRef.current?.contains(nextFocusedElement))
+                ) {
+                    handleClose();
+                }
+            },
+            [handleClose],
+        );
+
         /**
          * This function handles the item selection
          */
@@ -779,7 +797,11 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         return useMemo(
             () => (
-                <StyledSearchBox ref={boxRef} key={`search-box-${uuid}`}>
+                <StyledSearchBox
+                    ref={boxRef}
+                    key={`search-box-${uuid}`}
+                    onBlur={handleContainerBlur}
+                >
                     <div id={`search_box_input${uuid}`}>
                         {tagInputSettings ? (
                             <TagInput

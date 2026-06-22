@@ -142,6 +142,19 @@ const MentionFinder: FC<MentionFinderProps> = ({
 
     const shouldRenderPopup = shouldShowPopup && !!fullMatch && filteredMembers.length > 0;
 
+    const handleContainerBlur = useCallback((event: React.FocusEvent<HTMLDivElement>) => {
+        const nextFocusedElement = event.relatedTarget as Node | null;
+        const currentContainer = event.currentTarget as HTMLElement;
+
+        if (
+            !nextFocusedElement ||
+            (!currentContainer.contains(nextFocusedElement) &&
+                !popupRef.current?.contains(nextFocusedElement))
+        ) {
+            setShouldShowPopup(false);
+        }
+    }, []);
+
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
             const targetElement = event.target as HTMLElement | null;
@@ -543,7 +556,10 @@ const MentionFinder: FC<MentionFinderProps> = ({
     return (
         <>
             {overlayPortal}
-            <StyledMentionFinder className="beta-chayns-mention-finder">
+            <StyledMentionFinder
+                className="beta-chayns-mention-finder"
+                onBlur={handleContainerBlur}
+            >
                 <AnimatePresence initial={false}>
                     {shouldRenderPopup && (
                         <StyledMotionMentionFinderPopup
