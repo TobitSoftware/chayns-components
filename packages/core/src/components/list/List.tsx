@@ -9,7 +9,7 @@ interface IListContext {
     isWrapped: boolean;
     openItemUuid: string | undefined;
     updateOpenItemUuid: (uuid: string, options?: { shouldOnlyOpen?: boolean }) => void;
-    shouldEnableKeyboardHighlighting?: boolean;
+    shouldEnableKeyboardHighlighting: boolean;
     listGroupUuid?: string;
     listItemUuids?: string[];
     registerListItemUuid?: (uuid: string) => void;
