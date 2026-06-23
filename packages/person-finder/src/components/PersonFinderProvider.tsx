@@ -287,6 +287,10 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         null,
     );
     const latestHandledRequestRef = useRef<number>(0);
+    const searchLocalRef = useRef<() => void>(() => {});
+    const searchDataRef = useRef<({ filter }: { filter: PersonFinderFilterTypes[] }) => void>(
+        () => {},
+    );
 
     const throttledRequest = useRef<ThrottledFunction<() => void>>(
         throttle(
@@ -362,11 +366,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             THROTTLE_INTERVAL,
             { leading: false, trailing: true },
         ),
-    ).current;
-
-    useEffect(() => {
-        dataRef.current = data;
-    }, [data]);
+    );
 
     const searchData = useCallback(
         ({ filter }: { filter: PersonFinderFilterTypes[] }) => {
@@ -441,39 +441,71 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     }, [entries, search, uacUsers, updateData, updateLoadingState]);
 
     useEffect(() => {
+        dataRef.current = data;
+    }, [data]);
+
+    useEffect(() => {
+        searchLocalRef.current = searchLocal;
+    }, [searchLocal]);
+
+    useEffect(() => {
+        searchDataRef.current = searchData;
+    }, [searchData]);
+
+    useEffect(() => {
         if (!search) return;
 
-        const active = activeFilter ?? filterTypes;
+        const active = activeFilter && activeFilter.length > 0 ? activeFilter : filterTypes;
+        const currentData = dataRef.current;
 
         if (uacFilter || entries) {
-            searchLocal();
+            searchLocalRef.current();
         } else if (active?.includes(PersonFinderFilterTypes.UAC)) {
-            searchData({ filter: [PersonFinderFilterTypes.UAC] });
+            searchDataRef.current({ filter: [PersonFinderFilterTypes.UAC] });
         } else {
-            latestArgsRef.current = { search, filter: active };
+            // Only load filters that don't have data for this search yet
+            const filtersToLoad = active.filter((filter) => {
+                const filterData = currentData?.[filter];
+                return !filterData || filterData.searchString !== search;
+            });
 
-            throttledRequest();
+            // If we have filters to load, use them; otherwise use all active filters
+            const filterList = filtersToLoad.length > 0 ? filtersToLoad : active;
+
+            latestArgsRef.current = { search, filter: filterList };
+
+            throttledRequest.current();
         }
-    }, [
-        filterTypes,
-        search,
-        activeFilter,
-        friends,
-        friendsPriority,
-        updateData,
-        updateLoadingState,
-        throttledRequest,
-        searchData,
-        uacFilter,
-        searchLocal,
-        entries,
-    ]);
+    }, [search, uacFilter, entries]);
+
+    // Handle filter changes - load missing data for newly selected filters
+    useEffect(() => {
+        if (!search) return;
+
+        const active = activeFilter && activeFilter.length > 0 ? activeFilter : filterTypes;
+        const currentData = dataRef.current;
+
+        // Check which filters need to be loaded (don't have data for current search)
+        const missingFilters = active.filter((filter) => {
+            const filterData = currentData?.[filter];
+            // If no data or data is from a different search, we need to load it
+            return !filterData || filterData.searchString !== search;
+        });
+
+        if (missingFilters.length === 0) return;
+        if (uacFilter || entries) return;
+        if (active?.includes(PersonFinderFilterTypes.UAC)) return;
+
+        // Load only the missing filters
+        latestArgsRef.current = { search, filter: missingFilters };
+        throttledRequest.current();
+    }, [activeFilter, search, uacFilter, entries, filterTypes]);
 
     useEffect(
         () => () => {
-            throttledRequest.cancel();
+            throttledRequest.current?.cancel();
         },
-        [throttledRequest],
+        [],
     );
 
     // load initial data
