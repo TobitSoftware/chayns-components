@@ -1,8 +1,8 @@
 # @chayns-components/communication
 
-React component package providing 8 documented components for chayns applications.
+React component package providing 10 documented components for chayns applications.
 
-Documented components: `AudioInput`, `CommunicationButton`, `CommunicationContent`, `CommunicationHeader`, `CommunicationInput`, `CommunicationList`, `CommunicationMessage`, `CommunicationTeamTalkHeader`.
+Documented components: `AudioInput`, `CommunicationButton`, `CommunicationContent`, `CommunicationFileList`, `CommunicationHeader`, `CommunicationInput`, `CommunicationList`, `CommunicationMessage`, `CommunicationTeamTalkHeader`, `SocialPlugin`.
 
 ## Import
 
@@ -21,11 +21,13 @@ import { AudioInput, CommunicationButton, CommunicationContent } from '@chayns-c
 - `AudioInput`
 - `CommunicationButton`
 - `CommunicationContent`
+- `CommunicationFileList`
 - `CommunicationHeader`
 - `CommunicationInput`
 - `CommunicationList`
 - `CommunicationMessage`
 - `CommunicationTeamTalkHeader`
+- `SocialPlugin`
 
 ## AudioInput
 
@@ -155,6 +157,40 @@ No additional exported types documented.
 ### Usage Notes
 
 - Import `CommunicationContent` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+
+### Anti Patterns
+
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
+## CommunicationFileList
+
+`CommunicationFileList` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
+
+### Import
+
+```ts
+import { CommunicationFileList } from '@chayns-components/communication';
+```
+
+### Examples
+
+#### General
+
+```tsx
+<CommunicationFileList />
+```
+
+### Props
+
+No prop documentation available.
+
+### Types
+
+No additional exported types documented.
+
+### Usage Notes
+
+- Import `CommunicationFileList` directly from `@chayns-components/communication` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
@@ -844,6 +880,43 @@ No additional exported types documented.
 ### Usage Notes
 
 - Import `CommunicationTeamTalkHeader` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+
+### Anti Patterns
+
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
+## SocialPlugin
+
+`SocialPlugin` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
+
+### Import
+
+```ts
+import { SocialPlugin } from '@chayns-components/communication';
+```
+
+### Examples
+
+#### General
+
+```tsx
+<SocialPlugin
+    commentType={5}
+    postingId={'787cb5d13e8b43d98347a012b3eab261'}
+/>
+```
+
+### Props
+
+No prop documentation available.
+
+### Types
+
+No additional exported types documented.
+
+### Usage Notes
+
+- Import `SocialPlugin` directly from `@chayns-components/communication` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
