@@ -1,12 +1,15 @@
+import { CommunicationInputSize } from '../communication-input/CommunicationInput.types';
+
 export interface CommunicationFileListProps {
     files: (CommunicationFile | CommunicationVideo | CommunicationImage)[];
     onRemove?: (fileId: string) => void;
+    size?: CommunicationInputSize;
 }
 
 export enum CommunicationLoadingState {
-    uploaded = 'uploaded',
-    uploading = 'uploading',
-    error = 'error',
+    UPLOADED = 'UPLOADED',
+    UPLOADING = 'UPLOADING',
+    ERROR = 'ERROR',
 }
 
 export interface BaseCommunicationFile {

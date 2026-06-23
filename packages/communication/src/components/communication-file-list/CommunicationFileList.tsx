@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Masonry } from '@chayns-components/core';
 import CommunicationFileItem from './communication-file-item/CommunicationFileItem';
 import { CommunicationFileListProps } from './CommunicationFileList.types';
 import { StyledCommunicationFileList } from './CommunicationFileList.styles';
+import { CommunicationInputSize } from '../communication-input/CommunicationInput.types';
 
-const CommunicationFileList: React.FC<CommunicationFileListProps> = ({ files, onRemove }) => (
+const CommunicationFileList: FC<CommunicationFileListProps> = ({
+    files,
+    onRemove,
+    size = CommunicationInputSize.MEDIUM,
+}) => (
     <StyledCommunicationFileList>
-        <Masonry gap={8} columnWidth={64}>
+        <Masonry gap={4} columnWidth={64} rowHeight={64}>
             {files.map((file) => {
-                // Dateien nehmen 1 Spalte, Bilder/Videos 2 Spalten
-                const columnSpan = file.type === 'file' ? 1 : 3;
+                const columns = file.type === 'file' ? 4 : 1;
 
                 return (
-                    <Masonry.Item key={file.id} columnSpan={columnSpan}>
-                        <CommunicationFileItem file={file} onRemove={onRemove} />
+                    <Masonry.Item key={file.id} columns={columns}>
+                        <CommunicationFileItem file={file} onRemove={onRemove} size={size} />
                     </Masonry.Item>
                 );
             })}

@@ -218,6 +218,7 @@ interface UseCommunicationInputStylesOptions {
     size: CommunicationInputSize;
     isMultiLine: boolean;
     isInputInBottomRow: boolean;
+    hasTopContent: boolean;
 }
 
 const CORNER_SIZES = {
@@ -236,6 +237,7 @@ export const useCommunicationInputStyles = ({
     size,
     isMultiLine,
     isInputInBottomRow,
+    hasTopContent,
 }: UseCommunicationInputStylesOptions) =>
     useMemo(() => {
         let borderRadius: number;
@@ -243,7 +245,7 @@ export const useCommunicationInputStyles = ({
         let innerHeight = 48;
 
         if (cornerType === CommunicationInputCornerType.DYNAMIC) {
-            if (isMultiLine || !isInputInBottomRow) {
+            if (isMultiLine || !isInputInBottomRow || hasTopContent) {
                 borderRadius = CORNER_SIZES[size][CommunicationInputCornerType.ROUNDED];
             } else {
                 borderRadius = CORNER_SIZES[size][CommunicationInputCornerType.ROUND];

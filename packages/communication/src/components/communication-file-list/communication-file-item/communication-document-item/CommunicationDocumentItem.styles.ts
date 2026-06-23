@@ -1,59 +1,45 @@
 import styled from 'styled-components';
+import { WithTheme } from '@chayns-components/core';
 
-export const StyledDocumentItem = styled.div`
-    position: relative;
+type StyledCommunicationDocumentItemProps = WithTheme<unknown>;
+
+export const StyledCommunicationDocumentItem = styled.div<StyledCommunicationDocumentItemProps>`
     width: 100%;
-    aspect-ratio: 16 / 9;
-
+    height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-
-    padding: 12px;
+    gap: 4px;
+    padding: 6px 34px 6px 6px;
     box-sizing: border-box;
-
-    border-radius: 8px;
-    background: var(--background-color-secondary);
+    background: ${({ theme }) => theme['102']};
 `;
 
-export const StyledDocumentName = styled.span`
-    text-align: center;
-    word-break: break-word;
-    padding-right: 40px;
+export const StyledCommunicationDocumentItemInfoWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 `;
 
-export const StyledRemoveButton = styled.button`
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.6);
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
+export const StyledCommunicationDocumentItemName = styled.span`
+    font-size: 14px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+`;
+
+export const StyledCommunicationDocumentItemMeta = styled.span`
+    font-size: 12px;
+    line-height: 1.1;
+    opacity: 0.72;
+`;
+
+export const StyledCommunicationDocumentItemIcon = styled.div<WithTheme<unknown>>`
+    height: 100%;
+    aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s;
-
-    &:hover {
-        background: rgba(0, 0, 0, 0.8);
-    }
-`;
-
-export const StyledLoadingOverlay = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.8);
-    cursor: wait;
-    border-radius: 8px;
+    background: ${({ theme }) => theme.primary};
+    border-radius: 2px;
 `;

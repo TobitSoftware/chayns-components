@@ -26,139 +26,139 @@ const Template: StoryFn<typeof CommunicationFileList> = (args) => {
             id: '1',
             url: '',
             thumbnail: '',
-            loadingState: CommunicationLoadingState.uploading,
+            loadingState: CommunicationLoadingState.UPLOADING,
         },
         {
             type: 'file',
             id: '2',
             url: '',
             mimeType: 'application/pdf',
-            name: 'presentation.pdf',
+            name: 'Presentation.pdf',
             size: 2048000,
-            loadingState: CommunicationLoadingState.uploading,
+            loadingState: CommunicationLoadingState.UPLOADING,
         },
         {
             type: 'video',
             id: '3',
             url: '',
             thumbnail: '',
-            loadingState: CommunicationLoadingState.uploading,
+            loadingState: CommunicationLoadingState.UPLOADING,
         },
     ]);
 
     const ref = useRef<CommunicationInputRef>(null);
 
-    // useEffect(() => {
-    //     const timeout1 = setTimeout(() => {
-    //         setFiles((prev) =>
-    //             prev.map((file) =>
-    //                 file.id === '1' && file.type === 'image'
-    //                     ? {
-    //                           ...file,
-    //                           thumbnail:
-    //                               'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-    //                       }
-    //                     : file,
-    //             ),
-    //         );
-    //     }, 2000);
-    //
-    //     const timeout2 = setTimeout(() => {
-    //         setFiles((prev) =>
-    //             prev.map((file) =>
-    //                 file.id === '3' && file.type === 'video'
-    //                     ? {
-    //                           ...file,
-    //                           thumbnail:
-    //                               'https://images.unsplash.com/photo-1485470733090-0c814525038f?w=400&h=300&fit=crop',
-    //                       }
-    //                     : file,
-    //             ),
-    //         );
-    //     }, 4000);
-    //
-    //     const timeout3 = setTimeout(() => {
-    //         setFiles((prev) =>
-    //             prev.map((file) =>
-    //                 file.id === '1' && file.type === 'image'
-    //                     ? {
-    //                           ...file,
-    //                           url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-    //                           loadingState: CommunicationLoadingState.uploaded,
-    //                       }
-    //                     : file,
-    //             ),
-    //         );
-    //     }, 6000);
-    //
-    //     const timeout4 = setTimeout(() => {
-    //         setFiles((prev) =>
-    //             prev.map((file) =>
-    //                 file.id === '2' && file.type === 'file'
-    //                     ? {
-    //                           ...file,
-    //                           url: 'https://example.com/presentation.pdf',
-    //                           loadingState: CommunicationLoadingState.uploaded,
-    //                       }
-    //                     : file,
-    //             ),
-    //         );
-    //     }, 8000);
-    //
-    //     // Nach 10 Sekunden: Video ist fertig
-    //     const timeout5 = setTimeout(() => {
-    //         setFiles((prev) =>
-    //             prev.map((file) =>
-    //                 file.id === '3' && file.type === 'video'
-    //                     ? {
-    //                           ...file,
-    //                           url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/big_buck_bunny.mp4',
-    //                           loadingState: CommunicationLoadingState.uploaded,
-    //                       }
-    //                     : file,
-    //             ),
-    //         );
-    //     }, 10000);
-    //
-    //     const timeout6 = setTimeout(() => {
-    //         setFiles((prev) => [
-    //             ...prev,
-    //             {
-    //                 type: 'image',
-    //                 id: '4',
-    //                 url: '',
-    //                 thumbnail: '',
-    //                 loadingState: CommunicationLoadingState.uploading,
-    //             },
-    //         ]);
-    //     }, 12000);
-    //
-    //     const timeout7 = setTimeout(() => {
-    //         setFiles((prev) =>
-    //             prev.map((file) =>
-    //                 file.id === '4' && file.type === 'image'
-    //                     ? {
-    //                           ...file,
-    //                           url: 'https://images.unsplash.com/photo-1495995424756-f1a16f8a6d85?w=400&h=300&fit=crop',
-    //                           thumbnail:
-    //                               'https://images.unsplash.com/photo-1495995424756-f1a16f8a6d85?w=400&h=300&fit=crop',
-    //                           loadingState: CommunicationLoadingState.uploaded,
-    //                       }
-    //                     : file,
-    //             ),
-    //         );
-    //     }, 14000);
-    //
-    //     return () => {
-    //         clearTimeout(timeout1);
-    //         clearTimeout(timeout2);
-    //         clearTimeout(timeout3);
-    //         clearTimeout(timeout4);
-    //         clearTimeout(timeout5);
-    //         clearTimeout(timeout6);
-    //         clearTimeout(timeout7);
-    //     };
-    // }, []);
+    useEffect(() => {
+        const timeout1 = setTimeout(() => {
+            setFiles((prev) =>
+                prev.map((file) =>
+                    file.id === '1' && file.type === 'image'
+                        ? {
+                              ...file,
+                              thumbnail:
+                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpUkXj1rlkIRJba5cjdAQEHFE1acYHsG8y9oWYSFeVbg&s=10',
+                          }
+                        : file,
+                ),
+            );
+        }, 2000);
+
+        const timeout2 = setTimeout(() => {
+            setFiles((prev) =>
+                prev.map((file) =>
+                    file.id === '3' && file.type === 'video'
+                        ? {
+                              ...file,
+                              thumbnail:
+                                  'https://telecommunication-telemedia-assessment.github.io/AVT-VQDB-UHD-1/thumbs/new/test_1_bigbuck_bunny_8bit_15000kbps_1080p_60.0fps_h264.jpg',
+                          }
+                        : file,
+                ),
+            );
+        }, 4000);
+
+        const timeout3 = setTimeout(() => {
+            setFiles((prev) =>
+                prev.map((file) =>
+                    file.id === '1' && file.type === 'image'
+                        ? {
+                              ...file,
+                              url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpUkXj1rlkIRJba5cjdAQEHFE1acYHsG8y9oWYSFeVbg&s=10',
+                              loadingState: CommunicationLoadingState.UPLOADED,
+                          }
+                        : file,
+                ),
+            );
+        }, 6000);
+
+        const timeout4 = setTimeout(() => {
+            setFiles((prev) =>
+                prev.map((file) =>
+                    file.id === '2' && file.type === 'file'
+                        ? {
+                              ...file,
+                              url: 'https://example.com/presentation.pdf',
+                              loadingState: CommunicationLoadingState.UPLOADED,
+                          }
+                        : file,
+                ),
+            );
+        }, 8000);
+
+        // Nach 10 Sekunden: Video ist fertig
+        const timeout5 = setTimeout(() => {
+            setFiles((prev) =>
+                prev.map((file) =>
+                    file.id === '3' && file.type === 'video'
+                        ? {
+                              ...file,
+                              url: 'https://avtshare01.rz.tu-ilmenau.de/avt-vqdb-uhd-1/test_1/segments/bigbuck_bunny_8bit_15000kbps_1080p_60.0fps_h264.mp4',
+                              loadingState: CommunicationLoadingState.UPLOADED,
+                          }
+                        : file,
+                ),
+            );
+        }, 10000);
+
+        const timeout6 = setTimeout(() => {
+            setFiles((prev) => [
+                ...prev,
+                {
+                    type: 'image',
+                    id: '4',
+                    url: '',
+                    thumbnail: '',
+                    loadingState: CommunicationLoadingState.UPLOADING,
+                },
+            ]);
+        }, 12000);
+
+        const timeout7 = setTimeout(() => {
+            setFiles((prev) =>
+                prev.map((file) =>
+                    file.id === '4' && file.type === 'image'
+                        ? {
+                              ...file,
+                              url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTofbL0jwzE1oMQItSKlz_sbZ4feV1GMhp8_D7YjyLL_w&s=10',
+                              thumbnail:
+                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTofbL0jwzE1oMQItSKlz_sbZ4feV1GMhp8_D7YjyLL_w&s=10',
+                              loadingState: CommunicationLoadingState.UPLOADED,
+                          }
+                        : file,
+                ),
+            );
+        }, 14000);
+
+        return () => {
+            clearTimeout(timeout1);
+            clearTimeout(timeout2);
+            clearTimeout(timeout3);
+            clearTimeout(timeout4);
+            clearTimeout(timeout5);
+            clearTimeout(timeout6);
+            clearTimeout(timeout7);
+        };
+    }, []);
 
     const handleRemove = (fileId: string) => {
         setFiles((prev) => prev.filter((file) => file.id !== fileId));

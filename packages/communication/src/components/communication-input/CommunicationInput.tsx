@@ -85,6 +85,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             isMultiLine,
             isInputInBottomRow: shouldShowInputInBottomRow,
             size,
+            hasTopContent: !!topContent,
         });
         const { startInitialAnimation, initial, animate, transition, shouldShowOnlyRightElement } =
             useCommunicationInputAnimation({
