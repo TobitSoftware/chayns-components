@@ -141,6 +141,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
         const contentRef = useRef<HTMLDivElement>(null);
         const keyRef = useRef(`person-finder-${uuidV4()}`);
         const tagInputRef = useRef<TagInputRef>(null);
+        const hasFocusRef = useRef<boolean>(false);
 
         const { isTouch } = useDevice();
 
@@ -151,10 +152,14 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
         );
 
         const handleTagInputBlur = useCallback(() => {
+            hasFocusRef.current = false;
+
             setIsFocused(false);
         }, []);
 
         const handleTagInputFocus = useCallback(() => {
+            hasFocusRef.current = true;
+
             setIsFocused(true);
         }, []);
 
@@ -194,8 +199,8 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
         const handleDropdownOutsideClick = useCallback(() => {
             tagInputRef.current?.blur();
 
-            return isFocused && isTouch;
-        }, [isFocused, isTouch]);
+            return hasFocusRef.current && isTouch;
+        }, [isTouch]);
 
         const handleAdd = useCallback(
             (id: string) => {
@@ -272,9 +277,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
         }, [onDropdownHide, onDropdownShow, shouldShowBody]);
 
         const showBody = useMemo(() => {
-            const extraMobileCheck = isTouch ? isFocused : true;
-
-            const check = shouldShowBody && extraMobileCheck;
+            const check = shouldShowBody;
 
             if (relationMode === RelationMode.SITE) {
                 return check;
@@ -290,15 +293,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             }
 
             return check;
-        }, [
-            filterTypes,
-            friendsPriority,
-            isFocused,
-            isTouch,
-            search,
-            shouldShowBody,
-            relationMode,
-        ]);
+        }, [filterTypes, friendsPriority, search, shouldShowBody, relationMode]);
 
         const content = useMemo(() => {
             const body = (
