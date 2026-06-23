@@ -14,6 +14,7 @@ import {
 } from './FileItem.styles';
 import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
 import textStrings from '../../../constants/textStrings';
+import { useKeyboardFocusHighlighting } from '../../../hooks/useKeyboardFocusHighlighting';
 
 export type FileItemProps = IFileItem & {
     onRemove?: (name: string) => void;
@@ -29,8 +30,13 @@ const FileItem: FC<FileItemProps> = ({
     source,
     shouldAllowDownload,
 }) => {
+    const canDownload = shouldAllowDownload && !!source;
+    const canRemove = typeof onRemove === 'function';
+
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(canRemove || !!canDownload);
+
     const handleRemove = useCallback(() => {
-        if (typeof onRemove === 'function') {
+        if (canRemove) {
             onRemove(id);
         }
     }, [id, onRemove]);
@@ -47,7 +53,7 @@ const FileItem: FC<FileItemProps> = ({
 
     const handleRemoveKeyDown = useCallback<KeyboardEventHandler<HTMLSpanElement>>(
         (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
+            if (canRemove && (event.key === 'Enter' || event.key === ' ')) {
                 event.preventDefault();
                 event.stopPropagation();
                 handleRemove();
@@ -110,9 +116,6 @@ const FileItem: FC<FileItemProps> = ({
         }
     }, [name, source]);
 
-    const canDownload = shouldAllowDownload && !!source;
-    const canRemove = typeof onRemove === 'function';
-
     const downloadText = useTextstringValue({
         textstring: ttsToITextString(textStrings.components.fileItem.download),
     });
@@ -121,6 +124,7 @@ const FileItem: FC<FileItemProps> = ({
     });
 
     const rightElement = useMemo(() => {
+        if (!canDownload && !canRemove) return undefined;
         // Both actions available → show as ContextMenu
         if (canDownload && canRemove) {
             const items: ContextMenuItem[] = [
@@ -141,44 +145,62 @@ const FileItem: FC<FileItemProps> = ({
             return <ContextMenu items={items} />;
         }
 
-        // Only download
-        if (canDownload) {
-            return (
-                <StyledFileItemIcon onClick={handleDownload}>
-                    <Icon icons={['fa fa-download']} />
-                </StyledFileItemIcon>
-            );
-        }
+        const handleClick = () => {
+            if (canRemove) {
+                onRemove(id);
+                return;
+            }
 
-        // Only remove
-        if (canRemove) {
-            return (
-                <StyledFileItemIcon onClick={() => onRemove(id)}>
-                    <Icon icons={['ts-wrong']} />
-                </StyledFileItemIcon>
-            );
-        }
+            handleDownload();
+        };
 
-        return undefined;
-    }, [canDownload, canRemove, downloadText, handleDownload, id, onRemove, removeText]);
+        const handleKeyDown = canRemove ? handleRemoveKeyDown : undefined;
+
+        const fileIcon = canRemove ? 'ts-wrong' : 'fa fa-download';
+
+        return (
+            <StyledFileItemIcon
+                onClick={handleClick}
+                onKeyDown={handleKeyDown}
+                role="button"
+                tabIndex={0}
+            >
+                <Icon icons={[fileIcon]} />
+            </StyledFileItemIcon>
+        );
+    }, [
+        canDownload,
+        canRemove,
+        downloadText,
+        handleDownload,
+        handleRemoveKeyDown,
+        id,
+        onRemove,
+        removeText,
+    ]);
 
     return useMemo(
         () => (
             <StyledFileItem>
-                <StyledFileItemKeyboardWrapper
-                    onKeyDown={handleItemKeyDown}
-                    tabIndex={typeof onRemove === 'function' ? 0 : -1}
-                >
+                <StyledFileItemKeyboardWrapper onKeyDown={handleItemKeyDown} tabIndex={-1}>
                     <ListItem
                         title={name}
                         subtitle={humanFileSize}
                         icons={[icon]}
                         rightElements={rightElement}
+                        shouldEnableKeyboardHighlighting={shouldShowKeyboardHighlighting}
                     />
                 </StyledFileItemKeyboardWrapper>
             </StyledFileItem>
         ),
-        [handleItemKeyDown, humanFileSize, icon, name, rightElement],
+        [
+            handleItemKeyDown,
+            humanFileSize,
+            icon,
+            name,
+            rightElement,
+            shouldShowKeyboardHighlighting,
+        ],
     );
 };
 

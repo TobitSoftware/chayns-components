@@ -1,5 +1,8 @@
 import styled from 'styled-components';
-import { keyboardFocusHighlightingRingCss } from '../../../utils/keyboardFocusHighlighting.styles';
+import {
+    keyboardFocusHighlightingCircleRingCss,
+    keyboardFocusHighlightingRingCss,
+} from '../../../utils/keyboardFocusHighlighting.styles';
 
 export const StyledFileItem = styled.div``;
 export const StyledFileItemIcon = styled.div`
@@ -10,6 +13,12 @@ export const StyledFileItemIcon = styled.div`
     border-radius: 3px;
     padding: 6px;
     transition: background-color 0.3s ease;
+
+    &:focus-visible {
+        outline: none;
+        color: inherit;
+        ${keyboardFocusHighlightingCircleRingCss};
+    }
 `;
 
 export const StyledFileItemKeyboardWrapper = styled.div`

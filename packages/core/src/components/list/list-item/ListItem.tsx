@@ -199,6 +199,10 @@ export type ListItemProps = {
      * Function to be executed if the size are changed.
      */
     onSizeChange?: (sizes: ListItemSize) => void;
+    /**
+     * Enables keyboard-only focus highlighting. Overrides the value from the List context.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 export type ListItemRef = ListItemSize;
@@ -243,6 +247,7 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             shouldDisableAnimation = false,
             cornerElement,
             isSelected = false,
+            shouldEnableKeyboardHighlighting: shouldEnableKeyboardHighlightingProp,
         },
         ref,
     ) => {
@@ -251,7 +256,7 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             isWrapped,
             openItemUuid,
             updateOpenItemUuid,
-            shouldEnableKeyboardHighlighting,
+            shouldEnableKeyboardHighlighting: shouldEnableKeyboardHighlightingContext,
             listGroupUuid,
             listItemUuids,
             registerListItemUuid,
@@ -259,6 +264,9 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             activeListItemUuid,
             updateActiveListItemUuid,
         } = useContext(ListContext);
+
+        const shouldEnableKeyboardHighlighting =
+            shouldEnableKeyboardHighlightingProp ?? shouldEnableKeyboardHighlightingContext;
 
         const { isWrapped: isParentAccordionWrapped } = useContext(AccordionContext);
 
