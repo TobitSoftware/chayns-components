@@ -59,7 +59,6 @@ export const StyledTruncationClampFocusWrapper = styled.div<StyledTruncationClam
                 transition: none;
                 ${keyboardFocusHighlightingRingCss};
                 color: inherit;
-                outline: 2px solid rgba(255, 255, 255, 0.7);
             }
         `}
 `;

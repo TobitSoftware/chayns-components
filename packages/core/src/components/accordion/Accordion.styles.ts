@@ -125,7 +125,7 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
         css`
             &:focus-visible {
                 transition: none;
-                ${keyboardFocusHighlightingRingCss}
+                ${keyboardFocusHighlightingRingCss};
             }
         `};
 `;

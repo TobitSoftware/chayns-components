@@ -85,9 +85,7 @@ export const StyledSliderButtonPopupContentItem = styled.div<StyledSliderButtonP
     padding: 4px 12px;
 
     &:focus-visible {
-        ${keyboardFocusHighlightingRingCss}
-        outline: solid 2px color-mix(in srgb, white 70%, transparent);
-        color: ${({ theme }: StyledSliderButtonPopupContentItemProps) => theme.text};
+        ${keyboardFocusHighlightingRingCss};
     }
 `;
 

@@ -114,12 +114,10 @@ export const StyledListItem = styled.div<StyledListItemProps>`
         css`
             padding-left: 26px;
         `}
-
-    &[data-should-show-keyboard-highlighting='true']:focus-visible {
+    
+        &[data-should-show-keyboard-highlighting='true']:focus-visible {
         transition: none;
-        ${keyboardFocusHighlightingRingCss}
-        color: var(--chayns-color--text);
-        outline: solid 2px color-mix(in srgb, white 70%, transparent);
+        ${keyboardFocusHighlightingRingCss};
         overflow: visible;
     }
 `;

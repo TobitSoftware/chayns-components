@@ -53,8 +53,6 @@ export const StyledTagInputTagFocusWrapper = styled.div<StyledTagInputTagFocusWr
                 ${keyboardFocusHighlightingRingCss}
                 border-radius: 999px;
                 outline-offset: 0;
-                color: inherit;
-                outline: solid 2px color-mix(in srgb, white 70%, transparent);
             }
         `}
 `;
