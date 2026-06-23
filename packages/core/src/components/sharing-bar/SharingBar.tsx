@@ -40,7 +40,7 @@ const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment, containe
     return (
         <StyledSharingBar onClick={handleSharingBarClick}>
             <StyledSharingBarIconWrapper>
-                <Icon icons={['fa-solid fa-share-nodes']} />
+                <Icon icons={['fa fa-share-nodes']} />
             </StyledSharingBarIconWrapper>
             <SharingContextMenu
                 link={link}

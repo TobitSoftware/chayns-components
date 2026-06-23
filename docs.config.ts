@@ -67,6 +67,7 @@ const config: GenerateTypesConfig = {
     packages: [
         'code-highlighter',
         'color-picker',
+        'communication',
         'core',
         'date',
         'devalue-slider',
@@ -94,6 +95,11 @@ const config: GenerateTypesConfig = {
             id: 'color-picker',
             name: 'ColorPicker',
             icons: ['fa fa-eye-dropper'],
+        },
+        {
+            id: 'communication',
+            name: 'Communication',
+            icons: ['fa fa-comments'],
         },
         {
             id: 'date',
