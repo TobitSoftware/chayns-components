@@ -63,6 +63,73 @@ const getFocusedElementIndex = (elements: HTMLElement[], targetElement: HTMLElem
     );
 };
 
+type ListGroupNavigationParams = {
+    event: KeyboardEvent<HTMLDivElement>;
+    isCurrentListItemTarget: boolean;
+    isInKeyboardNavigationGroup: boolean;
+    listItemUuids?: string[];
+    currentUuid: string;
+    listGroupUuid?: string;
+    updateActiveListItemUuid?: (uuid?: string) => void;
+};
+
+type ListItemTabNavigationParams = ListGroupNavigationParams & {
+    currentListItemElement: HTMLDivElement;
+    targetElement: HTMLElement | null;
+};
+
+type ListItemToggleKeyParams = {
+    event: KeyboardEvent<HTMLDivElement>;
+    isCurrentListItemTarget: boolean;
+    isExpandable: boolean;
+    isItemOpen: boolean;
+    shouldEnableKeyboardHighlighting: boolean;
+    toggleItem: VoidFunction;
+};
+
+const getListItemElementByIndex = ({
+    index,
+    listItemUuids,
+    listGroupUuid,
+}: {
+    index: number;
+    listItemUuids: string[];
+    listGroupUuid?: string;
+}) => {
+    const listItemUuid = listItemUuids[index];
+
+    if (!listItemUuid || typeof listGroupUuid !== 'string') {
+        return undefined;
+    }
+
+    return document.querySelector<HTMLDivElement>(
+        `[data-uuid="${listGroupUuid}---${listItemUuid}"]`,
+    );
+};
+
+const focusListItemByIndex = ({
+    index,
+    listItemUuids,
+    listGroupUuid,
+    updateActiveListItemUuid,
+}: {
+    index: number;
+    listItemUuids: string[];
+    listGroupUuid?: string;
+    updateActiveListItemUuid?: (uuid?: string) => void;
+}) => {
+    const listItemUuid = listItemUuids[index];
+    const listItemElement = getListItemElementByIndex({ index, listItemUuids, listGroupUuid });
+
+    if (!listItemUuid || !listItemElement || typeof updateActiveListItemUuid !== 'function') {
+        return false;
+    }
+
+    updateActiveListItemUuid(listItemUuid);
+    listItemElement.focus();
+    return true;
+};
+
 export const handleHorizontalArrowNavigation = ({
     event,
     currentListItemElement,
@@ -156,6 +223,72 @@ export const handleHorizontalArrowNavigation = ({
     return false;
 };
 
+export const handleListItemTabNavigation = ({
+    event,
+    currentListItemElement,
+    targetElement,
+    isCurrentListItemTarget,
+    isInKeyboardNavigationGroup,
+    listItemUuids,
+    currentUuid,
+    listGroupUuid,
+    updateActiveListItemUuid,
+}: ListItemTabNavigationParams) => {
+    if (event.key !== 'Tab' || !isInKeyboardNavigationGroup || !listItemUuids?.length) {
+        return false;
+    }
+
+    const currentIndex = listItemUuids.indexOf(currentUuid);
+
+    if (currentIndex === -1) {
+        return false;
+    }
+
+    const focusableRightElements = getFocusableElements(
+        currentListItemElement,
+        RIGHT_ELEMENT_FOCUSABLE_SELECTOR,
+    );
+    const focusedRightElementIndex = getFocusedElementIndex(focusableRightElements, targetElement);
+
+    if (event.shiftKey) {
+        return false;
+    }
+
+    if (isCurrentListItemTarget) {
+        if (focusableRightElements.length > 0) {
+            event.preventDefault();
+            focusableRightElements[0]?.focus();
+            return true;
+        }
+
+        return false;
+    }
+
+    if (focusedRightElementIndex === -1) {
+        return false;
+    }
+
+    const nextRightElement = focusableRightElements[focusedRightElementIndex + 1];
+
+    if (nextRightElement) {
+        event.preventDefault();
+        nextRightElement.focus();
+        return true;
+    }
+
+    if (currentIndex < listItemUuids.length - 1) {
+        event.preventDefault();
+        return focusListItemByIndex({
+            index: currentIndex + 1,
+            listItemUuids,
+            listGroupUuid,
+            updateActiveListItemUuid,
+        });
+    }
+
+    return false;
+};
+
 export const handleVerticalListGroupNavigation = ({
     event,
     isCurrentListItemTarget,
@@ -164,23 +297,12 @@ export const handleVerticalListGroupNavigation = ({
     currentUuid,
     listGroupUuid,
     updateActiveListItemUuid,
-}: {
-    event: KeyboardEvent<HTMLDivElement>;
-    isCurrentListItemTarget: boolean;
-    isInKeyboardNavigationGroup: boolean;
-    listItemUuids?: string[];
-    currentUuid: string;
-    listGroupUuid?: string;
-    updateActiveListItemUuid?: (uuid?: string) => void;
-}) => {
-    const isTab = event.key === 'Tab';
-    const isShiftTab = isTab && event.shiftKey;
-
+}: ListGroupNavigationParams) => {
     if (
         !isCurrentListItemTarget ||
         !isInKeyboardNavigationGroup ||
         !listItemUuids?.length ||
-        (event.key !== 'ArrowDown' && event.key !== 'ArrowUp' && !isTab)
+        (event.key !== 'ArrowDown' && event.key !== 'ArrowUp')
     ) {
         return false;
     }
@@ -191,17 +313,7 @@ export const handleVerticalListGroupNavigation = ({
         return true;
     }
 
-    const isBackward = event.key === 'ArrowUp' || isShiftTab;
-
-    // For Tab at the boundaries, let the browser handle natural tab order
-    if (isTab) {
-        const isAtStart = currentIndex === 0;
-        const isAtEnd = currentIndex === listItemUuids.length - 1;
-
-        if ((isShiftTab && isAtStart) || (!isShiftTab && isAtEnd)) {
-            return false;
-        }
-    }
+    const isBackward = event.key === 'ArrowUp';
 
     event.preventDefault();
 
@@ -227,5 +339,30 @@ export const handleVerticalListGroupNavigation = ({
         }
     }
 
+    return true;
+};
+
+export const handleListItemToggleKey = ({
+    event,
+    isCurrentListItemTarget,
+    isExpandable,
+    isItemOpen,
+    shouldEnableKeyboardHighlighting,
+    toggleItem,
+}: ListItemToggleKeyParams) => {
+    if (!isCurrentListItemTarget || !shouldEnableKeyboardHighlighting) {
+        return false;
+    }
+
+    const shouldOpen = isExpandable && event.key === 'ArrowRight' && !isItemOpen;
+    const shouldClose = isExpandable && event.key === 'ArrowLeft' && isItemOpen;
+    const shouldToggle = event.key === 'Enter' || event.key === ' ';
+
+    if (!shouldOpen && !shouldClose && !shouldToggle) {
+        return false;
+    }
+
+    event.preventDefault();
+    toggleItem();
     return true;
 };

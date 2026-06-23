@@ -20,7 +20,12 @@ import type { IListItemRightElements } from '../../../types/list';
 import { AccordionContext } from '../../accordion/Accordion';
 import AreaContextProvider, { AreaContext } from '../../area-provider/AreaContextProvider';
 import { ListContext } from '../List';
-import { handleHorizontalArrowNavigation, handleVerticalListGroupNavigation } from '../List.utils';
+import {
+    handleHorizontalArrowNavigation,
+    handleListItemTabNavigation,
+    handleListItemToggleKey,
+    handleVerticalListGroupNavigation,
+} from '../List.utils';
 import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
 import { StyledListItem, StyledListItemTooltip } from './ListItem.styles';
@@ -376,24 +381,10 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             return undefined;
         }, [shouldEnableKeyboardHighlighting, registerListItemUuid, unregisterListItemUuid, uuid]);
 
-        const tabIndex = useMemo(() => {
-            if (isInKeyboardNavigationGroup) {
-                const isGroupTabStop =
-                    activeListItemUuid != null
-                        ? activeListItemUuid === uuid
-                        : listItemUuids?.[0] === uuid;
-
-                return isGroupTabStop ? 0 : -1;
-            }
-
-            return shouldEnableKeyboardHighlighting ? 0 : -1;
-        }, [
-            activeListItemUuid,
-            isInKeyboardNavigationGroup,
-            listItemUuids,
-            shouldEnableKeyboardHighlighting,
-            uuid,
-        ]);
+        const tabIndex = useMemo(
+            () => (shouldEnableKeyboardHighlighting ? 0 : -1),
+            [shouldEnableKeyboardHighlighting],
+        );
 
         const handleKeyDown = useCallback(
             (event: KeyboardEvent<HTMLDivElement>) => {
@@ -401,52 +392,50 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
                 const currentListItemElement = event.currentTarget as HTMLDivElement;
                 const targetElement = event.target as HTMLElement | null;
 
-                if (
-                    shouldEnableKeyboardHighlighting &&
-                    handleHorizontalArrowNavigation({
-                        event,
-                        currentListItemElement,
-                        targetElement,
-                        isCurrentListItemTarget,
-                    })
-                ) {
-                    return;
-                }
-
-                if (
-                    handleVerticalListGroupNavigation({
-                        event,
-                        isCurrentListItemTarget,
-                        isInKeyboardNavigationGroup,
-                        listItemUuids,
-                        currentUuid: uuid,
-                        listGroupUuid,
-                        updateActiveListItemUuid,
-                    })
-                ) {
-                    return;
-                }
-
-                if (isCurrentListItemTarget && shouldEnableKeyboardHighlighting) {
-                    if (isExpandable) {
-                        if (event.key === 'ArrowRight' && !isItemOpen) {
-                            event.preventDefault();
-                            handleHeadClick(event as unknown as React.MouseEvent<HTMLDivElement>);
-                            return;
-                        }
-
-                        if (event.key === 'ArrowLeft' && isItemOpen) {
-                            event.preventDefault();
-                            handleHeadClick(event as unknown as React.MouseEvent<HTMLDivElement>);
-                            return;
-                        }
-                    }
-
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        handleHeadClick(event as unknown as React.MouseEvent<HTMLDivElement>);
-                    }
-                }
+                [
+                    () =>
+                        shouldEnableKeyboardHighlighting &&
+                        handleHorizontalArrowNavigation({
+                            event,
+                            currentListItemElement,
+                            targetElement,
+                            isCurrentListItemTarget,
+                        }),
+                    () =>
+                        handleListItemTabNavigation({
+                            event,
+                            currentListItemElement,
+                            targetElement,
+                            isCurrentListItemTarget,
+                            isInKeyboardNavigationGroup,
+                            listItemUuids,
+                            currentUuid: uuid,
+                            listGroupUuid,
+                            updateActiveListItemUuid,
+                        }),
+                    () =>
+                        handleVerticalListGroupNavigation({
+                            event,
+                            isCurrentListItemTarget,
+                            isInKeyboardNavigationGroup,
+                            listItemUuids,
+                            currentUuid: uuid,
+                            listGroupUuid,
+                            updateActiveListItemUuid,
+                        }),
+                    () =>
+                        handleListItemToggleKey({
+                            event,
+                            isCurrentListItemTarget,
+                            isExpandable,
+                            isItemOpen,
+                            shouldEnableKeyboardHighlighting,
+                            toggleItem: () =>
+                                handleHeadClick(
+                                    event as unknown as React.MouseEvent<HTMLDivElement>,
+                                ),
+                        }),
+                ].some((handleKey) => handleKey());
             },
             [
                 handleHeadClick,
@@ -484,8 +473,6 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             updateActiveListItemUuid,
             uuid,
         ]);
-
-        const shouldAllowElementFocus = !shouldEnableKeyboardHighlighting || isFocusWithinListItem;
 
         return (
             <StyledListItem
@@ -564,7 +551,6 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
                         setShouldEnableTooltip={setShouldEnableTooltip}
                         shouldDisableAnimation={shouldDisableAnimation}
                         onImageError={onImageError}
-                        shouldAllowElementFocus={shouldAllowElementFocus}
                     />
                 </Tooltip>
                 <AnimatePresence initial={false}>

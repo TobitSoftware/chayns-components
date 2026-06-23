@@ -1,19 +1,13 @@
-import React, { FC, isValidElement, useEffect, useMemo, useRef } from 'react';
+import React, { FC, isValidElement, useMemo } from 'react';
 import type { IListItemRightElement, IListItemRightElements } from '../../../../../types/list';
 import { StyledListItemRightElement } from './ListItemRightElement.styles';
 import { getElementClickEvent } from '../../../../../utils/accordion';
 
 type ListItemRightElementProps = {
     rightElements?: IListItemRightElements;
-    shouldAllowFocus?: boolean;
 };
 
-const ListItemRightElement: FC<ListItemRightElementProps> = ({
-    rightElements,
-    shouldAllowFocus = true,
-}) => {
-    const rightElementRef = useRef<HTMLDivElement>(null);
-
+const ListItemRightElement: FC<ListItemRightElementProps> = ({ rightElements }) => {
     const handlePreventClick = (event: React.MouseEvent) => {
         event.stopPropagation();
         event.preventDefault();
@@ -39,53 +33,12 @@ const ListItemRightElement: FC<ListItemRightElementProps> = ({
         return false;
     }, [centerElement]);
 
-    useEffect(() => {
-        const rightElement = rightElementRef.current;
-
-        if (!rightElement) {
-            return;
-        }
-
-        const focusableElements = Array.from(
-            rightElement.querySelectorAll<HTMLElement>(
-                'a[href], button, input, select, textarea, [tabindex], [contenteditable="true"]',
-            ),
-        );
-
-        focusableElements.forEach((element) => {
-            const currentElement = element;
-            const datasetKey = 'listItemRightElementOriginalTabIndex';
-
-            if (shouldAllowFocus) {
-                const originalTabIndex = currentElement.dataset[datasetKey];
-
-                if (typeof originalTabIndex === 'string') {
-                    if (originalTabIndex === '') {
-                        currentElement.removeAttribute('tabindex');
-                    } else {
-                        currentElement.setAttribute('tabindex', originalTabIndex);
-                    }
-
-                    delete currentElement.dataset[datasetKey];
-                }
-            } else {
-                if (typeof currentElement.dataset[datasetKey] !== 'string') {
-                    currentElement.dataset[datasetKey] =
-                        currentElement.getAttribute('tabindex') ?? '';
-                }
-
-                currentElement.setAttribute('tabindex', '-1');
-            }
-        });
-    }, [centerElement, shouldAllowFocus]);
-
     if (!centerElement) {
         return null;
     }
 
     return (
         <StyledListItemRightElement
-            ref={rightElementRef}
             data-right-element="true"
             onClick={shouldPreventRightElementClick ? handlePreventClick : undefined}
         >

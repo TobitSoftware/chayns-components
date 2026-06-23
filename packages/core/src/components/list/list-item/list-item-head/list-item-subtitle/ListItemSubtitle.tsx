@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useMemo, useRef } from 'react';
+import React, { FC, ReactNode, useMemo, useRef } from 'react';
 import type { IListItemRightElement, IListItemRightElements } from '../../../../../types/list';
 import {
     StyledListItemHeadSubtitleText,
@@ -11,15 +11,9 @@ type ListItemSubtitleProps = {
     rightElements?: IListItemRightElements;
     subtitle?: ReactNode;
     isOpen: boolean;
-    shouldAllowRightElementFocus?: boolean;
 };
 
-const ListItemSubtitle: FC<ListItemSubtitleProps> = ({
-    rightElements,
-    subtitle,
-    isOpen,
-    shouldAllowRightElementFocus = true,
-}) => {
+const ListItemSubtitle: FC<ListItemSubtitleProps> = ({ rightElements, subtitle, isOpen }) => {
     const bottomElementRef = useRef<HTMLDivElement>(null);
 
     const handlePreventClick = (event: React.MouseEvent) => {
@@ -42,46 +36,6 @@ const ListItemSubtitle: FC<ListItemSubtitleProps> = ({
 
         return false;
     }, [bottomElement]);
-
-    useEffect(() => {
-        const bottomElementWrapper = bottomElementRef.current;
-
-        if (!bottomElementWrapper) {
-            return;
-        }
-
-        const focusableElements = Array.from(
-            bottomElementWrapper.querySelectorAll<HTMLElement>(
-                'a[href], button, input, select, textarea, [tabindex], [contenteditable="true"]',
-            ),
-        );
-
-        focusableElements.forEach((element) => {
-            const currentElement = element;
-            const datasetKey = 'listItemRightElementOriginalTabIndex';
-
-            if (shouldAllowRightElementFocus) {
-                const originalTabIndex = currentElement.dataset[datasetKey];
-
-                if (typeof originalTabIndex === 'string') {
-                    if (originalTabIndex === '') {
-                        currentElement.removeAttribute('tabindex');
-                    } else {
-                        currentElement.setAttribute('tabindex', originalTabIndex);
-                    }
-
-                    delete currentElement.dataset[datasetKey];
-                }
-            } else {
-                if (typeof currentElement.dataset[datasetKey] !== 'string') {
-                    currentElement.dataset[datasetKey] =
-                        currentElement.getAttribute('tabindex') ?? '';
-                }
-
-                currentElement.setAttribute('tabindex', '-1');
-            }
-        });
-    }, [bottomElement, shouldAllowRightElementFocus]);
 
     return (
         <StyledListItemSubtitle>
