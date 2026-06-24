@@ -4,6 +4,7 @@ import HighlightSliderItem, {
     HighlightSliderItemColors,
 } from './highlight-slider-item/HighlightSliderItem';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
+import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 const DEFAULT_HIGHLIGHT_SLIDER_COLORS: HighlightSliderItemColors = {
     backgroundColor: '#E0E0E0',
@@ -45,9 +46,12 @@ const HighlightSlider: FC<HighlightSliderProps> = ({
     duration = 10,
     shouldEnableKeyboardHighlighting,
 }) => {
+    const colorScheme = useColorScheme();
     const isInteractive = typeof onIndexChange === 'function';
+    const shouldEnableKeyboardHighlightingEffective =
+        shouldEnableKeyboardHighlighting ?? colorScheme?.shouldEnableKeyboardHighlighting ?? false;
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
-        shouldEnableKeyboardHighlighting && isInteractive,
+        shouldEnableKeyboardHighlightingEffective && isInteractive,
     );
 
     const handleFinish = useCallback(
@@ -80,7 +84,7 @@ const HighlightSlider: FC<HighlightSliderProps> = ({
                     isFinished={currentIndex > index}
                     onClick={handleClick}
                     onFinish={handleFinish}
-                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlightingEffective}
                     shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                     isInteractive={isInteractive}
                 />
@@ -92,7 +96,7 @@ const HighlightSlider: FC<HighlightSliderProps> = ({
             duration,
             handleClick,
             handleFinish,
-            shouldEnableKeyboardHighlighting,
+            shouldEnableKeyboardHighlightingEffective,
             shouldShowKeyboardHighlighting,
             isInteractive,
         ],
