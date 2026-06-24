@@ -26,7 +26,7 @@ import {
     type ContextMenuRef,
 } from './ContextMenu.types';
 import { SelectDialogResult } from '../../types/general';
-import { getDefaultFocusedIndex } from './ContextMenu.utils';
+import { getActiveItemIndex, getDefaultFocusedIndex, selectItem } from './ContextMenu.utils';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
@@ -126,44 +126,6 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             [handleHide],
         );
 
-        useEffect(() => {
-            if (!isContentShown) return () => {};
-
-            const handleKey = (e: KeyboardEvent) => {
-                if (items.length === 0 || isHovered) return;
-
-                if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    setFocusedIndex((prev) => (prev >= items.length - 1 ? 0 : prev + 1));
-                }
-
-                if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    setFocusedIndex((prev) => (prev <= 0 ? items.length - 1 : prev - 1));
-                }
-
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    const item = items[focusedIndex];
-                    if (item) {
-                        void item.onClick();
-
-                        if (shouldCloseOnPopupClick) {
-                            handleHide();
-                        }
-                    }
-                }
-
-                if (e.key === 'Escape') {
-                    handleHide();
-                }
-            };
-
-            document.addEventListener('keydown', handleKey);
-
-            return () => document.removeEventListener('keydown', handleKey);
-        }, [isContentShown, items, focusedIndex, handleHide, shouldCloseOnPopupClick, isHovered]);
-
         const handleShow = useCallback(async () => {
             if (isTouch) {
                 const { result } = (await createDialog({
@@ -244,10 +206,55 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     return;
                 }
 
-                const isContextMenuShortcut =
-                    event.key === 'ContextMenu' || (event.key === 'F10' && event.shiftKey);
                 const isActivationKey =
                     event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar';
+
+                if (isContentShown && event.key === 'Escape') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    handleHide();
+                    return;
+                }
+
+                if (isContentShown && !isHovered && event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setFocusedIndex((prev) => (prev >= items.length - 1 ? 0 : prev + 1));
+                    return;
+                }
+
+                if (isContentShown && !isHovered && event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setFocusedIndex((prev) => (prev <= 0 ? items.length - 1 : prev - 1));
+                    return;
+                }
+
+                if (isContentShown && isActivationKey) {
+                    if (
+                        selectItem({
+                            index: getActiveItemIndex({
+                                contextMenuContentElement: contextMenuContentRef.current,
+                                focusedIndex,
+                            }),
+                            items,
+                            onClose: handleHide,
+                            shouldCloseOnPopupClick,
+                        })
+                    ) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+
+                    return;
+                }
+
+                if (event.currentTarget !== event.target) {
+                    return;
+                }
+
+                const isContextMenuShortcut =
+                    event.key === 'ContextMenu' || (event.key === 'F10' && event.shiftKey);
 
                 if (isContextMenuShortcut) {
                     event.preventDefault();
@@ -263,7 +270,18 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     void handleShow();
                 }
             },
-            [handleShow, shouldDisableClick, shouldUseFocusableWrapper],
+            [
+                focusedIndex,
+                handleHide,
+                handleShow,
+                isHovered,
+                isContentShown,
+                items,
+                items.length,
+                shouldCloseOnPopupClick,
+                shouldDisableClick,
+                shouldUseFocusableWrapper,
+            ],
         );
 
         const handleContextMenu = useCallback(
@@ -398,13 +416,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                                 alignment={alignment ?? internalAlignment}
                                 ref={contextMenuContentRef}
                                 focusedIndex={focusedIndex}
-                                onKeySelect={(index) => {
-                                    const item = items[index];
-                                    if (item) {
-                                        void item.onClick();
-                                        handleHide();
-                                    }
-                                }}
+                                onItemFocus={setFocusedIndex}
                                 onMouseEnter={() => {
                                     setIsHovered(true);
                                     setFocusedIndex(-1);
