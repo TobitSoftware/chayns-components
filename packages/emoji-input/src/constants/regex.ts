@@ -2,6 +2,7 @@ export const BB_LC_MENTION_REGEX = /\[lc_mention.+?id="([^"]+?)"](.+?)\[\/lc_men
 export const BB_NER_IGNORE_REGEX = /\[nerIgnore](.+?)\[\/nerIgnore]/g;
 export const BB_NER_REPLACE_REGEX =
     /\[nerReplace\s*(?:prefix="(.*?)")?\s*type="(.*?)"\s*value="(.*?)"](.*?)\[\/nerReplace]/gi;
+export const BB_IGNORE_EMOJI_REGEX = /\[ignoreEmoji\]([\s\S]*?)\[\/ignoreEmoji\]/g;
 
 export const HTML_LC_MENTION_REGEX =
     /<lc_mention.+?id="([^"]+?)">(?:<span.*?<\/span>)*(.+?)<\/lc_mention>/g;

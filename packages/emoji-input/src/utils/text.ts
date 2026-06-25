@@ -2,6 +2,7 @@ import {
     BB_LC_MENTION_REGEX,
     BB_NER_IGNORE_REGEX,
     BB_NER_REPLACE_REGEX,
+    BB_IGNORE_EMOJI_REGEX,
     HTML_A_TAG_REGEX,
     HTML_BOLD_REGEX,
     HTML_LC_MENTION_REGEX,
@@ -32,7 +33,7 @@ export const convertTextToHTML = (text: string) => {
         .replace(HTML_A_TAG_REGEX, '$1')
         .replace(
             BB_LC_MENTION_REGEX,
-            '<lc_mention contenteditable="false" id="$1"><span>@</span>$2</lc_mention>​',
+            '<lc_mention contenteditable="false" id="$1"><span>@</span>$2</lc_mention>\u200B',
         )
         .replace(BB_NER_IGNORE_REGEX, '<nerIgnore contenteditable="false">$1</nerIgnore>')
         .replace(
@@ -42,7 +43,8 @@ export const convertTextToHTML = (text: string) => {
 
                 return `<nerReplace contenteditable="false" ${prefixAttr}type="${type}" value="${value}">${entity}</nerReplace>`;
             },
-        );
+        )
+        .replace(BB_IGNORE_EMOJI_REGEX, '<span class="no-emoji-convert">$1</span>');
 
     return result;
 };
@@ -67,7 +69,8 @@ export const convertHTMLToText = (text: string, { preserveSpaces = false } = {})
 
                 return `[nerReplace ${prefixAttr}type="${type}" value="${value}"]${entity}[/nerReplace]`;
             },
-        );
+        )
+        .replace(HTML_NO_EMOJI_REGEX, '[ignoreEmoji]$1[/ignoreEmoji]');
 
     if (preserveSpaces) {
         return result
