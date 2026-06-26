@@ -416,11 +416,16 @@ export const getCurrentCursorPosition = (editorElement: HTMLDivElement | null): 
         const container = document.createElement('div');
         container.appendChild(pre.cloneContents());
 
-        const bbCodeUntilCursor = convertHTMLToText(container.innerHTML, { preserveSpaces: true });
+        const bbCodeUntilCursor = convertHTMLToText(container.innerHTML, {
+            preserveSpaces: true,
+            shouldSerializeNoEmojiToBBCode: false,
+        });
 
         return bbCodeUntilCursor.length;
     } catch {
-        return convertHTMLToText(editorElement.innerHTML).length;
+        return convertHTMLToText(editorElement.innerHTML, {
+            shouldSerializeNoEmojiToBBCode: false,
+        }).length;
     }
 };
 
@@ -439,7 +444,13 @@ const getCursorTargetByAbsIndex = ({
         return { node: textNode, offset: 0 };
     }
 
-    const clampedPosition = clamp(position, 0, convertHTMLToText(editorElement.innerHTML).length);
+    const clampedPosition = clamp(
+        position,
+        0,
+        convertHTMLToText(editorElement.innerHTML, {
+            shouldSerializeNoEmojiToBBCode: false,
+        }).length,
+    );
 
     let absCounter = 0;
 
