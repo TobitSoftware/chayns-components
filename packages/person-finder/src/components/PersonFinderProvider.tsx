@@ -105,6 +105,7 @@ type PersonFinderProviderProps = {
     uacFilter?: UACFilter[];
     entries?: PersonEntry[];
     relationMode?: RelationMode;
+    shouldUseQa: boolean;
 };
 
 const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
@@ -114,6 +115,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     defaultEntries,
     excludedEntryIds,
     shouldShowOwnUser = false,
+    shouldUseQa,
     uacFilter,
     entries,
     relationMode,
@@ -219,6 +221,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 filter: [key],
                 skipMap: { [key]: current.skip },
                 relationMode,
+                shouldUseQa,
             })
                 .then((result) => {
                     const newData = result?.[key];
@@ -231,7 +234,15 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                     updateLoadingState(key, LoadingState.Success);
                 });
         },
-        [appendData, data, getPagedUsersByGroups, relationMode, search, updateLoadingState],
+        [
+            appendData,
+            data,
+            getPagedUsersByGroups,
+            relationMode,
+            search,
+            shouldUseQa,
+            updateLoadingState,
+        ],
     );
 
     const addFriend = useCallback((personId: string) => {
@@ -311,6 +322,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                     filter,
                     skipMap: {},
                     relationMode,
+                    shouldUseQa,
                 });
 
                 if (requestTimestamp < latestHandledRequestRef.current) {
