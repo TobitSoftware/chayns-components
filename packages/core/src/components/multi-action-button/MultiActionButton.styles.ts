@@ -11,6 +11,12 @@ export const StyledMultiActionButton = styled(motion.div)`
     position: relative;
     transition: width 0.2s ease;
     width: fit-content;
+
+    /* Keep normal clipping, but let focus-ring paint outside while focused. */
+    &:focus-within {
+        overflow: visible;
+        z-index: 1;
+    }
 `;
 
 type StyledSeparatorProps = WithTheme<{
