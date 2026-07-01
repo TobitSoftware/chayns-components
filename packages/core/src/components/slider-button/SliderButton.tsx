@@ -294,7 +294,7 @@ const SliderButton: FC<SliderButtonProps> = ({
                     ref={(element: HTMLDivElement | null) => {
                         popupItemRefs.current[popupIndex] = element;
                     }}
-                    tabIndex={0}
+                    tabIndex={-1}
                     role="button"
                     $isSelected={id === currentPopupId}
                 >

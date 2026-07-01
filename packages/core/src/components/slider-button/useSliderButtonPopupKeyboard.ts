@@ -71,7 +71,7 @@ export const useSliderButtonPopupKeyboard = ({
                 return;
             }
 
-            if (event.key === 'Escape') {
+            if (event.key === 'Escape' || event.key === 'ArrowLeft' || event.key === 'Tab') {
                 event.preventDefault();
                 popupRef.current?.hide();
                 focusThumb();
