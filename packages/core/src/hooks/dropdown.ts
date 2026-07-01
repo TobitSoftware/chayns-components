@@ -153,20 +153,11 @@ export const useDropdownPosition = ({
             const spaceToBottom = height - (y + anchorHeight);
 
             const nextAvailableMaxHeight = Math.max(
-                Math.round(
-                    (useTopAlignment ? spaceToTop : spaceToBottom) - AVAILABLE_HEIGHT_SPACING,
-                ),
+                (useTopAlignment ? spaceToTop : spaceToBottom) - AVAILABLE_HEIGHT_SPACING,
                 0,
             );
 
-            // Only update the available max height when it changes by more than one pixel. This
-            // prevents subpixel fluctuations of getBoundingClientRect from repeatedly triggering
-            // re-renders of the consumer, which could otherwise cause a layout shift loop.
-            setAvailableMaxHeight((currentAvailableMaxHeight) =>
-                Math.abs(currentAvailableMaxHeight - nextAvailableMaxHeight) <= 1
-                    ? currentAvailableMaxHeight
-                    : nextAvailableMaxHeight,
-            );
+            setAvailableMaxHeight(nextAvailableMaxHeight);
 
             setCoordinates({ x, y: useTopAlignment ? y : y + anchorHeight });
         }
