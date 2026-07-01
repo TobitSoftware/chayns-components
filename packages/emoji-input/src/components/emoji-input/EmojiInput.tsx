@@ -374,7 +374,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 let cleanedHTML = cleanupEmptyIgnoreEmojiSpans(editorRef.current.innerHTML);
                 handleUpdateHTML(cleanedHTML);
 
-                const text = convertHTMLToText(cleanedHTML);
+                // After handleUpdateHTML, the DOM has been updated with emojis
+                // We need to read the text from the updated DOM, not from pre-update HTML
+                // convertHTMLToText will convert no-emoji-convert spans to [ignoreEmoji] BBCode
+                const text = convertHTMLToText(editorRef.current.innerHTML);
 
                 setPlainTextValue(text);
 
