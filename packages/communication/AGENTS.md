@@ -2,18 +2,12 @@
 
 React component package providing 10 documented components for chayns applications.
 
-Documented components: `AudioInput`, `CommunicationButton`, `CommunicationContent`,
-`CommunicationFileList`, `CommunicationHeader`, `CommunicationInput`, `CommunicationList`,
-`CommunicationMessage`, `CommunicationTeamTalkHeader`, `SocialPlugin`.
+Documented components: `AudioInput`, `CommunicationButton`, `CommunicationContent`, `CommunicationFileList`, `CommunicationHeader`, `CommunicationInput`, `CommunicationList`, `CommunicationMessage`, `CommunicationTeamTalkHeader`, `SocialPlugin`.
 
 ## Import
 
 ```ts
-import {
-    AudioInput,
-    CommunicationButton,
-    CommunicationContent,
-} from '@chayns-components/communication';
+import { AudioInput, CommunicationButton, CommunicationContent } from '@chayns-components/communication';
 ```
 
 ## Typical Usage
@@ -37,8 +31,7 @@ import {
 
 ## AudioInput
 
-`AudioInput` is exported by `@chayns-components/communication` and should be imported from the
-public package entry point.
+`AudioInput` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
 
 ### Import
 
@@ -64,20 +57,15 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `AudioInput` directly from `@chayns-components/communication` instead of internal source
-  paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `AudioInput` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use
-  the public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
 ## CommunicationButton
 
-`CommunicationButton` is exported by `@chayns-components/communication` and should be imported from
-the public package entry point.
+`CommunicationButton` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
 
 ### Import
 
@@ -90,13 +78,20 @@ import { CommunicationButton } from '@chayns-components/communication';
 #### General
 
 ```tsx
-<CommunicationButton icons={['fa fa-thumbs-up']} iconColor={'white'} />
+<CommunicationButton
+    icons={['fa fa-thumbs-up']}
+    iconColor={'white'}
+/>
 ```
 
 #### With Agent
 
 ```tsx
-<CommunicationButton icons={['fa fa-thumbs-up']} iconColor={'white'} personId={'TKT-EEV5Q'} />
+<CommunicationButton
+    icons={['fa fa-thumbs-up']}
+    iconColor={'white'}
+    personId={'TKT-EEV5Q'}
+/>
 ```
 
 ### Props
@@ -109,20 +104,15 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `CommunicationButton` directly from `@chayns-components/communication` instead of internal
-  source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `CommunicationButton` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use
-  the public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
 ## CommunicationContent
 
-`CommunicationContent` is exported by `@chayns-components/communication` and should be imported from
-the public package entry point.
+`CommunicationContent` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
 
 ### Import
 
@@ -166,20 +156,15 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `CommunicationContent` directly from `@chayns-components/communication` instead of internal
-  source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `CommunicationContent` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use
-  the public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
 ## CommunicationFileList
 
-`CommunicationFileList` is exported by `@chayns-components/communication` and should be imported
-from the public package entry point.
+`CommunicationFileList` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
 
 ### Import
 
@@ -205,20 +190,15 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `CommunicationFileList` directly from `@chayns-components/communication` instead of
-  internal source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `CommunicationFileList` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use
-  the public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
 ## CommunicationHeader
 
-`CommunicationHeader` is exported by `@chayns-components/communication` and should be imported from
-the public package entry point.
+`CommunicationHeader` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
 
 ### Import
 
@@ -234,61 +214,61 @@ import { CommunicationHeader } from '@chayns-components/communication';
 <CommunicationHeader
     title={'Lorem Ipsum'}
     from={{
-        id: 'MIC-HAEL1',
-        name: 'Michael Gesenhues',
-        actions: [{ icons: ['fa fa-pen'], label: 'Email schreiben', onClick: () => {} }],
-    }}
+                id: 'MIC-HAEL1',
+                name: 'Michael Gesenhues',
+                actions: [{ icons: ['fa fa-pen'], label: 'Email schreiben', onClick: () => {} }],
+            }}
     to={[
-        {
-            id: 'JAN-NIK96',
-            name: 'Jannik Weise',
-            actions: [
-                { icons: ['fa fa-pen'], label: 'Email schreiben', onClick: () => {} },
-                { icons: ['fa fa-copy'], label: 'Email kopieren', onClick: () => {} },
-            ],
-        },
-    ]}
-    cc={[
-        {
-            id: '131-99998',
-            name: 'Luca Jesußek',
-            actions: [{ icons: ['fa fa-pen'], label: 'Email schreiben', onClick: () => {} }],
-        },
-    ]}
-    rightActions={[
-        {
-            id: 'print',
-            label: 'Drucken',
-            onClick: () => {},
-            icons: ['fa fa-print'],
-        },
-        {
-            id: 'delete',
-            label: 'Löschen',
-            onClick: () => {},
-            icons: ['fa fa-trash'],
-        },
-        {
-            id: 'reply',
-            label: 'Antworten',
-            onClick: () => {},
-            icons: ['fa fa-arrow-left'],
-        },
-        {
-            id: 'attachments',
-            label: 'Anhänge',
-            contextMenuItems: [
                 {
-                    icons: ['fa fa-file'],
-                    text: 'image.png',
-                    key: 'sfetsg',
-                    onClick: () => {},
+                    id: 'JAN-NIK96',
+                    name: 'Jannik Weise',
+                    actions: [
+                        { icons: ['fa fa-pen'], label: 'Email schreiben', onClick: () => {} },
+                        { icons: ['fa fa-copy'], label: 'Email kopieren', onClick: () => {} },
+                    ],
                 },
-            ],
-            onClick: () => {},
-            icons: ['fa fa-paperclip'],
-        },
-    ]}
+            ]}
+    cc={[
+                {
+                    id: '131-99998',
+                    name: 'Luca Jesußek',
+                    actions: [{ icons: ['fa fa-pen'], label: 'Email schreiben', onClick: () => {} }],
+                },
+            ]}
+    rightActions={[
+                {
+                    id: 'print',
+                    label: 'Drucken',
+                    onClick: () => {},
+                    icons: ['fa fa-print'],
+                },
+                {
+                    id: 'delete',
+                    label: 'Löschen',
+                    onClick: () => {},
+                    icons: ['fa fa-trash'],
+                },
+                {
+                    id: 'reply',
+                    label: 'Antworten',
+                    onClick: () => {},
+                    icons: ['fa fa-arrow-left'],
+                },
+                {
+                    id: 'attachments',
+                    label: 'Anhänge',
+                    contextMenuItems: [
+                        {
+                            icons: ['fa fa-file'],
+                            text: 'image.png',
+                            key: 'sfetsg',
+                            onClick: () => {},
+                        },
+                    ],
+                    onClick: () => {},
+                    icons: ['fa fa-paperclip'],
+                },
+            ]}
     date={'2026-04-24T13:23:01.087Z'}
 />
 ```
@@ -303,20 +283,15 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `CommunicationHeader` directly from `@chayns-components/communication` instead of internal
-  source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `CommunicationHeader` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use
-  the public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
 ## CommunicationInput
 
-`CommunicationInput` is exported by `@chayns-components/communication` and should be imported from
-the public package entry point.
+`CommunicationInput` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
 
 ### Import
 
@@ -354,27 +329,27 @@ import { CommunicationInput, Icon } from '@chayns-components/communication';
     placeholder={'Nachricht schreiben'}
     contextMenuItems={[{ key: 'copy', text: 'Copy', onClick: () => {}, icons: ['fa fa-copy'] }]}
     chips={[
-        {
-            label: 'Details',
-            onClick: () => {},
-        },
-        {
-            label: 'Offene Punkte',
-            onClick: () => {},
-        },
-        {
-            label: 'Statements',
-            onClick: () => {},
-        },
-        {
-            label: 'Stimmungsanalyse',
-            onClick: () => {},
-        },
-        {
-            label: 'Stimme zu!',
-            onClick: () => {},
-        },
-    ]}
+            {
+                label: 'Details',
+                onClick: () => {},
+            },
+            {
+                label: 'Offene Punkte',
+                onClick: () => {},
+            },
+            {
+                label: 'Statements',
+                onClick: () => {},
+            },
+            {
+                label: 'Stimmungsanalyse',
+                onClick: () => {},
+            },
+            {
+                label: 'Stimme zu!',
+                onClick: () => {},
+            },
+        ]}
     rightElement={<Icon icons={['fa fa-paper-plane']} />}
 />
 ```
@@ -386,17 +361,15 @@ import { CommunicationInput, Icon } from '@chayns-components/communication';
     placeholder={'Nachricht schreiben'}
     contextMenuItems={[{ key: 'copy', text: 'Copy', onClick: () => {}, icons: ['fa fa-copy'] }]}
     chips={[
-        {
-            icons: ['fa fa-file'],
-            label: 'Anhänge',
-            onRemove: () => {},
-        },
-    ]}
-    topContent={
-        <div style={{ padding: '6px', height: 50, backgroundColor: 'lightblue' }}>
-            Hier wird super Content angezeigt
-        </div>
-    }
+            {
+                icons: ['fa fa-file'],
+                label: 'Anhänge',
+                onRemove: () => {},
+            },
+        ]}
+    topContent={<div style={{ padding: '6px', height: 50, backgroundColor: 'lightblue' }}>
+                Hier wird super Content angezeigt
+            </div>}
     rightElement={<Icon icons={['fa fa-paper-plane']} />}
 />
 ```
@@ -461,20 +434,15 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `CommunicationInput` directly from `@chayns-components/communication` instead of internal
-  source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `CommunicationInput` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use
-  the public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
 ## CommunicationList
 
-`CommunicationList` is exported by `@chayns-components/communication` and should be imported from
-the public package entry point.
+`CommunicationList` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
 
 ### Import
 
@@ -491,23 +459,23 @@ import { CommunicationList, ListItem } from '@chayns-components/communication';
     items={[]}
     emptyMessage={'Keine Ergebnisse gefunden.'}
     itemRenderer={(_index, id) => {
-        const item = ALL_ITEMS.find((item) => item.id === id);
-
-        if (!item) {
-            return null;
-        }
-
-        return (
-            <ListItem
-                key={id}
-                title={item.title}
-                subtitle={item.subtitle}
-                icons={['fa fa-user']}
-                shouldDisableAnimation
-                shouldShowRoundImageOrIcon
-            />
-        );
-    }}
+                const item = ALL_ITEMS.find((item) => item.id === id);
+    
+                if (!item) {
+                    return null;
+                }
+    
+                return (
+                    <ListItem
+                        key={id}
+                        title={item.title}
+                        subtitle={item.subtitle}
+                        icons={['fa fa-user']}
+                        shouldDisableAnimation
+                        shouldShowRoundImageOrIcon
+                    />
+                );
+            }}
 />
 ```
 
@@ -516,50 +484,50 @@ import { CommunicationList, ListItem } from '@chayns-components/communication';
 ```tsx
 <CommunicationList
     items={[
-        {
-            id: '1',
-            sortKey: 'Anton',
-        },
-        {
-            id: '2',
-            sortKey: 'Xaver',
-        },
-        {
-            id: '3',
-            sortKey: 'Gustav',
-        },
-        {
-            id: '4',
-            sortKey: 'Clara',
-        },
-        {
-            id: '5',
-            sortKey: 'Thomas',
-        },
-        {
-            id: '6',
-            sortKey: 'Bernd',
-        },
-    ]}
+            {
+                id: '1',
+                sortKey: 'Anton',
+            },
+            {
+                id: '2',
+                sortKey: 'Xaver',
+            },
+            {
+                id: '3',
+                sortKey: 'Gustav',
+            },
+            {
+                id: '4',
+                sortKey: 'Clara',
+            },
+            {
+                id: '5',
+                sortKey: 'Thomas',
+            },
+            {
+                id: '6',
+                sortKey: 'Bernd',
+            },
+        ]}
     emptyMessage={'Keine Ergebnisse gefunden.'}
     itemRenderer={(_index, id) => {
-        const item = ALL_ITEMS.find((item) => item.id === id);
-
-        if (!item) {
-            return null;
-        }
-
-        return (
-            <ListItem
-                key={id}
-                title={item.title}
-                subtitle={item.subtitle}
-                icons={['fa fa-user']}
-                shouldDisableAnimation
-                shouldShowRoundImageOrIcon
-            />
-        );
-    }}
+                const item = ALL_ITEMS.find((item) => item.id === id);
+    
+                if (!item) {
+                    return null;
+                }
+    
+                return (
+                    <ListItem
+                        key={id}
+                        title={item.title}
+                        subtitle={item.subtitle}
+                        icons={['fa fa-user']}
+                        shouldDisableAnimation
+                        shouldShowRoundImageOrIcon
+                    />
+                );
+            }}
     sortType={SortType.ALPHABETIC}
 />
 ```
@@ -569,58 +537,58 @@ import { CommunicationList, ListItem } from '@chayns-components/communication';
 ```tsx
 <CommunicationList
     items={[
-        {
-            id: '7',
-            sortKey: getDateWithOffset(0, 9, 15),
-        },
-        {
-            id: '8',
-            sortKey: getDateWithOffset(0, 14, 45),
-        },
-        {
-            id: '9',
-            sortKey: getDateWithOffset(-1, 11, 30),
-        },
-        {
-            id: '10',
-            sortKey: getDateWithOffset(-1, 18, 5),
-        },
-        {
-            id: '11',
-            sortKey: getDateWithOffset(-3, 8, 0),
-        },
-        {
-            id: '12',
-            sortKey: getDateWithOffset(-6, 16, 20),
-        },
-        {
-            id: '13',
-            sortKey: getDateWithOffset(-10, 12, 0),
-        },
-        {
-            id: '14',
-            sortKey: getDateWithOffset(-18, 10, 0),
-        },
-    ]}
+            {
+                id: '7',
+                sortKey: getDateWithOffset(0, 9, 15),
+            },
+            {
+                id: '8',
+                sortKey: getDateWithOffset(0, 14, 45),
+            },
+            {
+                id: '9',
+                sortKey: getDateWithOffset(-1, 11, 30),
+            },
+            {
+                id: '10',
+                sortKey: getDateWithOffset(-1, 18, 5),
+            },
+            {
+                id: '11',
+                sortKey: getDateWithOffset(-3, 8, 0),
+            },
+            {
+                id: '12',
+                sortKey: getDateWithOffset(-6, 16, 20),
+            },
+            {
+                id: '13',
+                sortKey: getDateWithOffset(-10, 12, 0),
+            },
+            {
+                id: '14',
+                sortKey: getDateWithOffset(-18, 10, 0),
+            },
+        ]}
     emptyMessage={'Keine Ergebnisse gefunden.'}
     itemRenderer={(_index, id) => {
-        const item = ALL_ITEMS.find((item) => item.id === id);
-
-        if (!item) {
-            return null;
-        }
-
-        return (
-            <ListItem
-                key={id}
-                title={item.title}
-                subtitle={item.subtitle}
-                icons={['fa fa-user']}
-                shouldDisableAnimation
-                shouldShowRoundImageOrIcon
-            />
-        );
-    }}
+                const item = ALL_ITEMS.find((item) => item.id === id);
+    
+                if (!item) {
+                    return null;
+                }
+    
+                return (
+                    <ListItem
+                        key={id}
+                        title={item.title}
+                        subtitle={item.subtitle}
+                        icons={['fa fa-user']}
+                        shouldDisableAnimation
+                        shouldShowRoundImageOrIcon
+                    />
+                );
+            }}
     sortType={SortType.DATE}
 />
 ```
@@ -635,20 +603,15 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `CommunicationList` directly from `@chayns-components/communication` instead of internal
-  source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `CommunicationList` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use
-  the public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
 ## CommunicationMessage
 
-`CommunicationMessage` is exported by `@chayns-components/communication` and should be imported from
-the public package entry point.
+`CommunicationMessage` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
 
 ### Import
 
@@ -663,15 +626,15 @@ import { CommunicationMessage } from '@chayns-components/communication';
 ```tsx
 <CommunicationMessage
     metadata={{
-        id: 'message',
-        status: CommunicationMessageStatus.DELIVERED,
-        author: {
-            name: 'Michael Gesenhues',
-            id: 'MIC-HEAL1',
-            imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
-        },
-        creationTime: new Date().toISOString(),
-    }}
+                id: 'message',
+                status: CommunicationMessageStatus.DELIVERED,
+                author: {
+                    name: 'Michael Gesenhues',
+                    id: 'MIC-HEAL1',
+                    imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+                },
+                creationTime: new Date().toISOString(),
+            }}
     alignment={CommunicationMessageAlignment.RIGHT}
     content={'Michael Gesenhues hat Jannik Weise hinzugefügt'}
 />
@@ -682,15 +645,15 @@ import { CommunicationMessage } from '@chayns-components/communication';
 ```tsx
 <CommunicationMessage
     metadata={{
-        id: 'message',
-        status: CommunicationMessageStatus.DELIVERED,
-        author: {
-            name: 'Michael Gesenhues',
-            id: 'MIC-HEAL1',
-            imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
-        },
-        creationTime: new Date().toISOString(),
-    }}
+                id: 'message',
+                status: CommunicationMessageStatus.DELIVERED,
+                author: {
+                    name: 'Michael Gesenhues',
+                    id: 'MIC-HEAL1',
+                    imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+                },
+                creationTime: new Date().toISOString(),
+            }}
     alignment={CommunicationMessageAlignment.RIGHT}
     date={new Date().toISOString()}
 />
@@ -701,18 +664,17 @@ import { CommunicationMessage } from '@chayns-components/communication';
 ```tsx
 <CommunicationMessage
     metadata={{
-        id: 'message',
-        status: CommunicationMessageStatus.DELIVERED,
-        author: {
-            name: 'Michael Gesenhues',
-            id: 'MIC-HEAL1',
-            imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
-        },
-        creationTime: new Date().toISOString(),
-    }}
+                id: 'message',
+                status: CommunicationMessageStatus.DELIVERED,
+                author: {
+                    name: 'Michael Gesenhues',
+                    id: 'MIC-HEAL1',
+                    imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+                },
+                creationTime: new Date().toISOString(),
+            }}
     alignment={CommunicationMessageAlignment.RIGHT}
-    content={
-        <div
+    content={<div
             style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -770,8 +732,7 @@ import { CommunicationMessage } from '@chayns-components/communication';
             >
                 Test-Buchung
             </div>
-        </div>
-    }
+        </div>}
 />
 ```
 
@@ -780,43 +741,41 @@ import { CommunicationMessage } from '@chayns-components/communication';
 ```tsx
 <CommunicationMessage
     metadata={{
-        id: 'message',
-        status: CommunicationMessageStatus.DELIVERED,
-        author: {
-            name: 'Michael Gesenhues',
-            id: 'MIC-HEAL1',
-            imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
-        },
-        creationTime: new Date().toISOString(),
-    }}
+                id: 'message',
+                status: CommunicationMessageStatus.DELIVERED,
+                author: {
+                    name: 'Michael Gesenhues',
+                    id: 'MIC-HEAL1',
+                    imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+                },
+                creationTime: new Date().toISOString(),
+            }}
     alignment={CommunicationMessageAlignment.RIGHT}
     options={[
-        {
-            key: 'delete',
-            icons: ['fa fa-trash'],
-            text: 'Löschen',
-            onClick: () => {},
-        },
-    ]}
-    content={
-        <div>
-            <CommunicationMessage.Preview
-                metadata={{
-                    id: 'message',
-                    status: CommunicationMessageStatus.DELIVERED,
-                    author: {
-                        name: 'Jannik Weise',
-                        id: 'JAN-NIK96',
-                        imageUrl: 'https://tsimg.cloud/JAN-NIK96/profile_w200-h200.png',
-                    },
-                    plainText: 'An dieser Stelle würde ich einen Context benutzen.',
-                    creationTime: new Date().toISOString(),
-                }}
-                onClick={() => {}}
-            />
-            <p>Ja stimmt. Das ist hier die bessere Wahl. 👍</p>
-        </div>
-    }
+            {
+                key: 'delete',
+                icons: ['fa fa-trash'],
+                text: 'Löschen',
+                onClick: () => {},
+            },
+        ]}
+    content={<div>
+                <CommunicationMessage.Preview
+                    metadata={{
+                        id: 'message',
+                        status: CommunicationMessageStatus.DELIVERED,
+                        author: {
+                            name: 'Jannik Weise',
+                            id: 'JAN-NIK96',
+                            imageUrl: 'https://tsimg.cloud/JAN-NIK96/profile_w200-h200.png',
+                        },
+                        plainText: 'An dieser Stelle würde ich einen Context benutzen.',
+                        creationTime: new Date().toISOString(),
+                    }}
+                    onClick={() => {}}
+                />
+                <p>Ja stimmt. Das ist hier die bessere Wahl. 👍</p>
+            </div>}
 />
 ```
 
@@ -825,16 +784,16 @@ import { CommunicationMessage } from '@chayns-components/communication';
 ```tsx
 <CommunicationMessage
     metadata={{
-        id: 'message',
-        status: CommunicationMessageStatus.DELIVERED,
-        author: {
-            name: 'Michael Gesenhues',
-            id: 'MIC-HEAL1',
-            imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
-        },
-        creationTime: new Date().toISOString(),
-        deletionTime: new Date().toISOString(),
-    }}
+            id: 'message',
+            status: CommunicationMessageStatus.DELIVERED,
+            author: {
+                name: 'Michael Gesenhues',
+                id: 'MIC-HEAL1',
+                imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+            },
+            creationTime: new Date().toISOString(),
+            deletionTime: new Date().toISOString(),
+        }}
     alignment={CommunicationMessageAlignment.RIGHT}
 />
 ```
@@ -844,15 +803,15 @@ import { CommunicationMessage } from '@chayns-components/communication';
 ```tsx
 <CommunicationMessage
     metadata={{
-        id: 'message',
-        status: CommunicationMessageStatus.DELIVERED,
-        author: {
-            name: 'Michael Gesenhues',
-            id: 'MIC-HEAL1',
-            imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
-        },
-        creationTime: new Date().toISOString(),
-    }}
+                id: 'message',
+                status: CommunicationMessageStatus.DELIVERED,
+                author: {
+                    name: 'Michael Gesenhues',
+                    id: 'MIC-HEAL1',
+                    imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+                },
+                creationTime: new Date().toISOString(),
+            }}
     alignment={CommunicationMessageAlignment.RIGHT}
 />
 ```
@@ -862,15 +821,15 @@ import { CommunicationMessage } from '@chayns-components/communication';
 ```tsx
 <CommunicationMessage
     metadata={{
-        id: 'message',
-        status: CommunicationMessageStatus.DELIVERED,
-        author: {
-            name: 'Michael Gesenhues',
-            id: 'MIC-HEAL1',
-            imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
-        },
-        creationTime: new Date().toISOString(),
-    }}
+            id: 'message',
+            status: CommunicationMessageStatus.DELIVERED,
+            author: {
+                name: 'Michael Gesenhues',
+                id: 'MIC-HEAL1',
+                imageUrl: 'https://tsimg.cloud/MIC-HAEL1/profile_w200-h200.png',
+            },
+            creationTime: new Date().toISOString(),
+        }}
     alignment={CommunicationMessageAlignment.RIGHT}
     onClick={() => {}}
 />
@@ -886,20 +845,15 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `CommunicationMessage` directly from `@chayns-components/communication` instead of internal
-  source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `CommunicationMessage` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use
-  the public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
 ## CommunicationTeamTalkHeader
 
-`CommunicationTeamTalkHeader` is exported by `@chayns-components/communication` and should be
-imported from the public package entry point.
+`CommunicationTeamTalkHeader` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
 
 ### Import
 
@@ -925,20 +879,15 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `CommunicationTeamTalkHeader` directly from `@chayns-components/communication` instead of
-  internal source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `CommunicationTeamTalkHeader` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use
-  the public package export.
-
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
 ## SocialPlugin
 
-`SocialPlugin` is exported by `@chayns-components/communication` and should be imported from the
-public package entry point.
+`SocialPlugin` is exported by `@chayns-components/communication` and should be imported from the public package entry point.
 
 ### Import
 
@@ -951,7 +900,10 @@ import { SocialPlugin } from '@chayns-components/communication';
 #### General
 
 ```tsx
-<SocialPlugin commentType={5} postingId={'787cb5d13e8b43d98347a012b3eab261'} />
+<SocialPlugin
+    commentType={5}
+    postingId={'787cb5d13e8b43d98347a012b3eab261'}
+/>
 ```
 
 ### Props
@@ -964,12 +916,9 @@ No additional exported types documented.
 
 ### Usage Notes
 
-- Import `SocialPlugin` directly from `@chayns-components/communication` instead of internal source
-  paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `SocialPlugin` directly from `@chayns-components/communication` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use
-  the public package export.
+- Avoid imports from internal paths such as `@chayns-components/communication/src/...`; always use the public package export.
