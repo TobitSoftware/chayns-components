@@ -10,6 +10,7 @@ import React, {
 import AccordionGroup from '../accordion/accordion-group/AccordionGroup';
 import type { SetupWizardItemProps } from './setup-wizard-item/SetupWizardItem';
 import { StyledSetupWizard } from './SetupWizard.styles';
+import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type UpdateSelectedId = (id: number) => void;
 type UpdateActiveId = (id: number) => void;
@@ -53,7 +54,13 @@ export type SetupWizardProps = {
 };
 
 const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(
-    ({ children, isWrapped, shouldEnableKeyboardHighlighting = false }, ref) => {
+    ({ children, isWrapped, shouldEnableKeyboardHighlighting }, ref) => {
+        const colorScheme = useColorScheme();
+        const shouldEnableKeyboardHighlightingEffective =
+            shouldEnableKeyboardHighlighting ??
+            colorScheme?.shouldEnableKeyboardHighlighting ??
+            false;
+
         const [selectedId, setSelectedId] = useState<SetupWizardContextProps['selectedId']>(0);
         const [activeId, setActiveId] = useState<SetupWizardContextProps['activeId']>(0);
         const [allIds, setAllIds] = useState<number[]>([]);
@@ -129,12 +136,12 @@ const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(
                 updateSelectedId,
                 activeId,
                 updateActiveId,
-                shouldEnableKeyboardHighlighting,
+                shouldEnableKeyboardHighlighting: shouldEnableKeyboardHighlightingEffective,
             }),
             [
                 activeId,
                 selectedId,
-                shouldEnableKeyboardHighlighting,
+                shouldEnableKeyboardHighlightingEffective,
                 updateActiveId,
                 updateSelectedId,
             ],
