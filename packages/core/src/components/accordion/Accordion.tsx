@@ -249,7 +249,8 @@ const Accordion: FC<AccordionProps> = ({
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlightingEffective,
     );
-    const isKeyboardFocusable = shouldIndex || shouldEnableKeyboardHighlightingEffective;
+    const isKeyboardFocusable =
+        !isDisabled && (shouldIndex || shouldEnableKeyboardHighlightingEffective);
 
     const isInKeyboardNavigationGroup =
         isKeyboardFocusable &&
