@@ -54,6 +54,13 @@ interface DropdownBodyWrapperProps {
      */
     minBodyWidth?: number;
     /**
+     * Function to be executed when the available maximum height of the dropdown changes. The
+     * available maximum height is the space that is available for the dropdown content until the
+     * edge of the container is reached (minus a small spacing). This can be used to limit the
+     * content height, so the dropdown is not cut off when there is not enough space.
+     */
+    onAvailableMaxHeightChange?: (availableMaxHeight: number) => void;
+    /**
      * Function to be executed when the body is closed.
      */
     onClose?: VoidFunction;
@@ -87,6 +94,7 @@ const DropdownBodyWrapper = forwardRef<HTMLDivElement, DropdownBodyWrapperProps>
             direction = DropdownDirection.BOTTOM_RIGHT,
             maxHeight,
             minBodyWidth = 0,
+            onAvailableMaxHeightChange,
             onClose,
             onOutsideClick,
             onMeasure,
@@ -107,7 +115,7 @@ const DropdownBodyWrapper = forwardRef<HTMLDivElement, DropdownBodyWrapperProps>
 
         const container = useContainer({ anchorElement, container: containerProp });
 
-        const { transform, width, coordinates } = useDropdown({
+        const { transform, width, coordinates, availableMaxHeight } = useDropdown({
             anchorElement,
             container,
             contentHeight,
@@ -115,6 +123,12 @@ const DropdownBodyWrapper = forwardRef<HTMLDivElement, DropdownBodyWrapperProps>
             direction,
             shouldShowDropdown,
         });
+
+        useEffect(() => {
+            if (typeof onAvailableMaxHeightChange === 'function') {
+                onAvailableMaxHeightChange(availableMaxHeight);
+            }
+        }, [availableMaxHeight, onAvailableMaxHeightChange]);
 
         const handleClose = useCallback(() => {
             if (typeof onClose === 'function') {

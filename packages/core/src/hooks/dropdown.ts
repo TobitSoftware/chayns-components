@@ -94,6 +94,12 @@ interface UseDropdownPositionOptions {
     shouldShowDropdown: boolean;
 }
 
+/**
+ * The space (in pixels) that should be kept between the dropdown content and the edge of the
+ * container when calculating the available maximum height.
+ */
+const AVAILABLE_HEIGHT_SPACING = 16;
+
 export const useDropdownPosition = ({
     anchorElement,
     container,
@@ -103,6 +109,7 @@ export const useDropdownPosition = ({
 }: UseDropdownPositionOptions) => {
     const [coordinates, setCoordinates] = useState<DropdownCoordinates>({ x: 0, y: 0 });
     const [shouldUseTopAlignment, setShouldUseTopAlignment] = useState(false);
+    const [availableMaxHeight, setAvailableMaxHeight] = useState<number>(0);
 
     const calculateCoordinates = useCallback(() => {
         if (container) {
@@ -137,6 +144,21 @@ export const useDropdownPosition = ({
                 setShouldUseTopAlignment(false);
             }
 
+            // Calculate the space that is available for the dropdown content. When the dropdown is
+            // opened to the top, the available space reaches from the anchor to the top edge of the
+            // container. When it is opened to the bottom, it reaches from the bottom of the anchor
+            // to the bottom edge of the container. A small spacing is subtracted so the content does
+            // not touch the container edge (e.g. to leave room for shadows).
+            const spaceToTop = y;
+            const spaceToBottom = height - (y + anchorHeight);
+
+            const nextAvailableMaxHeight = Math.max(
+                (useTopAlignment ? spaceToTop : spaceToBottom) - AVAILABLE_HEIGHT_SPACING,
+                0,
+            );
+
+            setAvailableMaxHeight(nextAvailableMaxHeight);
+
             setCoordinates({ x, y: useTopAlignment ? y : y + anchorHeight });
         }
     }, [anchorElement, container, contentHeight, direction]);
@@ -160,8 +182,8 @@ export const useDropdownPosition = ({
     }, [calculateCoordinates, shouldShowDropdown]);
 
     return useMemo(
-        () => ({ shouldUseTopAlignment, coordinates }),
-        [coordinates, shouldUseTopAlignment],
+        () => ({ shouldUseTopAlignment, coordinates, availableMaxHeight }),
+        [availableMaxHeight, coordinates, shouldUseTopAlignment],
     );
 };
 
@@ -182,7 +204,7 @@ export const useDropdown = ({
     direction,
     shouldShowDropdown,
 }: UseDropdownOptions) => {
-    const { shouldUseTopAlignment, coordinates } = useDropdownPosition({
+    const { shouldUseTopAlignment, coordinates, availableMaxHeight } = useDropdownPosition({
         anchorElement,
         container,
         contentHeight,
@@ -199,5 +221,8 @@ export const useDropdown = ({
 
     const width = anchorElement.clientWidth;
 
-    return useMemo(() => ({ coordinates, transform, width }), [coordinates, transform, width]);
+    return useMemo(
+        () => ({ coordinates, transform, width, availableMaxHeight }),
+        [availableMaxHeight, coordinates, transform, width],
+    );
 };
