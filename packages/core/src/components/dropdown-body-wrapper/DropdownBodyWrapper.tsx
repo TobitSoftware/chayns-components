@@ -125,10 +125,13 @@ const DropdownBodyWrapper = forwardRef<HTMLDivElement, DropdownBodyWrapperProps>
         });
 
         useEffect(() => {
-            if (typeof onAvailableMaxHeightChange === 'function') {
+            // Only report the available max height while the dropdown is shown. Reporting it while
+            // the dropdown is closed would trigger unnecessary re-renders of the consumer (e.g. the
+            // ComboBox) during the initial layout, which can cause visible layout shifts.
+            if (shouldShowDropdown && typeof onAvailableMaxHeightChange === 'function') {
                 onAvailableMaxHeightChange(availableMaxHeight);
             }
-        }, [availableMaxHeight, onAvailableMaxHeightChange]);
+        }, [availableMaxHeight, onAvailableMaxHeightChange, shouldShowDropdown]);
 
         const handleClose = useCallback(() => {
             if (typeof onClose === 'function') {
