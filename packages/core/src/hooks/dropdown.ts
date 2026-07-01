@@ -152,11 +152,20 @@ export const useDropdownPosition = ({
                 DropdownDirection.BOTTOM_RIGHT,
             ].includes(direction);
 
+            // The available space above and below the anchor within the container.
+            const spaceToTop = y;
+            const spaceToBottom = height - (y + anchorHeight);
+
             if (lockedTopAlignmentRef.current !== null) {
                 // Keep the alignment that was decided when the dropdown opened.
                 useTopAlignment = lockedTopAlignmentRef.current;
             } else if (!hasBottomAlignment && y + anchorHeight + contentHeight > height) {
-                useTopAlignment = true;
+                // The content does not fit below the anchor. Only flip to the top when there is
+                // actually more space above than below. Otherwise the content would be cut off less
+                // when opened downwards (the content is limited to the available height anyway), so
+                // we keep the downward alignment. This avoids opening upwards for a content that,
+                // once limited to the available space, would fit below just fine.
+                useTopAlignment = spaceToTop > spaceToBottom;
             }
 
             lockedTopAlignmentRef.current = useTopAlignment;
@@ -168,8 +177,6 @@ export const useDropdownPosition = ({
             // container. When it is opened to the bottom, it reaches from the bottom of the anchor
             // to the bottom edge of the container. A small spacing is subtracted so the content does
             // not touch the container edge (e.g. to leave room for shadows).
-            const spaceToTop = y;
-            const spaceToBottom = height - (y + anchorHeight);
 
             const nextAvailableMaxHeight = Math.max(
                 Math.round(
