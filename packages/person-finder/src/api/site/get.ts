@@ -1,8 +1,6 @@
 import { getAccessToken } from 'chayns-api';
 import { SiteEntryResult } from '../../types/personFinder';
-
-const URL =
-    'https://relations.chayns.net/relations/location/?query=##search##&skip=##skip##&take=##take##&includeDomains=true';
+import { QA_RELATIONS_BASE_URL, RELATIONS_BASE_URL } from '../../constants/url';
 
 interface GetSiteResult {
     count: number;
@@ -13,9 +11,10 @@ interface GetSitesOptions {
     search: string;
     skip: number;
     take?: number;
+    shouldUseQa: boolean;
 }
 
-export const getSites = async ({ search, skip, take = 20 }: GetSitesOptions) => {
+export const getSites = async ({ search, skip, take = 20, shouldUseQa }: GetSitesOptions) => {
     const { accessToken } = await getAccessToken();
 
     if (!accessToken) {
@@ -29,8 +28,11 @@ export const getSites = async ({ search, skip, take = 20 }: GetSitesOptions) => 
         method: 'GET',
     };
 
+    const url = `${shouldUseQa ? QA_RELATIONS_BASE_URL : RELATIONS_BASE_URL}location/?query=##search##&skip=##skip##&take=##take##&includeDomains=true`;
+
     const response = await fetch(
-        URL.replace('##search##', search)
+        url
+            .replace('##search##', search)
             .replace('##skip##', skip.toString())
             .replace('##take##', take?.toString()),
         requestInit,

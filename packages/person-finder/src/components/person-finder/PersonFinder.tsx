@@ -31,6 +31,10 @@ export type PersonFinderProps = PersonFinderWrapperProps & {
      */
     shouldShowOwnUser?: boolean;
     /**
+     * Whether the qa relations should be used.
+     */
+    shouldUseQa?: boolean;
+    /**
      * Optional filter to search member of uac group. Only works with groups of the current Site and if the user is manager.
      */
     uacFilter?: UACFilter[];
@@ -60,6 +64,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             onDropdownHide,
             onDropdownShow,
             onRemove,
+            shouldUseQa = false,
             placeholder = 'Person oder Site finden',
             shouldAllowMultiple = true,
             shouldHideResultsOnAdd = !shouldAllowMultiple || false,
@@ -84,6 +89,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                 excludedEntryIds={excludedEntryIds}
                 shouldShowOwnUser={shouldShowOwnUser}
                 uacFilter={uacFilter}
+                shouldUseQa={shouldUseQa}
                 entries={entries}
                 relationMode={relationMode}
             >

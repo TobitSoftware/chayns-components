@@ -91,7 +91,7 @@ const SharingBar: FC<SharingBarProps> = ({
             }
         >
             <StyledSharingBarIconWrapper>
-                <Icon icons={['fa-solid fa-share-nodes']} />
+                <Icon icons={['fa fa-share-nodes']} />
             </StyledSharingBarIconWrapper>
             <SharingContextMenu
                 link={link}

@@ -39,7 +39,11 @@ import {
     getCurrentCursorPosition,
     setCursorPositionByAbsIndex,
 } from '../../utils/selection';
-import { convertHTMLToText, convertTextToHTML } from '../../utils/text';
+import {
+    convertHTMLToText,
+    convertTextToHTML,
+    cleanupEmptyIgnoreEmojiSpans,
+} from '../../utils/text';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
 import {
     StyledEmojiInput,
@@ -267,6 +271,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 );
 
                 newInnerHTML = convertTextToHTML(newInnerHTML);
+                newInnerHTML = cleanupEmptyIgnoreEmojiSpans(newInnerHTML);
 
                 if (newInnerHTML !== editorRef.current.innerHTML) {
                     saveSelection(editorRef.current, { shouldIgnoreEmptyTextNodes: true });
@@ -366,9 +371,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     return;
                 }
 
-                handleUpdateHTML(editorRef.current.innerHTML);
+                let cleanedHTML = cleanupEmptyIgnoreEmojiSpans(editorRef.current.innerHTML);
+                handleUpdateHTML(cleanedHTML);
 
-                const text = convertHTMLToText(editorRef.current.innerHTML);
+                const text = convertHTMLToText(cleanedHTML);
 
                 setPlainTextValue(text);
 

@@ -13,11 +13,12 @@ export const StyledSharingBar = styled.div`
     }
 `;
 
-export const StyledSharingBarIconWrapper = styled.div``;
+export const StyledSharingBarIconWrapper = styled.div`
+    margin-right: -4px;
+`;
 
 type StyledSharingBarTextProps = WithTheme<unknown>;
 
 export const StyledSharingBarText = styled.p<StyledSharingBarTextProps>`
     color: ${({ theme }: StyledSharingBarTextProps) => theme.text};
-    margin: 0 0 0 5px;
 `;

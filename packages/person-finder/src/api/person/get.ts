@@ -1,8 +1,6 @@
 import { getAccessToken } from 'chayns-api';
 import { PersonEntryResult, RelationMode } from '../../types/personFinder';
-
-const URL =
-    'https://relations.chayns.net/relations/v2/person?skip=##skip##&take=##take##&query=##search##&scoreForSite=##scoreForSite##';
+import { QA_RELATIONS_BASE_URL, RELATIONS_BASE_URL } from '../../constants/url';
 
 interface GetPersonResult {
     list: PersonEntryResult[];
@@ -14,6 +12,7 @@ interface GetPersonsOptions {
     skip: number;
     take?: number;
     relationMode?: RelationMode;
+    shouldUseQa: boolean;
 }
 
 export const getPersons = async ({
@@ -21,6 +20,7 @@ export const getPersons = async ({
     skip,
     take = 20,
     relationMode = RelationMode.PERSON,
+    shouldUseQa,
 }: GetPersonsOptions) => {
     const { accessToken } = await getAccessToken();
 
@@ -35,8 +35,11 @@ export const getPersons = async ({
         method: 'GET',
     };
 
+    const url = `${shouldUseQa ? QA_RELATIONS_BASE_URL : RELATIONS_BASE_URL}v2/person?skip=##skip##&take=##take##&query=##search##&scoreForSite=##scoreForSite##`;
+
     const response = await fetch(
-        URL.replace('##search##', search)
+        url
+            .replace('##search##', search)
             .replace('##skip##', skip.toString())
             .replace('##take##', take?.toString())
             .replace('##scoreForSite##', relationMode === RelationMode.SITE ? '1' : '0'),

@@ -152,6 +152,7 @@ interface LoadDataOptions {
     filter: PersonFinderFilterTypes[];
     skipMap: Partial<Record<PersonFinderFilterTypes, number>>;
     relationMode?: RelationMode;
+    shouldUseQa: boolean;
 }
 
 export const loadData = async ({
@@ -159,6 +160,7 @@ export const loadData = async ({
     searchString,
     filter,
     relationMode,
+    shouldUseQa,
 }: LoadDataOptions): Promise<PersonFinderDataMap> => {
     const promises = filter.map(async (filterType) => {
         const skip = skipMap[filterType] ?? 0;
@@ -176,7 +178,12 @@ export const loadData = async ({
                 };
             }
 
-            const data = await getPersons({ search: searchString, skip, relationMode });
+            const data = await getPersons({
+                search: searchString,
+                skip,
+                relationMode,
+                shouldUseQa,
+            });
 
             return {
                 key: PersonFinderFilterTypes.PERSON,
@@ -204,7 +211,7 @@ export const loadData = async ({
                 };
             }
 
-            const data = await getSites({ search: searchString, skip });
+            const data = await getSites({ search: searchString, skip, shouldUseQa });
 
             const filteredList = data?.list.filter(({ siteId }) => siteId !== null);
 

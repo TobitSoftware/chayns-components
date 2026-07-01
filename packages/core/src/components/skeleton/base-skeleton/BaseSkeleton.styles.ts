@@ -21,6 +21,8 @@ export const StyledBaseSkeleton = styled.div<StyledBaseSkeletonProps>`
 
     user-select: none;
 
+    white-space: nowrap;
+
     ${({ $shouldUseNativeTag, $height }) =>
         $shouldUseNativeTag
             ? css`

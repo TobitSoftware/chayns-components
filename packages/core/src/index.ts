@@ -130,7 +130,7 @@ export { useElementSize } from './hooks/element';
 export type { BrowserName } from './types/chayns';
 export { ContentCardType } from './types/contentCard';
 export type { FileItem, Image, InternalFileItem, Meta, Video } from './types/file';
-export { isValidFileType } from './utils/file';
+export { isValidFileType, getHumanSize } from './utils/file';
 export type { FileInputFileItem } from './types/fileInput';
 export { FilterButtonItemShape, FilterButtonSize } from './types/filterButtons';
 export type { IFilterButtonItem as FilterButtonItem } from './types/filterButtons';

@@ -1,0 +1,74 @@
+import styled from 'styled-components';
+
+export const StyledSocialPluginContent = styled.div`
+    width: 100%;
+`;
+
+export const StyledSocialPluginContentComments = styled.div`
+    min-height: 300px;
+    max-height: 500px;
+
+    width: 100%;
+    margin: 8px 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+`;
+
+export const StyledSocialPluginContentCommentsInner = styled.div`
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+`;
+
+export const StyledSocialPluginContentTopContent = styled.div`
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+`;
+
+type StyledSocialPluginContentRightElementProps = {
+    $isDisabled?: boolean;
+};
+
+export const StyledSocialPluginContentRightElement = styled.div<StyledSocialPluginContentRightElementProps>`
+    cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
+
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.75 : 1)};
+
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+export const StyledSocialPluginImageWrapper = styled.div`
+    height: 54px;
+    width: 54px;
+
+    position: relative;
+
+    border-radius: 3px;
+`;
+
+export const StyledSocialPluginImageXmark = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    cursor: pointer;
+`;
+
+export const StyledSocialPluginImage = styled.img`
+    height: 100%;
+    width: 100%;
+
+    object-fit: cover;
+`;

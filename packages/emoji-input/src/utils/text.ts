@@ -2,6 +2,7 @@ import {
     BB_LC_MENTION_REGEX,
     BB_NER_IGNORE_REGEX,
     BB_NER_REPLACE_REGEX,
+    BB_IGNORE_EMOJI_REGEX,
     HTML_A_TAG_REGEX,
     HTML_BOLD_REGEX,
     HTML_LC_MENTION_REGEX,
@@ -10,6 +11,11 @@ import {
     HTML_NO_EMOJI_REGEX,
 } from '../constants/regex';
 import { escapeHTML, unescapeHTML } from './emoji';
+
+interface ConvertHTMLToTextOptions {
+    preserveSpaces?: boolean;
+    shouldSerializeNoEmojiToBBCode?: boolean;
+}
 
 export const convertTextToHTML = (text: string) => {
     const element = document.createElement('div');
@@ -32,7 +38,7 @@ export const convertTextToHTML = (text: string) => {
         .replace(HTML_A_TAG_REGEX, '$1')
         .replace(
             BB_LC_MENTION_REGEX,
-            '<lc_mention contenteditable="false" id="$1"><span>@</span>$2</lc_mention>​',
+            '<lc_mention contenteditable="false" id="$1"><span>@</span>$2</lc_mention>\u200B',
         )
         .replace(BB_NER_IGNORE_REGEX, '<nerIgnore contenteditable="false">$1</nerIgnore>')
         .replace(
@@ -42,18 +48,20 @@ export const convertTextToHTML = (text: string) => {
 
                 return `<nerReplace contenteditable="false" ${prefixAttr}type="${type}" value="${value}">${entity}</nerReplace>`;
             },
-        );
+        )
+        .replace(BB_IGNORE_EMOJI_REGEX, '<span class="no-emoji-convert">$1</span>');
 
     return result;
 };
 
-export const convertHTMLToText = (text: string, { preserveSpaces = false } = {}) => {
+export const convertHTMLToText = (
+    text: string,
+    {
+        preserveSpaces = false,
+        shouldSerializeNoEmojiToBBCode = true,
+    }: ConvertHTMLToTextOptions = {},
+) => {
     let result = text;
-
-    // Unwrap "no-emoji-convert" protection spans so the plain-text
-    // representation does not leak the marker HTML to consumers.
-    // The protection itself is only relevant inside the live editor DOM.
-    result = result.replace(HTML_NO_EMOJI_REGEX, '$1');
 
     result = result
         .replace(HTML_A_TAG_REGEX, '$1')
@@ -67,6 +75,10 @@ export const convertHTMLToText = (text: string, { preserveSpaces = false } = {})
 
                 return `[nerReplace ${prefixAttr}type="${type}" value="${value}"]${entity}[/nerReplace]`;
             },
+        )
+        .replace(
+            HTML_NO_EMOJI_REGEX,
+            shouldSerializeNoEmojiToBBCode ? '[ignoreEmoji]$1[/ignoreEmoji]' : '$1',
         );
 
     if (preserveSpaces) {
@@ -101,10 +113,17 @@ export const getElementTextLength = (element: Element) => {
     let textLength = 0;
 
     try {
-        textLength = convertHTMLToText(element.outerHTML).length;
+        textLength = convertHTMLToText(element.outerHTML, {
+            shouldSerializeNoEmojiToBBCode: false,
+        }).length;
     } catch (e) {
         // Do nothing
     }
 
     return textLength;
+};
+
+export const cleanupEmptyIgnoreEmojiSpans = (html: string) => {
+    // Remove empty no-emoji-convert spans that have no text content
+    return html.replace(/<span class="no-emoji-convert"><\/span>/g, '');
 };
