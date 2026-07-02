@@ -42,7 +42,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
         document.addEventListener('keydown', handleKeyPress);
 
         return () => {
-            document.addEventListener('keydown', handleKeyPress);
+            document.removeEventListener('keydown', handleKeyPress);
         };
     }, [handleKeyPress]);
 
