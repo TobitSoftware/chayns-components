@@ -552,14 +552,18 @@ export const unwrapIgnoreEmojiSpanAtCursor = (editorElement: HTMLDivElement | nu
     }
 
     const range = selection.getRangeAt(0);
-    let { commonAncestorContainer } = range;
+    let commonAncestorContainer: Node | null = range.commonAncestorContainer;
     const cursorOffset = range.startOffset;
+
+    if (!editorElement.contains(commonAncestorContainer)) {
+        return;
+    }
 
     // Walk up the DOM tree to find if we're inside a no-emoji-convert span
     while (commonAncestorContainer && commonAncestorContainer !== editorElement) {
         if (
             commonAncestorContainer.nodeType === Node.ELEMENT_NODE &&
-            (commonAncestorContainer as Element).className === 'no-emoji-convert'
+            (commonAncestorContainer as Element).classList.contains('no-emoji-convert')
         ) {
             // We're inside a no-emoji-convert span, unwrap it
             const span = commonAncestorContainer as Element;
@@ -601,7 +605,7 @@ export const unwrapIgnoreEmojiSpanAtCursor = (editorElement: HTMLDivElement | nu
             break;
         }
 
-        commonAncestorContainer = commonAncestorContainer.parentNode ?? commonAncestorContainer;
+        commonAncestorContainer = commonAncestorContainer.parentNode;
     }
 };
 
@@ -621,13 +625,17 @@ export const moveCursorOutOfIgnoreEmojiSpan = (editorElement: HTMLDivElement | n
     }
 
     const range = selection.getRangeAt(0);
-    let { commonAncestorContainer } = range;
+    let commonAncestorContainer: Node | null = range.commonAncestorContainer;
+
+    if (!editorElement.contains(commonAncestorContainer)) {
+        return;
+    }
 
     // Walk up the DOM tree to find if we're inside a no-emoji-convert span
     while (commonAncestorContainer && commonAncestorContainer !== editorElement) {
         if (
             commonAncestorContainer.nodeType === Node.ELEMENT_NODE &&
-            (commonAncestorContainer as Element).className === 'no-emoji-convert'
+            (commonAncestorContainer as Element).classList.contains('no-emoji-convert')
         ) {
             // We're inside a no-emoji-convert span, move cursor to after it
             const span = commonAncestorContainer as Element;
@@ -670,6 +678,6 @@ export const moveCursorOutOfIgnoreEmojiSpan = (editorElement: HTMLDivElement | n
             break;
         }
 
-        commonAncestorContainer = commonAncestorContainer.parentNode ?? commonAncestorContainer;
+        commonAncestorContainer = commonAncestorContainer.parentNode;
     }
 };
