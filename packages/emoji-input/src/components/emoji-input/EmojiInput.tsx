@@ -70,6 +70,10 @@ export type EmojiInputProps = {
      */
     accessToken?: string;
     /**
+     * The DOM element that should receive the emoji picker popup portal.
+     */
+    container?: Element;
+    /**
      * Sets the height of the input field to a fixed value. If this value is not set, the component will use the needed height until the maximum height is reached.
      */
     height?: CSSProperties['height'];
@@ -167,6 +171,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
     (
         {
             accessToken,
+            container,
             height,
             inputId,
             isDisabled,
@@ -960,6 +965,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     {!isTouch && !shouldPreventEmojiPicker && (
                         <EmojiPickerPopup
                             accessToken={accessToken}
+                            container={container}
                             onSelect={handlePopupSelect}
                             onPopupVisibilityChange={handlePopupVisibility}
                             personId={personId}

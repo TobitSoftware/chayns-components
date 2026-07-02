@@ -1,4 +1,4 @@
-import { AreaProvider, Icon, Popup, type PopupRef } from '@chayns-components/core';
+import { AreaProvider, Icon, Popup, PopupAlignment, type PopupRef } from '@chayns-components/core';
 import React, { FC, useCallback, useEffect, useRef } from 'react';
 import EmojiPicker from '../emoji-picker/EmojiPicker';
 import { StyledEmojiPickerPopup } from './EmojiPickerPopup.styles';
@@ -8,6 +8,10 @@ export type EmojiPickerPopupProps = {
      * Access token of the logged-in user. Is needed to load and save the history of the emojis.
      */
     accessToken?: string;
+    /**
+     * The DOM element that should receive the popup portal.
+     */
+    container?: Element;
     /**
      * Function that is executed when the visibility of the popup changes.
      * @param {boolean} isVisible - Whether the popup is visible or not
@@ -26,6 +30,7 @@ export type EmojiPickerPopupProps = {
 
 const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
     accessToken,
+    container,
     onPopupVisibilityChange,
     onSelect,
     personId,
@@ -49,6 +54,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
     return (
         <StyledEmojiPickerPopup>
             <Popup
+                container={container}
                 ref={popupRef}
                 onHide={() =>
                     typeof onPopupVisibilityChange === 'function'
