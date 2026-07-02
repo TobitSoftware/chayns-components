@@ -334,7 +334,8 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
 
                     focusedElement.tabIndex = 0;
                     focusedElement.focus();
-                } else if (e.key === 'Enter' && focusedIndex !== null) {
+                } else if ((e.key === 'Enter' || e.key === ' ') && focusedIndex !== null) {
+                    e.preventDefault();
                     const element = contentRef.current?.children[focusedIndex];
 
                     if (!element) return;

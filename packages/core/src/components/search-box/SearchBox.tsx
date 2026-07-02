@@ -710,7 +710,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
                         newElement.tabIndex = 0;
                     }
-                } else if (e.key === 'Enter') {
+                } else if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     e.stopPropagation();
 

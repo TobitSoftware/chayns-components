@@ -140,7 +140,7 @@ const RadioButton: FC<RadioButtonProps> = ({
 
     const handleKeyDown = useCallback(
         (event: React.KeyboardEvent<HTMLInputElement>) => {
-            if (event.key === 'Enter') {
+            if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
                 handleClick();
             }
