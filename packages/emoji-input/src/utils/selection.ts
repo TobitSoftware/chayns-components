@@ -535,3 +535,141 @@ export const setCursorPositionByAbsIndex = ({
 
     range.collapse(true);
 };
+
+/**
+ * Unwraps any no-emoji-convert span that contains the cursor.
+ * This removes the span element but keeps its text content, preventing the cursor from getting stuck.
+ */
+export const unwrapIgnoreEmojiSpanAtCursor = (editorElement: HTMLDivElement | null) => {
+    if (!editorElement) {
+        return;
+    }
+
+    const selection = window.getSelection();
+
+    if (!selection || !selection.rangeCount) {
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+    let { commonAncestorContainer } = range;
+    const cursorOffset = range.startOffset;
+
+    // Walk up the DOM tree to find if we're inside a no-emoji-convert span
+    while (commonAncestorContainer && commonAncestorContainer !== editorElement) {
+        if (
+            commonAncestorContainer.nodeType === Node.ELEMENT_NODE &&
+            (commonAncestorContainer as Element).className === 'no-emoji-convert'
+        ) {
+            // We're inside a no-emoji-convert span, unwrap it
+            const span = commonAncestorContainer as Element;
+            const parentNode = span.parentNode;
+
+            if (!parentNode) {
+                return;
+            }
+
+            // Find which text node contains the cursor
+            let cursorNode: Node | null = null;
+            let cursorNodeOffset = cursorOffset;
+
+            // Get all child nodes of the span
+            const childNodes = Array.from(span.childNodes);
+
+            // Insert all children before the span and find the cursor node
+            childNodes.forEach((child) => {
+                const clonedChild = child.cloneNode(true);
+                parentNode.insertBefore(clonedChild, span);
+
+                // If this is the node that contains the cursor, track it
+                if (child === range.startContainer) {
+                    cursorNode = clonedChild;
+                }
+            });
+
+            // Remove the span
+            parentNode.removeChild(span);
+
+            // Restore cursor position in the unwrapped content
+            if (cursorNode) {
+                range.setStart(cursorNode, cursorNodeOffset);
+                range.collapse(true);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+
+            break;
+        }
+
+        commonAncestorContainer = commonAncestorContainer.parentNode ?? commonAncestorContainer;
+    }
+};
+
+/**
+ * Moves the cursor outside of any no-emoji-convert span if it's currently inside one.
+ * This prevents the cursor from getting "stuck" inside the protection span when typing.
+ */
+export const moveCursorOutOfIgnoreEmojiSpan = (editorElement: HTMLDivElement | null) => {
+    if (!editorElement) {
+        return;
+    }
+
+    const selection = window.getSelection();
+
+    if (!selection || !selection.rangeCount) {
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+    let { commonAncestorContainer } = range;
+
+    // Walk up the DOM tree to find if we're inside a no-emoji-convert span
+    while (commonAncestorContainer && commonAncestorContainer !== editorElement) {
+        if (
+            commonAncestorContainer.nodeType === Node.ELEMENT_NODE &&
+            (commonAncestorContainer as Element).className === 'no-emoji-convert'
+        ) {
+            // We're inside a no-emoji-convert span, move cursor to after it
+            const span = commonAncestorContainer as Element;
+            const nextSibling = span.nextSibling;
+            const parentNode = span.parentNode;
+
+            if (!parentNode) {
+                return;
+            }
+
+            // Always ensure there's a text node AFTER the span
+            let targetNode: Text;
+
+            if (nextSibling && nextSibling.nodeType === Node.TEXT_NODE) {
+                // Next sibling is already a text node, use it
+                targetNode = nextSibling as Text;
+            } else if (nextSibling && nextSibling.nodeType === Node.ELEMENT_NODE) {
+                // Next sibling is an element, find first text node in it
+                const walker = document.createTreeWalker(nextSibling, NodeFilter.SHOW_TEXT);
+                const firstTextNode = walker.nextNode() as Text;
+                if (firstTextNode) {
+                    targetNode = firstTextNode;
+                } else {
+                    // No text node found, create one
+                    targetNode = document.createTextNode('\u200B');
+                    parentNode.insertBefore(targetNode, nextSibling);
+                }
+            } else {
+                // No next sibling or it's not a text/element node, create a new text node
+                targetNode = document.createTextNode('\u200B');
+                parentNode.insertBefore(targetNode, nextSibling);
+            }
+
+            // Place cursor at the start of the target node
+            range.setStart(targetNode, 0);
+            range.collapse(true);
+
+            selection.removeAllRanges();
+            selection.addRange(range);
+            break;
+        }
+
+        commonAncestorContainer = commonAncestorContainer.parentNode ?? commonAncestorContainer;
+    }
+};

@@ -38,6 +38,8 @@ import {
     insertCursorAtMarker,
     getCurrentCursorPosition,
     setCursorPositionByAbsIndex,
+    moveCursorOutOfIgnoreEmojiSpan,
+    unwrapIgnoreEmojiSpanAtCursor,
 } from '../../utils/selection';
 import {
     convertHTMLToText,
@@ -340,6 +342,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     return;
                 }
 
+                // If the user is typing inside a no-emoji-convert span, unwrap it first
+                // This prevents text from getting stuck inside the protection span
+                unwrapIgnoreEmojiSpanAtCursor(editorRef.current);
+
                 if (isDisabled) {
                     event.stopPropagation();
                     event.preventDefault();
@@ -386,6 +392,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 }
 
                 insertCursorAtMarker(editorRef);
+                moveCursorOutOfIgnoreEmojiSpan(editorRef.current);
             },
             [handleUpdateHTML, isDisabled, onInput],
         );
@@ -654,6 +661,11 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 handleUpdateHTML(value);
             }
         }, [handleUpdateHTML, plainTextValue, value]);
+
+        // After every input, ensure the cursor is not stuck inside a no-emoji-convert span
+        useEffect(() => {
+            moveCursorOutOfIgnoreEmojiSpan(editorRef.current);
+        }, [plainTextValue]);
 
         // This effect is used to call the 'handleUpdateHTML' function once after the component has been
         // rendered. This is necessary because the 'contentEditable' element otherwise does not display
