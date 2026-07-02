@@ -75,6 +75,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
         const [minWidth, setMinWidth] = useState<number | undefined>(undefined);
         const [bodyMinWidth, setBodyMinWidth] = useState(0);
         const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+        const [availableMaxHeight, setAvailableMaxHeight] = useState<number | undefined>(undefined);
 
         const isInputFocused = useRef(false);
         const styledComboBoxElementRef = useRef<HTMLDivElement>(null);
@@ -155,6 +156,17 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
             );
         }, [lists, selectedItem]);
 
+        // Limits the configured maxHeight by the height that is actually available inside the
+        // container (reported by the DropdownBodyWrapper). This prevents the dropdown from being cut
+        // off when it is opened to the top or bottom and there is not enough space.
+        const effectiveMaxHeight = useMemo(() => {
+            if (typeof availableMaxHeight === 'number' && availableMaxHeight > 0) {
+                return Math.min(maxHeight, availableMaxHeight);
+            }
+
+            return maxHeight;
+        }, [availableMaxHeight, maxHeight]);
+
         const contentHeight = useMemo(() => {
             const flatItems = lists.flatMap((list) => list.list);
 
@@ -170,12 +182,12 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                 height += lists.length * 38;
             }
 
-            if (maxHeight < height) {
-                height = maxHeight;
+            if (effectiveMaxHeight < height) {
+                height = effectiveMaxHeight;
             }
 
             return height;
-        }, [lists, maxHeight, shouldShowBigImage]);
+        }, [effectiveMaxHeight, lists, shouldShowBigImage]);
 
         const handleInputFocus: FocusEventHandler<HTMLInputElement> = useCallback(
             (event) => {
@@ -596,6 +608,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                             bodyWidth={bodyWidth}
                             contentHeight={contentHeight}
                             shouldCaptureEvents={shouldCaptureEvents}
+                            onAvailableMaxHeightChange={setAvailableMaxHeight}
                             onClose={handleClose}
                             direction={direction}
                             container={container}
@@ -603,7 +616,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                             minBodyWidth={bodyWidth ?? bodyMinWidth}
                         >
                             <StyledComboBoxBody
-                                $maxHeight={maxHeight}
+                                $maxHeight={effectiveMaxHeight}
                                 $minWidth={bodyWidth ?? bodyMinWidth}
                                 className="chayns-scrollbar"
                                 ref={contentRef}
@@ -633,7 +646,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                 isAnimating,
                 isDisabled,
                 isTouch,
-                maxHeight,
+                effectiveMaxHeight,
                 minWidth,
                 onInputChange,
                 placeholderIcon,

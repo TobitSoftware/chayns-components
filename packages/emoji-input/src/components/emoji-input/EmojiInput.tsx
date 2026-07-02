@@ -38,6 +38,8 @@ import {
     insertCursorAtMarker,
     getCurrentCursorPosition,
     setCursorPositionByAbsIndex,
+    moveCursorOutOfIgnoreEmojiSpan,
+    unwrapIgnoreEmojiSpanAtCursor,
 } from '../../utils/selection';
 import {
     convertHTMLToText,
@@ -340,6 +342,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     return;
                 }
 
+                // If the user is typing inside a no-emoji-convert span, unwrap it first
+                // This prevents text from getting stuck inside the protection span
+                unwrapIgnoreEmojiSpanAtCursor(editorRef.current);
+
                 if (isDisabled) {
                     event.stopPropagation();
                     event.preventDefault();
@@ -374,7 +380,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 let cleanedHTML = cleanupEmptyIgnoreEmojiSpans(editorRef.current.innerHTML);
                 handleUpdateHTML(cleanedHTML);
 
-                const text = convertHTMLToText(cleanedHTML);
+                // After handleUpdateHTML, the DOM has been updated with emojis
+                // We need to read the text from the updated DOM, not from pre-update HTML
+                // convertHTMLToText will convert no-emoji-convert spans to [ignoreEmoji] BBCode
+                const text = convertHTMLToText(editorRef.current.innerHTML);
 
                 setPlainTextValue(text);
 
@@ -383,6 +392,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 }
 
                 insertCursorAtMarker(editorRef);
+                moveCursorOutOfIgnoreEmojiSpan(editorRef.current);
             },
             [handleUpdateHTML, isDisabled, onInput],
         );
@@ -651,6 +661,11 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 handleUpdateHTML(value);
             }
         }, [handleUpdateHTML, plainTextValue, value]);
+
+        // After every input, ensure the cursor is not stuck inside a no-emoji-convert span
+        useEffect(() => {
+            moveCursorOutOfIgnoreEmojiSpan(editorRef.current);
+        }, [plainTextValue]);
 
         // This effect is used to call the 'handleUpdateHTML' function once after the component has been
         // rendered. This is necessary because the 'contentEditable' element otherwise does not display

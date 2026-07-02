@@ -84,11 +84,11 @@ export const convertHTMLToText = (
     if (preserveSpaces) {
         return result
             .replace(/&nbsp;/g, '\u00A0') // non-breaking space
-            .replace(/\u200B/g, '​'); // zero-width space (sichtbar gemacht)
+            .replace(/\u200B/g, '\u200B'); // zero-width space (sichtbar gemacht)
     }
 
     // eslint-disable-next-line no-irregular-whitespace
-    result = result.replace(/​/g, '');
+    result = result.replace(/\u200B/g, '');
 
     result = escapeHTML(result);
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { DropdownCoordinates, DropdownDirection } from '../types/dropdown';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
@@ -94,6 +94,12 @@ interface UseDropdownPositionOptions {
     shouldShowDropdown: boolean;
 }
 
+/**
+ * The space (in pixels) that should be kept between the dropdown content and the edge of the
+ * container when calculating the available maximum height.
+ */
+const AVAILABLE_HEIGHT_SPACING = 16;
+
 export const useDropdownPosition = ({
     anchorElement,
     container,
@@ -103,8 +109,25 @@ export const useDropdownPosition = ({
 }: UseDropdownPositionOptions) => {
     const [coordinates, setCoordinates] = useState<DropdownCoordinates>({ x: 0, y: 0 });
     const [shouldUseTopAlignment, setShouldUseTopAlignment] = useState(false);
+    const [availableMaxHeight, setAvailableMaxHeight] = useState<number>(0);
+
+    // Stores the alignment decision (top/bottom) that was made when the dropdown opened. The
+    // decision depends on the content height, but the content height in turn is limited by the
+    // available height (which depends on the alignment). Recalculating the alignment on every
+    // change would create a feedback loop that makes the alignment flip and the height oscillate.
+    // We therefore lock the alignment while the dropdown stays open and reset it on close.
+    const lockedTopAlignmentRef = useRef<boolean | null>(null);
 
     const calculateCoordinates = useCallback(() => {
+        // While the dropdown is closing (or closed) we must not recalculate the position and the
+        // available height. Otherwise layout changes underneath the dropdown (e.g. content that
+        // appears after a selection) would move or resize the dropdown body while it is still fading
+        // out, causing it to visibly jump. Freezing the last calculated values keeps the closing
+        // animation stable.
+        if (!shouldShowDropdown) {
+            return;
+        }
+
         if (container) {
             const {
                 left: anchorLeft,
@@ -129,19 +152,58 @@ export const useDropdownPosition = ({
                 DropdownDirection.BOTTOM_RIGHT,
             ].includes(direction);
 
-            if (!hasBottomAlignment && y + anchorHeight + contentHeight > height) {
-                useTopAlignment = true;
+            // The available space above and below the anchor within the container.
+            const spaceToTop = y;
+            const spaceToBottom = height - (y + anchorHeight);
 
-                setShouldUseTopAlignment(true);
-            } else {
-                setShouldUseTopAlignment(false);
+            if (lockedTopAlignmentRef.current !== null) {
+                // Keep the alignment that was decided when the dropdown opened.
+                useTopAlignment = lockedTopAlignmentRef.current;
+            } else if (!hasBottomAlignment && y + anchorHeight + contentHeight > height) {
+                // The content does not fit below the anchor. Only flip to the top when there is
+                // actually more space above than below. Otherwise the content would be cut off less
+                // when opened downwards (the content is limited to the available height anyway), so
+                // we keep the downward alignment. This avoids opening upwards for a content that,
+                // once limited to the available space, would fit below just fine.
+                useTopAlignment = spaceToTop > spaceToBottom;
             }
+
+            lockedTopAlignmentRef.current = useTopAlignment;
+
+            setShouldUseTopAlignment(useTopAlignment);
+
+            // Calculate the space that is available for the dropdown content. When the dropdown is
+            // opened to the top, the available space reaches from the anchor to the top edge of the
+            // container. When it is opened to the bottom, it reaches from the bottom of the anchor
+            // to the bottom edge of the container. A small spacing is subtracted so the content does
+            // not touch the container edge (e.g. to leave room for shadows).
+
+            const nextAvailableMaxHeight = Math.max(
+                Math.round(
+                    (useTopAlignment ? spaceToTop : spaceToBottom) - AVAILABLE_HEIGHT_SPACING,
+                ),
+                0,
+            );
+
+            // Ignore sub-pixel fluctuations so tiny changes from getBoundingClientRect do not
+            // repeatedly trigger re-renders that could keep the height oscillating.
+            setAvailableMaxHeight((currentAvailableMaxHeight) =>
+                Math.abs(currentAvailableMaxHeight - nextAvailableMaxHeight) <= 1
+                    ? currentAvailableMaxHeight
+                    : nextAvailableMaxHeight,
+            );
 
             setCoordinates({ x, y: useTopAlignment ? y : y + anchorHeight });
         }
-    }, [anchorElement, container, contentHeight, direction]);
+    }, [anchorElement, container, contentHeight, direction, shouldShowDropdown]);
 
     useIsomorphicLayoutEffect(() => {
+        // Reset the locked alignment whenever the dropdown is closed, so the next time it opens the
+        // alignment (top/bottom) is decided freshly based on the then-available space.
+        if (!shouldShowDropdown) {
+            lockedTopAlignmentRef.current = null;
+        }
+
         const handleResize = () => {
             calculateCoordinates();
 
@@ -160,8 +222,8 @@ export const useDropdownPosition = ({
     }, [calculateCoordinates, shouldShowDropdown]);
 
     return useMemo(
-        () => ({ shouldUseTopAlignment, coordinates }),
-        [coordinates, shouldUseTopAlignment],
+        () => ({ shouldUseTopAlignment, coordinates, availableMaxHeight }),
+        [availableMaxHeight, coordinates, shouldUseTopAlignment],
     );
 };
 
@@ -182,7 +244,7 @@ export const useDropdown = ({
     direction,
     shouldShowDropdown,
 }: UseDropdownOptions) => {
-    const { shouldUseTopAlignment, coordinates } = useDropdownPosition({
+    const { shouldUseTopAlignment, coordinates, availableMaxHeight } = useDropdownPosition({
         anchorElement,
         container,
         contentHeight,
@@ -199,5 +261,8 @@ export const useDropdown = ({
 
     const width = anchorElement.clientWidth;
 
-    return useMemo(() => ({ coordinates, transform, width }), [coordinates, transform, width]);
+    return useMemo(
+        () => ({ coordinates, transform, width, availableMaxHeight }),
+        [availableMaxHeight, coordinates, transform, width],
+    );
 };
