@@ -46,6 +46,23 @@ interface SearchListOptions {
     searchString: string;
 }
 
+export const sortSearchBoxItems = ({ searchString, items }: SearchListOptions) => {
+    const lowercaseSearchString = searchString.toLowerCase();
+
+    return [...items].sort((a, b) => {
+        const aStartsWithSearchString = a.text.toLowerCase().startsWith(lowercaseSearchString);
+        const bStartsWithSearchString = b.text.toLowerCase().startsWith(lowercaseSearchString);
+
+        if (aStartsWithSearchString && !bStartsWithSearchString) {
+            return -1;
+        }
+        if (!aStartsWithSearchString && bStartsWithSearchString) {
+            return 1;
+        }
+        return a.text.localeCompare(b.text);
+    });
+};
+
 export const searchList = ({ searchString, items }: SearchListOptions) => {
     const matchingItems: ISearchBoxItem[] = [];
 
@@ -69,18 +86,5 @@ export const searchList = ({ searchString, items }: SearchListOptions) => {
         }
     });
 
-    matchingItems.sort((a, b) => {
-        const aStartsWithSearchString = a.text.toLowerCase().startsWith(lowercaseSearchString);
-        const bStartsWithSearchString = b.text.toLowerCase().startsWith(lowercaseSearchString);
-
-        if (aStartsWithSearchString && !bStartsWithSearchString) {
-            return -1;
-        }
-        if (!aStartsWithSearchString && bStartsWithSearchString) {
-            return 1;
-        }
-        return a.text.localeCompare(b.text);
-    });
-
-    return matchingItems;
+    return sortSearchBoxItems({ items: matchingItems, searchString });
 };
