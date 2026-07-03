@@ -32,11 +32,13 @@ export const StyledSearchBoxItemImage = styled.img<StyledSearchBoxItemImageProps
         `}
 `;
 
-type StyledSearchBoxItemTextProps = WithTheme<unknown>;
+type StyledSearchBoxItemTextProps = WithTheme<{ $shouldShowSmallItems?: boolean }>;
 
 export const StyledSearchBoxItemText = styled.p<StyledSearchBoxItemTextProps>`
     color: ${({ theme }: StyledSearchBoxItemTextProps) => theme.text};
-    margin: 5px 0 !important;
+    font-size: ${({ $shouldShowSmallItems }) => ($shouldShowSmallItems ? '14px' : undefined)};
+    margin: ${({ $shouldShowSmallItems }) =>
+        $shouldShowSmallItems ? '0 !important' : '5px 0 !important'};
 
     b {
         color: ${({ theme }: StyledSearchBoxItemTextProps) => theme.headline};

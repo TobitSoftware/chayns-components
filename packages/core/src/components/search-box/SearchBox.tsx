@@ -119,6 +119,10 @@ export type SearchBoxProps = {
      */
     shouldShowContentOnEmptyInput?: boolean;
     /**
+     * If true, the dropdown items are displayed more compactly.
+     */
+    shouldShowSmallItems?: boolean;
+    /**
      * If true, the images of the items are displayed in a round shape.
      */
     shouldShowRoundImage?: boolean;
@@ -157,6 +161,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             shouldAddInputToList = true,
             shouldHideFilterButtons = false,
             shouldShowContentOnEmptyInput = true,
+            shouldShowSmallItems = false,
             shouldShowRoundImage,
             shouldShowToggleIcon = false,
             tagInputSettings,
@@ -609,6 +614,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             id={id}
                             text={text}
                             imageUrl={imageUrl}
+                            shouldShowSmallItems={shouldShowSmallItems}
                             shouldShowRoundImage={shouldShowRoundImage}
                             onSelect={handleSelect}
                             groupName={groupName}
@@ -623,6 +629,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     <SearchBoxItem
                         id="input-value"
                         onSelect={handleSelect}
+                        shouldShowSmallItems={shouldShowSmallItems}
                         text={`<b>${inputToListValue}</b`}
                         tabIndex={items.length === 0 ? 0 : -1}
                     />,
