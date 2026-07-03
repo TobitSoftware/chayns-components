@@ -75,6 +75,10 @@ export type SearchBoxProps = {
      */
     lists: ISearchBoxItems[];
     /**
+     * The maximum height of the dropdown body in pixels.
+     */
+    maxHeight?: number;
+    /**
      * Function to be executed when the input lost focus.
      */
     onBlur?: FocusEventHandler<HTMLInputElement>;
@@ -141,6 +145,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             isInvalid = false,
             leftIcons,
             lists,
+            maxHeight = 300,
             onBlur,
             onChange,
             onKeyDown,
@@ -817,6 +822,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             <SearchBoxBody
                                 filterButtons={filterButtons}
                                 height={height}
+                                maxHeight={maxHeight}
                                 shouldShow={shouldShowDropdown}
                                 key={`search-box-body-${uuid}`}
                                 onGroupSelect={handleFilterButtonsGroupSelect}
@@ -844,6 +850,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 height,
                 isInvalid,
                 leftElement,
+                maxHeight,
                 onKeyDown,
                 placeholder,
                 rightElement,
