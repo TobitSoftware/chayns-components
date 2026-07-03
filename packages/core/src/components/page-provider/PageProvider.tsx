@@ -77,7 +77,7 @@ const PageProvider: FC<PageProviderProps> = ({
 
     const shouldUsePadding =
         !shouldRemovePadding &&
-        ![RuntimeEnviroment.IntercomPlugin, RuntimeEnviroment.PagemakerPlugin, 6].includes(
+        ![RuntimeEnviroment.IntercomPlugin, RuntimeEnviroment.PagemakerPlugin, 6, 8].includes(
             runtimeEnvironment as number,
         );
 
