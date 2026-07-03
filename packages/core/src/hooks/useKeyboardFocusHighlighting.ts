@@ -5,6 +5,22 @@ import {
     type ColorSchemeContextProps,
 } from '../components/color-scheme-provider/ColorSchemeProvider';
 
+const KEYBOARD_NAVIGATION_KEYS = new Set([
+    'Tab',
+    'ArrowUp',
+    'ArrowDown',
+    'ArrowLeft',
+    'ArrowRight',
+    'Enter',
+    ' ',
+    'Spacebar',
+    'Escape',
+    'Home',
+    'End',
+    'PageUp',
+    'PageDown',
+]);
+
 /**
  * Tracks whether focus highlighting should be visible for keyboard navigation.
  * Keyboard mode is enabled via Tab and reset by mouse interaction.
@@ -24,29 +40,15 @@ export const useKeyboardFocusHighlighting = (isEnabledProp?: boolean): boolean =
         };
 
         const handleKeyDown = (event: KeyboardEvent) => {
-            // Ignore pure modifier presses, but treat any real keyboard interaction as keyboard navigation.
             if (event.ctrlKey || event.altKey || event.metaKey) {
                 return;
             }
 
-            if (['Shift', 'Control', 'Alt', 'Meta'].includes(event.key)) {
+            if (!KEYBOARD_NAVIGATION_KEYS.has(event.key)) {
                 return;
             }
 
             enableKeyboardNavigation();
-        };
-
-        const handleFocusIn = (event: FocusEvent) => {
-            const { target } = event;
-
-            // Fallback for first tab-focus when the keydown was not observed.
-            if (
-                target instanceof HTMLElement &&
-                typeof target.matches === 'function' &&
-                target.matches(':focus-visible')
-            ) {
-                enableKeyboardNavigation();
-            }
         };
 
         const disableKeyboardNavigation = () => {
@@ -55,7 +57,6 @@ export const useKeyboardFocusHighlighting = (isEnabledProp?: boolean): boolean =
 
         if (canListen) {
             window.addEventListener('keydown', handleKeyDown);
-            window.addEventListener('focusin', handleFocusIn);
             window.addEventListener('mousedown', disableKeyboardNavigation);
             window.addEventListener('mousemove', disableKeyboardNavigation);
         } else {
@@ -65,7 +66,6 @@ export const useKeyboardFocusHighlighting = (isEnabledProp?: boolean): boolean =
         return () => {
             if (canListen) {
                 window.removeEventListener('keydown', handleKeyDown);
-                window.removeEventListener('focusin', handleFocusIn);
                 window.removeEventListener('mousedown', disableKeyboardNavigation);
                 window.removeEventListener('mousemove', disableKeyboardNavigation);
             }
