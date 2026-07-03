@@ -19,7 +19,7 @@ import { useTheme } from 'styled-components';
 import type { IFilterButtonItem } from '../../types/filterButtons';
 import type { ISearchBoxItem, ISearchBoxItems } from '../../types/searchBox';
 import { calculateContentHeight } from '../../utils/calculate';
-import { searchList } from '../../utils/searchBox';
+import { searchList, sortSearchBoxItems } from '../../utils/searchBox';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import Input from '../input/Input';
@@ -49,6 +49,40 @@ export interface TagInputSettings {
     tags?: TagInputProps['tags'];
 }
 
+const filterSearchBoxItems = ({
+    customFilter,
+    items,
+    searchString,
+    shouldUseCustomFilterOnly,
+}: {
+    customFilter?: (item: ISearchBoxItem) => boolean;
+    items: ISearchBoxItem[];
+    searchString: string;
+    shouldUseCustomFilterOnly?: boolean;
+}) => {
+    if (typeof customFilter !== 'function') {
+        return searchList({ items, searchString });
+    }
+
+    if (shouldUseCustomFilterOnly) {
+        const filteredItems = items.filter(customFilter);
+
+        return sortSearchBoxItems({ items: filteredItems, searchString });
+    }
+
+    return searchList({ items, searchString }).filter(customFilter);
+};
+
+const getDropdownSearchString = ({
+    selectedId,
+    shouldKeepSelectedItemPosition,
+    value,
+}: {
+    selectedId?: string;
+    shouldKeepSelectedItemPosition?: boolean;
+    value: string;
+}) => (shouldKeepSelectedItemPosition && selectedId ? '' : value);
+
 export type SearchBoxProps = {
     /**
      * The element where the content of the `ComboBox` should be rendered via React Portal.
@@ -58,6 +92,10 @@ export type SearchBoxProps = {
      * An optional callback function to filter the elements to be displayed
      */
     customFilter?: (item: ISearchBoxItem) => boolean;
+    /**
+     * If true, the custom filter replaces the built-in text search instead of narrowing its results.
+     */
+    shouldUseCustomFilterOnly?: boolean;
     /**
      * The direction in which the dropdown should be displayed. By default, it is displayed below the input.
      */
@@ -74,6 +112,10 @@ export type SearchBoxProps = {
      * List of groups with items that can be searched. It is possible to give only one list; if multiple lists are provided, the 'group name' parameter becomes mandatory.
      */
     lists: ISearchBoxItems[];
+    /**
+     * The maximum height of the dropdown body in pixels.
+     */
+    maxHeight?: number;
     /**
      * Function to be executed when the input lost focus.
      */
@@ -103,6 +145,10 @@ export type SearchBoxProps = {
      */
     selectedId?: string;
     /**
+     * If true, the selected item keeps its original position in the dropdown list.
+     */
+    shouldKeepSelectedItemPosition?: boolean;
+    /**
      * If true, the value in the Input is displayed in the list.
      */
     shouldAddInputToList: boolean;
@@ -114,6 +160,10 @@ export type SearchBoxProps = {
      * Whether the full list of items should be displayed if the input is empty.
      */
     shouldShowContentOnEmptyInput?: boolean;
+    /**
+     * If true, the dropdown items are displayed more compactly.
+     */
+    shouldShowSmallItems?: boolean;
     /**
      * If true, the images of the items are displayed in a round shape.
      */
@@ -145,6 +195,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             isInvalid = false,
             leftIcons,
             lists,
+            maxHeight = 300,
             onBlur,
             onChange,
             onKeyDown,
@@ -154,8 +205,11 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             hintText,
             selectedId,
             shouldAddInputToList = true,
+            shouldKeepSelectedItemPosition = false,
+            shouldUseCustomFilterOnly = false,
             shouldHideFilterButtons = false,
             shouldShowContentOnEmptyInput = true,
+            shouldShowSmallItems = false,
             shouldShowRoundImage,
             shouldShowToggleIcon = false,
             tagInputSettings,
@@ -190,6 +244,11 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         );
 
         const theme = useTheme() as Theme;
+        const dropdownSearchString = getDropdownSearchString({
+            selectedId,
+            shouldKeepSelectedItemPosition,
+            value,
+        });
 
         const { isTouch } = useDevice();
 
@@ -238,7 +297,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             const newMatchingItems: ISearchBoxItems[] = [];
 
             newLists.forEach(({ list, groupName }) => {
-                const newList = searchList({ items: list, searchString: value });
+                const newList = filterSearchBoxItems({
+                    customFilter,
+                    items: list,
+                    searchString: dropdownSearchString,
+                    shouldUseCustomFilterOnly,
+                });
 
                 if (newList.length > 0) {
                     newMatchingItems.push({
@@ -258,17 +322,25 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             const filteredMatchingListItems = newMatchingItems.map(({ list, groupName }) => ({
                 groupName,
                 list: list.filter((item) => {
-                    if (typeof customFilter === 'function') {
-                        return customFilter(item);
+                    if (typeof customFilter === 'function' && shouldUseCustomFilterOnly) {
+                        return true;
                     }
-                    return !(newMatchingItems.length === 1 && item.text === value);
+
+                    return !(newMatchingItems.length === 1 && item.text === dropdownSearchString);
                 }),
             }));
 
             setMatchingListsItems(filteredMatchingListItems);
 
             return newLists;
-        }, [groups, lists, customFilter, shouldAddInputToList, value]);
+        }, [
+            groups,
+            lists,
+            customFilter,
+            dropdownSearchString,
+            shouldAddInputToList,
+            shouldUseCustomFilterOnly,
+        ]);
 
         const handleOpen = useCallback(() => {
             setShouldShowBody(true);
@@ -358,7 +430,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 const newMatchingItems: ISearchBoxItems[] = [];
 
                 activeList.forEach(({ list, groupName }) => {
-                    const newList = searchList({ items: list, searchString: value });
+                    const newList = filterSearchBoxItems({
+                        customFilter,
+                        items: list,
+                        searchString: dropdownSearchString,
+                        shouldUseCustomFilterOnly,
+                    });
 
                     if (newList.length > 0) {
                         newMatchingItems.push({
@@ -378,10 +455,13 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 const filteredMatchingListItems = newMatchingItems.map(({ list, groupName }) => ({
                     groupName,
                     list: list.filter((item) => {
-                        if (typeof customFilter === 'function') {
-                            return customFilter(item);
+                        if (typeof customFilter === 'function' && shouldUseCustomFilterOnly) {
+                            return true;
                         }
-                        return !(newMatchingItems.length === 1 && item.text === value);
+
+                        return !(
+                            newMatchingItems.length === 1 && item.text === dropdownSearchString
+                        );
                     }),
                 }));
 
@@ -396,8 +476,9 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             activeList,
             shouldAddInputToList,
             hintText,
-            value,
+            dropdownSearchString,
             customFilter,
+            shouldUseCustomFilterOnly,
             handleOpen,
         ]);
 
@@ -409,7 +490,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             const newMatchingItems: ISearchBoxItems[] = [];
 
             activeList.forEach(({ list, groupName }) => {
-                const newList = searchList({ items: list, searchString: value });
+                const newList = filterSearchBoxItems({
+                    customFilter,
+                    items: list,
+                    searchString: dropdownSearchString,
+                    shouldUseCustomFilterOnly,
+                });
 
                 if (newList.length > 0) {
                     newMatchingItems.push({
@@ -440,7 +526,9 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             activeList,
             shouldAddInputToList,
             shouldShowContentOnEmptyInput,
-            value,
+            dropdownSearchString,
+            customFilter,
+            shouldUseCustomFilterOnly,
         ]);
 
         const handleClick = useCallback(() => {
@@ -483,7 +571,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 shouldShowPresetValue.current = false;
 
                 activeList.forEach(({ list, groupName }) => {
-                    const newList = searchList({ items: list, searchString: event.target.value });
+                    const newList = filterSearchBoxItems({
+                        customFilter,
+                        items: list,
+                        searchString: event.target.value,
+                        shouldUseCustomFilterOnly,
+                    });
 
                     if (newList.length > 0) {
                         filteredLists.push({
@@ -519,7 +612,15 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     onChange(event);
                 }
             },
-            [activeList, handleOpen, onChange, shouldAddInputToList, shouldShowContentOnEmptyInput],
+            [
+                activeList,
+                customFilter,
+                handleOpen,
+                onChange,
+                shouldAddInputToList,
+                shouldShowContentOnEmptyInput,
+                shouldUseCustomFilterOnly,
+            ],
         );
 
         /**
@@ -627,6 +728,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             id={id}
                             text={text}
                             imageUrl={imageUrl}
+                            shouldShowSmallItems={shouldShowSmallItems}
                             shouldShowRoundImage={shouldShowRoundImage}
                             onSelect={handleSelect}
                             groupName={groupName}
@@ -641,6 +743,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     <SearchBoxItem
                         id="input-value"
                         onSelect={handleSelect}
+                        shouldShowSmallItems={shouldShowSmallItems}
                         text={`<b>${inputToListValue}</b`}
                         tabIndex={items.length === 0 ? 0 : -1}
                     />,
@@ -655,6 +758,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             inputToListValue,
             value,
             hasMultipleGroups,
+            shouldShowSmallItems,
             shouldShowRoundImage,
             handleSelect,
         ]);
@@ -846,6 +950,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             <SearchBoxBody
                                 filterButtons={filterButtons}
                                 height={height}
+                                maxHeight={maxHeight}
                                 shouldShow={shouldShowDropdown}
                                 key={`search-box-body-${uuid}`}
                                 onGroupSelect={handleFilterButtonsGroupSelect}
@@ -873,6 +978,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 height,
                 isInvalid,
                 leftElement,
+                maxHeight,
                 onKeyDown,
                 placeholder,
                 rightElement,

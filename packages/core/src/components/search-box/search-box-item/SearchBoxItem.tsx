@@ -11,6 +11,7 @@ export type SearchBoxItemProps = {
     id: ISearchBoxItem['id'];
     text: ISearchBoxItem['text'];
     imageUrl?: ISearchBoxItem['imageUrl'];
+    shouldShowSmallItems?: boolean;
     shouldShowRoundImage?: boolean;
     groupName?: ISearchBoxItems['groupName'];
     tabIndex: number;
@@ -20,6 +21,7 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
     id,
     text,
     imageUrl,
+    shouldShowSmallItems,
     shouldShowRoundImage,
     onSelect,
     groupName,
@@ -50,10 +52,21 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
                         $shouldShowRoundImage={shouldShowRoundImage}
                     />
                 )}
-                <StyledSearchBoxItemText dangerouslySetInnerHTML={{ __html: text }} />
+                <StyledSearchBoxItemText
+                    $shouldShowSmallItems={shouldShowSmallItems}
+                    dangerouslySetInnerHTML={{ __html: text }}
+                />
             </StyledSearchBoxItem>
         ),
-        [handleClick, idString, imageUrl, shouldShowRoundImage, text, tabIndex],
+        [
+            handleClick,
+            idString,
+            imageUrl,
+            shouldShowRoundImage,
+            shouldShowSmallItems,
+            text,
+            tabIndex,
+        ],
     );
 };
 

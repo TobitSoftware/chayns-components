@@ -36,6 +36,7 @@ export const StyledSearchBoxBodyHeadGroupName = styled.div<StyledSearchBoxBodyHe
 type StyledSearchBoxBodyContentProps = WithTheme<{
     $height: number;
     $headHeight: number;
+    $maxHeight: number;
 }>;
 
 export const StyledSearchBoxBodyContent = styled.div<StyledSearchBoxBodyContentProps>`
@@ -43,6 +44,7 @@ export const StyledSearchBoxBodyContent = styled.div<StyledSearchBoxBodyContentP
     flex-direction: column;
     cursor: pointer;
     width: 100%;
-    max-height: ${({ $headHeight }) => 300 - $headHeight}px;
-    overflow-y: ${({ $height, $headHeight }) => ($height + $headHeight <= 300 ? 'hidden' : 'auto')};
+    max-height: ${({ $headHeight, $maxHeight }) => $maxHeight - $headHeight}px;
+    overflow-y: ${({ $height, $headHeight, $maxHeight }) =>
+        $height + $headHeight <= $maxHeight ? 'hidden' : 'auto'};
 `;

@@ -70,6 +70,10 @@ export type EmojiInputProps = {
      */
     accessToken?: string;
     /**
+     * The DOM element that should receive the emoji picker popup portal.
+     */
+    container?: Element;
+    /**
      * Sets the height of the input field to a fixed value. If this value is not set, the component will use the needed height until the maximum height is reached.
      */
     height?: CSSProperties['height'];
@@ -143,6 +147,10 @@ export type EmojiInputProps = {
      */
     shouldHidePlaceholderOnFocus?: boolean;
     /**
+     * Allows the most recently auto-converted ASCII smiley to be reverted with Backspace.
+     */
+    shouldRevertAsciiSmileyConversionOnBackspace?: boolean;
+    /**
      * Prevents the EmojiPickerPopup icon from being displayed
      */
     shouldPreventEmojiPicker?: boolean;
@@ -167,6 +175,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
     (
         {
             accessToken,
+            container,
             height,
             inputId,
             isDisabled,
@@ -183,6 +192,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             prefixElement,
             rightElement,
             shouldHidePlaceholderOnFocus = false,
+            shouldRevertAsciiSmileyConversionOnBackspace = false,
             shouldPreventEmojiPicker,
             value,
             onCursorPositionChange,
@@ -285,7 +295,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     // Remember the LAST ASCII conversion so Backspace can revert it.
                     // Older conversions are dropped on purpose: only the smiley the
                     // user just produced should be undoable.
-                    if (conversions.length > 0) {
+                    if (shouldRevertAsciiSmileyConversionOnBackspace && conversions.length > 0) {
                         const lastConv = conversions[conversions.length - 1];
                         const pos = getCurrentCursorPosition(editorRef.current);
                         if (pos !== null) {
@@ -295,10 +305,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                                 plainTextCursorPos: pos,
                             };
                         }
+                    } else {
+                        lastAsciiConversionRef.current = null;
                     }
                 }
             },
-            [emojiRegShortNames, emojiShortNames],
+            [emojiRegShortNames, emojiShortNames, shouldRevertAsciiSmileyConversionOnBackspace],
         );
 
         const handleBeforeInput = useCallback(
@@ -412,6 +424,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 // position), we revert the emoji back to the original text and wrap
                 // it in a protection span so it does not get re-converted.
                 if (
+                    shouldRevertAsciiSmileyConversionOnBackspace &&
                     event.key === 'Backspace' &&
                     !event.ctrlKey &&
                     !event.metaKey &&
@@ -443,7 +456,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         // Cursor moved away from the just-converted emoji -> drop tracker
                         lastAsciiConversionRef.current = null;
                     }
-                } else if (!MODIFIER_KEYS.has(event.key)) {
+                } else if (
+                    shouldRevertAsciiSmileyConversionOnBackspace &&
+                    !MODIFIER_KEYS.has(event.key)
+                ) {
                     // Any other actual keystroke invalidates the revert window
                     lastAsciiConversionRef.current = null;
                 }
@@ -487,7 +503,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     }
                 }
             },
-            [isDisabled, isPopupVisible, onKeyDown],
+            [isDisabled, isPopupVisible, onKeyDown, shouldRevertAsciiSmileyConversionOnBackspace],
         );
 
         const handlePopupVisibility = useCallback(
@@ -613,6 +629,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 editorRef.current.dispatchEvent(event);
             }
         }, []);
+
+        useEffect(() => {
+            if (!shouldRevertAsciiSmileyConversionOnBackspace) {
+                lastAsciiConversionRef.current = null;
+            }
+        }, [shouldRevertAsciiSmileyConversionOnBackspace]);
 
         useEffect(() => {
             if (typeof onPrefixElementRemove !== 'function') {
@@ -960,6 +982,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     {!isTouch && !shouldPreventEmojiPicker && (
                         <EmojiPickerPopup
                             accessToken={accessToken}
+                            container={container}
                             onSelect={handlePopupSelect}
                             onPopupVisibilityChange={handlePopupVisibility}
                             personId={personId}

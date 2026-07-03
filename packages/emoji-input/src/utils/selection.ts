@@ -555,15 +555,19 @@ export const unwrapIgnoreEmojiSpanAtCursor = (editorElement: HTMLDivElement | nu
     let { commonAncestorContainer } = range;
     const cursorOffset = range.startOffset;
 
+    if (!editorElement.contains(commonAncestorContainer)) {
+        return;
+    }
+
     // Walk up the DOM tree to find if we're inside a no-emoji-convert span
     while (commonAncestorContainer && commonAncestorContainer !== editorElement) {
         if (
             commonAncestorContainer.nodeType === Node.ELEMENT_NODE &&
-            (commonAncestorContainer as Element).className === 'no-emoji-convert'
+            (commonAncestorContainer as Element).classList.contains('no-emoji-convert')
         ) {
             // We're inside a no-emoji-convert span, unwrap it
             const span = commonAncestorContainer as Element;
-            const parentNode = span.parentNode;
+            const { parentNode } = span;
 
             if (!parentNode) {
                 return;
@@ -571,7 +575,7 @@ export const unwrapIgnoreEmojiSpanAtCursor = (editorElement: HTMLDivElement | nu
 
             // Find which text node contains the cursor
             let cursorNode: Node | null = null;
-            let cursorNodeOffset = cursorOffset;
+            const cursorNodeOffset = cursorOffset;
 
             // Get all child nodes of the span
             const childNodes = Array.from(span.childNodes);
@@ -601,7 +605,8 @@ export const unwrapIgnoreEmojiSpanAtCursor = (editorElement: HTMLDivElement | nu
             break;
         }
 
-        commonAncestorContainer = commonAncestorContainer.parentNode ?? commonAncestorContainer;
+        // @ts-expect-error - is needed
+        commonAncestorContainer = commonAncestorContainer.parentNode;
     }
 };
 
@@ -623,16 +628,20 @@ export const moveCursorOutOfIgnoreEmojiSpan = (editorElement: HTMLDivElement | n
     const range = selection.getRangeAt(0);
     let { commonAncestorContainer } = range;
 
+    if (!editorElement.contains(commonAncestorContainer)) {
+        return;
+    }
+
     // Walk up the DOM tree to find if we're inside a no-emoji-convert span
     while (commonAncestorContainer && commonAncestorContainer !== editorElement) {
         if (
             commonAncestorContainer.nodeType === Node.ELEMENT_NODE &&
-            (commonAncestorContainer as Element).className === 'no-emoji-convert'
+            (commonAncestorContainer as Element).classList.contains('no-emoji-convert')
         ) {
             // We're inside a no-emoji-convert span, move cursor to after it
             const span = commonAncestorContainer as Element;
-            const nextSibling = span.nextSibling;
-            const parentNode = span.parentNode;
+            const { nextSibling } = span;
+            const { parentNode } = span;
 
             if (!parentNode) {
                 return;
@@ -670,6 +679,7 @@ export const moveCursorOutOfIgnoreEmojiSpan = (editorElement: HTMLDivElement | n
             break;
         }
 
-        commonAncestorContainer = commonAncestorContainer.parentNode ?? commonAncestorContainer;
+        // @ts-expect-error - is needed
+        commonAncestorContainer = commonAncestorContainer.parentNode;
     }
 };

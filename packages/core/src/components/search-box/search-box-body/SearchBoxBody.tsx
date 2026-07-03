@@ -26,6 +26,7 @@ export type SearchBoxBodyProps = {
     filterButtons?: IFilterButtonItem[];
     selectedGroups?: string[];
     height: number;
+    maxHeight?: number;
     onGroupSelect?: (keys: string[]) => void;
     shouldHideFilterButtons?: boolean;
     shouldShow: boolean;
@@ -37,6 +38,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
             filterButtons,
             selectedGroups,
             height,
+            maxHeight = 300,
             children,
             shouldShow,
             onGroupSelect,
@@ -122,6 +124,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                     <StyledSearchBoxBodyContent
                         $height={height}
                         $headHeight={headHeight}
+                        $maxHeight={maxHeight}
                         key="content"
                         id={`searchBoxContent__${uuid}`}
                         className="chayns-scrollbar"
@@ -141,6 +144,7 @@ const SearchBoxBody = forwardRef<HTMLDivElement, SearchBoxBodyProps>(
                 headHeight,
                 height,
                 onGroupSelect,
+                maxHeight,
                 ref,
                 selectedGroups,
                 shouldHideFilterButtons,
