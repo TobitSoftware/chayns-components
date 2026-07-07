@@ -986,7 +986,10 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                                 placeholder={placeholder}
                                 ref={inputRef}
                                 rightElement={rightElement}
-                                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                                shouldEnableKeyboardHighlighting={
+                                    inputProps?.shouldEnableKeyboardHighlighting ??
+                                    shouldEnableKeyboardHighlighting
+                                }
                                 value={value}
                             />
                         )}
