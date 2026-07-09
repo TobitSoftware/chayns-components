@@ -322,22 +322,28 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 if (isDisabled) {
                     event.preventDefault();
                     event.stopPropagation();
-
                     return;
                 }
 
-                const { data, type } = event.nativeEvent as InputEvent;
+                const nativeEvent = event.nativeEvent as InputEvent;
+                const { data, inputType } = nativeEvent;
 
-                if (type === 'textInput' && data && data.includes('\n')) {
+                if (inputType === 'insertParagraph' || inputType === 'insertLineBreak') {
+                    return;
+                }
+
+                if (inputType === 'insertText' && data && data.includes('\n')) {
                     event.preventDefault();
                     event.stopPropagation();
 
                     const text = convertEmojisToUnicode(data, emojiRegShortNames, emojiShortNames);
 
-                    insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+                    insertTextAtCursorPosition({
+                        editorElement: editorRef.current,
+                        text,
+                    });
 
                     const newEvent = new Event('input', { bubbles: true });
-
                     editorRef.current.dispatchEvent(newEvent);
                 }
             },
@@ -389,7 +395,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     return;
                 }
 
-                let cleanedHTML = cleanupEmptyIgnoreEmojiSpans(editorRef.current.innerHTML);
+                const cleanedHTML = cleanupEmptyIgnoreEmojiSpans(editorRef.current.innerHTML);
                 handleUpdateHTML(cleanedHTML);
 
                 // After handleUpdateHTML, the DOM has been updated with emojis
@@ -472,13 +478,6 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
                 if (typeof onKeyDown === 'function') {
                     onKeyDown(event);
-                }
-
-                if (event.key === 'Enter' && !event.isPropagationStopped() && editorRef.current) {
-                    event.preventDefault();
-
-                    // noinspection JSDeprecatedSymbols
-                    document.execCommand('insertLineBreak', false);
                 }
 
                 if (event.key === 'Enter') {
@@ -669,6 +668,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             onPrefixElementRemove();
             hasPrefixRendered.current = false;
         }, [onPrefixElementRemove, plainTextValue.length, prefixElement]);
+
+        console.log('TEST');
 
         useEffect(() => {
             if (typeof prefixElement === 'string') {
@@ -958,6 +959,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         className="chayns-scrollbar"
                         animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
                         contentEditable
+                        role="textbox"
+                        aria-multiline="true"
+                        inputMode="text"
+                        autoCapitalize="sentences"
+                        autoCorrect="on"
+                        spellCheck
                         id={inputId}
                         onBeforeInput={handleBeforeInput}
                         onBlur={handleBlur}
