@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 import React, {
+    ChangeEventHandler,
     CSSProperties,
     forwardRef,
     KeyboardEvent,
@@ -17,6 +18,7 @@ import React, {
 } from 'react';
 import { useUuid } from '../../../hooks/uuid';
 import type { IListItemRightElements } from '../../../types/list';
+import type { InputProps } from '../../input/Input';
 import { AccordionContext } from '../../accordion/Accordion';
 import AreaContextProvider, { AreaContext } from '../../area-provider/AreaContextProvider';
 import { ListContext } from '../List';
@@ -208,6 +210,15 @@ export type ListItemProps = {
      * Enables keyboard-only focus highlighting. Overrides the value from the List context.
      */
     shouldEnableKeyboardHighlighting?: boolean;
+    /**
+     * Function that is executed when the text of the title input changes.
+     * When this function is given, the title is displayed as an input.
+     */
+    onTitleInputChange?: ChangeEventHandler<HTMLInputElement>;
+    /**
+     * The props of the title input.
+     */
+    titleInputProps?: InputProps;
 };
 
 export type ListItemRef = ListItemSize;
@@ -248,7 +259,9 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             title,
             onImageError,
             onSizeChange,
+            onTitleInputChange,
             titleElement,
+            titleInputProps,
             shouldDisableAnimation = false,
             cornerElement,
             isSelected = false,
@@ -546,7 +559,9 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
                         shouldShowRoundImageOrIcon={shouldShowRoundImageOrIcon}
                         subtitle={subtitle}
                         title={title}
+                        onTitleInputChange={onTitleInputChange}
                         onTitleWidthChange={handleTitleWidthChange}
+                        titleInputProps={titleInputProps}
                         titleElement={titleElement}
                         setShouldEnableTooltip={setShouldEnableTooltip}
                         shouldDisableAnimation={shouldDisableAnimation}

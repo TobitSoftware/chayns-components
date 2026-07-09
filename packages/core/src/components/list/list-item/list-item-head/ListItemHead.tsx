@@ -1,5 +1,6 @@
 import { LayoutGroup, motion } from 'motion/react';
 import React, {
+    ChangeEventHandler,
     CSSProperties,
     FC,
     MouseEventHandler,
@@ -7,12 +8,14 @@ import React, {
     SyntheticEvent,
     TouchEventHandler,
     useCallback,
+    useContext,
     useEffect,
     useMemo,
     useRef,
     useState,
 } from 'react';
 import type { IListItemRightElements } from '../../../../types/list';
+import type { InputProps } from '../../../input/Input';
 import ListItemIcon from './list-item-icon/ListItemIcon';
 import ListItemImage from './list-item-image/ListItemImage';
 import {
@@ -23,6 +26,7 @@ import {
     StyledListItemHeadLeftWrapper,
     StyledListItemHeadSubtitle,
     StyledListItemHeadTitle,
+    StyledListItemHeadTitleInputWrapper,
     StyledMotionListItemHeadHoverItem,
     StyledMotionListItemHeadHoverItemWrapper,
 } from './ListItemHead.styles';
@@ -33,6 +37,8 @@ import { useTheme } from 'styled-components';
 import type { Theme } from '../../../color-scheme-provider/ColorSchemeProvider';
 import { StyledUnicodeIcon } from '../../../icon/Icon.styles';
 import { getIsExpandableIcon } from '../../../../utils/icon';
+import Input from '../../../input/Input';
+import { AreaContext } from '../../../area-provider/AreaContextProvider';
 
 type ListItemHeadProps = {
     careOfLocationId?: number;
@@ -62,6 +68,8 @@ type ListItemHeadProps = {
     cornerElement?: ReactNode;
     onTitleWidthChange: (titleWidth: number, titleMaxWidth: number) => void;
     onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
+    onTitleInputChange?: ChangeEventHandler<HTMLInputElement>;
+    titleInputProps?: InputProps;
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
@@ -92,6 +100,8 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     cornerElement,
     onTitleWidthChange,
     onImageError,
+    onTitleInputChange,
+    titleInputProps,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
     const [titleMaxWidth, setTitleMaxWidth] = useState(0);
@@ -102,13 +112,18 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const leftElementRef = useRef<HTMLDivElement>(null);
 
     const theme = useTheme() as Theme;
+    const areaProvider = useContext(AreaContext);
+
+    const hasTitleInput = typeof onTitleInputChange === 'function';
 
     const shouldShowSubtitleRow =
-        subtitle ||
-        typeof subtitle === 'string' ||
+        (!hasTitleInput && (subtitle || typeof subtitle === 'string')) ||
         (typeof rightElements === 'object' && rightElements && 'bottom' in rightElements);
 
-    const shouldShowMultilineTitle = useMemo(() => !subtitle, [subtitle]);
+    const shouldShowMultilineTitle = useMemo(
+        () => !subtitle && !hasTitleInput,
+        [hasTitleInput, subtitle],
+    );
 
     useEffect(() => {
         window.setTimeout(() => {
@@ -156,6 +171,10 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     const handleTitleWidthChange = useCallback((width: number) => {
         setTitleMaxWidth(width);
+    }, []);
+
+    const handleInputClick = useCallback<MouseEventHandler<HTMLDivElement>>((event) => {
+        event.stopPropagation();
     }, []);
 
     const iconOrImageElement = useMemo(() => {
@@ -253,15 +272,31 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                         as={shouldDisableAnimation ? undefined : motion.div}
                         layout="position"
                     >
-                        <ListItemTitle
-                            title={title}
-                            titleElement={titleElement}
-                            isOpen={isOpen}
-                            shouldShowMultilineTitle={shouldShowMultilineTitle}
-                            rightElements={rightElements}
-                            onTitleWidthChange={handleTitleWidthChange}
-                            onResize={handleShowTooltipResize}
-                        />
+                        {hasTitleInput ? (
+                            // eslint-disable-next-line react/jsx-no-constructed-context-values
+                            <AreaContext.Provider
+                                value={{ ...areaProvider, shouldChangeColor: true }}
+                            >
+                                <StyledListItemHeadTitleInputWrapper onClick={handleInputClick}>
+                                    <Input
+                                        /* eslint-disable-next-line react/jsx-props-no-spreading */
+                                        {...titleInputProps}
+                                        value={typeof title === 'string' ? title : undefined}
+                                        onChange={onTitleInputChange}
+                                    />
+                                </StyledListItemHeadTitleInputWrapper>
+                            </AreaContext.Provider>
+                        ) : (
+                            <ListItemTitle
+                                title={title}
+                                titleElement={titleElement}
+                                isOpen={isOpen}
+                                shouldShowMultilineTitle={shouldShowMultilineTitle}
+                                rightElements={rightElements}
+                                onTitleWidthChange={handleTitleWidthChange}
+                                onResize={handleShowTooltipResize}
+                            />
+                        )}
                     </StyledListItemHeadTitle>
                     {shouldShowSubtitleRow && (
                         <StyledListItemHeadSubtitle>

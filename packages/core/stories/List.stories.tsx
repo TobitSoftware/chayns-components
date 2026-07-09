@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import React, { FC, ReactNode } from 'react';
+import React, { ChangeEvent, FC, ReactNode, useState } from 'react';
 import { AmountControl, Badge, Icon } from '../src';
 import Button from '../src/components/button/Button';
 import List from '../src/components/list/List';
@@ -12,7 +12,73 @@ export default {
     args: {},
 } as Meta<typeof List>;
 
+const images = [
+    'https://tsimg.cloud/77896-21884/8aee1a304297729a4542b97325940a656a3da8f2.png',
+    'https://tsimg.cloud/77896-21884/54a117f35e5fb57520e64471461af5491c0eff06.png',
+    'https://tsimg.cloud/77896-21884/25399416f38c1d960f521a3530c8a2bc70a88bb9.png',
+    'https://tsimg.cloud/77896-21884/fce5e30f68c75c8c524cc9ac0887832f263b79ff.png',
+];
+
+const locationImages = [
+    'https://sub60.tobit.com/l/1',
+    'https://sub60.tobit.com/l/2',
+    'https://sub60.tobit.com/l/3',
+];
+
+const otherImages = [
+    'https://tsimg.cloud/77896-21884/436c7140eb430a0fa486aa737a953626cc83c22a.jpg',
+    'https://tsimg.cloud/77896-21884/2268d6644b6a24f0fed7378f7263c1ee3fdb6d01.jpg',
+    'https://tsimg.cloud/77896-21884/8c380d25c782f88007f0acc923d465848bac49af.jpg',
+    'https://tsimg.cloud/77896-21884/2b52c3fd7059aeacad23cd8c36779477cb25e902.jpg',
+];
+
 const Template: StoryFn<typeof List> = ({ children }) => <List>{children}</List>;
+
+const ListItemWithTitleInputTemplate: StoryFn<typeof List> = () => {
+    const [title, setTitle] = useState('Lorem ipsum');
+
+    const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setTitle(event.target.value);
+    };
+
+    return (
+        <List>
+            <ListItem
+                title={title}
+                subtitle="Dieser Subtitle sollte bei aktivem Input nicht angezeigt werden"
+                onTitleInputChange={handleTitleChange}
+                titleInputProps={{
+                    placeholder: 'Titel bearbeiten',
+                    rightElement: (
+                        <div
+                            style={{
+                                backgroundColor: '#3377b6',
+                                height: '42px',
+                                width: '42px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <Icon icons={['ts-calling-code']} size={25} color="white" />
+                        </div>
+                    ),
+                }}
+                rightElements={{
+                    center: <AmountControl />,
+                }}
+                images={[images[0]]}
+                shouldShowRoundImageOrIcon
+            />
+            <ListItem
+                title="Normales ListItem zum Vergleich"
+                subtitle="Dieser Subtitle bleibt sichtbar"
+                images={[images[1]]}
+                shouldShowRoundImageOrIcon
+            />
+        </List>
+    );
+};
 
 export const General = Template.bind({});
 
@@ -44,25 +110,7 @@ export const ListItemWithHiddenBottomLines = Template.bind({});
 
 export const IntercomListItems = Template.bind({});
 
-const images = [
-    'https://tsimg.cloud/77896-21884/8aee1a304297729a4542b97325940a656a3da8f2.png',
-    'https://tsimg.cloud/77896-21884/54a117f35e5fb57520e64471461af5491c0eff06.png',
-    'https://tsimg.cloud/77896-21884/25399416f38c1d960f521a3530c8a2bc70a88bb9.png',
-    'https://tsimg.cloud/77896-21884/fce5e30f68c75c8c524cc9ac0887832f263b79ff.png',
-];
-
-const locationImages = [
-    'https://sub60.tobit.com/l/1',
-    'https://sub60.tobit.com/l/2',
-    'https://sub60.tobit.com/l/3',
-];
-
-const otherImages = [
-    'https://tsimg.cloud/77896-21884/436c7140eb430a0fa486aa737a953626cc83c22a.jpg',
-    'https://tsimg.cloud/77896-21884/2268d6644b6a24f0fed7378f7263c1ee3fdb6d01.jpg',
-    'https://tsimg.cloud/77896-21884/8c380d25c782f88007f0acc923d465848bac49af.jpg',
-    'https://tsimg.cloud/77896-21884/2b52c3fd7059aeacad23cd8c36779477cb25e902.jpg',
-];
+export const ListItemWithTitleInput = ListItemWithTitleInputTemplate.bind({});
 
 General.args = {
     children: [
