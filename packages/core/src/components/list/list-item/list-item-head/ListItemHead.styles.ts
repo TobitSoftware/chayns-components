@@ -68,6 +68,10 @@ export const StyledListItemHeadTitle = styled.div<StyledListItemHeadTitleProps>`
     justify-content: space-between;
 `;
 
+export const StyledListItemHeadTitleInputWrapper = styled.div`
+    width: 100%;
+`;
+
 export const StyledListItemHeadTitleContent = styled.div`
     align-items: center;
     display: flex;
