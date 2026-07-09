@@ -9,6 +9,9 @@ import CareOfClipPath from './clip-paths/CareOfClipPath';
 import { useUuid } from '../../hooks/uuid';
 import SecondImageClipPath from './clip-paths/SecondImageClipPath';
 
+const GROUPED_IMAGE_SERVICE_ORIGIN = 'https://tsimg.cloud';
+const IMAGE_SERVICE_PARAM_PATTERN = /^(?:m(?:scale|crop|shortedgescale)|[whsbd]\d+)$/i;
+
 interface GroupedImageProps {
     /**
      * Optional image to display in the bottom right corner of the grouped image.
@@ -48,6 +51,48 @@ interface GroupedImageProps {
     onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
 }
 
+const getGroupedImageDisplayUrl = (url: string, size: number): string => {
+    try {
+        const urlObject = new URL(url);
+
+        if (urlObject.origin !== GROUPED_IMAGE_SERVICE_ORIGIN) {
+            return url;
+        }
+
+        const pathSegments = urlObject.pathname.split('/');
+        const fileName = pathSegments.pop();
+
+        if (!fileName) {
+            return url;
+        }
+
+        const extensionIndex = fileName.lastIndexOf('.');
+        const extension = extensionIndex > -1 ? fileName.slice(extensionIndex) : '';
+        const fileBaseName = extensionIndex > -1 ? fileName.slice(0, extensionIndex) : fileName;
+        const parameterSegment = fileBaseName.split('_').pop();
+        const hasImageServiceParameters = Boolean(
+            parameterSegment &&
+            parameterSegment !== fileBaseName &&
+            parameterSegment
+                .split('-')
+                .every((parameter) => IMAGE_SERVICE_PARAM_PATTERN.test(parameter)),
+        );
+        const normalizedFileBaseName = hasImageServiceParameters
+            ? fileBaseName.slice(0, fileBaseName.lastIndexOf('_'))
+            : fileBaseName;
+        const normalizedSize = Math.max(1, Math.round(size));
+
+        pathSegments.push(
+            `${normalizedFileBaseName}_w${normalizedSize}-h${normalizedSize}${extension}`,
+        );
+        urlObject.pathname = pathSegments.join('/');
+
+        return urlObject.toString();
+    } catch {
+        return url;
+    }
+};
+
 const GroupedImage: FC<GroupedImageProps> = ({
     cornerImage,
     height = 40,
@@ -63,6 +108,9 @@ const GroupedImage: FC<GroupedImageProps> = ({
     const hasCornerElement = Boolean(cornerElement);
     const hasMultipleImages = images.length > 1;
     const uuid = useUuid();
+    const cornerImageDisplayUrl = cornerImage
+        ? getGroupedImageDisplayUrl(cornerImage, height)
+        : undefined;
 
     const imageElements = images.slice(0, 2).map((src, index) => (
         <StyledGroupImageElement
@@ -86,7 +134,7 @@ const GroupedImage: FC<GroupedImageProps> = ({
                 <foreignObject width="40" height="40">
                     <img
                         alt={`image--${index}`}
-                        src={src}
+                        src={getGroupedImageDisplayUrl(src, height)}
                         onError={(event) =>
                             typeof onImageError === 'function' && onImageError(event, index)
                         }
@@ -120,7 +168,7 @@ const GroupedImage: FC<GroupedImageProps> = ({
                     $background={imageBackground}
                     $shouldPreventBackground={shouldPreventBackground}
                     $hasMultipleImages={hasMultipleImages}
-                    src={cornerImage}
+                    src={cornerImageDisplayUrl}
                     key="corner-image"
                 />
             )}
