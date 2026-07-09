@@ -4,11 +4,11 @@ import React, {
     KeyboardEventHandler,
     MouseEventHandler,
     MouseEvent,
-    SyntheticEvent,
     useCallback,
     useState,
 } from 'react';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
+import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 import {
     StyledGridBottomRightImage,
     StyledGridImage,
@@ -51,15 +51,17 @@ const GridImage: FC<GridImageProps> = ({
     onClick,
     shouldEnableKeyboardHighlighting,
 }) => {
+    const colorScheme = useColorScheme();
+    const shouldEnableKeyboardHighlightingEffective =
+        shouldEnableKeyboardHighlighting ?? colorScheme?.shouldEnableKeyboardHighlighting ?? false;
+
     const [hasLoadedLeftImage, setHasLoadedLeftImage] = useState(false);
     const [hasLoadedTopRightImage, setHasLoadedTopRightImage] = useState(false);
     const [hasLoadedBottomRightImage, setHasLoadedBottomRightImage] = useState(false);
 
     const isClickable = typeof onClick === 'function';
-    const isKeyboardFocusable = isClickable && shouldEnableKeyboardHighlighting;
-    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
-        shouldEnableKeyboardHighlighting,
-    );
+    const isKeyboardFocusable = isClickable && shouldEnableKeyboardHighlightingEffective;
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(isKeyboardFocusable);
 
     const handleKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
         (event) => {

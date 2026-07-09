@@ -18,6 +18,7 @@ import CareOfClipPath from './clip-paths/CareOfClipPath';
 import { useUuid } from '../../hooks/uuid';
 import SecondImageClipPath from './clip-paths/SecondImageClipPath';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
+import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 const GROUPED_IMAGE_SERVICE_ORIGIN = 'https://tsimg.cloud';
 const IMAGE_SERVICE_PARAM_PATTERN = /^(?:m(?:scale|crop|shortedgescale)|[whsbd]\d+)$/i;
@@ -119,6 +120,10 @@ const GroupedImage: FC<GroupedImageProps> = ({
     onImageError,
     shouldEnableKeyboardHighlighting,
 }) => {
+    const colorScheme = useColorScheme();
+    const shouldEnableKeyboardHighlightingEffective =
+        shouldEnableKeyboardHighlighting ?? colorScheme?.shouldEnableKeyboardHighlighting ?? false;
+
     const hasCornerImage = Boolean(cornerImage);
     const hasCornerElement = Boolean(cornerElement);
     const hasMultipleImages = images.length > 1;
@@ -127,10 +132,8 @@ const GroupedImage: FC<GroupedImageProps> = ({
         ? getGroupedImageDisplayUrl(cornerImage, height)
         : undefined;
     const isClickable = typeof onClick === 'function';
-    const isKeyboardFocusable = isClickable && shouldEnableKeyboardHighlighting;
-    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
-        shouldEnableKeyboardHighlighting,
-    );
+    const isKeyboardFocusable = isClickable && shouldEnableKeyboardHighlightingEffective;
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(isKeyboardFocusable);
 
     const handleKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
         (event) => {
