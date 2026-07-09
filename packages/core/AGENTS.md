@@ -2992,6 +2992,12 @@ import { List, ListItem } from '@chayns-components/core';
 </List>
 ```
 
+#### List Item With Title Input
+
+```tsx
+<List />
+```
+
 ### Props
 
 No prop documentation available.
