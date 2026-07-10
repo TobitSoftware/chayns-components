@@ -1,4 +1,4 @@
-﻿import React, { CSSProperties, ReactNode, useEffect } from 'react';
+﻿import React, { CSSProperties, ReactNode, useEffect, type JSX } from 'react';
 import clsx from 'clsx';
 import { useAdaptiveTranslation } from '../hooks/useAdaptiveTranslation';
 import { Language } from 'chayns-api';

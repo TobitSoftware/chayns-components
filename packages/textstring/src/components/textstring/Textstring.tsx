@@ -1,8 +1,8 @@
 import React, {
     CSSProperties,
     FC,
+    type JSX,
     MouseEvent,
-    ReactHTML,
     useCallback,
     type ReactElement,
 } from 'react';
@@ -27,7 +27,7 @@ export type TextstringProps = {
     /**
      * The tag of the HTML element that the text should be displayed in. Only used if `children` is not set.
      */
-    childrenTagName?: keyof ReactHTML;
+    childrenTagName?: keyof JSX.IntrinsicElements;
     /**
      * Whether the textstring contains HTML elements and should be displayed as HTML.
      */

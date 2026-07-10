@@ -1,4 +1,4 @@
-import { ChangeEventHandler, CSSProperties, FocusEventHandler, ReactHTML, ReactNode } from 'react';
+import { ChangeEventHandler, CSSProperties, FocusEventHandler, ReactNode, type JSX } from 'react';
 import { CSSPropertiesWithVars } from 'styled-components/dist/types';
 import { DropdownDirection } from '../../types/dropdown';
 
@@ -41,7 +41,7 @@ export interface ComboBoxTextStyles {
     /**
      * The HTML tag that should be used for the text wrapper.
      */
-    tagName?: keyof ReactHTML;
+    tagName?: keyof JSX.IntrinsicElements;
     /**
      * Additional inline styles applied to the text wrapper.
      */
