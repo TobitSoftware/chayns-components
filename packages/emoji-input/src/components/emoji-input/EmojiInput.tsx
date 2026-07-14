@@ -669,8 +669,6 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             hasPrefixRendered.current = false;
         }, [onPrefixElementRemove, plainTextValue.length, prefixElement]);
 
-        console.log('TEST');
-
         useEffect(() => {
             if (typeof prefixElement === 'string') {
                 hasPrefixChanged.current = true;

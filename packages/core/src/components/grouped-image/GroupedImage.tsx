@@ -21,7 +21,8 @@ import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighli
 import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 const GROUPED_IMAGE_SERVICE_ORIGIN = 'https://tsimg.cloud';
-const IMAGE_SERVICE_PARAM_PATTERN = /^(?:m(?:scale|crop|shortedgescale)|[whsbd]\d+)$/i;
+const IMAGE_SERVICE_PARAM_PATTERN =
+    /^(?:[whsbd]\d+|f(?:webp|avif|json|none)|c(?:c|f)|m(?:cr|sd|ct|pd|cv))$/i;
 
 interface GroupedImageProps {
     /**
@@ -84,7 +85,7 @@ const getGroupedImageDisplayUrl = (url: string, size: number): string => {
         const extensionIndex = fileName.lastIndexOf('.');
         const extension = extensionIndex > -1 ? fileName.slice(extensionIndex) : '';
         const fileBaseName = extensionIndex > -1 ? fileName.slice(0, extensionIndex) : fileName;
-        const parameterSegment = fileBaseName.split('_').pop();
+        const parameterSegment = fileBaseName.split('_').pop() ?? '';
         const hasImageServiceParameters = Boolean(
             parameterSegment &&
             parameterSegment !== fileBaseName &&
@@ -92,14 +93,18 @@ const getGroupedImageDisplayUrl = (url: string, size: number): string => {
                 .split('-')
                 .every((parameter) => IMAGE_SERVICE_PARAM_PATTERN.test(parameter)),
         );
-        const normalizedFileBaseName = hasImageServiceParameters
-            ? fileBaseName.slice(0, fileBaseName.lastIndexOf('_'))
-            : fileBaseName;
         const normalizedSize = Math.max(1, Math.round(size));
 
-        pathSegments.push(
-            `${normalizedFileBaseName}_w${normalizedSize}-h${normalizedSize}${extension}`,
-        );
+        if (hasImageServiceParameters) {
+            const fileBaseNameWithoutParams = fileBaseName.slice(0, fileBaseName.lastIndexOf('_'));
+            const preservedParams = parameterSegment
+                .split('-')
+                .filter((p) => !/^[whs]\d+$/i.test(p));
+            const newParams = [...preservedParams, `w${normalizedSize}`, `h${normalizedSize}`];
+            pathSegments.push(`${fileBaseNameWithoutParams}_${newParams.join('-')}${extension}`);
+        } else {
+            pathSegments.push(`${fileBaseName}_w${normalizedSize}-h${normalizedSize}${extension}`);
+        }
         urlObject.pathname = pathSegments.join('/');
 
         return urlObject.toString();
