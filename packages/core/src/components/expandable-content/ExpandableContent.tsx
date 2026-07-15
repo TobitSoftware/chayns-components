@@ -1,4 +1,4 @@
-import { AnimatePresence } from 'motion/react';
+import { AnimatePresence, Variants } from 'motion/react';
 import React, { FC, ReactNode, useMemo } from 'react';
 import { StyledMotionExpandableContent } from './ExpandableContent.styles';
 
@@ -18,19 +18,32 @@ export type ExpandableContentProps = {
 };
 
 const ExpandableContent: FC<ExpandableContentProps> = ({ children, isOpen, startDelay }) =>
-    useMemo(
-        () => (
+    useMemo(() => {
+        const variants: Variants = {
+            open: {
+                height: 'auto',
+                overflow: 'hidden',
+                transition: { duration: 0.2, type: 'tween', delay: startDelay },
+                transitionEnd: { overflow: 'visible' },
+            },
+            closed: {
+                height: '0px',
+                overflow: 'hidden',
+                transition: { duration: 0.2, type: 'tween' },
+            },
+        };
+
+        return (
             <AnimatePresence initial={false}>
                 <StyledMotionExpandableContent
-                    animate={{ height: isOpen ? 'auto' : '0px' }}
-                    transition={{ duration: 0.2, type: 'tween', delay: isOpen ? startDelay : 0 }}
+                    animate={isOpen ? 'open' : 'closed'}
+                    variants={variants}
                 >
                     {children}
                 </StyledMotionExpandableContent>
             </AnimatePresence>
-        ),
-        [children, isOpen, startDelay],
-    );
+        );
+    }, [children, isOpen, startDelay]);
 
 ExpandableContent.displayName = 'ExpandableContent';
 
