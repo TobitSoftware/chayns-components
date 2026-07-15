@@ -15,7 +15,7 @@ export const StyledMultiActionButton = styled(motion.div)`
     /* Keep normal clipping, but let focus-ring paint outside while focused. */
     &:focus-within {
         overflow: visible;
-        z-index: 1;
+        z-index: 10;
     }
 `;
 

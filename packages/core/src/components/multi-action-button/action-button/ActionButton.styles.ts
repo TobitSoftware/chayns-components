@@ -200,9 +200,10 @@ export const StyledActionButton = styled.button<StyledActionButtonProps>`
         css`
             &:focus-visible {
                 transition: none;
+                z-index: 1;
                 outline: solid 2px color-mix(in srgb, currentColor 70%, transparent);
-                box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.3);
-                outline-offset: 1px;
+                box-shadow: inset 0 0 0 2px rgba(0, 102, 204, 0.25);
+                outline-offset: -2px;
                 color: white;
             }
         `}
