@@ -46,6 +46,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             style,
             yOffset = 0,
             zIndex = 20,
+            dialogText,
         },
         ref,
     ) => {
@@ -139,6 +140,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             if (isTouch) {
                 const { result } = (await createDialog({
                     type: DialogType.SELECT,
+                    text: dialogText,
                     buttons: [],
                     list: items.map(({ icons, text, isSelected }, index) => ({
                         name: text,
@@ -193,7 +195,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 setIsContentShown(true);
             }
-        }, [isTouch, items, newContainer, yOffset]);
+        }, [isTouch, items, newContainer, yOffset, dialogText]);
 
         const handleClick = useCallback<MouseEventHandler<HTMLSpanElement>>(
             (event) => {
