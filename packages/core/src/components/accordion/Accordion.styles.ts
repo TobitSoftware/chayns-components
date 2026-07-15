@@ -62,9 +62,9 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
         theme,
         $bottomBorderColor,
     }: StyledMotionAccordionProps) => {
-        if ($shouldForceBottomLine) {
+        if ($bottomBorderColor && $shouldForceBottomLine) {
             return css`
-                border-bottom-color: ${$bottomBorderColor ?? `rgba(${theme['headline-rgb']}, 1)`};
+                border-bottom-color: ${$bottomBorderColor};
             `;
         }
 
