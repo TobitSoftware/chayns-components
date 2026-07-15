@@ -1,4 +1,4 @@
-import React, { forwardRef, ReactHTML, ReactNode } from 'react';
+import React, { forwardRef, ReactNode, type JSX } from 'react';
 import {
     StyledBaseSkeleton,
     StyledMotionBaseSkeletonPulse,
@@ -10,7 +10,7 @@ import { useSkeletonAnimation, useSkeletonContext } from '../skeleton-provider/S
 export interface BaseSkeletonProps extends BaseSkeletonConfig {
     width: number | string;
     height: number | string;
-    as?: keyof ReactHTML;
+    as?: keyof JSX.IntrinsicElements;
     children?: ReactNode;
 }
 

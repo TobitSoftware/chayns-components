@@ -17,6 +17,59 @@ interface ConvertHTMLToTextOptions {
     shouldSerializeNoEmojiToBBCode?: boolean;
 }
 
+const BLOCK_ELEMENT_TAG_NAMES = new Set(['DIV', 'P']);
+const BLOCK_SEPARATOR = '<br>';
+
+const serializeHTMLNodeToText = (node: ChildNode): string => {
+    if (node.nodeType === Node.TEXT_NODE) {
+        return node.textContent ?? '';
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+        return '';
+    }
+
+    const element = node as HTMLElement;
+
+    if (element.tagName === 'BR') {
+        return '<br>';
+    }
+
+    if (BLOCK_ELEMENT_TAG_NAMES.has(element.tagName)) {
+        return serializeHTMLToText(element.childNodes);
+    }
+
+    return element.outerHTML;
+};
+
+const serializeHTMLToText = (nodes: NodeListOf<ChildNode> | ChildNode[]) => {
+    const serializedNodes = Array.from(nodes);
+
+    let result = '';
+    let didSerializeBlockElement = false;
+
+    serializedNodes.forEach((node) => {
+        const serializedNode = serializeHTMLNodeToText(node);
+
+        const isBlockElement =
+            node.nodeType === Node.ELEMENT_NODE &&
+            BLOCK_ELEMENT_TAG_NAMES.has((node as HTMLElement).tagName);
+
+        if (!serializedNode && !isBlockElement) {
+            return;
+        }
+
+        if (result && (isBlockElement || didSerializeBlockElement)) {
+            result += BLOCK_SEPARATOR;
+        }
+
+        result += serializedNode;
+        didSerializeBlockElement = isBlockElement;
+    });
+
+    return result;
+};
+
 export const convertTextToHTML = (text: string) => {
     const element = document.createElement('div');
 
@@ -81,6 +134,12 @@ export const convertHTMLToText = (
             shouldSerializeNoEmojiToBBCode ? '[ignoreEmoji]$1[/ignoreEmoji]' : '$1',
         );
 
+    const container = document.createElement('div');
+
+    container.innerHTML = result;
+
+    result = serializeHTMLToText(container.childNodes);
+
     if (preserveSpaces) {
         return result
             .replace(/&nbsp;/g, '\u00A0') // non-breaking space
@@ -89,7 +148,6 @@ export const convertHTMLToText = (
 
     // eslint-disable-next-line no-irregular-whitespace
     result = result.replace(/\u200B/g, '');
-
     result = escapeHTML(result);
 
     const element = document.createElement('div');

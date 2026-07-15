@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/maps",
-    "version": "5.4.16",
+    "version": "5.4.20-alpha.0",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -52,13 +52,13 @@
         "url": "https://github.com/TobitSoftware/chayns-components/issues"
     },
     "devDependencies": {
-        "@babel/cli": "^7.28.6",
-        "@babel/core": "^7.29.0",
-        "@babel/preset-env": "^7.29.5",
-        "@babel/preset-react": "^7.28.5",
-        "@babel/preset-typescript": "^7.28.5",
-        "@types/google.maps": "^3.64.0",
-        "@types/react": "^18.3.28",
+        "@babel/cli": "^7.29.7",
+        "@babel/core": "^7.29.7",
+        "@babel/preset-env": "^7.29.7",
+        "@babel/preset-react": "^7.29.7",
+        "@babel/preset-typescript": "^7.29.7",
+        "@types/google.maps": "^3.65.2",
+        "@types/react": "^18.3.31",
         "@types/react-dom": "^18.3.7",
         "@types/styled-components": "^5.1.36",
         "@types/uuid": "^10.0.0",
@@ -67,15 +67,15 @@
         "lerna": "^8.2.4",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "styled-components": "^6.3.9",
+        "styled-components": "^6.4.3",
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.4.16",
+        "@chayns-components/core": "^5.4.20-alpha.0",
         "@googlemaps/react-wrapper": "^1.2.0",
         "@googlemaps/typescript-guards": "^2.0.3",
         "@react-google-maps/api": "^2.20.8",
-        "fast-equals": "^5.4.0",
+        "fast-equals": "^5.4.1",
         "react-compiler-runtime": "^1.0.0"
     },
     "peerDependencies": {
