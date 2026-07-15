@@ -1,7 +1,9 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
-type StyledMentionFinderItemProps = WithTheme<{ $isActive: boolean }>;
+type StyledMentionFinderItemProps = WithTheme<{
+    $isActive: boolean;
+}>;
 
 export const StyledMentionFinderItem = styled.div<StyledMentionFinderItemProps>`
     align-items: center;

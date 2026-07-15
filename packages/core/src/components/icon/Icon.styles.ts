@@ -1,10 +1,12 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { keyboardFocusHighlightingCircleRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledIconWrapperProps = {
     $isDisabled?: boolean;
     $isOnClick: boolean;
     $size: number;
+    $shouldShowKeyboardHighlighting?: boolean;
 };
 
 export const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
@@ -18,6 +20,27 @@ export const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
     position: relative;
     transition: opacity 0.3s ease;
     min-width: ${({ $size }) => `${$size}px`};
+
+    ${({ $shouldShowKeyboardHighlighting, $size }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus-visible {
+                outline: none;
+                color: inherit;
+            }
+
+            &:focus-visible::after {
+                ${keyboardFocusHighlightingCircleRingCss};
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: ${$size + 14}px;
+                height: ${$size + 14}px;
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+            }
+        `}
 
     // To insure that stacked icons have the same size as normal icons.
     &&.fa-stack {

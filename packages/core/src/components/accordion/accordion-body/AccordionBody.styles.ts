@@ -7,7 +7,9 @@ type StyledMotionAccordionBodyProps = WithTheme<{
 }>;
 
 export const StyledMotionAccordionBody = styled(motion.div)<StyledMotionAccordionBodyProps>`
-    overflow: hidden;
+    /* overflow: clip erlaubt overflow-clip-margin, sodass der Fokusring sichtbar bleibt */
+    overflow: clip;
+    overflow-clip-margin: 4px;
     transition: none !important;
 
     ${({ $maxHeight }) =>

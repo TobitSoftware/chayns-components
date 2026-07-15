@@ -21,6 +21,7 @@ interface IRadioButtonGroupContext {
     radioButtonRightElements: IRadioButtonRightElements;
     updateHasRightElement?: IUpdateHasRightElement;
     radioButtonsCanBeUnchecked?: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 export const RadioButtonGroupContext = React.createContext<IRadioButtonGroupContext>({
@@ -29,6 +30,7 @@ export const RadioButtonGroupContext = React.createContext<IRadioButtonGroupCont
     radioButtonsCanBeUnchecked: false,
     radioButtonRightElements: [],
     updateHasRightElement: undefined,
+    shouldEnableKeyboardHighlighting: undefined,
 });
 
 RadioButtonGroupContext.displayName = 'RadioButtonGroupContext';
@@ -42,6 +44,10 @@ export type RadioButtonGroupProps = {
      * Whether the RadioButtons can be unchecked.
      */
     canUncheckRadioButtons?: boolean;
+    /**
+     * Enables keyboard-only focus highlighting for all RadioButtons in this group.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
     /**
      * The RadioButtons that should be grouped. Radio buttons with the same group are
      * automatically unchecked when an `RadioButton` of the group is checked.
@@ -58,7 +64,16 @@ export type RadioButtonGroupProps = {
 };
 
 const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
-    ({ children, canUncheckRadioButtons, selectedId, onSelect }, ref) => {
+    (
+        {
+            children,
+            canUncheckRadioButtons,
+            selectedId,
+            onSelect,
+            shouldEnableKeyboardHighlighting,
+        },
+        ref,
+    ) => {
         const [selectedRadioButtonId, setSelectedRadioButtonId] =
             useState<IRadioButtonGroupContext['selectedRadioButtonId']>(undefined);
         const [radioButtonRightElements, setRadioButtonRightElements] =
@@ -112,11 +127,13 @@ const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
                 radioButtonsCanBeUnchecked: canUncheckRadioButtons,
                 updateHasRightElement,
                 radioButtonRightElements,
+                shouldEnableKeyboardHighlighting,
             }),
             [
                 canUncheckRadioButtons,
                 radioButtonRightElements,
                 selectedRadioButtonId,
+                shouldEnableKeyboardHighlighting,
                 updateHasRightElement,
                 updateSelectedRadioButtonId,
             ],

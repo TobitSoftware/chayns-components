@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { InputSize } from '../input/Input';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledSearchInputProps = WithTheme<{
     $size: InputSize;
@@ -44,6 +45,7 @@ export const StyledSearchInputPseudoElement = styled.div`
 
 type StyledMotionSearchInputContentWrapperProps = {
     $shouldUseAbsolutePositioning: boolean;
+    $shouldShowKeyboardHighlighting: boolean;
 };
 
 export const StyledMotionSearchInputContentWrapper = styled(
@@ -57,12 +59,45 @@ export const StyledMotionSearchInputContentWrapper = styled(
             right: 0;
         `}
 
-    overflow: hidden;
+    overflow: ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting ? 'visible' : 'hidden'};
 `;
 
-export const StyledMotionSearchInputIconWrapperContent = styled(motion.div)`
+type StyledMotionSearchInputIconWrapperContentProps = {
+    $shouldShowKeyboardHighlighting: boolean;
+};
+
+export const StyledMotionSearchInputIconWrapperContent = styled(
+    motion.div,
+)<StyledMotionSearchInputIconWrapperContentProps>`
     display: flex;
     cursor: pointer;
+`;
+
+type StyledSearchInputIconTriggerProps = {
+    $shouldShowKeyboardHighlighting: boolean;
+};
+
+export const StyledSearchInputIconTrigger = styled.div<StyledSearchInputIconTriggerProps>`
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus-visible {
+                transition: none;
+                ${keyboardFocusHighlightingRingCss}
+                border-radius: 50%;
+                box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.35);
+                outline-offset: 2px;
+            }
+        `}
 `;
 
 export const StyledMotionSearchInputIconWrapper = styled.div`

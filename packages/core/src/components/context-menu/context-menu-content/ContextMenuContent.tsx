@@ -23,7 +23,7 @@ type ContextMenuContentProps = {
     headline?: string;
     zIndex: number;
     focusedIndex: number;
-    onKeySelect: (index: number) => void;
+    onItemFocus: (index: number) => void;
     onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
     onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 };
@@ -37,7 +37,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
             zIndex,
             shouldHidePopupArrow,
             headline,
-            onKeySelect,
+            onItemFocus,
             focusedIndex,
             onMouseEnter,
             onMouseLeave,
@@ -124,12 +124,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                                 tabIndex={0}
                                 $shouldHidePopupArrow={shouldHidePopupArrow}
                                 $isFocused={isFocused}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        e.preventDefault();
-                                        onKeySelect(index);
-                                    }
-                                }}
+                                onFocus={() => onItemFocus(index)}
                             >
                                 {iconElement}
                                 <StyledContextMenuContentItemText>
@@ -140,7 +135,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                         </StyledContextMenuContentItem>
                     );
                 }),
-            [items, focusedIndex, shouldHidePopupArrow, onKeySelect],
+            [items, focusedIndex, shouldHidePopupArrow, onItemFocus],
         );
 
         return (

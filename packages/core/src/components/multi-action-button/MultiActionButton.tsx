@@ -10,6 +10,7 @@ import React, {
     useState,
 } from 'react';
 import { useElementSize, useMeasuredClone } from '../../hooks/element';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { useIsTouch } from '../../utils/environment';
 import ContextMenu from '../context-menu/ContextMenu';
 import type { ContextMenuRef } from '../context-menu/ContextMenu.types';
@@ -97,11 +98,13 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     secondaryContextMenu,
     shouldAutoCollapse = false,
     shouldUseFullWidth,
+    shouldEnableKeyboardHighlighting,
     width,
 }) => {
     const [isExtendedByClick, setIsExtendedByClick] = useState(false);
     const [isSecondaryExpanded, setIsSecondaryExpanded] = useState(false);
     const [isSecondaryHovered, setIsSecondaryHovered] = useState(false);
+    const [isSecondaryFocused, setIsSecondaryFocused] = useState(false);
 
     const autoCollapseTimeoutRef = useRef<number | null>(null);
     const multiActionButtonRef = useRef<HTMLDivElement | null>(null);
@@ -120,6 +123,9 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
     const hasExpandableSecondaryAction = Boolean(secondaryAction) && !hasSecondaryContextMenu;
     const hasSecondaryAction = Boolean(secondaryTriggerAction);
     const shouldUseContentWidth = !width && !shouldUseFullWidth;
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting && !isDisabled,
+    );
 
     const expandedMeasuredContent = useMemo(
         () =>
@@ -195,11 +201,17 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
         typeof availableWidth === 'number' &&
         availableWidth <= minimumPrimaryLabelVisibleWidth;
 
-    const resolvedWidth = shouldKeepFullWidth
-        ? '100%'
-        : effectiveIsCollapsed
-          ? height
-          : (width ?? 'fit-content');
+    const resolvedWidth = useMemo(() => {
+        if (shouldKeepFullWidth) {
+            return '100%';
+        }
+
+        if (effectiveIsCollapsed) {
+            return height;
+        }
+
+        return width ?? 'fit-content';
+    }, [effectiveIsCollapsed, height, shouldKeepFullWidth, width]);
 
     const secondaryContextMenuTriggerStyle = getSecondaryContextMenuTriggerStyle({
         height,
@@ -262,6 +274,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
             setIsSecondaryExpanded(false);
             setIsExtendedByClick(false);
             setIsSecondaryHovered(false);
+            setIsSecondaryFocused(false);
         }
     }, [clearAutoCollapseTimeout, effectiveIsCollapsed, shouldPreventSecondaryExpansion]);
 
@@ -368,10 +381,41 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
         }
     }, [effectiveIsCollapsed, isExtendedByClick, isTouch]);
 
+    const handleSecondaryFocus = useCallback(() => {
+        if (
+            !secondaryAction ||
+            isSecondaryHidden ||
+            isDisabled ||
+            shouldPreventSecondaryExpansion ||
+            secondaryAction.isDisabled
+        ) {
+            return;
+        }
+
+        setIsSecondaryFocused(true);
+        if (!isExtendedByClick) {
+            setIsSecondaryExpanded(true);
+        }
+    }, [
+        isDisabled,
+        isExtendedByClick,
+        isSecondaryHidden,
+        secondaryAction,
+        shouldPreventSecondaryExpansion,
+    ]);
+
+    const handleSecondaryBlur = useCallback(() => {
+        setIsSecondaryFocused(false);
+        if (!isExtendedByClick && !effectiveIsCollapsed) {
+            setIsSecondaryExpanded(false);
+        }
+    }, [effectiveIsCollapsed, isExtendedByClick]);
+
     /**
-     * Secondary label is visible when expanded or when hovered (desktop only).
+     * Secondary label is visible when expanded or when hovered/focused.
      */
-    const isSecondaryLabelVisible = isSecondaryExpanded || (!isTouch && isSecondaryHovered);
+    const isSecondaryLabelVisible =
+        isSecondaryExpanded || (!isTouch && isSecondaryHovered) || isSecondaryFocused;
 
     return (
         <>
@@ -400,6 +444,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                         (shouldKeepPrimaryLabelVisible || !shouldHideSecondaryForAutoCollapse) &&
                         (!hasExpandableSecondaryAction || !isSecondaryExpanded)
                     }
+                    shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                     shouldUseContentWidth={shouldUseContentWidth}
                     height={height}
                 />
@@ -431,6 +476,7 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                                     key="multi-action-secondary-context-menu"
                                     onClick={handleSecondaryClick}
                                     showLabel={false}
+                                    shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                                     shouldUseContentWidth={shouldUseContentWidth}
                                     height={height}
                                 />
@@ -454,11 +500,14 @@ const MultiActionButton: FC<MultiActionButtonProps> = ({
                                 onClick={handleSecondaryClick}
                                 onMouseEnter={handleSecondaryMouseEnter}
                                 onMouseLeave={handleSecondaryMouseLeave}
+                                onFocus={handleSecondaryFocus}
+                                onBlur={handleSecondaryBlur}
                                 showLabel={
                                     !isSecondaryHidden &&
                                     !isAutoIconsOnly &&
                                     isSecondaryLabelVisible
                                 }
+                                shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                                 shouldUseContentWidth={shouldUseContentWidth}
                                 height={height}
                             />

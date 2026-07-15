@@ -35,6 +35,7 @@ import {
 import { ContentCardType } from '../../types/contentCard';
 import { useCursorRepaint } from '../../hooks/resize';
 import Tooltip from '../tooltip/Tooltip';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 export interface InputRef {
     focus: VoidFunction;
@@ -178,6 +179,10 @@ export type InputProps = {
      * Value if the input field should be controlled
      */
     value?: string;
+    /**
+     * Enables keyboard-only focus highlighting.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const Input = forwardRef<InputRef, InputProps>(
@@ -208,6 +213,7 @@ const Input = forwardRef<InputRef, InputProps>(
             id,
             shouldShowTransparentBackground = false,
             autoComplete,
+            shouldEnableKeyboardHighlighting,
         },
         ref,
     ) => {
@@ -242,6 +248,17 @@ const Input = forwardRef<InputRef, InputProps>(
                 }
             }
         }, [onChange]);
+
+        const handleClearIconKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+            (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    handleClearIconClick();
+                    inputRef.current?.focus();
+                }
+            },
+            [handleClearIconClick],
+        );
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const shouldShowBorder = rightElement?.props?.style?.backgroundColor === undefined;
@@ -289,6 +306,13 @@ const Input = forwardRef<InputRef, InputProps>(
             backgroundColor = theme['000'];
         }
 
+        const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+            shouldEnableKeyboardHighlighting && !isDisabled,
+        );
+
+        const borderColor = color?.border;
+        const placeholderColor = color?.placeholder;
+
         const labelPosition = useMemo(() => {
             if (hasValue && !shouldRemainPlaceholder && !shouldPreventPlaceholderAnimation) {
                 return shouldShowOnlyBottomBorder
@@ -315,7 +339,8 @@ const Input = forwardRef<InputRef, InputProps>(
                         $shouldRoundRightCorners={shouldShowBorder}
                         $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                         $size={size}
-                        $borderColor={color?.border}
+                        $borderColor={borderColor}
+                        $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                     >
                         {leftElement && (
                             <StyledInputIconWrapper>{leftElement}</StyledInputIconWrapper>
@@ -370,10 +395,7 @@ const Input = forwardRef<InputRef, InputProps>(
                                     duration: shouldPreventPlaceholderAnimation ? 0 : 0.1,
                                 }}
                             >
-                                <StyledInputLabel
-                                    $color={color?.placeholder}
-                                    $isInvalid={isInvalid}
-                                >
+                                <StyledInputLabel $color={placeholderColor} $isInvalid={isInvalid}>
                                     {placeholder}
                                 </StyledInputLabel>
                             </StyledMotionInputLabelWrapper>
@@ -382,9 +404,18 @@ const Input = forwardRef<InputRef, InputProps>(
                             <StyledMotionInputClearIcon
                                 $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                                 $size={size}
+                                $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                                 animate={{ opacity: hasValue ? 1 : 0 }}
                                 initial={false}
                                 onClick={handleClearIconClick}
+                                onKeyDown={handleClearIconKeyDown}
+                                tabIndex={
+                                    shouldShowKeyboardHighlighting && hasValue && !isDisabled
+                                        ? 0
+                                        : -1
+                                }
+                                role={shouldShowKeyboardHighlighting ? 'button' : undefined}
+                                aria-hidden={!hasValue}
                                 transition={{ type: 'tween' }}
                             >
                                 <Icon
@@ -393,7 +424,11 @@ const Input = forwardRef<InputRef, InputProps>(
                                 />
                             </StyledMotionInputClearIcon>
                         )}
-                        {rightElement && shouldShowBorder && rightElement}
+                        {rightElement && shouldShowBorder && (
+                            <StyledInputRightElement $isInline>
+                                {rightElement}
+                            </StyledInputRightElement>
+                        )}
                     </StyledInputContentWrapper>
                     {rightElement && !shouldShowBorder && (
                         <StyledInputRightElement>{rightElement}</StyledInputRightElement>
@@ -429,11 +464,15 @@ const Input = forwardRef<InputRef, InputProps>(
                 theme.fontSize,
                 theme.wrong,
                 labelPosition,
-                color?.placeholder,
+                borderColor,
+                placeholderColor,
                 placeholder,
                 shouldShowClearIcon,
                 handleClearIconClick,
+                handleClearIconKeyDown,
                 rightElement,
+                shouldEnableKeyboardHighlighting,
+                shouldShowKeyboardHighlighting,
             ],
         );
 

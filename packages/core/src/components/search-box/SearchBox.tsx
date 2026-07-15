@@ -181,6 +181,10 @@ export type SearchBoxProps = {
      */
     tagInputSettings?: TagInputSettings;
     /**
+     * Enables keyboard-only focus highlighting.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * A text that should be displayed if no results are found.
      */
     hintText?: string;
@@ -214,6 +218,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             shouldShowRoundImage,
             shouldShowToggleIcon = false,
             tagInputSettings,
+            shouldEnableKeyboardHighlighting,
         },
         ref,
     ) => {
@@ -689,6 +694,24 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             return hasFocusRef.current && isTouch;
         }, [isTouch]);
 
+        const handleContainerBlur = useCallback(
+            (event: React.FocusEvent<HTMLDivElement>) => {
+                const nextFocusedElement = event.relatedTarget as Node | null;
+                const currentContainer = event.currentTarget as HTMLElement;
+
+                // Check if focus is moving outside the SearchBox container
+                // Also check the dropdown content (contentRef) since it's rendered in a portal
+                if (
+                    !nextFocusedElement ||
+                    (!currentContainer.contains(nextFocusedElement) &&
+                        !contentRef.current?.contains(nextFocusedElement))
+                ) {
+                    handleClose();
+                }
+            },
+            [handleClose],
+        );
+
         /**
          * This function handles the item selection
          */
@@ -842,7 +865,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
                         newElement.tabIndex = 0;
                     }
-                } else if (e.key === 'Enter') {
+                } else if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     e.stopPropagation();
 
@@ -929,7 +952,11 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         return useMemo(
             () => (
-                <StyledSearchBox ref={boxRef} key={`search-box-${uuid}`}>
+                <StyledSearchBox
+                    ref={boxRef}
+                    key={`search-box-${uuid}`}
+                    onBlur={handleContainerBlur}
+                >
                     <div id={`search_box_input${uuid}`}>
                         {tagInputSettings ? (
                             <TagInput
@@ -942,6 +969,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                                 placeholder={placeholder}
                                 ref={tagInputRef}
                                 shouldAllowMultiple={tagInputSettings.shouldAllowMultiple}
+                                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                                 shouldPreventEnter
                                 tags={tagInputSettings.tags}
                             />
@@ -958,6 +986,10 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                                 placeholder={placeholder}
                                 ref={inputRef}
                                 rightElement={rightElement}
+                                shouldEnableKeyboardHighlighting={
+                                    inputProps?.shouldEnableKeyboardHighlighting ??
+                                    shouldEnableKeyboardHighlighting
+                                }
                                 value={value}
                             />
                         )}
@@ -1010,6 +1042,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 rightElement,
                 shouldHideFilterButtons,
                 shouldShowDropdown,
+                shouldEnableKeyboardHighlighting,
                 tagInputSettings,
                 uuid,
                 value,

@@ -16,6 +16,7 @@ import React, {
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import { StyledInputRightElement } from '../input/Input.styles';
 import {
+    StyledRightElementWrapper,
     StyledTextArea,
     StyledTextAreaContent,
     StyledTextAreaContentWrapper,
@@ -24,6 +25,7 @@ import {
     StyledTextAreaLabelWrapper,
 } from './TextArea.styles';
 import { useCursorRepaint } from '../../hooks/resize';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 type TextAreaColors = {
     backgroundColor: CSSProperties['backgroundColor'];
@@ -79,6 +81,10 @@ export type TextAreaProps = {
      * Provide custom colors to the TextArea Component
      */
     colors?: TextAreaColors;
+    /**
+     * Enables keyboard-only focus highlighting.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
@@ -96,6 +102,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             maxHeight = '120px',
             minHeight = '41px',
             colors,
+            shouldEnableKeyboardHighlighting,
         },
         ref,
     ) => {
@@ -115,6 +122,10 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         const shouldChangeColor = useMemo(
             () => areaProvider.shouldChangeColor ?? false,
             [areaProvider.shouldChangeColor],
+        );
+
+        const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+            shouldEnableKeyboardHighlighting && !isDisabled,
         );
 
         const adjustTextareaHeight = useCallback(() => {
@@ -164,6 +175,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                         $shouldChangeColor={shouldChangeColor}
                         $backgroundColor={colors?.backgroundColor}
                         $borderColor={colors?.borderColor}
+                        data-should-show-keyboard-highlighting={shouldShowKeyboardHighlighting}
                     >
                         <StyledTextAreaContent>
                             <StyledTextAreaInput
@@ -192,10 +204,18 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                                 </StyledTextAreaLabel>
                             </StyledTextAreaLabelWrapper>
                         </StyledTextAreaContent>
-                        {rightElement && shouldShowBorder && rightElement}
+                        {rightElement && shouldShowBorder && (
+                            <StyledInputRightElement $isInline>
+                                <StyledRightElementWrapper>
+                                    {rightElement}
+                                </StyledRightElementWrapper>
+                            </StyledInputRightElement>
+                        )}
                     </StyledTextAreaContentWrapper>
                     {rightElement && !shouldShowBorder && (
-                        <StyledInputRightElement>{rightElement}</StyledInputRightElement>
+                        <StyledInputRightElement $isInline>
+                            <StyledRightElementWrapper>{rightElement}</StyledRightElementWrapper>
+                        </StyledInputRightElement>
                     )}
                 </StyledTextArea>
             ),
@@ -203,6 +223,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 isDisabled,
                 isInvalid,
                 shouldChangeColor,
+                shouldShowKeyboardHighlighting,
                 colors?.backgroundColor,
                 colors?.borderColor,
                 value,

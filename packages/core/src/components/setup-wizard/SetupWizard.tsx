@@ -10,6 +10,7 @@ import React, {
 import AccordionGroup from '../accordion/accordion-group/AccordionGroup';
 import type { SetupWizardItemProps } from './setup-wizard-item/SetupWizardItem';
 import { StyledSetupWizard } from './SetupWizard.styles';
+import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type UpdateSelectedId = (id: number) => void;
 type UpdateActiveId = (id: number) => void;
@@ -19,6 +20,7 @@ interface SetupWizardContextProps {
     updateSelectedId?: UpdateSelectedId;
     activeId: number | undefined;
     updateActiveId?: UpdateActiveId;
+    shouldEnableKeyboardHighlighting: boolean;
 }
 
 export const SetupWizardContext = React.createContext<SetupWizardContextProps>({
@@ -26,6 +28,7 @@ export const SetupWizardContext = React.createContext<SetupWizardContextProps>({
     updateSelectedId: undefined,
     activeId: undefined,
     updateActiveId: undefined,
+    shouldEnableKeyboardHighlighting: false,
 });
 
 SetupWizardContext.displayName = 'SetupWizardContext';
@@ -44,99 +47,118 @@ export type SetupWizardProps = {
      * This value must be set if the SetupWizard is inside an Accordion.
      */
     isWrapped?: boolean;
+    /**
+     * Enables keyboard-only focus highlighting for setup wizard items.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
-const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(({ children, isWrapped }, ref) => {
-    const [selectedId, setSelectedId] = useState<SetupWizardContextProps['selectedId']>(0);
-    const [activeId, setActiveId] = useState<SetupWizardContextProps['activeId']>(0);
-    const [allIds, setAllIds] = useState<number[]>([]);
+const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(
+    ({ children, isWrapped, shouldEnableKeyboardHighlighting }, ref) => {
+        const colorScheme = useColorScheme();
+        const shouldEnableKeyboardHighlightingEffective =
+            shouldEnableKeyboardHighlighting ??
+            colorScheme?.shouldEnableKeyboardHighlighting ??
+            false;
 
-    useEffect(() => {
-        React.Children.map(children, (child: ReactElement<SetupWizardItemProps>) => {
-            setAllIds((prevState) => [...prevState, child.props.id]);
-        });
-    }, [children]);
+        const [selectedId, setSelectedId] = useState<SetupWizardContextProps['selectedId']>(0);
+        const [activeId, setActiveId] = useState<SetupWizardContextProps['activeId']>(0);
+        const [allIds, setAllIds] = useState<number[]>([]);
 
-    const updateSelectedId = useCallback<UpdateSelectedId>(
-        (id) => {
-            setSelectedId(id);
-        },
-        [setSelectedId],
-    );
+        useEffect(() => {
+            React.Children.map(children, (child: ReactElement<SetupWizardItemProps>) => {
+                setAllIds((prevState) => [...prevState, child.props.id]);
+            });
+        }, [children]);
 
-    const updateActiveId = useCallback<UpdateSelectedId>(
-        (id) => {
-            setActiveId(id);
-        },
-        [setActiveId],
-    );
+        const updateSelectedId = useCallback<UpdateSelectedId>(
+            (id) => {
+                setSelectedId(id);
+            },
+            [setSelectedId],
+        );
 
-    const handleNext = useCallback(
-        (stepId: number | undefined) => {
-            if (typeof stepId === 'number') {
-                updateSelectedId(stepId);
+        const updateActiveId = useCallback<UpdateSelectedId>(
+            (id) => {
+                setActiveId(id);
+            },
+            [setActiveId],
+        );
 
-                if (typeof activeId === 'number' && stepId > activeId) {
-                    updateActiveId(stepId);
+        const handleNext = useCallback(
+            (stepId: number | undefined) => {
+                if (typeof stepId === 'number') {
+                    updateSelectedId(stepId);
+
+                    if (typeof activeId === 'number' && stepId > activeId) {
+                        updateActiveId(stepId);
+                    }
+                } else {
+                    const index = allIds.findIndex((id) => id === selectedId);
+
+                    if (index < 0) {
+                        return;
+                    }
+
+                    const numberAtIndex = allIds[index + 1];
+
+                    if (!numberAtIndex) {
+                        return;
+                    }
+
+                    updateSelectedId(numberAtIndex);
+
+                    if (typeof activeId === 'number' && numberAtIndex > activeId) {
+                        updateActiveId(numberAtIndex);
+                    }
                 }
-            } else {
-                const index = allIds.findIndex((id) => id === selectedId);
+            },
+            [activeId, allIds, selectedId, updateActiveId, updateSelectedId],
+        );
 
-                if (index < 0) {
-                    return;
-                }
+        const handleReset = useCallback(() => {
+            updateSelectedId(0);
+            updateActiveId(0);
+        }, [updateActiveId, updateSelectedId]);
 
-                const numberAtIndex = allIds[index + 1];
+        useImperativeHandle(
+            ref,
+            () => ({
+                next: handleNext,
+                reset: handleReset,
+            }),
+            [handleNext, handleReset],
+        );
 
-                if (!numberAtIndex) {
-                    return;
-                }
+        const providerValue = useMemo<SetupWizardContextProps>(
+            () => ({
+                selectedId,
+                updateSelectedId,
+                activeId,
+                updateActiveId,
+                shouldEnableKeyboardHighlighting: shouldEnableKeyboardHighlightingEffective,
+            }),
+            [
+                activeId,
+                selectedId,
+                shouldEnableKeyboardHighlightingEffective,
+                updateActiveId,
+                updateSelectedId,
+            ],
+        );
 
-                updateSelectedId(numberAtIndex);
-
-                if (typeof activeId === 'number' && numberAtIndex > activeId) {
-                    updateActiveId(numberAtIndex);
-                }
-            }
-        },
-        [activeId, allIds, selectedId, updateActiveId, updateSelectedId],
-    );
-
-    const handleReset = useCallback(() => {
-        updateSelectedId(0);
-        updateActiveId(0);
-    }, [updateActiveId, updateSelectedId]);
-
-    useImperativeHandle(
-        ref,
-        () => ({
-            next: handleNext,
-            reset: handleReset,
-        }),
-        [handleNext, handleReset],
-    );
-
-    const providerValue = useMemo<SetupWizardContextProps>(
-        () => ({
-            selectedId,
-            updateSelectedId,
-            activeId,
-            updateActiveId,
-        }),
-        [activeId, selectedId, updateActiveId, updateSelectedId],
-    );
-
-    return useMemo(
-        () => (
-            <SetupWizardContext.Provider value={providerValue}>
-                <StyledSetupWizard>
-                    <AccordionGroup isWrapped={isWrapped}>{children}</AccordionGroup>
-                </StyledSetupWizard>
-            </SetupWizardContext.Provider>
-        ),
-        [children, isWrapped, providerValue],
-    );
-});
+        return useMemo(
+            () => (
+                <SetupWizardContext.Provider value={providerValue}>
+                    <StyledSetupWizard>
+                        <AccordionGroup isWrapped={isWrapped}>{children}</AccordionGroup>
+                    </StyledSetupWizard>
+                </SetupWizardContext.Provider>
+            ),
+            [children, isWrapped, providerValue],
+        );
+    },
+);
 
 SetupWizard.displayName = 'SetupWizard';
 

@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
     FilterButtonItemShape,
     FilterButtonSize,
@@ -34,6 +34,10 @@ export type FilterButtonsProps = {
      * The size auf the filter buttons. Use the FilterButtonSize enum.
      */
     size?: FilterButtonSize;
+    /**
+     * Enables keyboard-only focus highlighting for filter buttons.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const FilterButtons: FC<FilterButtonsProps> = ({
@@ -43,8 +47,19 @@ const FilterButtons: FC<FilterButtonsProps> = ({
     items,
     shouldCalcCountForAll = false,
     size = FilterButtonSize.Normal,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const [selectedIds, setSelectedIds] = useState<string[]>(['all']);
+    const [focusedId, setFocusedId] = useState<string>('all');
+    const buttonRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+    const keyboardNavigationItems = useMemo(
+        () => [
+            { id: 'all', isDisabled: false },
+            ...items.map(({ id, isDisabled }) => ({ id, isDisabled: Boolean(isDisabled) })),
+        ],
+        [items],
+    );
 
     /**
      * This function set the selectedItemKey
@@ -83,6 +98,54 @@ const FilterButtons: FC<FilterButtonsProps> = ({
         [onSelect, selectedIds],
     );
 
+    useEffect(() => {
+        const currentFocusedItem = keyboardNavigationItems.find(({ id }) => id === focusedId);
+
+        if (currentFocusedItem && !currentFocusedItem.isDisabled) {
+            return;
+        }
+
+        const nextFocusable = keyboardNavigationItems.find(({ isDisabled }) => !isDisabled);
+
+        if (nextFocusable) {
+            setFocusedId(nextFocusable.id);
+        }
+    }, [focusedId, keyboardNavigationItems]);
+
+    const handleArrowNavigate = useCallback(
+        (currentId: string, direction: -1 | 1) => {
+            if (!shouldEnableKeyboardHighlighting || keyboardNavigationItems.length < 2) {
+                return;
+            }
+
+            const startIndex = keyboardNavigationItems.findIndex(({ id }) => id === currentId);
+
+            if (startIndex < 0) {
+                return;
+            }
+
+            let attempts = 0;
+            let nextIndex = startIndex;
+
+            while (attempts < keyboardNavigationItems.length) {
+                nextIndex =
+                    (nextIndex + direction + keyboardNavigationItems.length) %
+                    keyboardNavigationItems.length;
+
+                const nextItem = keyboardNavigationItems[nextIndex];
+
+                if (nextItem && !nextItem.isDisabled) {
+                    setFocusedId(nextItem.id);
+                    buttonRefs.current[nextItem.id]?.focus();
+                    return;
+                }
+
+                attempts += 1;
+            }
+        },
+        [keyboardNavigationItems, shouldEnableKeyboardHighlighting],
+    );
+
     const reactItems = useMemo(() => {
         if (items.length === 0) {
             return null;
@@ -104,6 +167,13 @@ const FilterButtons: FC<FilterButtonsProps> = ({
                     }
                     size={size}
                     onSelect={handleSelect}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                    onArrowNavigate={handleArrowNavigate}
+                    onFocus={setFocusedId}
+                    tabIndex={0}
+                    buttonRef={(element) => {
+                        buttonRefs.current.all = element;
+                    }}
                 />
             </TextstringProvider>,
         ];
@@ -122,12 +192,28 @@ const FilterButtons: FC<FilterButtonsProps> = ({
                     size={size}
                     text={text}
                     isDisabled={isDisabled}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                    onArrowNavigate={handleArrowNavigate}
+                    onFocus={setFocusedId}
+                    tabIndex={isDisabled ? -1 : 0}
+                    buttonRef={(element) => {
+                        buttonRefs.current[id] = element;
+                    }}
                 />,
             );
         });
 
         return array;
-    }, [allCount, handleSelect, items, selectedIds, shouldCalcCountForAll, size]);
+    }, [
+        allCount,
+        handleSelect,
+        items,
+        selectedIds,
+        shouldCalcCountForAll,
+        shouldEnableKeyboardHighlighting,
+        handleArrowNavigate,
+        size,
+    ]);
 
     return useMemo(() => <StyledFilterButton>{reactItems}</StyledFilterButton>, [reactItems]);
 };

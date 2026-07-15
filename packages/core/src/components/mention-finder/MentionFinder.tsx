@@ -63,6 +63,22 @@ export type MentionFinderProps = {
 
 const DRAG_CLOSE_THRESHOLD_IN_PX = 60;
 
+const isTextInputElement = (
+    element: HTMLElement | null,
+): element is HTMLInputElement | HTMLTextAreaElement => {
+    if (!element) {
+        return false;
+    }
+
+    const tagName = element.tagName.toLowerCase();
+
+    return (
+        (tagName === 'input' && (element as HTMLInputElement).type !== 'button') ||
+        tagName === 'textarea' ||
+        element.isContentEditable
+    );
+};
+
 const findTouchByIdentifier = (touchList: TouchList, identifier: number | null) => {
     if (identifier === null) {
         return null;
@@ -93,6 +109,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
 
     const popupRef = useRef<HTMLDivElement>(null);
     const listRef = useRef<HTMLDivElement>(null);
+    const inputElementRef = useRef<HTMLElement | null>(null);
     const dragStartYRef = useRef<number | null>(null);
     const hasTriggeredDragCloseRef = useRef(false);
     const activePointerIdRef = useRef<number | null>(null);
@@ -123,8 +140,29 @@ const MentionFinder: FC<MentionFinderProps> = ({
         [members, searchString],
     );
 
+    const shouldRenderPopup = shouldShowPopup && !!fullMatch && filteredMembers.length > 0;
+
+    const handleContainerBlur = useCallback((event: React.FocusEvent<HTMLDivElement>) => {
+        const nextFocusedElement = event.relatedTarget as Node | null;
+        const currentContainer = event.currentTarget as HTMLElement;
+
+        if (
+            !nextFocusedElement ||
+            (!currentContainer.contains(nextFocusedElement) &&
+                !popupRef.current?.contains(nextFocusedElement))
+        ) {
+            setShouldShowPopup(false);
+        }
+    }, []);
+
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
+            const targetElement = event.target as HTMLElement | null;
+
+            if (isTextInputElement(targetElement)) {
+                inputElementRef.current = targetElement;
+            }
+
             if ((event.key === 'ArrowUp' || event.key === 'ArrowDown') && shouldRenderPopup) {
                 event.preventDefault();
 
@@ -161,9 +199,17 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 if (fullMatch && activeMember) {
                     onSelect({ fullMatch, member: activeMember });
                 }
+            } else if (event.key === 'Escape' && shouldRenderPopup) {
+                event.preventDefault();
+                event.stopPropagation();
+                setShouldShowPopup(false);
+
+                window.requestAnimationFrame(() => {
+                    inputElementRef.current?.focus();
+                });
             }
         },
-        [activeMember, filteredMembers, focusedIndex, fullMatch, onSelect],
+        [activeMember, filteredMembers, focusedIndex, fullMatch, onSelect, shouldRenderPopup],
     );
 
     const handleMemberClick = useCallback(
@@ -209,6 +255,18 @@ const MentionFinder: FC<MentionFinderProps> = ({
         hasTriggeredDragCloseRef.current = false;
         setShouldShowPopup(true);
     }, [inputValue]);
+
+    useEffect(() => {
+        if (!shouldRenderPopup) {
+            return;
+        }
+
+        const activeElement = document.activeElement as HTMLElement | null;
+
+        if (isTextInputElement(activeElement)) {
+            inputElementRef.current = activeElement;
+        }
+    }, [shouldRenderPopup]);
 
     useEffect(() => {
         if (shouldShowPopup) {
@@ -457,8 +515,6 @@ const MentionFinder: FC<MentionFinderProps> = ({
         handleDragTouchCancel,
     ]);
 
-    const shouldRenderPopup = shouldShowPopup && fullMatch && items.length > 0;
-
     useEffect(() => {
         if (!enableDragHandle || !shouldRenderPopup) {
             setOverlayContainer(null);
@@ -500,7 +556,10 @@ const MentionFinder: FC<MentionFinderProps> = ({
     return (
         <>
             {overlayPortal}
-            <StyledMentionFinder className="beta-chayns-mention-finder">
+            <StyledMentionFinder
+                className="beta-chayns-mention-finder"
+                onBlur={handleContainerBlur}
+            >
                 <AnimatePresence initial={false}>
                     {shouldRenderPopup && (
                         <StyledMotionMentionFinderPopup

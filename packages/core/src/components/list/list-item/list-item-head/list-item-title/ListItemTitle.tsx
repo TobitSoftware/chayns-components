@@ -100,6 +100,7 @@ const ListItemTitle: FC<ListItemTitleProps> = ({
             </StyledListItemTitleLeftWrapper>
             {topElement && (
                 <StyledListItemTopRightElement
+                    data-right-element="true"
                     ref={topElementWrapperRef}
                     onClick={shouldPreventRightElementClick ? handlePreventClick : undefined}
                 >

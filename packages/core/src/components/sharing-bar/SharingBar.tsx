@@ -1,4 +1,6 @@
-import React, { FC, MouseEventHandler, useCallback, useRef } from 'react';
+import React, { FC, KeyboardEventHandler, MouseEventHandler, useCallback, useRef } from 'react';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
+import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import {
     StyledSharingBar,
@@ -25,20 +27,69 @@ export type SharingBarProps = {
      * The alignment of the sharing options.
      */
     popupAlignment: ContextMenuAlignment;
+    /**
+     * Enables keyboard-only focus highlighting and keyboard interaction.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
-const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment, container }) => {
+const SharingBar: FC<SharingBarProps> = ({
+    label,
+    link,
+    popupAlignment,
+    container,
+    shouldEnableKeyboardHighlighting,
+}) => {
+    const colorScheme = useColorScheme();
+    const shouldEnableKeyboardHighlightingEffective =
+        shouldEnableKeyboardHighlighting ?? colorScheme?.shouldEnableKeyboardHighlighting ?? false;
+
     const contextMenuRef = useRef<{ hide: VoidFunction; show: VoidFunction }>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlightingEffective,
+    );
 
-    const handleSharingBarClick = useCallback<MouseEventHandler<HTMLDivElement>>((event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
+    const showContextMenu = useCallback(() => {
         contextMenuRef.current?.show();
     }, []);
 
+    const handleSharingBarClick = useCallback<MouseEventHandler<HTMLDivElement>>(
+        (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            showContextMenu();
+        },
+        [showContextMenu],
+    );
+
+    const handleKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (event.currentTarget !== event.target) {
+                return;
+            }
+
+            if (event.key !== 'Enter' && event.key !== ' ') {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            showContextMenu();
+        },
+        [showContextMenu],
+    );
+
     return (
-        <StyledSharingBar onClick={handleSharingBarClick}>
+        <StyledSharingBar
+            onClick={handleSharingBarClick}
+            onKeyDown={shouldEnableKeyboardHighlightingEffective ? handleKeyDown : undefined}
+            tabIndex={shouldEnableKeyboardHighlightingEffective ? 0 : undefined}
+            role={shouldEnableKeyboardHighlightingEffective ? 'button' : undefined}
+            data-should-show-keyboard-highlighting={
+                shouldShowKeyboardHighlighting ? 'true' : undefined
+            }
+        >
             <StyledSharingBarIconWrapper>
                 <Icon icons={['fa fa-share-nodes']} />
             </StyledSharingBarIconWrapper>
@@ -47,6 +98,7 @@ const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment, containe
                 ref={contextMenuRef}
                 alignment={popupAlignment}
                 container={container}
+                shouldDisableClick
             >
                 {null}
             </SharingContextMenu>

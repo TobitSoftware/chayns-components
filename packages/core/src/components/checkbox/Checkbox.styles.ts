@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import type { CSSProperties } from 'react';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 import type { CheckboxProps } from './Checkbox';
 
 export const StyledCheckbox = styled.div`
@@ -11,8 +12,33 @@ export const StyledCheckbox = styled.div`
     min-height: 20px;
 `;
 
-export const StyledCheckboxInput = styled.input`
-    display: none;
+type StyledCheckboxInputProps = {
+    $shouldShowKeyboardHighlighting?: boolean;
+};
+
+export const StyledCheckboxInput = styled.input<StyledCheckboxInputProps>`
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    left: 0;
+    margin: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    white-space: nowrap;
+    width: 1px;
+
+    ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus-visible + div > label {
+                transition: none;
+                ${keyboardFocusHighlightingRingCss}
+            }
+        `}
 `;
 
 type StyledCheckboxBoxWrapperProps = WithTheme<{
@@ -47,6 +73,8 @@ export const StyledCheckboxBox = styled.label<StyledCheckboxBoxProps>`
     cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     position: relative;
+    display: inline-block;
+    width: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '44px' : '16px')};
     transition: opacity 0.2s ease;
     user-select: none;
     height: 16px;
@@ -106,7 +134,11 @@ export const StyledCheckboxBox = styled.label<StyledCheckboxBoxProps>`
                 return 'none';
             }
 
-            return `1px solid ${$borderColor ?? `rgba(${theme['409-rgb']}, 0.5)`}`;
+            const fallbackBorderColor = theme['409-rgb']
+                ? `rgba(${theme['409-rgb']}, 0.5)`
+                : theme.text;
+
+            return `1px solid ${$borderColor ?? fallbackBorderColor}`;
         }};
 
         border-radius: ${({ $shouldShowAsSwitch, $borderRadius }) =>

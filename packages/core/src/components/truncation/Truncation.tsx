@@ -1,5 +1,6 @@
 import React, {
     FC,
+    KeyboardEventHandler,
     MouseEvent,
     MouseEventHandler,
     ReactElement,
@@ -17,11 +18,13 @@ import {
     StyledMotionTruncationContent,
     StyledTruncation,
     StyledTruncationClamp,
+    StyledTruncationClampFocusWrapper,
     StyledTruncationClampWrapper,
     StyledTruncationPseudoContent,
 } from './Truncation.styles';
 import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
 import textStrings from '../../constants/textStrings';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 export type TruncationProps = {
     /**
@@ -52,6 +55,10 @@ export type TruncationProps = {
      * Function to be executed when the component is expanding or collapsing.
      */
     onChange?: (event: MouseEvent<HTMLAnchorElement>, isOpen: boolean) => void;
+    /**
+     * Enables keyboard-only focus highlighting.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
@@ -64,7 +71,12 @@ const Truncation: FC<TruncationProps> = ({
     lessLabel,
     onChange,
     children,
+    shouldEnableKeyboardHighlighting,
 }) => {
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
     const [internalIsOpen, setInternalIsOpen] = useState(false);
     const [showClamp, setShowClamp] = useState(true);
     const [newCollapsedHeight, setNewCollapsedHeight] = useState(collapsedHeight);
@@ -110,6 +122,13 @@ const Truncation: FC<TruncationProps> = ({
         },
         [onChange],
     );
+
+    const handleClampKeyDown = useCallback<KeyboardEventHandler<HTMLAnchorElement>>((event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            event.currentTarget.click();
+        }
+    }, []);
 
     useEffect(() => {
         if (children) {
@@ -293,9 +312,18 @@ const Truncation: FC<TruncationProps> = ({
                 {showClamp && (
                     <StyledTruncationClampWrapper $position={clampPosition}>
                         <TextstringProvider libraryName="@chayns-components-core">
-                            <StyledTruncationClamp onClick={handleClampClick}>
-                                {internalIsOpen ? internalLessLabel : internalMoreLabel}
-                            </StyledTruncationClamp>
+                            <StyledTruncationClampFocusWrapper
+                                $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                            >
+                                <StyledTruncationClamp
+                                    onClick={handleClampClick}
+                                    onKeyDown={handleClampKeyDown}
+                                    role="button"
+                                    tabIndex={0}
+                                >
+                                    {internalIsOpen ? internalLessLabel : internalMoreLabel}
+                                </StyledTruncationClamp>
+                            </StyledTruncationClampFocusWrapper>
                         </TextstringProvider>
                     </StyledTruncationClampWrapper>
                 )}
@@ -306,12 +334,14 @@ const Truncation: FC<TruncationProps> = ({
             clampPosition,
             handleAnimationEnd,
             handleClampClick,
+            handleClampKeyDown,
             hasSizeChanged,
             internalIsOpen,
             lessLabel,
             moreLabel,
             newCollapsedHeight,
             originalHeight,
+            shouldShowKeyboardHighlighting,
             showClamp,
         ],
     );

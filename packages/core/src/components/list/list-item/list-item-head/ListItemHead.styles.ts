@@ -33,6 +33,11 @@ export const StyledListItemHeadLeftWrapper = styled.div`
     margin: auto 0;
 `;
 
+export const StyledListItemHeadLeftElements = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
 type StyledListItemHeadIndicatorProps = HTMLMotionProps<'div'>;
 
 export const StyledListItemHeadIndicator = styled.div<StyledListItemHeadIndicatorProps>`

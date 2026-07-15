@@ -35,7 +35,8 @@ export type SetupWizardItemProps = {
 };
 
 const SetupWizardItem: FC<SetupWizardItemProps> = ({ children, step, title, id }) => {
-    const { selectedId, updateSelectedId, activeId } = useContext(SetupWizardContext);
+    const { selectedId, updateSelectedId, activeId, shouldEnableKeyboardHighlighting } =
+        useContext(SetupWizardContext);
 
     const [shouldOpen, setShouldOpen] = useState<boolean>(false);
 
@@ -89,11 +90,21 @@ const SetupWizardItem: FC<SetupWizardItemProps> = ({ children, step, title, id }
                 isOpened={shouldOpen}
                 isDisabled={shouldBeDisabled}
                 rightElement={rightElement}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             >
                 <AccordionContent>{children}</AccordionContent>
             </Accordion>
         ),
-        [handleAccordionOpen, step, title, shouldOpen, shouldBeDisabled, rightElement, children],
+        [
+            children,
+            handleAccordionOpen,
+            rightElement,
+            shouldBeDisabled,
+            shouldEnableKeyboardHighlighting,
+            shouldOpen,
+            step,
+            title,
+        ],
     );
 };
 

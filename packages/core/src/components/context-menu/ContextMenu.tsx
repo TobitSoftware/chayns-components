@@ -3,6 +3,8 @@ import { AnimatePresence } from 'motion/react';
 import React, {
     forwardRef,
     isValidElement,
+    KeyboardEventHandler,
+    MouseEvent,
     MouseEventHandler,
     ReactPortal,
     useCallback,
@@ -24,7 +26,8 @@ import {
     type ContextMenuRef,
 } from './ContextMenu.types';
 import { SelectDialogResult } from '../../types/general';
-import { getDefaultFocusedIndex } from './ContextMenu.utils';
+import { getActiveItemIndex, getDefaultFocusedIndex, selectItem } from './ContextMenu.utils';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
     (
@@ -42,6 +45,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             shouldDisableClick = false,
             shouldHidePopupArrow = false,
             shouldShowHoverEffect = false,
+            shouldEnableKeyboardHighlighting,
             shouldUseDefaultTriggerStyles = true,
             style,
             yOffset = 0,
@@ -64,13 +68,22 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         const [isContentShown, setIsContentShown] = useState(false);
         const [portal, setPortal] = useState<ReactPortal>();
         const [isHovered, setIsHovered] = useState(false);
+        const [shouldUseFocusableWrapper, setShouldUseFocusableWrapper] = useState(false);
 
         const uuid = useUuid();
 
         const contextMenuContentRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<HTMLSpanElement>(null);
+        const shouldSkipNextContextMenuOpenRef = useRef(false);
+        const shouldPreventNextNativeContextMenuRef = useRef(false);
 
         const isTouch = useIsTouch();
+        const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+            shouldEnableKeyboardHighlighting && !shouldDisableClick,
+        );
+        const shouldShowWrapperKeyboardHighlighting =
+            shouldShowKeyboardHighlighting && shouldUseFocusableWrapper;
+        const shouldUseKeyboardFocusableWrapper = shouldUseFocusableWrapper && !shouldDisableClick;
 
         useEffect(() => {
             if (isContentShown) {
@@ -98,43 +111,21 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             setIsContentShown(false);
         }, []);
 
-        useEffect(() => {
-            if (!isContentShown) return () => {};
+        const handleContainerBlur = useCallback(
+            (event: React.FocusEvent<HTMLSpanElement>) => {
+                const nextFocusedElement = event.relatedTarget as Node | null;
+                const currentContainer = event.currentTarget as HTMLElement;
 
-            const handleKey = (e: KeyboardEvent) => {
-                if (items.length === 0 || isHovered) return;
-
-                if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    setFocusedIndex((prev) => (prev >= items.length - 1 ? 0 : prev + 1));
-                }
-
-                if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    setFocusedIndex((prev) => (prev <= 0 ? items.length - 1 : prev - 1));
-                }
-
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    const item = items[focusedIndex];
-                    if (item) {
-                        void item.onClick();
-
-                        if (shouldCloseOnPopupClick) {
-                            handleHide();
-                        }
-                    }
-                }
-
-                if (e.key === 'Escape') {
+                if (
+                    !nextFocusedElement ||
+                    (!currentContainer.contains(nextFocusedElement) &&
+                        !contextMenuContentRef.current?.contains(nextFocusedElement))
+                ) {
                     handleHide();
                 }
-            };
-
-            document.addEventListener('keydown', handleKey);
-
-            return () => document.removeEventListener('keydown', handleKey);
-        }, [isContentShown, items, focusedIndex, handleHide, shouldCloseOnPopupClick, isHovered]);
+            },
+            [handleHide],
+        );
 
         const handleShow = useCallback(async () => {
             if (isTouch) {
@@ -211,19 +202,164 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             [handleShow, shouldDisableClick],
         );
 
-        const handleDocumentClick = useCallback<EventListener>(
+        const handleKeyDown = useCallback<KeyboardEventHandler<HTMLSpanElement>>(
             (event) => {
+                if (shouldDisableClick) {
+                    return;
+                }
+
+                const isActivationKey =
+                    event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar';
+
+                if (isContentShown && event.key === 'Escape') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    handleHide();
+                    return;
+                }
+
+                if (isContentShown && !isHovered && event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setFocusedIndex((prev) => (prev >= items.length - 1 ? 0 : prev + 1));
+                    return;
+                }
+
+                if (isContentShown && !isHovered && event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setFocusedIndex((prev) => (prev <= 0 ? items.length - 1 : prev - 1));
+                    return;
+                }
+
+                if (isContentShown && isActivationKey) {
+                    if (
+                        selectItem({
+                            index: getActiveItemIndex({
+                                contextMenuContentElement: contextMenuContentRef.current,
+                                focusedIndex,
+                            }),
+                            items,
+                            onClose: handleHide,
+                            shouldCloseOnPopupClick,
+                        })
+                    ) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+
+                    return;
+                }
+
+                if (event.currentTarget !== event.target) {
+                    return;
+                }
+
+                const isContextMenuShortcut =
+                    event.key === 'ContextMenu' || (event.key === 'F10' && event.shiftKey);
+
+                if (isContextMenuShortcut) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    shouldSkipNextContextMenuOpenRef.current = true;
+                    void handleShow();
+                    return;
+                }
+
+                if (shouldUseFocusableWrapper && isActivationKey) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    void handleShow();
+                }
+            },
+            [
+                focusedIndex,
+                handleHide,
+                handleShow,
+                isHovered,
+                isContentShown,
+                items,
+                items.length,
+                shouldCloseOnPopupClick,
+                shouldDisableClick,
+                shouldUseFocusableWrapper,
+            ],
+        );
+
+        const handleContextMenu = useCallback(
+            (event: MouseEvent<HTMLSpanElement>) => {
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (shouldDisableClick) {
+                    return;
+                }
+
+                if (shouldSkipNextContextMenuOpenRef.current) {
+                    shouldSkipNextContextMenuOpenRef.current = false;
+                    return;
+                }
+
+                void handleShow();
+            },
+            [handleShow, shouldDisableClick],
+        );
+
+        useEffect(() => {
+            const handleGlobalKeyDown = (event: KeyboardEvent) => {
+                if (shouldDisableClick || !contextMenuRef.current) {
+                    return;
+                }
+
+                const isContextMenuShortcut =
+                    event.key === 'ContextMenu' || (event.key === 'F10' && event.shiftKey);
+
+                if (!isContextMenuShortcut) {
+                    return;
+                }
+
+                const { activeElement } = document;
+
                 if (
-                    !shouldCloseOnPopupClick &&
-                    contextMenuContentRef.current?.contains(event.target as Node)
+                    !(activeElement instanceof HTMLElement) ||
+                    activeElement === document.body ||
+                    activeElement === document.documentElement
                 ) {
                     return;
                 }
 
-                handleHide();
-            },
-            [handleHide, shouldCloseOnPopupClick],
-        );
+                const shouldOpenFromFocusedParent =
+                    activeElement.contains(contextMenuRef.current) &&
+                    !contextMenuRef.current.contains(activeElement);
+
+                if (!shouldOpenFromFocusedParent) {
+                    return;
+                }
+
+                event.preventDefault();
+                event.stopPropagation();
+                shouldPreventNextNativeContextMenuRef.current = true;
+                void handleShow();
+            };
+
+            const handleNativeContextMenuCapture = (event: Event) => {
+                if (!shouldPreventNextNativeContextMenuRef.current) {
+                    return;
+                }
+
+                shouldPreventNextNativeContextMenuRef.current = false;
+                event.preventDefault();
+                event.stopPropagation();
+            };
+
+            document.addEventListener('keydown', handleGlobalKeyDown, true);
+            document.addEventListener('contextmenu', handleNativeContextMenuCapture, true);
+
+            return () => {
+                document.removeEventListener('keydown', handleGlobalKeyDown, true);
+                document.removeEventListener('contextmenu', handleNativeContextMenuCapture, true);
+            };
+        }, [handleShow, shouldDisableClick]);
 
         useImperativeHandle(
             ref,
@@ -235,6 +371,17 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         );
 
         useEffect(() => {
+            const handleDocumentClick = (event: PointerEvent) => {
+                if (
+                    !shouldCloseOnPopupClick &&
+                    contextMenuContentRef.current?.contains(event.target as Node)
+                ) {
+                    return;
+                }
+
+                handleHide();
+            };
+
             if (isContentShown) {
                 document.addEventListener('click', handleDocumentClick, true);
                 window.addEventListener('blur', handleHide);
@@ -250,7 +397,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                 document.removeEventListener('click', handleDocumentClick, true);
                 window.removeEventListener('blur', handleHide);
             };
-        }, [handleDocumentClick, handleHide, isContentShown, onHide, onShow]);
+        }, [handleHide, isContentShown, onHide, onShow, shouldCloseOnPopupClick]);
 
         useEffect(() => {
             if (!newContainer) {
@@ -271,13 +418,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                                 alignment={alignment ?? internalAlignment}
                                 ref={contextMenuContentRef}
                                 focusedIndex={focusedIndex}
-                                onKeySelect={(index) => {
-                                    const item = items[index];
-                                    if (item) {
-                                        void item.onClick();
-                                        handleHide();
-                                    }
-                                }}
+                                onItemFocus={setFocusedIndex}
                                 onMouseEnter={() => {
                                     setIsHovered(true);
                                     setFocusedIndex(-1);
@@ -307,6 +448,21 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             handleHide,
         ]);
 
+        useEffect(() => {
+            if (!contextMenuRef.current) {
+                return;
+            }
+
+            const focusableChildSelector =
+                'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]), [contenteditable="true"]';
+
+            const hasFocusableChild = Boolean(
+                contextMenuRef.current.querySelector(focusableChildSelector),
+            );
+
+            setShouldUseFocusableWrapper(!hasFocusableChild);
+        }, [children]);
+
         return (
             <>
                 <StyledContextMenu
@@ -317,9 +473,18 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     }
                     $isActive={isContentShown && shouldShowHoverEffect}
                     $shouldAddHoverEffect={!isTouch && shouldShowHoverEffect}
+                    $shouldShowWrapperKeyboardHighlighting={shouldShowWrapperKeyboardHighlighting}
                     $shouldUseDefaultTriggerStyles={shouldUseDefaultTriggerStyles}
                     onClick={handleClick}
+                    onContextMenuCapture={handleContextMenu}
+                    onContextMenu={handleContextMenu}
+                    onKeyDown={handleKeyDown}
+                    onBlur={handleContainerBlur}
                     ref={contextMenuRef}
+                    tabIndex={shouldUseKeyboardFocusableWrapper ? 0 : undefined}
+                    role={shouldUseKeyboardFocusableWrapper ? 'button' : undefined}
+                    aria-haspopup={shouldUseKeyboardFocusableWrapper ? 'menu' : undefined}
+                    aria-expanded={shouldUseKeyboardFocusableWrapper ? isContentShown : undefined}
                     style={style}
                 >
                     {children}

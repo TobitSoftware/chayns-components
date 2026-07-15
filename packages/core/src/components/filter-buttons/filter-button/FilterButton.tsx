@@ -1,5 +1,13 @@
-import React, { CSSProperties, FC, MouseEvent, useCallback, useMemo } from 'react';
+import React, {
+    CSSProperties,
+    FC,
+    KeyboardEventHandler,
+    MouseEvent,
+    useCallback,
+    useMemo,
+} from 'react';
 import type { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';
+import { useKeyboardFocusHighlighting } from '../../../hooks/useKeyboardFocusHighlighting';
 import Icon from '../../icon/Icon';
 import {
     StyledFilterButtonItem,
@@ -20,6 +28,11 @@ export type FilterButtonProps = {
     text: string;
     id: string;
     isDisabled?: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
+    tabIndex?: number;
+    onFocus?: (id: string) => void;
+    onArrowNavigate?: (id: string, direction: -1 | 1) => void;
+    buttonRef?: (element: HTMLDivElement | null) => void;
     onSelect: (key: string) => void;
 };
 
@@ -33,8 +46,17 @@ const FilterButton: FC<FilterButtonProps> = ({
     isSelected,
     id,
     isDisabled,
+    shouldEnableKeyboardHighlighting,
+    tabIndex,
+    onFocus,
+    onArrowNavigate,
+    buttonRef,
     onSelect,
 }) => {
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting && !isDisabled,
+    );
+
     const handleClick = useCallback(
         (event: MouseEvent) => {
             if (isDisabled) {
@@ -49,13 +71,52 @@ const FilterButton: FC<FilterButtonProps> = ({
         [id, isDisabled, onSelect],
     );
 
+    const handleKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (isDisabled) {
+                return;
+            }
+
+            if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+                event.preventDefault();
+                onArrowNavigate?.(id, 1);
+                return;
+            }
+
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+                event.preventDefault();
+                onArrowNavigate?.(id, -1);
+                return;
+            }
+
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onSelect(id);
+            }
+        },
+        [id, isDisabled, onArrowNavigate, onSelect],
+    );
+
+    const handleFocus = useCallback(() => {
+        onFocus?.(id);
+    }, [id, onFocus]);
+
     return useMemo(
         () => (
             <StyledFilterButtonItem
+                ref={buttonRef}
+                $shape={shape}
                 $isSelected={isSelected}
                 $isDisabled={isDisabled}
+                $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                 $size={size}
                 onClick={handleClick}
+                onKeyDown={handleKeyDown}
+                onFocus={handleFocus}
+                role={shouldEnableKeyboardHighlighting ? 'button' : undefined}
+                tabIndex={!isDisabled ? (tabIndex ?? 0) : -1}
+                aria-pressed={shouldEnableKeyboardHighlighting ? isSelected : undefined}
+                aria-disabled={shouldEnableKeyboardHighlighting ? isDisabled : undefined}
             >
                 <StyledFilterButtonItemLabel>
                     {icons && <Icon icons={icons} size={15} />}
@@ -78,7 +139,23 @@ const FilterButton: FC<FilterButtonProps> = ({
                 />
             </StyledFilterButtonItem>
         ),
-        [color, count, handleClick, icons, isDisabled, isSelected, shape, size, text],
+        [
+            color,
+            buttonRef,
+            count,
+            handleClick,
+            handleFocus,
+            handleKeyDown,
+            icons,
+            isDisabled,
+            isSelected,
+            shape,
+            shouldEnableKeyboardHighlighting,
+            shouldShowKeyboardHighlighting,
+            size,
+            tabIndex,
+            text,
+        ],
     );
 };
 

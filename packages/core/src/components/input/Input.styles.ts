@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { InputSize } from './Input';
 import { CSSProperties } from 'react';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledInputProps = WithTheme<{ $isDisabled?: boolean }>;
 
@@ -20,6 +21,7 @@ type StyledInputContentWrapperProps = WithTheme<{
     $size: InputSize;
     $shouldShowTransparentBackground: boolean;
     $borderColor?: CSSProperties['borderColor'];
+    $shouldShowKeyboardHighlighting: boolean;
 }>;
 
 export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
@@ -96,6 +98,16 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
             border-right: none;
         `;
     }}
+
+    ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            /* Show highlighting when the input field is focused */
+            &:has(input:focus-visible) {
+                transition: none;
+                ${keyboardFocusHighlightingRingCss}
+            }
+        `}
 `;
 
 type StyledInputContentProps = WithTheme<{ $shouldShowOnlyBottomBorder?: boolean }>;
@@ -167,6 +179,7 @@ export const StyledInputLabel = styled.label<StyledInputLabelProps>`
 type StyledMotionInputClearIconProps = WithTheme<{
     $shouldShowOnlyBottomBorder?: boolean;
     $size: InputSize;
+    $shouldShowKeyboardHighlighting: boolean;
 }>;
 
 export const StyledMotionInputClearIcon = styled(motion.div)<StyledMotionInputClearIconProps>`
@@ -179,6 +192,15 @@ export const StyledMotionInputClearIcon = styled(motion.div)<StyledMotionInputCl
     height: ${({ $size }) => ($size === 'medium' ? '40px' : '30px')};
     justify-content: center;
     width: ${({ $size }) => ($size === 'medium' ? '40px' : '30px')};
+
+    ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus-visible {
+                transition: none;
+                ${keyboardFocusHighlightingRingCss}
+            }
+        `}
 `;
 
 export const StyledInputIconWrapper = styled.div`
@@ -189,9 +211,28 @@ export const StyledInputIconWrapper = styled.div`
     margin-left: 10px;
 `;
 
-export const StyledInputRightElement = styled.div`
-    border-bottom-right-radius: 3px;
-    border-top-right-radius: 3px;
-    overflow: hidden;
+type StyledInputRightElementProps = {
+    $isInline?: boolean;
+};
+
+export const StyledInputRightElement = styled.div<StyledInputRightElementProps>`
     flex: 0 0 auto;
+    overflow: hidden;
+    min-width: 28px;
+    text-align: center;
+
+    ${({ $isInline }) =>
+        !$isInline &&
+        css`
+            border-bottom-right-radius: 3px;
+            border-top-right-radius: 3px;
+        `}
+
+    &:has(*:focus-visible) {
+        overflow: visible;
+    }
+
+    .beta-chayns-icon:focus-visible::after {
+        transform: translate(-50%, -50%) scale(0.78);
+    }
 `;

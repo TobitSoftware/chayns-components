@@ -1,7 +1,9 @@
 import clsx from 'clsx';
-import React, { FC, MouseEventHandler } from 'react';
+import React, { FC, KeyboardEventHandler, MouseEventHandler } from 'react';
 import { getStackSizeFactor } from '../../utils/icon';
-import { StyledIcon, StyledIconWrapper } from './Icon.styles';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
+import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { StyledIcon as StyledIconElement, StyledIconWrapper } from './Icon.styles';
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 
@@ -100,6 +102,10 @@ export type IconProps = {
      * Optional tab index for the icon.
      */
     tabIndex?: number;
+    /**
+     * Enables keyboard-only focus highlighting for clickable icons.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const Icon: FC<IconProps> = ({
@@ -113,8 +119,17 @@ const Icon: FC<IconProps> = ({
     tabIndex,
     size = 15,
     shouldStopPropagation,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const theme = useTheme() as Theme;
+    const colorScheme = useColorScheme();
+    const shouldEnableKeyboardHighlightingEffective =
+        shouldEnableKeyboardHighlighting ?? colorScheme?.shouldEnableKeyboardHighlighting ?? false;
+
+    const isClickable = typeof onClick === 'function' && !isDisabled;
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlightingEffective && isClickable,
+    );
 
     const handleClick: MouseEventHandler<HTMLSpanElement> = (event) => {
         if (shouldStopPropagation) {
@@ -133,6 +148,17 @@ const Icon: FC<IconProps> = ({
 
         if (typeof onDoubleClick === 'function') {
             onDoubleClick(event);
+        }
+    };
+
+    const handleKeyDown: KeyboardEventHandler<HTMLSpanElement> = (event) => {
+        if (!isClickable) {
+            return;
+        }
+
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            handleClick(event as unknown as React.MouseEvent<HTMLSpanElement>);
         }
     };
 
@@ -156,16 +182,23 @@ const Icon: FC<IconProps> = ({
 
     return (
         <StyledIconWrapper
-            tabIndex={tabIndex}
+            tabIndex={
+                shouldEnableKeyboardHighlightingEffective && isClickable
+                    ? (tabIndex ?? 0)
+                    : tabIndex
+            }
             className={wrapperClasses}
             $isDisabled={isDisabled}
-            onClick={typeof onClick === 'function' && !isDisabled ? handleClick : undefined}
-            $isOnClick={typeof onClick === 'function' && !isDisabled}
+            onClick={isClickable ? handleClick : undefined}
+            $isOnClick={isClickable}
             onDoubleClick={
                 typeof onDoubleClick === 'function' && !isDisabled ? handleDoubleClick : undefined
             }
             onMouseDown={typeof onMouseDown === 'function' && !isDisabled ? onMouseDown : undefined}
+            onKeyDown={shouldEnableKeyboardHighlightingEffective ? handleKeyDown : undefined}
+            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
             $size={size}
+            role={isClickable ? 'button' : undefined}
         >
             {icons.map((icon) => {
                 const stackSizeFactor = getStackSizeFactor(icon);
@@ -178,7 +211,7 @@ const Icon: FC<IconProps> = ({
                 });
 
                 return (
-                    <StyledIcon
+                    <StyledIconElement
                         className={iconClasses}
                         $color={icon.includes('fa-inverse') ? 'white' : color}
                         $fontSize={((stackSizeFactor || 1) / maxStackSizeFactor) * size}

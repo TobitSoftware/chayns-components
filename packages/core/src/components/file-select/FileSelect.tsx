@@ -1,8 +1,9 @@
 import { createDialog, DialogType } from 'chayns-api';
-import React, { DragEvent, FC, useCallback, useMemo } from 'react';
+import React, { DragEvent, FC, KeyboardEventHandler, useCallback, useMemo } from 'react';
 import type { ImageDialogResult } from '../../types/fileInput';
 import { isValidFileType } from '../../utils/file';
 import { selectFiles } from '../../utils/fileDialog';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import Icon from '../icon/Icon';
 import {
     StyledFileSelect,
@@ -69,6 +70,10 @@ export type FileSelectProps = {
      * Whether the image upload should be prevented.
      */
     shouldPreventImageUpload?: boolean;
+    /**
+     * Enables keyboard-only focus highlighting for selection triggers.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const FileSelect: FC<FileSelectProps> = ({
@@ -81,7 +86,12 @@ const FileSelect: FC<FileSelectProps> = ({
     fileSelectionPlaceholder = 'Dateien hochladen',
     imageSelectPlaceholder,
     shouldPreventImageUpload = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting && !isDisabled,
+    );
+
     const handleAddImages = useCallback(
         (images: UploadedFile[]) => {
             if (typeof onAdd === 'function') {
@@ -200,14 +210,38 @@ const FileSelect: FC<FileSelectProps> = ({
         [shouldPreventImageUpload, handleAddFiles, fileTypes, maxFileSizeInMB, handleOpenEditor],
     );
 
+    const handleFileSelectionKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                void handleFileSelectionClick();
+            }
+        },
+        [handleFileSelectionClick],
+    );
+
+    const handleImageSelectionKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                void handleImageSelectionClick();
+            }
+        },
+        [handleImageSelectionClick],
+    );
+
     return useMemo(
         () => (
             <StyledFileSelect>
                 <StyledFileSelectWrapper $isDisabled={isDisabled}>
                     <StyledFileSelectContainer
+                        $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                         onClick={() => void handleFileSelectionClick()}
+                        onKeyDown={handleFileSelectionKeyDown}
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={handleDrop}
+                        role="button"
+                        tabIndex={isDisabled ? -1 : 0}
                     >
                         <Icon icons={fileSelectionIcons} />
                         <StyledFileSelectText>{fileSelectionPlaceholder}</StyledFileSelectText>
@@ -215,7 +249,11 @@ const FileSelect: FC<FileSelectProps> = ({
                     {imageSelectPlaceholder && (
                         <StyledFileSelectContainer
                             $isImageSelection
+                            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                             onClick={() => void handleImageSelectionClick()}
+                            onKeyDown={handleImageSelectionKeyDown}
+                            role="button"
+                            tabIndex={isDisabled ? -1 : 0}
                         >
                             <Icon icons={imageSelectIcons} />
                             <StyledFileSelectText>{imageSelectPlaceholder}</StyledFileSelectText>
@@ -230,9 +268,12 @@ const FileSelect: FC<FileSelectProps> = ({
             fileSelectionPlaceholder,
             imageSelectPlaceholder,
             imageSelectIcons,
+            shouldShowKeyboardHighlighting,
             handleFileSelectionClick,
             handleDrop,
+            handleFileSelectionKeyDown,
             handleImageSelectionClick,
+            handleImageSelectionKeyDown,
         ],
     );
 };

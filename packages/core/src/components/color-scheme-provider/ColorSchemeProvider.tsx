@@ -37,6 +37,10 @@ export type ColorSchemeProviderProps = {
      * An optional color for all icons
      */
     iconColor?: string;
+    /**
+     * Enables keyboard-only focus highlighting globally for child components.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 export interface Theme {
@@ -111,11 +115,13 @@ export interface ColorSchemeContextProps {
     designSettings?: ChaynsDesignSettings;
     paragraphFormat: ChaynsParagraphFormat[];
     theme: Theme;
+    shouldEnableKeyboardHighlighting: boolean;
 }
 
 export const ColorSchemeContext = createContext<ColorSchemeContextProps | undefined>(undefined);
 
-export const useColorScheme = () => useContext(ColorSchemeContext);
+export const useColorScheme = (): ColorSchemeContextProps | undefined =>
+    useContext(ColorSchemeContext);
 
 const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     children,
@@ -126,6 +132,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     style = {},
     iconColor,
     customVariables,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const context = useContext(ColorSchemeContext);
 
@@ -142,6 +149,9 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         [overrideParagraphFormat],
     );
 
+    const resolvedShouldEnableKeyboardHighlighting =
+        shouldEnableKeyboardHighlighting ?? context?.shouldEnableKeyboardHighlighting ?? false;
+
     const contextValue = useChaynsTheme({
         color,
         iconColor,
@@ -155,7 +165,12 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
     return (
         <ThemeProvider theme={contextValue.theme}>
-            <ColorSchemeContext.Provider value={contextValue}>
+            <ColorSchemeContext.Provider
+                value={{
+                    ...contextValue,
+                    shouldEnableKeyboardHighlighting: resolvedShouldEnableKeyboardHighlighting,
+                }}
+            >
                 <StyledColorSchemeProvider className="color-scheme-provider" style={style}>
                     {children}
                 </StyledColorSchemeProvider>

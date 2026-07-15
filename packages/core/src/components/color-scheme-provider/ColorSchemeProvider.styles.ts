@@ -8,18 +8,24 @@ type ColorSchemeProviderProps = WithTheme<unknown>;
 export const StyledColorSchemeProvider = styled.div<ColorSchemeProviderProps>`
     color: var(--chayns-color--text);
 
+    --focus-color: color-mix(in srgb, currentColor 70%, transparent);
+    --focus-outline: var(--focus-color) solid 2px;
+    --focus-shadow: 0 0 0 3px rgba(0, 102, 204, 0.3);
+    --focus-border-radius-circle: 50%;
+    --focus-border-radius: 3px;
+
     ${({ theme }: ColorSchemeProviderProps) =>
         getAvailableColorList().map((colorName: string) => {
             const colorNameRgb = `${colorName}-rgb`;
             return [
-                `--chayns-color--${colorName}: ${theme[colorName]};`,
-                `--chayns-color-rgb--${colorName}: ${theme[colorNameRgb]};`,
+                `--chayns-color--${colorName}: ${theme[colorName] ?? ''};`,
+                `--chayns-color-rgb--${colorName}: ${theme[colorNameRgb] ?? ''};`,
             ];
         })}
 
     ${({ theme }: ColorSchemeProviderProps) =>
         `
-        --chayns-color--header-bar: ${theme['header-bar'] ?? theme.primary};
+        --chayns-color--header-bar: ${theme['header-bar'] ?? theme.primary ?? ''};
     `}
 
     // ToDo: Remove .h1...

@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledSliderButtonProps = WithTheme<{ $isDisabled?: boolean }>;
 
@@ -71,7 +72,9 @@ export const StyledSliderButtonPopupContent = styled.div`
     flex-direction: column;
 `;
 
-type StyledSliderButtonPopupContentItemProps = WithTheme<{ $isSelected?: boolean }>;
+type StyledSliderButtonPopupContentItemProps = WithTheme<{
+    $isSelected?: boolean;
+}>;
 
 export const StyledSliderButtonPopupContentItem = styled.div<StyledSliderButtonPopupContentItemProps>`
     font-size: 110%;
@@ -80,6 +83,10 @@ export const StyledSliderButtonPopupContentItem = styled.div<StyledSliderButtonP
     background-color: ${({ $isSelected, theme }: StyledSliderButtonPopupContentItemProps) =>
         $isSelected ? theme['secondary-102'] : undefined};
     padding: 4px 12px;
+
+    &:focus-visible {
+        ${keyboardFocusHighlightingRingCss};
+    }
 `;
 
 type StyledSliderButtonButtonsWrapperProps = WithTheme<{ $isInvisible?: boolean }>;
@@ -94,7 +101,11 @@ export const StyledSliderButtonButtonsWrapper = styled.div<StyledSliderButtonBut
     pointer-events: ${({ $isInvisible }) => ($isInvisible ? 'auto' : 'none')};
 `;
 
-type StyledMotionSliderButtonThumbProps = WithTheme<{ $width: number; $isRounded: boolean }>;
+type StyledMotionSliderButtonThumbProps = WithTheme<{
+    $width: number;
+    $isRounded: boolean;
+    $shouldShowKeyboardHighlighting?: boolean;
+}>;
 
 export const StyledMotionSliderButtonThumb = styled(motion.div)<StyledMotionSliderButtonThumbProps>`
     font-size: 110%;
@@ -114,4 +125,12 @@ export const StyledMotionSliderButtonThumb = styled(motion.div)<StyledMotionSlid
     justify-content: center;
     align-items: center;
     cursor: pointer;
+
+    ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus-visible {
+                ${keyboardFocusHighlightingRingCss}
+            }
+        `}
 `;

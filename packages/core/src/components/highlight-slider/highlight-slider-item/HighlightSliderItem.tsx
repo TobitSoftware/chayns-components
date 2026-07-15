@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, KeyboardEventHandler, useCallback } from 'react';
 import {
     StyledHighlightSliderItem,
     StyledHighlightSliderItemBackground,
@@ -20,6 +20,9 @@ export type HighlightSliderItemProps = {
     onFinish: (index: number) => void;
     duration: number;
     colors: HighlightSliderItemColors;
+    isInteractive: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
+    shouldShowKeyboardHighlighting?: boolean;
 };
 
 const HighlightSliderItem: FC<HighlightSliderItemProps> = ({
@@ -30,11 +33,35 @@ const HighlightSliderItem: FC<HighlightSliderItemProps> = ({
     index,
     onClick,
     duration,
+    isInteractive,
+    shouldEnableKeyboardHighlighting,
+    shouldShowKeyboardHighlighting = false,
 }) => {
     const uuid = useUuid();
+    const isKeyboardFocusable = isInteractive && shouldEnableKeyboardHighlighting;
+
+    const handleKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (!isInteractive) {
+                return;
+            }
+
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onClick(index);
+            }
+        },
+        [index, isInteractive, onClick],
+    );
 
     return (
-        <StyledHighlightSliderItem onClick={() => onClick(index)}>
+        <StyledHighlightSliderItem
+            onClick={isInteractive ? () => onClick(index) : undefined}
+            onKeyDown={isKeyboardFocusable ? handleKeyDown : undefined}
+            tabIndex={isKeyboardFocusable ? 0 : -1}
+            role={isInteractive ? 'button' : undefined}
+            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+        >
             <StyledProgressBarProgressWrapper>
                 {isActive && (
                     <StyledHighlightSliderItemProgress

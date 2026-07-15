@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { keyboardFocusHighlightingCircleRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledSliderProps = WithTheme<{ $isDisabled?: boolean }>;
 
@@ -21,6 +22,7 @@ type StyledSliderInputProps = WithTheme<{
     $background?: string;
     $isInterval: boolean;
     $thumbWidth: number;
+    $shouldShowKeyboardHighlighting?: boolean;
 }>;
 
 export const StyledSliderInput = styled(motion.input).attrs<StyledSliderInputProps>(
@@ -68,6 +70,7 @@ export const StyledSliderInput = styled(motion.input).attrs<StyledSliderInputPro
 type StyledSliderThumbProps = WithTheme<{
     $position: number;
     $isBigSlider: boolean;
+    $shouldShowFocusRing?: boolean;
 }>;
 
 export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(
@@ -93,6 +96,12 @@ export const StyledSliderThumb = styled.div.attrs<StyledSliderThumbProps>(
     padding: 0 8px;
     white-space: nowrap;
     top: 5px;
+
+    ${({ $shouldShowFocusRing }) =>
+        $shouldShowFocusRing &&
+        css`
+            ${keyboardFocusHighlightingCircleRingCss}
+        `}
 
     transition: top 0.2s ease 0s;
 `;

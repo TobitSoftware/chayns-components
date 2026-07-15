@@ -98,4 +98,12 @@ export type ButtonProps = {
      * @optional
      */
     tapDuration?: number;
+    /**
+     * Enables keyboard-only focus highlighting.
+     * @description
+     * Focus styles are only shown while navigating with the keyboard and are reset on mouse interaction.
+     * @optional
+     * @default false
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };

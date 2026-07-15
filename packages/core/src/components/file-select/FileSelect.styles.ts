@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 export const StyledFileSelect = styled.div``;
 
@@ -17,6 +18,7 @@ export const StyledFileSelectWrapper = styled.div<StyledFileSelectWrapperProps>`
 
 type StyledFileSelectContainerProps = WithTheme<{
     $isImageSelection?: boolean;
+    $shouldShowKeyboardHighlighting?: boolean;
 }>;
 
 type StyledUploadedFilesListProps = WithTheme<{ $shouldShowBorder: boolean }>;
@@ -42,6 +44,15 @@ export const StyledFileSelectContainer = styled.div<StyledFileSelectContainerPro
         $isImageSelection &&
         css`
             border-left: none;
+        `}
+
+    ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus-visible {
+                transition: none;
+                ${keyboardFocusHighlightingRingCss}
+            }
         `}
 `;
 

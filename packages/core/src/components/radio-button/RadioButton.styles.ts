@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import { RadioButtonRightElementMargin } from '../../types/radioButton';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { keyboardFocusHighlightingCircleRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledRadioButtonProps = WithTheme<{
     $isDisabled: boolean;
@@ -39,22 +40,16 @@ export const StyledRadioButton = styled.span<StyledRadioButtonProps>`
     }}
 `;
 
-export const StyledRadioButtonWrapper = styled.div`
+type StyledRadioButtonWrapperProps = {
+    $shouldShowKeyboardHighlighting: boolean;
+};
+
+export const StyledRadioButtonWrapper = styled.div<StyledRadioButtonWrapperProps>`
     display: flex;
     align-items: center;
     position: relative;
     gap: 5px;
     user-select: none;
-`;
-
-type StyledRadioButtonCheckBoxProps = WithTheme<{ $isDisabled: boolean }>;
-
-export const StyledRadioButtonCheckBox = styled.input<StyledRadioButtonCheckBoxProps>`
-    opacity: 0;
-    height: 15px;
-    width: 15px;
-    cursor: ${({ $isDisabled }: StyledRadioButtonCheckBoxProps) =>
-        $isDisabled ? 'default !important' : 'pointer !important'};
 `;
 
 type StyledRadioButtonPseudoCheckBoxProps = WithTheme<{
@@ -72,8 +67,31 @@ export const StyledRadioButtonPseudoCheckBox = styled.div<StyledRadioButtonPseud
     height: 15px;
     position: absolute;
     border-radius: 100%;
+    z-index: 1;
     cursor: ${({ $isDisabled }: StyledRadioButtonPseudoCheckBoxProps) =>
         $isDisabled ? 'default !important' : 'pointer !important'};
+`;
+
+type StyledRadioButtonCheckBoxProps = WithTheme<{
+    $isDisabled: boolean;
+    $shouldShowKeyboardHighlighting: boolean;
+}>;
+
+export const StyledRadioButtonCheckBox = styled.input<StyledRadioButtonCheckBoxProps>`
+    opacity: 0;
+    height: 15px;
+    width: 15px;
+    cursor: ${({ $isDisabled }: StyledRadioButtonCheckBoxProps) =>
+        $isDisabled ? 'default !important' : 'pointer !important'};
+
+    ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus-visible + ${StyledRadioButtonPseudoCheckBox} {
+                transition: none;
+                ${keyboardFocusHighlightingCircleRingCss}
+            }
+        `}
 `;
 
 type StyledRadioButtonCheckBoxMarkProps = WithTheme<{

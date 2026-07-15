@@ -1,4 +1,10 @@
-import { Children, isValidElement, type ReactElement, type ReactNode } from 'react';
+import {
+    Children,
+    isValidElement,
+    type KeyboardEvent,
+    type ReactElement,
+    type ReactNode,
+} from 'react';
 import { LIST_ITEM_MARKER } from './list-item/ListItem.utils';
 
 export interface ListItemMetaProps {
@@ -35,3 +41,328 @@ export const shouldShowExpandIndicator = (node: ReactNode): boolean =>
 
         return false;
     });
+
+const LEFT_ELEMENT_FOCUSABLE_SELECTOR =
+    '[data-left-element="true"] a[href], [data-left-element="true"] button, [data-left-element="true"] input, [data-left-element="true"] select, [data-left-element="true"] textarea, [data-left-element="true"] [tabindex], [data-left-element="true"] [contenteditable="true"]';
+
+const RIGHT_ELEMENT_FOCUSABLE_SELECTOR =
+    '[data-right-element="true"] a[href], [data-right-element="true"] button, [data-right-element="true"] input, [data-right-element="true"] select, [data-right-element="true"] textarea, [data-right-element="true"] [tabindex], [data-right-element="true"] [contenteditable="true"]';
+
+const getFocusableElements = (root: HTMLElement, selector: string) =>
+    Array.from(root.querySelectorAll<HTMLElement>(selector)).filter(
+        (element) => !element.hasAttribute('disabled') && element.getAttribute('tabindex') !== '-1',
+    );
+
+const getFocusedElementIndex = (elements: HTMLElement[], targetElement: HTMLElement | null) => {
+    if (!targetElement || elements.length === 0) {
+        return -1;
+    }
+
+    return elements.findIndex(
+        (element) => element === targetElement || element.contains(targetElement),
+    );
+};
+
+type ListGroupNavigationParams = {
+    event: KeyboardEvent<HTMLDivElement>;
+    isCurrentListItemTarget: boolean;
+    isInKeyboardNavigationGroup: boolean;
+    listItemUuids?: string[];
+    currentUuid: string;
+    listGroupUuid?: string;
+    updateActiveListItemUuid?: (uuid?: string) => void;
+};
+
+type ListItemTabNavigationParams = ListGroupNavigationParams & {
+    currentListItemElement: HTMLDivElement;
+    targetElement: HTMLElement | null;
+};
+
+type ListItemToggleKeyParams = {
+    event: KeyboardEvent<HTMLDivElement>;
+    isCurrentListItemTarget: boolean;
+    isExpandable: boolean;
+    isItemOpen: boolean;
+    shouldEnableKeyboardHighlighting: boolean;
+    toggleItem: VoidFunction;
+};
+
+const getListItemElementByIndex = ({
+    index,
+    listItemUuids,
+    listGroupUuid,
+}: {
+    index: number;
+    listItemUuids: string[];
+    listGroupUuid?: string;
+}) => {
+    const listItemUuid = listItemUuids[index];
+
+    if (!listItemUuid || typeof listGroupUuid !== 'string') {
+        return undefined;
+    }
+
+    return document.querySelector<HTMLDivElement>(
+        `[data-uuid="${listGroupUuid}---${listItemUuid}"]`,
+    );
+};
+
+const focusListItemByIndex = ({
+    index,
+    listItemUuids,
+    listGroupUuid,
+    updateActiveListItemUuid,
+}: {
+    index: number;
+    listItemUuids: string[];
+    listGroupUuid?: string;
+    updateActiveListItemUuid?: (uuid?: string) => void;
+}) => {
+    const listItemUuid = listItemUuids[index];
+    const listItemElement = getListItemElementByIndex({ index, listItemUuids, listGroupUuid });
+
+    if (!listItemUuid || !listItemElement || typeof updateActiveListItemUuid !== 'function') {
+        return false;
+    }
+
+    updateActiveListItemUuid(listItemUuid);
+    listItemElement.focus();
+    return true;
+};
+
+export const handleHorizontalArrowNavigation = ({
+    event,
+    currentListItemElement,
+    targetElement,
+    isCurrentListItemTarget,
+}: {
+    event: KeyboardEvent<HTMLDivElement>;
+    currentListItemElement: HTMLDivElement;
+    targetElement: HTMLElement | null;
+    isCurrentListItemTarget: boolean;
+}) => {
+    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
+        return false;
+    }
+
+    const focusableLeftElements = getFocusableElements(
+        currentListItemElement,
+        LEFT_ELEMENT_FOCUSABLE_SELECTOR,
+    );
+
+    const focusableRightElements = getFocusableElements(
+        currentListItemElement,
+        RIGHT_ELEMENT_FOCUSABLE_SELECTOR,
+    );
+
+    const focusedLeftElementIndex = getFocusedElementIndex(focusableLeftElements, targetElement);
+
+    if (focusedLeftElementIndex !== -1) {
+        event.preventDefault();
+
+        if (event.key === 'ArrowLeft') {
+            const previousLeftElement = focusableLeftElements[focusedLeftElementIndex - 1];
+
+            if (previousLeftElement) {
+                previousLeftElement.focus();
+            } else {
+                currentListItemElement.focus();
+            }
+
+            return true;
+        }
+
+        const nextLeftElement = focusableLeftElements[focusedLeftElementIndex + 1];
+
+        if (nextLeftElement) {
+            nextLeftElement.focus();
+        } else if (focusableRightElements.length > 0) {
+            focusableRightElements[0]?.focus();
+        }
+
+        return true;
+    }
+
+    const focusedRightElementIndex = getFocusedElementIndex(focusableRightElements, targetElement);
+
+    if (focusedRightElementIndex !== -1) {
+        event.preventDefault();
+
+        if (event.key === 'ArrowRight') {
+            focusableRightElements[focusedRightElementIndex + 1]?.focus();
+            return true;
+        }
+
+        const previousRightElement = focusableRightElements[focusedRightElementIndex - 1];
+
+        if (previousRightElement) {
+            previousRightElement.focus();
+        } else if (focusableLeftElements.length > 0) {
+            focusableLeftElements[focusableLeftElements.length - 1]?.focus();
+        } else {
+            currentListItemElement.focus();
+        }
+
+        return true;
+    }
+
+    if (isCurrentListItemTarget) {
+        if (event.key === 'ArrowLeft' && focusableLeftElements.length > 0) {
+            event.preventDefault();
+            focusableLeftElements[focusableLeftElements.length - 1]?.focus();
+            return true;
+        }
+
+        if (event.key === 'ArrowRight' && focusableRightElements.length > 0) {
+            event.preventDefault();
+            focusableRightElements[0]?.focus();
+            return true;
+        }
+    }
+
+    return false;
+};
+
+export const handleListItemTabNavigation = ({
+    event,
+    currentListItemElement,
+    targetElement,
+    isCurrentListItemTarget,
+    isInKeyboardNavigationGroup,
+    listItemUuids,
+    currentUuid,
+    listGroupUuid,
+    updateActiveListItemUuid,
+}: ListItemTabNavigationParams) => {
+    if (event.key !== 'Tab' || !isInKeyboardNavigationGroup || !listItemUuids?.length) {
+        return false;
+    }
+
+    const currentIndex = listItemUuids.indexOf(currentUuid);
+
+    if (currentIndex === -1) {
+        return false;
+    }
+
+    const focusableRightElements = getFocusableElements(
+        currentListItemElement,
+        RIGHT_ELEMENT_FOCUSABLE_SELECTOR,
+    );
+    const focusedRightElementIndex = getFocusedElementIndex(focusableRightElements, targetElement);
+
+    if (event.shiftKey) {
+        return false;
+    }
+
+    if (isCurrentListItemTarget) {
+        if (focusableRightElements.length > 0) {
+            event.preventDefault();
+            focusableRightElements[0]?.focus();
+            return true;
+        }
+
+        return false;
+    }
+
+    if (focusedRightElementIndex === -1) {
+        return false;
+    }
+
+    const nextRightElement = focusableRightElements[focusedRightElementIndex + 1];
+
+    if (nextRightElement) {
+        event.preventDefault();
+        nextRightElement.focus();
+        return true;
+    }
+
+    if (currentIndex < listItemUuids.length - 1) {
+        event.preventDefault();
+        return focusListItemByIndex({
+            index: currentIndex + 1,
+            listItemUuids,
+            listGroupUuid,
+            updateActiveListItemUuid,
+        });
+    }
+
+    return false;
+};
+
+export const handleVerticalListGroupNavigation = ({
+    event,
+    isCurrentListItemTarget,
+    isInKeyboardNavigationGroup,
+    listItemUuids,
+    currentUuid,
+    listGroupUuid,
+    updateActiveListItemUuid,
+}: ListGroupNavigationParams) => {
+    if (
+        !isCurrentListItemTarget ||
+        !isInKeyboardNavigationGroup ||
+        !listItemUuids?.length ||
+        (event.key !== 'ArrowDown' && event.key !== 'ArrowUp')
+    ) {
+        return false;
+    }
+
+    const currentIndex = listItemUuids.indexOf(currentUuid);
+
+    if (currentIndex === -1) {
+        return true;
+    }
+
+    const isBackward = event.key === 'ArrowUp';
+
+    event.preventDefault();
+
+    const nextIndex = isBackward
+        ? (currentIndex - 1 + listItemUuids.length) % listItemUuids.length
+        : (currentIndex + 1) % listItemUuids.length;
+
+    const nextListItemUuid = listItemUuids[nextIndex];
+
+    if (
+        nextListItemUuid &&
+        nextListItemUuid !== currentUuid &&
+        typeof listGroupUuid === 'string' &&
+        typeof updateActiveListItemUuid === 'function'
+    ) {
+        const nextListItemElement = document.querySelector<HTMLDivElement>(
+            `[data-uuid="${listGroupUuid}---${nextListItemUuid}"]`,
+        );
+
+        if (nextListItemElement) {
+            updateActiveListItemUuid(nextListItemUuid);
+            nextListItemElement.focus();
+        }
+    }
+
+    return true;
+};
+
+export const handleListItemToggleKey = ({
+    event,
+    isCurrentListItemTarget,
+    isExpandable,
+    isItemOpen,
+    shouldEnableKeyboardHighlighting,
+    toggleItem,
+}: ListItemToggleKeyParams) => {
+    if (!isCurrentListItemTarget || !shouldEnableKeyboardHighlighting) {
+        return false;
+    }
+
+    const shouldOpen = isExpandable && event.key === 'ArrowRight' && !isItemOpen;
+    const shouldClose = isExpandable && event.key === 'ArrowLeft' && isItemOpen;
+    const shouldToggle = event.key === 'Enter' || event.key === ' ';
+
+    if (!shouldOpen && !shouldClose && !shouldToggle) {
+        return false;
+    }
+
+    event.preventDefault();
+    toggleItem();
+    return true;
+};

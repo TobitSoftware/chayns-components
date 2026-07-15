@@ -1,13 +1,20 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, KeyboardEventHandler, useCallback, useMemo } from 'react';
 import { getHumanSize, getIconByMimeType } from '../../../utils/file';
 import Icon from '../../icon/Icon';
 import ContextMenu from '../../context-menu/ContextMenu';
 import type { ContextMenuItem } from '../../context-menu/ContextMenu.types';
 import ListItem from '../../list/list-item/ListItem';
 import type { IFileItem } from '../FileList';
-import { StyledFileItem, StyledFileItemIcon } from './FileItem.styles';
+import {
+    StyledFileItem,
+    StyledFileItemActions,
+    StyledFileItemKeyboardWrapper,
+    StyledFileItemRemoveButton,
+    StyledFileItemIcon,
+} from './FileItem.styles';
 import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
 import textStrings from '../../../constants/textStrings';
+import { useKeyboardFocusHighlighting } from '../../../hooks/useKeyboardFocusHighlighting';
 
 export type FileItemProps = IFileItem & {
     onRemove?: (name: string) => void;
@@ -23,6 +30,38 @@ const FileItem: FC<FileItemProps> = ({
     source,
     shouldAllowDownload,
 }) => {
+    const canDownload = shouldAllowDownload && !!source;
+    const canRemove = typeof onRemove === 'function';
+
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(canRemove || !!canDownload);
+
+    const handleRemove = useCallback(() => {
+        if (canRemove) {
+            onRemove(id);
+        }
+    }, [id, onRemove]);
+
+    const handleItemKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (event.key === 'Delete') {
+                event.preventDefault();
+                handleRemove();
+            }
+        },
+        [handleRemove],
+    );
+
+    const handleRemoveKeyDown = useCallback<KeyboardEventHandler<HTMLSpanElement>>(
+        (event) => {
+            if (canRemove && (event.key === 'Enter' || event.key === ' ')) {
+                event.preventDefault();
+                event.stopPropagation();
+                handleRemove();
+            }
+        },
+        [handleRemove],
+    );
+
     const humanFileSize = useMemo(() => {
         if (typeof size === 'number') {
             return getHumanSize(size);
@@ -77,9 +116,6 @@ const FileItem: FC<FileItemProps> = ({
         }
     }, [name, source]);
 
-    const canDownload = shouldAllowDownload && !!source;
-    const canRemove = typeof onRemove === 'function';
-
     const downloadText = useTextstringValue({
         textstring: ttsToITextString(textStrings.components.fileItem.download),
     });
@@ -88,6 +124,7 @@ const FileItem: FC<FileItemProps> = ({
     });
 
     const rightElement = useMemo(() => {
+        if (!canDownload && !canRemove) return undefined;
         // Both actions available → show as ContextMenu
         if (canDownload && canRemove) {
             const items: ContextMenuItem[] = [
@@ -108,39 +145,62 @@ const FileItem: FC<FileItemProps> = ({
             return <ContextMenu items={items} />;
         }
 
-        // Only download
-        if (canDownload) {
-            return (
-                <StyledFileItemIcon onClick={handleDownload}>
-                    <Icon icons={['fa fa-download']} />
-                </StyledFileItemIcon>
-            );
-        }
+        const handleClick = () => {
+            if (canRemove) {
+                onRemove(id);
+                return;
+            }
 
-        // Only remove
-        if (canRemove) {
-            return (
-                <StyledFileItemIcon onClick={() => onRemove(id)}>
-                    <Icon icons={['ts-wrong']} />
-                </StyledFileItemIcon>
-            );
-        }
+            handleDownload();
+        };
 
-        return undefined;
-    }, [canDownload, canRemove, downloadText, handleDownload, id, onRemove, removeText]);
+        const handleKeyDown = canRemove ? handleRemoveKeyDown : undefined;
+
+        const fileIcon = canRemove ? 'ts-wrong' : 'fa fa-download';
+
+        return (
+            <StyledFileItemIcon
+                onClick={handleClick}
+                onKeyDown={handleKeyDown}
+                role="button"
+                tabIndex={0}
+            >
+                <Icon icons={[fileIcon]} />
+            </StyledFileItemIcon>
+        );
+    }, [
+        canDownload,
+        canRemove,
+        downloadText,
+        handleDownload,
+        handleRemoveKeyDown,
+        id,
+        onRemove,
+        removeText,
+    ]);
 
     return useMemo(
         () => (
             <StyledFileItem>
-                <ListItem
-                    title={name}
-                    subtitle={humanFileSize}
-                    icons={[icon]}
-                    rightElements={rightElement}
-                />
+                <StyledFileItemKeyboardWrapper onKeyDown={handleItemKeyDown} tabIndex={-1}>
+                    <ListItem
+                        title={name}
+                        subtitle={humanFileSize}
+                        icons={[icon]}
+                        rightElements={rightElement}
+                        shouldEnableKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                    />
+                </StyledFileItemKeyboardWrapper>
             </StyledFileItem>
         ),
-        [humanFileSize, icon, name, rightElement],
+        [
+            handleItemKeyDown,
+            humanFileSize,
+            icon,
+            name,
+            rightElement,
+            shouldShowKeyboardHighlighting,
+        ],
     );
 };
 

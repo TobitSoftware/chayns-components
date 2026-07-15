@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useMemo } from 'react';
+import React, { FC, ReactNode, useMemo, useRef } from 'react';
 import type { IListItemRightElement, IListItemRightElements } from '../../../../../types/list';
 import {
     StyledListItemHeadSubtitleText,
@@ -14,6 +14,8 @@ type ListItemSubtitleProps = {
 };
 
 const ListItemSubtitle: FC<ListItemSubtitleProps> = ({ rightElements, subtitle, isOpen }) => {
+    const bottomElementRef = useRef<HTMLDivElement>(null);
+
     const handlePreventClick = (event: React.MouseEvent) => {
         event.stopPropagation();
         event.preventDefault();
@@ -42,6 +44,8 @@ const ListItemSubtitle: FC<ListItemSubtitleProps> = ({ rightElements, subtitle, 
             </StyledListItemHeadSubtitleText>
             {bottomElement && (
                 <StyledListItemBottomRightElement
+                    data-right-element="true"
+                    ref={bottomElementRef}
                     onClick={shouldPreventRightElementClick ? handlePreventClick : undefined}
                 >
                     {bottomElement}

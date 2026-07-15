@@ -17,11 +17,13 @@ import {
     StyledMotionSearchInputIconWrapper,
     StyledMotionSearchInputIconWrapperContent,
     StyledSearchInput,
+    StyledSearchInputIconTrigger,
     StyledSearchInputPseudoElement,
 } from './SearchInput.styles';
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import { useElementSize } from '../../hooks/element';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 export type SearchInputProps = {
     /**
@@ -61,6 +63,10 @@ export type SearchInputProps = {
      */
     value?: string;
     /**
+     * Enables keyboard-only focus highlighting.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * The width of the parent.
      */
     width?: number;
@@ -78,6 +84,7 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
             shouldUseAbsolutePositioning = false,
             size = InputSize.Medium,
             value,
+            shouldEnableKeyboardHighlighting,
             width: widthValue,
         },
         ref,
@@ -88,14 +95,53 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
 
         const inputRef = useRef<InputRef>(null);
         const pseudoRef = useRef<HTMLDivElement>(null);
+        const iconTriggerRef = useRef<HTMLDivElement>(null);
 
         const parentWidth = useElementSize(pseudoRef);
 
         const theme = useTheme() as Theme;
 
+        const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+            shouldEnableKeyboardHighlighting,
+        );
+
         const handleBackIconClick = useCallback(() => setIsSearchInputActive(false), []);
 
         const handleSearchIconClick = useCallback(() => setIsSearchInputActive(true), []);
+
+        const handleIconTriggerClick = useCallback(() => {
+            if (isSearchInputActive) {
+                handleBackIconClick();
+                return;
+            }
+
+            handleSearchIconClick();
+        }, [handleBackIconClick, handleSearchIconClick, isSearchInputActive]);
+
+        const handleIconTriggerKeyDown = useCallback(
+            (event: React.KeyboardEvent<HTMLDivElement>) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    handleIconTriggerClick();
+                }
+            },
+            [handleIconTriggerClick],
+        );
+
+        const handleInputKeyDown = useCallback(
+            (event: React.KeyboardEvent<HTMLInputElement>) => {
+                if (event.key === 'Escape') {
+                    event.preventDefault();
+                    setIsSearchInputActive(false);
+                    iconTriggerRef.current?.focus();
+                }
+
+                if (typeof onKeyDown === 'function') {
+                    onKeyDown(event);
+                }
+            },
+            [onActiveChange, onKeyDown],
+        );
 
         useEffect(() => {
             if (typeof onActiveChange === 'function') {
@@ -135,21 +181,13 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                     className="beta-chayns-search-input"
                     $size={size}
                     $shouldUseAbsolutePositioning={shouldUseAbsolutePositioning}
-                    onClick={() => {
-                        if (shouldUseAbsolutePositioning) {
-                            if (isSearchInputActive) {
-                                handleBackIconClick();
-                            } else {
-                                handleSearchIconClick();
-                            }
-                        }
-                    }}
                 >
                     {shouldUseAbsolutePositioning ? (
                         <AnimatePresence initial={false}>
                             {isSearchInputActive && (
                                 <StyledMotionSearchInputContentWrapper
                                     $shouldUseAbsolutePositioning={shouldUseAbsolutePositioning}
+                                    $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                                     animate={{ opacity: 1, width }}
                                     exit={{ opacity: 0, width: 0 }}
                                     initial={{ opacity: 0, width: 0 }}
@@ -158,100 +196,98 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                                 >
                                     <Input
                                         onChange={onChange}
-                                        onKeyDown={onKeyDown}
+                                        onKeyDown={handleInputKeyDown}
                                         placeholder={placeholder}
                                         ref={inputRef}
+                                        shouldEnableKeyboardHighlighting={
+                                            shouldEnableKeyboardHighlighting
+                                        }
                                         shouldShowClearIcon
                                         size={size}
                                         value={value}
                                     />
                                 </StyledMotionSearchInputContentWrapper>
                             )}
-                            <StyledMotionSearchInputIconWrapperContent
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0, position: 'absolute' }}
-                                initial={{ opacity: 0 }}
-                                key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
-                                transition={{ duration: 0.3 }}
+                            <StyledSearchInputIconTrigger
+                                ref={iconTriggerRef}
                                 id={
                                     isSearchInputActive
                                         ? 'search-input-backIcon'
                                         : 'search-input-searchIcon'
                                 }
                                 tabIndex={0}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        e.preventDefault();
-                                        if (isSearchInputActive) {
-                                            handleBackIconClick();
-                                        } else {
-                                            handleSearchIconClick();
-                                        }
-                                    }
-                                }}
+                                onClick={handleIconTriggerClick}
+                                onKeyDown={handleIconTriggerKeyDown}
+                                $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                             >
-                                <Icon
-                                    key="icon"
-                                    color={iconColor}
-                                    tabIndex={-1}
-                                    icons={isSearchInputActive ? ['fa fa-xmark'] : ['fa fa-search']}
-                                    onClick={
-                                        isSearchInputActive
-                                            ? handleBackIconClick
-                                            : handleSearchIconClick
-                                    }
-                                />
-                            </StyledMotionSearchInputIconWrapperContent>
+                                <StyledMotionSearchInputIconWrapperContent
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0, position: 'absolute' }}
+                                    initial={{ opacity: 0 }}
+                                    key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
+                                    transition={{ duration: 0.3 }}
+                                    $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                                >
+                                    <Icon
+                                        key="icon"
+                                        color={iconColor}
+                                        tabIndex={-1}
+                                        icons={
+                                            isSearchInputActive ? ['fa fa-xmark'] : ['fa fa-search']
+                                        }
+                                    />
+                                </StyledMotionSearchInputIconWrapperContent>
+                            </StyledSearchInputIconTrigger>
                         </AnimatePresence>
                     ) : (
                         <>
                             <StyledMotionSearchInputIconWrapper>
                                 <AnimatePresence initial={false}>
-                                    <StyledMotionSearchInputIconWrapperContent
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0, position: 'absolute' }}
-                                        initial={{ opacity: 0 }}
-                                        key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
-                                        transition={{ duration: 0.3 }}
+                                    <StyledSearchInputIconTrigger
+                                        ref={iconTriggerRef}
                                         id={
                                             isSearchInputActive
                                                 ? 'search-input-backIcon'
                                                 : 'search-input-searchIcon'
                                         }
                                         tabIndex={0}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                e.preventDefault();
-                                                if (isSearchInputActive) {
-                                                    handleBackIconClick();
-                                                } else {
-                                                    handleSearchIconClick();
-                                                }
-                                            }
-                                        }}
+                                        onClick={handleIconTriggerClick}
+                                        onKeyDown={handleIconTriggerKeyDown}
+                                        $shouldShowKeyboardHighlighting={
+                                            shouldShowKeyboardHighlighting
+                                        }
                                     >
-                                        <Icon
-                                            key="icon"
-                                            color={iconColor}
-                                            tabIndex={-1}
-                                            icons={
-                                                isSearchInputActive
-                                                    ? ['fa fa-arrow-left']
-                                                    : ['fa fa-search']
+                                        <StyledMotionSearchInputIconWrapperContent
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0, position: 'absolute' }}
+                                            initial={{ opacity: 0 }}
+                                            key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
+                                            transition={{ duration: 0.3 }}
+                                            $shouldShowKeyboardHighlighting={
+                                                shouldShowKeyboardHighlighting
                                             }
-                                            onClick={
-                                                isSearchInputActive
-                                                    ? handleBackIconClick
-                                                    : handleSearchIconClick
-                                            }
-                                        />
-                                    </StyledMotionSearchInputIconWrapperContent>
+                                        >
+                                            <Icon
+                                                key="icon"
+                                                color={iconColor}
+                                                tabIndex={-1}
+                                                icons={
+                                                    isSearchInputActive
+                                                        ? ['fa fa-arrow-left']
+                                                        : ['fa fa-search']
+                                                }
+                                            />
+                                        </StyledMotionSearchInputIconWrapperContent>
+                                    </StyledSearchInputIconTrigger>
                                 </AnimatePresence>
                             </StyledMotionSearchInputIconWrapper>
                             <AnimatePresence initial={false}>
                                 {isSearchInputActive && (
                                     <StyledMotionSearchInputContentWrapper
                                         $shouldUseAbsolutePositioning={shouldUseAbsolutePositioning}
+                                        $shouldShowKeyboardHighlighting={
+                                            shouldShowKeyboardHighlighting
+                                        }
                                         animate={{ opacity: 1, width: '100%' }}
                                         exit={{ opacity: 0, width: 0 }}
                                         initial={{ opacity: 0, width: 0 }}
@@ -267,9 +303,12 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                                                 />
                                             }
                                             onChange={onChange}
-                                            onKeyDown={onKeyDown}
+                                            onKeyDown={handleInputKeyDown}
                                             placeholder={placeholder}
                                             ref={inputRef}
+                                            shouldEnableKeyboardHighlighting={
+                                                shouldEnableKeyboardHighlighting
+                                            }
                                             shouldShowClearIcon
                                             size={size}
                                             value={value}

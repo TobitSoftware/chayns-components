@@ -53,6 +53,7 @@ export type AccordionHeadProps = {
     titleInputProps?: InputProps;
     titleColor?: CSSProperties['color'];
     shouldSkipAnimation?: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 interface HeadHeight {
@@ -79,6 +80,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     titleInputProps,
     onTitleInputChange,
     titleColor,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const [headHeight, setHeadHeight] = useState<HeadHeight>({
         closed: isWrapped ? 40 : 32,
@@ -198,6 +200,10 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                 {...titleInputProps}
                                 value={title}
                                 onChange={onTitleInputChange}
+                                shouldEnableKeyboardHighlighting={
+                                    titleInputProps?.shouldEnableKeyboardHighlighting ??
+                                    shouldEnableKeyboardHighlighting
+                                }
                             />
                         </StyledTitleInputWrapper>
                     </AreaContext.Provider>
@@ -281,6 +287,9 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                     placeholder={searchPlaceholder}
                                     size={InputSize.Small}
                                     value={internalSearchValue}
+                                    shouldEnableKeyboardHighlighting={
+                                        shouldEnableKeyboardHighlighting
+                                    }
                                 />
                             </StyledMotionSearchWrapper>
                         )}

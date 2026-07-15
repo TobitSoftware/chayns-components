@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import { motion } from 'motion/react';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 export const StyledFilter = styled.div``;
 
@@ -42,6 +43,7 @@ export const StyledFilterSearch = styled.div`
 type StyledFilterIconProps = WithTheme<{
     $isOpen: boolean;
     $shouldShowRoundedHoverEffect: boolean;
+    $shouldShowKeyboardHighlighting: boolean;
 }>;
 
 export const StyledFilterIcon = styled.div<StyledFilterIconProps>`
@@ -74,6 +76,14 @@ export const StyledFilterIcon = styled.div<StyledFilterIconProps>`
     &:hover {
         background-color: ${({ theme }) => theme['100']};
     }
+
+    ${({ $shouldShowKeyboardHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus-visible {
+                ${keyboardFocusHighlightingRingCss}
+            }
+        `}
 `;
 
 type StyledMotionFilterBackgroundProps = WithTheme<{ $top: number; $left: number }>;

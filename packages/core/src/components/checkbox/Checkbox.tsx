@@ -3,12 +3,14 @@ import React, {
     ChangeEventHandler,
     CSSProperties,
     FC,
+    KeyboardEvent,
     ReactElement,
     useCallback,
     useEffect,
     useRef,
     useState,
 } from 'react';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { useUuid } from '../../hooks/uuid';
 import { getHeightOfSingleTextLine } from '../../utils/calculate';
 import {
@@ -73,6 +75,10 @@ export type CheckboxProps = {
      * Whether the Checkbox should be displayed centered to the label or at the top
      */
     shouldShowCentered?: boolean;
+    /**
+     * Enables keyboard-only focus highlighting.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const Checkbox: FC<CheckboxProps> = ({
@@ -86,6 +92,7 @@ const Checkbox: FC<CheckboxProps> = ({
     colors,
     shouldShowCentered = false,
     shouldChangeOnLabelClick = true,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const [isActive, setIsActive] = useState(isChecked ?? false);
     const [checkboxTop, setCheckboxTop] = useState<number | undefined>(undefined);
@@ -118,9 +125,14 @@ const Checkbox: FC<CheckboxProps> = ({
         }
     }, [shouldShowCentered]);
 
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting && !isDisabled,
+    );
+
     return (
         <StyledCheckbox ref={checkboxRootRef}>
             <StyledCheckboxInput
+                $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                 checked={isChecked}
                 disabled={isDisabled}
                 id={uuid}

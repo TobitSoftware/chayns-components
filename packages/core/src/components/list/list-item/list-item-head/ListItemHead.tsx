@@ -22,6 +22,7 @@ import {
     StyledListItemHead,
     StyledListItemHeadContent,
     StyledListItemHeadIndicator,
+    StyledListItemHeadLeftElements,
     StyledListItemHeadLeftWrapper,
     StyledListItemHeadSubtitle,
     StyledListItemHeadTitle,
@@ -108,6 +109,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     const longPressTimeoutRef = useRef<number>();
     const resizeSkipRef = useRef(true);
+    const leftElementRef = useRef<HTMLDivElement>(null);
 
     const theme = useTheme() as Theme;
     const areaProvider = useContext(AreaContext);
@@ -254,7 +256,11 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                         {isExpandable && !shouldHideIndicator && expandIcon}
                     </StyledListItemHeadIndicator>
                 )}
-                {leftElements}
+                {leftElements && (
+                    <StyledListItemHeadLeftElements ref={leftElementRef} data-left-element="true">
+                        {leftElements}
+                    </StyledListItemHeadLeftElements>
+                )}
                 {iconOrImageElement}
             </StyledListItemHeadLeftWrapper>
             <StyledListItemHeadContent

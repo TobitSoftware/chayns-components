@@ -11,6 +11,7 @@ import React, {
 } from 'react';
 import { useTheme } from 'styled-components';
 import { useElementSize } from '../../hooks/element';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import {
     calculateGradientOffset,
     calculatePopupPosition,
@@ -127,6 +128,14 @@ export type SliderProps = {
      */
     shouldHighlightSteps?: boolean;
     /**
+     * Enables keyboard-only focus highlighting.
+     * @description
+     * Focus styles are shown only during keyboard navigation and reset on mouse interaction.
+     * @default false
+     * @optional
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * Indicates whether the slider should show a label on the thumb.
      * @description
      * The `shouldShowThumbLabel` prop determines whether the slider should display a label on the thumb that shows the current value.
@@ -181,6 +190,7 @@ const Slider: FC<SliderProps> = ({
     onChange,
     onSelect,
     shouldHighlightSteps = false,
+    shouldEnableKeyboardHighlighting,
     shouldShowThumbLabel = false,
     step = 1,
     thumbLabelFormatter,
@@ -190,6 +200,8 @@ const Slider: FC<SliderProps> = ({
     const [toValue, setToValue] = useState(maxEnabledValue ?? maxValue);
     const [thumbWidth, setThumbWidth] = useState(20);
     const [isBigSlider, setIsBigSlider] = useState(false);
+    const [isFromThumbFocused, setIsFromThumbFocused] = useState(false);
+    const [isToThumbFocused, setIsToThumbFocused] = useState(false);
 
     const previousFromValueRef = useRef(fromValue);
     const previousToValueRef = useRef(toValue);
@@ -204,6 +216,9 @@ const Slider: FC<SliderProps> = ({
     const sliderWrapperSize = useElementSize(sliderWrapperRef);
 
     const theme = useTheme() as Theme;
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting && !isDisabled,
+    );
 
     const updateFromValue = useCallback((nextValue: number) => {
         previousFromValueRef.current = nextValue;
@@ -595,7 +610,7 @@ const Slider: FC<SliderProps> = ({
                     $isInterval={!!interval}
                     type="range"
                     value={fromValue}
-                    step={0.01}
+                    step={step}
                     max={maxValue}
                     min={minValue}
                     onTouchStart={handleTouchStart}
@@ -603,11 +618,20 @@ const Slider: FC<SliderProps> = ({
                     onChange={handleInputChange}
                     onMouseUp={handleMouseUp}
                     $background={fromInputBackground}
+                    $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                    onFocus={() => {
+                        setIsFromThumbFocused(true);
+                        setIsToThumbFocused(false);
+                    }}
+                    onBlur={() => {
+                        setIsFromThumbFocused(false);
+                    }}
                 />
                 <StyledSliderThumb
                     ref={fromSliderThumbRef}
                     $position={fromSliderThumbPosition}
                     $isBigSlider={isBigSlider}
+                    $shouldShowFocusRing={shouldShowKeyboardHighlighting && isFromThumbFocused}
                 >
                     {shouldShowThumbLabel && (
                         <StyledSliderThumbLabel
@@ -627,6 +651,7 @@ const Slider: FC<SliderProps> = ({
                         ref={toSliderThumbRef}
                         $position={toSliderThumbPosition}
                         $isBigSlider={isBigSlider}
+                        $shouldShowFocusRing={shouldShowKeyboardHighlighting && isToThumbFocused}
                     >
                         {shouldShowThumbLabel && (
                             <StyledSliderThumbLabel
@@ -652,13 +677,21 @@ const Slider: FC<SliderProps> = ({
                         $isInterval={!!interval}
                         type="range"
                         value={toValue}
-                        step={0.01}
+                        step={step}
                         max={maxValue}
                         min={minValue}
                         onTouchStart={handleTouchStart}
                         onTouchEnd={handleTouchEnd}
                         onChange={handleControlToSlider}
                         onMouseUp={handleMouseUp}
+                        $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                        onFocus={() => {
+                            setIsToThumbFocused(true);
+                            setIsFromThumbFocused(false);
+                        }}
+                        onBlur={() => {
+                            setIsToThumbFocused(false);
+                        }}
                     />
                 )}
             </StyledSlider>
@@ -677,9 +710,12 @@ const Slider: FC<SliderProps> = ({
             interval,
             isBigSlider,
             isDisabled,
+            isFromThumbFocused,
+            isToThumbFocused,
             maxValue,
             minValue,
             shouldShowThumbLabel,
+            shouldShowKeyboardHighlighting,
             thumbLabelFormatter,
             thumbWidth,
             toSliderThumbContentPosition,

@@ -1,7 +1,17 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
-type StyledTagInputProps = WithTheme<{ $shouldChangeColor: boolean }>;
+type StyledTagInputProps = WithTheme<{
+    $shouldChangeColor: boolean;
+    $shouldShowKeyboardHighlighting: boolean;
+    $shouldShowTagHighlighting: boolean;
+}>;
+
+type StyledTagInputTagFocusWrapperProps = {
+    $isSelected: boolean;
+    $shouldShowKeyboardHighlighting: boolean;
+};
 
 export const StyledTagInput = styled.div<StyledTagInputProps>`
     display: flex;
@@ -13,12 +23,38 @@ export const StyledTagInput = styled.div<StyledTagInputProps>`
     background-color: ${({ theme, $shouldChangeColor }: StyledTagInputProps) =>
         theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
     border: 1px solid rgba(160, 160, 160, 0.3);
+
+    ${({ $shouldShowKeyboardHighlighting, $shouldShowTagHighlighting }) =>
+        $shouldShowKeyboardHighlighting &&
+        !$shouldShowTagHighlighting &&
+        css`
+            &:focus-within {
+                transition: none;
+                ${keyboardFocusHighlightingRingCss}
+            }
+        `}
 `;
 
 export const StyledTagInputTagWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 4px;
+`;
+
+export const StyledTagInputTagFocusWrapper = styled.div<StyledTagInputTagFocusWrapperProps>`
+    display: inline-flex;
+
+    ${({ $isSelected, $shouldShowKeyboardHighlighting }) =>
+        $isSelected &&
+        $shouldShowKeyboardHighlighting &&
+        css`
+            ${StyledTagInput}:focus-within & > .beta-chayns-badge {
+                transition: none;
+                ${keyboardFocusHighlightingRingCss}
+                border-radius: 999px;
+                outline-offset: 0;
+            }
+        `}
 `;
 
 export const StyledTagInputTagWrapperText = styled.p`

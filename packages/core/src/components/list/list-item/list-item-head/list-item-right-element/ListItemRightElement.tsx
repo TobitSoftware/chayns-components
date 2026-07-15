@@ -39,6 +39,7 @@ const ListItemRightElement: FC<ListItemRightElementProps> = ({ rightElements }) 
 
     return (
         <StyledListItemRightElement
+            data-right-element="true"
             onClick={shouldPreventRightElementClick ? handlePreventClick : undefined}
         >
             {centerElement}

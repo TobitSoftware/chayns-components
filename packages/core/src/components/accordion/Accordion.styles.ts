@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledMotionAccordionProps = WithTheme<{
     $isOpen: boolean;
@@ -11,6 +12,8 @@ type StyledMotionAccordionProps = WithTheme<{
     $shouldShowLines?: boolean;
     $shouldHideBottomLine: boolean;
     $bottomBorderColor?: string;
+    $shouldEnableKeyboardHighlighting?: boolean;
+    $shouldShowKeyboardHighlighting?: boolean;
 }>;
 
 export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionProps>`
@@ -87,13 +90,42 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
             : css`
                   margin: 0;
               `}
-    ${({ $isWrapped, $shouldHideBackground, theme }: StyledMotionAccordionProps) =>
+    ${({
+        $isWrapped,
+        $shouldHideBackground,
+        theme,
+        $shouldEnableKeyboardHighlighting,
+    }: StyledMotionAccordionProps) =>
         !$isWrapped &&
         !$shouldHideBackground &&
         css`
-            &:hover,
-            &:focus-visible {
+            &:hover {
                 background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
+            }
+            ${!$shouldEnableKeyboardHighlighting
+                ? css`
+                      &:focus-visible {
+                          background-color: rgba(
+                              ${theme['100-rgb']},
+                              ${theme.cardBackgroundOpacity}
+                          );
+                      }
+                  `
+                : null}
+        `};
+
+    ${({
+        $shouldEnableKeyboardHighlighting,
+        $shouldShowKeyboardHighlighting,
+        $shouldHideBackground,
+    }: StyledMotionAccordionProps) =>
+        $shouldEnableKeyboardHighlighting &&
+        $shouldShowKeyboardHighlighting &&
+        !$shouldHideBackground &&
+        css`
+            &:focus-visible {
+                transition: none;
+                ${keyboardFocusHighlightingRingCss};
             }
         `};
 `;
