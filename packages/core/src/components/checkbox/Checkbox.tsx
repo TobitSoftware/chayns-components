@@ -130,7 +130,7 @@ const Checkbox: FC<CheckboxProps> = ({
     );
 
     return (
-        <StyledCheckbox ref={checkboxRootRef}>
+        <StyledCheckbox ref={checkboxRootRef} className="beta-chayns-checkbox">
             <StyledCheckboxInput
                 $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                 checked={isChecked}
