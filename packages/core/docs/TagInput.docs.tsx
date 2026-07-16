@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Tag, TagInput } from '@chayns-components/core';
+import { InputSize, Tag, TagInput } from '@chayns-components/core';
 
 const Component: FC = () => {
     const [tags, setTags] = useState<Tag[]>([]);
@@ -14,6 +14,7 @@ const Component: FC = () => {
 
     return (
         <TagInput
+            size={InputSize.Small}
             shouldEnableKeyboardHighlighting
             tags={tags}
             onAdd={handleAdd}

@@ -130,6 +130,10 @@ export type AccordionProps = {
      */
     shouldHideBackground?: boolean;
     /**
+     * Whether the bottom line should always be shown, regardless of other line-related props.
+     */
+    shouldForceBottomLine?: boolean;
+    /**
      * Whether the bottom line should be hidden.
      */
     shouldHideBottomLine?: boolean;
@@ -192,6 +196,7 @@ const Accordion: FC<AccordionProps> = ({
     searchPlaceholder,
     searchValue,
     shouldForceBackground = false,
+    shouldForceBottomLine = false,
     shouldHideBackground = false,
     shouldRenderClosed = false,
     shouldRotateIcon = true,
@@ -534,6 +539,7 @@ const Accordion: FC<AccordionProps> = ({
             $isParentWrapped={isParentWrapped}
             $isWrapped={isWrapped}
             $shouldForceBackground={shouldForceBackground}
+            $shouldForceBottomLine={shouldForceBottomLine}
             $shouldHideBackground={shouldHideBackground}
             $shouldHideBottomLine={shouldHideBottomLine}
             $bottomBorderColor={colors?.borderBottomColor}

@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import TagInput from '../src/components/tag-input/TagInput';
 import React, { useState } from 'react';
-import { Tag } from '../src';
+import { InputSize, Tag } from '../src';
 
 export default {
     title: 'Core/TagInput',
@@ -33,4 +33,9 @@ export const General = Template.bind({});
 export const WithKeyboardHighlighting = Template.bind({});
 WithKeyboardHighlighting.args = {
     shouldEnableKeyboardHighlighting: true,
+};
+
+export const Small = Template.bind({});
+Small.args = {
+    size: InputSize.Small,
 };

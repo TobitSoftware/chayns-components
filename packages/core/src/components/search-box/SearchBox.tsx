@@ -45,6 +45,7 @@ export interface SearchBoxRef {
 export interface TagInputSettings {
     onAdd?: TagInputProps['onAdd'];
     onRemove?: TagInputProps['onRemove'];
+    size?: TagInputProps['size'];
     shouldAllowMultiple?: TagInputProps['shouldAllowMultiple'];
     tags?: TagInputProps['tags'];
 }
@@ -968,6 +969,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                                 onRemove={tagInputSettings.onRemove}
                                 placeholder={placeholder}
                                 ref={tagInputRef}
+                                size={tagInputSettings.size}
                                 shouldAllowMultiple={tagInputSettings.shouldAllowMultiple}
                                 shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                                 shouldPreventEnter

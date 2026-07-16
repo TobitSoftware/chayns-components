@@ -171,6 +171,10 @@ export type ContextMenuProps = {
      * @optional
      */
     zIndex?: number;
+    /**
+     * Optional text for the select dialog.
+     */
+    dialogText?: string;
 };
 
 /**
