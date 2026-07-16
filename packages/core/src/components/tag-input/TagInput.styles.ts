@@ -1,11 +1,13 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
+import type { InputSize } from '../input/Input';
 
 type StyledTagInputProps = WithTheme<{
     $shouldChangeColor: boolean;
     $shouldShowKeyboardHighlighting: boolean;
     $shouldShowTagHighlighting: boolean;
+    $size: InputSize;
 }>;
 
 type StyledTagInputTagFocusWrapperProps = {
@@ -16,10 +18,10 @@ type StyledTagInputTagFocusWrapperProps = {
 export const StyledTagInput = styled.div<StyledTagInputProps>`
     display: flex;
     flex-wrap: wrap;
-    min-height: 42px;
-    padding: 5px;
+    min-height: ${({ $size }) => ($size === 'medium' ? '42px' : '32px')};
+    padding: ${({ $size }) => ($size === 'medium' ? '5px' : '4px')};
     align-items: center;
-    gap: 6px;
+    gap: ${({ $size }) => ($size === 'medium' ? '6px' : '4px')};
     background-color: ${({ theme, $shouldChangeColor }: StyledTagInputProps) =>
         theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']};
     border: 1px solid rgba(160, 160, 160, 0.3);
@@ -35,10 +37,14 @@ export const StyledTagInput = styled.div<StyledTagInputProps>`
         `}
 `;
 
-export const StyledTagInputTagWrapper = styled.div`
+type StyledTagInputTagWrapperProps = {
+    $size: InputSize;
+};
+
+export const StyledTagInputTagWrapper = styled.div<StyledTagInputTagWrapperProps>`
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: ${({ $size }) => ($size === 'medium' ? '4px' : '2px')};
 `;
 
 export const StyledTagInputTagFocusWrapper = styled.div<StyledTagInputTagFocusWrapperProps>`
@@ -57,29 +63,40 @@ export const StyledTagInputTagFocusWrapper = styled.div<StyledTagInputTagFocusWr
         `}
 `;
 
-export const StyledTagInputTagWrapperText = styled.p`
+type StyledTagInputTagWrapperTextProps = {
+    $size: InputSize;
+};
+
+export const StyledTagInputTagWrapperText = styled.p<StyledTagInputTagWrapperTextProps>`
     margin: 0;
     flex-grow: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 15px;
+    font-size: ${({ $size }) => ($size === 'medium' ? '15px' : '13px')};
 `;
 
-type StyledTagInputTagInputProps = WithTheme<unknown>;
+type StyledTagInputTagInputProps = WithTheme<{
+    $size: InputSize;
+}>;
 
 export const StyledTagInputTagInput = styled.input<StyledTagInputTagInputProps>`
     border: none;
-    height: 24px;
+    height: ${({ $size }) => ($size === 'medium' ? '24px' : '20px')};
     flex-grow: 1;
     background-color: transparent;
     color: ${({ theme }: StyledTagInputTagInputProps) => theme.text};
+    font-size: ${({ $size }) => ($size === 'medium' ? '15px' : '13px')};
 `;
 
-export const StyledTagInputIconWrapper = styled.div`
+type StyledTagInputIconWrapperProps = {
+    $size: InputSize;
+};
+
+export const StyledTagInputIconWrapper = styled.div<StyledTagInputIconWrapperProps>`
     align-items: baseline;
     display: flex;
     flex: 0 0 auto;
     justify-content: center;
-    margin-left: 5px;
+    margin-left: ${({ $size }) => ($size === 'medium' ? '5px' : '4px')};
 `;

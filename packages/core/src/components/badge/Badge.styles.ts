@@ -42,9 +42,9 @@ export const StyledBadge = styled.div<StyledBadgeProps>`
                     border-radius: ${$borderRadius};
                     color: ${$fontColor ?? theme.text};
                     display: inline-block;
-                    font-size: 0.8rem;
+                    font-size: ${$size?.font ?? '80%'};
                     min-width: ${$minWidth};
-                    padding: 2px 6px;
+                    padding: ${$size?.padding ?? '2px 6px'};
                     line-height: 20px;
                     text-align: center;
                     cursor: ${$cursor};

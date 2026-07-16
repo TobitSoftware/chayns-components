@@ -17,6 +17,8 @@ import { useTheme } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import type { Tag } from '../../types/tagInput';
 import Badge from '../badge/Badge';
+import { BadgeSize } from '../badge/Badge.types';
+import { InputSize } from '../input/Input';
 import Icon from '../icon/Icon';
 import {
     StyledTagInput,
@@ -76,6 +78,10 @@ export type TagInputProps = {
      * The tags that should be displayed.
      */
     tags?: Tag[];
+    /**
+     * The size of the input field.
+     */
+    size?: InputSize;
 };
 
 export interface TagInputRef {
@@ -97,6 +103,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             shouldAllowMultiple = true,
             shouldEnableKeyboardHighlighting,
             shouldPreventEnter,
+            size = InputSize.Medium,
             tags,
         },
         ref,
@@ -313,14 +320,18 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                                 backgroundColor={
                                     isSelected ? ((theme['206'] as string) ?? undefined) : undefined
                                 }
+                                size={
+                                    size === InputSize.Small ? BadgeSize.SMALL : BadgeSize.DEFAULT
+                                }
                             >
-                                <StyledTagInputTagWrapper>
-                                    <StyledTagInputTagWrapperText>
+                                <StyledTagInputTagWrapper $size={size}>
+                                    <StyledTagInputTagWrapperText $size={size}>
                                         {text}
                                     </StyledTagInputTagWrapperText>
                                     {rightElement}
                                     <Icon
                                         icons={['ts-wrong']}
+                                        size={size === InputSize.Small ? 14 : 16}
                                         shouldEnableKeyboardHighlighting={false}
                                         onClick={(event) => {
                                             event.preventDefault();
@@ -344,6 +355,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             shouldShowKeyboardHighlighting,
             theme,
             handleIconClick,
+            size,
         ]);
 
         const shouldShowInput = useMemo(
@@ -357,9 +369,12 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                     $shouldChangeColor={shouldChangeColor}
                     $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                     $shouldShowTagHighlighting={shouldShowTagHighlighting}
+                    $size={size}
                 >
                     {leftElement && (
-                        <StyledTagInputIconWrapper>{leftElement}</StyledTagInputIconWrapper>
+                        <StyledTagInputIconWrapper $size={size}>
+                            {leftElement}
+                        </StyledTagInputIconWrapper>
                     )}
                     {content}
                     {shouldShowInput && (
@@ -370,6 +385,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                             onKeyDown={handleKeyDown}
                             placeholder={tags && tags.length > 0 ? undefined : placeholder}
                             ref={inputRef}
+                            $size={size}
                             value={currentValue}
                         />
                     )}
@@ -388,6 +404,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
                 shouldShowInput,
                 shouldShowKeyboardHighlighting,
                 shouldShowTagHighlighting,
+                size,
                 tags,
             ],
         );
