@@ -4682,6 +4682,18 @@ import { TagInput } from '@chayns-components/core';
 />
 ```
 
+#### Small
+
+```tsx
+<TagInput
+    tags={[
+                { id: 'pizza', text: 'Pizza' },
+                { id: 'nudeln', text: 'Nudeln' },
+            ]}
+    size={InputSize.Small}
+/>
+```
+
 ### Props
 
 No prop documentation available.
