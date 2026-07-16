@@ -469,6 +469,7 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             isInKeyboardNavigationGroup,
             updateActiveListItemUuid,
         });
+        const shouldForceHoverItem = shouldForceHover || isFocusWithinListItem;
 
         useEffect(() => {
             if (
@@ -551,7 +552,7 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
                         leftElements={leftElements}
                         onClick={isClickable ? handleHeadClick : undefined}
                         onLongPress={onLongPress}
-                        shouldForceHover={shouldForceHover}
+                        shouldForceHover={shouldForceHoverItem}
                         rightElements={rightElements}
                         shouldHideImageOrIconBackground={shouldHideImageOrIconBackground}
                         shouldHideIndicator={shouldHideIndicator}
