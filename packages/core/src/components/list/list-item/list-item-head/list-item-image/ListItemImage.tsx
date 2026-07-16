@@ -33,10 +33,6 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
 }) => {
     const handleImageClick = useCallback<MouseEventHandler<HTMLDivElement>>(
         (event) => {
-            if (!shouldOpenImageOnClick) {
-                return;
-            }
-
             event.preventDefault();
             event.stopPropagation();
 
@@ -49,7 +45,7 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
             // @ts-ignore
             void openMedia({ items, startIndex: 0 });
         },
-        [images, shouldOpenImageOnClick],
+        [images],
     );
 
     if (images && images[0]) {
@@ -65,7 +61,7 @@ const ListItemImage: React.FC<ListItemImageProps> = ({
                 images={images}
                 height={40}
                 onImageError={onImageError}
-                onClick={handleImageClick}
+                onClick={shouldOpenImageOnClick ? handleImageClick : undefined}
                 shouldPreventBackground={shouldHideBackground}
                 shouldShowRoundImage={shouldShowRoundImage}
             />
