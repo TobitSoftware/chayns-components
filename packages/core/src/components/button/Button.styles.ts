@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledButtonProps = WithTheme<{
     $hasIcon: boolean;
@@ -12,7 +11,6 @@ type StyledButtonProps = WithTheme<{
     $shouldShowAsSelectButton: boolean;
     $shouldShowWaitCursor?: boolean;
     $effectiveButtonDesign: number;
-    $shouldShowKeyboardHighlighting?: boolean;
 }>;
 
 export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
@@ -73,15 +71,6 @@ export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
     position: relative;
     user-select: none;
     width: fit-content;
-
-    ${({ $shouldShowKeyboardHighlighting }) =>
-        $shouldShowKeyboardHighlighting &&
-        css`
-            &:focus-visible {
-                transition: none;
-                ${keyboardFocusHighlightingRingCss}
-            }
-        `}
 
     ${({ $hasIcon, $hasChildren, $shouldShowWaitCursor }) => {
         if ($shouldShowWaitCursor) {

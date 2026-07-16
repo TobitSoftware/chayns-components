@@ -7,6 +7,7 @@ import React, {
     ReactNode,
     SyntheticEvent,
     useCallback,
+    useRef,
 } from 'react';
 import {
     StyledCornerElement,
@@ -17,6 +18,7 @@ import {
 import CareOfClipPath from './clip-paths/CareOfClipPath';
 import { useUuid } from '../../hooks/uuid';
 import SecondImageClipPath from './clip-paths/SecondImageClipPath';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 
@@ -125,6 +127,7 @@ const GroupedImage: FC<GroupedImageProps> = ({
     onImageError,
     shouldEnableKeyboardHighlighting,
 }) => {
+    const groupedImageRef = useRef<HTMLDivElement>(null);
     const colorScheme = useColorScheme();
     const shouldEnableKeyboardHighlightingEffective =
         shouldEnableKeyboardHighlighting ?? colorScheme?.shouldEnableKeyboardHighlighting ?? false;
@@ -139,6 +142,10 @@ const GroupedImage: FC<GroupedImageProps> = ({
     const isClickable = typeof onClick === 'function';
     const isKeyboardFocusable = isClickable && shouldEnableKeyboardHighlightingEffective;
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(isKeyboardFocusable);
+    useFocusRingPortal(groupedImageRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        shape: shouldShowRoundImage ? 'circle' : 'rectangle',
+    });
 
     const handleKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
         (event) => {
@@ -188,12 +195,12 @@ const GroupedImage: FC<GroupedImageProps> = ({
 
     return (
         <StyledGroupedImage
+            ref={groupedImageRef}
             onClick={isClickable ? onClick : undefined}
             onKeyDown={isKeyboardFocusable ? handleKeyDown : undefined}
             tabIndex={isKeyboardFocusable ? 0 : -1}
             role={isClickable ? 'button' : undefined}
             $height={height}
-            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
         >
             {hasCornerImage && (
                 <CareOfClipPath

@@ -1,9 +1,5 @@
 import styled, { css } from 'styled-components';
 import { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import {
-    keyboardFocusHighlightingCircleRingCss,
-    keyboardFocusHighlightingRingCss,
-} from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledContextMenuProps = WithTheme<{
     $isActive: boolean;
@@ -44,43 +40,12 @@ export const StyledContextMenu = styled.span<StyledContextMenuProps>`
             }
         `}
 
-    ${({
-        $shouldShowWrapperKeyboardHighlighting,
-        $shouldUseDefaultTriggerStyles,
-    }: StyledContextMenuProps) =>
+    ${({ $shouldShowWrapperKeyboardHighlighting }: StyledContextMenuProps) =>
         $shouldShowWrapperKeyboardHighlighting &&
-        ($shouldUseDefaultTriggerStyles
-            ? css`
-                  &:focus-visible {
-                      outline: none;
-                      box-shadow: none;
-                  }
-
-                  &:focus-visible > .beta-chayns-icon {
-                      position: relative;
-                      color: inherit;
-                  }
-
-                  &:focus-visible > .beta-chayns-icon::after {
-                      ${keyboardFocusHighlightingCircleRingCss};
-                      content: '';
-                      position: absolute;
-                      top: 50%;
-                      left: 50%;
-                      width: calc(100% + 8px);
-                      height: calc(100% + 8px);
-                      transform: translate(-50%, -50%);
-                      pointer-events: none;
-                  }
-              `
-            : css`
-                  &:focus-visible {
-                      outline: none;
-                      box-shadow: none;
-                  }
-
-                  &:focus-visible > * {
-                      ${keyboardFocusHighlightingRingCss}
-                  }
-              `)}
+        css`
+            &:focus-visible {
+                outline: none;
+                box-shadow: none;
+            }
+        `}
 `;

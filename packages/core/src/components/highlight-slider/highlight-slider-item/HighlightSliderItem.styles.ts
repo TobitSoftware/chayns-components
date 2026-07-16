@@ -1,13 +1,8 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { motion } from 'motion/react';
 import { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../../../utils/keyboardFocusHighlighting.styles';
 
-type StyledHighlightSliderItemProps = {
-    $shouldShowKeyboardHighlighting?: boolean;
-};
-
-export const StyledHighlightSliderItem = styled.div<StyledHighlightSliderItemProps>`
+export const StyledHighlightSliderItem = styled.div`
     overflow: hidden;
     position: relative;
     width: 100%;
@@ -15,13 +10,9 @@ export const StyledHighlightSliderItem = styled.div<StyledHighlightSliderItemPro
     border-radius: 4px;
     cursor: pointer;
 
-    ${({ $shouldShowKeyboardHighlighting }) =>
-        $shouldShowKeyboardHighlighting &&
-        css`
-            &:focus-visible {
-                ${keyboardFocusHighlightingRingCss}
-            }
-        `}
+    &:focus-visible {
+        outline: none;
+    }
 `;
 type StyledHighlightSliderItemProgressProps = WithTheme<{ $backgroundColor: string }>;
 

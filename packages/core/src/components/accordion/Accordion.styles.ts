@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledMotionAccordionProps = WithTheme<{
     $isOpen: boolean;
@@ -125,7 +124,6 @@ export const StyledMotionAccordion = styled(motion.div)<StyledMotionAccordionPro
         css`
             &:focus-visible {
                 transition: none;
-                ${keyboardFocusHighlightingRingCss};
             }
         `};
 `;

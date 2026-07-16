@@ -1,12 +1,10 @@
 import { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledGridImageProps = WithTheme<{
     $background?: CSSProperties['background'];
     $shouldShowRoundImage?: boolean;
-    $shouldShowKeyboardHighlighting?: boolean;
     $size: number;
 }>;
 
@@ -22,13 +20,9 @@ export const StyledGridImage = styled.div<StyledGridImageProps>`
     width: ${({ $size }) => $size}px;
     flex: 0 0 auto;
 
-    ${({ $shouldShowKeyboardHighlighting }) =>
-        $shouldShowKeyboardHighlighting &&
-        css`
-            &:focus-visible {
-                ${keyboardFocusHighlightingRingCss}
-            }
-        `}
+    &:focus-visible {
+        outline: none;
+    }
 `;
 
 type StyledGridLeftImageProps = {

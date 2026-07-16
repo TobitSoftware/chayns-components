@@ -10,6 +10,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { useUuid } from '../../hooks/uuid';
 import { getHeightOfSingleTextLine } from '../../utils/calculate';
@@ -98,6 +99,7 @@ const Checkbox: FC<CheckboxProps> = ({
     const [checkboxTop, setCheckboxTop] = useState<number | undefined>(undefined);
 
     const checkboxBoxRef = useRef<HTMLLabelElement>(null);
+    const checkboxInputRef = useRef<HTMLInputElement>(null);
     const checkboxRootRef = useRef<HTMLDivElement>(null);
 
     const handleChange = useCallback(
@@ -128,11 +130,16 @@ const Checkbox: FC<CheckboxProps> = ({
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlighting && !isDisabled,
     );
+    useFocusRingPortal(checkboxInputRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        overlayRef: checkboxBoxRef,
+        borderRadius: shouldShowAsSwitch ? (borderRadius ?? '100px') : borderRadius,
+    });
 
     return (
         <StyledCheckbox ref={checkboxRootRef}>
             <StyledCheckboxInput
-                $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                ref={checkboxInputRef}
                 checked={isChecked}
                 disabled={isDisabled}
                 id={uuid}

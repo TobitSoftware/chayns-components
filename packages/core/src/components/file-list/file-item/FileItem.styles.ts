@@ -1,8 +1,4 @@
 import styled from 'styled-components';
-import {
-    keyboardFocusHighlightingCircleRingCss,
-    keyboardFocusHighlightingRingCss,
-} from '../../../utils/keyboardFocusHighlighting.styles';
 
 export const StyledFileItem = styled.div``;
 export const StyledFileItemIcon = styled.div`
@@ -17,15 +13,10 @@ export const StyledFileItemIcon = styled.div`
     &:focus-visible {
         outline: none;
         color: inherit;
-        ${keyboardFocusHighlightingCircleRingCss};
     }
 `;
 
-export const StyledFileItemKeyboardWrapper = styled.div`
-    &:focus-visible {
-        ${keyboardFocusHighlightingRingCss}
-    }
-`;
+export const StyledFileItemKeyboardWrapper = styled.div``;
 
 export const StyledFileItemActions = styled.span`
     display: flex;
@@ -35,8 +26,4 @@ export const StyledFileItemActions = styled.span`
 
 export const StyledFileItemRemoveButton = styled.span`
     display: inline-flex;
-
-    &:focus-visible {
-        ${keyboardFocusHighlightingRingCss}
-    }
 `;

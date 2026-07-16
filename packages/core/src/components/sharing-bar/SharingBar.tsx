@@ -1,4 +1,5 @@
 import React, { FC, KeyboardEventHandler, MouseEventHandler, useCallback, useRef } from 'react';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
@@ -45,9 +46,11 @@ const SharingBar: FC<SharingBarProps> = ({
         shouldEnableKeyboardHighlighting ?? colorScheme?.shouldEnableKeyboardHighlighting ?? false;
 
     const contextMenuRef = useRef<{ hide: VoidFunction; show: VoidFunction }>(null);
+    const sharingBarRef = useRef<HTMLDivElement>(null);
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlightingEffective,
     );
+    useFocusRingPortal(sharingBarRef, { isEnabled: shouldShowKeyboardHighlighting });
 
     const showContextMenu = useCallback(() => {
         contextMenuRef.current?.show();
@@ -82,6 +85,7 @@ const SharingBar: FC<SharingBarProps> = ({
 
     return (
         <StyledSharingBar
+            ref={sharingBarRef}
             onClick={handleSharingBarClick}
             onKeyDown={shouldEnableKeyboardHighlightingEffective ? handleKeyDown : undefined}
             tabIndex={shouldEnableKeyboardHighlightingEffective ? 0 : undefined}

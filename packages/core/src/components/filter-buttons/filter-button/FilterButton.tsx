@@ -5,8 +5,11 @@ import React, {
     MouseEvent,
     useCallback,
     useMemo,
+    useRef,
+    type MutableRefObject,
 } from 'react';
 import type { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';
+import { useFocusRingPortal } from '../../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../../hooks/useKeyboardFocusHighlighting';
 import Icon from '../../icon/Icon';
 import {
@@ -53,9 +56,12 @@ const FilterButton: FC<FilterButtonProps> = ({
     buttonRef,
     onSelect,
 }) => {
+    const filterButtonRef = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement | null>;
+
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlighting && !isDisabled,
     );
+    useFocusRingPortal(filterButtonRef, { isEnabled: shouldShowKeyboardHighlighting });
 
     const handleClick = useCallback(
         (event: MouseEvent) => {
@@ -104,7 +110,10 @@ const FilterButton: FC<FilterButtonProps> = ({
     return useMemo(
         () => (
             <StyledFilterButtonItem
-                ref={buttonRef}
+                ref={(element) => {
+                    filterButtonRef.current = element;
+                    buttonRef?.(element);
+                }}
                 $shape={shape}
                 $isSelected={isSelected}
                 $isDisabled={isDisabled}

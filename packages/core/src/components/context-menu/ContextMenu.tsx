@@ -28,6 +28,7 @@ import {
 import { SelectDialogResult } from '../../types/general';
 import { getActiveItemIndex, getDefaultFocusedIndex, selectItem } from './ContextMenu.utils';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 
 const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
     (
@@ -73,6 +74,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
         const contextMenuContentRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<HTMLSpanElement>(null);
+        const contextMenuFocusRingRef = useRef<HTMLElement | null>(null);
         const shouldSkipNextContextMenuOpenRef = useRef(false);
         const shouldPreventNextNativeContextMenuRef = useRef(false);
 
@@ -83,6 +85,19 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         const shouldShowWrapperKeyboardHighlighting =
             shouldShowKeyboardHighlighting && shouldUseFocusableWrapper;
         const shouldUseKeyboardFocusableWrapper = shouldUseFocusableWrapper && !shouldDisableClick;
+        useFocusRingPortal(contextMenuRef, {
+            isEnabled: shouldShowWrapperKeyboardHighlighting,
+            overlayRef: contextMenuFocusRingRef,
+            shape: shouldUseDefaultTriggerStyles ? 'circle' : 'rectangle',
+            padding: shouldUseDefaultTriggerStyles ? 4 : 0,
+        });
+
+        useEffect(() => {
+            contextMenuFocusRingRef.current =
+                contextMenuRef.current?.firstElementChild instanceof HTMLElement
+                    ? contextMenuRef.current.firstElementChild
+                    : contextMenuRef.current;
+        }, [children]);
 
         useEffect(() => {
             if (isContentShown) {

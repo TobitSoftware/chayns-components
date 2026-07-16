@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 import type { DisplayState } from './AmountControl';
 
 type StyledAmountControlProps = WithTheme<{
@@ -29,7 +28,6 @@ type StyledAmountControlInputProps = WithTheme<{
     $shouldShowIcon: boolean;
     $hasFocus: boolean;
     $shouldShowWideInput: boolean;
-    $shouldShowKeyboardHighlighting?: boolean;
 }>;
 
 export const StyledInputWrapper = styled.div<WithTheme<unknown>>`
@@ -44,14 +42,6 @@ export const StyledAmountControlInput = styled.input<StyledAmountControlInputPro
     width: ${({ $shouldShowWideInput }) => ($shouldShowWideInput ? 90 : 55)}px;
     text-align: center;
     cursor: ${({ $hasFocus }) => ($hasFocus ? 'text' : 'pointer')};
-
-    ${({ $shouldShowKeyboardHighlighting }) =>
-        $shouldShowKeyboardHighlighting &&
-        css`
-            &:focus-visible {
-                ${keyboardFocusHighlightingRingCss}
-            }
-        `}
 
     ${({ $displayState }) =>
         $displayState === 'maxAmount' &&
@@ -97,7 +87,6 @@ export const StyledAmountControlPseudoInput = styled.div<StyledAmountControlPseu
 type StyledAmountControlButtonProps = WithTheme<{
     $isDisabled: boolean;
     $color?: string;
-    $shouldShowKeyboardHighlighting?: boolean;
 }>;
 
 export const StyledMotionAmountControlButton = styled(
@@ -110,14 +99,6 @@ export const StyledMotionAmountControlButton = styled(
     justify-content: center;
     //overflow: hidden;
     transition: background-color 0.2s ease-in-out;
-
-    ${({ $shouldShowKeyboardHighlighting }: StyledAmountControlButtonProps) =>
-        $shouldShowKeyboardHighlighting &&
-        css`
-            &:focus-visible {
-                ${keyboardFocusHighlightingRingCss}
-            }
-        `};
 
     ${({ $isDisabled }) =>
         $isDisabled &&

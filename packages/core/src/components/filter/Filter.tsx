@@ -39,6 +39,7 @@ import ContextMenu from '../context-menu/ContextMenu';
 import type { ContextMenuItem, ContextMenuRef } from '../context-menu/ContextMenu.types';
 import Checkbox from '../checkbox/Checkbox';
 import { InputRef } from '../input/Input';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 
@@ -46,6 +47,51 @@ export interface FilterRightIcon {
     icons: string[];
     onClick: VoidFunction;
 }
+
+type FilterIconButtonProps = FilterRightIcon & {
+    isOpen: boolean;
+    shouldEnableKeyboardHighlighting: boolean;
+    shouldShowKeyboardHighlighting: boolean;
+    shouldShowRoundedHoverEffect: boolean;
+};
+
+const FilterIconButton: React.FC<FilterIconButtonProps> = ({
+    icons,
+    onClick,
+    isOpen,
+    shouldEnableKeyboardHighlighting,
+    shouldShowKeyboardHighlighting,
+    shouldShowRoundedHoverEffect,
+}) => {
+    const iconRef = useRef<HTMLDivElement | null>(null);
+
+    useFocusRingPortal(iconRef, { isEnabled: shouldShowKeyboardHighlighting });
+
+    const handleKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onClick();
+            }
+        },
+        [onClick],
+    );
+
+    return (
+        <StyledFilterIcon
+            ref={iconRef}
+            onClick={onClick}
+            onKeyDown={handleKeyDown}
+            $isOpen={isOpen}
+            role={shouldEnableKeyboardHighlighting ? 'button' : undefined}
+            tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
+            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+            $shouldShowRoundedHoverEffect={shouldShowRoundedHoverEffect}
+        >
+            <Icon icons={icons} size={18} />
+        </StyledFilterIcon>
+    );
+};
 
 //
 export type FilterProps = {
@@ -98,6 +144,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
         const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
             shouldEnableKeyboardHighlightingEffective,
         );
+        useFocusRingPortal(iconRef, { isEnabled: shouldShowKeyboardHighlighting });
 
         const type = useMemo(() => {
             if (
@@ -313,33 +360,21 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                             <StyledFilterIconWrapper>
                                 {rightIcons &&
                                     rightIcons.map(({ icons: rIcons, onClick }) => (
-                                        <StyledFilterIcon
+                                        <FilterIconButton
                                             key={rIcons.join('-')}
+                                            icons={rIcons}
                                             onClick={onClick}
-                                            onKeyDown={(event) => {
-                                                if (event.key === 'Enter' || event.key === ' ') {
-                                                    event.preventDefault();
-                                                    onClick();
-                                                }
-                                            }}
-                                            $isOpen={false}
-                                            role={
+                                            isOpen={false}
+                                            shouldEnableKeyboardHighlighting={
                                                 shouldEnableKeyboardHighlightingEffective
-                                                    ? 'button'
-                                                    : undefined
                                             }
-                                            tabIndex={
-                                                shouldEnableKeyboardHighlightingEffective ? 0 : -1
-                                            }
-                                            $shouldShowKeyboardHighlighting={
+                                            shouldShowKeyboardHighlighting={
                                                 shouldShowKeyboardHighlighting
                                             }
-                                            $shouldShowRoundedHoverEffect={
+                                            shouldShowRoundedHoverEffect={
                                                 shouldShowRoundedHoverEffect
                                             }
-                                        >
-                                            <Icon icons={rIcons} size={18} />
-                                        </StyledFilterIcon>
+                                        />
                                     ))}
                                 {iconElement}
                             </StyledFilterIconWrapper>

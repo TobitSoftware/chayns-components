@@ -16,11 +16,13 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { useTheme } from 'styled-components';
 import { useUuid } from '../../../hooks/uuid';
 import type { IListItemRightElements } from '../../../types/list';
 import type { InputProps } from '../../input/Input';
 import { AccordionContext } from '../../accordion/Accordion';
 import AreaContextProvider, { AreaContext } from '../../area-provider/AreaContextProvider';
+import { type Theme, useColorScheme } from '../../color-scheme-provider/ColorSchemeProvider';
 import { ListContext } from '../List';
 import {
     handleHorizontalArrowNavigation,
@@ -33,6 +35,7 @@ import ListItemHead from './list-item-head/ListItemHead';
 import { StyledListItem, StyledListItemTooltip } from './ListItem.styles';
 import Tooltip from '../../tooltip/Tooltip';
 import { useIsInsideDialog } from '../../../hooks/element';
+import { useFocusRingPortal } from '../../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../../hooks/useKeyboardFocusHighlighting';
 import { useListItemFocus } from './useListItemFocus';
 
@@ -282,9 +285,15 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             activeListItemUuid,
             updateActiveListItemUuid,
         } = useContext(ListContext);
+        const colorScheme = useColorScheme();
+        const theme = useTheme() as Theme;
+        const isInsideListContext = typeof listGroupUuid === 'string';
 
         const shouldEnableKeyboardHighlighting =
-            shouldEnableKeyboardHighlightingProp ?? shouldEnableKeyboardHighlightingContext;
+            shouldEnableKeyboardHighlightingProp ??
+            (isInsideListContext
+                ? shouldEnableKeyboardHighlightingContext
+                : (colorScheme?.shouldEnableKeyboardHighlighting ?? false));
 
         const { isWrapped: isParentAccordionWrapped } = useContext(AccordionContext);
 
@@ -372,6 +381,10 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
         const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
             shouldEnableKeyboardHighlighting,
         );
+        useFocusRingPortal(listItemRef, {
+            isEnabled: shouldShowKeyboardHighlighting,
+            borderRadius: `${theme.cardBorderRadius}px`,
+        });
 
         const isInKeyboardNavigationGroup =
             shouldEnableKeyboardHighlighting &&

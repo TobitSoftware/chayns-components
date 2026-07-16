@@ -24,6 +24,7 @@ import {
 } from './Truncation.styles';
 import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
 import textStrings from '../../constants/textStrings';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 export type TruncationProps = {
@@ -94,6 +95,7 @@ const Truncation: FC<TruncationProps> = ({
     }, []);
 
     const parentRef = useRef<HTMLDivElement>(null);
+    const clampRef = useRef<HTMLAnchorElement>(null);
     const pseudoChildrenRef = useRef<HTMLDivElement>(null);
     const childrenRef = useRef<HTMLDivElement>(null);
     const originalChildrenRef = useRef<HTMLDivElement>(null);
@@ -101,6 +103,8 @@ const Truncation: FC<TruncationProps> = ({
     const isAnimating = useRef(false);
     const hasSizeRecentlyChanged = useRef(false);
     const canResetSizeChanged = useRef(true);
+
+    useFocusRingPortal(clampRef, { isEnabled: shouldShowKeyboardHighlighting && showClamp });
 
     useEffect(() => {
         if (typeof isOpen === 'boolean') {
@@ -312,10 +316,9 @@ const Truncation: FC<TruncationProps> = ({
                 {showClamp && (
                     <StyledTruncationClampWrapper $position={clampPosition}>
                         <TextstringProvider libraryName="@chayns-components-core">
-                            <StyledTruncationClampFocusWrapper
-                                $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
-                            >
+                            <StyledTruncationClampFocusWrapper>
                                 <StyledTruncationClamp
+                                    ref={clampRef}
                                     onClick={handleClampClick}
                                     onKeyDown={handleClampKeyDown}
                                     role="button"

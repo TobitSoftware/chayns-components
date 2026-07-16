@@ -5,8 +5,10 @@ import React, {
     MouseEventHandler,
     MouseEvent,
     useCallback,
+    useRef,
     useState,
 } from 'react';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 import {
@@ -51,6 +53,7 @@ const GridImage: FC<GridImageProps> = ({
     onClick,
     shouldEnableKeyboardHighlighting,
 }) => {
+    const gridImageRef = useRef<HTMLDivElement>(null);
     const colorScheme = useColorScheme();
     const shouldEnableKeyboardHighlightingEffective =
         shouldEnableKeyboardHighlighting ?? colorScheme?.shouldEnableKeyboardHighlighting ?? false;
@@ -62,6 +65,10 @@ const GridImage: FC<GridImageProps> = ({
     const isClickable = typeof onClick === 'function';
     const isKeyboardFocusable = isClickable && shouldEnableKeyboardHighlightingEffective;
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(isKeyboardFocusable);
+    useFocusRingPortal(gridImageRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        shape: shouldShowRoundImage ? 'circle' : 'rectangle',
+    });
 
     const handleKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
         (event) => {
@@ -88,9 +95,9 @@ const GridImage: FC<GridImageProps> = ({
 
     return (
         <StyledGridImage
+            ref={gridImageRef}
             $background={background}
             $shouldShowRoundImage={shouldShowRoundImage}
-            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
             $size={size}
             onClick={isClickable ? onClick : undefined}
             onKeyDown={isKeyboardFocusable ? handleKeyDown : undefined}

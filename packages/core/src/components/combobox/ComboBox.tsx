@@ -35,6 +35,7 @@ import { DropdownDirection } from '../../types/dropdown';
 import { useElementSize } from '../../hooks/element';
 import { ComboBoxProps, ComboBoxRef, ComboBoxSize, IComboBoxItem } from './ComboBox.types';
 import { getComboBoxWidthResult } from './ComboBox.utils';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
@@ -142,6 +143,12 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
         const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
             shouldEnableKeyboardHighlighting && !isDisabled,
         );
+        useFocusRingPortal(comboBoxHeaderRef, {
+            isEnabled: shouldShowKeyboardHighlighting && typeof inputValue !== 'string',
+        });
+        useFocusRingPortal(comboBoxInputRef, {
+            isEnabled: shouldShowKeyboardHighlighting && typeof inputValue === 'string',
+        });
 
         const shouldDisableActions = useMemo(() => {
             if (!selectedItem) {
@@ -536,7 +543,6 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                         $isDisabled={isDisabled}
                         $shouldChangeColor={shouldChangeColor}
                         $shouldShowBigImage={shouldShowBigImage}
-                        $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                         onKeyDown={handleHeaderKeyDown}
                         tabIndex={!isDisabled && typeof inputValue !== 'string' ? 0 : undefined}
                         role={!isDisabled && typeof inputValue !== 'string' ? 'button' : undefined}
