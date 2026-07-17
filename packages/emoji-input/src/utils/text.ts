@@ -20,6 +20,36 @@ interface ConvertHTMLToTextOptions {
 const BLOCK_ELEMENT_TAG_NAMES = new Set(['DIV', 'P']);
 const BLOCK_SEPARATOR = '<br>';
 
+const isMeaningfulTextNode = (node: ChildNode) =>
+    node.nodeType !== Node.TEXT_NODE || (node.textContent?.length ?? 0) > 0;
+
+const isBreakElement = (node: ChildNode) =>
+    node.nodeType === Node.ELEMENT_NODE && (node as HTMLElement).tagName === 'BR';
+
+const serializeBlockElementToText = (element: HTMLElement) => {
+    const childNodes = Array.from(element.childNodes).filter(isMeaningfulTextNode);
+
+    if (childNodes.length === 0) {
+        return '';
+    }
+
+    if (childNodes.length === 1 && isBreakElement(childNodes[0]!)) {
+        return '';
+    }
+
+    let serializedText = serializeHTMLToText(childNodes);
+
+    if (
+        childNodes.length > 1 &&
+        isBreakElement(childNodes[0]!) &&
+        serializedText.startsWith(BLOCK_SEPARATOR)
+    ) {
+        serializedText = serializedText.slice(BLOCK_SEPARATOR.length);
+    }
+
+    return serializedText;
+};
+
 const serializeHTMLNodeToText = (node: ChildNode): string => {
     if (node.nodeType === Node.TEXT_NODE) {
         return node.textContent ?? '';
@@ -36,13 +66,13 @@ const serializeHTMLNodeToText = (node: ChildNode): string => {
     }
 
     if (BLOCK_ELEMENT_TAG_NAMES.has(element.tagName)) {
-        return serializeHTMLToText(element.childNodes);
+        return serializeBlockElementToText(element);
     }
 
     return element.outerHTML;
 };
 
-const serializeHTMLToText = (nodes: NodeListOf<ChildNode> | ChildNode[]) => {
+export const serializeHTMLToText = (nodes: NodeListOf<ChildNode> | ChildNode[]) => {
     const serializedNodes = Array.from(nodes);
 
     let result = '';
