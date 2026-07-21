@@ -1,7 +1,8 @@
 import { format } from 'prettier/standalone';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useColorScheme } from '@chayns-components/core';
 import {
     CodeHighlighterLanguage,
     CodeHighlighterTheme,
@@ -71,7 +72,7 @@ export type CodeHighlighterProps = {
 };
 
 const CodeHighlighter: FC<CodeHighlighterProps> = ({
-    theme = CodeHighlighterTheme.Dark,
+    theme,
     code,
     copyButtonText,
     language,
@@ -81,9 +82,18 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     shouldShowLineNumbers = false,
     shouldWrapLines,
 }) => {
+    const colorScheme = useColorScheme();
+
     const [width, setWidth] = useState(0);
+    const [formattedCode, setFormattedCode] = useState(code);
 
     const ref = useRef<HTMLDivElement>(null);
+
+    const resolvedTheme =
+        theme ??
+        (colorScheme?.theme.colorMode === 'dark'
+            ? CodeHighlighterTheme.Dark
+            : CodeHighlighterTheme.Light);
 
     useEffect(() => {
         addScrollbarClassToPre({ root: ref.current, className: 'chayns-scrollbar' });
@@ -143,23 +153,41 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
         [],
     );
 
-    const formattedCode = useMemo(() => {
-        if (language) {
-            void getParserForLanguage(language).then((config) => {
-                if (shouldFormatCode && config) {
-                    try {
-                        return format(code, config) as unknown as string;
-                    } catch (error) {
-                        if (typeof onFormatError !== 'undefined') onFormatError(error);
-                    }
-                }
+    const syntaxHighlighterStyle = useMemo(
+        () => ({
+            padding: '0 15px 15px',
+        }),
+        [],
+    );
 
-                return code;
-            });
+    useEffect(() => {
+        let isCurrent = true;
+
+        if (!shouldFormatCode) {
+            setFormattedCode(code);
+
+            return () => {
+                isCurrent = false;
+            };
         }
 
-        return code;
-    }, [code, language, shouldFormatCode, onFormatError]);
+        void getParserForLanguage(language).then((config) => {
+            if (!config || !isCurrent) {
+                return;
+            }
+
+            try {
+                setFormattedCode(format(code, config) as unknown as string);
+            } catch (error) {
+                onFormatError?.(error);
+                setFormattedCode(code);
+            }
+        });
+
+        return () => {
+            isCurrent = false;
+        };
+    }, [code, language, onFormatError, shouldFormatCode]);
 
     useEffect(() => {
         const elements = document.getElementsByClassName('linenumber');
@@ -177,20 +205,29 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
     return useMemo(
         () => (
-            <StyledCodeHighlighter $shouldWrapLines={shouldWrapLines} $codeTheme={theme} ref={ref}>
-                <StyledCodeHighlighterHeader $codeTheme={theme}>
-                    <StyledCodeHighlighterFileName $codeTheme={theme}>
+            <StyledCodeHighlighter
+                $shouldWrapLines={shouldWrapLines}
+                $codeTheme={resolvedTheme}
+                ref={ref}
+            >
+                <StyledCodeHighlighterHeader $codeTheme={resolvedTheme}>
+                    <StyledCodeHighlighterFileName $codeTheme={resolvedTheme}>
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                         {/* @ts-ignore */}
                         <tw-ignore>{formatLanguage(language)}</tw-ignore>
                     </StyledCodeHighlighterFileName>
-                    <CopyToClipboard text={code} theme={theme} copyButtonText={copyButtonText} />
                 </StyledCodeHighlighterHeader>
+                <CopyToClipboard
+                    text={code}
+                    theme={resolvedTheme}
+                    copyButtonText={copyButtonText}
+                />
                 <SyntaxHighlighter
+                    customStyle={syntaxHighlighterStyle}
                     language={language ?? ''}
                     lineNumberStyle={lineNumberStyle}
                     showLineNumbers={shouldShowLineNumbers}
-                    style={theme === CodeHighlighterTheme.Dark ? oneDark : oneLight}
+                    style={resolvedTheme === CodeHighlighterTheme.Dark ? oneDark : oneLight}
                     wrapLines
                     wrapLongLines={shouldWrapLines}
                     lineProps={lineWrapper}
@@ -201,11 +238,12 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
         ),
         [
             shouldWrapLines,
-            theme,
+            resolvedTheme,
             language,
             code,
             copyButtonText,
             lineNumberStyle,
+            syntaxHighlighterStyle,
             shouldShowLineNumbers,
             lineWrapper,
             formattedCode,

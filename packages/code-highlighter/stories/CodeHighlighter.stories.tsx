@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 import CodeHighlighter from '../src/components/code-highlighter/CodeHighlighter';
+import { CodeHighlighterTheme } from '../src/types/codeHighlighter';
 
 export default {
     title: 'CodeHighlighter/CodeHighlighter',
@@ -23,6 +24,9 @@ export const WithMarkdown = Template.bind({});
 export const WithGraphQL = Template.bind({});
 export const WithYaml = Template.bind({});
 export const WithLineBreak = Template.bind({});
+export const StickyHeader = Template.bind({});
+export const Light = Template.bind({});
+export const Dark = Template.bind({});
 
 General.args = {
     code: `import React from 'react';
@@ -171,4 +175,23 @@ WithLineBreak.args = {
     code: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed rhoncus nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Donec semper ante quis molestie vulputate. Praesent facilisis auctor turpis. Duis sodales dictum sem, id aliquet nisi faucibus egestas. Morbi volutpat dapibus feugiat.',
     language: '',
     shouldWrapLines: true,
+};
+
+StickyHeader.args = {
+    code: Array.from({ length: 100 }, (_, index) => `console.log('Zeile ${index + 1}');`).join(
+        '\n',
+    ),
+    language: 'typescript',
+};
+
+Light.args = {
+    code: General.args?.code,
+    language: 'tsx',
+    theme: CodeHighlighterTheme.Light,
+};
+
+Dark.args = {
+    code: General.args?.code,
+    language: 'tsx',
+    theme: CodeHighlighterTheme.Dark,
 };
