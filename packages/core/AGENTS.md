@@ -1,8 +1,8 @@
 # @chayns-components/core
 
-React component package providing 46 documented components for chayns applications.
+React component package providing 47 documented components for chayns applications.
 
-Documented components: `Accordion`, `AmountControl`, `AnimatedNumber`, `Badge`, `Button`, `Checkbox`, `ComboBox`, `ContentCard`, `ContextMenu`, `ExpandableContent`, `FileInput`, `FileList`, `FileSelect`, `Filter`, `FilterButtons`, `GridImage`, `GroupedImage`, `HighlightSlider`, `Icon`, `Input`, `List`, `Masonry`, `MentionFinder`, `MultiActionButton`, `NumberInput`, `Popup`, `ProgressBar`, `RadioButton`, `ScrollView`, `SearchBox`, `SearchInput`, `SelectButton`, `SetupWizard`, `SetupWizardItem`, `SharingBar`, `SharingButton`, `Signature`, `Skeleton`, `Slider`, `SliderButton`, `SmallWaitCursor`, `TagInput`, `TextArea`, `Tooltip`, `Truncation`, `VerificationBadge`.
+Documented components: `Accordion`, `AmountControl`, `AnimatedNumber`, `Badge`, `Button`, `Checkbox`, `ComboBox`, `ContentCard`, `ContextMenu`, `CopyableContent`, `ExpandableContent`, `FileInput`, `FileList`, `FileSelect`, `Filter`, `FilterButtons`, `GridImage`, `GroupedImage`, `HighlightSlider`, `Icon`, `Input`, `List`, `Masonry`, `MentionFinder`, `MultiActionButton`, `NumberInput`, `Popup`, `ProgressBar`, `RadioButton`, `ScrollView`, `SearchBox`, `SearchInput`, `SelectButton`, `SetupWizard`, `SetupWizardItem`, `SharingBar`, `SharingButton`, `Signature`, `Skeleton`, `Slider`, `SliderButton`, `SmallWaitCursor`, `TagInput`, `TextArea`, `Tooltip`, `Truncation`, `VerificationBadge`.
 
 ## Import
 
@@ -27,6 +27,7 @@ import { Accordion, AmountControl, AnimatedNumber } from '@chayns-components/cor
 - `ComboBox`
 - `ContentCard`
 - `ContextMenu`
+- `CopyableContent`
 - `ExpandableContent`
 - `FileInput`
 - `FileList`
@@ -1459,6 +1460,90 @@ No additional exported types documented.
 ### Usage Notes
 
 - Import `ContextMenu` directly from `@chayns-components/core` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+
+### Anti Patterns
+
+- Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+## CopyableContent
+
+`CopyableContent` is exported by `@chayns-components/core` and should be imported from the public package entry point.
+
+### Import
+
+```ts
+import { CopyableContent } from '@chayns-components/core';
+```
+
+### Examples
+
+#### Short
+
+```tsx
+<CopyableContent
+    content={'Vielen Dank für eure Rückmeldungen. Der Termin für das gemeinsame Sommerfest steht nun fest: Samstag, 22. August, ab 15 Uhr.'}
+/>
+```
+
+#### Long
+
+```tsx
+<CopyableContent
+    content={Array.from(
+            { length: 8 },
+            (_, index) =>
+                `### Abschnitt ${index + 1}\n\nDas Planungsteam hat die Hinweise aus den Gesprächen aufgenommen und bereitet jetzt die nächsten Schritte vor. Bis Ende der Woche sammeln wir noch Rückmeldungen, damit alle Beteiligten zuverlässig informiert sind.`,
+        ).join('\n\n')}
+/>
+```
+
+#### Markdown
+
+```tsx
+<CopyableContent
+    content={`# Projekt-Update: Sommerfest
+
+    Die Vorbereitungen für das Sommerfest gehen in die letzte Runde. Das Organisationsteam hat die Rückmeldungen aus den einzelnen Gruppen zusammengeführt und den Ablauf für den Nachmittag angepasst.
+
+    ## Was bereits feststeht
+
+    - Der Aufbau beginnt am Freitag um 16:30 Uhr am Bürgerhaus.
+    - Für Kinder gibt es eine Kreativstation, eine kleine Rallye und einen ruhigen Rückzugsbereich.
+    - Getränke und vegetarische Speisen werden vor Ort angeboten.
+
+    > Bitte gebt Rückmeldung, falls ihr beim Aufbau helfen könnt oder besondere Anforderungen an die Verpflegung habt.
+
+    Weitere Informationen stehen im [gemeinsamen Ablaufplan](https://example.com/veranstaltungen/sommerfest-2026/ablauf-und-helferinnen).`}
+/>
+```
+
+#### Long Url
+
+```tsx
+<CopyableContent
+    content={'Die vollständige Materialliste findet ihr unter https://example.com/veranstaltungen/sommerfest-2026/organisation/materialien/helferinnen-und-helfer/abstimmung-und-zeitplan.'}
+/>
+```
+
+#### Dark
+
+```tsx
+<CopyableContent
+    content={`${PROJECT_UPDATE}\n\n---\n\nDiese Story bitte mit dunklem Storybook-Hintergrund prüfen.`}
+/>
+```
+
+### Props
+
+No prop documentation available.
+
+### Types
+
+No additional exported types documented.
+
+### Usage Notes
+
+- Import `CopyableContent` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 
 ### Anti Patterns

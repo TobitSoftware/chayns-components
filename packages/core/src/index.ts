@@ -45,6 +45,10 @@ export { default as FileSelect } from './components/file-select/FileSelect';
 export { default as DropdownBodyWrapper } from './components/dropdown-body-wrapper/DropdownBodyWrapper';
 export { default as ComboBox } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
+export {
+    default as CopyableContent,
+    type CopyableContentProps,
+} from './components/copyable-content/CopyableContent';
 export { default as HighlightSlider } from './components/highlight-slider/HighlightSlider';
 export type { HighlightSliderItemColors as HighlightSliderColors } from './components/highlight-slider/highlight-slider-item/HighlightSliderItem';
 export { default as ContextMenu } from './components/context-menu/ContextMenu';
