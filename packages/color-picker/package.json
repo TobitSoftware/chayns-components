@@ -66,12 +66,12 @@
         "lerna": "^8.2.4",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "styled-components": "^6.4.3",
+        "styled-components": "^6.4.4",
         "typescript": "^5.9.3"
     },
     "dependencies": {
         "@chayns-components/core": "^5.5.6",
-        "@chayns-components/textstring": "^5.4.19",
+        "@chayns-components/textstring": "^5.5.0",
         "@chayns/colors": "^2.0.2",
         "react-compiler-runtime": "^1.0.0"
     },
