@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/core",
-    "version": "5.5.6",
+    "version": "5.5.7",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -77,7 +77,7 @@
     },
     "dependencies": {
         "@chayns-components/format": "^5.5.0",
-        "@chayns-components/textstring": "^5.5.0",
+        "@chayns-components/textstring": "^5.5.7",
         "@chayns/colors": "^2.0.2",
         "@chayns/uac-service": "~0.0.62",
         "clsx": "^2.1.1",
