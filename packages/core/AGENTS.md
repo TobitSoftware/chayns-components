@@ -1502,17 +1502,17 @@ import { CopyableContent } from '@chayns-components/core';
 ```tsx
 <CopyableContent
     content={`# Projekt-Update: Sommerfest
-
+    
     Die Vorbereitungen für das Sommerfest gehen in die letzte Runde. Das Organisationsteam hat die Rückmeldungen aus den einzelnen Gruppen zusammengeführt und den Ablauf für den Nachmittag angepasst.
-
+    
     ## Was bereits feststeht
-
+    
     - Der Aufbau beginnt am Freitag um 16:30 Uhr am Bürgerhaus.
     - Für Kinder gibt es eine Kreativstation, eine kleine Rallye und einen ruhigen Rückzugsbereich.
     - Getränke und vegetarische Speisen werden vor Ort angeboten.
-
+    
     > Bitte gebt Rückmeldung, falls ihr beim Aufbau helfen könnt oder besondere Anforderungen an die Verpflegung habt.
-
+    
     Weitere Informationen stehen im [gemeinsamen Ablaufplan](https://example.com/veranstaltungen/sommerfest-2026/ablauf-und-helferinnen).`}
 />
 ```
