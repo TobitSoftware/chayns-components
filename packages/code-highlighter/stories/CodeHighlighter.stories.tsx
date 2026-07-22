@@ -43,7 +43,38 @@ const ChatScrollContainer: React.FC<{ children: React.ReactNode }> = ({ children
         >
             Projektgruppe Sommerfest
         </div>
-        <div style={{ minHeight: 0, overflowY: 'scroll', padding: '16px' }}>{children}</div>
+        <div
+            style={{
+                minHeight: 0,
+                overflowY: 'scroll',
+                padding: '0 16px 16px',
+            }}
+        >
+            <div style={{ paddingTop: '16px' }}>{children}</div>
+        </div>
+    </div>
+);
+
+const VirtualizedChatMessageFrame: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+    <div
+        className="message-row message-row--virtualized"
+        style={{
+            transform: 'translate3d(0, 0, 0)',
+            willChange: 'height, margin-top, opacity, transform',
+        }}
+    >
+        <div className="message-bubble" style={{ filter: 'brightness(1)', overflow: 'clip' }}>
+            <div className="message-bubble__content-wrapper" style={{ position: 'relative' }}>
+                <div
+                    className="message-bubble__content-wrapper__content"
+                    style={{ overflow: 'clip' }}
+                >
+                    <div className="message-text" style={{ overflow: 'clip' }}>
+                        {children}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 );
 
@@ -51,6 +82,16 @@ const NestedScrollContainerTemplate: StoryFn<typeof CodeHighlighter> = (args) =>
     <ChatScrollContainer>
         <p>Neue Nachricht mit einem Code-Beispiel</p>
         <CodeHighlighter {...args} />
+        <p>Ende der langen Nachricht</p>
+    </ChatScrollContainer>
+);
+
+const VirtualizedChatMessageTemplate: StoryFn<typeof CodeHighlighter> = (args) => (
+    <ChatScrollContainer>
+        <p>Neue Nachricht vor dem langen Code-Beispiel</p>
+        <VirtualizedChatMessageFrame>
+            <CodeHighlighter {...args} />
+        </VirtualizedChatMessageFrame>
         <p>Ende der langen Nachricht</p>
     </ChatScrollContainer>
 );
@@ -68,6 +109,7 @@ export const StickyHeader = Template.bind({});
 export const Light = Template.bind({});
 export const Dark = Template.bind({});
 export const NestedScrollContainer = NestedScrollContainerTemplate.bind({});
+export const VirtualizedChatMessage = VirtualizedChatMessageTemplate.bind({});
 
 General.args = {
     code: `import React from 'react';
@@ -245,3 +287,4 @@ NestedScrollContainer.args = {
     language: 'typescript',
     shouldShowLineNumbers: true,
 };
+VirtualizedChatMessage.args = NestedScrollContainer.args;
