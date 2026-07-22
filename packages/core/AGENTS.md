@@ -1545,6 +1545,22 @@ import { CopyableContent } from '@chayns-components/core';
 />
 ```
 
+#### Virtualized Chat Message
+
+```tsx
+<CopyableContent />
+```
+
+#### Conversation
+
+```tsx
+<CopyableContent
+    content={`### Nächster Schritt
+    
+    Bitte prüft die **offenen Aufgaben** und ergänzt eure Rückmeldung bis Freitagmittag. Die vollständige Übersicht steht im [gemeinsamen Ablaufplan](https://example.com/ablaufplan).`}
+/>
+```
+
 ### Props
 
 No prop documentation available.

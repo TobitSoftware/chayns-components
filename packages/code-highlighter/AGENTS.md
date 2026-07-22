@@ -302,6 +302,16 @@ import { CodeHighlighter } from '@chayns-components/code-highlighter';
 />
 ```
 
+#### Virtualized Chat Message
+
+```tsx
+<CodeHighlighter
+    copyButtonText={'Code kopieren'}
+    shouldShowLineNumbers
+    language={'tsx'}
+/>
+```
+
 ### Props
 
 No prop documentation available.
