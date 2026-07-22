@@ -9,6 +9,46 @@ export default {
 
 const Template: StoryFn<typeof CopyableContent> = (args) => <CopyableContent {...args} />;
 
+const CHAT_HEADER_HEIGHT = 52;
+const CHAT_VIEWPORT_HEIGHT = 420;
+
+const ChatScrollContainer: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+    <div
+        style={{
+            border: '1px solid #d4d4d4',
+            borderRadius: '8px',
+            display: 'flex',
+            flexDirection: 'column',
+            height: `${CHAT_VIEWPORT_HEIGHT}px`,
+            overflow: 'hidden',
+        }}
+    >
+        <div
+            style={{
+                alignItems: 'center',
+                background: '#fafafa',
+                borderBottom: '1px solid #d4d4d4',
+                display: 'flex',
+                flexShrink: 0,
+                fontWeight: 600,
+                height: `${CHAT_HEADER_HEIGHT}px`,
+                padding: '0 16px',
+            }}
+        >
+            Projektgruppe Sommerfest
+        </div>
+        <div style={{ minHeight: 0, overflowY: 'scroll', padding: '16px' }}>{children}</div>
+    </div>
+);
+
+const NestedScrollContainerTemplate: StoryFn<typeof CopyableContent> = (args) => (
+    <ChatScrollContainer>
+        <p>Neue Nachricht von Anna</p>
+        <CopyableContent {...args} />
+        <p>Ende der langen Nachricht</p>
+    </ChatScrollContainer>
+);
+
 const PROJECT_UPDATE = `# Projekt-Update: Sommerfest
 
 Die Vorbereitungen für das Sommerfest gehen in die letzte Runde. Das Organisationsteam hat die Rückmeldungen aus den einzelnen Gruppen zusammengeführt und den Ablauf für den Nachmittag angepasst.
@@ -28,6 +68,7 @@ export const Long = Template.bind({});
 export const Markdown = Template.bind({});
 export const LongUrl = Template.bind({});
 export const Dark = Template.bind({});
+export const NestedScrollContainer = NestedScrollContainerTemplate.bind({});
 
 Short.args = {
     content:
@@ -47,4 +88,11 @@ LongUrl.args = {
 };
 Dark.args = {
     content: `${PROJECT_UPDATE}\n\n---\n\nDiese Story bitte mit dunklem Storybook-Hintergrund prüfen.`,
+};
+NestedScrollContainer.args = {
+    content: Array.from(
+        { length: 12 },
+        (_, index) =>
+            `### Update ${index + 1}\n\nDas Organisationsteam hat die aktuelle Rückmeldung zusammengefasst. Bitte prüft die offenen Punkte und gebt bis Freitag Bescheid, falls sich bei eurer Planung noch etwas geändert hat.`,
+    ).join('\n\n'),
 };

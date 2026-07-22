@@ -15,6 +15,46 @@ export default {
 
 const Template: StoryFn<typeof CodeHighlighter> = ({ ...args }) => <CodeHighlighter {...args} />;
 
+const CHAT_HEADER_HEIGHT = 52;
+const CHAT_VIEWPORT_HEIGHT = 420;
+
+const ChatScrollContainer: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+    <div
+        style={{
+            border: '1px solid #d4d4d4',
+            borderRadius: '8px',
+            display: 'flex',
+            flexDirection: 'column',
+            height: `${CHAT_VIEWPORT_HEIGHT}px`,
+            overflow: 'hidden',
+        }}
+    >
+        <div
+            style={{
+                alignItems: 'center',
+                background: '#fafafa',
+                borderBottom: '1px solid #d4d4d4',
+                display: 'flex',
+                flexShrink: 0,
+                fontWeight: 600,
+                height: `${CHAT_HEADER_HEIGHT}px`,
+                padding: '0 16px',
+            }}
+        >
+            Projektgruppe Sommerfest
+        </div>
+        <div style={{ minHeight: 0, overflowY: 'scroll', padding: '16px' }}>{children}</div>
+    </div>
+);
+
+const NestedScrollContainerTemplate: StoryFn<typeof CodeHighlighter> = (args) => (
+    <ChatScrollContainer>
+        <p>Neue Nachricht mit einem Code-Beispiel</p>
+        <CodeHighlighter {...args} />
+        <p>Ende der langen Nachricht</p>
+    </ChatScrollContainer>
+);
+
 export const General = Template.bind({});
 
 export const HighlightedLines = Template.bind({});
@@ -27,6 +67,7 @@ export const WithLineBreak = Template.bind({});
 export const StickyHeader = Template.bind({});
 export const Light = Template.bind({});
 export const Dark = Template.bind({});
+export const NestedScrollContainer = NestedScrollContainerTemplate.bind({});
 
 General.args = {
     code: `import React from 'react';
@@ -194,4 +235,13 @@ Dark.args = {
     code: General.args?.code,
     language: 'tsx',
     theme: CodeHighlighterTheme.Dark,
+};
+
+NestedScrollContainer.args = {
+    code: Array.from(
+        { length: 80 },
+        (_, index) => `const update${index + 1} = createUpdate(${index + 1});`,
+    ).join('\n'),
+    language: 'typescript',
+    shouldShowLineNumbers: true,
 };
