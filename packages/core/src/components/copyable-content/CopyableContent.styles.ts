@@ -26,16 +26,25 @@ type StyledCopyableContentButtonProps = WithTheme<{
     $isSticky: boolean;
 }>;
 
-export const StyledCopyableContentActions = styled.div<StyledCopyableContentProps>`
-    position: sticky;
-    top: var(--copyable-content-action-inset);
+type StyledCopyableContentActionsProps = {
+    $fixedRight: number;
+    $fixedTop: number;
+    $isFixed: boolean;
+};
+
+export const StyledCopyableContentActions = styled.div<StyledCopyableContentActionsProps>`
+    position: ${({ $isFixed }) => ($isFixed ? 'fixed' : 'sticky')};
+    top: ${({ $fixedTop, $isFixed }) =>
+        $isFixed ? `${$fixedTop}px` : 'var(--copyable-content-action-inset)'};
+    right: ${({ $fixedRight, $isFixed }) => ($isFixed ? `${$fixedRight}px` : 'auto')};
     z-index: 1;
     display: flex;
     justify-content: flex-end;
     height: calc(var(--copyable-content-action-size) + var(--copyable-content-action-inset));
-    margin-top: calc(
-        (var(--copyable-content-action-size) + var(--copyable-content-action-inset)) * -1
-    );
+    margin-top: ${({ $isFixed }) =>
+        $isFixed
+            ? '0'
+            : 'calc((var(--copyable-content-action-size) + var(--copyable-content-action-inset)) * -1)'};
     padding-right: var(--copyable-content-action-inset);
 `;
 

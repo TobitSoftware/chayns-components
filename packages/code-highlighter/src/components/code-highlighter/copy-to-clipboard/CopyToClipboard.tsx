@@ -1,7 +1,7 @@
 import { Icon, SharingContextMenu } from '@chayns-components/core';
 import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
 import { createDialog, DialogType, ToastType } from 'chayns-api';
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, RefObject, useCallback, useRef } from 'react';
 import { CodeHighlighterTheme } from '../../../types/codeHighlighter';
 import {
     StyledCopyToClipboard,
@@ -9,19 +9,18 @@ import {
     StyledCopyToClipboardButton,
 } from './CopyToClipboard.styles';
 import textStrings from '../../../constants/textStrings';
+import { useStickyActionPosition } from './useStickyActionPosition';
 
 export type CopyToClipboardProps = {
     copyButtonText?: string;
+    rootRef: RefObject<HTMLDivElement>;
     text: string;
     theme: CodeHighlighterTheme;
 };
 
-const STICKY_ACTION_OFFSET = 8;
-
-const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, text, theme }) => {
-    const [isActionGroupSticky, setIsActionGroupSticky] = useState(false);
-
+const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, rootRef, text, theme }) => {
     const actionGroupRef = useRef<HTMLDivElement>(null);
+    const stickyActionPosition = useStickyActionPosition(rootRef, actionGroupRef);
 
     const defaultCopyText = useTextstringValue({
         textstring: ttsToITextString(textStrings.components.codeHighlighter.copyToClipboard.copy),
@@ -40,24 +39,6 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, text, theme
 
     const copyText = copyButtonText ?? defaultCopyText;
     const iconColor = theme === CodeHighlighterTheme.Dark ? '#f4f6f8' : '#5f6368';
-
-    useEffect(() => {
-        const updateStickyState = () => {
-            const actionGroupTop = actionGroupRef.current?.getBoundingClientRect().top;
-            setIsActionGroupSticky(
-                actionGroupTop !== undefined && actionGroupTop <= STICKY_ACTION_OFFSET,
-            );
-        };
-
-        updateStickyState();
-        document.addEventListener('scroll', updateStickyState, true);
-        window.addEventListener('resize', updateStickyState);
-
-        return () => {
-            document.removeEventListener('scroll', updateStickyState, true);
-            window.removeEventListener('resize', updateStickyState);
-        };
-    }, []);
 
     const handleCopy = useCallback(async () => {
         try {
@@ -79,11 +60,17 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, text, theme
     }, [copiedText, copyFailedText, text]);
 
     return (
-        <StyledCopyToClipboard $codeTheme={theme} ref={actionGroupRef}>
+        <StyledCopyToClipboard
+            $codeTheme={theme}
+            $fixedRight={stickyActionPosition.fixedRight}
+            $fixedTop={stickyActionPosition.fixedTop}
+            $isFixed={stickyActionPosition.isFixed}
+            ref={actionGroupRef}
+        >
             <StyledCopyToClipboardActionGroup>
                 <StyledCopyToClipboardButton
                     $codeTheme={theme}
-                    $isSticky={isActionGroupSticky}
+                    $isSticky={stickyActionPosition.isSticky}
                     aria-label={copyText}
                     onClick={() => {
                         void handleCopy();
@@ -95,7 +82,7 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, text, theme
                 <SharingContextMenu link={text} shouldUseDefaultTriggerStyles={false}>
                     <StyledCopyToClipboardButton
                         $codeTheme={theme}
-                        $isSticky={isActionGroupSticky}
+                        $isSticky={stickyActionPosition.isSticky}
                         aria-label={shareText}
                         type="button"
                     >

@@ -1,8 +1,9 @@
 import { formatStringToHtml } from '@chayns-components/format';
 import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
 import { createDialog, DialogType, ToastType } from 'chayns-api';
-import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, ReactNode, useCallback, useMemo, useRef } from 'react';
 import textStrings from '../../constants/textStrings';
+import { useStickyActionPosition } from '../../hooks/useStickyActionPosition';
 import SharingContextMenu from '../sharing-context-menu/SharingContextMenu';
 import Icon from '../icon/Icon';
 import {
@@ -21,17 +22,15 @@ export type CopyableContentProps = {
     copyFailedMessage?: string;
 };
 
-const STICKY_ACTION_OFFSET = 8;
-
 const CopyableContent: FC<CopyableContentProps> = ({
     content,
     children,
     copiedMessage,
     copyFailedMessage,
 }) => {
-    const [isActionGroupSticky, setIsActionGroupSticky] = useState(false);
-
+    const rootRef = useRef<HTMLElement>(null);
     const actionGroupRef = useRef<HTMLDivElement>(null);
+    const stickyActionPosition = useStickyActionPosition(rootRef, actionGroupRef);
 
     const defaultCopyButtonText = useTextstringValue({
         textstring: ttsToITextString(textStrings.components.copyableContent.copy),
@@ -47,24 +46,6 @@ const CopyableContent: FC<CopyableContentProps> = ({
     });
 
     const html = useMemo(() => formatStringToHtml(content).html, [content]);
-
-    useEffect(() => {
-        const updateStickyState = () => {
-            const actionGroupTop = actionGroupRef.current?.getBoundingClientRect().top;
-            setIsActionGroupSticky(
-                actionGroupTop !== undefined && actionGroupTop <= STICKY_ACTION_OFFSET,
-            );
-        };
-
-        updateStickyState();
-        document.addEventListener('scroll', updateStickyState, true);
-        window.addEventListener('resize', updateStickyState);
-
-        return () => {
-            document.removeEventListener('scroll', updateStickyState, true);
-            window.removeEventListener('resize', updateStickyState);
-        };
-    }, []);
 
     const handleCopy = useCallback(async () => {
         try {
@@ -86,11 +67,16 @@ const CopyableContent: FC<CopyableContentProps> = ({
     }, [content, copiedMessage, defaultCopiedMessage, defaultCopyFailedMessage, copyFailedMessage]);
 
     return (
-        <StyledCopyableContent className="copyable-content">
-            <StyledCopyableContentActions ref={actionGroupRef}>
+        <StyledCopyableContent className="copyable-content" ref={rootRef}>
+            <StyledCopyableContentActions
+                $fixedRight={stickyActionPosition.fixedRight}
+                $fixedTop={stickyActionPosition.fixedTop}
+                $isFixed={stickyActionPosition.isFixed}
+                ref={actionGroupRef}
+            >
                 <StyledCopyableContentActionGroup>
                     <StyledCopyableContentButton
-                        $isSticky={isActionGroupSticky}
+                        $isSticky={stickyActionPosition.isSticky}
                         aria-label={defaultCopyButtonText}
                         onClick={() => {
                             void handleCopy();
@@ -101,7 +87,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
                     </StyledCopyableContentButton>
                     <SharingContextMenu link={content} shouldUseDefaultTriggerStyles={false}>
                         <StyledCopyableContentButton
-                            $isSticky={isActionGroupSticky}
+                            $isSticky={stickyActionPosition.isSticky}
                             aria-label={shareText}
                             type="button"
                         >

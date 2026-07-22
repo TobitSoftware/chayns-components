@@ -4,18 +4,24 @@ import { CodeHighlighterTheme } from '../../../types/codeHighlighter';
 
 type StyledCopyToClipboardProps = WithTheme<{
     $codeTheme: CodeHighlighterTheme;
+    $fixedRight: number;
+    $fixedTop: number;
+    $isFixed: boolean;
 }>;
 
 export const StyledCopyToClipboard = styled.div<StyledCopyToClipboardProps>`
-    position: sticky;
-    top: var(--code-highlighter-action-inset);
+    position: ${({ $isFixed }) => ($isFixed ? 'fixed' : 'sticky')};
+    top: ${({ $fixedTop, $isFixed }) =>
+        $isFixed ? `${$fixedTop}px` : 'var(--code-highlighter-action-inset)'};
+    right: ${({ $fixedRight, $isFixed }) => ($isFixed ? `${$fixedRight}px` : 'auto')};
     z-index: 1;
     display: flex;
     justify-content: flex-end;
     height: calc(var(--code-highlighter-action-size) + var(--code-highlighter-action-inset));
-    margin-top: calc(
-        (var(--code-highlighter-action-size) + var(--code-highlighter-action-inset)) * -1
-    );
+    margin-top: ${({ $isFixed }) =>
+        $isFixed
+            ? '0'
+            : 'calc((var(--code-highlighter-action-size) + var(--code-highlighter-action-inset)) * -1)'};
     padding-right: var(--code-highlighter-action-inset);
 `;
 

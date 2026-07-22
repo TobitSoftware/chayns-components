@@ -221,6 +221,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                     text={code}
                     theme={resolvedTheme}
                     copyButtonText={copyButtonText}
+                    rootRef={ref}
                 />
                 <SyntaxHighlighter
                     customStyle={syntaxHighlighterStyle}
