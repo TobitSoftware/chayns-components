@@ -65,7 +65,7 @@
         "@types/styled-components": "^5.1.36",
         "@types/uuid": "^10.0.0",
         "babel-loader": "^9.2.1",
-        "chayns-api": "^2.6.19",
+        "chayns-api": "^3.4.0",
         "cross-env": "^7.0.3",
         "jsdom": "^26.1.0",
         "lerna": "^8.2.4",
