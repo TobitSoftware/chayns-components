@@ -1533,6 +1533,18 @@ import { CopyableContent } from '@chayns-components/core';
 />
 ```
 
+#### Nested Scroll Container
+
+```tsx
+<CopyableContent
+    content={Array.from(
+            { length: 12 },
+            (_, index) =>
+                `### Update ${index + 1}\n\nDas Organisationsteam hat die aktuelle Rückmeldung zusammengefasst. Bitte prüft die offenen Punkte und gebt bis Freitag Bescheid, falls sich bei eurer Planung noch etwas geändert hat.`,
+        ).join('\n\n')}
+/>
+```
+
 ### Props
 
 No prop documentation available.

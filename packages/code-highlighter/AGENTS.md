@@ -288,6 +288,20 @@ import { CodeHighlighter } from '@chayns-components/code-highlighter';
 />
 ```
 
+#### Nested Scroll Container
+
+```tsx
+<CodeHighlighter
+    copyButtonText={'Code kopieren'}
+    shouldShowLineNumbers
+    language={'typescript'}
+    code={Array.from(
+            { length: 80 },
+            (_, index) => `const update${index + 1} = createUpdate(${index + 1});`,
+        ).join('\n')}
+/>
+```
+
 ### Props
 
 No prop documentation available.
