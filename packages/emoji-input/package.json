@@ -48,6 +48,7 @@
         "build:types": "tsc",
         "build:cjs": "cross-env NODE_ENV=cjs babel src --out-dir lib/cjs --extensions=.ts,.tsx --source-maps --ignore=src/stories --copy-files",
         "build:esm": "cross-env NODE_ENV=esm babel src --out-dir lib/esm --extensions=.ts,.tsx --source-maps --ignore=src/stories --copy-files",
+        "test": "vitest --environment jsdom",
         "watch:js": "npm run build:esm -- --watch",
         "link": "npm link && npm run watch:js"
     },
@@ -66,11 +67,13 @@
         "@types/uuid": "^10.0.0",
         "babel-loader": "^9.2.1",
         "cross-env": "^7.0.3",
+        "jsdom": "^26.1.0",
         "lerna": "^8.2.4",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "styled-components": "^6.4.4",
-        "typescript": "^5.9.3"
+        "typescript": "^5.9.3",
+        "vitest": "^1.6.1"
     },
     "dependencies": {
         "@chayns-components/core": "^5.5.12",

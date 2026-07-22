@@ -50,6 +50,16 @@ const serializeBlockElementToText = (element: HTMLElement) => {
     return serializedText;
 };
 
+const serializeSpanElementToText = (element: HTMLElement) => {
+    const childNodes = Array.from(element.childNodes).filter(isMeaningfulTextNode);
+
+    if (childNodes.length === 0) {
+        return BLOCK_SEPARATOR;
+    }
+
+    return serializeHTMLToText(childNodes);
+};
+
 const serializeHTMLNodeToText = (node: ChildNode): string => {
     if (node.nodeType === Node.TEXT_NODE) {
         return node.textContent ?? '';
@@ -63,6 +73,10 @@ const serializeHTMLNodeToText = (node: ChildNode): string => {
 
     if (element.tagName === 'BR') {
         return '<br>';
+    }
+
+    if (element.tagName === 'SPAN') {
+        return serializeSpanElementToText(element);
     }
 
     if (BLOCK_ELEMENT_TAG_NAMES.has(element.tagName)) {
