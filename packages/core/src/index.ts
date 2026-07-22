@@ -47,6 +47,7 @@ export { default as ComboBox } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
 export {
     default as CopyableContent,
+    CopyableContentAppearance,
     type CopyableContentProps,
 } from './components/copyable-content/CopyableContent';
 export { default as HighlightSlider } from './components/highlight-slider/HighlightSlider';

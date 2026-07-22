@@ -13,9 +13,14 @@ import {
     StyledCopyableContentBody,
     StyledCopyableContentButton,
 } from './CopyableContent.styles';
+import { CopyableContentAppearance } from './CopyableContent.types';
 import { copyableContentToClipboard } from './copyableContentClipboard';
 
 export type CopyableContentProps = {
+    /**
+     * Controls the visual surface of the content block.
+     */
+    appearance?: CopyableContentAppearance;
     content: string;
     children?: ReactNode;
     copiedMessage?: string;
@@ -23,6 +28,7 @@ export type CopyableContentProps = {
 };
 
 const CopyableContent: FC<CopyableContentProps> = ({
+    appearance = CopyableContentAppearance.Default,
     content,
     children,
     copiedMessage,
@@ -67,7 +73,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
     }, [content, copiedMessage, defaultCopiedMessage, defaultCopyFailedMessage, copyFailedMessage]);
 
     return (
-        <StyledCopyableContent className="copyable-content" ref={rootRef}>
+        <StyledCopyableContent $appearance={appearance} className="copyable-content" ref={rootRef}>
             <StyledCopyableContentActions ref={actionGroupRef}>
                 <StyledCopyableContentActionGroup>
                     <StyledCopyableContentButton
@@ -101,3 +107,5 @@ const CopyableContent: FC<CopyableContentProps> = ({
 CopyableContent.displayName = 'CopyableContent';
 
 export default CopyableContent;
+
+export { CopyableContentAppearance } from './CopyableContent.types';

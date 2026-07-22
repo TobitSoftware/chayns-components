@@ -1,7 +1,21 @@
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import styled from 'styled-components';
+import { CopyableContentAppearance } from './CopyableContent.types';
 
-type StyledCopyableContentProps = WithTheme<unknown>;
+type StyledCopyableContentProps = WithTheme<{
+    $appearance: CopyableContentAppearance;
+}>;
+
+const getBackgroundColor = ({ $appearance, theme }: StyledCopyableContentProps) => {
+    if ($appearance === CopyableContentAppearance.Chat) {
+        return theme.colorMode === 'dark' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.2)';
+    }
+
+    const secondaryColor = theme['secondary-100-rgb'] ?? '255, 255, 255';
+    const opacity = theme.cardBackgroundOpacity ?? 1;
+
+    return `rgba(${secondaryColor}, ${opacity})`;
+};
 
 export const StyledCopyableContent = styled.section<StyledCopyableContentProps>`
     --copyable-content-action-size: 32px;
@@ -15,10 +29,7 @@ export const StyledCopyableContent = styled.section<StyledCopyableContentProps>`
         var(--copyable-content-action-size) + var(--copyable-content-action-inset) * 2
     );
     border-radius: ${({ theme }) => theme.cardBorderRadius}px;
-    background-color: rgba(
-        ${({ theme }) => theme['secondary-100-rgb']},
-        ${({ theme }) => theme.cardBackgroundOpacity}
-    );
+    background-color: ${getBackgroundColor};
     color: ${({ theme }) => theme.text};
 `;
 
@@ -77,7 +88,7 @@ export const StyledCopyableContentButton = styled.button<StyledCopyableContentBu
     }
 `;
 
-export const StyledCopyableContentBody = styled.div<StyledCopyableContentProps>`
+export const StyledCopyableContentBody = styled.div<WithTheme<unknown>>`
     min-width: 0;
     max-width: 100%;
     overflow-wrap: anywhere;

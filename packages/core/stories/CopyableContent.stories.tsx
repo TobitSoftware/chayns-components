@@ -1,6 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
-import CopyableContent from '../src/components/copyable-content/CopyableContent';
+import CopyableContent, {
+    CopyableContentAppearance,
+} from '../src/components/copyable-content/CopyableContent';
 
 export default {
     title: 'Core/CopyableContent',
@@ -131,6 +133,7 @@ export const Long = Template.bind({});
 export const Markdown = Template.bind({});
 export const LongUrl = Template.bind({});
 export const Dark = Template.bind({});
+export const ChatAppearance = Template.bind({});
 export const NestedScrollContainer = NestedScrollContainerTemplate.bind({});
 export const VirtualizedChatMessage = VirtualizedChatMessageTemplate.bind({});
 export const Conversation = ConversationTemplate.bind({});
@@ -153,6 +156,10 @@ LongUrl.args = {
 };
 Dark.args = {
     content: `${PROJECT_UPDATE}\n\n---\n\nDiese Story bitte mit dunklem Storybook-Hintergrund prüfen.`,
+};
+ChatAppearance.args = {
+    appearance: CopyableContentAppearance.Chat,
+    content: PROJECT_UPDATE,
 };
 NestedScrollContainer.args = {
     content: Array.from(
