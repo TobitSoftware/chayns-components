@@ -9,7 +9,7 @@ import {
     StyledCopyToClipboardButton,
 } from './CopyToClipboard.styles';
 import textStrings from '../../../constants/textStrings';
-import { useStickyActionPosition } from './useStickyActionPosition';
+import { useStickyActionState } from './useStickyActionState';
 
 export type CopyToClipboardProps = {
     copyButtonText?: string;
@@ -20,7 +20,7 @@ export type CopyToClipboardProps = {
 
 const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, rootRef, text, theme }) => {
     const actionGroupRef = useRef<HTMLDivElement>(null);
-    const stickyActionPosition = useStickyActionPosition(rootRef, actionGroupRef);
+    const isActionGroupSticky = useStickyActionState(rootRef, actionGroupRef);
 
     const defaultCopyText = useTextstringValue({
         textstring: ttsToITextString(textStrings.components.codeHighlighter.copyToClipboard.copy),
@@ -60,17 +60,11 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, rootRef, te
     }, [copiedText, copyFailedText, text]);
 
     return (
-        <StyledCopyToClipboard
-            $codeTheme={theme}
-            $fixedRight={stickyActionPosition.fixedRight}
-            $fixedTop={stickyActionPosition.fixedTop}
-            $isFixed={stickyActionPosition.isFixed}
-            ref={actionGroupRef}
-        >
+        <StyledCopyToClipboard $codeTheme={theme} ref={actionGroupRef}>
             <StyledCopyToClipboardActionGroup>
                 <StyledCopyToClipboardButton
                     $codeTheme={theme}
-                    $isSticky={stickyActionPosition.isSticky}
+                    $isSticky={isActionGroupSticky}
                     aria-label={copyText}
                     onClick={() => {
                         void handleCopy();
@@ -82,7 +76,7 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, rootRef, te
                 <SharingContextMenu link={text} shouldUseDefaultTriggerStyles={false}>
                     <StyledCopyToClipboardButton
                         $codeTheme={theme}
-                        $isSticky={stickyActionPosition.isSticky}
+                        $isSticky={isActionGroupSticky}
                         aria-label={shareText}
                         type="button"
                     >

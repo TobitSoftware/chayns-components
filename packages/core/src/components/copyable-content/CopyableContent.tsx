@@ -3,7 +3,7 @@ import { ttsToITextString, useTextstringValue } from '@chayns-components/textstr
 import { createDialog, DialogType, ToastType } from 'chayns-api';
 import React, { FC, ReactNode, useCallback, useMemo, useRef } from 'react';
 import textStrings from '../../constants/textStrings';
-import { useStickyActionPosition } from '../../hooks/useStickyActionPosition';
+import { useStickyActionState } from '../../hooks/useStickyActionState';
 import SharingContextMenu from '../sharing-context-menu/SharingContextMenu';
 import Icon from '../icon/Icon';
 import {
@@ -30,7 +30,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
 }) => {
     const rootRef = useRef<HTMLElement>(null);
     const actionGroupRef = useRef<HTMLDivElement>(null);
-    const stickyActionPosition = useStickyActionPosition(rootRef, actionGroupRef);
+    const isActionGroupSticky = useStickyActionState(rootRef, actionGroupRef);
 
     const defaultCopyButtonText = useTextstringValue({
         textstring: ttsToITextString(textStrings.components.copyableContent.copy),
@@ -68,15 +68,10 @@ const CopyableContent: FC<CopyableContentProps> = ({
 
     return (
         <StyledCopyableContent className="copyable-content" ref={rootRef}>
-            <StyledCopyableContentActions
-                $fixedRight={stickyActionPosition.fixedRight}
-                $fixedTop={stickyActionPosition.fixedTop}
-                $isFixed={stickyActionPosition.isFixed}
-                ref={actionGroupRef}
-            >
+            <StyledCopyableContentActions ref={actionGroupRef}>
                 <StyledCopyableContentActionGroup>
                     <StyledCopyableContentButton
-                        $isSticky={stickyActionPosition.isSticky}
+                        $isSticky={isActionGroupSticky}
                         aria-label={defaultCopyButtonText}
                         onClick={() => {
                             void handleCopy();
@@ -87,7 +82,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
                     </StyledCopyableContentButton>
                     <SharingContextMenu link={content} shouldUseDefaultTriggerStyles={false}>
                         <StyledCopyableContentButton
-                            $isSticky={stickyActionPosition.isSticky}
+                            $isSticky={isActionGroupSticky}
                             aria-label={shareText}
                             type="button"
                         >
