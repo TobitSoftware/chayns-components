@@ -1,7 +1,7 @@
 import { Icon, SharingContextMenu } from '@chayns-components/core';
 import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
 import { createDialog, DialogType, ToastType } from 'chayns-api';
-import React, { FC, RefObject, useCallback, useRef } from 'react';
+import React, { FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { CodeHighlighterTheme } from '../../../types/codeHighlighter';
 import {
     StyledCopyToClipboard,
@@ -18,15 +18,16 @@ export type CopyToClipboardProps = {
     theme: CodeHighlighterTheme;
 };
 
+const COPY_FEEDBACK_DURATION = 1500;
+
 const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, rootRef, text, theme }) => {
     const actionGroupRef = useRef<HTMLDivElement>(null);
+    const copyFeedbackTimeoutRef = useRef<number>();
     const isActionGroupSticky = useStickyActionState(rootRef, actionGroupRef);
+    const [hasCopied, setHasCopied] = useState(false);
 
     const defaultCopyText = useTextstringValue({
         textstring: ttsToITextString(textStrings.components.codeHighlighter.copyToClipboard.copy),
-    });
-    const copiedText = useTextstringValue({
-        textstring: ttsToITextString(textStrings.components.codeHighlighter.copyToClipboard.copied),
     });
     const copyFailedText = useTextstringValue({
         textstring: ttsToITextString(
@@ -40,15 +41,26 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, rootRef, te
     const copyText = copyButtonText ?? defaultCopyText;
     const iconColor = theme === CodeHighlighterTheme.Dark ? '#f4f6f8' : '#5f6368';
 
+    useEffect(
+        () => () => {
+            window.clearTimeout(copyFeedbackTimeoutRef.current);
+        },
+        [],
+    );
+
+    const showCopyFeedback = useCallback(() => {
+        window.clearTimeout(copyFeedbackTimeoutRef.current);
+        setHasCopied(true);
+
+        copyFeedbackTimeoutRef.current = window.setTimeout(() => {
+            setHasCopied(false);
+        }, COPY_FEEDBACK_DURATION);
+    }, []);
+
     const handleCopy = useCallback(async () => {
         try {
             await navigator.clipboard.writeText(text);
-            void createDialog({
-                showCloseIcon: true,
-                text: copiedText,
-                toastType: ToastType.SUCCESS,
-                type: DialogType.TOAST,
-            }).open();
+            showCopyFeedback();
         } catch {
             void createDialog({
                 showCloseIcon: true,
@@ -57,7 +69,7 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, rootRef, te
                 type: DialogType.TOAST,
             }).open();
         }
-    }, [copiedText, copyFailedText, text]);
+    }, [copyFailedText, showCopyFeedback, text]);
 
     return (
         <StyledCopyToClipboard $codeTheme={theme} ref={actionGroupRef}>
@@ -71,9 +83,17 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, rootRef, te
                     }}
                     type="button"
                 >
-                    <Icon color={iconColor} icons={['fa-light fa-copy']} />
+                    <Icon
+                        color={iconColor}
+                        icons={hasCopied ? ['fa fa-check'] : ['fa-light fa-copy']}
+                    />
                 </StyledCopyToClipboardButton>
-                <SharingContextMenu link={text} shouldUseDefaultTriggerStyles={false}>
+                <SharingContextMenu
+                    link={text}
+                    shouldShowCallingCodeAction={false}
+                    shouldShowCopyAction={false}
+                    shouldUseDefaultTriggerStyles={false}
+                >
                     <StyledCopyToClipboardButton
                         $codeTheme={theme}
                         $isSticky={isActionGroupSticky}

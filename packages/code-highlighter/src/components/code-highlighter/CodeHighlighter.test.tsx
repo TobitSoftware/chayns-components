@@ -6,8 +6,23 @@ import { CodeHighlighterTheme } from '../../types/codeHighlighter';
 import CodeHighlighter from './CodeHighlighter';
 
 vi.mock('@chayns-components/core', () => ({
-    Icon: () => <span />,
-    SharingContextMenu: ({ children }: { children: React.ReactNode }) => children,
+    Icon: ({ icons }: { icons: string[] }) => <span data-icons={icons.join(' ')} />,
+    SharingContextMenu: ({
+        children,
+        shouldShowCallingCodeAction,
+        shouldShowCopyAction,
+    }: {
+        children: React.ReactNode;
+        shouldShowCallingCodeAction?: boolean;
+        shouldShowCopyAction?: boolean;
+    }) => (
+        <div
+            data-calling-code-action={shouldShowCallingCodeAction}
+            data-copy-action={shouldShowCopyAction}
+        >
+            {children}
+        </div>
+    ),
     useColorScheme: () => undefined,
 }));
 
@@ -24,7 +39,7 @@ vi.mock('chayns-api', () => ({
 }));
 
 describe('CodeHighlighter', () => {
-    it('keeps the copy operation and renders sticky actions', () => {
+    it('keeps the copy operation and renders sticky actions', async () => {
         const writeText = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
         const { container } = render(
             <CodeHighlighter
@@ -38,12 +53,17 @@ describe('CodeHighlighter', () => {
 
         fireEvent.click(screen.getByRole('button', { name: 'Copy code' }));
 
-        expect(writeText).toHaveBeenCalledWith('const value = true;');
+        await waitFor(() => {
+            expect(writeText).toHaveBeenCalledWith('const value = true;');
+            expect(container.querySelector('[data-icons="fa fa-check"]')).toBeInTheDocument();
+        });
         expect(container.querySelector('pre')).toHaveStyle({
             overflow: 'auto',
             padding: '0px 15px 15px',
         });
         expect(container.firstChild).toHaveStyle({ backgroundColor: 'rgb(40, 44, 52)' });
+        expect(container.querySelector('[data-copy-action="false"]')).toBeInTheDocument();
+        expect(container.querySelector('[data-calling-code-action="false"]')).toBeInTheDocument();
     });
 
     it('formats code before highlighting when requested', async () => {
