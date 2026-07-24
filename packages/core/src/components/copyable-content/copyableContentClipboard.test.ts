@@ -17,34 +17,45 @@ describe('copyableContentToClipboard', () => {
         vi.restoreAllMocks();
     });
 
-    it('writes exact source as plain text and markdown with safe HTML', async () => {
+    it('writes readable plain text first and safe HTML second', async () => {
         const write = vi.spyOn(navigator.clipboard, 'write').mockResolvedValue();
 
         await copyableContentToClipboard(source);
 
-        const item = write.mock.calls[0][0][0] as unknown as ClipboardItem;
-        await expect(readBlob(await item.getType('text/plain'))).resolves.toBe(source);
-        await expect(readBlob(await item.getType('text/markdown'))).resolves.toBe(source);
+        const item = write.mock.calls[0][0][0] as unknown as ClipboardItem & {
+            items: Record<string, Blob>;
+        };
+        expect(Object.keys(item.items)).toEqual(['text/plain', 'text/html']);
+        await expect(readBlob(await item.getType('text/plain'))).resolves.toBe('Heading\n\nLink');
         await expect(readBlob(await item.getType('text/html'))).resolves.toBe(
             formatStringToHtml(source).html,
         );
     });
 
-    it('uses a plain ClipboardItem when rich MIME types are unsupported', async () => {
-        vi.stubGlobal('ClipboardItem', Object.assign(class {}, { supports: () => false }));
-        const write = vi.spyOn(navigator.clipboard, 'write').mockResolvedValue();
+    it('uses a plain ClipboardItem after a rejected rich write', async () => {
+        const write = vi
+            .spyOn(navigator.clipboard, 'write')
+            .mockRejectedValueOnce(new Error('denied'))
+            .mockResolvedValueOnce();
+        const writeText = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
 
         await copyableContentToClipboard(source);
 
-        expect(write).toHaveBeenCalledTimes(1);
+        expect(write).toHaveBeenCalledTimes(2);
+        expect(writeText).not.toHaveBeenCalled();
+        const item = write.mock.calls[1][0][0] as unknown as ClipboardItem & {
+            items: Record<string, Blob>;
+        };
+        expect(Object.keys(item.items)).toEqual(['text/plain']);
+        await expect(readBlob(await item.getType('text/plain'))).resolves.toBe('Heading\n\nLink');
     });
 
-    it('uses writeText after ClipboardItem writes fail', async () => {
+    it('uses writeText after all ClipboardItem writes fail', async () => {
         vi.spyOn(navigator.clipboard, 'write').mockRejectedValue(new Error('denied'));
         const writeText = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
 
         await copyableContentToClipboard(source);
 
-        expect(writeText).toHaveBeenCalledWith(source);
+        expect(writeText).toHaveBeenCalledWith('Heading\n\nLink');
     });
 });

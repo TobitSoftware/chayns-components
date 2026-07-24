@@ -8,7 +8,7 @@ type StyledCopyableContentProps = WithTheme<{
 
 const getBackgroundColor = ({ $appearance, theme }: StyledCopyableContentProps) => {
     if ($appearance === CopyableContentAppearance.Chat) {
-        return theme.colorMode === 'dark' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.2)';
+        return 'rgba(0, 0, 0, 0.2)';
     }
 
     const secondaryColor = theme['secondary-100-rgb'] ?? '255, 255, 255';
@@ -21,6 +21,7 @@ export const StyledCopyableContent = styled.section<StyledCopyableContentProps>`
     --copyable-content-action-size: 32px;
     --copyable-content-action-inset: 8px;
 
+    margin: 4px 0;
     min-width: 0;
     max-width: 100%;
     overflow-x: clip;

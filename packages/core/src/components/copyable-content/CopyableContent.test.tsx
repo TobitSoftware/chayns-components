@@ -5,11 +5,26 @@ import { describe, expect, it, vi } from 'vitest';
 import CopyableContent from './CopyableContent';
 
 vi.mock('../icon/Icon', () => ({
-    default: () => <span />,
+    default: ({ icons }: { icons: string[] }) => <span data-icons={icons.join(' ')} />,
 }));
 
 vi.mock('../sharing-context-menu/SharingContextMenu', () => ({
-    default: ({ children }: { children: React.ReactNode }) => children,
+    default: ({
+        children,
+        shouldShowCallingCodeAction,
+        shouldShowCopyAction,
+    }: {
+        children: React.ReactNode;
+        shouldShowCallingCodeAction?: boolean;
+        shouldShowCopyAction?: boolean;
+    }) => (
+        <div
+            data-calling-code-action={shouldShowCallingCodeAction}
+            data-copy-action={shouldShowCopyAction}
+        >
+            {children}
+        </div>
+    ),
 }));
 
 vi.mock('chayns-api', async (importOriginal) => ({
@@ -55,22 +70,22 @@ describe('CopyableContent', () => {
         await expect(readBlob(await item.getType('text/plain'))).resolves.toBe('source markdown');
     });
 
-    it('shows a toast after a successful copy', async () => {
+    it('shows a checkmark after a successful copy', async () => {
         vi.spyOn(navigator.clipboard, 'write').mockResolvedValue();
-        render(<CopyableContent content="source" copiedMessage="Done" />);
+        const { container } = render(<CopyableContent content="source" />);
 
         fireEvent.click(screen.getByRole('button', { name: 'Kopieren' }));
 
-        await waitFor(async () => {
-            const { createDialog } = await import('chayns-api');
-            expect(createDialog).toHaveBeenCalledWith(expect.objectContaining({ text: 'Done' }));
+        await waitFor(() => {
+            expect(container.querySelector('[data-icons="fa fa-check"]')).toBeInTheDocument();
         });
-        expect(screen.queryByRole('status')).not.toBeInTheDocument();
     });
 
     it('offers sharing actions', () => {
-        render(<CopyableContent content="source" />);
+        const { container } = render(<CopyableContent content="source" />);
 
         expect(screen.getByRole('button', { name: 'Teilen' })).toBeInTheDocument();
+        expect(container.querySelector('[data-copy-action="false"]')).toBeInTheDocument();
+        expect(container.querySelector('[data-calling-code-action="false"]')).toBeInTheDocument();
     });
 });

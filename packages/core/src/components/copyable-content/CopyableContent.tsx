@@ -1,7 +1,7 @@
 import { formatStringToHtml } from '@chayns-components/format';
 import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
 import { createDialog, DialogType, ToastType } from 'chayns-api';
-import React, { FC, ReactNode, useCallback, useMemo, useRef } from 'react';
+import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import textStrings from '../../constants/textStrings';
 import { useStickyActionState } from '../../hooks/useStickyActionState';
 import SharingContextMenu from '../sharing-context-menu/SharingContextMenu';
@@ -16,6 +16,8 @@ import {
 import { CopyableContentAppearance } from './CopyableContent.types';
 import { copyableContentToClipboard } from './copyableContentClipboard';
 
+const COPY_FEEDBACK_DURATION = 1500;
+
 export type CopyableContentProps = {
     /**
      * Controls the visual surface of the content block.
@@ -23,7 +25,6 @@ export type CopyableContentProps = {
     appearance?: CopyableContentAppearance;
     content: string;
     children?: ReactNode;
-    copiedMessage?: string;
     copyFailedMessage?: string;
 };
 
@@ -31,18 +32,16 @@ const CopyableContent: FC<CopyableContentProps> = ({
     appearance = CopyableContentAppearance.Default,
     content,
     children,
-    copiedMessage,
     copyFailedMessage,
 }) => {
     const rootRef = useRef<HTMLElement>(null);
     const actionGroupRef = useRef<HTMLDivElement>(null);
+    const copyFeedbackTimeoutRef = useRef<number>();
     const isActionGroupSticky = useStickyActionState(rootRef, actionGroupRef);
+    const [hasCopied, setHasCopied] = useState(false);
 
     const defaultCopyButtonText = useTextstringValue({
         textstring: ttsToITextString(textStrings.components.copyableContent.copy),
-    });
-    const defaultCopiedMessage = useTextstringValue({
-        textstring: ttsToITextString(textStrings.components.copyableContent.copied),
     });
     const defaultCopyFailedMessage = useTextstringValue({
         textstring: ttsToITextString(textStrings.components.copyableContent.copyFailed),
@@ -53,15 +52,26 @@ const CopyableContent: FC<CopyableContentProps> = ({
 
     const html = useMemo(() => formatStringToHtml(content).html, [content]);
 
+    useEffect(
+        () => () => {
+            window.clearTimeout(copyFeedbackTimeoutRef.current);
+        },
+        [],
+    );
+
+    const showCopyFeedback = useCallback(() => {
+        window.clearTimeout(copyFeedbackTimeoutRef.current);
+        setHasCopied(true);
+
+        copyFeedbackTimeoutRef.current = window.setTimeout(() => {
+            setHasCopied(false);
+        }, COPY_FEEDBACK_DURATION);
+    }, []);
+
     const handleCopy = useCallback(async () => {
         try {
             await copyableContentToClipboard(content);
-            void createDialog({
-                showCloseIcon: true,
-                text: copiedMessage ?? defaultCopiedMessage,
-                toastType: ToastType.SUCCESS,
-                type: DialogType.TOAST,
-            }).open();
+            showCopyFeedback();
         } catch {
             void createDialog({
                 showCloseIcon: true,
@@ -70,7 +80,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
                 type: DialogType.TOAST,
             }).open();
         }
-    }, [content, copiedMessage, defaultCopiedMessage, defaultCopyFailedMessage, copyFailedMessage]);
+    }, [content, defaultCopyFailedMessage, copyFailedMessage, showCopyFeedback]);
 
     return (
         <StyledCopyableContent $appearance={appearance} className="copyable-content" ref={rootRef}>
@@ -84,9 +94,14 @@ const CopyableContent: FC<CopyableContentProps> = ({
                         }}
                         type="button"
                     >
-                        <Icon icons={['fa-light fa-copy']} />
+                        <Icon icons={hasCopied ? ['fa fa-check'] : ['fa-light fa-copy']} />
                     </StyledCopyableContentButton>
-                    <SharingContextMenu link={content} shouldUseDefaultTriggerStyles={false}>
+                    <SharingContextMenu
+                        link={content}
+                        shouldShowCallingCodeAction={false}
+                        shouldShowCopyAction={false}
+                        shouldUseDefaultTriggerStyles={false}
+                    >
                         <StyledCopyableContentButton
                             $isSticky={isActionGroupSticky}
                             aria-label={shareText}

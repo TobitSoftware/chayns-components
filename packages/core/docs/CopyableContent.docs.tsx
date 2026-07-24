@@ -9,13 +9,12 @@ const Component: FC = () => (
             content={'# Chat-Inhalt\n\nDezent hervorgehobener Inhalt in einer Nachricht.'}
         />
         <p>
-            Der ursprüngliche content wird unverändert als text/plain und text/markdown kopiert.
-            text/html wird sicher mit dem Formatter erzeugt. children ersetzt nur die sichtbare
-            Darstellung.
+            Die Clipboard API kopiert eine lesbare text/plain-Darstellung und ein sicher mit dem
+            Formatter erzeugtes text/html. children ersetzt nur die sichtbare Darstellung.
         </p>
         <p>
-            Mit CopyableContentAppearance.Chat verwendet der Block ein dezentes, vom Farbschema
-            abhängiges Overlay für die Verwendung innerhalb von Nachrichten-Sprechblasen.
+            Mit CopyableContentAppearance.Chat verwendet der Block ein dezentes dunkles Overlay für
+            die Verwendung innerhalb von Nachrichten-Sprechblasen.
         </p>
         <p>
             Die sticky Aktionsgruppe benötigt den vorgesehenen Scrollcontainer als Containing Block.

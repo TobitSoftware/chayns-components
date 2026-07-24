@@ -50,10 +50,6 @@ export default {
                 stringName: 'txt_chayns_components_core_components_copyableContent_share',
                 fallback: 'Teilen',
             },
-            copied: {
-                stringName: 'txt_chayns_components_core_components_copyableContent_copied',
-                fallback: 'Kopiert',
-            },
             copyFailed: {
                 stringName: 'txt_chayns_components_core_components_copyableContent_copyFailed',
                 fallback: 'Kopieren fehlgeschlagen',

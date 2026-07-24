@@ -1,22 +1,48 @@
 import { formatStringToHtml } from '@chayns-components/format';
 
-const RICH_MIME_TYPES = ['text/plain', 'text/markdown', 'text/html'] as const;
+interface ClipboardContent {
+    html: string;
+    plainText: string;
+}
 
-const createClipboardItem = (data: Record<string, Blob>) => new ClipboardItem(data);
+const getPlainTextFromHtml = (html: string) => {
+    const document = new DOMParser().parseFromString(html, 'text/html');
 
-const supportsRichMimeTypes = () => {
-    if (typeof ClipboardItem === 'undefined' || typeof ClipboardItem.supports !== 'function') {
-        return true;
-    }
+    return Array.from(document.body.children)
+        .map((element) => {
+            if (element.tagName === 'UL' || element.tagName === 'OL') {
+                return Array.from(element.children)
+                    .map((item) => `• ${item.textContent?.trim() ?? ''}`)
+                    .join('\n');
+            }
 
-    return RICH_MIME_TYPES.every((mimeType) => ClipboardItem.supports(mimeType));
+            return element.textContent?.trim() ?? '';
+        })
+        .filter(Boolean)
+        .join('\n\n');
 };
 
-const copyPlainText = async (source: string) => {
+const createClipboardContent = (source: string): ClipboardContent => {
+    const { html } = formatStringToHtml(source);
+    return { html, plainText: getPlainTextFromHtml(html) };
+};
+
+const copyWithClipboardItem = async ({ html, plainText }: ClipboardContent) => {
+    const clipboardData = new ClipboardItem({
+        'text/plain': new Blob([plainText], { type: 'text/plain' }),
+        'text/html': new Blob([html], { type: 'text/html' }),
+    });
+
+    await navigator.clipboard.write([clipboardData]);
+};
+
+const copyPlainText = async (plainText: string) => {
     if (typeof ClipboardItem !== 'undefined') {
         try {
             await navigator.clipboard.write([
-                createClipboardItem({ 'text/plain': new Blob([source], { type: 'text/plain' }) }),
+                new ClipboardItem({
+                    'text/plain': new Blob([plainText], { type: 'text/plain' }),
+                }),
             ]);
             return;
         } catch {
@@ -24,30 +50,25 @@ const copyPlainText = async (source: string) => {
         }
     }
 
-    await navigator.clipboard.writeText(source);
+    await navigator.clipboard.writeText(plainText);
 };
 
 export const copyableContentToClipboard = async (source: string) => {
+    const clipboardContent = createClipboardContent(source);
+
     if (!navigator.clipboard) {
         throw new Error('Clipboard API is not available.');
     }
 
-    if (typeof ClipboardItem === 'undefined' || !supportsRichMimeTypes()) {
-        await copyPlainText(source);
+    if (typeof ClipboardItem === 'undefined') {
+        await copyPlainText(clipboardContent.plainText);
         return;
     }
 
-    const { html } = formatStringToHtml(source);
-
     try {
-        await navigator.clipboard.write([
-            createClipboardItem({
-                'text/plain': new Blob([source], { type: 'text/plain' }),
-                'text/markdown': new Blob([source], { type: 'text/markdown' }),
-                'text/html': new Blob([html], { type: 'text/html' }),
-            }),
-        ]);
+        await copyWithClipboardItem(clipboardContent);
     } catch {
-        await copyPlainText(source);
+        // Use the plain-text fallback when the browser rejects rich MIME types.
+        await copyPlainText(clipboardContent.plainText);
     }
 };
