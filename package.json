@@ -13,6 +13,7 @@
         "build:storybook": "storybook build",
         "lerna:version": "npm run generate:usage && npm run commit:usage && lerna version --no-push",
         "lerna:build": "lerna run build",
+        "typecheck": "lerna run build:types",
         "lerna:clean": "npx lerna clean -y",
         "prepare": "husky install",
         "preversion": "lerna exec -- npm run build:types",

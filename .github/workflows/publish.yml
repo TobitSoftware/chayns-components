@@ -9,8 +9,12 @@ on:
       - 'v5.[0-9]+.[0-9]+-beta.[0-9]+'
 
 permissions:
-  id-token: write # Required for OIDC
+  id-token: write # Required for npm OIDC trusted publishing and provenance
   contents: write
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   publish:
@@ -42,8 +46,17 @@ jobs:
       - name: Build packages
         uses: ./.github/actions/lerna-build
 
+      - name: Typecheck packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run typecheck
+
       - name: Publish packages
-        run: lerna publish from-package --yes --dist-tag ${{ env.TAG }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm publish --workspaces --access public --provenance --tag "$TAG"
 
       - name: Generate and upload docs
         run: npm run generate:docs
