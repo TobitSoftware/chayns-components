@@ -12,6 +12,10 @@ permissions:
   id-token: write # Required for OIDC
   contents: write
 
+concurrency:
+  group: publish-npm-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -20,8 +24,8 @@ jobs:
       API_TOKEN_KEY: ${{ secrets.API_TOKEN_KEY }}
       API_TOKEN_SECRET: ${{ secrets.API_TOKEN_SECRET }}
       TAG: >-
-        ${{ contains(github.ref_name, 'alpha') && 'alpha' || (contains(github.ref_name, '-') &&
-        'beta' || 'latest') }}
+        ${{ contains(github.ref_name, 'alpha') && 'alpha' || (contains(github.ref_name, '-')
+        && 'beta' || 'latest') }}
 
     steps:
       - name: Checkout branch
@@ -32,21 +36,38 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
+          cache: npm
 
       - name: Update npm
+        shell: bash
         run: |
+          set -euo pipefail
           npm install -g npm@latest
-          npm --version
-          node --version
+          echo "npm:  $(npm --version)"
+          echo "node: $(node --version)"
+
+      - name: Verify npm authentication
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm whoami
 
       - name: Build packages
         uses: ./.github/actions/lerna-build
 
       - name: Publish packages
-        run: lerna publish from-package --yes --dist-tag ${{ env.TAG }}
+        shell: bash
+        env:
+          NPM_CONFIG_PROVENANCE: "false"
+        run: |
+          set -euo pipefail
+          npx lerna publish from-package --yes --dist-tag "${TAG}" --no-provenance
 
       - name: Generate and upload docs
-        run: npm run generate:docs
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run generate:docs
 
   deploy:
     needs: publish
