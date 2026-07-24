@@ -12,13 +12,31 @@ export type SharingContextMenuProps = {
      */
     link: string;
     /**
+     * Shows the action that copies the shared link to the clipboard.
+     */
+    shouldShowCopyAction?: boolean;
+    /**
+     * Shows the action that downloads a calling-code image.
+     */
+    shouldShowCallingCodeAction?: boolean;
+    /**
      * Enables keyboard-only focus highlighting for the context menu trigger.
      */
     shouldEnableKeyboardHighlighting?: boolean;
 } & Omit<ContextMenuProps, 'items' | 'shouldEnableKeyboardHighlighting'>;
 
 const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
-    ({ link, children, shouldEnableKeyboardHighlighting, ...contextMenuProps }, ref) => {
+    (
+        {
+            link,
+            children,
+            shouldEnableKeyboardHighlighting,
+            shouldShowCallingCodeAction = true,
+            shouldShowCopyAction = true,
+            ...contextMenuProps
+        },
+        ref,
+    ) => {
         const isTouch = useIsTouch();
 
         const handleImageDownload = useCallback(() => {
@@ -86,12 +104,16 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
         );
 
         const contextMenuItems = [
-            {
-                icons: ['fa fa-copy'],
-                key: 'copy',
-                onClick: () => handleShare('copy'),
-                text: 'Zwischenablage',
-            },
+            ...(shouldShowCopyAction
+                ? [
+                      {
+                          icons: ['fa fa-copy'],
+                          key: 'copy',
+                          onClick: () => handleShare('copy'),
+                          text: 'Zwischenablage',
+                      },
+                  ]
+                : []),
             {
                 icons: ['fa-solid fa-brands fa-whatsapp'],
                 key: 'whatsapp',
@@ -116,20 +138,24 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
                 onClick: () => handleShare('mail'),
                 text: 'Mail',
             },
-            {
-                icons: ['fa fa-qrcode'],
-                key: 'callingCode',
-                onClick: handleImageDownload,
-                text: 'Calling Code herunterladen',
-            },
+            ...(shouldShowCallingCodeAction
+                ? [
+                      {
+                          icons: ['fa fa-qrcode'],
+                          key: 'callingCode',
+                          onClick: handleImageDownload,
+                          text: 'Calling Code herunterladen',
+                      },
+                  ]
+                : []),
         ];
 
         return (
-            // eslint-disable-next-line react/jsx-props-no-spreading
             <ContextMenu
                 items={contextMenuItems}
                 ref={ref}
                 shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...contextMenuProps}
             >
                 {children}

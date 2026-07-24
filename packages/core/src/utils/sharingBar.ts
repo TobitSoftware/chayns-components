@@ -1,41 +1,30 @@
-import { createDialog, DialogType, openImage } from 'chayns-api';
+import { openImage } from 'chayns-api';
 
 export const copyToClipboard = (link: string) => {
     const aux = document.createElement('input');
-
-    const range = document.createRange();
-
     aux.setAttribute('value', link);
     aux.setAttribute('contenteditable', 'true');
     aux.setAttribute('readonly', 'true');
 
     document.body.appendChild(aux);
 
-    aux.select();
+    try {
+        const selection = window.getSelection();
 
-    range.selectNodeContents(aux);
+        if (!selection) {
+            return;
+        }
 
-    const s = window.getSelection();
-
-    if (!s) {
-        return;
+        const range = document.createRange();
+        aux.select();
+        range.selectNodeContents(aux);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        aux.setSelectionRange(0, 999999);
+        document.execCommand('copy');
+    } finally {
+        aux.remove();
     }
-
-    s.removeAllRanges();
-    s.addRange(range);
-
-    aux.setSelectionRange(0, 999999);
-
-    document.execCommand('copy');
-
-    document.body.removeChild(aux);
-
-    void createDialog({
-        type: DialogType.TOAST,
-        showCloseIcon: true,
-        toastType: 1,
-        text: 'kopiert',
-    }).open();
 };
 
 export const shareWithApp = (link: string) => {
