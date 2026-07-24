@@ -23,8 +23,17 @@ export type CopyableContentProps = {
      * Controls the visual surface of the content block.
      */
     appearance?: CopyableContentAppearance;
+    /**
+     * Markdown source used for rendering and clipboard data.
+     */
     content: string;
+    /**
+     * Replaces only the visible rendered content and never the copied source.
+     */
     children?: ReactNode;
+    /**
+     * Replaces the localized error message shown when copying fails.
+     */
     copyFailedMessage?: string;
 };
 

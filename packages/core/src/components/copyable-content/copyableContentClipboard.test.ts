@@ -15,6 +15,7 @@ const readBlob = (blob: Blob) =>
 describe('copyableContentToClipboard', () => {
     afterEach(() => {
         vi.restoreAllMocks();
+        vi.unstubAllGlobals();
     });
 
     it('writes readable plain text first and safe HTML second', async () => {
@@ -52,6 +53,15 @@ describe('copyableContentToClipboard', () => {
 
     it('uses writeText after all ClipboardItem writes fail', async () => {
         vi.spyOn(navigator.clipboard, 'write').mockRejectedValue(new Error('denied'));
+        const writeText = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
+
+        await copyableContentToClipboard(source);
+
+        expect(writeText).toHaveBeenCalledWith('Heading\n\nLink');
+    });
+
+    it('uses writeText when ClipboardItem is unavailable', async () => {
+        vi.stubGlobal('ClipboardItem', undefined);
         const writeText = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
 
         await copyableContentToClipboard(source);

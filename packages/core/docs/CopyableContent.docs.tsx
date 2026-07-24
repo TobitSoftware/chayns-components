@@ -13,8 +13,8 @@ const Component: FC = () => (
             Formatter erzeugtes text/html. children ersetzt nur die sichtbare Darstellung.
         </p>
         <p>
-            Mit CopyableContentAppearance.Chat verwendet der Block ein dezentes dunkles Overlay für
-            die Verwendung innerhalb von Nachrichten-Sprechblasen.
+            Mit CopyableContentAppearance.Chat verwendet der Block ein dezentes dunkles rgba(0, 0,
+            0, 0.12)-Overlay für die Verwendung innerhalb von Nachrichten-Sprechblasen.
         </p>
         <p>
             Die sticky Aktionsgruppe benötigt den vorgesehenen Scrollcontainer als Containing Block.
