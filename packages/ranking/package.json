@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/ranking",
-    "version": "5.5.20",
+    "version": "5.5.21",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -70,8 +70,8 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.5.20",
-        "@chayns-components/textstring": "^5.5.20",
+        "@chayns-components/core": "^5.5.21",
+        "@chayns-components/textstring": "^5.5.21",
         "react-compiler-runtime": "^1.0.0"
     },
     "peerDependencies": {

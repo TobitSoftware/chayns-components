@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/textstring",
-    "version": "5.5.20",
+    "version": "5.5.21",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
