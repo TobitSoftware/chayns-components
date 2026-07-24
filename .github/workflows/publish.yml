@@ -9,7 +9,7 @@ on:
       - 'v5.[0-9]+.[0-9]+-beta.[0-9]+'
 
 permissions:
-  id-token: write  # Required for OIDC
+  id-token: write # Required for OIDC
   contents: write
 
 jobs:
@@ -26,6 +26,18 @@ jobs:
     steps:
       - name: Checkout branch
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Force npm 11
+        run: |
+          npm install -g npm@11
+          npm --version
+          node --version
 
       - name: Build packages
         uses: ./.github/actions/lerna-build
