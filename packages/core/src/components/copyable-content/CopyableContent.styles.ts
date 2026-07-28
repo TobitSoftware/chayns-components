@@ -21,7 +21,7 @@ export const StyledCopyableContent = styled.section<StyledCopyableContentProps>`
     --copyable-content-action-size: 32px;
     --copyable-content-action-inset: 8px;
 
-    margin: 8px 0;
+    margin: 4px 0;
     min-width: 0;
     max-width: 100%;
     overflow-x: clip;
@@ -29,9 +29,10 @@ export const StyledCopyableContent = styled.section<StyledCopyableContentProps>`
     padding-top: calc(
         var(--copyable-content-action-size) + var(--copyable-content-action-inset) * 2
     );
-    border-radius: ${({ theme }) => theme.cardBorderRadius}px;
+    border-radius: 8px;
     background-color: ${getBackgroundColor};
     color: ${({ theme }) => theme.text};
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
 `;
 
 type StyledCopyableContentButtonProps = WithTheme<{
@@ -67,7 +68,7 @@ export const StyledCopyableContentButton = styled.button<StyledCopyableContentBu
     cursor: pointer;
     background-color: ${({ $isSticky, theme }) => ($isSticky ? theme['100'] : 'transparent')};
     color: ${({ theme }) => theme.text};
-    box-shadow: ${({ $isSticky }) => ($isSticky ? '0 2px 8px rgba(0, 0, 0, 0.16)' : 'none')};
+    box-shadow: ${({ $isSticky }) => ($isSticky ? '0 2px 8px rgba(0, 0, 0, 0.28)' : 'none')};
     transition:
         background-color 0.15s ease,
         border-color 0.15s ease,
@@ -75,12 +76,13 @@ export const StyledCopyableContentButton = styled.button<StyledCopyableContentBu
         transform 0.15s ease;
 
     &:hover {
+        border-color: rgba(${({ theme }) => theme['text-rgb']}, 0.18);
         background-color: rgba(${({ theme }) => theme['text-rgb']}, 0.1);
         box-shadow: inset 0 0 0 1px rgba(${({ theme }) => theme['text-rgb']}, 0.06);
     }
 
     &:active {
-        transform: scale(0.9);
+        transform: scale(0.94);
     }
 
     &:focus-visible {
@@ -89,11 +91,19 @@ export const StyledCopyableContentButton = styled.button<StyledCopyableContentBu
     }
 `;
 
-export const StyledCopyableContentBody = styled.div<WithTheme<unknown>>`
+export const StyledCopyableContentTruncation = styled.div`
+    padding: 0 12px 12px;
+`;
+
+type StyledCopyableContentBodyProps = WithTheme<{
+    $shouldShowPadding?: boolean;
+}>;
+
+export const StyledCopyableContentBody = styled.div<StyledCopyableContentBodyProps>`
     min-width: 0;
     max-width: 100%;
     overflow-wrap: anywhere;
-    padding: 0 12px 12px;
+    padding: ${({ $shouldShowPadding = true }) => ($shouldShowPadding ? '0 12px 12px' : '0')};
 
     h1,
     h2,
