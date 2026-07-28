@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
-import React from 'react';
+import { Typewriter, TypewriterSpeed } from '@chayns-components/typewriter';
+import React, { useEffect, useState } from 'react';
 import CopyableContent, {
     CopyableContentAppearance,
 } from '../src/components/copyable-content/CopyableContent';
@@ -128,9 +129,59 @@ Die Vorbereitungen für das Sommerfest gehen in die letzte Runde. Das Organisati
 
 Weitere Informationen stehen im [gemeinsamen Ablaufplan](https://example.com/veranstaltungen/sommerfest-2026/ablauf-und-helferinnen).`;
 
+const TYPEWRITER_COPYABLE_CONTENTS = [
+    `# Erster langer Inhalt
+
+Der äußere Typewriter gibt diesen CopyableContent aus. Der Text ist absichtlich lang, damit die enthaltene Truncation während des Schreibens und nach dem vollständigen Rendern korrekt reagieren kann.
+
+## Weitere Informationen
+
+Das Planungsteam hat die Rückmeldungen aus mehreren Gesprächen zusammengeführt. Die nächsten Schritte werden dokumentiert, geprüft und anschließend an alle Beteiligten verteilt.
+
+Bitte öffnet den vollständigen Inhalt nur bei Bedarf.
+
+Zusätzliche Details machen den Inhalt bewusst länger als die sichtbare Fläche.`,
+    `# Zweiter langer Inhalt
+
+Nach dem Wechsel des Typewriters wird ein weiterer umfangreicher CopyableContent ausgegeben. Dabei ändern sich Text und Höhe mehrfach, bevor der nächste Loop-Durchlauf beginnt.
+
+## Aktueller Stand
+
+Die Aufgaben sind verteilt, die offenen Fragen werden gesammelt und die Ergebnisse werden in den nächsten Tagen ergänzt. Dieser Abschnitt dient dazu, die eingeklappte Darstellung mit realistisch langen Nachrichten zu prüfen.
+
+Weitere Details stehen im gemeinsamen Ablaufplan.
+
+Auch dieser Zusatz ist absichtlich Teil des langen Inhalts.`,
+];
+
+const TypewriterLoopTemplate: StoryFn = () => {
+    const [contentIndex, setContentIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = window.setInterval(() => {
+            setContentIndex(
+                (currentIndex) => (currentIndex + 1) % TYPEWRITER_COPYABLE_CONTENTS.length,
+            );
+        }, 9000);
+
+        return () => window.clearInterval(interval);
+    }, []);
+
+    return (
+        <Typewriter key={contentIndex} speed={TypewriterSpeed.Fast}>
+            <CopyableContent
+                collapsedHeight={180}
+                content={TYPEWRITER_COPYABLE_CONTENTS[contentIndex]}
+                key={contentIndex}
+            />
+        </Typewriter>
+    );
+};
+
 export const Short = Template.bind({});
 export const Long = Template.bind({});
 export const Collapsed = Template.bind({});
+export const TypewriterLoop = TypewriterLoopTemplate.bind({});
 export const Markdown = Template.bind({});
 export const LongUrl = Template.bind({});
 export const Dark = Template.bind({});

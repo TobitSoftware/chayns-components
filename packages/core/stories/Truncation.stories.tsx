@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
-import React, { ReactNode, useEffect, useState } from 'react';
+import { Typewriter, TypewriterSpeed } from '@chayns-components/typewriter';
+import React, { ReactElement, useEffect, useState } from 'react';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
 import Button from '../src/components/button/Button';
@@ -22,6 +23,11 @@ const BASE_HTML_TEXT = (
     </div>
 );
 
+const TYPEWRITER_TRUNCATION_TEXTS = [
+    'Der erste lange Inhalt wird von einem äußeren Typewriter ausgegeben. Die Truncation muss während des Schreibens sichtbar bleiben, die wachsende Höhe beobachten und den Inhalt nach dem vollständigen Schreiben auf die konfigurierte Höhe begrenzen. Dieser Abschnitt ist absichtlich ausführlich, damit der Mehr-anzeigen-Link zuverlässig erscheint.',
+    'Der zweite lange Inhalt wird nach dem Wechsel des Typewriters angezeigt. Auch dieser Text ist deutlich länger als der sichtbare Bereich und enthält genug Inhalt, um die erneute Höhenmessung, das Einklappen und das anschließende Zurücksetzen im Loop zu prüfen.',
+];
+
 export default {
     title: 'Core/Truncation',
     component: Truncation,
@@ -41,8 +47,38 @@ const Template: StoryFn<typeof Truncation> = ({ children, ...args }) => (
     </>
 );
 
+const TypewriterLoopTemplate: StoryFn = () => {
+    const [textIndex, setTextIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = window.setInterval(() => {
+            setTextIndex((currentIndex) => (currentIndex + 1) % TYPEWRITER_TRUNCATION_TEXTS.length);
+        }, 7000);
+
+        return () => window.clearInterval(interval);
+    }, []);
+
+    return (
+        <Typewriter
+            key={textIndex}
+            resetDelay={500}
+            resetSpeed={TypewriterSpeed.Fast}
+            speed={TypewriterSpeed.Fast}
+        >
+            <Truncation collapsedHeight={100} key={textIndex}>
+                <div>
+                    <p>{TYPEWRITER_TRUNCATION_TEXTS[textIndex]}</p>
+                    <p>{TYPEWRITER_TRUNCATION_TEXTS[textIndex]}</p>
+                    <p>{TYPEWRITER_TRUNCATION_TEXTS[textIndex]}</p>
+                </div>
+            </Truncation>
+        </Typewriter>
+    );
+};
+
 export const General = Template.bind({});
 export const AnimatedChildren = Template.bind({});
+export const TypewriterLoop = TypewriterLoopTemplate.bind({});
 
 export const SmallText = Template.bind({});
 
@@ -118,7 +154,7 @@ JustText.args = {
 };
 
 const FloatingImageTemplate: StoryFn<typeof Truncation> = ({ children, ...args }) => {
-    const [content, setContent] = useState<ReactNode>('');
+    const [content, setContent] = useState<ReactElement>(<></>);
 
     useEffect(() => {
         window.setTimeout(() => {
