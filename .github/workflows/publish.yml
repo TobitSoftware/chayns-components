@@ -54,9 +54,11 @@ jobs:
 
       - name: Publish packages
         shell: bash
+        env:
+          NPM_CONFIG_PROVENANCE: true
         run: |
           set -euo pipefail
-          npm publish --workspaces --access public --provenance --tag "$TAG"
+          lerna publish from-package --yes --dist-tag "$TAG"
 
       - name: Generate and upload docs
         run: npm run generate:docs
