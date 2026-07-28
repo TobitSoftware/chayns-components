@@ -1497,6 +1497,25 @@ import { CopyableContent } from '@chayns-components/core';
 />
 ```
 
+#### Collapsed
+
+```tsx
+<CopyableContent
+    collapsedHeight={180}
+    content={Array.from(
+            { length: 12 },
+            (_, index) =>
+                `### Abschnitt ${index + 1}\n\nDas Planungsteam hat die Hinweise aus den Gesprächen aufgenommen und bereitet jetzt die nächsten Schritte vor.`,
+        ).join('\n\n')}
+/>
+```
+
+#### Typewriter Loop
+
+```tsx
+<CopyableContent />
+```
+
 #### Markdown
 
 ```tsx
@@ -5071,6 +5090,31 @@ import { Button, Truncation } from '@chayns-components/core';
                     <p>Alle Infos und Tickets zum Event in Kürze.&nbsp;</p>
                     <Button onClick={() => alert('hallo')}>test</Button>
                 </>
+    }
+</Truncation>
+```
+
+#### Typewriter Loop
+
+```tsx
+<Truncation
+    collapsedHeight={100}
+>
+    {
+        <div>
+                <p id="isPasted">
+                    Der legendärste Abend: Homecoming at next! Studenten und Ausreißer, Urlauber und
+                    Daheimgebliebene, Partymäuse und Partymuffel – sie alle zieht es am Tag vor Heiligabend
+                    in die Heimat an einen zuvor ausgemachten Ort, um all die guten Freunde und alte
+                    Bekannte wiederzutreffen.
+                </p>
+                <p>
+                    Was damals vor vielen Jahren auf der StattAlm auf dem Campus in Ahaus begann, führen wir
+                    bei uns im next fort!&nbsp;
+                </p>
+                <p>Alle Infos und Tickets zum Event in Kürze.&nbsp;</p>
+                <Button onClick={() => alert('hallo')}>test</Button>
+            </div>
     }
 </Truncation>
 ```
