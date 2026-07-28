@@ -15,9 +15,8 @@ export const StyledMotionTruncationContent = styled(motion.div)`
     position: relative;
 `;
 
-export const StyledTruncationPseudoContent = styled.div`
-    visibility: hidden;
-    position: absolute;
+export const StyledTruncationContent = styled.div`
+    min-width: 0;
     width: 100%;
 `;
 
