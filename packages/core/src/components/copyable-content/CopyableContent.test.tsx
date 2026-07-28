@@ -4,6 +4,42 @@ import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import CopyableContent from './CopyableContent';
 
+vi.mock('@chayns-components/textstring', () => ({
+    Textstring: ({ textstring }: { textstring: { fallback: string } }) => textstring.fallback,
+    TextstringProvider: ({ children }: { children: React.ReactNode }) => children,
+    ttsToITextString: (textstring: { fallback: string }) => textstring,
+    useTextstringValue: ({ textstring }: { textstring: { fallback: string } }) =>
+        textstring.fallback,
+}));
+
+type ResizeObserverCallback = (entries: ResizeObserverEntry[]) => void;
+
+const resizeObserverCallbacks: ResizeObserverCallback[] = [];
+
+class ResizeObserverMock {
+    constructor(callback: ResizeObserverCallback) {
+        resizeObserverCallbacks.push(callback);
+    }
+
+    disconnect() {}
+
+    observe() {}
+
+    unobserve() {}
+}
+
+vi.stubGlobal('ResizeObserver', ResizeObserverMock);
+
+const triggerResize = (height: number) => {
+    resizeObserverCallbacks.forEach((callback) => {
+        callback([
+            {
+                contentRect: { height } as DOMRectReadOnly,
+            } as ResizeObserverEntry,
+        ]);
+    });
+};
+
 vi.mock('../icon/Icon', () => ({
     default: ({ icons }: { icons: string[] }) => <span data-icons={icons.join(' ')} />,
 }));
@@ -89,7 +125,7 @@ describe('CopyableContent', () => {
         expect(container.querySelector('[data-calling-code-action="false"]')).toBeInTheDocument();
     });
 
-    it('supports collapsed content', () => {
+    it('supports collapsed content', async () => {
         render(
             <CopyableContent
                 collapsedHeight={100}
@@ -97,6 +133,10 @@ describe('CopyableContent', () => {
             />,
         );
 
-        expect(screen.getByRole('button', { name: 'Mehr anzeigen' })).toBeInTheDocument();
+        triggerResize(240);
+
+        await waitFor(() => {
+            expect(screen.getByRole('button', { name: 'Mehr' })).toBeInTheDocument();
+        });
     });
 });
