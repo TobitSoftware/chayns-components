@@ -74,6 +74,7 @@ const Truncation: FC<TruncationProps> = ({
         shouldEnableKeyboardHighlighting,
     );
     const contentRef = useRef<HTMLDivElement>(null);
+    const pendingObservedHeight = useRef(0);
     const [internalIsOpen, setInternalIsOpen] = useState(Boolean(isOpen));
     const [contentHeight, setContentHeight] = useState(0);
 
@@ -89,7 +90,12 @@ const Truncation: FC<TruncationProps> = ({
         }
 
         let frame: number | undefined;
-        const updateContentHeight = () => {
+        const updateContentHeight = (entries?: ResizeObserverEntry[]) => {
+            pendingObservedHeight.current = Math.max(
+                pendingObservedHeight.current,
+                entries?.[0]?.contentRect.height ?? 0,
+            );
+
             if (frame !== undefined) {
                 return;
             }
@@ -103,15 +109,17 @@ const Truncation: FC<TruncationProps> = ({
 
                 setContentHeight(
                     Math.max(
+                        pendingObservedHeight.current,
                         contentRef.current.scrollHeight,
                         contentRef.current.getBoundingClientRect().height,
                     ),
                 );
+                pendingObservedHeight.current = 0;
             });
         };
 
-        const resizeObserver = new ResizeObserver(updateContentHeight);
-        const mutationObserver = new MutationObserver(updateContentHeight);
+        const resizeObserver = new ResizeObserver((entries) => updateContentHeight(entries));
+        const mutationObserver = new MutationObserver(() => updateContentHeight());
 
         resizeObserver.observe(contentRef.current);
         mutationObserver.observe(contentRef.current, {
