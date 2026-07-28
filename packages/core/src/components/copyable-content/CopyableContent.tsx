@@ -4,10 +4,12 @@ import { createDialog, DialogType, ToastType } from 'chayns-api';
 import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import textStrings from '../../constants/textStrings';
 import { useStickyActionState } from '../../hooks/useStickyActionState';
+import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 import SharingContextMenu from '../sharing-context-menu/SharingContextMenu';
 import Icon from '../icon/Icon';
 import Truncation from '../truncation/Truncation';
 import {
+    CopyableContentColorMode,
     StyledCopyableContent,
     StyledCopyableContentActionGroup,
     StyledCopyableContentActions,
@@ -56,6 +58,12 @@ const CopyableContent: FC<CopyableContentProps> = ({
     const isActionGroupSticky = useStickyActionState(rootRef, actionGroupRef);
     const [hasCopied, setHasCopied] = useState(false);
 
+    const colorScheme = useColorScheme();
+    const colorMode =
+        colorScheme?.theme.colorMode === 'dark'
+            ? CopyableContentColorMode.Dark
+            : CopyableContentColorMode.Light;
+
     const defaultCopyButtonText = useTextstringValue({
         textstring: ttsToITextString(textStrings.components.copyableContent.copy),
     });
@@ -99,10 +107,16 @@ const CopyableContent: FC<CopyableContentProps> = ({
     }, [content, defaultCopyFailedMessage, copyFailedMessage, showCopyFeedback]);
 
     return (
-        <StyledCopyableContent $appearance={appearance} className="copyable-content" ref={rootRef}>
+        <StyledCopyableContent
+            $appearance={appearance}
+            $colorMode={colorMode}
+            className="copyable-content"
+            ref={rootRef}
+        >
             <StyledCopyableContentActions ref={actionGroupRef}>
                 <StyledCopyableContentActionGroup>
                     <StyledCopyableContentButton
+                        $colorMode={colorMode}
                         $isSticky={isActionGroupSticky}
                         aria-label={defaultCopyButtonText}
                         onClick={() => {
@@ -119,6 +133,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
                         shouldUseDefaultTriggerStyles={false}
                     >
                         <StyledCopyableContentButton
+                            $colorMode={colorMode}
                             $isSticky={isActionGroupSticky}
                             aria-label={shareText}
                             type="button"
@@ -131,13 +146,16 @@ const CopyableContent: FC<CopyableContentProps> = ({
             {typeof collapsedHeight === 'number' ? (
                 <StyledCopyableContentTruncation>
                     <Truncation collapsedHeight={collapsedHeight}>
-                        <StyledCopyableContentBody $shouldShowPadding={false}>
+                        <StyledCopyableContentBody
+                            $colorMode={colorMode}
+                            $shouldShowPadding={false}
+                        >
                             {children ?? <div dangerouslySetInnerHTML={{ __html: html }} />}
                         </StyledCopyableContentBody>
                     </Truncation>
                 </StyledCopyableContentTruncation>
             ) : (
-                <StyledCopyableContentBody>
+                <StyledCopyableContentBody $colorMode={colorMode}>
                     {children ?? <div dangerouslySetInnerHTML={{ __html: html }} />}
                 </StyledCopyableContentBody>
             )}

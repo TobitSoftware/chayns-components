@@ -2,20 +2,26 @@ import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import styled from 'styled-components';
 import { CopyableContentAppearance } from './CopyableContent.types';
 
+export enum CopyableContentColorMode {
+    Dark = 'dark',
+    Light = 'light',
+}
+
 type StyledCopyableContentProps = WithTheme<{
     $appearance: CopyableContentAppearance;
+    $colorMode: CopyableContentColorMode;
 }>;
 
-const getBackgroundColor = ({ $appearance, theme }: StyledCopyableContentProps) => {
+const getBackgroundColor = ({ $appearance, $colorMode }: StyledCopyableContentProps) => {
     if ($appearance === CopyableContentAppearance.Chat) {
         return 'rgba(0, 0, 0, 0.12)';
     }
 
-    const secondaryColor = theme['secondary-100-rgb'] ?? '255, 255, 255';
-    const opacity = theme.cardBackgroundOpacity ?? 1;
-
-    return `rgba(${secondaryColor}, ${opacity})`;
+    return $colorMode === CopyableContentColorMode.Dark ? '#282c34' : '#fafafa';
 };
+
+const getTextColor = ({ $colorMode }: StyledCopyableContentProps) =>
+    $colorMode === CopyableContentColorMode.Dark ? '#f4f6f8' : '#333333';
 
 export const StyledCopyableContent = styled.section<StyledCopyableContentProps>`
     --copyable-content-action-size: 32px;
@@ -31,13 +37,42 @@ export const StyledCopyableContent = styled.section<StyledCopyableContentProps>`
     );
     border-radius: 8px;
     background-color: ${getBackgroundColor};
-    color: ${({ theme }) => theme.text};
+    color: ${getTextColor};
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
 `;
 
 type StyledCopyableContentButtonProps = WithTheme<{
+    $colorMode: CopyableContentColorMode;
     $isSticky: boolean;
 }>;
+
+const getActionGroupBorder = ({ $colorMode, $isSticky }: StyledCopyableContentButtonProps) => {
+    if (!$isSticky) {
+        return 'transparent';
+    }
+
+    return $colorMode === CopyableContentColorMode.Dark ? '#5a6474' : '#d4d4d4';
+};
+
+const getActionGroupBackground = ({ $colorMode, $isSticky }: StyledCopyableContentButtonProps) => {
+    if (!$isSticky) {
+        return 'transparent';
+    }
+
+    return $colorMode === CopyableContentColorMode.Dark ? '#343a46' : '#fafafa';
+};
+
+const getButtonHoverBackground = ({ $colorMode }: StyledCopyableContentButtonProps) =>
+    $colorMode === CopyableContentColorMode.Dark ? '#454c59' : 'rgba(128, 128, 128, 0.2)';
+
+const getButtonActiveBackground = ({ $colorMode }: StyledCopyableContentButtonProps) =>
+    $colorMode === CopyableContentColorMode.Dark ? '#545d6d' : 'rgba(128, 128, 128, 0.3)';
+
+const getButtonHoverBorder = ({ $colorMode }: StyledCopyableContentButtonProps) =>
+    $colorMode === CopyableContentColorMode.Dark ? '#6a7485' : '#c2c2c2';
+
+const getButtonColor = ({ $colorMode }: StyledCopyableContentButtonProps) =>
+    $colorMode === CopyableContentColorMode.Dark ? '#f4f6f8' : '#999999';
 
 export const StyledCopyableContentActions = styled.div`
     position: sticky;
@@ -60,14 +95,14 @@ export const StyledCopyableContentActionGroup = styled.div`
 
 export const StyledCopyableContentButton = styled.button<StyledCopyableContentButtonProps>`
     box-sizing: border-box;
-    border: 1px solid ${({ $isSticky, theme }) => ($isSticky ? theme['202'] : 'transparent')};
+    border: 1px solid ${getActionGroupBorder};
     border-radius: 4px;
     width: var(--copyable-content-action-size);
     height: var(--copyable-content-action-size);
     padding: 0;
     cursor: pointer;
-    background-color: ${({ $isSticky, theme }) => ($isSticky ? theme['100'] : 'transparent')};
-    color: ${({ theme }) => theme.text};
+    background-color: ${getActionGroupBackground};
+    color: ${getButtonColor};
     box-shadow: ${({ $isSticky }) => ($isSticky ? '0 2px 8px rgba(0, 0, 0, 0.28)' : 'none')};
     transition:
         background-color 0.15s ease,
@@ -76,17 +111,18 @@ export const StyledCopyableContentButton = styled.button<StyledCopyableContentBu
         transform 0.15s ease;
 
     &:hover {
-        border-color: rgba(${({ theme }) => theme['text-rgb']}, 0.18);
-        background-color: rgba(${({ theme }) => theme['text-rgb']}, 0.1);
-        box-shadow: inset 0 0 0 1px rgba(${({ theme }) => theme['text-rgb']}, 0.06);
+        border-color: ${getButtonHoverBorder};
+        background-color: ${getButtonHoverBackground};
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
     }
 
     &:active {
+        background-color: ${getButtonActiveBackground};
         transform: scale(0.94);
     }
 
     &:focus-visible {
-        outline: 2px solid ${({ theme }) => theme.buttonBackgroundColor};
+        outline: 2px solid currentColor;
         outline-offset: 2px;
     }
 `;
@@ -96,8 +132,18 @@ export const StyledCopyableContentTruncation = styled.div`
 `;
 
 type StyledCopyableContentBodyProps = WithTheme<{
+    $colorMode: CopyableContentColorMode;
     $shouldShowPadding?: boolean;
 }>;
+
+const getHeadlineColor = ({ $colorMode }: StyledCopyableContentBodyProps) =>
+    $colorMode === CopyableContentColorMode.Dark ? '#e5e5e5' : '#333333';
+
+const getBlockquoteBorderColor = ({ $colorMode }: StyledCopyableContentBodyProps) =>
+    $colorMode === CopyableContentColorMode.Dark ? '#5a6474' : '#d4d4d4';
+
+const getLinkColor = ({ $colorMode }: StyledCopyableContentBodyProps) =>
+    $colorMode === CopyableContentColorMode.Dark ? '#7cb3ff' : '#0066cc';
 
 export const StyledCopyableContentBody = styled.div<StyledCopyableContentBodyProps>`
     min-width: 0;
@@ -124,7 +170,7 @@ export const StyledCopyableContentBody = styled.div<StyledCopyableContentBodyPro
     h4,
     h5,
     h6 {
-        color: ${({ theme }) => theme.headline};
+        color: ${getHeadlineColor};
     }
 
     ul,
@@ -134,11 +180,11 @@ export const StyledCopyableContentBody = styled.div<StyledCopyableContentBodyPro
 
     blockquote {
         padding-left: 12px;
-        border-left: 3px solid ${({ theme }) => theme['202']};
+        border-left: 3px solid ${getBlockquoteBorderColor};
     }
 
     a {
-        color: ${({ theme }) => theme.primary};
+        color: ${getLinkColor};
         overflow-wrap: anywhere;
     }
 
