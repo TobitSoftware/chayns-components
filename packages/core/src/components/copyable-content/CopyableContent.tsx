@@ -6,12 +6,14 @@ import textStrings from '../../constants/textStrings';
 import { useStickyActionState } from '../../hooks/useStickyActionState';
 import SharingContextMenu from '../sharing-context-menu/SharingContextMenu';
 import Icon from '../icon/Icon';
+import Truncation from '../truncation/Truncation';
 import {
     StyledCopyableContent,
     StyledCopyableContentActionGroup,
     StyledCopyableContentActions,
     StyledCopyableContentBody,
     StyledCopyableContentButton,
+    StyledCopyableContentTruncation,
 } from './CopyableContent.styles';
 import { CopyableContentAppearance } from './CopyableContent.types';
 import { copyableContentToClipboard } from './copyableContentClipboard';
@@ -35,6 +37,10 @@ export type CopyableContentProps = {
      * Replaces the localized error message shown when copying fails.
      */
     copyFailedMessage?: string;
+    /**
+     * The height of the content in its collapsed state.
+     */
+    collapsedHeight?: number;
 };
 
 const CopyableContent: FC<CopyableContentProps> = ({
@@ -42,6 +48,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
     content,
     children,
     copyFailedMessage,
+    collapsedHeight,
 }) => {
     const rootRef = useRef<HTMLElement>(null);
     const actionGroupRef = useRef<HTMLDivElement>(null);
@@ -121,9 +128,19 @@ const CopyableContent: FC<CopyableContentProps> = ({
                     </SharingContextMenu>
                 </StyledCopyableContentActionGroup>
             </StyledCopyableContentActions>
-            <StyledCopyableContentBody>
-                {children ?? <div dangerouslySetInnerHTML={{ __html: html }} />}
-            </StyledCopyableContentBody>
+            {typeof collapsedHeight === 'number' ? (
+                <StyledCopyableContentTruncation>
+                    <Truncation collapsedHeight={collapsedHeight}>
+                        <StyledCopyableContentBody $shouldShowPadding={false}>
+                            {children ?? <div dangerouslySetInnerHTML={{ __html: html }} />}
+                        </StyledCopyableContentBody>
+                    </Truncation>
+                </StyledCopyableContentTruncation>
+            ) : (
+                <StyledCopyableContentBody>
+                    {children ?? <div dangerouslySetInnerHTML={{ __html: html }} />}
+                </StyledCopyableContentBody>
+            )}
         </StyledCopyableContent>
     );
 };

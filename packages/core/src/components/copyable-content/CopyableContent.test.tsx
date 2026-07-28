@@ -88,4 +88,15 @@ describe('CopyableContent', () => {
         expect(container.querySelector('[data-copy-action="false"]')).toBeInTheDocument();
         expect(container.querySelector('[data-calling-code-action="false"]')).toBeInTheDocument();
     });
+
+    it('supports collapsed content', () => {
+        render(
+            <CopyableContent
+                collapsedHeight={100}
+                content={Array(20).fill('Long content').join('\n\n')}
+            />,
+        );
+
+        expect(screen.getByRole('button', { name: 'Mehr anzeigen' })).toBeInTheDocument();
+    });
 });

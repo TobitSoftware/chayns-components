@@ -8,6 +8,14 @@ const Component: FC = () => (
             appearance={CopyableContentAppearance.Chat}
             content={'# Chat-Inhalt\n\nDezent hervorgehobener Inhalt in einer Nachricht.'}
         />
+        <CopyableContent
+            collapsedHeight={180}
+            content={Array.from(
+                { length: 8 },
+                (_, index) =>
+                    `### Abschnitt ${index + 1}\n\nDieser längere Inhalt wird zunächst eingeklappt und kann über „Mehr anzeigen“ vollständig geöffnet werden.`,
+            ).join('\n\n')}
+        />
         <p>
             Die Clipboard API kopiert eine lesbare text/plain-Darstellung und ein sicher mit dem
             Formatter erzeugtes text/html. children ersetzt nur die sichtbare Darstellung.

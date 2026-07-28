@@ -130,6 +130,7 @@ Weitere Informationen stehen im [gemeinsamen Ablaufplan](https://example.com/ver
 
 export const Short = Template.bind({});
 export const Long = Template.bind({});
+export const Collapsed = Template.bind({});
 export const Markdown = Template.bind({});
 export const LongUrl = Template.bind({});
 export const Dark = Template.bind({});
@@ -147,6 +148,14 @@ Long.args = {
         { length: 8 },
         (_, index) =>
             `### Abschnitt ${index + 1}\n\nDas Planungsteam hat die Hinweise aus den Gesprächen aufgenommen und bereitet jetzt die nächsten Schritte vor. Bis Ende der Woche sammeln wir noch Rückmeldungen, damit alle Beteiligten zuverlässig informiert sind.`,
+    ).join('\n\n'),
+};
+Collapsed.args = {
+    collapsedHeight: 180,
+    content: Array.from(
+        { length: 12 },
+        (_, index) =>
+            `### Abschnitt ${index + 1}\n\nDas Planungsteam hat die Hinweise aus den Gesprächen aufgenommen und bereitet jetzt die nächsten Schritte vor.`,
     ).join('\n\n'),
 };
 Markdown.args = { content: PROJECT_UPDATE };
