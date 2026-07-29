@@ -1,0 +1,1 @@
+<FileInput imageSelectPlaceholder="Select image" />;

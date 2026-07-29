@@ -1,0 +1,1 @@
+<SearchInput onChange={() => {}} placeholder="Search" />;
