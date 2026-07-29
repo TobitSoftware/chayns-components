@@ -3,3 +3,4 @@ generate-docs-2.ts
 packages/**/lib
 packages/**/node_modules
 *.docs.tsx
+*.snippets.tsx
