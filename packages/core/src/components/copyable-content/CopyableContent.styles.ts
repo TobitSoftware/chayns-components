@@ -30,7 +30,6 @@ export const StyledCopyableContent = styled.section<StyledCopyableContentProps>`
     margin: 4px 0;
     min-width: 0;
     max-width: 100%;
-    overflow-x: clip;
     overflow-wrap: anywhere;
     padding-top: calc(
         var(--copyable-content-action-size) + var(--copyable-content-action-inset) * 2
@@ -148,6 +147,7 @@ const getLinkColor = ({ $colorMode }: StyledCopyableContentBodyProps) =>
 export const StyledCopyableContentBody = styled.div<StyledCopyableContentBodyProps>`
     min-width: 0;
     max-width: 100%;
+    overflow-x: clip;
     overflow-wrap: anywhere;
     padding: ${({ $shouldShowPadding = true }) => ($shouldShowPadding ? '0 12px 12px' : '0')};
 
