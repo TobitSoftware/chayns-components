@@ -212,12 +212,6 @@ export const handleHorizontalArrowNavigation = ({
             focusableLeftElements[focusableLeftElements.length - 1]?.focus();
             return true;
         }
-
-        if (event.key === 'ArrowRight' && focusableRightElements.length > 0) {
-            event.preventDefault();
-            focusableRightElements[0]?.focus();
-            return true;
-        }
     }
 
     return false;
