@@ -307,9 +307,9 @@ export const handleVerticalListGroupNavigation = ({
         return true;
     }
 
-    const isBackward = event.key === 'ArrowUp';
-
     event.preventDefault();
+
+    const isBackward = event.key === 'ArrowUp';
 
     const nextIndex = isBackward
         ? (currentIndex - 1 + listItemUuids.length) % listItemUuids.length

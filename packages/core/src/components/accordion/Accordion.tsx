@@ -388,6 +388,7 @@ const Accordion: FC<AccordionProps> = ({
                 accordionUuids?.length &&
                 (e.key === 'ArrowDown' || e.key === 'ArrowUp')
             ) {
+                e.preventDefault();
                 const currentIndex = accordionUuids.indexOf(uuid);
 
                 if (currentIndex !== -1) {
