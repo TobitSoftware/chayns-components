@@ -41,5 +41,19 @@ export default {
                 fallback: 'Entfernen',
             },
         },
+        copyableContent: {
+            copy: {
+                stringName: 'txt_chayns_components_core_components_copyableContent_copy',
+                fallback: 'Kopieren',
+            },
+            share: {
+                stringName: 'txt_chayns_components_core_components_copyableContent_share',
+                fallback: 'Teilen',
+            },
+            copyFailed: {
+                stringName: 'txt_chayns_components_core_components_copyableContent_copyFailed',
+                fallback: 'Kopieren fehlgeschlagen',
+            },
+        },
     },
 } as const;

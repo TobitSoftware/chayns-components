@@ -37,7 +37,7 @@ export type RadioButtonProps = {
     /**
      * The id of the radio button.
      */
-    id: string;
+    id: string | number;
     /**
      * The label that should be displayed next to the radio button.
      */

@@ -12,12 +12,17 @@ export const StyledCodeHighlighter = styled.div<StyledCodeHighlighterProps>`
     background-color: ${({ $codeTheme }) =>
         $codeTheme === CodeHighlighterTheme.Dark ? '#282c34' : '#fafafa'};
     border-radius: 8px;
+    --code-highlighter-action-size: 32px;
+    --code-highlighter-action-inset: 8px;
     padding-bottom: 6px;
+    padding-top: calc(
+        var(--code-highlighter-action-size) + var(--code-highlighter-action-inset) * 2
+    );
 
     pre {
         margin: 0 !important;
         overflow: auto;
-        padding: 15px;
+        padding: 0 15px 15px;
         line-height: 1.5;
 
         code {
@@ -39,10 +44,9 @@ type StyledCodeHighlighterHeaderProps = WithTheme<{
 export const StyledCodeHighlighterHeader = styled.div<StyledCodeHighlighterHeaderProps>`
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid
-        ${({ $codeTheme }) => ($codeTheme === CodeHighlighterTheme.Dark ? '#e5e5e5' : '#999999')};
-    padding: 4px 12px;
+    padding: 0 12px;
+    height: 0;
+    transform: translateY(-26px);
 `;
 
 type StyledCodeHighlighterFileNameProps = WithTheme<{

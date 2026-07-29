@@ -1,3 +1,4 @@
+import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
 import React, {
     FC,
     KeyboardEventHandler,
@@ -7,24 +8,22 @@ import React, {
     useCallback,
     useEffect,
     useLayoutEffect,
-    useMemo,
     useRef,
     useState,
 } from 'react';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
+import textStrings from '../../constants/textStrings';
 import { ClampPosition } from '../../types/truncation';
-import { debounce } from '../../utils/debounce';
-import { truncateElement } from '../../utils/truncation';
 import {
     StyledMotionTruncationContent,
     StyledTruncation,
     StyledTruncationClamp,
     StyledTruncationClampFocusWrapper,
     StyledTruncationClampWrapper,
-    StyledTruncationPseudoContent,
+    StyledTruncationContent,
 } from './Truncation.styles';
 import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
 import textStrings from '../../constants/textStrings';
-import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 export type TruncationProps = {
@@ -37,7 +36,7 @@ export type TruncationProps = {
      */
     clampPosition?: ClampPosition;
     /**
-     * The height of the children Element in it`s collapsed state.
+     * The height of the children element in its collapsed state.
      */
     collapsedHeight?: number;
     /**
@@ -68,8 +67,8 @@ const Truncation: FC<TruncationProps> = ({
     collapsedHeight = 150,
     clampPosition = ClampPosition.Right,
     isOpen,
-    moreLabel,
     lessLabel,
+    moreLabel,
     onChange,
     children,
     shouldEnableKeyboardHighlighting,
@@ -77,50 +76,86 @@ const Truncation: FC<TruncationProps> = ({
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlighting,
     );
-
-    const [internalIsOpen, setInternalIsOpen] = useState(false);
-    const [showClamp, setShowClamp] = useState(true);
-    const [newCollapsedHeight, setNewCollapsedHeight] = useState(collapsedHeight);
-    const [originalHeight, setOriginalHeight] = useState(0);
-    const [shouldShowCollapsedElement, setShouldShowCollapsedElement] = useState(true);
-    const [hasSizeChanged, setHasSizeChanged] = useState(false);
-    const [initialRender, setInitialRender] = useState(true);
-    const [shouldSkipChangeCheck, setShouldSkipChangeCheck] = useState(false);
-
-    const [originalSmallHeight, setOriginalSmallHeight] = useState(0);
-    const [originalBigHeight, setOriginalBigHeight] = useState(0);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const pendingObservedHeight = useRef(0);
+    const [internalIsOpen, setInternalIsOpen] = useState(Boolean(isOpen));
+    const [contentHeight, setContentHeight] = useState(0);
 
     useEffect(() => {
         setInitialRender(false);
     }, []);
 
-    const parentRef = useRef<HTMLDivElement>(null);
-    const clampRef = useRef<HTMLAnchorElement>(null);
-    const pseudoChildrenRef = useRef<HTMLDivElement>(null);
-    const childrenRef = useRef<HTMLDivElement>(null);
-    const originalChildrenRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
     const hasCollapsed = useRef(false);
     const isAnimating = useRef(false);
     const hasSizeRecentlyChanged = useRef(false);
     const canResetSizeChanged = useRef(true);
 
-    useFocusRingPortal(clampRef, { isEnabled: shouldShowKeyboardHighlighting && showClamp });
-
     useEffect(() => {
         if (typeof isOpen === 'boolean') {
             setInternalIsOpen(isOpen);
-            setShowClamp(!isOpen);
         }
     }, [isOpen]);
 
-    // Changes the state of the truncation
+    useIsomorphicLayoutEffect(() => {
+        if (!contentRef.current) {
+            return () => {};
+        }
+
+        let frame: number | undefined;
+        const updateContentHeight = (entries?: ResizeObserverEntry[]) => {
+            pendingObservedHeight.current = Math.max(
+                pendingObservedHeight.current,
+                entries?.[0]?.contentRect.height ?? 0,
+            );
+
+            if (frame !== undefined) {
+                return;
+            }
+
+            frame = window.requestAnimationFrame(() => {
+                frame = undefined;
+
+                if (!contentRef.current) {
+                    return;
+                }
+
+                setContentHeight(
+                    Math.max(
+                        pendingObservedHeight.current,
+                        contentRef.current.scrollHeight,
+                        contentRef.current.getBoundingClientRect().height,
+                    ),
+                );
+                pendingObservedHeight.current = 0;
+            });
+        };
+
+        const resizeObserver = new ResizeObserver((entries) => updateContentHeight(entries));
+        const mutationObserver = new MutationObserver(() => updateContentHeight());
+
+        resizeObserver.observe(contentRef.current);
+        mutationObserver.observe(contentRef.current, {
+            characterData: true,
+            childList: true,
+            subtree: true,
+        });
+        updateContentHeight();
+
+        return () => {
+            resizeObserver.disconnect();
+            mutationObserver.disconnect();
+
+            if (frame !== undefined) {
+                window.cancelAnimationFrame(frame);
+            }
+        };
+    }, [children]);
+
     const handleClampClick = useCallback<MouseEventHandler<HTMLAnchorElement>>(
         (event) => {
             setInternalIsOpen((current) => {
-                if (typeof onChange === 'function') {
-                    onChange(event, !current);
-                }
-
+                onChange?.(event, !current);
                 return !current;
             });
         },
@@ -134,219 +169,55 @@ const Truncation: FC<TruncationProps> = ({
         }
     }, []);
 
-    useEffect(() => {
-        if (children) {
-            setShouldSkipChangeCheck(true);
+    const internalMoreLabel = moreLabel ?? (
+        <Textstring textstring={ttsToITextString(textStrings.components.truncation.more)} />
+    );
+    const internalLessLabel = lessLabel ?? (
+        <Textstring textstring={ttsToITextString(textStrings.components.truncation.less)} />
+    );
+    const hasOverflow = contentHeight > collapsedHeight;
+    const collapsedContentHeight = Math.min(contentHeight || collapsedHeight, collapsedHeight);
+    const targetHeight = internalIsOpen ? contentHeight || collapsedHeight : collapsedContentHeight;
 
-            window.setTimeout(() => {
-                setShouldSkipChangeCheck(false);
-            }, 200);
-        }
-    }, [children]);
+    const internalMoreLabel = moreLabel ?? (
+        <Textstring textstring={ttsToITextString(textStrings.components.truncation.more)} />
+    );
+    const internalLessLabel = lessLabel ?? (
+        <Textstring textstring={ttsToITextString(textStrings.components.truncation.less)} />
+    );
+    const hasOverflow = contentHeight > collapsedHeight;
+    const collapsedContentHeight = Math.min(contentHeight || collapsedHeight, collapsedHeight);
+    const targetHeight = internalIsOpen ? contentHeight || collapsedHeight : collapsedContentHeight;
 
-    const handleAnimationEnd = useCallback(() => {
-        hasCollapsed.current = true;
-        isAnimating.current = false;
-
-        if (canResetSizeChanged.current) {
-            setHasSizeChanged(false);
-            canResetSizeChanged.current = false;
-        }
-
-        window.setTimeout(() => {
-            hasSizeRecentlyChanged.current = false;
-        }, 10);
-
-        setShouldShowCollapsedElement(!internalIsOpen);
-
-        window.setTimeout(() => {
-            hasCollapsed.current = false;
-        }, 30);
-    }, [internalIsOpen]);
-
-    useEffect(() => {
-        if (!pseudoChildrenRef.current) {
-            return;
-        }
-
-        setOriginalHeight(pseudoChildrenRef.current.offsetHeight);
-        setOriginalBigHeight(pseudoChildrenRef.current.offsetHeight);
-
-        truncateElement(pseudoChildrenRef.current, collapsedHeight);
-
-        setNewCollapsedHeight(pseudoChildrenRef.current.offsetHeight);
-        setOriginalSmallHeight(pseudoChildrenRef.current.offsetHeight);
-    }, [collapsedHeight, pseudoChildrenRef, children]);
-
-    // Checks if the clamp should be shown
-    useEffect(() => {
-        if (
-            pseudoChildrenRef.current &&
-            (!hasSizeChanged || shouldSkipChangeCheck) &&
-            !initialRender
-        ) {
-            setShowClamp(originalHeight > newCollapsedHeight);
-        }
-    }, [
-        shouldSkipChangeCheck,
-        collapsedHeight,
-        hasSizeChanged,
-        initialRender,
-        newCollapsedHeight,
-        originalHeight,
-        children,
-    ]);
-
-    useEffect(() => {
-        if (childrenRef.current && pseudoChildrenRef.current && originalChildrenRef.current) {
-            while (childrenRef.current.firstChild) {
-                childrenRef.current.removeChild(childrenRef.current.firstChild);
-            }
-
-            childrenRef.current.appendChild(
-                shouldShowCollapsedElement && !internalIsOpen
-                    ? pseudoChildrenRef.current
-                    : originalChildrenRef.current,
-            );
-
-            parentRef.current?.appendChild(
-                shouldShowCollapsedElement && !internalIsOpen
-                    ? originalChildrenRef.current
-                    : pseudoChildrenRef.current,
-            );
-
-            (childrenRef.current.children[0] as HTMLDivElement).style.visibility = 'visible';
-        }
-    }, [children, internalIsOpen, shouldShowCollapsedElement]);
-
-    useIsomorphicLayoutEffect(() => {
-        if (originalChildrenRef.current) {
-            const resizeObserver = new ResizeObserver((entries) => {
-                if (entries && entries[0]) {
-                    const observedHeight = entries[0].contentRect.height;
-
-                    setOriginalHeight(
-                        observedHeight < originalBigHeight ? originalBigHeight : observedHeight,
-                    );
-
-                    if (
-                        !hasCollapsed.current &&
-                        !isAnimating.current &&
-                        !hasSizeRecentlyChanged.current
-                    ) {
-                        void debounce(() => {
-                            canResetSizeChanged.current = true;
-                        }, 250)();
-
-                        setHasSizeChanged(true);
-                        hasSizeRecentlyChanged.current = true;
-                    }
-                }
-            });
-
-            resizeObserver.observe(originalChildrenRef.current);
-
-            return () => {
-                resizeObserver.disconnect();
-            };
-        }
-
-        return () => {};
-    }, [originalBigHeight, children]);
-
-    useIsomorphicLayoutEffect(() => {
-        if (pseudoChildrenRef.current) {
-            const resizeObserver = new ResizeObserver((entries) => {
-                if (entries && entries[0]) {
-                    const observedHeight = entries[0].contentRect.height;
-
-                    setNewCollapsedHeight(
-                        observedHeight < originalSmallHeight ? originalSmallHeight : observedHeight,
-                    );
-
-                    if (
-                        !hasCollapsed.current &&
-                        !isAnimating.current &&
-                        !hasSizeRecentlyChanged.current
-                    ) {
-                        void debounce(() => {
-                            canResetSizeChanged.current = true;
-                        }, 250)();
-
-                        setHasSizeChanged(true);
-                        hasSizeRecentlyChanged.current = true;
-                    }
-                }
-            });
-
-            resizeObserver.observe(pseudoChildrenRef.current);
-
-            return () => {
-                resizeObserver.disconnect();
-            };
-        }
-
-        return () => {};
-    }, [originalSmallHeight, children]);
-
-    const ts = textStrings.components.truncation;
-
-    const internalMoreLabel = moreLabel ?? <Textstring textstring={ttsToITextString(ts.more)} />;
-    const internalLessLabel = lessLabel ?? <Textstring textstring={ttsToITextString(ts.less)} />;
-
-    return useMemo(
-        () => (
-            <StyledTruncation className="beta-chayns-truncation" ref={parentRef}>
-                <StyledTruncationPseudoContent ref={pseudoChildrenRef}>
-                    {children}
-                </StyledTruncationPseudoContent>
-                <StyledTruncationPseudoContent ref={originalChildrenRef}>
-                    {children}
-                </StyledTruncationPseudoContent>
-                <StyledMotionTruncationContent
-                    animate={{ height: internalIsOpen ? originalHeight : newCollapsedHeight }}
-                    initial={false}
-                    transition={{ type: 'tween', duration: hasSizeChanged ? 0 : 0.2 }}
-                    onAnimationComplete={handleAnimationEnd}
-                    onAnimationStart={() => {
-                        isAnimating.current = true;
-                    }}
-                    ref={childrenRef}
-                />
-                {showClamp && (
-                    <StyledTruncationClampWrapper $position={clampPosition}>
-                        <TextstringProvider libraryName="@chayns-components-core">
-                            <StyledTruncationClampFocusWrapper>
-                                <StyledTruncationClamp
-                                    ref={clampRef}
-                                    onClick={handleClampClick}
-                                    onKeyDown={handleClampKeyDown}
-                                    role="button"
-                                    tabIndex={0}
-                                >
-                                    {internalIsOpen ? internalLessLabel : internalMoreLabel}
-                                </StyledTruncationClamp>
-                            </StyledTruncationClampFocusWrapper>
-                        </TextstringProvider>
-                    </StyledTruncationClampWrapper>
-                )}
-            </StyledTruncation>
-        ),
-        [
-            children,
-            clampPosition,
-            handleAnimationEnd,
-            handleClampClick,
-            handleClampKeyDown,
-            hasSizeChanged,
-            internalIsOpen,
-            lessLabel,
-            moreLabel,
-            newCollapsedHeight,
-            originalHeight,
-            shouldShowKeyboardHighlighting,
-            showClamp,
-        ],
+    return (
+        <StyledTruncation className="beta-chayns-truncation">
+            <StyledMotionTruncationContent
+                animate={{ height: targetHeight }}
+                initial={false}
+                transition={{ type: 'tween', duration: 0.2 }}
+            >
+                <StyledTruncationContent ref={contentRef}>{children}</StyledTruncationContent>
+            </StyledMotionTruncationContent>
+            {hasOverflow && (
+                <StyledTruncationClampWrapper $position={clampPosition}>
+                    <TextstringProvider libraryName="@chayns-components-core">
+                        <StyledTruncationClampFocusWrapper
+                            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                        >
+                            <StyledTruncationClamp
+                                onClick={handleClampClick}
+                                onKeyDown={handleClampKeyDown}
+                                role="button"
+                                tabIndex={0}
+                            >
+                                {internalIsOpen ? internalLessLabel : internalMoreLabel}
+                            </StyledTruncationClamp>
+                        </StyledTruncationClampFocusWrapper>
+                    </TextstringProvider>
+                </StyledTruncationClampWrapper>
+            )}
+        </StyledTruncation>
+    );
     );
 };
 

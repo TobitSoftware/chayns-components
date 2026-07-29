@@ -9,14 +9,14 @@ import React, {
 } from 'react';
 import { getRadioButtonOrder } from '../../../utils/radioButton';
 
-type IUpdateSelectedRadioButtonId = (id: string | undefined) => void;
+type IUpdateSelectedRadioButtonId = (id: string | number | undefined) => void;
 
-type IUpdateHasRightElement = (id: string, hasRightElement: boolean) => void;
+type IUpdateHasRightElement = (id: string | number, hasRightElement: boolean) => void;
 
-type IRadioButtonRightElements = { id: string; hasRightElement: boolean }[];
+type IRadioButtonRightElements = { id: string | number; hasRightElement: boolean }[];
 
 interface IRadioButtonGroupContext {
-    selectedRadioButtonId: string | undefined;
+    selectedRadioButtonId: string | number | undefined;
     updateSelectedRadioButtonId?: IUpdateSelectedRadioButtonId;
     radioButtonRightElements: IRadioButtonRightElements;
     updateHasRightElement?: IUpdateHasRightElement;
@@ -56,11 +56,11 @@ export type RadioButtonGroupProps = {
     /**
      * Function to be executed when an id is selected.
      */
-    onSelect?: (id?: string) => void;
+    onSelect?: (id?: string | number) => void;
     /**
      * The id of the current selected RadioButton.
      */
-    selectedId?: string;
+    selectedId?: string | number;
 };
 
 const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
@@ -79,7 +79,7 @@ const RadioButtonGroup = forwardRef<RadioButtonGroupRef, RadioButtonGroupProps>(
         const [radioButtonRightElements, setRadioButtonRightElements] =
             useState<IRadioButtonRightElements>([]);
 
-        const isControlled = typeof selectedId === 'string';
+        const isControlled = selectedId !== undefined;
 
         useEffect(() => {
             setSelectedRadioButtonId(selectedId);

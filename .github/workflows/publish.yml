@@ -9,8 +9,12 @@ on:
       - 'v5.[0-9]+.[0-9]+-beta.[0-9]+'
 
 permissions:
-  id-token: write  # Required for OIDC
+  id-token: write # Required for npm OIDC trusted publishing and provenance
   contents: write
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   publish:
@@ -27,11 +31,34 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - name: Update npm
+        run: |
+          npm install -g npm@latest
+          npm --version
+          node --version
+
       - name: Build packages
         uses: ./.github/actions/lerna-build
 
+      - name: Typecheck packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run typecheck
+
       - name: Publish packages
-        run: lerna publish from-package --yes --dist-tag ${{ env.TAG }}
+        shell: bash
+        env:
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          set -euo pipefail
+          lerna publish from-package --yes --dist-tag "$TAG"
 
       - name: Generate and upload docs
         run: npm run generate:docs

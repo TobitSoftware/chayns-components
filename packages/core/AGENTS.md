@@ -1,15 +1,8 @@
 # @chayns-components/core
 
-React component package providing 46 documented components for chayns applications.
+React component package providing 47 documented components for chayns applications.
 
-Documented components: `Accordion`, `AmountControl`, `AnimatedNumber`, `Badge`, `Button`,
-`Checkbox`, `ComboBox`, `ContentCard`, `ContextMenu`, `ExpandableContent`, `FileInput`, `FileList`,
-`FileSelect`, `Filter`, `FilterButtons`, `GridImage`, `GroupedImage`, `HighlightSlider`, `Icon`,
-`Input`, `List`, `Masonry`, `MentionFinder`, `MultiActionButton`, `NumberInput`, `Popup`,
-`ProgressBar`, `RadioButton`, `ScrollView`, `SearchBox`, `SearchInput`, `SelectButton`,
-`SetupWizard`, `SetupWizardItem`, `SharingBar`, `SharingButton`, `Signature`, `Skeleton`, `Slider`,
-`SliderButton`, `SmallWaitCursor`, `TagInput`, `TextArea`, `Tooltip`, `Truncation`,
-`VerificationBadge`.
+Documented components: `Accordion`, `AmountControl`, `AnimatedNumber`, `Badge`, `Button`, `Checkbox`, `ComboBox`, `ContentCard`, `ContextMenu`, `CopyableContent`, `ExpandableContent`, `FileInput`, `FileList`, `FileSelect`, `Filter`, `FilterButtons`, `GridImage`, `GroupedImage`, `HighlightSlider`, `Icon`, `Input`, `List`, `Masonry`, `MentionFinder`, `MultiActionButton`, `NumberInput`, `Popup`, `ProgressBar`, `RadioButton`, `ScrollView`, `SearchBox`, `SearchInput`, `SelectButton`, `SetupWizard`, `SetupWizardItem`, `SharingBar`, `SharingButton`, `Signature`, `Skeleton`, `Slider`, `SliderButton`, `SmallWaitCursor`, `TagInput`, `TextArea`, `Tooltip`, `Truncation`, `VerificationBadge`.
 
 ## Import
 
@@ -34,6 +27,7 @@ import { Accordion, AmountControl, AnimatedNumber } from '@chayns-components/cor
 - `ComboBox`
 - `ContentCard`
 - `ContextMenu`
+- `CopyableContent`
 - `ExpandableContent`
 - `FileInput`
 - `FileList`
@@ -1451,9 +1445,159 @@ No additional exported types documented.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public
-  package export.
+- Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+## CopyableContent
 
+`CopyableContent` is exported by `@chayns-components/core` and should be imported from the public package entry point.
+
+### Import
+
+```ts
+import { CopyableContent } from '@chayns-components/core';
+```
+
+### Examples
+
+#### Short
+
+```tsx
+<CopyableContent
+    content={'Vielen Dank für eure Rückmeldungen. Der Termin für das gemeinsame Sommerfest steht nun fest: Samstag, 22. August, ab 15 Uhr.'}
+/>
+```
+
+#### Long
+
+```tsx
+<CopyableContent
+    content={Array.from(
+            { length: 8 },
+            (_, index) =>
+                `### Abschnitt ${index + 1}\n\nDas Planungsteam hat die Hinweise aus den Gesprächen aufgenommen und bereitet jetzt die nächsten Schritte vor. Bis Ende der Woche sammeln wir noch Rückmeldungen, damit alle Beteiligten zuverlässig informiert sind.`,
+        ).join('\n\n')}
+/>
+```
+
+#### Collapsed
+
+```tsx
+<CopyableContent
+    collapsedHeight={180}
+    content={Array.from(
+            { length: 12 },
+            (_, index) =>
+                `### Abschnitt ${index + 1}\n\nDas Planungsteam hat die Hinweise aus den Gesprächen aufgenommen und bereitet jetzt die nächsten Schritte vor.`,
+        ).join('\n\n')}
+/>
+```
+
+#### Typewriter Loop
+
+```tsx
+<CopyableContent />
+```
+
+#### Markdown
+
+```tsx
+<CopyableContent
+    content={`# Projekt-Update: Sommerfest
+    
+    Die Vorbereitungen für das Sommerfest gehen in die letzte Runde. Das Organisationsteam hat die Rückmeldungen aus den einzelnen Gruppen zusammengeführt und den Ablauf für den Nachmittag angepasst.
+    
+    ## Was bereits feststeht
+    
+    - Der Aufbau beginnt am Freitag um 16:30 Uhr am Bürgerhaus.
+    - Für Kinder gibt es eine Kreativstation, eine kleine Rallye und einen ruhigen Rückzugsbereich.
+    - Getränke und vegetarische Speisen werden vor Ort angeboten.
+    
+    > Bitte gebt Rückmeldung, falls ihr beim Aufbau helfen könnt oder besondere Anforderungen an die Verpflegung habt.
+    
+    Weitere Informationen stehen im [gemeinsamen Ablaufplan](https://example.com/veranstaltungen/sommerfest-2026/ablauf-und-helferinnen).`}
+/>
+```
+
+#### Long Url
+
+```tsx
+<CopyableContent
+    content={'Die vollständige Materialliste findet ihr unter https://example.com/veranstaltungen/sommerfest-2026/organisation/materialien/helferinnen-und-helfer/abstimmung-und-zeitplan.'}
+/>
+```
+
+#### Dark
+
+```tsx
+<CopyableContent
+    content={`${PROJECT_UPDATE}\n\n---\n\nDiese Story bitte mit dunklem Storybook-Hintergrund prüfen.`}
+/>
+```
+
+#### Chat Appearance
+
+```tsx
+<CopyableContent
+    appearance={CopyableContentAppearance.Chat}
+    content={`# Projekt-Update: Sommerfest
+    
+    Die Vorbereitungen für das Sommerfest gehen in die letzte Runde. Das Organisationsteam hat die Rückmeldungen aus den einzelnen Gruppen zusammengeführt und den Ablauf für den Nachmittag angepasst.
+    
+    ## Was bereits feststeht
+    
+    - Der Aufbau beginnt am Freitag um 16:30 Uhr am Bürgerhaus.
+    - Für Kinder gibt es eine Kreativstation, eine kleine Rallye und einen ruhigen Rückzugsbereich.
+    - Getränke und vegetarische Speisen werden vor Ort angeboten.
+    
+    > Bitte gebt Rückmeldung, falls ihr beim Aufbau helfen könnt oder besondere Anforderungen an die Verpflegung habt.
+    
+    Weitere Informationen stehen im [gemeinsamen Ablaufplan](https://example.com/veranstaltungen/sommerfest-2026/ablauf-und-helferinnen).`}
+/>
+```
+
+#### Nested Scroll Container
+
+```tsx
+<CopyableContent
+    content={Array.from(
+            { length: 12 },
+            (_, index) =>
+                `### Update ${index + 1}\n\nDas Organisationsteam hat die aktuelle Rückmeldung zusammengefasst. Bitte prüft die offenen Punkte und gebt bis Freitag Bescheid, falls sich bei eurer Planung noch etwas geändert hat.`,
+        ).join('\n\n')}
+/>
+```
+
+#### Virtualized Chat Message
+
+```tsx
+<CopyableContent />
+```
+
+#### Conversation
+
+```tsx
+<CopyableContent
+    content={`### Nächster Schritt
+    
+    Bitte prüft die **offenen Aufgaben** und ergänzt eure Rückmeldung bis Freitagmittag. Die vollständige Übersicht steht im [gemeinsamen Ablaufplan](https://example.com/ablaufplan).`}
+/>
+```
+
+### Props
+
+No prop documentation available.
+
+### Types
+
+No additional exported types documented.
+
+### Usage Notes
+
+- Import `CopyableContent` directly from `@chayns-components/core` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+
+### Anti Patterns
+
+- Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
 ## ExpandableContent
 
 `ExpandableContent` is exported by `@chayns-components/core` and should be imported from the public
@@ -4945,6 +5089,31 @@ import { Button, Truncation } from '@chayns-components/core';
             <p>Alle Infos und Tickets zum Event in Kürze.&nbsp;</p>
             <Button onClick={() => alert('hallo')}>test</Button>
         </>
+    }
+</Truncation>
+```
+
+#### Typewriter Loop
+
+```tsx
+<Truncation
+    collapsedHeight={100}
+>
+    {
+        <div>
+                <p id="isPasted">
+                    Der legendärste Abend: Homecoming at next! Studenten und Ausreißer, Urlauber und
+                    Daheimgebliebene, Partymäuse und Partymuffel – sie alle zieht es am Tag vor Heiligabend
+                    in die Heimat an einen zuvor ausgemachten Ort, um all die guten Freunde und alte
+                    Bekannte wiederzutreffen.
+                </p>
+                <p>
+                    Was damals vor vielen Jahren auf der StattAlm auf dem Campus in Ahaus begann, führen wir
+                    bei uns im next fort!&nbsp;
+                </p>
+                <p>Alle Infos und Tickets zum Event in Kürze.&nbsp;</p>
+                <Button onClick={() => alert('hallo')}>test</Button>
+            </div>
     }
 </Truncation>
 ```

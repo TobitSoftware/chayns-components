@@ -1,5 +1,5 @@
 export interface RadioButtonItem {
-    id: string;
+    id: string | number;
     isChecked: boolean;
 }
 

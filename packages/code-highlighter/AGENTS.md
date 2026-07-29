@@ -251,6 +251,67 @@ import { CodeHighlighter } from '@chayns-components/code-highlighter';
 />
 ```
 
+#### Sticky Header
+
+```tsx
+<CodeHighlighter
+    copyButtonText={'Code kopieren'}
+    shouldShowLineNumbers
+    language={'typescript'}
+    code={Array.from({ length: 100 }, (_, index) => `console.log('Zeile ${index + 1}');`).join(
+            '\n',
+        )}
+/>
+```
+
+#### Light
+
+```tsx
+<CodeHighlighter
+    copyButtonText={'Code kopieren'}
+    shouldShowLineNumbers
+    language={'tsx'}
+    code={General.args?.code}
+    theme={CodeHighlighterTheme.Light}
+/>
+```
+
+#### Dark
+
+```tsx
+<CodeHighlighter
+    copyButtonText={'Code kopieren'}
+    shouldShowLineNumbers
+    language={'tsx'}
+    code={General.args?.code}
+    theme={CodeHighlighterTheme.Dark}
+/>
+```
+
+#### Nested Scroll Container
+
+```tsx
+<CodeHighlighter
+    copyButtonText={'Code kopieren'}
+    shouldShowLineNumbers
+    language={'typescript'}
+    code={Array.from(
+            { length: 80 },
+            (_, index) => `const update${index + 1} = createUpdate(${index + 1});`,
+        ).join('\n')}
+/>
+```
+
+#### Virtualized Chat Message
+
+```tsx
+<CodeHighlighter
+    copyButtonText={'Code kopieren'}
+    shouldShowLineNumbers
+    language={'tsx'}
+/>
+```
+
 ### Props
 
 No prop documentation available.
