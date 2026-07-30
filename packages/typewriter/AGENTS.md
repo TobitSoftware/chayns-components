@@ -219,17 +219,55 @@ import { Typewriter } from '@chayns-components/typewriter';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `animationSteps` | `number \| undefined` | no | The number of characters that will be animated per animation cycle. |
+| `autoSpeedBaseFactor` | `number \| undefined` | no | Sets how long the animation should last when `shouldCalcAutoSpeed` is enabled in milliseconds.<br />When chunks are streamed, this value will only be used for the initial speed and then change to the speed characters are added at |
+| `children` | `string \| ReactElement<any, string \| JSXElementConstructor<any>> \| string[] \| ReactElement<any, string \| JSXElementConstructor<any>>[]` | yes | The text to type |
+| `cursorType` | `CursorType \| undefined` | no | The type of the cursor. Use the CursorType enum for this prop. |
+| `nextTextDelay` | `TypewriterDelay \| undefined` | no | The delay in milliseconds before the next text is shown.<br />This prop is only used if multiple texts are given. |
+| `onFinish` | `VoidFunction \| undefined` | no | Function that is executed when the typewriter animation has finished. This function will not<br />be executed if multiple texts are used. |
+| `onResetAnimationEnd` | `VoidFunction \| undefined` | no | Function that is executed when the reset animation has finished. This function will not be<br />executed if `shouldUseResetAnimation` is not set to `true`. |
+| `onResetAnimationStart` | `VoidFunction \| undefined` | no | Function that is executed when the reset animation has started. This function will not be<br />executed if `shouldUseResetAnimation` is not set to `true`. |
+| `onTypingAnimationEnd` | `VoidFunction \| undefined` | no | Function that is executed when the typing animation has finished. If multiple texts are given,<br />this function will be executed for each text. |
+| `onTypingAnimationStart` | `VoidFunction \| undefined` | no | Function that is executed when the typing animation has started. If multiple texts are given,<br />this function will be executed for each text. |
+| `pseudoChildren` | `string \| ReactElement<any, string \| JSXElementConstructor<any>> \| undefined` | no | Pseudo-element to be rendered invisible during animation to define the size of the element<br />for the typewriter effect. By default, the "children" is used for this purpose. |
+| `resetDelay` | `TypewriterDelay \| undefined` | no | Waiting time in milliseconds before the typewriter resets the text.<br />This prop is only used if multiple texts are given. |
+| `resetSpeed` | `number \| undefined` | no | The reset speed of the animation. Use the TypewriterSpeed enum for this prop. |
+| `shouldCalcAutoSpeed` | `boolean \| undefined` | no | Whether the animation speed should be calculated with the chunk interval. |
+| `shouldForceCursorAnimation` | `boolean \| undefined` | no | Specifies whether the cursor should be forced to animate even if no text is currently animated. |
+| `shouldHideCursor` | `boolean \| undefined` | no | Specifies whether the cursor should be hidden |
+| `shouldRemainSingleLine` | `boolean \| undefined` | no | Whether the content should remain a single line. |
+| `shouldSortChildrenRandomly` | `boolean \| undefined` | no | Specifies whether the children should be sorted randomly if there are multiple texts.<br />This makes the typewriter start with a different text each time and also changes them<br />in a random order. |
+| `shouldUseAnimationHeight` | `boolean \| undefined` | no | Specifies whether the animation should use its full height or the height of the current<br />chunk. |
+| `shouldUseResetAnimation` | `boolean \| undefined` | no | Specifies whether the reset of the text should be animated with a backspace animation for<br />multiple texts. |
+| `shouldWaitForContent` | `boolean \| undefined` | no | Whether the typewriter should wait for new content |
+| `speed` | `number \| undefined` | no | The speed of the animation. Use the TypewriterSpeed enum for this prop. |
+| `startDelay` | `TypewriterDelay \| undefined` | no | The delay in milliseconds before the typewriter starts typing. |
+| `textStyle` | `CSSPropertiesWithVars \| undefined` | no | The style of the typewriter text element |
 
 ### Types
 
-No additional exported types documented.
+- `CursorType` -> `enum CursorType {
+    Default = 'default',
+    Thin = 'thin',
+}`
+- `TypewriterDelay` -> `enum TypewriterDelay {
+    ExtraSlow = 4000,
+    Slow = 2000,
+    Medium = 1000,
+    Fast = 500,
+    ExtraFast = 250,
+    None = 0,
+}`
 
 ### Usage Notes
 
 - Import `Typewriter` directly from `@chayns-components/typewriter` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `children`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/typewriter/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.

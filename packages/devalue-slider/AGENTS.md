@@ -91,11 +91,22 @@ import { DevalueSlider } from '@chayns-components/devalue-slider';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `backgroundColor` | `BackgroundColor \| undefined` | no | The basic color of the slider.<br />This color is the background of the track before the slider is devalued. |
+| `devalueBackgroundColor` | `BackgroundColor \| undefined` | no | The devalue color of the slider.<br />This color fills the track from the left on user movement.<br />This color is the background of the timer after the slider is devalued. |
+| `devalueTime` | `Date \| undefined` | no | If this slider was devalued, provide the time when it was devalued.<br />This will show a timer. |
+| `isDisabled` | `boolean \| undefined` | no | Disables the slider and cancels any active drags. |
+| `label` | `string \| undefined` | no | The label of the slider. The default value is "EINLÖSEN" |
+| `onChange` | `DevalueSliderOnChangeHandler \| undefined` | no | This function is called when the slider value changes.<br />With this function you can keep track of the movement of the slider. |
+| `onComplete` | `DevalueSliderOnCompleteHandler \| undefined` | no | This function is called when the slider is completed.<br />The slider is completed when the user devalues the slider<br />and the animation is completed. |
+| `onDevalue` | `DevalueSliderOnDevalueHandler \| undefined` | no | This function is called when the slider is devalued. |
 
 ### Types
 
-No additional exported types documented.
+- `DevalueSliderOnChangeHandler` -> `type DevalueSliderOnChangeHandler = (relativeValue: number) => void;`
+- `DevalueSliderOnCompleteHandler` -> `type DevalueSliderOnCompleteHandler = () => void;`
+- `DevalueSliderOnDevalueHandler` -> `type DevalueSliderOnDevalueHandler = () => Promise<DevalueSliderOnDevalueHandlerResult>;`
 
 ### Usage Notes
 
@@ -105,3 +116,4 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/devalue-slider/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.

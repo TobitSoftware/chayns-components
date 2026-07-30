@@ -478,7 +478,40 @@ import { Accordion } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `bodyMaxHeight` | `number \| undefined` | no | Maximum height of the accordion body element. This automatically makes the content of the<br />body element scrollable. |
+| `children` | `ReactNode` | yes | The content of the accordion body |
+| `colors` | `AccordionColors \| undefined` | no | Provide custom colors to the Accordion Component |
+| `icon` | `string \| undefined` | no | The icon that is displayed in front of the title |
+| `isDefaultOpen` | `boolean \| undefined` | no | This can be used to automatically expand the Accordion during the first render. |
+| `isDisabled` | `boolean \| undefined` | no | This will disable the Accordion so that it cannot be opened and will gray out the title. Does not work with isOpened. |
+| `isFixed` | `boolean \| undefined` | no | This can be used so that the Accordion cannot be opened or closed.<br />In addition, in this case the icon is exchanged to mark the Accordions. |
+| `isOpened` | `boolean \| undefined` | no | This can be used to open the Accordion from the outside |
+| `isTitleGreyed` | `boolean \| undefined` | no | This will gray out the title of the Accordion to indicate hidden content, for example. |
+| `onBodyAnimationComplete` | `VoidFunction \| undefined` | no | Function that is executed when the accordion body is animated |
+| `onBodyScroll` | `((event: UIEvent<HTMLDivElement, UIEvent>) => void) \| undefined` | no | Function that is executed when the accordion body will be scrolled |
+| `onClose` | `VoidFunction \| undefined` | no | Function that is executed when the accordion will be closed. |
+| `onHoverEnd` | `MouseEventHandler<HTMLDivElement> \| undefined` | no | Function to be executed when the accordion is no longer hovered. |
+| `onHoverStart` | `MouseEventHandler<HTMLDivElement> \| undefined` | no | Function to be executed when the accordion is hovered. |
+| `onOpen` | `VoidFunction \| undefined` | no | Function that is executed when the accordion will be opened. |
+| `onSearchChange` | `ChangeEventHandler<HTMLInputElement> \| undefined` | no | Function that is executed when the text of the search in the accordion<br />head changes. When this function is given, the search field is displayed<br />in the Accordion Head. |
+| `onTitleInputChange` | `ChangeEventHandler<HTMLInputElement> \| undefined` | no | Function that is executed when the text of the search in the accordion<br />title changes. When this function is given, the search field is displayed<br />as the Accordion title. |
+| `rightElement` | `ReactNode` | no | Content to be displayed on the right side in the head of the Accordion |
+| `searchPlaceholder` | `string \| undefined` | no | The placeholder to be used for the search |
+| `searchValue` | `string \| undefined` | no | The value that is displayed inside the search |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. The highlighting is only visible while the<br />user navigates with the keyboard and is reset on mouse movement or click. |
+| `shouldForceBackground` | `boolean \| undefined` | no | This will force the background color of the accordion to be used even if it is closed and not hovered. |
+| `shouldForceBottomLine` | `boolean \| undefined` | no | Whether the bottom line should always be shown, regardless of other line-related props. |
+| `shouldHideBackground` | `boolean \| undefined` | no | This will hide the background color of the accordion |
+| `shouldHideBottomLine` | `boolean \| undefined` | no | Whether the bottom line should be hidden. |
+| `shouldIndex` | `boolean \| undefined` | no | Whether the accordion should be indexed. |
+| `shouldRenderClosed` | `boolean \| undefined` | no | This will render the Accordion closed on the first render. |
+| `shouldRotateIcon` | `boolean \| undefined` | no | Whether the icon should be rotating. |
+| `shouldSkipAnimation` | `boolean \| undefined` | no | Whether the animation should be skipped.<br />If 'isDefaultOpen' is true the initial animation will be skipped even this prop is false |
+| `title` | `string \| undefined` | no | Title of the Accordion displayed in the head |
+| `titleElement` | `ReactNode` | no | Additional elements to be displayed in the header next to the title. |
+| `titleInputProps` | `InputProps \| undefined` | no | The props of the title Input. |
 
 ### Types
 
@@ -488,10 +521,12 @@ No additional exported types documented.
 
 - Import `Accordion` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `children`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## AmountControl
 
 `AmountControl` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -534,7 +569,22 @@ import { AmountControl } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `amount` | `number \| undefined` | no | The amount that should be displayed. |
+| `icon` | `string \| undefined` | no | The icon that should be displayed if no amount is selected. |
+| `iconColor` | `string \| undefined` | no | The color of the icon. |
+| `isDisabled` | `boolean \| undefined` | no | Whether the control should be disabled |
+| `label` | `string \| undefined` | no | A Text that should be displayed if no amount is selected; |
+| `maxAmount` | `number \| undefined` | no | The maximum allowed amount. If the maxAmount is reached, a check icon is displayed on the left side. |
+| `minAmount` | `number \| undefined` | no | The minimum allowed amount. |
+| `onChange` | `((amount: number) => void) \| undefined` | no | A Function that is executed when the amount is changed |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. The highlighting is only visible while the<br />user navigates with the keyboard and is reset on mouse movement or click. |
+| `shouldForceLabel` | `boolean \| undefined` | no | Whether the label should be displayed even if an amount is selected. |
+| `shouldShowAddIconOnMinAmount` | `boolean \| undefined` | no | Whether the "add"-icon should be displayed if the minAmount is reached. |
+| `shouldShowIcon` | `boolean \| undefined` | no | Whether the icon should be displayed if no amount is selected |
+| `shouldShowWideInput` | `boolean \| undefined` | no | Whether the input should be wider |
+| `step` | `number \| undefined` | no | Defines the amount that will change when adjusted |
 
 ### Types
 
@@ -548,6 +598,7 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## AnimatedNumber
 
 `AnimatedNumber` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -570,7 +621,17 @@ import { AnimatedNumber } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `delay` | `number \| undefined` | no | Start delay of the animation in seconds. |
+| `duration` | `number \| undefined` | no | Total duration of the animation in seconds. |
+| `ease` | `Ease \| undefined` | no | Easing curve of the animation (e.g., cubic-bezier like [0.16, 1, 0.3, 1] or predefined easings).<br />Controls how the animation accelerates/decelerates. |
+| `format` | `((n: number) => string) \| undefined` | no | Custom formatter for the displayed value.<br />If provided, it overrides locale/toLocaleString and round.<br />Example: (n) => `${Math.round(n)} points` |
+| `locale` | `string \| undefined` | no | Locale used by toLocaleString when no custom formatter is provided. |
+| `onComplete` | `(() => void) \| undefined` | no | Callback invoked when the animation completes. |
+| `round` | `((n: number) => number) \| undefined` | no | Custom rounding function when no custom formatter is provided.<br />Default: Math.round |
+| `startFrom` | `number \| undefined` | no | Starting value for the animation.<br />Default: 0 |
+| `value` | `number` | yes | Target value to animate to. |
 
 ### Types
 
@@ -580,10 +641,12 @@ No additional exported types documented.
 
 - Import `AnimatedNumber` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `value`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## Badge
 
 `Badge` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -635,11 +698,30 @@ import { Badge } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `backgroundColor` | `BackgroundColor \| undefined` | no | The background color of the badge. |
+| `children` | `ReactNode` | no | The content of the badge. |
+| `className` | `string \| undefined` | no | Additional class names for the badge element. |
+| `design` | `BadgeDesign \| undefined` | no | The design of the Badge. |
+| `fontColor` | `Color \| undefined` | no | The font color of the badge. |
+| `onClick` | `MouseEventHandler \| undefined` | no | Function to be executed when the badge is clicked. |
+| `size` | `BadgeSize \| undefined` | no | The size of the badge. |
 
 ### Types
 
-No additional exported types documented.
+- `BadgeDesign` -> `enum BadgeDesign {
+    /** Default design with background color and no border */
+    DEFAULT = 'default',
+    /** Design with border only, no background color */
+    BORDER = 'border',
+}`
+- `BadgeSize` -> `enum BadgeSize {
+    /** Small size */
+    SMALL = 'small',
+    /** Default size */
+    DEFAULT = 'default',
+}`
 
 ### Usage Notes
 
@@ -649,6 +731,7 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## Button
 
 `Button` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -699,7 +782,21 @@ import { Button } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `buttonDesign` | `number \| undefined` | no | Optional button design override. |
+| `children` | `ReactNode` | no | The label of the button. |
+| `className` | `string \| undefined` | no | Additional class names for the button element. |
+| `icon` | `string \| undefined` | no | An icon that is displayed on the left-hand side of the button text. |
+| `isDisabled` | `boolean \| undefined` | no | Whether the button is disabled and cannot be clicked anymore. |
+| `isSecondary` | `boolean \| undefined` | no | Displays the button in the secondary style. |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | yes | Function to be executed when the button is clicked. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
+| `shouldShowAsSelectButton` | `boolean \| undefined` | no | Whether the button should be displayed as a selectButton. |
+| `shouldShowTextAsRobotoMedium` | `boolean \| undefined` | no | Whether the text should be 'Roboto Medium'. |
+| `shouldShowWaitCursor` | `boolean \| undefined` | no | Shows a wait cursor instead of button text. |
+| `shouldStopPropagation` | `boolean \| undefined` | no | Stops event propagation on click. |
+| `tapDuration` | `number \| undefined` | no | Duration in seconds for the tap animation. |
 
 ### Types
 
@@ -709,10 +806,12 @@ No additional exported types documented.
 
 - Import `Button` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `onClick`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## Checkbox
 
 `Checkbox` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -735,7 +834,19 @@ import { Checkbox } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `borderRadius` | `BorderRadius<string \| number> \| undefined` | no | Border radius for the checkbox or switch indicator. |
+| `children` | `string \| ReactElement<any, string \| JSXElementConstructor<any>> \| undefined` | no | Text for checkbox or switch |
+| `colors` | `CheckboxColors \| undefined` | no | No description available. |
+| `isChecked` | `boolean \| undefined` | no | Indicates whether the checkbox or switch is selected |
+| `isDisabled` | `boolean \| undefined` | no | Disables the checkbox or switch so it cannot be toggled |
+| `labelClassName` | `string \| undefined` | no | Classname for the label |
+| `onChange` | `ChangeEventHandler<HTMLInputElement> \| undefined` | no | Function to be executed if the checked value changes |
+| `shouldChangeOnLabelClick` | `boolean \| undefined` | no | Whether the label should change the state of the checkbox |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
+| `shouldShowAsSwitch` | `boolean \| undefined` | no | Changes the design to use switch instead of checkbox |
+| `shouldShowCentered` | `boolean \| undefined` | no | Whether the Checkbox should be displayed centered to the label or at the top |
 
 ### Types
 
@@ -749,6 +860,7 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## ComboBox
 
 `ComboBox` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -1278,20 +1390,69 @@ import { ComboBox } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `bodyWidth` | `number \| undefined` | no | The width of the body. |
+| `container` | `Element \| undefined` | no | The element where the content of the `ComboBox` should be rendered via React Portal. |
+| `direction` | `DropdownDirection \| undefined` | no | The direction in which the combobox should open. |
+| `inputValue` | `string \| undefined` | no | The value of the optional input. |
+| `isDisabled` | `boolean \| undefined` | no | Whether the combobox should be disabled. |
+| `lists` | `IComboBoxItems[]` | yes | The list of the items that should be displayed. |
+| `maxHeight` | `number \| undefined` | no | The maximum height of the combobox content. |
+| `onHide` | `(() => void) \| undefined` | no | Function to be executed when the content of the `ComboBox` is hidden. |
+| `onInputBlur` | `FocusEventHandler<HTMLInputElement> \| undefined` | no | Function to be executed when the optional input lost its focus. |
+| `onInputChange` | `ChangeEventHandler<HTMLInputElement> \| undefined` | no | Function to be executed when the value of the optional input is changed. |
+| `onInputFocus` | `FocusEventHandler<HTMLInputElement> \| undefined` | no | Function to be executed when the optional input gets its focus. |
+| `onSelect` | `((comboboxItem?: IComboBoxItem \| undefined) => boolean \| void \| Promise<boolean>) \| undefined` | no | Function that should be executed when an item is selected. If the function returns false, the item will not be selected. |
+| `onShow` | `(() => void) \| undefined` | no | Function to be executed when the content of the `ComboBox` is shown. |
+| `placeholder` | `string` | yes | A text that should be displayed when no item is selected. |
+| `prefix` | `string \| undefined` | no | A prefix that should be displayed before the placeholder. |
+| `prefixMinWidth` | `number \| undefined` | no | Optional min width for the prefix element. |
+| `selectedItem` | `IComboBoxItem \| undefined` | no | An item that should be preselected. |
+| `shouldCaptureEvents` | `boolean \| undefined` | no | Whether the outside events should be captured. |
+| `shouldDropDownUseMaxItemWidth` | `boolean \| undefined` | no | If true, the dropdown will use the maximum width of the items. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables the shared keyboard-only focus ring for the combobox header. |
+| `shouldShowBigImage` | `boolean \| undefined` | no | If true, the images of the items are displayed in a bigger shape. This prop will automatically be set to true if the subtext of an item is given. |
+| `shouldShowClearIcon` | `boolean \| undefined` | no | If true, a clear icon is displayed at the end of the combo box if an item is selected. |
+| `shouldShowRoundImage` | `boolean \| undefined` | no | If true, the images of the items are displayed in a round shape. |
+| `shouldShowTransparentBackground` | `boolean \| undefined` | no | Whether the background should be transparent. |
+| `shouldUseCurrentItemWidth` | `boolean \| undefined` | no | Whether the width of the ComboBox should be the width of the current item. |
+| `shouldUseFullWidth` | `boolean \| undefined` | no | Whether the width of the 'ComboBox' should be the width of the parent or of the widest item. |
+| `size` | `ComboBoxSize \| undefined` | no | The size of the ComboBox. |
 
 ### Types
 
-No additional exported types documented.
+- `ComboBoxSize` -> `enum ComboBoxSize {
+    /**
+     * Standard height and spacing.
+     */
+    NORMAL = 'normal',
+    /**
+     * Compact height and spacing.
+     */
+    SMALL = 'small',
+}`
+- `DropdownDirection` -> `enum DropdownDirection {
+    BOTTOM,
+    TOP,
+    BOTTOM_LEFT,
+    BOTTOM_RIGHT,
+    TOP_LEFT,
+    TOP_RIGHT,
+    LEFT,
+    RIGHT,
+}`
 
 ### Usage Notes
 
 - Import `ComboBox` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `lists`, `placeholder`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## ContentCard
 
 `ContentCard` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -1336,11 +1497,21 @@ import { ContentCard } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | no | The content of the content card |
+| `onClick` | `(() => void) \| undefined` | no | The onClick event handler |
+| `type` | `ContentCardType \| undefined` | no | The type of the content card |
 
 ### Types
 
-No additional exported types documented.
+- `ContentCardType` -> `enum ContentCardType {
+    Default = 'default',
+    Error = 'error',
+    Success = 'success',
+    Warning = 'warning',
+    SiteColor = 'siteColor',
+}`
 
 ### Usage Notes
 
@@ -1350,6 +1521,7 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## ContextMenu
 
 `ContextMenu` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -1451,20 +1623,69 @@ import { ContextMenu } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `alignment` | `ContextMenuAlignment \| undefined` | no | Context menu alignment |
+| `children` | `ReactNode` | no | Children element |
+| `className` | `string \| undefined` | no | Additional class name applied to the trigger wrapper. |
+| `container` | `Element \| undefined` | no | Container element |
+| `coordinates` | `ContextMenuCoordinates \| undefined` | no | Custom coordinates |
+| `dialogText` | `string \| undefined` | no | Optional text for the select dialog. |
+| `headline` | `string \| undefined` | no | Context menu headline |
+| `items` | `ContextMenuItem[]` | yes | Menu items |
+| `onHide` | `VoidFunction \| undefined` | no | Hide callback function |
+| `onShow` | `VoidFunction \| undefined` | no | Show callback function |
+| `shouldCloseOnPopupClick` | `boolean \| undefined` | no | Close on popup click flag |
+| `shouldDisableClick` | `boolean \| undefined` | no | Disable click flag |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for the trigger. |
+| `shouldHidePopupArrow` | `boolean \| undefined` | no | Hide popup arrow flag |
+| `shouldShowHoverEffect` | `boolean \| undefined` | no | Show hover effect flag |
+| `shouldUseDefaultTriggerStyles` | `boolean \| undefined` | no | Whether the default trigger padding/background styles should be applied. |
+| `style` | `CSSProperties \| undefined` | no | Inline styles applied to the trigger wrapper. |
+| `yOffset` | `number \| undefined` | no | Vertical offset between the trigger element and the context menu. |
+| `zIndex` | `number \| undefined` | no | Z-index value |
 
 ### Types
 
-No additional exported types documented.
+- `ContextMenuAlignment` -> `enum ContextMenuAlignment {
+    TopLeft,
+    BottomLeft,
+    TopRight,
+    BottomRight,
+    TopCenter,
+    BottomCenter,
+}`
+- `ContextMenuCoordinates` -> `type ContextMenuCoordinates = {
+    /** The x-coordinate. */
+    x: number;
+    /** The y-coordinate. */
+    y: number;
+};`
+- `ContextMenuItem` -> `type ContextMenuItem = {
+    /** Optional icons for the item. Can be strings or React nodes. */
+    icons?: string[] | ReactNode;
+    /** Whether the item is selected. */
+    isSelected?: boolean;
+    /** Unique key for the item. */
+    key: string;
+    /** Function called when the item is clicked. */
+    onClick: (event?: MouseEvent<HTMLDivElement>) => Promise<void> | void;
+    /** Whether to show a spacer after the item. */
+    shouldShowSpacer?: boolean;
+    /** The text displayed for the item. */
+    text: string;
+};`
 
 ### Usage Notes
 
 - Import `ContextMenu` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `items`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## CopyableContent
 
 `CopyableContent` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -1603,7 +1824,13 @@ import { CopyableContent } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `appearance` | `CopyableContentAppearance \| undefined` | no | Controls the visual surface of the content block. |
+| `children` | `ReactNode` | no | Replaces only the visible rendered content and never the copied source. |
+| `collapsedHeight` | `number \| undefined` | no | The height of the content in its collapsed state. |
+| `content` | `string` | yes | Markdown source used for rendering and clipboard data. |
+| `copyFailedMessage` | `string \| undefined` | no | Replaces the localized error message shown when copying fails. |
 
 ### Types
 
@@ -1613,10 +1840,12 @@ No additional exported types documented.
 
 - Import `CopyableContent` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `content`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## ExpandableContent
 
 `ExpandableContent` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -1643,7 +1872,11 @@ import { ExpandableContent } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | yes | The children that should be animated. |
+| `isOpen` | `boolean` | yes | Whether the content is expanded. |
+| `startDelay` | `number \| undefined` | no | An optional start delay. |
 
 ### Types
 
@@ -1653,10 +1886,12 @@ No additional exported types documented.
 
 - Import `ExpandableContent` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `children`, `isOpen`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## FileInput
 
 `FileInput` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -1706,7 +1941,23 @@ import { FileInput } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `files` | `IFileItem[] \| undefined` | no | Already uploaded files to display. |
+| `fileSelectionIcons` | `string[] \| undefined` | no | An array of icons that should be displayed inside the FileInput |
+| `fileSelectionPlaceholder` | `string \| undefined` | no | The text that should be displayed inside the FileInput. |
+| `fileTypes` | `string \| undefined` | no | The filetypes that could be selected. Example for multiple types: 'image/*, video/*'. |
+| `imageSelectIcons` | `string[] \| undefined` | no | The icon of the image selection. |
+| `imageSelectPlaceholder` | `string \| undefined` | no | If set, pictures can be select via Pixabay. |
+| `isDisabled` | `boolean \| undefined` | no | Whether the FileInput is disabled. |
+| `maxFiles` | `number \| undefined` | no | The maximum amount of Files that can be uploaded. |
+| `maxFileSizeInMB` | `number \| undefined` | no | The maximum size of a file in MB. |
+| `onAdd` | `((files: File[] \| UploadedFile[]) => void) \| undefined` | no | A function to be executed when files are added. |
+| `onMaxFilesReached` | `(() => void) \| undefined` | no | Function to be executed when the maximum amount of Files are reached. |
+| `onRemove` | `((file: IFileItem \| File \| UploadedFile) => void) \| undefined` | no | A function to be executed when a file is removed. |
+| `shouldAllowDownload` | `boolean \| undefined` | no | Whether to show a download icon for files that have a `source` set. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for the file selection trigger. |
+| `shouldPreventImageUpload` | `boolean \| undefined` | no | Whether the image upload should be prevented. |
 
 ### Types
 
@@ -1720,6 +1971,7 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## FileList
 
 `FileList` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -1747,7 +1999,11 @@ import { FileList } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `files` | `IFileItem[] \| undefined` | no | Already uploaded files to display. |
+| `onRemove` | `((id: string) => void) \| undefined` | no | A function to be executed when a file is removed. |
+| `shouldAllowDownload` | `boolean \| undefined` | no | Whether to show a download icon for files that have a `source` set. |
 
 ### Types
 
@@ -1761,6 +2017,7 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## FileSelect
 
 `FileSelect` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -1781,7 +2038,19 @@ import { FileSelect } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `fileSelectionIcons` | `string[] \| undefined` | no | An array of icons that should be displayed inside the FileInput |
+| `fileSelectionPlaceholder` | `string \| undefined` | no | The text that should be displayed inside the FileInput. |
+| `fileTypes` | `string \| undefined` | no | The filetypes that could be selected. Example for multiple types: 'image/*, video/*'. |
+| `imageSelectIcons` | `string[] \| undefined` | no | The icon of the image selection. |
+| `imageSelectPlaceholder` | `string \| undefined` | no | If set, pictures can be select via Pixabay. |
+| `isDisabled` | `boolean \| undefined` | no | Whether the FileInput is disabled. |
+| `maxFiles` | `number \| undefined` | no | The maximum amount of Files that can be uploaded. |
+| `maxFileSizeInMB` | `number \| undefined` | no | The maximum size of a file in MB. |
+| `onAdd` | `((files: File[] \| UploadedFile[]) => void) \| undefined` | no | A function to be executed when files are added. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for selection triggers. |
+| `shouldPreventImageUpload` | `boolean \| undefined` | no | Whether the image upload should be prevented. |
 
 ### Types
 
@@ -1795,6 +2064,7 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## Filter
 
 `Filter` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -2007,20 +2277,61 @@ import { Filter } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `checkboxConfig` | `CheckboxProps \| undefined` | no | No description available. |
+| `comboboxConfig` | `ComboboxConfig \| undefined` | no | No description available. |
+| `filterButtonConfig` | `FilterButtonsProps \| undefined` | no | No description available. |
+| `headline` | `ReactNode` | yes | No description available. |
+| `onActiveChange` | `((isActive: boolean) => void) \| undefined` | no | No description available. |
+| `rightIcons` | `FilterRightIcon[] \| undefined` | no | No description available. |
+| `searchConfig` | `SearchConfig \| undefined` | no | No description available. |
+| `shouldAutoFocus` | `boolean \| undefined` | no | No description available. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | No description available. |
+| `shouldShowRoundedHoverEffect` | `boolean \| undefined` | no | No description available. |
+| `sortConfig` | `SortConfig \| undefined` | no | No description available. |
 
 ### Types
 
-No additional exported types documented.
+- `FilterRightIcon` -> `interface FilterRightIcon {
+    icons: string[];
+    onClick: VoidFunction;
+}`
+- `SearchConfig` -> `interface SearchConfig {
+    /**
+     * Callback invoked whenever the search input changes.
+     */
+    onSearchChange: (search: string) => void;
+    /**
+     * Current search value.
+     */
+    searchValue: string;
+}`
+- `SortConfig` -> `interface SortConfig {
+    /**
+     * Callback invoked when a sort item is selected.
+     */
+    onSortChange: (item: SortItem) => void;
+    /**
+     * Currently selected sort item.
+     */
+    selectedItem: SortItem;
+    /**
+     * Available sort items.
+     */
+    items: SortItem[];
+}`
 
 ### Usage Notes
 
 - Import `Filter` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `headline`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## FilterButtons
 
 `FilterButtons` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -2151,20 +2462,33 @@ import { FilterButtons } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `allCount` | `number \| undefined` | no | The number that should be displayed as count in the "all" button. |
+| `items` | `IFilterButtonItem[]` | yes | The items that should be displayed. |
+| `onSelect` | `((keys: string[]) => void) \| undefined` | no | A function that should be executed when an item is selected. |
+| `selectedItemIds` | `string[] \| undefined` | no | The keys of items that should be selected. |
+| `shouldCalcCountForAll` | `boolean \| undefined` | no | If true, the count of all items will be shown in the "all" button. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for filter buttons. |
+| `size` | `FilterButtonSize \| undefined` | no | The size auf the filter buttons. Use the FilterButtonSize enum. |
 
 ### Types
 
-No additional exported types documented.
+- `FilterButtonSize` -> `enum FilterButtonSize {
+    Small,
+    Normal,
+}`
 
 ### Usage Notes
 
 - Import `FilterButtons` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `items`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## GridImage
 
 `GridImage` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -2193,7 +2517,14 @@ import { GridImage } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `background` | `Background<string \| number> \| undefined` | no | The background color of the image. |
+| `images` | `string[]` | yes | The images to be displayed in the `GridImage`. Only the first three images are displayed. |
+| `onClick` | `MouseEventHandler<HTMLDivElement> \| undefined` | no | Function to be executed when the images are clicked. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for clickable GridImage instances. |
+| `shouldShowRoundImage` | `boolean \| undefined` | no | Images of users should always be displayed in a round shape. Therefore, this property can be set to true. |
+| `size` | `number` | yes | The size of the `GridImage` in pixels, which is set as both width and height. |
 
 ### Types
 
@@ -2203,10 +2534,12 @@ No additional exported types documented.
 
 - Import `GridImage` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `images`, `size`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## GroupedImage
 
 `GroupedImage` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -2262,7 +2595,18 @@ import { GroupedImage } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `cornerElement` | `ReactNode` | no | Optional Element to display in the right corner of the image |
+| `cornerImage` | `string \| undefined` | no | Optional image to display in the bottom right corner of the grouped image. |
+| `height` | `number \| undefined` | no | Height of the grouped image container. |
+| `imageBackground` | `Background<string \| number> \| undefined` | no | Background for the single images. |
+| `images` | `string[]` | yes | Array of image URLs to display in the grouped image. If only one image is provided, it will be displayed as a full image. |
+| `onClick` | `MouseEventHandler<HTMLDivElement> \| undefined` | no | Optional click handler for the grouped image. |
+| `onImageError` | `((event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void) \| undefined` | no | Optional handler for image load errors. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for clickable grouped images. |
+| `shouldPreventBackground` | `boolean \| undefined` | no | Whether to prevent the background of the images from being set. |
+| `shouldShowRoundImage` | `boolean \| undefined` | no | Whether to show the images in a round shape. |
 
 ### Types
 
@@ -2272,10 +2616,12 @@ No additional exported types documented.
 
 - Import `GroupedImage` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `images`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## HighlightSlider
 
 `HighlightSlider` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -2298,7 +2644,14 @@ import { HighlightSlider } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `colors` | `HighlightSliderItemColors \| undefined` | no | The Colors of the slider. |
+| `count` | `number` | yes | The total number of sections, that should be displayed. |
+| `currentIndex` | `number` | yes | The current index. |
+| `duration` | `number \| undefined` | no | The duration of the animation of a single item in seconds. |
+| `onIndexChange` | `((index: number) => void) \| undefined` | no | Function to be executed if the index has changed. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for interactive slider items. |
 
 ### Types
 
@@ -2308,10 +2661,12 @@ No additional exported types documented.
 
 - Import `HighlightSlider` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `count`, `currentIndex`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## Icon
 
 `Icon` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -2348,7 +2703,19 @@ import { Icon } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `className` | `string \| undefined` | no | Additional class name for the icon wrapper element. |
+| `color` | `string \| undefined` | no | The color of the icon. |
+| `icons` | `string[]` | yes | The icon(s) to be displayed. |
+| `isDisabled` | `boolean \| undefined` | no | Whether the icon should be disabled. |
+| `onClick` | `MouseEventHandler<HTMLSpanElement> \| undefined` | no | Function to be executed when the icon is clicked. |
+| `onDoubleClick` | `MouseEventHandler<HTMLSpanElement> \| undefined` | no | Function to be executed when the icon is double-clicked. |
+| `onMouseDown` | `MouseEventHandler<HTMLSpanElement> \| undefined` | no | Function to be executed when the icon is pressed. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for clickable icons. |
+| `shouldStopPropagation` | `boolean \| undefined` | no | Stops event propagation on click. |
+| `size` | `number \| undefined` | no | The size of the icon. |
+| `tabIndex` | `number \| undefined` | no | Optional tab index for the icon. |
 
 ### Types
 
@@ -2358,10 +2725,12 @@ No additional exported types documented.
 
 - Import `Icon` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `icons`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## Input
 
 `Input` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -2419,11 +2788,41 @@ import { Input } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `autoComplete` | `AutoComplete` | no | Defines the auto Complete of the input |
+| `color` | `Color \| undefined` | no | Colors for different parts of the input. You can set the color of the placeholder and the border color. |
+| `disabledHint` | `string \| undefined` | no | If set and the input is disabled, the input will display a tooltip with this message. |
+| `id` | `string \| undefined` | no | The id of the input |
+| `inputMode` | `InputMode` | no | Defines the input mode of the input |
+| `isDisabled` | `boolean \| undefined` | no | Disables the input so that it cannot be changed anymore |
+| `isInvalid` | `boolean \| undefined` | no | If true, the input field is marked as invalid |
+| `leftElement` | `ReactNode` | no | An element to be displayed on the left side of the input field |
+| `onBlur` | `FocusEventHandler<HTMLInputElement> \| undefined` | no | Function that is executed when the input field loses focus |
+| `onChange` | `ChangeEventHandler<HTMLInputElement> \| undefined` | no | Function that is executed when the text of the input changes |
+| `onFocus` | `FocusEventHandler<HTMLInputElement> \| undefined` | no | Function that is executed when the input field is focused |
+| `onKeyDown` | `KeyboardEventHandler<HTMLInputElement> \| undefined` | no | Function that is executed when a letter is pressed |
+| `onPaste` | `((event: ClipboardEvent<HTMLInputElement>) => void) \| undefined` | no | Function that is executed when content is pasted into the input field |
+| `placeholder` | `ReactNode` | no | Placeholder for the input field |
+| `rightElement` | `ReactElement<any, string \| JSXElementConstructor<any>> \| undefined` | no | An element that should be displayed on the right side of the Input. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
+| `shouldPreventPlaceholderAnimation` | `boolean \| undefined` | no | Whether the placeholder animation should be prevented. |
+| `shouldRemainPlaceholder` | `boolean \| undefined` | no | Whether the placeholder should remain at its position if a value is typed. |
+| `shouldShowCenteredContent` | `boolean \| undefined` | no | Whether the content should be displayed centered inside the input. |
+| `shouldShowClearIcon` | `boolean \| undefined` | no | If true, a clear icon is displayed at the end of the input field |
+| `shouldShowOnlyBottomBorder` | `boolean \| undefined` | no | Whether only the bottom border should be displayed |
+| `shouldShowTransparentBackground` | `boolean \| undefined` | no | Whether the background should be transparent. |
+| `shouldUseAutoFocus` | `boolean \| undefined` | no | If true, the input field is focused when the component is mounted |
+| `size` | `InputSize \| undefined` | no | The size of the input field |
+| `type` | `HTMLInputTypeAttribute \| undefined` | no | Input type set for an input element (e.g. 'text', 'number' or 'password') |
+| `value` | `string \| undefined` | no | Value if the input field should be controlled |
 
 ### Types
 
-No additional exported types documented.
+- `InputSize` -> `enum InputSize {
+    Small = 'small',
+    Medium = 'medium',
+}`
 
 ### Usage Notes
 
@@ -2433,6 +2832,7 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## List
 
 `List` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -3153,7 +3553,11 @@ import { List, ListItem } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | yes | The items of the list |
+| `isWrapped` | `boolean \| undefined` | no | This value must be set for nested AccordionGroup components. This adjusts the style of<br />the head and the padding of the content accordions. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting and arrow-key navigation within the list. |
 
 ### Types
 
@@ -3163,10 +3567,12 @@ No additional exported types documented.
 
 - Import `List` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `children`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## Masonry
 
 `Masonry` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -3358,20 +3764,40 @@ import { MentionFinder } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `dragCloseThresholdInPx` | `number \| undefined` | no | Threshold in pixels to drag to close the popup |
+| `enableDragHandle` | `boolean \| undefined` | no | Enables the optional drag handle inside the popup |
+| `inputValue` | `string` | yes | The text from the input field |
+| `members` | `MentionMember[]` | yes | Members that can be selected |
+| `onSelect` | `({ fullMatch, member }: { fullMatch: string; member: MentionMember; }) => void` | yes | Function to be executed when a member is selected |
+| `overlayContainerSelector` | `string \| undefined` | no | Selector for the container to render the overlay into (defaults to closest dialog, thread, page provider or tapp) |
+| `popupAlignment` | `MentionFinderPopupAlignment` | yes | Alignment of the popup |
 
 ### Types
 
-No additional exported types documented.
+- `MentionFinderPopupAlignment` -> `enum MentionFinderPopupAlignment {
+    Top,
+    Bottom,
+}`
+- `MentionMember` -> `type MentionMember = {
+    id: string;
+    info?: string;
+    imageUrl: string;
+    name: string;
+    shouldShowRoundImage?: boolean;
+};`
 
 ### Usage Notes
 
 - Import `MentionFinder` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `inputValue`, `members`, `onSelect`, `popupAlignment`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## MultiActionButton
 
 `MultiActionButton` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -3700,20 +4126,90 @@ import { MultiActionButton } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `backgroundColor` | `string \| undefined` | no | Optional background color for both actions. |
+| `className` | `string \| undefined` | no | Additional class name for the wrapper element. |
+| `extendedTimeoutMs` | `number \| undefined` | no | Timeout in ms before the secondary action collapses after a click. |
+| `gapColor` | `string \| undefined` | no | Optional color for the 1px separator line between actions. |
+| `height` | `number \| undefined` | no | Height of the button. |
+| `isCollapsed` | `boolean \| undefined` | no | Whether the button is collapsed to a single icon. |
+| `isDisabled` | `boolean \| undefined` | no | Whether the whole control is disabled. |
+| `primaryAction` | `MultiActionButtonAction` | yes | Primary action configuration. |
+| `secondaryAction` | `MultiActionButtonAction \| undefined` | no | Secondary action configuration. |
+| `secondaryContextMenu` | `MultiActionButtonSecondaryContextMenu \| undefined` | no | Context menu rendered as the secondary action. |
+| `shouldAutoCollapse` | `boolean \| undefined` | no | Whether the button should collapse automatically based on the available width. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for interactive action buttons. |
+| `shouldUseFullWidth` | `boolean \| undefined` | no | Whether the button should take the full width of its parent. |
+| `width` | `number \| MotionValue<number> \| undefined` | no | Optional width override for the whole button. |
 
 ### Types
 
-No additional exported types documented.
+- `MultiActionButtonAction` -> `type MultiActionButtonAction = {
+    /**
+     * Optional background color for this action.
+     * @description Overrides the component-level background color for this specific action.
+     * If omitted, `MultiActionButton.backgroundColor` is used as fallback.
+     * @optional
+     */
+    backgroundColor?: string;
+    /**
+     * Optional color for the icon and label.
+     * @description Overrides the default text/icon color. If omitted, the current theme text color is used.
+     * @optional
+     */
+    color?: string;
+    /**
+     * The icon for the action.
+     * @description Can be a FontAwesome class string (e.g., 'fa fa-microphone') or a custom React element.
+     * The icon is always rendered inside a fixed-size slot to keep alignment stable.
+     */
+    icon: string | ReactElement;
+    /**
+     * Whether the action is disabled.
+     * @description Disabled actions do not respond to hover or click and are visually dimmed.
+     * @optional
+     */
+    isDisabled?: boolean;
+    /**
+     * Optional reason shown in a tooltip when the action is disabled.
+     * @description Use this to explain why the action is currently unavailable.
+     * @optional
+     */
+    disabledReason?: string;
+    /**
+     * The optional label for the action.
+     * @description The label is shown next to the icon and will be truncated with ellipsis when
+     * there is not enough horizontal space.
+     * @optional
+     */
+    label: ReactNode;
+    /**
+     * Click handler for the action.
+     * @description Receives a payload that includes the action type, extension state, and device info.
+     * This allows external logic to decide whether the click should trigger an action immediately.
+     * @optional
+     */
+    onClick?: (info: MultiActionButtonActionEvent) => void;
+    /**
+     * Status effect configuration for the action.
+     * @description Controls optional visual emphasis like pulsing, without changing layout or sizing.
+     * @optional
+     */
+    status?: MultiActionButtonActionStatus;
+};`
+- `MultiActionButtonSecondaryContextMenu` -> `type MultiActionButtonSecondaryContextMenu = ContextMenuItem[];`
 
 ### Usage Notes
 
 - Import `MultiActionButton` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `primaryAction`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## NumberInput
 
 `NumberInput` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -3734,7 +4230,22 @@ import { NumberInput } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `isDecimalInput` | `boolean \| undefined` | no | Applies rules for decimal input.<br />Enables the user to input one zero as number before the comma |
+| `isDisabled` | `boolean \| undefined` | no | Whether the input is disabled |
+| `isInvalid` | `boolean \| undefined` | no | Whether the value is invalid. |
+| `isMoneyInput` | `boolean \| undefined` | no | Applies rules for money input.<br />Rules: only two decimal places, one zero before the comma |
+| `isTimeInput` | `boolean \| undefined` | no | Whether the value should be formatted as a time. |
+| `maxNumber` | `number \| undefined` | no | Limits the number to this value |
+| `minNumber` | `number \| undefined` | no | Limits the number to this value |
+| `onBlur` | `((newNumber: string \| number \| null, isInvalid: boolean) => void) \| undefined` | no | Callback function that is called when the input gets out of focus |
+| `onChange` | `((newValue: string) => void) \| undefined` | no | Callback function that is called when the input changes<br />It will pass the text from the input |
+| `placeholder` | `string \| undefined` | no | Placeholder for the input field |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
+| `shouldShowOnlyBottomBorder` | `boolean \| undefined` | no | Whether only the bottom border should be displayed |
+| `shouldTriggerChangeOnFormat` | `boolean \| undefined` | no | Whether the onChange function should be triggert when the value is formatted on the focus or blur |
+| `value` | `string \| undefined` | no | The value, that should be displayed in the input, when it is in focus.<br />You can also pass a stringified number as default value.<br />NOTE: If you pass a stringified number, it will be formatted to the selected format |
 
 ### Types
 
@@ -3748,6 +4259,7 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## Popup
 
 `Popup` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -3816,20 +4328,44 @@ import { Popup } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `alignment` | `PopupAlignment \| undefined` | no | The preferred alignment of the popup relative to its trigger element. |
+| `children` | `ReactNode` | no | The trigger element that the popup is attached to. |
+| `container` | `Element \| undefined` | no | The DOM element that should receive the popup portal. |
+| `content` | `ReactNode` | yes | The content rendered inside the popup. |
+| `isOpen` | `boolean \| undefined` | no | Fully controls whether the popup is visible. |
+| `onHide` | `VoidFunction \| undefined` | no | Callback that is called after the popup becomes hidden. |
+| `onShow` | `VoidFunction \| undefined` | no | Callback that is called after the popup becomes visible. |
+| `shouldBeOpen` | `boolean \| undefined` | no | Requests that the popup should be opened from outside. |
+| `shouldHideOnChildrenLeave` | `boolean \| undefined` | no | Hides the popup when the pointer leaves the trigger element. |
+| `shouldScrollWithContent` | `boolean \| undefined` | no | Keeps the popup aligned within the scrolling content container. |
+| `shouldShowOnHover` | `boolean \| undefined` | no | Opens the popup when the trigger element is hovered instead of clicked. |
+| `shouldUseChildrenWidth` | `boolean \| undefined` | no | Uses the trigger element width as the popup width reference. |
+| `shouldUseFullWidth` | `boolean \| undefined` | no | Stretches the trigger element to the full available width. |
+| `yOffset` | `number \| undefined` | no | Vertical offset between the trigger element and the popup. |
 
 ### Types
 
-No additional exported types documented.
+- `PopupAlignment` -> `enum PopupAlignment {
+    TopLeft,
+    TopCenter,
+    TopRight,
+    BottomLeft,
+    BottomCenter,
+    BottomRight,
+}`
 
 ### Usage Notes
 
 - Import `Popup` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `content`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## ProgressBar
 
 `ProgressBar` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -3893,7 +4429,17 @@ import { ProgressBar } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `colors` | `Colors \| undefined` | no | The colors of the ProgressBar. |
+| `height` | `number \| undefined` | no | The height of the progress bar in pixels. If not provided, it will be 10px if shouldShowLabelInline is false and 20px if shouldShowLabelInline is true. |
+| `label` | `string \| undefined` | no | The label that should be displayed under the progressbar. |
+| `percentage` | `0 \| 2 \| 1 \| 4 \| 56 \| 38 \| 20 \| 3 \| 10 \| 6 \| 5 \| 7 \| 8 \| 9 \| 11 \| 12 \| 13 \| 14 \| 15 \| 16 \| 17 \| 18 \| 19 \| 21 \| 22 \| 23 \| 24 \| 25 \| 26 \| 27 \| 28 \| 29 \| 30 \| 31 \| 32 \| 33 \| 34 \| 35 \| 36 \| 37 \| 39 \| 40 \| 41 \| 42 \| 43 \| 44 \| 45 \| 46 \| 47 \| 48 \| 49 \| 50 \| 51 \| 52 \| 53 \| 54 \| 55 \| 57 \| 58 \| 59 \| 60 \| 61 \| 62 \| 63 \| 64 \| 65 \| 66 \| 67 \| 68 \| 69 \| 70 \| 71 \| 72 \| 73 \| 74 \| 75 \| 76 \| 77 \| 78 \| 79 \| 80 \| 81 \| 82 \| 83 \| 84 \| 85 \| 86 \| 87 \| 88 \| 89 \| 90 \| 91 \| 92 \| 93 \| 94 \| 95 \| 96 \| 97 \| 98 \| 99 \| 100 \| undefined` | no | The percentage of the progress. Number between 0 and 100. |
+| `shouldHideProgress` | `boolean \| undefined` | no | Whether the progress should be hide and just display the label. |
+| `shouldShowLabelInline` | `boolean \| undefined` | no | Whether the label should be displayed inside the ProgressBar. |
+| `showShine` | `boolean \| undefined` | no | Whether a shine animation should be shown on the progress bar. The amount of shine is based on the percentage value. |
+| `steps` | `(0 \| 2 \| 1 \| 4 \| 56 \| 38 \| 20 \| 3 \| 10 \| 6 \| 5 \| 7 \| 8 \| 9 \| 11 \| 12 \| 13 \| 14 \| 15 \| 16 \| 17 \| 18 \| 19 \| 21 \| 22 \| 23 \| 24 \| 25 \| 26 \| 27 \| 28 \| 29 \| 30 \| 31 \| 32 \| 33 \| 34 \| 35 \| 36 \| 37 \| 39 \| 40 \| 41 \| 42 \| 43 \| 44 \| 45 \| 46 \| 47 \| 48 \| 49 \| 50 \| 51 \| 52 \| 53 \| 54 \| 55 \| 57 \| 58 \| 59 \| 60 \| 61 \| 62 \| 63 \| 64 \| 65 \| 66 \| 67 \| 68 \| 69 \| 70 \| 71 \| 72 \| 73 \| 74 \| 75 \| 76 \| 77 \| 78 \| 79 \| 80 \| 81 \| 82 \| 83 \| 84 \| 85 \| 86 \| 87 \| 88 \| 89 \| 90 \| 91 \| 92 \| 93 \| 94 \| 95 \| 96 \| 97 \| 98 \| 99 \| 100)[] \| undefined` | no | Visual marked steps. |
+| `thumbLabel` | `ReactNode` | no | The label that should be displayed on the thumb of the progress bar. |
 
 ### Types
 
@@ -3907,6 +4453,7 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## RadioButton
 
 `RadioButton` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -3976,7 +4523,16 @@ import { RadioButton } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | no | The children that should be displayed after the RadioButton is checked. |
+| `id` | `string \| number` | yes | The id of the radio button. |
+| `isDisabled` | `boolean \| undefined` | no | whether the RadioButton should be shown. |
+| `label` | `ReactNode` | no | The label that should be displayed next to the radio button. |
+| `rightElement` | `ReactNode` | no | An element that should be displayed on the right side of the label. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
+| `shouldShowCentered` | `boolean \| undefined` | no | Whether the RadioButton should be displayed centered to the label or at the top |
+| `shouldShowRightElementOnlyOnChecked` | `boolean \| undefined` | no | Whether the rightElement should only be displayed when the RadioButton is checked |
 
 ### Types
 
@@ -3986,10 +4542,12 @@ No additional exported types documented.
 
 - Import `RadioButton` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `id`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## ScrollView
 
 `ScrollView` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4010,7 +4568,15 @@ import { ScrollView } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | yes | The elements that should be shown inside the scrollview |
+| `height` | `Height<string \| number> \| undefined` | no | The height of the scroll view. |
+| `maxHeight` | `Height<string \| number> \| null \| undefined` | no | The maximum height of the scroll view. |
+| `maxWidth` | `Width<string \| number> \| undefined` | no | The maximum width of the scroll view. |
+| `overflowX` | `"scroll" \| "auto" \| undefined` | no | The overflow-x style of the scroll view. |
+| `overflowY` | `"scroll" \| "auto" \| undefined` | no | The overflow-y style of the scroll view. |
+| `width` | `Width<string \| number> \| undefined` | no | The width of the scroll view. |
 
 ### Types
 
@@ -4020,10 +4586,12 @@ No additional exported types documented.
 
 - Import `ScrollView` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `children`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## SearchBox
 
 `SearchBox` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4148,20 +4716,58 @@ import { SearchBox } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `container` | `Element \| undefined` | no | The element where the content of the `ComboBox` should be rendered via React Portal. |
+| `customFilter` | `((item: ISearchBoxItem) => boolean) \| undefined` | no | An optional callback function to filter the elements to be displayed |
+| `dropdownDirection` | `DropdownDirection \| undefined` | no | The direction in which the dropdown should be displayed. By default, it is displayed below the input. |
+| `hintText` | `string \| undefined` | no | A text that should be displayed if no results are found. |
+| `inputProps` | `InputProps \| undefined` | no | Props that are passed to the underlying Input component. |
+| `isInvalid` | `boolean \| undefined` | no | If true, the input field is marked as invalid |
+| `leftIcons` | `string[] \| undefined` | no | An optional icon that is displayed inside the left side of the input. |
+| `lists` | `ISearchBoxItems[]` | yes | List of groups with items that can be searched. It is possible to give only one list; if multiple lists are provided, the 'group name' parameter becomes mandatory. |
+| `maxHeight` | `number \| undefined` | no | The maximum height of the dropdown body in pixels. |
+| `onBlur` | `FocusEventHandler<HTMLInputElement> \| undefined` | no | Function to be executed when the input lost focus. |
+| `onChange` | `ChangeEventHandler<HTMLInputElement> \| undefined` | no | Function to be executed when the input is changed. |
+| `onKeyDown` | `KeyboardEventHandler<HTMLInputElement> \| undefined` | no | Function that is executed when a letter is pressed |
+| `onSelect` | `((item: ISearchBoxItem) => void) \| undefined` | no | Function to be executed when an item is selected. |
+| `placeholder` | `string \| undefined` | no | The placeholder that should be displayed. |
+| `presetValue` | `string \| undefined` | no | Set an input for the search box - it is not an item of a list, just a string. |
+| `selectedId` | `string \| undefined` | no | Control the selected item. If you use this prop, make sure to update it when the user selects an item. |
+| `shouldAddInputToList` | `boolean` | yes | If true, the value in the Input is displayed in the list. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
+| `shouldHideFilterButtons` | `boolean \| undefined` | no | If true, the filter buttons are hidden. |
+| `shouldKeepSelectedItemPosition` | `boolean \| undefined` | no | If true, the selected item keeps its original position in the dropdown list. |
+| `shouldShowContentOnEmptyInput` | `boolean \| undefined` | no | Whether the full list of items should be displayed if the input is empty. |
+| `shouldShowRoundImage` | `boolean \| undefined` | no | If true, the images of the items are displayed in a round shape. |
+| `shouldShowSmallItems` | `boolean \| undefined` | no | If true, the dropdown items are displayed more compactly. |
+| `shouldShowToggleIcon` | `boolean \| undefined` | no | Whether the icon to open and close the list should be displayed. |
+| `shouldUseCustomFilterOnly` | `boolean \| undefined` | no | If true, the custom filter replaces the built-in text search instead of narrowing its results. |
+| `tagInputSettings` | `TagInputSettings \| undefined` | no | Settings for the TagInput. |
 
 ### Types
 
-No additional exported types documented.
+- `DropdownDirection` -> `enum DropdownDirection {
+    BOTTOM,
+    TOP,
+    BOTTOM_LEFT,
+    BOTTOM_RIGHT,
+    TOP_LEFT,
+    TOP_RIGHT,
+    LEFT,
+    RIGHT,
+}`
 
 ### Usage Notes
 
 - Import `SearchBox` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `lists`, `shouldAddInputToList`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## SearchInput
 
 `SearchInput` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4184,20 +4790,37 @@ import { SearchInput } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `iconColor` | `Color \| undefined` | no | Color of the icon |
+| `isActive` | `boolean \| undefined` | no | Force the active state of the input and override the internal state |
+| `onActiveChange` | `((isActive: boolean) => void) \| undefined` | no | Function that is executed when the active state of the input changes |
+| `onChange` | `ChangeEventHandler<HTMLInputElement>` | yes | Function that is executed when the text of the input changes |
+| `onKeyDown` | `((event: KeyboardEvent<HTMLInputElement>) => void) \| undefined` | no | Function that is executed when a key is pressed |
+| `placeholder` | `string \| undefined` | no | Placeholder for the input field |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
+| `shouldUseAbsolutePositioning` | `boolean \| undefined` | no | Whether the SearchInput should be positioned absolute. |
+| `size` | `InputSize \| undefined` | no | The size of the input field |
+| `value` | `string \| undefined` | no | Value if the input field should be controlled |
+| `width` | `number \| undefined` | no | The width of the parent. |
 
 ### Types
 
-No additional exported types documented.
+- `InputSize` -> `enum InputSize {
+    Small = 'small',
+    Medium = 'medium',
+}`
 
 ### Usage Notes
 
 - Import `SearchInput` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `onChange`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## SelectButton
 
 `SelectButton` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4226,20 +4849,39 @@ import { SelectButton } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `additionalText` | `string \| undefined` | no | Text used when there are more selected items than maxDisplayedItems. '##count##' will be displayed with the additional count. |
+| `buttonText` | `string` | yes | The text that should be displayed inside the button. |
+| `isDisabled` | `boolean \| undefined` | no | Whether the button should be disabled. |
+| `list` | `SelectButtonItem[]` | yes | A list of item that could be selected. |
+| `maxDisplayedItems` | `number \| undefined` | no | The maximum number of items displayed in the button text. |
+| `onSelect` | `((ids: (string \| number)[]) => void) \| undefined` | no | Function to be executed after an item is selected. |
+| `selectAllText` | `string \| undefined` | no | If a string is given and `shouldAllowMultiSelect` is true, the dialog displays a checkbox to select all items at once. |
+| `selectedItemIds` | `(string \| number)[] \| undefined` | no | The id of an item that should be preselected. |
+| `shouldAllowMultiSelect` | `boolean \| undefined` | no | Whether more than one item should be selectable. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
+| `shouldShowButtonTextWithSelection` | `boolean \| undefined` | no | Whether the button text should be displayed also if items are selected. |
+| `shouldShowSearch` | `boolean \| undefined` | no | Whether the search should be displayed inside the dialog. |
+| `title` | `string \| undefined` | no | The title of the dialog. |
 
 ### Types
 
-No additional exported types documented.
+- `SelectButtonItem` -> `interface SelectButtonItem {
+    text: string;
+    id: number | string;
+}`
 
 ### Usage Notes
 
 - Import `SelectButton` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `buttonText`, `list`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## SetupWizard
 
 `SetupWizard` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4266,7 +4908,11 @@ import { SetupWizard } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `children` | `ReactElement<SetupWizardItemProps, string \| JSXElementConstructor<any>> \| ReactElement<SetupWizardItemProps, string \| JSXElementConstructor<any>>[]` | yes | The steps of the setup. Use the SetupWizardItem component. |
+| `isWrapped` | `boolean \| undefined` | no | This value must be set if the SetupWizard is inside an Accordion. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for setup wizard items. |
 
 ### Types
 
@@ -4276,10 +4922,12 @@ No additional exported types documented.
 
 - Import `SetupWizard` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `children`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## SetupWizardItem
 
 `SetupWizardItem` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4319,7 +4967,12 @@ import { Input, RadioButton, RadioButtonGroup, SetupWizardItem } from '@chayns-c
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | yes | The content that should be displayed inside the item. |
+| `id` | `number` | yes | The id of the item. |
+| `step` | `number` | yes | The step of the item. |
+| `title` | `string` | yes | The title of the item. |
 
 ### Types
 
@@ -4329,10 +4982,12 @@ No additional exported types documented.
 
 - Import `SetupWizardItem` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `children`, `id`, `step`, `title`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## SharingBar
 
 `SharingBar` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4357,20 +5012,35 @@ import { SharingBar } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `container` | `Element \| undefined` | no | The element where the content of the `SharingBar` should be rendered via React Portal. |
+| `label` | `string` | yes | The label that should be displayed. |
+| `link` | `string` | yes | The link that should be shared. |
+| `popupAlignment` | `ContextMenuAlignment` | yes | The alignment of the sharing options. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting and keyboard interaction. |
 
 ### Types
 
-No additional exported types documented.
+- `ContextMenuAlignment` -> `enum ContextMenuAlignment {
+    TopLeft,
+    BottomLeft,
+    TopRight,
+    BottomRight,
+    TopCenter,
+    BottomCenter,
+}`
 
 ### Usage Notes
 
 - Import `SharingBar` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `label`, `link`, `popupAlignment`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## SharingButton
 
 `SharingButton` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4441,20 +5111,36 @@ import { SharingButton } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `alignment` | `ContextMenuAlignment \| undefined` | no | Context menu alignment |
+| `children` | `ReactNode` | no | No description available. |
+| `container` | `Element \| undefined` | no | Container element |
+| `isDisabled` | `boolean \| undefined` | no | Whether the button is disabled and cannot be clicked anymore. |
+| `link` | `string` | yes | The link that should be shared. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
 
 ### Types
 
-No additional exported types documented.
+- `ContextMenuAlignment` -> `enum ContextMenuAlignment {
+    TopLeft,
+    BottomLeft,
+    TopRight,
+    BottomRight,
+    TopCenter,
+    BottomCenter,
+}`
 
 ### Usage Notes
 
 - Import `SharingButton` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `link`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## Signature
 
 `Signature` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4477,7 +5163,15 @@ import { Signature } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `buttonText` | `string` | yes | The text that should be displayed inside the button. |
+| `isDisabled` | `boolean \| undefined` | no | Whether the button is disabled. |
+| `onEdit` | `((signatureUrl: string) => void) \| undefined` | no | Function to be executed when the signature is edited. |
+| `onRemove` | `(() => void) \| undefined` | no | Function to be executed when the user deletes the signature. |
+| `onSubscribe` | `((signatureUrl: string) => void) \| undefined` | no | Function to be executed when the user subscribes. |
+| `onUnsubscribe` | `(() => void) \| undefined` | no | Function to be executed when the user unsubscribes. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for interactive controls. |
 
 ### Types
 
@@ -4487,10 +5181,12 @@ No additional exported types documented.
 
 - Import `Signature` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `buttonText`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## Skeleton
 
 `Skeleton` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4677,7 +5373,22 @@ import { Slider } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `interval` | `SliderInterval \| undefined` | no | The current interval of the slider. |
+| `isDisabled` | `boolean \| undefined` | no | Disables the slider, preventing user interaction. |
+| `maxEnabledValue` | `number \| undefined` | no | The maximum enabled value of the slider. |
+| `maxValue` | `number` | yes | The maximum value of the slider. |
+| `minEnabledValue` | `number \| undefined` | no | The minimum enabled value of the slider. |
+| `minValue` | `number` | yes | The minimum value of the slider. |
+| `onChange` | `((value?: number \| undefined, interval?: SliderInterval \| undefined) => void) \| undefined` | no | Callback function that is called when the slider value changes. |
+| `onSelect` | `((value?: number \| undefined, interval?: SliderInterval \| undefined) => void) \| undefined` | no | Callback function that is called when the slider selection is finalized. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
+| `shouldHighlightSteps` | `boolean \| undefined` | no | Indicates whether the slider should highlight steps. |
+| `shouldShowThumbLabel` | `boolean \| undefined` | no | Indicates whether the slider should show a label on the thumb. |
+| `step` | `number \| undefined` | no | The step size for the slider. |
+| `thumbLabelFormatter` | `((value: number, isMeasuring?: boolean \| undefined) => string) \| undefined` | no | A function to format the thumb label. |
+| `value` | `number \| undefined` | no | The current value of the slider. |
 
 ### Types
 
@@ -4687,10 +5398,12 @@ No additional exported types documented.
 
 - Import `Slider` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `maxValue`, `minValue`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## SliderButton
 
 `SliderButton` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4749,20 +5462,33 @@ import { SliderButton } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `isDisabled` | `boolean \| undefined` | no | Whether the button is disabled and cannot be clicked anymore. |
+| `isRounded` | `boolean \| undefined` | no | No description available. |
+| `isSecondary` | `boolean \| undefined` | no | Displays the button in the secondary style. |
+| `items` | `SliderButtonItem[]` | yes | The items that should be displayed in the slider button. |
+| `onChange` | `((id: string) => void) \| undefined` | no | Function to be executed when a button is selected. The id of the selected button is passed as an argument. |
+| `selectedButtonId` | `string \| undefined` | no | The id of the button that should be selected. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
 
 ### Types
 
-No additional exported types documented.
+- `SliderButtonItem` -> `interface SliderButtonItem {
+    id: string;
+    text: string;
+}`
 
 ### Usage Notes
 
 - Import `SliderButton` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `items`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## SmallWaitCursor
 
 `SmallWaitCursor` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4786,11 +5512,21 @@ import { SmallWaitCursor } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `color` | `string \| undefined` | no | No description available. |
+| `shouldHideBackground` | `boolean \| undefined` | no | No description available. |
+| `shouldHideWaitCursor` | `boolean \| undefined` | no | No description available. |
+| `size` | `number \| undefined` | no | No description available. |
+| `speed` | `SmallWaitCursorSpeed \| undefined` | no | No description available. |
 
 ### Types
 
-No additional exported types documented.
+- `SmallWaitCursorSpeed` -> `enum SmallWaitCursorSpeed {
+    Slow = 1.5,
+    Medium = 1,
+    Fast = 0.5,
+}`
 
 ### Usage Notes
 
@@ -4800,6 +5536,7 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## TagInput
 
 `TagInput` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4849,11 +5586,32 @@ import { TagInput } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `leftElement` | `ReactNode` | no | An element that should be displayed on the left side of the input. |
+| `onAdd` | `((tag: Tag) => boolean \| void \| Promise<boolean>) \| undefined` | no | Function to be executed when a tag is added. |
+| `onBlur` | `FocusEventHandler \| undefined` | no | Function to be executed when the input is blurred. |
+| `onChange` | `ChangeEventHandler<HTMLInputElement> \| undefined` | no | Function to be executed when the value of the input is changed. |
+| `onFocus` | `FocusEventHandler \| undefined` | no | Function to be executed when the input is focused. |
+| `onRemove` | `((id: string) => void) \| undefined` | no | Function to be executed when a tag is removed. |
+| `placeholder` | `string \| undefined` | no | The placeholder that should be displayed. |
+| `shouldAllowMultiple` | `boolean \| undefined` | no | Whether multiple tags should be allowed. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
+| `shouldPreventEnter` | `boolean \| undefined` | no | Whether the enter key should be prevented. |
+| `size` | `InputSize \| undefined` | no | The size of the input field. |
+| `tags` | `Tag[] \| undefined` | no | The tags that should be displayed. |
 
 ### Types
 
-No additional exported types documented.
+- `InputSize` -> `enum InputSize {
+    Small = 'small',
+    Medium = 'medium',
+}`
+- `Tag` -> `interface Tag {
+    id: string;
+    text: string;
+    rightElement?: ReactNode;
+}`
 
 ### Usage Notes
 
@@ -4863,6 +5621,7 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## TextArea
 
 `TextArea` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -4931,7 +5690,21 @@ import { TextArea } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `colors` | `TextAreaColors \| undefined` | no | Provide custom colors to the TextArea Component |
+| `isDisabled` | `boolean \| undefined` | no | Disables the text area so that it cannot be changed. |
+| `isInvalid` | `boolean \| undefined` | no | If true, the text area is marked as invalid |
+| `maxHeight` | `MaxHeight<string \| number> \| undefined` | no | The maximum height of the text area. |
+| `minHeight` | `MinHeight<string \| number> \| undefined` | no | The minimum height of the text area. |
+| `onBlur` | `FocusEventHandler<HTMLTextAreaElement> \| undefined` | no | Function that is executed when the text area loses focus. |
+| `onChange` | `ChangeEventHandler<HTMLTextAreaElement> \| undefined` | no | Function that is executed when the text of the text area changes. |
+| `onFocus` | `FocusEventHandler<HTMLTextAreaElement> \| undefined` | no | Function that is executed when the input field is focused |
+| `onKeyDown` | `KeyboardEventHandler<HTMLTextAreaElement> \| undefined` | no | Function that is executed when a letter is pressed |
+| `placeholder` | `string \| ReactElement<any, string \| JSXElementConstructor<any>> \| undefined` | no | Placeholder for the text area field. |
+| `rightElement` | `ReactElement<any, string \| JSXElementConstructor<any>> \| undefined` | no | An element that should be displayed on the right side of the Input. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
+| `value` | `string \| undefined` | no | Value if the text area should be controlled. |
 
 ### Types
 
@@ -4945,6 +5718,7 @@ No additional exported types documented.
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## Tooltip
 
 `Tooltip` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -5010,20 +5784,41 @@ import { Tooltip } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `alignment` | `PopupAlignment \| undefined` | no | The alignment of the tooltip. By default, the tooltip will calculate the best alignment. |
+| `children` | `ReactNode` | yes | The elements that the tooltip should surround. |
+| `container` | `Element \| undefined` | no | The element where the content of the `Tooltip` should be rendered via React Portal. |
+| `isDisabled` | `boolean \| undefined` | no | whether the tooltip should be shown. |
+| `item` | `ReactNode \| ITooltipItem` | yes | The content that should be displayed. |
+| `itemWidth` | `Width<string \| number> \| undefined` | no | The width of an item. |
+| `maxItemWidth` | `number \| undefined` | no | The max width of the Tooltip. |
+| `shouldHideOnChildrenLeave` | `boolean \| undefined` | no | Whether the tooltip should be hidden after the children is not hovered. |
+| `shouldUseChildrenWidth` | `boolean \| undefined` | no | Whether the width of the children should be used. |
+| `shouldUseFullWidth` | `boolean \| undefined` | no | Whether the tooltip children should use the full width. |
+| `yOffset` | `number \| undefined` | no | The Y offset of the tooltip to the children. |
 
 ### Types
 
-No additional exported types documented.
+- `PopupAlignment` -> `enum PopupAlignment {
+    TopLeft,
+    TopCenter,
+    TopRight,
+    BottomLeft,
+    BottomCenter,
+    BottomRight,
+}`
 
 ### Usage Notes
 
 - Import `Tooltip` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `children`, `item`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## Truncation
 
 `Truncation` is exported by `@chayns-components/core` and should be imported from the public package entry point.
@@ -5221,20 +6016,35 @@ import { Button, Truncation } from '@chayns-components/core';
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `children` | `ReactElement<any, string \| JSXElementConstructor<any>>` | yes | The elements that should be expanding or collapsing. |
+| `clampPosition` | `ClampPosition \| undefined` | no | The position of the clamp. |
+| `collapsedHeight` | `number \| undefined` | no | The height of the children element in its collapsed state. |
+| `isOpen` | `boolean \| undefined` | no | If set to true, the content is exposed. |
+| `lessLabel` | `string \| undefined` | no | A text that should be displayed if the content is expanded. |
+| `moreLabel` | `string \| undefined` | no | A text that should be displayed if the content is collapsed. |
+| `onChange` | `((event: MouseEvent<HTMLAnchorElement, MouseEvent>, isOpen: boolean) => void) \| undefined` | no | Function to be executed when the component is expanding or collapsing. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
 
 ### Types
 
-No additional exported types documented.
+- `ClampPosition` -> `enum ClampPosition {
+    Right,
+    Middle,
+    Left,
+}`
 
 ### Usage Notes
 
 - Import `Truncation` directly from `@chayns-components/core` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `children`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/core/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
 ## VerificationBadge
 
 `VerificationBadge` is exported by `@chayns-components/core` and should be imported from the public package entry point.

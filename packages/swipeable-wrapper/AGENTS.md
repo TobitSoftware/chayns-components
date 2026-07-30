@@ -138,17 +138,34 @@ import { Icon, ListItem, SwipeableWrapper } from '@chayns-components/swipeable-w
 
 ### Props
 
-No prop documentation available.
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | yes | The content of the Swipeable item. |
+| `isDisabled` | `boolean \| undefined` | no | Whether the swipeable functionality is disabled |
+| `leftActions` | `SwipeableActionItem[] \| undefined` | no | The left-side actions, ordered from the left to the right. |
+| `onSwipeEnd` | `VoidFunction \| undefined` | no | Callback to be executed when the swiping is ended. |
+| `onSwipeStart` | `VoidFunction \| undefined` | no | Callback to be executed when the swiping is started. |
+| `rightActions` | `SwipeableActionItem[] \| undefined` | no | The right-side actions, ordered from left to the right. |
+| `shouldUseOpacityAnimation` | `boolean \| undefined` | no | Whether the opacity should be animated when swiping in the actions. |
 
 ### Types
 
-No additional exported types documented.
+- `SwipeableActionItem` -> `type SwipeableActionItem = {
+    action: VoidFunction;
+    backgroundColor: CSSProperties['backgroundColor'];
+    color: CSSProperties['color'];
+    text?: ReactNode;
+    icon: ReactNode;
+    key: string;
+};`
 
 ### Usage Notes
 
 - Import `SwipeableWrapper` directly from `@chayns-components/swipeable-wrapper` instead of internal source paths.
 - Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
+- Pay special attention to required props: `children`.
 
 ### Anti Patterns
 
 - Avoid imports from internal paths such as `@chayns-components/swipeable-wrapper/src/...`; always use the public package export.
+- Avoid incomplete prop objects; follow the documented prop types and required fields.
