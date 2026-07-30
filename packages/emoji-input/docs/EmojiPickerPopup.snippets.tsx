@@ -1,1 +1,0 @@
-<EmojiPickerPopup onSelect={() => {}} />;

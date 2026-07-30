@@ -4,4 +4,5 @@
         { id: 'active', text: 'Active' },
         { id: 'archived', text: 'Archived' },
     ]}
+    onSelect={(keys: string[]) => {}}
 />;

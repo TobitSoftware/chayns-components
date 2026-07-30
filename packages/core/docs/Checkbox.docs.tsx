@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
-import { Button } from '@chayns-components/core';
+import { Checkbox } from '@chayns-components/core';
 
 const Component: FC = () => {
     const handleClick = () => {
         console.log('Click');
     };
 
-    return <Button onClick={handleClick}>Click me!</Button>;
+    return <Checkbox onChange={handleClick}>Click me!</Checkbox>;
 };
 
 Component.displayName = 'Component';

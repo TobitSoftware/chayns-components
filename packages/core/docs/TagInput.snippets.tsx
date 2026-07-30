@@ -3,4 +3,6 @@
         { id: 'first', text: 'First' },
         { id: 'second', text: 'Second' },
     ]}
+    onAdd={(tag: Tag) => {}=>{}}
+    onRemove={(id: Tag['id']) => {}}
 />;

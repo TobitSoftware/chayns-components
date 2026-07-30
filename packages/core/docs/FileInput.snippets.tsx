@@ -1,1 +1,1 @@
-<FileInput imageSelectPlaceholder="Select image" />;
+<FileInput imageSelectPlaceholder="Select image" onAdd={(files: File[] | UploadedFile[]) => {}} />;

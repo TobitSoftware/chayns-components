@@ -1,17 +1,17 @@
 <Ranking
     entries={[
         {
-            personId: 'person-1',
+            personId: '123-45678',
             points: 120,
             rank: 1,
             username: 'Alex Morgan',
         },
         {
-            personId: 'person-2',
+            personId: 'ABC-DERFG',
             points: 95,
             rank: 2,
             username: 'Taylor Smith',
         },
     ]}
-    friendPersonIds={['person-1']}
+    friendPersonIds={['123-45678']}
 />;

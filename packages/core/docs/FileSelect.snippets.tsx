@@ -1,1 +1,1 @@
-<FileSelect />;
+<FileSelect onAdd={(files: File[] | UploadedFile[]) => {}} />;

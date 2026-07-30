@@ -1,1 +1,1 @@
-<Input placeholder="Enter text" />;
+<Input placeholder="Enter text" value="" onChange={(event: ChangeEvent<HTMLInputElement>) => {}} />;

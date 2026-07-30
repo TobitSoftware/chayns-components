@@ -1,13 +1,8 @@
 import React, { FC } from 'react';
-import { Typewriter } from '@chayns-components/typewriter';
+import { PositionInput } from '@chayns-components/maps';
 
 const Component: FC = () => {
-    return (
-        <Typewriter>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vel finibus nunc, a cursus
-            magna.
-        </Typewriter>
-    );
+    return <PositionInput apiToken="YOUR_API_TOKEN" />;
 };
 
 Component.displayName = 'Component';

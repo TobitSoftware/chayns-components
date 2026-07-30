@@ -1,1 +1,3 @@
-<AdaptiveTranslation>{({ translate }) => translate('Hello world')}</AdaptiveTranslation>;
+<AdaptiveTranslation>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vel finibus nunc, a cursus magna.
+</AdaptiveTranslation>;

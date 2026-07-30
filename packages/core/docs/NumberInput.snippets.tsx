@@ -1,1 +1,1 @@
-<NumberInput placeholder="Enter number" />;
+<NumberInput placeholder="Enter number" value="" onChange={(value: string) => {}} />;
