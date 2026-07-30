@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
 <Tooltip
     item={{
         headline: 'Information',
@@ -5,4 +8,4 @@
     }}
 >
     Hover me
-</Tooltip>;
+</Tooltip>

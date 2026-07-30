@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
 <SearchBox
     lists={[
         {
@@ -10,4 +13,4 @@
     ]}
     placeholder="Search"
     shouldAddInputToList={false}
-/>;
+/>

@@ -1,1 +1,4 @@
-<MenuToggle color="#ffffff" isOpen={false} onClick={() => {}} />;
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
+<MenuToggle color="#ffffff" isOpen={false} onClick={() => {}} />

@@ -1,1 +1,4 @@
-<HighlightSlider count={5} currentIndex={0} />;
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
+<HighlightSlider count={5} currentIndex={0} />

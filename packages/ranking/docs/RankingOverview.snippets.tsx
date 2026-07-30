@@ -1,1 +1,4 @@
-<RankingOverview suffix="points" totalPlayers={42} />;
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
+<RankingOverview suffix="points" totalPlayers={42} />

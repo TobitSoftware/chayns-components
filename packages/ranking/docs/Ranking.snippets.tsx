@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
 <Ranking
     entries={[
         {
@@ -14,4 +17,4 @@
         },
     ]}
     friendPersonIds={['123-45678']}
-/>;
+/>

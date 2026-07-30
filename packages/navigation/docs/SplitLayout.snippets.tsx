@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
 <SplitLayout
     views={{
         main: {
@@ -9,4 +12,4 @@
             title: 'Details',
         },
     }}
-/>;
+/>

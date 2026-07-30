@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
 <ContextMenu
     items={[
         {
@@ -13,4 +16,4 @@
             text: 'Delete',
         },
     ]}
-/>;
+/>

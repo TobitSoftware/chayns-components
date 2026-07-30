@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
 <FilterButtons
     items={[
         { id: 'all', text: 'All' },
@@ -5,4 +8,4 @@
         { id: 'archived', text: 'Archived' },
     ]}
     onSelect={(keys: string[]) => {}}
-/>;
+/>

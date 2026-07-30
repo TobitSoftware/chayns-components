@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
 <OpeningTimes
     openingTimes={[
         {
@@ -17,4 +20,4 @@
         { id: 4, name: 'Thursday' },
         { id: 5, name: 'Friday' },
     ]}
-/>;
+/>

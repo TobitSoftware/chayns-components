@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
 <SwipeableWrapper
     rightActions={[
         {
@@ -29,4 +32,4 @@
     ]}
 >
     Add your content here.
-</SwipeableWrapper>;
+</SwipeableWrapper>

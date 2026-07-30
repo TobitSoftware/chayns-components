@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
 <ComboBox
     lists={[
         {
@@ -9,4 +12,4 @@
         },
     ]}
     placeholder="Choose an option"
-/>;
+/>

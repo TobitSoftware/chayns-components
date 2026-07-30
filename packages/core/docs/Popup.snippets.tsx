@@ -1,1 +1,4 @@
-<Popup content={<PopupContent>Popup content</PopupContent>} />;
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
+<Popup content={<PopupContent>Popup content</PopupContent>} />

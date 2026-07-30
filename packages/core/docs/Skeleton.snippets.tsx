@@ -1,1 +1,4 @@
-<Skeleton height={80} width={240} />;
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
+<Skeleton height={80} width={240} />

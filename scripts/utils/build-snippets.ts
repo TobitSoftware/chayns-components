@@ -23,9 +23,40 @@ const JSX_IDENTIFIER_PATTERN = /<\/?\s*([A-Z][A-Za-z0-9_]*)/g;
 const MEMBER_IDENTIFIER_PATTERN = /\b([A-Z][A-Za-z0-9_]*)\s*\./g;
 const EXTERNAL_PUBLIC_EXPORTS: Record<string, string[]> = {
     'chayns-api': ['Language'],
+    react: [
+        'ChangeEvent',
+        'ComponentProps',
+        'CSSProperties',
+        'FC',
+        'FocusEvent',
+        'FormEvent',
+        'KeyboardEvent',
+        'MouseEvent',
+        'PropsWithChildren',
+        'ReactElement',
+        'ReactNode',
+        'RefObject',
+        'SyntheticEvent',
+        'useEffect',
+        'useMemo',
+        'useRef',
+        'useState',
+    ],
 };
 
 type PackageExportMap = Map<string, string[]>;
+
+/**
+ * Removes editor/tooling directives from snippet files before writing JSON.
+ */
+const normalizeSnippetCode = (code: string): string =>
+    code
+        .replace(/^\/\*\s*eslint-disable\s*\*\/\r?\n/, '')
+        .replace(/^\/\/\s*@ts-nocheck\r?\n/, '')
+        .replace(/^\/\/\s*prettier-ignore\r?\n/, '')
+        .trim()
+        .replace(/;$/, '')
+        .trim();
 
 /**
  * Returns the insertable snippet source for a component when available.
@@ -45,7 +76,7 @@ const getComponentSnippetCode = (
         return undefined;
     }
 
-    return fs.readFileSync(snippetFilePath, 'utf8').trim().replace(/;$/, '').trim();
+    return normalizeSnippetCode(fs.readFileSync(snippetFilePath, 'utf8'));
 };
 
 /**

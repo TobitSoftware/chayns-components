@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
 <TagInput
     tags={[
         { id: 'first', text: 'First' },
@@ -5,4 +8,4 @@
     ]}
     onAdd={(tag: Tag) => {}=>{}}
     onRemove={(id: Tag['id']) => {}}
-/>;
+/>

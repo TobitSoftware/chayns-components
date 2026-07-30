@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
 <FileList
     files={[
         {
@@ -7,4 +10,4 @@
             size: 1024,
         },
     ]}
-/>;
+/>

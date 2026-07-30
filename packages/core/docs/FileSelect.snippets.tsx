@@ -1,1 +1,4 @@
-<FileSelect onAdd={(files: File[] | UploadedFile[]) => {}} />;
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
+<FileSelect onAdd={(files: File[] | UploadedFile[]) => {}} />

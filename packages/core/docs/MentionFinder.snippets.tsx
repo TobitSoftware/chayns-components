@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
 <MentionFinder
     inputValue="Hello @a"
     members={[
@@ -10,4 +13,4 @@
     ]}
     onSelect={() => {}}
     popupAlignment={MentionFinderPopupAlignment.Bottom}
-/>;
+/>

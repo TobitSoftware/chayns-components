@@ -1,1 +1,4 @@
-<PageProvider>Add your page content here.</PageProvider>;
+/* eslint-disable */
+// @ts-nocheck
+// prettier-ignore
+<PageProvider>Add your page content here.</PageProvider>
