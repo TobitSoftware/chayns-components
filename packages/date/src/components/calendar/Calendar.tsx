@@ -1,4 +1,4 @@
-import { ComboBox, Icon, useColorScheme } from '@chayns-components/core';
+import { ComboBox, Icon, useColorScheme, useFocusRingPortal } from '@chayns-components/core';
 import { Language } from 'chayns-api';
 import React, {
     CSSProperties,
@@ -35,7 +35,6 @@ import {
     StyledPseudoMonthYearPicker,
 } from './Calendar.styles';
 import MonthWrapper from './month-wrapper/MonthWrapper';
-import { useCalendarFocusRingPortal } from './useCalendarFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '@chayns-components/core';
 
 interface BaseProps {
@@ -195,18 +194,20 @@ const Calendar: FC<CalendarProps> = ({
         shouldEnableKeyboardHighlighting,
     );
 
-    useCalendarFocusRingPortal(
-        leftNavigationIconRef,
-        shouldShowKeyboardFocusHighlighting,
-        leftNavigationIconContentRef,
-        currentDate,
-    );
-    useCalendarFocusRingPortal(
-        rightNavigationIconRef,
-        shouldShowKeyboardFocusHighlighting,
-        rightNavigationIconContentRef,
-        currentDate,
-    );
+    useFocusRingPortal(leftNavigationIconRef, {
+        isEnabled: shouldShowKeyboardFocusHighlighting,
+        shape: 'circle',
+        padding: 4,
+        overlayRef: leftNavigationIconContentRef,
+        updateKey: currentDate,
+    } as Parameters<typeof useFocusRingPortal>[1] & { updateKey: Date | undefined });
+    useFocusRingPortal(rightNavigationIconRef, {
+        isEnabled: shouldShowKeyboardFocusHighlighting,
+        shape: 'circle',
+        padding: 4,
+        overlayRef: rightNavigationIconContentRef,
+        updateKey: currentDate,
+    } as Parameters<typeof useFocusRingPortal>[1] & { updateKey: Date | undefined });
 
     useEffect(() => {
         const pendingFocusedDate = pendingFocusedDateRef.current;
@@ -231,7 +232,7 @@ const Calendar: FC<CalendarProps> = ({
             animationFrameId = window.requestAnimationFrame(focusPendingDay);
         };
 
-        focusPendingDay();
+        animationFrameId = window.requestAnimationFrame(focusPendingDay);
 
         return () => {
             window.cancelAnimationFrame(animationFrameId);
@@ -587,7 +588,10 @@ const Calendar: FC<CalendarProps> = ({
 
             if (!isNextDateVisible) {
                 pendingFocusedDateRef.current = nextDate;
-                setCurrentDate(nextDate);
+                setDirection(daysToMove > 0 ? 'right' : 'left');
+                setCurrentDate((previousDate) =>
+                    previousDate ? getNewDate(daysToMove > 0 ? 1 : -1, previousDate) : previousDate,
+                );
             } else {
                 event.currentTarget
                     .querySelector<HTMLDivElement>(
@@ -676,6 +680,7 @@ const Calendar: FC<CalendarProps> = ({
                     handleLeftArrowClick={handleLeftArrowClick}
                     handleRightArrowClick={handleRightArrowClick}
                     currentDateBackgroundColor={currentDateBackgroundColor}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                     shouldShowKeyboardHighlighting={
                         shouldShowKeyboardFocusHighlighting && type !== CalendarType.Single
                     }

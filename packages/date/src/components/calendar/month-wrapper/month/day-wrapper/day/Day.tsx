@@ -1,4 +1,5 @@
-import React, { CSSProperties, FC, useMemo } from 'react';
+import { useFocusRingPortal } from '@chayns-components/core';
+import React, { CSSProperties, FC, useMemo, useRef } from 'react';
 import {
     Categories,
     CustomThumbColors,
@@ -29,6 +30,7 @@ export type DayProps = {
     shouldShowHighlightsInMonthOverlay: boolean;
     customThumbColors?: CustomThumbColors;
     currentDateBackgroundColor?: CSSProperties['backgroundColor'];
+    shouldEnableKeyboardHighlighting: boolean;
     shouldShowKeyboardHighlighting: boolean;
 };
 
@@ -47,9 +49,18 @@ const Day: FC<DayProps> = ({
     shouldShowHighlightsInMonthOverlay,
     setHoveringDay,
     currentDateBackgroundColor,
+    shouldEnableKeyboardHighlighting,
     shouldShowKeyboardHighlighting,
 }) => {
+    const dayRef = useRef<HTMLDivElement>(null);
     const isCurrentDay = useMemo(() => isSameDay(date, new Date()), [date]);
+
+    useFocusRingPortal(dayRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        shape: 'circle',
+        padding: 2,
+        updateKey: date.getTime(),
+    } as Parameters<typeof useFocusRingPortal>[1] & { updateKey: number });
 
     const styles: HighlightedDateStyles | undefined = useMemo(() => {
         if (!highlightedDates || (!shouldShowHighlightsInMonthOverlay && !isSameMonth)) {
@@ -75,20 +86,22 @@ const Day: FC<DayProps> = ({
 
     return (
         <StyledDay
+            ref={dayRef}
             onClick={() => onClick(date, isSameMonth && !isDisabled)}
             $isSameMonth={isSameMonth}
             $isDisabled={isDisabled}
             $backgroundColor={styles?.backgroundColor}
             $textColor={styles?.textColor}
-            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
             tabIndex={
-                shouldShowKeyboardHighlighting &&
+                shouldEnableKeyboardHighlighting &&
                 isSameMonth &&
                 (isSelected || isIntervalStart || isIntervalEnd)
                     ? 0
                     : -1
             }
             data-calendar-date={date.getTime()}
+            onFocus={() => setHoveringDay(date)}
+            onBlur={() => setHoveringDay(null)}
             onMouseEnter={() => setHoveringDay(date)}
             onMouseLeave={() => setHoveringDay(null)}
         >

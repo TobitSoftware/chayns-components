@@ -9,6 +9,7 @@ type FocusRingPortalOptions = {
     padding?: number;
     borderRadius?: CSSProperties['borderRadius'];
     overlayRef?: RefObject<HTMLElement>;
+    updateKey?: unknown;
 };
 
 export type FocusRingPortalShape = FocusRingShape;
@@ -162,6 +163,7 @@ export const useFocusRingPortal = (
         padding = 0,
         borderRadius,
         overlayRef,
+        updateKey,
     }: FocusRingPortalOptions,
 ) => {
     useEffect(() => {
@@ -252,5 +254,5 @@ export const useFocusRingPortal = (
             delete targetElement.dataset.focusRingPortalMode;
             hideFocusRingOverlay(getOverlayTargetElement());
         };
-    }, [borderRadius, isEnabled, overlayRef, padding, shape, targetRef]);
+    }, [borderRadius, isEnabled, overlayRef, padding, shape, targetRef, updateKey]);
 };
