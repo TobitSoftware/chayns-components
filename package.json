@@ -22,6 +22,7 @@
         "upgrade": "lerna exec -- ncu -u",
         "commit:usage": "git add packages/**/AGENTS.md && git diff --cached --quiet || git commit --no-verify -m \"📝 Update AGENTS.md\"",
         "generate:docs": "npx ts-node --project tsconfig.scripts.json scripts/generate-docs.ts",
+        "generate:snippets": "npx ts-node --project tsconfig.scripts.json scripts/generate-snippets.ts",
         "generate:usage": "npx ts-node --project tsconfig.scripts.json scripts/generate-ai-usage.ts"
     },
     "lint-staged": {

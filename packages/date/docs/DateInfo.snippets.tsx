@@ -1,0 +1,1 @@
+<DateInfo date={new Date()} />;

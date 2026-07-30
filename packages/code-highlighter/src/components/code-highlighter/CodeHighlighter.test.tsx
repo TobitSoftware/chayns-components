@@ -66,6 +66,23 @@ describe('CodeHighlighter', () => {
         expect(container.querySelector('[data-calling-code-action="false"]')).toBeInTheDocument();
     });
 
+    it('renders an insert action when onInsertCode is provided', () => {
+        const onInsertCode = vi.fn();
+
+        render(
+            <CodeHighlighter
+                code="const value = true;"
+                language="typescript"
+                onInsertCode={onInsertCode}
+                theme={CodeHighlighterTheme.Dark}
+            />,
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: 'Code einfügen' }));
+
+        expect(onInsertCode).toHaveBeenCalledWith('const value = true;');
+    });
+
     it('formats code before highlighting when requested', async () => {
         const { container } = render(
             <CodeHighlighter

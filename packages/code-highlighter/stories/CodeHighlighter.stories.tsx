@@ -13,7 +13,9 @@ export default {
     },
 } as Meta<typeof CodeHighlighter>;
 
-const Template: StoryFn<typeof CodeHighlighter> = ({ ...args }) => <CodeHighlighter {...args} />;
+const Template: StoryFn<typeof CodeHighlighter> = ({ ...args }) => (
+    <CodeHighlighter onInsertCode={undefined} {...args} />
+);
 
 const CHAT_HEADER_HEIGHT = 52;
 const CHAT_VIEWPORT_HEIGHT = 420;
@@ -106,6 +108,7 @@ export const WithGraphQL = Template.bind({});
 export const WithYaml = Template.bind({});
 export const WithLineBreak = Template.bind({});
 export const StickyHeader = Template.bind({});
+export const WithInsertAction = Template.bind({});
 export const Light = Template.bind({});
 export const Dark = Template.bind({});
 export const NestedScrollContainer = NestedScrollContainerTemplate.bind({});
@@ -265,6 +268,16 @@ StickyHeader.args = {
         '\n',
     ),
     language: 'typescript',
+};
+
+WithInsertAction.args = {
+    code: `const greeting = 'Hello world';
+
+console.log(greeting);`,
+    language: 'typescript',
+    onInsertCode: (code) => {
+        console.log('Insert code', code);
+    },
 };
 
 Light.args = {

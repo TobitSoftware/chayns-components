@@ -1,0 +1,1 @@
+<AmountControl label="1" />;

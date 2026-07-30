@@ -1,0 +1,1 @@
+<NumberInput placeholder="Enter number" />;

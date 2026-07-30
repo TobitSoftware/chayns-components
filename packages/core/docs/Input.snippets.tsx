@@ -1,0 +1,1 @@
+<Input placeholder="Enter text" />;

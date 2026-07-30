@@ -1,4 +1,5 @@
 {
     "extends": "./tsconfig.json",
+    "exclude": ["packages/**/docs/**/*.snippets.tsx"],
     "include": ["packages/**/src/**/*.ts", "packages/**/src/**/*.tsx"]
 }
