@@ -185,6 +185,7 @@ const Calendar: FC<CalendarProps> = ({
     const rightNavigationIconRef = useRef<HTMLDivElement>(null);
     const rightNavigationIconContentRef = useRef<HTMLDivElement>(null);
     const pendingFocusedDateRef = useRef<Date>();
+    const pendingNavigationFocusRef = useRef<'left' | 'right'>();
     const colorScheme = useColorScheme();
     const shouldEnableKeyboardHighlighting =
         shouldEnableKeyboardHighlightingProp ??
@@ -236,6 +237,20 @@ const Calendar: FC<CalendarProps> = ({
             window.cancelAnimationFrame(animationFrameId);
         };
     }, [currentDate, direction, shouldRenderTwoMonths]);
+
+    useEffect(() => {
+        if (direction || !pendingNavigationFocusRef.current) {
+            return;
+        }
+
+        const navigationIconRef =
+            pendingNavigationFocusRef.current === 'left'
+                ? leftNavigationIconRef
+                : rightNavigationIconRef;
+
+        pendingNavigationFocusRef.current = undefined;
+        navigationIconRef.current?.focus();
+    }, [currentDate, direction]);
 
     useEffect(() => {
         if (currentDate) {
@@ -487,12 +502,17 @@ const Calendar: FC<CalendarProps> = ({
     };
 
     const handleNavigationIconKeyDown = useCallback(
-        (event: KeyboardEvent<HTMLDivElement>, onNavigate: VoidFunction) => {
+        (
+            event: KeyboardEvent<HTMLDivElement>,
+            onNavigate: VoidFunction,
+            navigationDirection: 'left' | 'right',
+        ) => {
             if (!shouldEnableKeyboardHighlighting || (event.key !== 'Enter' && event.key !== ' ')) {
                 return;
             }
 
             event.preventDefault();
+            pendingNavigationFocusRef.current = navigationDirection;
             onNavigate();
         },
         [shouldEnableKeyboardHighlighting],
@@ -600,7 +620,9 @@ const Calendar: FC<CalendarProps> = ({
                     role="button"
                     tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
                     onClick={handleLeftArrowClick}
-                    onKeyDown={(event) => handleNavigationIconKeyDown(event, handleLeftArrowClick)}
+                    onKeyDown={(event) =>
+                        handleNavigationIconKeyDown(event, handleLeftArrowClick, 'left')
+                    }
                 >
                     <StyledCalendarIconWrapperContent ref={leftNavigationIconContentRef}>
                         {showMonthYearPickers && (
@@ -647,7 +669,9 @@ const Calendar: FC<CalendarProps> = ({
                     role="button"
                     tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
                     onClick={handleRightArrowClick}
-                    onKeyDown={(event) => handleNavigationIconKeyDown(event, handleRightArrowClick)}
+                    onKeyDown={(event) =>
+                        handleNavigationIconKeyDown(event, handleRightArrowClick, 'right')
+                    }
                 >
                     <StyledCalendarIconWrapperContent ref={rightNavigationIconContentRef}>
                         {showMonthYearPickers && (

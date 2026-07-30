@@ -34,10 +34,7 @@ export const useCalendarFocusRingPortal = (
         overlayContainer.appendChild(overlayElement);
 
         const updateOverlay = () => {
-            if (
-                document.activeElement !== targetElement ||
-                !targetElement.matches(':focus-visible')
-            ) {
+            if (document.activeElement !== targetElement) {
                 overlayElement.style.display = 'none';
                 return false;
             }
@@ -76,6 +73,9 @@ export const useCalendarFocusRingPortal = (
         targetElement.addEventListener('blur', updateOverlay);
         window.addEventListener('resize', startTrackingOverlay);
         window.addEventListener('scroll', startTrackingOverlay, true);
+
+        // The focused icon can survive a month transition while this effect is rebound.
+        startTrackingOverlay();
 
         return () => {
             if (animationFrameId !== undefined) {
