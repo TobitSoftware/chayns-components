@@ -80,6 +80,7 @@ const Day: FC<DayProps> = ({
             $isDisabled={isDisabled}
             $backgroundColor={styles?.backgroundColor}
             $textColor={styles?.textColor}
+            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
             tabIndex={
                 shouldShowKeyboardHighlighting &&
                 isSameMonth &&

@@ -144,6 +144,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         setCurrentDate,
                         setHoveringDay,
                         showMonthYearPickers,
+                        shouldShowKeyboardHighlighting,
                         type,
                         year,
                     } as ReactElement,
@@ -169,6 +170,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
         showMonthYearPickers,
         type,
         shouldShowHighlightsInMonthOverlay,
+        shouldShowKeyboardHighlighting,
     ]);
 
     const animate: MotionProps['animate'] = useMemo(() => {

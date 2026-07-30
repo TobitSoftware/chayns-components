@@ -8,6 +8,7 @@ type StyledDayProps = WithTheme<{
     $backgroundColor?: CSSProperties['backgroundColor'];
     $textColor?: CSSProperties['color'];
     $isDisabled: boolean;
+    $shouldShowKeyboardHighlighting: boolean;
 }>;
 
 export const StyledDay = styled.div<StyledDayProps>`
@@ -31,6 +32,15 @@ export const StyledDay = styled.div<StyledDayProps>`
     aspect-ratio: 1;
     pointer-events: ${({ $isSameMonth, $isDisabled }) =>
         $isSameMonth && !$isDisabled ? 'auto' : 'none'};
+
+    ${({ $shouldShowKeyboardHighlighting, theme }) =>
+        $shouldShowKeyboardHighlighting &&
+        css`
+            &:focus {
+                outline: 2px solid ${theme['404']};
+                outline-offset: -2px;
+            }
+        `}
 
     ${({ $backgroundColor, $textColor }) =>
         $backgroundColor &&

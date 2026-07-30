@@ -219,7 +219,7 @@ const Calendar: FC<CalendarProps> = ({
 
         const focusPendingDay = () => {
             const nextDay = calendarRef.current?.querySelector<HTMLDivElement>(
-                `[data-calendar-month="${pendingFocusedDate.getFullYear()}-${pendingFocusedDate.getMonth()}"] [data-calendar-date="${pendingFocusedDate.getTime()}"][tabindex="0"]`,
+                `[data-calendar-month="${pendingFocusedDate.getFullYear()}-${pendingFocusedDate.getMonth()}"] [data-calendar-date="${pendingFocusedDate.getTime()}"]`,
             );
 
             if (nextDay) {
@@ -534,6 +534,20 @@ const Calendar: FC<CalendarProps> = ({
 
             const dayTimestamp = Number(dayElement.dataset.calendarDate);
             const day = new Date(dayTimestamp);
+
+            if (!Number.isFinite(dayTimestamp)) {
+                return;
+            }
+
+            if (
+                type !== CalendarType.Single &&
+                (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar')
+            ) {
+                event.preventDefault();
+                handleSelect(day);
+                return;
+            }
+
             const daysToMove =
                 event.key === 'ArrowLeft'
                     ? -1
@@ -545,7 +559,7 @@ const Calendar: FC<CalendarProps> = ({
                           ? 7
                           : 0;
 
-            if (!Number.isFinite(dayTimestamp) || daysToMove === 0) {
+            if (daysToMove === 0) {
                 return;
             }
 
@@ -577,12 +591,14 @@ const Calendar: FC<CalendarProps> = ({
             } else {
                 event.currentTarget
                     .querySelector<HTMLDivElement>(
-                        `[data-calendar-month="${nextDate.getFullYear()}-${nextDate.getMonth()}"] [data-calendar-date="${nextDate.getTime()}"][tabindex="0"]`,
+                        `[data-calendar-month="${nextDate.getFullYear()}-${nextDate.getMonth()}"] [data-calendar-date="${nextDate.getTime()}"]`,
                     )
                     ?.focus();
             }
 
-            handleSelect(nextDate);
+            if (type === CalendarType.Single) {
+                handleSelect(nextDate);
+            }
         },
         [
             currentDate,
@@ -592,6 +608,7 @@ const Calendar: FC<CalendarProps> = ({
             minDate,
             shouldEnableKeyboardHighlighting,
             shouldRenderTwoMonths,
+            type,
         ],
     );
 
@@ -659,7 +676,9 @@ const Calendar: FC<CalendarProps> = ({
                     handleLeftArrowClick={handleLeftArrowClick}
                     handleRightArrowClick={handleRightArrowClick}
                     currentDateBackgroundColor={currentDateBackgroundColor}
-                    shouldShowKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                    shouldShowKeyboardHighlighting={
+                        shouldShowKeyboardFocusHighlighting && type !== CalendarType.Single
+                    }
                 />
             )}
             {ShouldShowRightArrow ? (
