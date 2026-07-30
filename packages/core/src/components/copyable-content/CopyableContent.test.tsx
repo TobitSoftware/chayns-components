@@ -106,6 +106,25 @@ describe('CopyableContent', () => {
         await expect(readBlob(await item.getType('text/plain'))).resolves.toBe('source markdown');
     });
 
+    it('passes the clipboard HTML transformer to the copy action', async () => {
+        const write = vi.spyOn(navigator.clipboard, 'write').mockResolvedValue();
+        const transformClipboardHtml = vi.fn((html: string) => `${html}<p>Styled</p>`);
+
+        render(
+            <CopyableContent
+                content="source markdown"
+                transformClipboardHtml={transformClipboardHtml}
+            />,
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: 'Kopieren' }));
+
+        await waitFor(() => expect(transformClipboardHtml).toHaveBeenCalledOnce());
+        const item = write.mock.calls[0][0][0];
+
+        await expect(readBlob(await item.getType('text/html'))).resolves.toContain('<p>Styled</p>');
+    });
+
     it('shows a checkmark after a successful copy', async () => {
         vi.spyOn(navigator.clipboard, 'write').mockResolvedValue();
         const { container } = render(<CopyableContent content="source" />);

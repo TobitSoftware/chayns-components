@@ -43,6 +43,10 @@ export type CopyableContentProps = {
      * The height of the content in its collapsed state.
      */
     collapsedHeight?: number;
+    /**
+     * Transforms the generated HTML before it is written to the clipboard.
+     */
+    transformClipboardHtml?: (html: string) => string;
 };
 
 const CopyableContent: FC<CopyableContentProps> = ({
@@ -51,6 +55,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
     children,
     copyFailedMessage,
     collapsedHeight,
+    transformClipboardHtml,
 }) => {
     const rootRef = useRef<HTMLElement>(null);
     const actionGroupRef = useRef<HTMLDivElement>(null);
@@ -94,7 +99,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
 
     const handleCopy = useCallback(async () => {
         try {
-            await copyableContentToClipboard(content);
+            await copyableContentToClipboard(content, transformClipboardHtml);
             showCopyFeedback();
         } catch {
             void createDialog({
@@ -104,7 +109,13 @@ const CopyableContent: FC<CopyableContentProps> = ({
                 type: DialogType.TOAST,
             }).open();
         }
-    }, [content, defaultCopyFailedMessage, copyFailedMessage, showCopyFeedback]);
+    }, [
+        content,
+        defaultCopyFailedMessage,
+        copyFailedMessage,
+        showCopyFeedback,
+        transformClipboardHtml,
+    ]);
 
     return (
         <StyledCopyableContent
