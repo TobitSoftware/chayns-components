@@ -13,6 +13,7 @@ import { useStickyActionState } from './useStickyActionState';
 
 export type CopyToClipboardProps = {
     copyButtonText?: string;
+    onInsertCode?: (code: string) => void;
     rootRef: RefObject<HTMLDivElement>;
     text: string;
     theme: CodeHighlighterTheme;
@@ -20,7 +21,13 @@ export type CopyToClipboardProps = {
 
 const COPY_FEEDBACK_DURATION = 1500;
 
-const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, rootRef, text, theme }) => {
+const CopyToClipboard: FC<CopyToClipboardProps> = ({
+    copyButtonText,
+    onInsertCode,
+    rootRef,
+    text,
+    theme,
+}) => {
     const actionGroupRef = useRef<HTMLDivElement>(null);
     const copyFeedbackTimeoutRef = useRef<number>();
     const isActionGroupSticky = useStickyActionState(rootRef, actionGroupRef);
@@ -36,6 +43,11 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, rootRef, te
     });
     const shareText = useTextstringValue({
         textstring: ttsToITextString(textStrings.components.codeHighlighter.copyToClipboard.share),
+    });
+    const insertCodeText = useTextstringValue({
+        textstring: ttsToITextString(
+            textStrings.components.codeHighlighter.copyToClipboard.insertCode,
+        ),
     });
 
     const copyText = copyButtonText ?? defaultCopyText;
@@ -81,6 +93,7 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, rootRef, te
                     onClick={() => {
                         void handleCopy();
                     }}
+                    title={copyText}
                     type="button"
                 >
                     <Icon
@@ -98,11 +111,26 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, rootRef, te
                         $codeTheme={theme}
                         $isSticky={isActionGroupSticky}
                         aria-label={shareText}
+                        title={shareText}
                         type="button"
                     >
                         <Icon color={iconColor} icons={['fa fa-share-nodes']} />
                     </StyledCopyToClipboardButton>
                 </SharingContextMenu>
+                {typeof onInsertCode === 'function' && (
+                    <StyledCopyToClipboardButton
+                        $codeTheme={theme}
+                        $isSticky={isActionGroupSticky}
+                        aria-label={insertCodeText}
+                        onClick={() => {
+                            onInsertCode(text);
+                        }}
+                        title={insertCodeText}
+                        type="button"
+                    >
+                        <Icon color={iconColor} icons={['fa fa-arrow-right']} />
+                    </StyledCopyToClipboardButton>
+                )}
             </StyledCopyToClipboardActionGroup>
         </StyledCopyToClipboard>
     );
