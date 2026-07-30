@@ -189,6 +189,7 @@ export const useFocusRingPortal = (
         const getOverlayTargetElement = () => overlayRef?.current ?? targetElement;
 
         let animationFrameId: number | undefined;
+        let wasPointerFocused = false;
 
         const stopTrackingOverlay = () => {
             if (animationFrameId !== undefined) {
@@ -200,8 +201,8 @@ export const useFocusRingPortal = (
         const updateOverlay = () => {
             if (
                 document.activeElement !== targetElement ||
-                (!targetElement.matches(':focus-visible') &&
-                    !getIsKeyboardFocusHighlightingActive())
+                wasPointerFocused ||
+                !getIsKeyboardFocusHighlightingActive()
             ) {
                 stopTrackingOverlay();
                 hideFocusRingOverlay(getOverlayTargetElement());
@@ -238,16 +239,39 @@ export const useFocusRingPortal = (
             hideFocusRingOverlay(getOverlayTargetElement());
         };
 
+        const handlePointerDown = (event: PointerEvent) => {
+            if (
+                !(event.target instanceof Node) ||
+                (!targetElement.contains(event.target) &&
+                    !getOverlayTargetElement().contains(event.target))
+            ) {
+                return;
+            }
+
+            wasPointerFocused = true;
+            stopTrackingOverlay();
+            hideFocusRingOverlay(getOverlayTargetElement());
+        };
+
+        const handleKeyDown = () => {
+            wasPointerFocused = false;
+            startTrackingOverlay();
+        };
+
         startTrackingOverlay();
 
         targetElement.addEventListener('focus', startTrackingOverlay);
         targetElement.addEventListener('blur', handleBlur);
+        document.addEventListener('pointerdown', handlePointerDown, true);
+        targetElement.addEventListener('keydown', handleKeyDown);
         window.addEventListener('resize', startTrackingOverlay);
         window.addEventListener('scroll', startTrackingOverlay, true);
 
         return () => {
             targetElement.removeEventListener('focus', startTrackingOverlay);
             targetElement.removeEventListener('blur', handleBlur);
+            document.removeEventListener('pointerdown', handlePointerDown, true);
+            targetElement.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('resize', startTrackingOverlay);
             window.removeEventListener('scroll', startTrackingOverlay, true);
             stopTrackingOverlay();

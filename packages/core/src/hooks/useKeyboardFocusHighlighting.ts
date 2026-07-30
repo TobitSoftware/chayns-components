@@ -57,12 +57,6 @@ export const useKeyboardFocusHighlighting = (isEnabledProp?: boolean): boolean =
             enableKeyboardNavigation();
         };
 
-        const handleFocusIn = (event: FocusEvent) => {
-            if (event.target instanceof HTMLElement && event.target.matches(':focus-visible')) {
-                enableKeyboardNavigation();
-            }
-        };
-
         const disableKeyboardNavigation = () => {
             isKeyboardFocusHighlightingActive = false;
             setIsKeyboardNavigation((current) => (current ? false : current));
@@ -70,8 +64,8 @@ export const useKeyboardFocusHighlighting = (isEnabledProp?: boolean): boolean =
 
         if (canListen) {
             window.addEventListener('keydown', handleKeyDown);
-            document.addEventListener('focusin', handleFocusIn, true);
-            window.addEventListener('mousedown', disableKeyboardNavigation);
+            // Reset synchronously before a click can move focus to a control.
+            document.addEventListener('pointerdown', disableKeyboardNavigation, true);
             window.addEventListener('mousemove', disableKeyboardNavigation);
         } else {
             isKeyboardFocusHighlightingActive = false;
@@ -81,8 +75,7 @@ export const useKeyboardFocusHighlighting = (isEnabledProp?: boolean): boolean =
         return () => {
             if (canListen) {
                 window.removeEventListener('keydown', handleKeyDown);
-                document.removeEventListener('focusin', handleFocusIn, true);
-                window.removeEventListener('mousedown', disableKeyboardNavigation);
+                document.removeEventListener('pointerdown', disableKeyboardNavigation, true);
                 window.removeEventListener('mousemove', disableKeyboardNavigation);
             }
         };
