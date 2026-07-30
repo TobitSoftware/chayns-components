@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, useMemo, useRef } from 'react';
+import React, { CSSProperties, FC, useMemo } from 'react';
 import {
     Categories,
     CustomThumbColors,
@@ -29,6 +29,7 @@ export type DayProps = {
     shouldShowHighlightsInMonthOverlay: boolean;
     customThumbColors?: CustomThumbColors;
     currentDateBackgroundColor?: CSSProperties['backgroundColor'];
+    shouldShowKeyboardHighlighting: boolean;
 };
 
 const Day: FC<DayProps> = ({
@@ -46,8 +47,8 @@ const Day: FC<DayProps> = ({
     shouldShowHighlightsInMonthOverlay,
     setHoveringDay,
     currentDateBackgroundColor,
+    shouldShowKeyboardHighlighting,
 }) => {
-    const dayRef = useRef<HTMLDivElement>(null);
     const isCurrentDay = useMemo(() => isSameDay(date, new Date()), [date]);
 
     const styles: HighlightedDateStyles | undefined = useMemo(() => {
@@ -74,12 +75,13 @@ const Day: FC<DayProps> = ({
 
     return (
         <StyledDay
-            ref={dayRef}
             onClick={() => onClick(date, isSameMonth && !isDisabled)}
             $isSameMonth={isSameMonth}
             $isDisabled={isDisabled}
             $backgroundColor={styles?.backgroundColor}
             $textColor={styles?.textColor}
+            tabIndex={shouldShowKeyboardHighlighting && isSameMonth && !isDisabled ? 0 : -1}
+            data-calendar-date={date.getTime()}
             onMouseEnter={() => setHoveringDay(date)}
             onMouseLeave={() => setHoveringDay(null)}
         >

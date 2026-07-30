@@ -36,6 +36,7 @@ export type DayWrapperProps = {
     customThumbColors?: CustomThumbColors;
     shouldShowHighlightsInMonthOverlay: boolean;
     currentDateBackgroundColor?: CSSProperties['backgroundColor'];
+    shouldShowKeyboardHighlighting: boolean;
 };
 
 const DayWrapper: FC<DayWrapperProps> = ({
@@ -54,6 +55,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
     setHoveringDay,
     disabledDates,
     currentDateBackgroundColor,
+    shouldShowKeyboardHighlighting,
 }) => {
     const dayOfCurrentMonth = useMemo(() => new Date(year, month - 1, 13), [month, year]);
 
@@ -164,6 +166,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
                     highlightedDates={highlightedDates}
                     setHoveringDay={setHoveringDay}
                     currentDateBackgroundColor={currentDateBackgroundColor}
+                    shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                 />,
             );
         });

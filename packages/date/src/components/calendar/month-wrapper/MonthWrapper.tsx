@@ -35,6 +35,7 @@ export type MonthWrapperProps = {
     handleLeftArrowClick: () => void;
     handleRightArrowClick: () => void;
     currentDateBackgroundColor?: CSSProperties['backgroundColor'];
+    shouldShowKeyboardHighlighting: boolean;
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
@@ -60,6 +61,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     handleLeftArrowClick,
     handleRightArrowClick,
     currentDateBackgroundColor,
+    shouldShowKeyboardHighlighting,
 }) => {
     const [content, setContent] = useState<ReactElement[]>();
 
@@ -102,6 +104,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         handleLeftArrowClick={handleLeftArrowClick}
                         handleRightArrowClick={handleRightArrowClick}
                         currentDateBackgroundColor={currentDateBackgroundColor}
+                        shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                     />,
                 );
             }

@@ -1,6 +1,15 @@
-import { ComboBox, Icon } from '@chayns-components/core';
+import { ComboBox, Icon, useColorScheme } from '@chayns-components/core';
 import { Language } from 'chayns-api';
-import React, { CSSProperties, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+    CSSProperties,
+    FC,
+    KeyboardEvent,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import {
     CalendarType,
     Categories,
@@ -10,6 +19,7 @@ import {
 } from '../../types/calendar';
 import { getNewDate, getYearsBetween, isDateInRange } from '../../utils/calendar';
 import {
+    addDays,
     addYears,
     differenceInCalendarMonths,
     isSameDay,
@@ -81,6 +91,10 @@ interface BaseProps {
         When set, the current date will be highlighted in the corresponding style.
     */
     currentDateBackgroundColor?: CSSProperties['backgroundColor'];
+    /**
+     * Enables keyboard focus highlighting and keyboard selection for selectable days.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 interface SingleSelectionProps {
@@ -146,6 +160,7 @@ const Calendar: FC<CalendarProps> = ({
     showMonthYearPickers: showMonthYearPickersProp,
     onShownDatesChange = () => {},
     currentDateBackgroundColor,
+    shouldEnableKeyboardHighlighting: shouldEnableKeyboardHighlightingProp,
 }) => {
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
@@ -163,6 +178,42 @@ const Calendar: FC<CalendarProps> = ({
     }, [minDate, maxDate, showMonthYearPickersProp]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
+    const pendingFocusedDateRef = useRef<Date>();
+    const colorScheme = useColorScheme();
+    const shouldEnableKeyboardHighlighting =
+        shouldEnableKeyboardHighlightingProp ??
+        colorScheme?.shouldEnableKeyboardHighlighting ??
+        false;
+
+    useEffect(() => {
+        const pendingFocusedDate = pendingFocusedDateRef.current;
+
+        if (!pendingFocusedDate || !calendarRef.current || direction) {
+            return;
+        }
+
+        let animationFrameId: number;
+
+        const focusPendingDay = () => {
+            const nextDay = calendarRef.current?.querySelector<HTMLDivElement>(
+                `[data-calendar-month="${pendingFocusedDate.getFullYear()}-${pendingFocusedDate.getMonth()}"] [data-calendar-date="${pendingFocusedDate.getTime()}"][tabindex="0"]`,
+            );
+
+            if (nextDay) {
+                pendingFocusedDateRef.current = undefined;
+                nextDay.focus();
+                return;
+            }
+
+            animationFrameId = window.requestAnimationFrame(focusPendingDay);
+        };
+
+        focusPendingDay();
+
+        return () => {
+            window.cancelAnimationFrame(animationFrameId);
+        };
+    }, [currentDate, direction, shouldRenderTwoMonths]);
 
     useEffect(() => {
         if (currentDate) {
@@ -413,6 +464,83 @@ const Calendar: FC<CalendarProps> = ({
         setDirection(() => undefined);
     };
 
+    const handleKeyDown = useCallback(
+        (event: KeyboardEvent<HTMLDivElement>) => {
+            if (!shouldEnableKeyboardHighlighting) {
+                return;
+            }
+
+            const dayElement = (event.target as HTMLElement).closest<HTMLDivElement>(
+                '[data-calendar-date]',
+            );
+
+            if (!dayElement || !event.currentTarget.contains(dayElement)) {
+                return;
+            }
+
+            const dayTimestamp = Number(dayElement.dataset.calendarDate);
+            const day = new Date(dayTimestamp);
+            const daysToMove =
+                event.key === 'ArrowLeft'
+                    ? -1
+                    : event.key === 'ArrowRight'
+                      ? 1
+                      : event.key === 'ArrowUp'
+                        ? -7
+                        : event.key === 'ArrowDown'
+                          ? 7
+                          : 0;
+
+            if (!Number.isFinite(dayTimestamp) || daysToMove === 0) {
+                return;
+            }
+
+            const direction = daysToMove > 0 ? 1 : -1;
+            let nextDate = addDays(day, daysToMove);
+
+            while (
+                isWithinInterval(nextDate, { start: minDate, end: maxDate }) &&
+                disabledDates.some((disabledDate) => isSameDay(disabledDate, nextDate))
+            ) {
+                nextDate = addDays(nextDate, direction);
+            }
+
+            if (!isWithinInterval(nextDate, { start: minDate, end: maxDate })) {
+                event.preventDefault();
+                return;
+            }
+
+            event.preventDefault();
+
+            const isNextDateVisible =
+                currentDate &&
+                (isSameMonth(nextDate, currentDate) ||
+                    (shouldRenderTwoMonths && isSameMonth(nextDate, getNewDate(1, currentDate))));
+
+            if (!isNextDateVisible) {
+                pendingFocusedDateRef.current = nextDate;
+                setCurrentDate(nextDate);
+            } else {
+                event.currentTarget
+                    .querySelector<HTMLDivElement>(
+                        `[data-calendar-month="${nextDate.getFullYear()}-${nextDate.getMonth()}"] [data-calendar-date="${nextDate.getTime()}"][tabindex="0"]`,
+                    )
+                    ?.focus();
+            }
+
+            handleSelect(nextDate);
+        },
+        [
+            currentDate,
+            disabledDates,
+            handleSelect,
+            maxDate,
+            minDate,
+            shouldEnableKeyboardHighlighting,
+            shouldRenderTwoMonths,
+        ],
+    );
+
     const ShouldShowLeftArrow = useMemo(() => {
         if (!currentDate) {
             return false;
@@ -430,7 +558,7 @@ const Calendar: FC<CalendarProps> = ({
     }, [currentDate, maxDate]);
 
     return (
-        <StyledCalendar ref={calendarRef} $isDisabled={isDisabled}>
+        <StyledCalendar ref={calendarRef} $isDisabled={isDisabled} onKeyDown={handleKeyDown}>
             {ShouldShowLeftArrow ? (
                 <StyledCalendarIconWrapper onClick={handleLeftArrowClick}>
                     <StyledCalendarIconWrapperContent>
@@ -468,6 +596,7 @@ const Calendar: FC<CalendarProps> = ({
                     handleLeftArrowClick={handleLeftArrowClick}
                     handleRightArrowClick={handleRightArrowClick}
                     currentDateBackgroundColor={currentDateBackgroundColor}
+                    shouldShowKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />
             )}
             {ShouldShowRightArrow ? (
