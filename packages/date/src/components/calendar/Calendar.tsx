@@ -35,6 +35,8 @@ import {
     StyledPseudoMonthYearPicker,
 } from './Calendar.styles';
 import MonthWrapper from './month-wrapper/MonthWrapper';
+import { useCalendarFocusRingPortal } from './useCalendarFocusRingPortal';
+import { useKeyboardFocusHighlighting } from '@chayns-components/core';
 
 interface BaseProps {
     /**
@@ -178,12 +180,32 @@ const Calendar: FC<CalendarProps> = ({
     }, [minDate, maxDate, showMonthYearPickersProp]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
+    const leftNavigationIconRef = useRef<HTMLDivElement>(null);
+    const leftNavigationIconContentRef = useRef<HTMLDivElement>(null);
+    const rightNavigationIconRef = useRef<HTMLDivElement>(null);
+    const rightNavigationIconContentRef = useRef<HTMLDivElement>(null);
     const pendingFocusedDateRef = useRef<Date>();
     const colorScheme = useColorScheme();
     const shouldEnableKeyboardHighlighting =
         shouldEnableKeyboardHighlightingProp ??
         colorScheme?.shouldEnableKeyboardHighlighting ??
         false;
+    const shouldShowKeyboardFocusHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
+    useCalendarFocusRingPortal(
+        leftNavigationIconRef,
+        shouldShowKeyboardFocusHighlighting,
+        leftNavigationIconContentRef,
+        currentDate,
+    );
+    useCalendarFocusRingPortal(
+        rightNavigationIconRef,
+        shouldShowKeyboardFocusHighlighting,
+        rightNavigationIconContentRef,
+        currentDate,
+    );
 
     useEffect(() => {
         const pendingFocusedDate = pendingFocusedDateRef.current;
@@ -464,6 +486,18 @@ const Calendar: FC<CalendarProps> = ({
         setDirection(() => undefined);
     };
 
+    const handleNavigationIconKeyDown = useCallback(
+        (event: KeyboardEvent<HTMLDivElement>, onNavigate: VoidFunction) => {
+            if (!shouldEnableKeyboardHighlighting || (event.key !== 'Enter' && event.key !== ' ')) {
+                return;
+            }
+
+            event.preventDefault();
+            onNavigate();
+        },
+        [shouldEnableKeyboardHighlighting],
+    );
+
     const handleKeyDown = useCallback(
         (event: KeyboardEvent<HTMLDivElement>) => {
             if (!shouldEnableKeyboardHighlighting) {
@@ -560,8 +594,15 @@ const Calendar: FC<CalendarProps> = ({
     return (
         <StyledCalendar ref={calendarRef} $isDisabled={isDisabled} onKeyDown={handleKeyDown}>
             {ShouldShowLeftArrow ? (
-                <StyledCalendarIconWrapper onClick={handleLeftArrowClick}>
-                    <StyledCalendarIconWrapperContent>
+                <StyledCalendarIconWrapper
+                    ref={leftNavigationIconRef}
+                    aria-label="Previous month"
+                    role="button"
+                    tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
+                    onClick={handleLeftArrowClick}
+                    onKeyDown={(event) => handleNavigationIconKeyDown(event, handleLeftArrowClick)}
+                >
+                    <StyledCalendarIconWrapperContent ref={leftNavigationIconContentRef}>
                         {showMonthYearPickers && (
                             <StyledPseudoMonthYearPicker>
                                 <ComboBox lists={[{ list: [] }]} placeholder="" />
@@ -600,8 +641,15 @@ const Calendar: FC<CalendarProps> = ({
                 />
             )}
             {ShouldShowRightArrow ? (
-                <StyledCalendarIconWrapper onClick={handleRightArrowClick}>
-                    <StyledCalendarIconWrapperContent>
+                <StyledCalendarIconWrapper
+                    ref={rightNavigationIconRef}
+                    aria-label="Next month"
+                    role="button"
+                    tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
+                    onClick={handleRightArrowClick}
+                    onKeyDown={(event) => handleNavigationIconKeyDown(event, handleRightArrowClick)}
+                >
+                    <StyledCalendarIconWrapperContent ref={rightNavigationIconContentRef}>
                         {showMonthYearPickers && (
                             <StyledPseudoMonthYearPicker>
                                 <ComboBox lists={[{ list: [] }]} placeholder="" />

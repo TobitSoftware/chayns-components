@@ -174,3 +174,4 @@ export type {
 export { default as Skeleton } from './components/skeleton';
 export { SkeletonAnimationType } from './components/skeleton/types';
 export { default as Masonry } from './components/masonry/Masonry';
+export { useKeyboardFocusHighlighting } from './hooks/useKeyboardFocusHighlighting';

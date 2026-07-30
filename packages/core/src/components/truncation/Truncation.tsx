@@ -11,8 +11,9 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import textStrings from '../../constants/textStrings';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
+import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { ClampPosition } from '../../types/truncation';
 import {
     StyledMotionTruncationContent,
@@ -22,9 +23,6 @@ import {
     StyledTruncationClampWrapper,
     StyledTruncationContent,
 } from './Truncation.styles';
-import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
-import textStrings from '../../constants/textStrings';
-import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 export type TruncationProps = {
     /**
@@ -77,25 +75,22 @@ const Truncation: FC<TruncationProps> = ({
         shouldEnableKeyboardHighlighting,
     );
     const contentRef = useRef<HTMLDivElement>(null);
+    const clampRef = useRef<HTMLAnchorElement>(null);
     const pendingObservedHeight = useRef(0);
     const [internalIsOpen, setInternalIsOpen] = useState(Boolean(isOpen));
     const [contentHeight, setContentHeight] = useState(0);
-
-    useEffect(() => {
-        setInitialRender(false);
-    }, []);
-
-    const contentRef = useRef<HTMLDivElement>(null);
-    const hasCollapsed = useRef(false);
-    const isAnimating = useRef(false);
-    const hasSizeRecentlyChanged = useRef(false);
-    const canResetSizeChanged = useRef(true);
 
     useEffect(() => {
         if (typeof isOpen === 'boolean') {
             setInternalIsOpen(isOpen);
         }
     }, [isOpen]);
+
+    const hasOverflow = contentHeight > collapsedHeight;
+
+    useFocusRingPortal(clampRef, {
+        isEnabled: shouldShowKeyboardHighlighting && hasOverflow,
+    });
 
     useIsomorphicLayoutEffect(() => {
         if (!contentRef.current) {
@@ -175,17 +170,6 @@ const Truncation: FC<TruncationProps> = ({
     const internalLessLabel = lessLabel ?? (
         <Textstring textstring={ttsToITextString(textStrings.components.truncation.less)} />
     );
-    const hasOverflow = contentHeight > collapsedHeight;
-    const collapsedContentHeight = Math.min(contentHeight || collapsedHeight, collapsedHeight);
-    const targetHeight = internalIsOpen ? contentHeight || collapsedHeight : collapsedContentHeight;
-
-    const internalMoreLabel = moreLabel ?? (
-        <Textstring textstring={ttsToITextString(textStrings.components.truncation.more)} />
-    );
-    const internalLessLabel = lessLabel ?? (
-        <Textstring textstring={ttsToITextString(textStrings.components.truncation.less)} />
-    );
-    const hasOverflow = contentHeight > collapsedHeight;
     const collapsedContentHeight = Math.min(contentHeight || collapsedHeight, collapsedHeight);
     const targetHeight = internalIsOpen ? contentHeight || collapsedHeight : collapsedContentHeight;
 
@@ -201,10 +185,9 @@ const Truncation: FC<TruncationProps> = ({
             {hasOverflow && (
                 <StyledTruncationClampWrapper $position={clampPosition}>
                     <TextstringProvider libraryName="@chayns-components-core">
-                        <StyledTruncationClampFocusWrapper
-                            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
-                        >
+                        <StyledTruncationClampFocusWrapper>
                             <StyledTruncationClamp
+                                ref={clampRef}
                                 onClick={handleClampClick}
                                 onKeyDown={handleClampKeyDown}
                                 role="button"
@@ -217,7 +200,6 @@ const Truncation: FC<TruncationProps> = ({
                 </StyledTruncationClampWrapper>
             )}
         </StyledTruncation>
-    );
     );
 };
 

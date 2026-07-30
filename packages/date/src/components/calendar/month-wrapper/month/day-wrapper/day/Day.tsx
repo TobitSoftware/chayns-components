@@ -80,7 +80,13 @@ const Day: FC<DayProps> = ({
             $isDisabled={isDisabled}
             $backgroundColor={styles?.backgroundColor}
             $textColor={styles?.textColor}
-            tabIndex={shouldShowKeyboardHighlighting && isSameMonth && !isDisabled ? 0 : -1}
+            tabIndex={
+                shouldShowKeyboardHighlighting &&
+                isSameMonth &&
+                (isSelected || isIntervalStart || isIntervalEnd)
+                    ? 0
+                    : -1
+            }
             data-calendar-date={date.getTime()}
             onMouseEnter={() => setHoveringDay(date)}
             onMouseLeave={() => setHoveringDay(null)}
