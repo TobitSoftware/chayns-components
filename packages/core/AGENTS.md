@@ -1831,6 +1831,7 @@ import { CopyableContent } from '@chayns-components/core';
 | `collapsedHeight` | `number \| undefined` | no | The height of the content in its collapsed state. |
 | `content` | `string` | yes | Markdown source used for rendering and clipboard data. |
 | `copyFailedMessage` | `string \| undefined` | no | Replaces the localized error message shown when copying fails. |
+| `transformClipboardHtml` | `((html: string) => string) \| undefined` | no | Transforms the generated HTML before it is written to the clipboard. |
 
 ### Types
 
