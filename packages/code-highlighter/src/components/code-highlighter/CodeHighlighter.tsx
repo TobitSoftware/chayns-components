@@ -54,6 +54,10 @@ export type CodeHighlighterProps = {
      */
     onFormatError?: (error: unknown) => void;
     /**
+     * Function to be executed when the code should be inserted into another target.
+     */
+    onInsertCode?: (code: string) => void;
+    /**
      * Whether the code should be formatted with prettier.
      */
     shouldFormatCode?: boolean;
@@ -79,6 +83,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     highlightedLines,
     shouldFormatCode = false,
     onFormatError,
+    onInsertCode,
     shouldShowLineNumbers = false,
     shouldWrapLines,
 }) => {
@@ -221,6 +226,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                     text={code}
                     theme={resolvedTheme}
                     copyButtonText={copyButtonText}
+                    onInsertCode={onInsertCode}
                     rootRef={ref}
                 />
                 <SyntaxHighlighter
@@ -243,6 +249,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
             language,
             code,
             copyButtonText,
+            onInsertCode,
             lineNumberStyle,
             syntaxHighlighterStyle,
             shouldShowLineNumbers,

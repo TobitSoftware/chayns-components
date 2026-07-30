@@ -18,6 +18,7 @@ import type {
     BuildDocsFilter,
     BuildDocsOutput,
     BuildDocsProp,
+    BuildDocsType,
 } from '../types/build-docs';
 import { script } from './logger';
 
@@ -98,8 +99,17 @@ const getComponentDocsCode = (packagePath: string, componentName: string): strin
  */
 const getComponentDeclaration = (componentSymbol: MorphSymbol): MorphNode | undefined => {
     const declarations = componentSymbol.getDeclarations();
+    const declaration = declarations[0];
 
-    return declarations[0];
+    if (declaration && Node.isExportAssignment(declaration)) {
+        const expression = declaration.getExpression();
+
+        if (Node.isIdentifier(expression)) {
+            return expression.getSymbol()?.getDeclarations()[0] ?? declaration;
+        }
+    }
+
+    return declaration;
 };
 
 /**
@@ -151,6 +161,15 @@ const formatTypeText = (type: Type): string =>
         .replace(/React\./g, '')
         .replace(/import\(['"].*?['"]\)\./g, '')
         .replace(/\s+/g, ' ')
+        .trim();
+
+/**
+ * Returns a clean source representation for exported supporting types.
+ */
+const formatExportedTypeText = (declaration: MorphNode): string =>
+    declaration
+        .getText()
+        .replace(/^export\s+/, '')
         .trim();
 
 /**
@@ -261,15 +280,17 @@ const buildComponentDocs = (
     componentName: string,
     componentSymbol: MorphSymbol,
     packagePath: string,
+    packageTypes: BuildDocsType[],
 ): BuildDocsComponent => {
     const componentDeclaration = getComponentDeclaration(componentSymbol);
     const componentFunction = getComponentFunctionDeclaration(componentDeclaration);
+    const props = getComponentProps(componentFunction);
 
     return {
         code: getComponentDocsCode(packagePath, componentName),
         name: componentName,
-        props: getComponentProps(componentFunction),
-        types: [],
+        props,
+        types: getReferencedTypes(props, packageTypes),
     };
 };
 
@@ -286,6 +307,68 @@ const getComponentExportSpecifiers = (indexSourceFile: SourceFile): ExportSpecif
         );
 
 /**
+ * Returns all public supporting type exports from a package index file.
+ */
+const getPackageExportedTypes = (indexSourceFile: SourceFile): BuildDocsType[] =>
+    indexSourceFile
+        .getExportDeclarations()
+        .flatMap((exportDeclaration) => {
+            const moduleSourceFile = exportDeclaration.getModuleSpecifierSourceFile();
+
+            if (!moduleSourceFile) {
+                return [];
+            }
+
+            return exportDeclaration
+                .getNamedExports()
+                .filter(
+                    (exportSpecifier) =>
+                        !(
+                            exportSpecifier.getName() === 'default' &&
+                            exportSpecifier.getAliasNode()
+                        ),
+                )
+                .map((exportSpecifier) => {
+                    const exportedName =
+                        exportSpecifier.getAliasNode()?.getText() ?? exportSpecifier.getName();
+                    const exportedSymbol = moduleSourceFile
+                        .getExportSymbols()
+                        .find((symbol) => symbol.getName() === exportSpecifier.getName());
+                    const declaration = exportedSymbol?.getDeclarations()[0];
+
+                    if (
+                        !declaration ||
+                        (!Node.isTypeAliasDeclaration(declaration) &&
+                            !Node.isInterfaceDeclaration(declaration) &&
+                            !Node.isEnumDeclaration(declaration))
+                    ) {
+                        return null;
+                    }
+
+                    return {
+                        name: exportedName,
+                        type: formatExportedTypeText(declaration),
+                    };
+                });
+        })
+        .filter((type): type is BuildDocsType => Boolean(type))
+        .sort((left, right) => left.name.localeCompare(right.name));
+
+/**
+ * Returns supporting types that are referenced by a component's documented prop types.
+ */
+const getReferencedTypes = (
+    props: BuildDocsProp[],
+    packageTypes: BuildDocsType[],
+): BuildDocsType[] =>
+    packageTypes.filter((type) => {
+        const escapedName = type.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const typeReferencePattern = new RegExp(`\\b${escapedName}\\b`);
+
+        return props.some((prop) => typeReferencePattern.test(prop.type));
+    });
+
+/**
  * Builds docs for a single package.
  */
 const buildPackageDocs = (
@@ -293,6 +376,7 @@ const buildPackageDocs = (
     packageName: string,
 ): BuildDocsComponent[] => {
     const packagePath = path.resolve(config.rootDir, packageName);
+    const packageTypes = getPackageExportedTypes(indexSourceFile);
 
     return getComponentExportSpecifiers(indexSourceFile)
         .map((exportSpecifier) => {
@@ -303,7 +387,7 @@ const buildPackageDocs = (
                 return null;
             }
 
-            return buildComponentDocs(componentName, componentSymbol, packagePath);
+            return buildComponentDocs(componentName, componentSymbol, packagePath, packageTypes);
         })
         .filter((component): component is BuildDocsComponent => Boolean(component))
         .sort((left, right) => left.name.localeCompare(right.name));

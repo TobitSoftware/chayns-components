@@ -22,9 +22,14 @@ const getPlainTextFromHtml = (html: string) => {
         .join('\n\n');
 };
 
-const createClipboardContent = (source: string): ClipboardContent => {
+const createClipboardContent = (
+    source: string,
+    transformHtml?: (html: string) => string,
+): ClipboardContent => {
     const { html } = formatStringToHtml(source);
-    return { html, plainText: getPlainTextFromHtml(html) };
+    const clipboardHtml = transformHtml?.(html) ?? html;
+
+    return { html: clipboardHtml, plainText: getPlainTextFromHtml(clipboardHtml) };
 };
 
 const copyWithClipboardItem = async ({ html, plainText }: ClipboardContent) => {
@@ -53,8 +58,11 @@ const copyPlainText = async (plainText: string) => {
     await navigator.clipboard.writeText(plainText);
 };
 
-export const copyableContentToClipboard = async (source: string) => {
-    const clipboardContent = createClipboardContent(source);
+export const copyableContentToClipboard = async (
+    source: string,
+    transformHtml?: (html: string) => string,
+) => {
+    const clipboardContent = createClipboardContent(source, transformHtml);
 
     if (!navigator.clipboard) {
         throw new Error('Clipboard API is not available.');

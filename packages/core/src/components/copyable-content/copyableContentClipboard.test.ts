@@ -13,6 +13,18 @@ const readBlob = (blob: Blob) =>
     });
 
 describe('copyableContentToClipboard', () => {
+    it('transforms the generated HTML before copying', async () => {
+        const write = vi.spyOn(navigator.clipboard, 'write').mockResolvedValue();
+
+        await copyableContentToClipboard('source', (html) => `${html}<p>Styled</p>`);
+
+        const clipboardItem = write.mock.calls[0][0][0];
+
+        await expect(readBlob(await clipboardItem.getType('text/html'))).resolves.toContain(
+            '<p>Styled</p>',
+        );
+    });
+
     afterEach(() => {
         vi.restoreAllMocks();
         vi.unstubAllGlobals();

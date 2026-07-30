@@ -20,6 +20,10 @@
         "outDir": "${configDir}/lib/types",
         "ignoreDeprecations": "5.0"
     },
-    "exclude": ["node_modules"],
+    "exclude": [
+        "node_modules",
+        "${configDir}/docs/**/*.snippets.tsx",
+        "packages/**/docs/**/*.snippets.tsx"
+    ],
     "include": ["${configDir}/src/**/*.ts", "${configDir}/src/**/*.tsx"]
 }

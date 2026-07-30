@@ -15,6 +15,7 @@ const CHAYNS_SPACE_URL = 'https://api.chayns.space/';
 const AWS_UPLOAD_URL = 'https://chayns-space.s3.amazonaws.com/';
 const VERSION = '5';
 const SITE_ID = '77896-21884';
+const DIST_PATH = path.resolve(__dirname, '../../dist');
 const DEFAULT_HEADERS: Pick<AwsUploadFields, 'acl' | 'x-amz-algorithm'> = {
     'x-amz-algorithm': 'AWS4-HMAC-SHA256',
     acl: 'private',
@@ -28,7 +29,7 @@ const getAwsUploadFields = async (): Promise<AwsUploadFields | null> => {
     const password = process.env.API_TOKEN_SECRET;
 
     if (!username || !password) {
-        script.warn('Missing API tokens. Skipping docs upload.');
+        script.warn('Missing API tokens. Skipping upload.');
         return null;
     }
 
@@ -120,17 +121,19 @@ const uploadFile = async ({
 };
 
 /**
- * Uploads the generated docs JSON file when upload credentials are available.
+ * Uploads a generated JSON file from the dist directory when upload credentials are available.
  */
-export const uploadDocs = async (): Promise<string | null> => {
-    const docsPath = path.resolve(__dirname, '../../dist/docs.json');
+const uploadGeneratedJson = async (
+    fileName: string,
+    errorMessage: string,
+): Promise<string | null> => {
+    const docsPath = path.resolve(DIST_PATH, fileName);
 
     if (!fs.existsSync(docsPath)) {
-        throw new Error(`Generated docs file not found at ${docsPath}.`);
+        throw new Error(`Generated file not found at ${docsPath}.`);
     }
 
     const fileBuffer = fs.readFileSync(docsPath);
-    const fileName = path.basename(docsPath);
 
     script.step(`Uploading ${fileName}...`);
 
@@ -141,7 +144,19 @@ export const uploadDocs = async (): Promise<string | null> => {
             mimeType: 'application/json',
         });
     } catch (error) {
-        script.error('Failed to upload generated docs.', error);
+        script.error(errorMessage, error);
         throw error;
     }
 };
+
+/**
+ * Uploads the generated docs JSON file when upload credentials are available.
+ */
+export const uploadDocs = async (): Promise<string | null> =>
+    uploadGeneratedJson('docs.json', 'Failed to upload generated docs.');
+
+/**
+ * Uploads the generated snippets JSON file when upload credentials are available.
+ */
+export const uploadSnippets = async (): Promise<string | null> =>
+    uploadGeneratedJson('snippets.json', 'Failed to upload generated snippets.');
