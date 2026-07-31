@@ -50,6 +50,7 @@ export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputE
         $shouldShowContent ? theme.text : theme['100']};
     flex: 1 1 auto;
     font-family: ${getFontFamily};
+    outline: none;
     overflow-y: scroll;
     overflow-x: hidden;
     word-break: break-word;

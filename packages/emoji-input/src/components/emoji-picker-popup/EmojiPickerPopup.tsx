@@ -1,5 +1,13 @@
-import { AreaProvider, Icon, Popup, PopupAlignment, type PopupRef } from '@chayns-components/core';
-import React, { FC, useCallback, useEffect, useRef } from 'react';
+import {
+    AreaProvider,
+    Icon,
+    Popup,
+    PopupAlignment,
+    useFocusRingPortal,
+    useKeyboardFocusHighlighting,
+    type PopupRef,
+} from '@chayns-components/core';
+import React, { FC, KeyboardEventHandler, useCallback, useEffect, useRef } from 'react';
 import EmojiPicker from '../emoji-picker/EmojiPicker';
 import { StyledEmojiPickerPopup } from './EmojiPickerPopup.styles';
 
@@ -26,6 +34,14 @@ export type EmojiPickerPopupProps = {
      * @param {string} emoji - Emoji that was selected
      */
     onSelect: (emoji: string) => void;
+    /**
+     * Enables keyboard-only focus highlighting for the picker trigger.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
+     * Receives focus after an emoji is selected with the keyboard.
+     */
+    onSelectWithKeyboard?: (emoji: string) => void;
 };
 
 const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
@@ -33,15 +49,45 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
     container,
     onPopupVisibilityChange,
     onSelect,
+    onSelectWithKeyboard,
     personId,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const popupRef = useRef<PopupRef>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
+    useFocusRingPortal(triggerRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        shape: 'circle',
+        padding: 4,
+    });
 
     const handleKeyPress = useCallback((event: KeyboardEvent) => {
         if (event.key === 'Escape' && !event.shiftKey) {
             popupRef.current?.hide();
         }
     }, []);
+
+    const handleTriggerKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>((event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            popupRef.current?.show();
+        }
+    }, []);
+
+    const handleSelect = useCallback(
+        (emoji: string, shouldRestoreInputFocus?: boolean) => {
+            onSelect(emoji);
+
+            if (shouldRestoreInputFocus) {
+                onSelectWithKeyboard?.(emoji);
+            }
+        },
+        [onSelect, onSelectWithKeyboard],
+    );
 
     useEffect(() => {
         document.addEventListener('keydown', handleKeyPress);
@@ -70,13 +116,21 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
                     <AreaProvider shouldChangeColor={false}>
                         <EmojiPicker
                             accessToken={accessToken}
-                            onSelect={onSelect}
+                            onSelect={handleSelect}
                             personId={personId}
                         />
                     </AreaProvider>
                 }
             >
-                <Icon className="prevent-lose-focus" icons={['far fa-smile']} size={18} />
+                <div
+                    className="prevent-lose-focus"
+                    onKeyDown={handleTriggerKeyDown}
+                    ref={triggerRef}
+                    role="button"
+                    tabIndex={0}
+                >
+                    <Icon icons={['far fa-smile']} size={18} />
+                </div>
             </Popup>
         </StyledEmojiPickerPopup>
     );

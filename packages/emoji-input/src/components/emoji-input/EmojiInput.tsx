@@ -1,4 +1,9 @@
-import { AreaContext, useIsTouch } from '@chayns-components/core';
+import {
+    AreaContext,
+    useFocusRingPortal,
+    useIsTouch,
+    useKeyboardFocusHighlighting,
+} from '@chayns-components/core';
 import { AnimatePresence } from 'motion/react';
 import React, {
     ChangeEvent,
@@ -155,6 +160,10 @@ export type EmojiInputProps = {
      */
     shouldPreventEmojiPicker?: boolean;
     /**
+     * Enables keyboard-only focus highlighting.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * The plain text value of the input field. Instead of HTML elements BB codes must be used at
      * this point. These are then converted by the input field into corresponding HTML elements.
      */
@@ -192,6 +201,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             prefixElement,
             rightElement,
             shouldHidePlaceholderOnFocus = false,
+            shouldEnableKeyboardHighlighting,
             shouldRevertAsciiSmileyConversionOnBackspace = false,
             shouldPreventEmojiPicker,
             value,
@@ -213,6 +223,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const areaProvider = useContext(AreaContext);
 
         const editorRef = useRef<HTMLDivElement>(null);
+        const inputRef = useRef<HTMLDivElement>(null);
         const prefixElementRef = useRef<HTMLDivElement>(null);
         const hasPrefixRendered = useRef(false);
         const hasPrefixChanged = useRef(false);
@@ -695,6 +706,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             handleUpdateHTML(valueRef.current);
         }, [handleUpdateHTML]);
 
+        const handlePopupKeyboardSelect = useCallback(() => {
+            editorRef.current?.focus();
+        }, []);
+
         const handleInsertTextAtCursorPosition = useCallback((text: string) => {
             if (editorRef.current) {
                 insertTextAtCursorPosition({ editorElement: editorRef.current, text });
@@ -923,8 +938,20 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             };
         }, [isDisabled]);
 
+        const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+            shouldEnableKeyboardHighlighting,
+        );
+        useFocusRingPortal(editorRef, {
+            isEnabled: shouldShowKeyboardHighlighting,
+            overlayRef: inputRef,
+        });
+
         return (
-            <StyledEmojiInput $isDisabled={isDisabled} $shouldChangeColor={shouldChangeColor}>
+            <StyledEmojiInput
+                ref={inputRef}
+                $isDisabled={isDisabled}
+                $shouldChangeColor={shouldChangeColor}
+            >
                 <AnimatePresence initial>
                     {progressDuration > 0 && (
                         <StyledMotionEmojiInputProgress
@@ -989,8 +1016,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                             accessToken={accessToken}
                             container={container}
                             onSelect={handlePopupSelect}
+                            onSelectWithKeyboard={handlePopupKeyboardSelect}
                             onPopupVisibilityChange={handlePopupVisibility}
                             personId={personId}
+                            shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                         />
                     )}
                 </StyledEmojiInputContent>

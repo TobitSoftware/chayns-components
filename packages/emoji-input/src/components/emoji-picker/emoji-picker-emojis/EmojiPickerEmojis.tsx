@@ -14,7 +14,7 @@ import {
 
 export type EmojiPickerEmojisProps = {
     accessToken?: string;
-    onSelect: (emoji: string) => void;
+    onSelect: (emoji: string, shouldRestoreInputFocus?: boolean) => void;
     personId?: string;
     searchString: string;
     selectedCategory: Category;
@@ -83,18 +83,21 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
     }, []);
 
     const handleSelect = useCallback(
-        ({
-            emoji,
-            name,
-            skin_tone_support,
-            index,
-        }: {
-            emoji: string;
-            name: string;
-            skin_tone_support: boolean;
-            index?: number;
-        }) => {
-            onSelect(emoji);
+        (
+            {
+                emoji,
+                name,
+                skin_tone_support,
+                index,
+            }: {
+                emoji: string;
+                name: string;
+                skin_tone_support: boolean;
+                index?: number;
+            },
+            shouldRestoreInputFocus = false,
+        ) => {
+            onSelect(emoji, shouldRestoreInputFocus);
 
             if (index) {
                 setFocusedIndex(index);
@@ -198,7 +201,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
                     return;
                 }
 
-                handleSelect({ emoji, name, skin_tone_support: skinToneSupport === 'true' });
+                handleSelect({ emoji, name, skin_tone_support: skinToneSupport === 'true' }, true);
             }
         };
 

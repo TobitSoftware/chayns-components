@@ -16,7 +16,7 @@ export type EmojiPickerProps = {
      * Function executed when an emoji is selected in the popup
      * @param {string} emoji - Emoji that was selected
      */
-    onSelect: (emoji: string) => void;
+    onSelect: (emoji: string, shouldRestoreInputFocus?: boolean) => void;
     /**
      * Person id of the logged-in user. Is needed to load and save the history of the emojis.
      */
