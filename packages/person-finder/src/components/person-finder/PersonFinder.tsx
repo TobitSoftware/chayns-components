@@ -70,6 +70,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
             shouldHideResultsOnAdd = !shouldAllowMultiple || false,
             shouldShowOwnUser = false,
             shouldDisableRemove = false,
+            shouldEnableKeyboardHighlighting,
             shouldRenderInline = false,
         },
         ref,
@@ -111,6 +112,7 @@ const PersonFinder = forwardRef<PersonFinderRef, PersonFinderProps>(
                             placeholder={placeholder}
                             shouldAllowMultiple={shouldAllowMultiple}
                             shouldHideResultsOnAdd={shouldHideResultsOnAdd}
+                            shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                             shouldRenderInline={shouldRenderInline}
                         />
                     </div>

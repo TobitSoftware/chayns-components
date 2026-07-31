@@ -12,10 +12,14 @@ export type PersonFinderBodyProps = {
     onRemove: (id: string) => void;
     filterTypes?: PersonFinderFilterTypes[];
     shouldRenderInline?: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
-    ({ onAdd, filterTypes, onRemove, shouldRenderInline }, ref) => {
+    (
+        { onAdd, filterTypes, onRemove, shouldRenderInline, shouldEnableKeyboardHighlighting },
+        ref,
+    ) => {
         const { activeFilter, data } = usePersonFinder();
 
         const [isScrollTop, setIsScrollTop] = useState(true);
@@ -45,6 +49,7 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
                             onRemove={onRemove}
                             entries={entries}
                             count={count}
+                            shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                             shouldShowGroupName={shouldShowGroupNames && index !== 0}
                         />
                     );
@@ -60,6 +65,7 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
                     filterTypes={filterTypes}
                     shouldShowGroupNames={shouldShowGroupNames}
                     shouldShowShadow={!isScrollTop && !shouldRenderInline}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />
                 <StyledPersonFinderBodyContent
                     ref={contentRef}

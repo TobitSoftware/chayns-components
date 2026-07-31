@@ -2,6 +2,7 @@ import {
     DropdownBodyWrapper,
     DropdownDirection,
     Icon,
+    useColorScheme,
     type Tag,
     TagInput,
     type TagInputRef,
@@ -30,6 +31,7 @@ import {
 import { StyledPersonFinder, StyledPersonFinderLeftElement } from './PersonFinderWrapper.styles';
 import PersonFinderBody from './person-finder-body/PersonFinderBody';
 import { usePersonFinder } from '../../PersonFinderProvider';
+import { usePersonFinderKeyboardNavigation } from './usePersonFinderKeyboardNavigation';
 
 export type PersonFinderRef = {
     clear: () => void;
@@ -105,6 +107,10 @@ export type PersonFinderWrapperProps = {
      */
     shouldDisableRemove?: boolean;
     /**
+     * Enables keyboard-only focus highlighting for interactive controls.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * Determines whether persons are searched and sorted from the user's perspective or from a site's perspective.
      */
     relationMode?: RelationMode;
@@ -123,6 +129,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             onDropdownHide,
             onDropdownShow,
             shouldDisableRemove,
+            shouldEnableKeyboardHighlighting,
             onRemove,
             placeholder,
             shouldAllowMultiple,
@@ -133,6 +140,11 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
         ref,
     ) => {
         const { data, updateSearch, setTags, tags, search } = usePersonFinder();
+        const colorScheme = useColorScheme();
+        const shouldEnableKeyboardHighlightingEffective =
+            shouldEnableKeyboardHighlighting ??
+            colorScheme?.shouldEnableKeyboardHighlighting ??
+            false;
 
         const [isFocused, setIsFocused] = useState(false);
         const [shouldShowBody, setShouldShowBody] = useState(false);
@@ -155,6 +167,21 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             hasFocusRef.current = false;
 
             setIsFocused(false);
+        }, []);
+
+        const handleBlurCapture = useCallback(() => {
+            window.requestAnimationFrame(() => {
+                const activeElement = document.activeElement;
+                const hasFocusWithinPersonFinder = Boolean(
+                    activeElement instanceof Node &&
+                    (boxRef.current?.contains(activeElement) ||
+                        contentRef.current?.contains(activeElement)),
+                );
+
+                if (!hasFocusWithinPersonFinder) {
+                    setShouldShowBody(false);
+                }
+            });
         }, []);
 
         const handleTagInputFocus = useCallback(() => {
@@ -258,6 +285,14 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
             [updateSearch],
         );
 
+        const handleKeyDown = usePersonFinderKeyboardNavigation({
+            inputWrapperRef: boxRef,
+            isEnabled: shouldEnableKeyboardHighlightingEffective,
+            isOpen: shouldShowBody,
+            onClose: handleClose,
+            resultsRef: contentRef,
+        });
+
         useImperativeHandle(
             ref,
             () => ({
@@ -303,6 +338,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
                     onRemove={handleRemove}
                     ref={contentRef}
                     shouldRenderInline={shouldRenderInline}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />
             );
 
@@ -339,7 +375,13 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
         ]);
 
         return (
-            <StyledPersonFinder ref={boxRef} onFocus={handleOpen} key={keyRef.current}>
+            <StyledPersonFinder
+                ref={boxRef}
+                onBlurCapture={handleBlurCapture}
+                onFocus={handleOpen}
+                onKeyDown={handleKeyDown}
+                key={keyRef.current}
+            >
                 <TagInput
                     leftElement={leftElement}
                     onBlur={handleTagInputBlur}
@@ -350,6 +392,7 @@ const PersonFinderWrapper = forwardRef<PersonFinderRef, PersonFinderWrapperProps
                     ref={tagInputRef}
                     shouldAllowMultiple={shouldAllowMultiple}
                     shouldPreventEnter
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                     tags={tags}
                 />
                 {content}

@@ -68,7 +68,6 @@ export const useKeyboardFocusHighlighting = (isEnabledProp?: boolean): boolean =
             document.addEventListener('pointerdown', disableKeyboardNavigation, true);
             window.addEventListener('mousemove', disableKeyboardNavigation);
         } else {
-            isKeyboardFocusHighlightingActive = false;
             setIsKeyboardNavigation(false);
         }
 

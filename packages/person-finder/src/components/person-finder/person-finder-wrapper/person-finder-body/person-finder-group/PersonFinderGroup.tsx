@@ -25,6 +25,7 @@ export type PersonFinderGroupProps = {
     shouldShowGroupName: boolean;
     onAdd: (id: string) => void;
     onRemove: (id: string) => void;
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
@@ -34,6 +35,7 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
     shouldShowGroupName,
     onAdd,
     onRemove,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const { loadMore, loadingState: loadingStateFromState, search } = usePersonFinder();
     const areOnlyFriendsGiven =
@@ -92,6 +94,7 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
                                 entry={entry}
                                 onAdd={onAdd}
                                 onRemove={onRemove}
+                                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                             />
                         ) : (
                             <PersonFinderItem
@@ -99,6 +102,7 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
                                 entry={entry}
                                 onAdd={onAdd}
                                 onRemove={onRemove}
+                                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                             />
                         ),
                     )}
@@ -112,6 +116,7 @@ const PersonFinderGroup: FC<PersonFinderGroupProps> = ({
                         key={`more-button--${filterKey}`}
                         shouldShowWaitCursor={loadingState === LoadingState.Pending}
                         onClick={handleLoadMore}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                     >
                         {getPersonFinderTextstringValue({ textstring: ts.loadMore })} {groupName}
                     </Button>
