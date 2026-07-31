@@ -12,6 +12,7 @@ const GalleryViewerItem: FC<GalleryViewerItemProps> = ({
     ratio = 1,
     remainingItemsLength,
     onClick,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const handleClick = useCallback(() => onClick(fileItem), [fileItem, onClick]);
 
@@ -22,6 +23,7 @@ const GalleryViewerItem: FC<GalleryViewerItemProps> = ({
                 onClick={handleClick}
                 ratio={ratio}
                 shouldLoadImages={shouldLoadImages}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             />
             {remainingItemsLength && (
                 <StyledGalleryViewerMoreItemsIndicator onClick={handleClick}>

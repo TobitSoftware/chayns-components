@@ -1,5 +1,5 @@
-import { Icon } from '@chayns-components/core';
-import React, { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
+import { Icon, useFocusRingPortal, useKeyboardFocusHighlighting } from '@chayns-components/core';
+import React, { FC, KeyboardEventHandler, memo, useEffect, useMemo, useRef, useState } from 'react';
 import {
     StyledMediaContentImage,
     StyledMediaContentImageWrapper,
@@ -24,6 +24,7 @@ const MediaContent: FC<MediaContentProps> = ({
     ratio,
     onClick,
     shouldLoadImages = true,
+    shouldEnableKeyboardHighlighting,
     playIconSize = 50,
 }) => {
     const isVideo = isVideoFile(file);
@@ -33,6 +34,7 @@ const MediaContent: FC<MediaContentProps> = ({
     const [resolvedFinalSourceUrl, setResolvedFinalSourceUrl] = useState<string>();
     const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
     const imageRef = useRef<HTMLImageElement>(null);
+    const contentRef = useRef<HTMLDivElement | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const renderSize = useMediaContentSize(containerElement);
     const devicePixelRatio =
@@ -100,11 +102,24 @@ const MediaContent: FC<MediaContentProps> = ({
 
     const shouldRenderFinalImage = shouldLoadImages && Boolean(finalSourceUrl);
     const shouldShowPreview = Boolean(displayPreviewUrl);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+    useFocusRingPortal(contentRef, { isEnabled: shouldShowKeyboardHighlighting });
+
+    const handleKeyDown = ((event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onClick();
+        }
+    }) as KeyboardEventHandler<HTMLDivElement>;
 
     if (isVideo) {
         return (
             <StyledMediaContentVideoWrapper
                 ref={setContainerElement}
+                tabIndex={0}
+                onKeyDown={handleKeyDown}
                 onClick={onClick}
                 $ratio={ratio}
             >
@@ -136,7 +151,16 @@ const MediaContent: FC<MediaContentProps> = ({
     }
 
     return (
-        <StyledMediaContentImageWrapper ref={setContainerElement} onClick={onClick} $ratio={ratio}>
+        <StyledMediaContentImageWrapper
+            ref={(element) => {
+                setContainerElement(element);
+                contentRef.current = element;
+            }}
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
+            onClick={onClick}
+            $ratio={ratio}
+        >
             {shouldShowPreview && (
                 <StyledMediaContentPreviewImage
                     draggable={false}

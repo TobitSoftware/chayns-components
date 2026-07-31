@@ -20,6 +20,7 @@ const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
             onFileCountChange,
             onRemove,
             shouldLoadImages = true,
+            shouldEnableKeyboardHighlighting,
         },
         ref,
     ) => {
@@ -66,12 +67,17 @@ const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
                                 handleDeleteFile={handleDeleteFile}
                                 onClick={handleOpenFiles}
                                 shouldLoadImages={shouldLoadImages}
+                                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                             />
                         ))}
                     </AnimatePresence>
 
                     {shouldShowAddFileTile && (
-                        <AddFile addFileIcon={addFileIcon} onAdd={handleAddFiles} />
+                        <AddFile
+                            addFileIcon={addFileIcon}
+                            onAdd={handleAddFiles}
+                            shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                        />
                     )}
                 </StyledGalleryEditorGrid>
             </StyledGalleryEditor>

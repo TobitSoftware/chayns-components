@@ -1,5 +1,5 @@
-import { Icon } from '@chayns-components/core';
-import React, { FC, ReactNode, memo } from 'react';
+import { Icon, useFocusRingPortal, useKeyboardFocusHighlighting } from '@chayns-components/core';
+import React, { FC, ReactNode, memo, useRef } from 'react';
 import {
     StyledMotionGalleryEditorItem,
     StyledGalleryEditorItemDeleteButton,
@@ -16,9 +16,16 @@ const GalleryEditorItem: FC<GalleryEditorItemProps> = ({
     fileItem,
     handleDeleteFile,
     shouldLoadImages = true,
+    shouldEnableKeyboardHighlighting,
     ratio = 1,
     onClick,
 }) => {
+    const deleteButtonRef = useRef<HTMLButtonElement>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+    useFocusRingPortal(deleteButtonRef, { isEnabled: shouldShowKeyboardHighlighting, padding: -1 });
+
     const shouldRenderPreview = fileItem.state === 'uploading';
     const shouldRenderMedia =
         fileItem.state !== 'none' &&
@@ -36,6 +43,7 @@ const GalleryEditorItem: FC<GalleryEditorItemProps> = ({
                 openSelectedFile={onClick}
                 previewUrl={fileItem.previewUrl}
                 shouldLoadImages={shouldLoadImages}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             />
         );
     }
@@ -49,6 +57,7 @@ const GalleryEditorItem: FC<GalleryEditorItemProps> = ({
         >
             {mediaContent}
             <StyledGalleryEditorItemDeleteButton
+                ref={deleteButtonRef}
                 type="button"
                 onClick={(event) => {
                     event.stopPropagation();

@@ -19,6 +19,7 @@ const Gallery = forwardRef<GalleryRef, GalleryProps>(
             onFileCountChange,
             onRemove,
             shouldLoadImages = true,
+            shouldEnableKeyboardHighlighting,
             viewMode = GalleryViewMode.GRID,
         },
         ref,
@@ -55,9 +56,15 @@ const Gallery = forwardRef<GalleryRef, GalleryProps>(
                 onFileCountChange={onFileCountChange}
                 onRemove={onRemove}
                 shouldLoadImages={shouldLoadImages}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             />
         ) : (
-            <GalleryViewer files={files} shouldLoadImages={shouldLoadImages} viewMode={viewMode} />
+            <GalleryViewer
+                files={files}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                shouldLoadImages={shouldLoadImages}
+                viewMode={viewMode}
+            />
         );
     },
 );

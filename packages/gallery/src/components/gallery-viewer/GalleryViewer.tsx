@@ -17,6 +17,7 @@ const EMPTY_FILE_ITEMS: FileItem[] = [];
 const GalleryViewer: FC<GalleryViewerProps> = ({
     files,
     shouldLoadImages = true,
+    shouldEnableKeyboardHighlighting,
     viewMode = GalleryViewMode.GRID,
 }) => {
     const fileItems = files ?? EMPTY_FILE_ITEMS;
@@ -45,6 +46,7 @@ const GalleryViewer: FC<GalleryViewerProps> = ({
                         onClick={handleOpenFiles}
                         ratio={getReadOnlyItemRatio({ fileItems, index, viewMode })}
                         shouldLoadImages={shouldLoadImages}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                         remainingItemsLength={
                             fileItems.length > GALLERY_VIEWER_MAX_VISIBLE_ITEMS && index === 3
                                 ? fileItems.length

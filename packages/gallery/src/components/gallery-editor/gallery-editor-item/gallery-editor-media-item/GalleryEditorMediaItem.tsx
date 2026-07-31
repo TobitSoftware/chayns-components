@@ -9,6 +9,7 @@ const GalleryEditorMediaItem: FC<GalleryEditorMediaItemProps> = ({
     openSelectedFile,
     previewUrl,
     shouldLoadImages = true,
+    shouldEnableKeyboardHighlighting,
     ratio,
 }) => (
     <StyledMotionGalleryEditorMediaItem
@@ -25,6 +26,7 @@ const GalleryEditorMediaItem: FC<GalleryEditorMediaItemProps> = ({
                 previewUrl={previewUrl}
                 ratio={ratio}
                 shouldLoadImages={shouldLoadImages}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             />
         )}
     </StyledMotionGalleryEditorMediaItem>

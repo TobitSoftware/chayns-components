@@ -97,6 +97,10 @@ export interface GalleryProps {
      */
     shouldLoadImages?: boolean;
     /**
+     * Enables keyboard-only focus highlighting for interactive gallery tiles.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * Is called after a file has been uploaded successfully in edit mode.
      * @description
      * The callback receives the uploaded file representation that should be merged into the consuming state.

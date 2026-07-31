@@ -113,20 +113,21 @@ import { Gallery } from '@chayns-components/gallery';
 
 ### Props
 
-| name                      | type                                         | required | description                                                                   |
-| ------------------------- | -------------------------------------------- | -------- | ----------------------------------------------------------------------------- |
-| `addFileIcon`             | `string \| undefined`                        | no       | Defines the icon that is shown in the add-file tile in edit mode.             |
-| `allowDragAndDrop`        | `boolean \| undefined`                       | no       | Enables drag and drop while the component is used in edit mode.               |
-| `doubleFileDialogMessage` | `string \| undefined`                        | no       | Defines the dialog message that is shown when a duplicate upload is detected. |
-| `fileMinWidth`            | `number \| undefined`                        | no       | Defines the minimum width of one tile in edit mode.                           |
-| `files`                   | `FileItem[] \| undefined`                    | no       | Provides already known media items that should be rendered by the gallery.    |
-| `isEditMode`              | `boolean \| undefined`                       | no       | Enables the editable upload mode instead of the read-only viewer mode.        |
-| `maxFiles`                | `number \| undefined`                        | no       | Limits how many files can be managed in edit mode.                            |
-| `onAdd`                   | `((file: FileItem) => void) \| undefined`    | no       | Is called after a file has been uploaded successfully in edit mode.           |
-| `onFileCountChange`       | `((fileCount: number) => void) \| undefined` | no       | Is called whenever the internal item count changes in edit mode.              |
-| `onRemove`                | `((file: FileItem) => void) \| undefined`    | no       | Is called after an uploaded file has been removed in edit mode.               |
-| `shouldLoadImages`        | `boolean \| undefined`                       | no       | Controls when the gallery is allowed to load the final media assets.          |
-| `viewMode`                | `GalleryViewMode \| undefined`               | no       | Defines how known media items are arranged in read-only mode.                 |
+| name                               | type                                         | required | description                                                                   |
+| ---------------------------------- | -------------------------------------------- | -------- | ----------------------------------------------------------------------------- |
+| `addFileIcon`                      | `string \| undefined`                        | no       | Defines the icon that is shown in the add-file tile in edit mode.             |
+| `allowDragAndDrop`                 | `boolean \| undefined`                       | no       | Enables drag and drop while the component is used in edit mode.               |
+| `doubleFileDialogMessage`          | `string \| undefined`                        | no       | Defines the dialog message that is shown when a duplicate upload is detected. |
+| `fileMinWidth`                     | `number \| undefined`                        | no       | Defines the minimum width of one tile in edit mode.                           |
+| `files`                            | `FileItem[] \| undefined`                    | no       | Provides already known media items that should be rendered by the gallery.    |
+| `isEditMode`                       | `boolean \| undefined`                       | no       | Enables the editable upload mode instead of the read-only viewer mode.        |
+| `maxFiles`                         | `number \| undefined`                        | no       | Limits how many files can be managed in edit mode.                            |
+| `onAdd`                            | `((file: FileItem) => void) \| undefined`    | no       | Is called after a file has been uploaded successfully in edit mode.           |
+| `onFileCountChange`                | `((fileCount: number) => void) \| undefined` | no       | Is called whenever the internal item count changes in edit mode.              |
+| `onRemove`                         | `((file: FileItem) => void) \| undefined`    | no       | Is called after an uploaded file has been removed in edit mode.               |
+| `shouldLoadImages`                 | `boolean \| undefined`                       | no       | Controls when the gallery is allowed to load the final media assets.          |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined`                       | no       | Enables keyboard-only focus highlighting for interactive gallery tiles.       |
+| `viewMode`                         | `GalleryViewMode \| undefined`               | no       | Defines how known media items are arranged in read-only mode.                 |
 
 ### Types
 
