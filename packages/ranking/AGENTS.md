@@ -219,19 +219,20 @@ import { Ranking } from '@chayns-components/ranking';
 
 ### Props
 
-| name                    | type                                        | required | description                                                                                                        |
-| ----------------------- | ------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------ |
-| `entries`               | `IRankingEntry[]`                           | yes      | Array of ranking entries to be displayed in the ranking list.                                                      |
-| `friendPersonIds`       | `string[]`                                  | yes      | Array of personIds that represent the user's friends.                                                              |
-| `isLoadingData`         | `boolean \| undefined`                      | no       | Whether new data is loading.                                                                                       |
-| `onFriendAdd`           | `((personId: string) => void) \| undefined` | no       | Callback function triggered when a friend is added to the friends list.                                            |
-| `onFriendRemove`        | `((personId: string) => void) \| undefined` | no       | Callback function triggered when a friend is removed from the friends list.                                        |
-| `onFriendVisibleChange` | `(() => void) \| undefined`                 | no       | Callback function triggered when the visibility of friends is toggled.                                             |
-| `onLoadMore`            | `(() => void) \| undefined`                 | no       | Callback function when the load more button is clicked.                                                            |
-| `onSearchChange`        | `((value: string) => void) \| undefined`    | no       | Callback function triggered when the search input value changes.                                                   |
-| `searchValue`           | `string \| undefined`                       | no       | The current value of the search input field.                                                                       |
-| `shouldShowOnlyFriends` | `boolean \| undefined`                      | no       | Whether only the friends of the user should be displayed (filtering and fetching the correct data is done by you). |
-| `title`                 | `string \| undefined`                       | no       | The title of the top Accordion.                                                                                    |
+| name                               | type                                        | required | description                                                                                                        |
+| ---------------------------------- | ------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------ |
+| `entries`                          | `IRankingEntry[]`                           | yes      | Array of ranking entries to be displayed in the ranking list.                                                      |
+| `friendPersonIds`                  | `string[]`                                  | yes      | Array of personIds that represent the user's friends.                                                              |
+| `isLoadingData`                    | `boolean \| undefined`                      | no       | Whether new data is loading.                                                                                       |
+| `onFriendAdd`                      | `((personId: string) => void) \| undefined` | no       | Callback function triggered when a friend is added to the friends list.                                            |
+| `onFriendRemove`                   | `((personId: string) => void) \| undefined` | no       | Callback function triggered when a friend is removed from the friends list.                                        |
+| `onFriendVisibleChange`            | `(() => void) \| undefined`                 | no       | Callback function triggered when the visibility of friends is toggled.                                             |
+| `onLoadMore`                       | `(() => void) \| undefined`                 | no       | Callback function when the load more button is clicked.                                                            |
+| `onSearchChange`                   | `((value: string) => void) \| undefined`    | no       | Callback function triggered when the search input value changes.                                                   |
+| `searchValue`                      | `string \| undefined`                       | no       | The current value of the search input field.                                                                       |
+| `shouldShowOnlyFriends`            | `boolean \| undefined`                      | no       | Whether only the friends of the user should be displayed (filtering and fetching the correct data is done by you). |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined`                      | no       | Enables keyboard-only focus highlighting for interactive controls.                                                 |
+| `title`                            | `string \| undefined`                       | no       | The title of the top Accordion.                                                                                    |
 
 ### Types
 
