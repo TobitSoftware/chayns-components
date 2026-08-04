@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import type { IPresetColor } from '../../types/colorPicker';
 import ColorArea from './color-area/ColorArea';
 import { StyledColorPickerPopup } from './ColorPickerPopup.styles';
@@ -31,34 +31,52 @@ const ColorPickerPopup = ({
     shouldShowMoreOptions,
     shouldHideColorArea,
     shouldEnableKeyboardHighlighting,
-}: ColorPickerPopupProps) => (
-    <StyledColorPickerPopup>
-        {!shouldHideColorArea && (
-            <ColorArea shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting} />
-        )}
-        {!shouldHideColorArea && (
-            <Sliders
-                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
-                shouldShowTransparencySlider={shouldShowTransparencySlider}
-            />
-        )}
-        {shouldShowPresetColors && (
-            <PresetColors
-                shouldHideDefaultPresetColors={shouldHideDefaultPresetColors}
-                presetColors={presetColors}
-                shouldUseSiteColors={shouldUseSiteColors}
-                onPresetColorAdd={onPresetColorAdd}
-                onPresetColorRemove={onPresetColorRemove}
-                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
-            />
-        )}
-        {shouldShowMoreOptions && (
-            <TextstringProvider libraryName="@chayns-components-color-picker">
-                <MoreOptions shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting} />
-            </TextstringProvider>
-        )}
-    </StyledColorPickerPopup>
-);
+}: ColorPickerPopupProps) => {
+    const popupRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const animationFrameId = window.requestAnimationFrame(() => {
+            popupRef.current
+                ?.querySelector<HTMLElement>(
+                    '[tabindex="0"], input:not([disabled]), button:not([disabled])',
+                )
+                ?.focus();
+        });
+
+        return () => window.cancelAnimationFrame(animationFrameId);
+    }, []);
+
+    return (
+        <StyledColorPickerPopup ref={popupRef}>
+            {!shouldHideColorArea && (
+                <ColorArea shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting} />
+            )}
+            {!shouldHideColorArea && (
+                <Sliders
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                    shouldShowTransparencySlider={shouldShowTransparencySlider}
+                />
+            )}
+            {shouldShowPresetColors && (
+                <PresetColors
+                    shouldHideDefaultPresetColors={shouldHideDefaultPresetColors}
+                    presetColors={presetColors}
+                    shouldUseSiteColors={shouldUseSiteColors}
+                    onPresetColorAdd={onPresetColorAdd}
+                    onPresetColorRemove={onPresetColorRemove}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                />
+            )}
+            {shouldShowMoreOptions && (
+                <TextstringProvider libraryName="@chayns-components-color-picker">
+                    <MoreOptions
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                    />
+                </TextstringProvider>
+            )}
+        </StyledColorPickerPopup>
+    );
+};
 
 ColorPickerPopup.displayName = 'ColorPickerPopup';
 
