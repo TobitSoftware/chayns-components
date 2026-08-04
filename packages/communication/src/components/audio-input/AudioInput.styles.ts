@@ -26,8 +26,13 @@ export const StyledMotionAudioInput = styled(motion.div)<StyledMotionAudioInputP
     background-color: ${({ $backgroundColor }) => $backgroundColor};
 `;
 
-export const StyledMotionAudioInputIconWrapper = styled(motion.div)`
+export const StyledMotionAudioInputIconWrapper = styled(motion.button)`
+    background: none;
+    border: 0;
+    cursor: pointer;
     height: 100%;
+    outline: none;
+    padding: 0;
     aspect-ratio: 1;
     display: flex;
     align-items: center;

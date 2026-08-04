@@ -56,16 +56,17 @@ import { AudioInput } from '@chayns-components/communication';
 
 ### Props
 
-| name           | type                                           | required | description                                             |
-| -------------- | ---------------------------------------------- | -------- | ------------------------------------------------------- |
-| `isMuted`      | `boolean \| undefined`                         | no       | Controls whether the microphone is currently muted.     |
-| `onError`      | `((error: unknown) => void) \| undefined`      | no       | Called when microphone access or recording setup fails. |
-| `onMuteChange` | `((isMuted: boolean) => void) \| undefined`    | no       | Called when the mute state should change.               |
-| `onStart`      | `((stream: MediaStream) => void) \| undefined` | no       | Called after recording starts successfully.             |
-| `onStop`       | `(() => void) \| undefined`                    | no       | Called after the active recording has been stopped.     |
-| `position`     | `AudioInputPosition \| undefined`              | no       | Horizontal alignment of the expandable audio input.     |
-| `size`         | `CommunicationInputSize \| undefined`          | no       | Size variant shared with the communication input.       |
-| `styleConfig`  | `AudioInputStyleConfig \| undefined`           | no       | Visual configuration of the audio input button.         |
+| name                               | type                                           | required | description                                                  |
+| ---------------------------------- | ---------------------------------------------- | -------- | ------------------------------------------------------------ |
+| `isMuted`                          | `boolean \| undefined`                         | no       | Controls whether the microphone is currently muted.          |
+| `onError`                          | `((error: unknown) => void) \| undefined`      | no       | Called when microphone access or recording setup fails.      |
+| `onMuteChange`                     | `((isMuted: boolean) => void) \| undefined`    | no       | Called when the mute state should change.                    |
+| `onStart`                          | `((stream: MediaStream) => void) \| undefined` | no       | Called after recording starts successfully.                  |
+| `onStop`                           | `(() => void) \| undefined`                    | no       | Called after the active recording has been stopped.          |
+| `position`                         | `AudioInputPosition \| undefined`              | no       | Horizontal alignment of the expandable audio input.          |
+| `size`                             | `CommunicationInputSize \| undefined`          | no       | Size variant shared with the communication input.            |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined`                         | no       | Enables keyboard-only focus highlighting for audio controls. |
+| `styleConfig`                      | `AudioInputStyleConfig \| undefined`           | no       | Visual configuration of the audio input button.              |
 
 ### Types
 
