@@ -26,6 +26,7 @@ interface ColorPickerWrapperProps {
     shouldHideColorArea: boolean;
     shouldHideDefaultPresetColors: boolean;
     alignment?: PopupAlignment;
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 const ColorPickerWrapper = ({
@@ -43,6 +44,7 @@ const ColorPickerWrapper = ({
     shouldShowTransparencySlider,
     shouldUseSiteColors,
     alignment,
+    shouldEnableKeyboardHighlighting,
 }: ColorPickerWrapperProps) => {
     const { selectedColor } = useContext(ColorPickerContext);
 
@@ -58,6 +60,7 @@ const ColorPickerWrapper = ({
                 shouldUseSiteColors={shouldUseSiteColors}
                 shouldShowMoreOptions={shouldShowMoreOptions}
                 shouldShowTransparencySlider={shouldShowTransparencySlider}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             />
         ),
         [
@@ -70,6 +73,7 @@ const ColorPickerWrapper = ({
             shouldShowPresetColors,
             shouldShowTransparencySlider,
             shouldUseSiteColors,
+            shouldEnableKeyboardHighlighting,
         ],
     );
 

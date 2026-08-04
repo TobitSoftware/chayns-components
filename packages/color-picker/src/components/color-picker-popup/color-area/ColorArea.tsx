@@ -1,4 +1,12 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+    KeyboardEvent,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import {
     StyledColorArea,
     StyledColorAreaCanvas,
@@ -17,9 +25,17 @@ import {
     rgbToHsv,
 } from '../../../utils/color';
 import { ColorPickerContext } from '../../ColorPickerProvider';
-import { useIsMeasuredClone } from '@chayns-components/core';
+import {
+    useFocusRingPortal,
+    useIsMeasuredClone,
+    useKeyboardFocusHighlighting,
+} from '@chayns-components/core';
 
-const ColorArea = () => {
+type ColorAreaProps = {
+    shouldEnableKeyboardHighlighting?: boolean;
+};
+
+const ColorArea = ({ shouldEnableKeyboardHighlighting }: ColorAreaProps) => {
     const {
         selectedColor,
         updateSelectedColor,
@@ -40,6 +56,7 @@ const ColorArea = () => {
     const canDrag = useRef(false);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const pseudoRef = useRef<HTMLDivElement>(null);
+    const pointerRef = useRef<HTMLDivElement>(null);
 
     const [shouldPreventListener, ref] = useIsMeasuredClone<HTMLDivElement>();
 
@@ -47,6 +64,16 @@ const ColorArea = () => {
 
     const x = useMotionValue(0);
     const y = useMotionValue(0);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
+    useFocusRingPortal(pseudoRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        overlayRef: pointerRef,
+        shape: 'circle',
+        padding: 3,
+    });
 
     useEffect(() => {
         isPresetColorRef.current = isPresetColor ?? false;
@@ -298,6 +325,33 @@ const ColorArea = () => {
         updateShouldGetCoordinates,
     ]);
 
+    const handleKeyDown = useCallback(
+        (event: KeyboardEvent<HTMLDivElement>) => {
+            const step = event.shiftKey ? 10 : 1;
+            const horizontalChange =
+                event.key === 'ArrowLeft' ? -step : event.key === 'ArrowRight' ? step : 0;
+            const verticalChange =
+                event.key === 'ArrowUp' ? -step : event.key === 'ArrowDown' ? step : 0;
+
+            if (horizontalChange === 0 && verticalChange === 0) {
+                return;
+            }
+
+            event.preventDefault();
+
+            if (typeof updateShouldGetCoordinates === 'function') {
+                updateShouldGetCoordinates(false);
+            }
+
+            move(x.get() + horizontalChange, y.get() + verticalChange);
+
+            if (typeof updateShouldCallOnSelect === 'function') {
+                updateShouldCallOnSelect(true);
+            }
+        },
+        [move, updateShouldCallOnSelect, updateShouldGetCoordinates, x, y],
+    );
+
     return useMemo(
         () => (
             <StyledColorArea ref={ref}>
@@ -306,8 +360,12 @@ const ColorArea = () => {
                     ref={pseudoRef}
                     onPointerDown={handleStartDrag}
                     onClick={handleClick}
+                    onKeyDown={handleKeyDown}
+                    role="slider"
+                    tabIndex={0}
                 >
                     <StyledMotionColorAreaPointer
+                        ref={pointerRef}
                         drag
                         dragConstraints={pseudoRef}
                         style={{ x, y }}

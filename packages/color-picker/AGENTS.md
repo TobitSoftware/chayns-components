@@ -79,24 +79,25 @@ import { ColorPicker } from '@chayns-components/color-picker';
 
 ### Props
 
-| name                            | type                                                 | required | description                                                                    |
-| ------------------------------- | ---------------------------------------------------- | -------- | ------------------------------------------------------------------------------ |
-| `alignment`                     | `PopupAlignment \| undefined`                        | no       | The alignment of the popup                                                     |
-| `children`                      | `ReactNode`                                          | no       | The element that should be rendered to trigger the ColorPicker popup on click. |
-| `onPresetColorAdd`              | `((presetColor: IPresetColor) => void) \| undefined` | no       | Function to be executed when a preset color is added.                          |
-| `onPresetColorRemove`           | `((presetColorId: string) => void) \| undefined`     | no       | Function to be executed when a preset color is removed.                        |
-| `onSelect`                      | `((color: string) => void) \| undefined`             | no       | Function to be executed when a color is selected.                              |
-| `presetColors`                  | `IPresetColor[] \| undefined`                        | no       | Colors the user can select from.                                               |
-| `selectedColor`                 | `string \| undefined`                                | no       | The color that should be preselected.                                          |
-| `shouldHideColorArea`           | `boolean \| undefined`                               | no       | Whether the color area should be displayed.                                    |
-| `shouldHideDefaultPresetColors` | `boolean \| undefined`                               | no       | Whether the default preset colors should be hidden.                            |
-| `shouldShowAsPopup`             | `boolean \| undefined`                               | no       | Whether the ColorPicker should be displayed inside a popup.                    |
-| `shouldShowMoreOptions`         | `boolean \| undefined`                               | no       | Whether the more options accordion should be displayed.                        |
-| `shouldShowPresetColors`        | `boolean \| undefined`                               | no       | Whether the preset colors should be displayed.                                 |
-| `shouldShowPreviewColorString`  | `boolean \| undefined`                               | no       | Whether the preview color should be displayed as text.                         |
-| `shouldShowRoundPreviewColor`   | `boolean \| undefined`                               | no       | Whether the preview color should be displayed round.                           |
-| `shouldShowTransparencySlider`  | `boolean \| undefined`                               | no       | Whether the transparency slider should be displayed.                           |
-| `shouldUseSiteColors`           | `boolean \| undefined`                               | no       | Whether presetColors should be got and uploaded to the site storage.           |
+| name                               | type                                                 | required | description                                                                    |
+| ---------------------------------- | ---------------------------------------------------- | -------- | ------------------------------------------------------------------------------ |
+| `alignment`                        | `PopupAlignment \| undefined`                        | no       | The alignment of the popup                                                     |
+| `children`                         | `ReactNode`                                          | no       | The element that should be rendered to trigger the ColorPicker popup on click. |
+| `onPresetColorAdd`                 | `((presetColor: IPresetColor) => void) \| undefined` | no       | Function to be executed when a preset color is added.                          |
+| `onPresetColorRemove`              | `((presetColorId: string) => void) \| undefined`     | no       | Function to be executed when a preset color is removed.                        |
+| `onSelect`                         | `((color: string) => void) \| undefined`             | no       | Function to be executed when a color is selected.                              |
+| `presetColors`                     | `IPresetColor[] \| undefined`                        | no       | Colors the user can select from.                                               |
+| `selectedColor`                    | `string \| undefined`                                | no       | The color that should be preselected.                                          |
+| `shouldHideColorArea`              | `boolean \| undefined`                               | no       | Whether the color area should be displayed.                                    |
+| `shouldHideDefaultPresetColors`    | `boolean \| undefined`                               | no       | Whether the default preset colors should be hidden.                            |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined`                               | no       | Enables keyboard-only focus highlighting for color picker controls.            |
+| `shouldShowAsPopup`                | `boolean \| undefined`                               | no       | Whether the ColorPicker should be displayed inside a popup.                    |
+| `shouldShowMoreOptions`            | `boolean \| undefined`                               | no       | Whether the more options accordion should be displayed.                        |
+| `shouldShowPresetColors`           | `boolean \| undefined`                               | no       | Whether the preset colors should be displayed.                                 |
+| `shouldShowPreviewColorString`     | `boolean \| undefined`                               | no       | Whether the preview color should be displayed as text.                         |
+| `shouldShowRoundPreviewColor`      | `boolean \| undefined`                               | no       | Whether the preview color should be displayed round.                           |
+| `shouldShowTransparencySlider`     | `boolean \| undefined`                               | no       | Whether the transparency slider should be displayed.                           |
+| `shouldUseSiteColors`              | `boolean \| undefined`                               | no       | Whether presetColors should be got and uploaded to the site storage.           |
 
 ### Types
 

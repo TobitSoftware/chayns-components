@@ -3,12 +3,13 @@ import styled from 'styled-components';
 
 type StyledPresetButtonProps = WithTheme<{ $isDisabled: boolean }>;
 
-export const StyledPresetButton = styled.div<StyledPresetButtonProps>`
+export const StyledPresetButton = styled.button<StyledPresetButtonProps>`
     display: flex;
     align-items: center;
     justify-content: center;
 
     background-color: transparent;
+    padding: 0;
     width: 22px;
     aspect-ratio: 1;
     cursor: ${({ $isDisabled }) => ($isDisabled ? 'normal' : 'pointer')};

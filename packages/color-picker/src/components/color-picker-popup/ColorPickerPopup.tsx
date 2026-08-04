@@ -17,6 +17,7 @@ interface ColorPickerPopupProps {
     shouldUseSiteColors: boolean;
     shouldHideColorArea: boolean;
     shouldHideDefaultPresetColors: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 const ColorPickerPopup = ({
@@ -29,11 +30,17 @@ const ColorPickerPopup = ({
     shouldUseSiteColors,
     shouldShowMoreOptions,
     shouldHideColorArea,
+    shouldEnableKeyboardHighlighting,
 }: ColorPickerPopupProps) => (
     <StyledColorPickerPopup>
-        {!shouldHideColorArea && <ColorArea />}
         {!shouldHideColorArea && (
-            <Sliders shouldShowTransparencySlider={shouldShowTransparencySlider} />
+            <ColorArea shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting} />
+        )}
+        {!shouldHideColorArea && (
+            <Sliders
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                shouldShowTransparencySlider={shouldShowTransparencySlider}
+            />
         )}
         {shouldShowPresetColors && (
             <PresetColors
@@ -42,11 +49,12 @@ const ColorPickerPopup = ({
                 shouldUseSiteColors={shouldUseSiteColors}
                 onPresetColorAdd={onPresetColorAdd}
                 onPresetColorRemove={onPresetColorRemove}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             />
         )}
         {shouldShowMoreOptions && (
             <TextstringProvider libraryName="@chayns-components-color-picker">
-                <MoreOptions />
+                <MoreOptions shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting} />
             </TextstringProvider>
         )}
     </StyledColorPickerPopup>

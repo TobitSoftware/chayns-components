@@ -1,5 +1,13 @@
 import { isHex } from '@chayns/colors';
-import React, { useContext, useEffect, useMemo, useState, type ReactElement } from 'react';
+import React, {
+    KeyboardEvent,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+    type ReactElement,
+} from 'react';
 
 import { putSiteColors } from '../../../api/color/get';
 import { getSiteColors } from '../../../api/color/put';
@@ -17,6 +25,7 @@ interface PresetColorsProps {
     onPresetColorRemove?: (presetColorId: IPresetColor['id']) => void;
     shouldUseSiteColors: boolean;
     shouldHideDefaultPresetColors: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 const PresetColors = ({
@@ -25,10 +34,12 @@ const PresetColors = ({
     onPresetColorAdd,
     shouldUseSiteColors,
     shouldHideDefaultPresetColors,
+    shouldEnableKeyboardHighlighting,
 }: PresetColorsProps) => {
     const { selectedColor } = useContext(ColorPickerContext);
 
     const [siteColors, setSiteColors] = useState<IPresetColor[] | undefined>(undefined);
+    const [focusedPresetIndex, setFocusedPresetIndex] = useState(0);
 
     const loadSiteColors = async (presetColorId?: IPresetColor['id']) => {
         const colors = await getSiteColors();
@@ -107,12 +118,83 @@ const PresetColors = ({
     const content = useMemo(() => {
         const items: ReactElement[] = [];
 
-        combinedColors.forEach(({ color, id }) => {
-            items.push(<PresetColor key={`preset-color__${id}`} color={color} />);
+        combinedColors.forEach(({ color, id }, index) => {
+            items.push(
+                <PresetColor
+                    key={`preset-color__${id}`}
+                    color={color}
+                    isKeyboardFocusable={index === focusedPresetIndex}
+                    onFocus={() => setFocusedPresetIndex(index)}
+                    presetIndex={index}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                />,
+            );
         });
 
         return items;
-    }, [combinedColors]);
+    }, [combinedColors, focusedPresetIndex, shouldEnableKeyboardHighlighting]);
+
+    const handlePresetColorsKeyDown = useCallback(
+        (event: KeyboardEvent<HTMLDivElement>) => {
+            const currentPreset =
+                event.target instanceof HTMLElement
+                    ? event.target.closest<HTMLElement>('[data-preset-color-index]')
+                    : null;
+
+            if (!currentPreset) {
+                return;
+            }
+
+            if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+                return;
+            }
+
+            event.preventDefault();
+
+            const currentIndex = Number(currentPreset.dataset.presetColorIndex);
+            const presets = Array.from(
+                currentPreset.parentElement?.querySelectorAll<HTMLElement>(
+                    '[data-preset-color-index]',
+                ) ?? [],
+            );
+            const currentRect = currentPreset.getBoundingClientRect();
+            let nextPreset: HTMLElement | undefined;
+
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                nextPreset = presets[currentIndex + (event.key === 'ArrowLeft' ? -1 : 1)];
+            } else {
+                const rowDirection = event.key === 'ArrowUp' ? -1 : 1;
+                const targetTop = currentRect.top + rowDirection * currentRect.height;
+
+                nextPreset = presets
+                    .filter((preset) => {
+                        const { top } = preset.getBoundingClientRect();
+                        return rowDirection < 0 ? top < currentRect.top : top > currentRect.top;
+                    })
+                    .sort((left, right) => {
+                        const leftRect = left.getBoundingClientRect();
+                        const rightRect = right.getBoundingClientRect();
+                        const leftDistance =
+                            Math.abs(leftRect.top - targetTop) * 1000 +
+                            Math.abs(leftRect.left - currentRect.left);
+                        const rightDistance =
+                            Math.abs(rightRect.top - targetTop) * 1000 +
+                            Math.abs(rightRect.left - currentRect.left);
+                        return leftDistance - rightDistance;
+                    })[0];
+            }
+
+            const nextIndex = Number(nextPreset?.dataset.presetColorIndex);
+
+            if (!Number.isFinite(nextIndex) || nextIndex === currentIndex) {
+                return;
+            }
+
+            setFocusedPresetIndex(nextIndex);
+            nextPreset?.focus();
+        },
+        [combinedColors.length],
+    );
 
     const currentPresetColor = useMemo(
         () => combinedColors.find(({ color }) => color === selectedColor),
@@ -148,14 +230,18 @@ const PresetColors = ({
     };
 
     return (
-        <StyledPresetColors>
+        <StyledPresetColors onKeyDown={handlePresetColorsKeyDown}>
             {content}
             {!shouldHideDefaultPresetColors && (
                 <PresetButton
                     id={currentPresetColor?.id}
                     isCustom={currentPresetColor?.isCustom}
+                    isKeyboardFocusable={focusedPresetIndex === combinedColors.length}
                     onAdd={handleAddColor}
+                    onFocus={() => setFocusedPresetIndex(combinedColors.length)}
                     onRemove={handleRemoveColor}
+                    presetIndex={combinedColors.length}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />
             )}
         </StyledPresetColors>
