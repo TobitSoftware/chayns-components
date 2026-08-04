@@ -6,7 +6,15 @@ import {
     useKeyboardFocusHighlighting,
 } from '@chayns-components/core';
 import { isHex } from '@chayns/colors';
-import React, { type ChangeEvent, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+    type ChangeEvent,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 
 import { extractRgbValues, hexToRgb, isValidRGBA, rgbToHex } from '../../../utils/color';
 import { ColorPickerContext } from '../../ColorPickerProvider';
@@ -31,14 +39,37 @@ const MoreOptions = ({ shouldEnableKeyboardHighlighting }: MoreOptionsProps) => 
     const [tmpRgbValue, setTmpRgbValue] = useState('');
     const [isHexInvalid, setIsHexInvalid] = useState(false);
     const [isRgbInvalid, setIsRgbInvalid] = useState(false);
-    const hexInputRef = useRef<HTMLInputElement>(null);
-    const rgbInputRef = useRef<HTMLInputElement>(null);
+    const [areInputsMounted, setAreInputsMounted] = useState(false);
+    const hexInputRef = useRef<HTMLInputElement | null>(null);
+    const rgbInputRef = useRef<HTMLInputElement | null>(null);
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlighting,
     );
 
-    useFocusRingPortal(hexInputRef, { isEnabled: shouldShowKeyboardHighlighting });
-    useFocusRingPortal(rgbInputRef, { isEnabled: shouldShowKeyboardHighlighting });
+    useFocusRingPortal(hexInputRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        updateKey: areInputsMounted,
+    });
+    useFocusRingPortal(rgbInputRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        updateKey: areInputsMounted,
+    });
+
+    const setHexInputRef = useCallback((element: HTMLInputElement | null) => {
+        hexInputRef.current = element;
+
+        if (element) {
+            setAreInputsMounted(true);
+        }
+    }, []);
+
+    const setRgbInputRef = useCallback((element: HTMLInputElement | null) => {
+        rgbInputRef.current = element;
+
+        if (element) {
+            setAreInputsMounted(true);
+        }
+    }, []);
 
     const shouldChangeColor = useMemo(
         () => areaProvider.shouldChangeColor ?? false,
@@ -105,14 +136,14 @@ const MoreOptions = ({ shouldEnableKeyboardHighlighting }: MoreOptionsProps) => 
                 <Accordion title={title}>
                     <StyledMoreOptionsInputWrapper>
                         <StyledMoreOptionsInput
-                            ref={hexInputRef}
+                            ref={setHexInputRef}
                             $shouldChangeColor={shouldChangeColor}
                             value={tmpHexValue}
                             onChange={handleHexChange}
                             $isInvalid={isHexInvalid}
                         />
                         <StyledMoreOptionsInput
-                            ref={rgbInputRef}
+                            ref={setRgbInputRef}
                             $shouldChangeColor={shouldChangeColor}
                             value={tmpRgbValue}
                             onChange={handleRgbChange}
