@@ -109,15 +109,20 @@ export const StyledCopyableContentButton = styled.button<StyledCopyableContentBu
         box-shadow 0.15s ease,
         transform 0.15s ease;
 
-    &:hover {
+    &:enabled:hover {
         border-color: ${getButtonHoverBorder};
         background-color: ${getButtonHoverBackground};
         box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
     }
 
-    &:active {
+    &:enabled:active {
         background-color: ${getButtonActiveBackground};
         transform: scale(0.94);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.45;
     }
 
     &:focus-visible {

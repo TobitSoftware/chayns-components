@@ -32,6 +32,10 @@ export type CopyableContentProps = {
      */
     content: string;
     /**
+     * Disables the copy and share actions.
+     */
+    isDisabled?: boolean;
+    /**
      * Replaces only the visible rendered content and never the copied source.
      */
     children?: ReactNode;
@@ -55,6 +59,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
     children,
     copyFailedMessage,
     collapsedHeight,
+    isDisabled = false,
     transformClipboardHtml,
 }) => {
     const rootRef = useRef<HTMLElement>(null);
@@ -98,6 +103,10 @@ const CopyableContent: FC<CopyableContentProps> = ({
     }, []);
 
     const handleCopy = useCallback(async () => {
+        if (isDisabled) {
+            return;
+        }
+
         try {
             await copyableContentToClipboard(content, transformClipboardHtml);
             showCopyFeedback();
@@ -112,6 +121,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
     }, [
         content,
         defaultCopyFailedMessage,
+        isDisabled,
         copyFailedMessage,
         showCopyFeedback,
         transformClipboardHtml,
@@ -130,6 +140,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
                         $colorMode={colorMode}
                         $isSticky={isActionGroupSticky}
                         aria-label={defaultCopyButtonText}
+                        disabled={isDisabled}
                         onClick={() => {
                             void handleCopy();
                         }}
@@ -139,6 +150,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
                     </StyledCopyableContentButton>
                     <SharingContextMenu
                         link={content}
+                        shouldDisableClick={isDisabled}
                         shouldShowCallingCodeAction={false}
                         shouldShowCopyAction={false}
                         shouldUseDefaultTriggerStyles={false}
@@ -147,6 +159,7 @@ const CopyableContent: FC<CopyableContentProps> = ({
                             $colorMode={colorMode}
                             $isSticky={isActionGroupSticky}
                             aria-label={shareText}
+                            disabled={isDisabled}
                             type="button"
                         >
                             <Icon icons={['fa fa-share-nodes']} />

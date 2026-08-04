@@ -181,6 +181,7 @@ const TypewriterLoopTemplate: StoryFn = () => {
 export const Short = Template.bind({});
 export const Long = Template.bind({});
 export const Collapsed = Template.bind({});
+export const Disabled = Template.bind({});
 export const TypewriterLoop = TypewriterLoopTemplate.bind({});
 export const Markdown = Template.bind({});
 export const LongUrl = Template.bind({});
@@ -208,6 +209,11 @@ Collapsed.args = {
         (_, index) =>
             `### Abschnitt ${index + 1}\n\nDas Planungsteam hat die Hinweise aus den Gesprächen aufgenommen und bereitet jetzt die nächsten Schritte vor.`,
     ).join('\n\n'),
+};
+Disabled.args = {
+    content:
+        'Dieser Inhalt wird noch aktualisiert. Kopieren und Teilen sind bis zum Abschluss deaktiviert.',
+    isDisabled: true,
 };
 Markdown.args = { content: PROJECT_UPDATE };
 LongUrl.args = {
