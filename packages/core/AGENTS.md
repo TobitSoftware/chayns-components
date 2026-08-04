@@ -1731,6 +1731,15 @@ import { CopyableContent } from '@chayns-components/core';
 />
 ```
 
+#### Disabled
+
+```tsx
+<CopyableContent
+    content={'Dieser Inhalt wird noch aktualisiert. Kopieren und Teilen sind bis zum Abschluss deaktiviert.'}
+    isDisabled
+/>
+```
+
 #### Typewriter Loop
 
 ```tsx
@@ -1831,6 +1840,7 @@ import { CopyableContent } from '@chayns-components/core';
 | `collapsedHeight` | `number \| undefined` | no | The height of the content in its collapsed state. |
 | `content` | `string` | yes | Markdown source used for rendering and clipboard data. |
 | `copyFailedMessage` | `string \| undefined` | no | Replaces the localized error message shown when copying fails. |
+| `isDisabled` | `boolean \| undefined` | no | Disables the copy and share actions. |
 | `transformClipboardHtml` | `((html: string) => string) \| undefined` | no | Transforms the generated HTML before it is written to the clipboard. |
 
 ### Types
