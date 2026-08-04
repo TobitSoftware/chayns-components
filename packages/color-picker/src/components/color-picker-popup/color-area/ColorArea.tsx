@@ -1,12 +1,4 @@
-import React, {
-    KeyboardEvent,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
     StyledColorArea,
     StyledColorAreaCanvas,
@@ -30,6 +22,7 @@ import {
     useIsMeasuredClone,
     useKeyboardFocusHighlighting,
 } from '@chayns-components/core';
+import { useColorAreaKeyboardNavigation } from '../../../hooks/useColorAreaKeyboardNavigation';
 
 type ColorAreaProps = {
     shouldEnableKeyboardHighlighting?: boolean;
@@ -325,32 +318,13 @@ const ColorArea = ({ shouldEnableKeyboardHighlighting }: ColorAreaProps) => {
         updateShouldGetCoordinates,
     ]);
 
-    const handleKeyDown = useCallback(
-        (event: KeyboardEvent<HTMLDivElement>) => {
-            const step = event.shiftKey ? 10 : 1;
-            const horizontalChange =
-                event.key === 'ArrowLeft' ? -step : event.key === 'ArrowRight' ? step : 0;
-            const verticalChange =
-                event.key === 'ArrowUp' ? -step : event.key === 'ArrowDown' ? step : 0;
-
-            if (horizontalChange === 0 && verticalChange === 0) {
-                return;
-            }
-
-            event.preventDefault();
-
-            if (typeof updateShouldGetCoordinates === 'function') {
-                updateShouldGetCoordinates(false);
-            }
-
-            move(x.get() + horizontalChange, y.get() + verticalChange);
-
-            if (typeof updateShouldCallOnSelect === 'function') {
-                updateShouldCallOnSelect(true);
-            }
-        },
-        [move, updateShouldCallOnSelect, updateShouldGetCoordinates, x, y],
-    );
+    const handleKeyDown = useColorAreaKeyboardNavigation({
+        move,
+        onChangeEnd: () => updateShouldCallOnSelect?.(true),
+        onChangeStart: () => updateShouldGetCoordinates?.(false),
+        x,
+        y,
+    });
 
     return useMemo(
         () => (
