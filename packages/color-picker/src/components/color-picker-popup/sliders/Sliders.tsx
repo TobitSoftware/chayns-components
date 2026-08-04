@@ -35,6 +35,10 @@ const Sliders = ({
         if (typeof updateHueColor === 'function' && color) {
             updateHueColor(color);
         }
+
+        if (typeof updateSelectedColor === 'function' && color) {
+            updateSelectedColor(color);
+        }
     };
 
     const handleStart = () => {

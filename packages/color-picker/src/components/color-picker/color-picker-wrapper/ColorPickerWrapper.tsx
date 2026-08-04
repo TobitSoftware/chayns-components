@@ -1,7 +1,7 @@
 import { Popup, PopupAlignment } from '@chayns-components/core';
 import React, { ReactNode, useContext, useMemo } from 'react';
 import type { IPresetColor } from '../../../types/colorPicker';
-import ColorPickerPopup from '../../color-picker-popup/ColorPickerPopup';
+import { ColorPickerPopupContent } from '../../color-picker-popup/ColorPickerPopup';
 import { ColorPickerContext } from '../../ColorPickerProvider';
 import {
     StyledColorPickerWrapper,
@@ -50,7 +50,7 @@ const ColorPickerWrapper = ({
 
     const content = useMemo(
         () => (
-            <ColorPickerPopup
+            <ColorPickerPopupContent
                 shouldHideDefaultPresetColors={shouldHideDefaultPresetColors}
                 shouldHideColorArea={shouldHideColorArea}
                 shouldShowPresetColors={shouldShowPresetColors}

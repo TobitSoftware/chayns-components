@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import type { IPresetColor } from '../../types/colorPicker';
+import ColorPickerProvider from '../ColorPickerProvider';
 import ColorArea from './color-area/ColorArea';
 import { StyledColorPickerPopup } from './ColorPickerPopup.styles';
 import MoreOptions from './more-options/MoreOptions';
@@ -7,7 +8,7 @@ import PresetColors from './preset-colors/PresetColors';
 import Sliders from './sliders/Sliders';
 import { TextstringProvider } from '@chayns-components/textstring';
 
-interface ColorPickerPopupProps {
+export interface ColorPickerPopupProps {
     presetColors?: IPresetColor[];
     shouldShowPresetColors: boolean;
     onPresetColorAdd?: (presetColor: IPresetColor) => void;
@@ -18,9 +19,13 @@ interface ColorPickerPopupProps {
     shouldHideColorArea: boolean;
     shouldHideDefaultPresetColors: boolean;
     shouldEnableKeyboardHighlighting?: boolean;
+    selectedColor?: string;
+    onSelect?: (color: string) => void;
 }
 
-const ColorPickerPopup = ({
+type ColorPickerPopupContentProps = Omit<ColorPickerPopupProps, 'onSelect' | 'selectedColor'>;
+
+export const ColorPickerPopupContent = ({
     presetColors,
     onPresetColorRemove,
     onPresetColorAdd,
@@ -31,7 +36,7 @@ const ColorPickerPopup = ({
     shouldShowMoreOptions,
     shouldHideColorArea,
     shouldEnableKeyboardHighlighting,
-}: ColorPickerPopupProps) => {
+}: ColorPickerPopupContentProps) => {
     const popupRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -77,6 +82,18 @@ const ColorPickerPopup = ({
         </StyledColorPickerPopup>
     );
 };
+
+ColorPickerPopupContent.displayName = 'ColorPickerPopupContent';
+
+const ColorPickerPopup = ({
+    onSelect,
+    selectedColor = 'rgba(0, 94, 184, 1)',
+    ...props
+}: ColorPickerPopupProps) => (
+    <ColorPickerProvider onSelect={onSelect} selectedColor={selectedColor}>
+        <ColorPickerPopupContent {...props} />
+    </ColorPickerProvider>
+);
 
 ColorPickerPopup.displayName = 'ColorPickerPopup';
 
