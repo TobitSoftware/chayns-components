@@ -110,6 +110,14 @@ export interface CommunicationInputProps {
      * @optional
      */
     scrollContainerRef?: RefObject<HTMLElement>;
+    /**
+     * Enables keyboard-only focus highlighting for the complete input container.
+     * @description
+     * Displays a focus ring around the full communication input when its editor receives focus
+     * through keyboard navigation.
+     * @optional
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 export interface Chip {

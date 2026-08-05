@@ -54,7 +54,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
     shouldEnableKeyboardHighlighting,
 }) => {
     const popupRef = useRef<PopupRef>(null);
-    const triggerRef = useRef<HTMLDivElement>(null);
+    const triggerRef = useRef<HTMLButtonElement>(null);
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlighting,
     );
@@ -71,7 +71,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
         }
     }, []);
 
-    const handleTriggerKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>((event) => {
+    const handleTriggerKeyDown = useCallback<KeyboardEventHandler<HTMLButtonElement>>((event) => {
         if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             popupRef.current?.show();
@@ -122,15 +122,15 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
                     </AreaProvider>
                 }
             >
-                <div
+                <button
+                    aria-label="Open emoji picker"
                     className="prevent-lose-focus"
                     onKeyDown={handleTriggerKeyDown}
                     ref={triggerRef}
-                    role="button"
-                    tabIndex={0}
+                    type="button"
                 >
                     <Icon icons={['far fa-smile']} size={18} />
-                </div>
+                </button>
             </Popup>
         </StyledEmojiPickerPopup>
     );

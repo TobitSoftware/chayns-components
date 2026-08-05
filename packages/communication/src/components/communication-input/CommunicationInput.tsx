@@ -21,7 +21,13 @@ import {
     CommunicationInputSize,
     CommunicationInputDirection,
 } from './CommunicationInput.types';
-import { ContextMenu, ContextMenuRef, Icon } from '@chayns-components/core';
+import {
+    ContextMenu,
+    ContextMenuRef,
+    Icon,
+    useFocusRingPortal,
+    useKeyboardFocusHighlighting,
+} from '@chayns-components/core';
 import DynamicLayout from './dynamic-layout/DynamicLayout';
 import { EmojiInput } from '@chayns-components/emoji-input';
 import {
@@ -51,12 +57,14 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             direction = CommunicationInputDirection.TOP,
             scrollContainerRef,
             shouldDisableFullHeight = false,
+            shouldEnableKeyboardHighlighting,
         },
         ref,
     ) => {
         const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
 
         const contextMenuRef = useRef<ContextMenuRef>(null);
+        const contextMenuTriggerRef = useRef<HTMLButtonElement>(null);
 
         const {
             onFullHeightToggle,
@@ -87,6 +95,15 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             size,
             hasTopContent: !!topContent,
         });
+        const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+            shouldEnableKeyboardHighlighting,
+        );
+
+        useFocusRingPortal(contextMenuTriggerRef, {
+            isEnabled: shouldShowKeyboardHighlighting,
+            shape: 'circle',
+            padding: 4,
+        });
         const { startInitialAnimation, initial, animate, transition, shouldShowOnlyRightElement } =
             useCommunicationInputAnimation({
                 shouldUseInitialAnimation,
@@ -108,24 +125,23 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
 
             return (
                 <StyledCommunicationInputSideElement $height={innerHeight}>
-                    <StyledMotionIconWrapper
-                        onClick={() =>
-                            isContextMenuOpen
-                                ? contextMenuRef.current?.hide()
-                                : contextMenuRef.current?.show()
-                        }
-                        animate={{ rotate: isContextMenuOpen ? 45 : 0 }}
+                    <ContextMenu
+                        items={contextMenuItems}
+                        onHide={() => setIsContextMenuOpen(false)}
+                        onShow={() => setIsContextMenuOpen(true)}
+                        ref={contextMenuRef}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                        shouldUseDefaultTriggerStyles={false}
                     >
-                        <ContextMenu
-                            shouldDisableClick
-                            items={contextMenuItems}
-                            onHide={() => setIsContextMenuOpen(false)}
-                            onShow={() => setIsContextMenuOpen(true)}
-                            ref={contextMenuRef}
+                        <StyledMotionIconWrapper
+                            animate={{ rotate: isContextMenuOpen ? 45 : 0 }}
+                            aria-label="Open context menu"
+                            ref={contextMenuTriggerRef}
+                            type="button"
                         >
                             <Icon icons={['fa fa-plus']} size={fontSize} />
-                        </ContextMenu>
-                    </StyledMotionIconWrapper>
+                        </StyledMotionIconWrapper>
+                    </ContextMenu>
                 </StyledCommunicationInputSideElement>
             );
         }, [contextMenuItems, fontSize, innerHeight, isContextMenuOpen]);
@@ -135,6 +151,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                 <StyledCommunicationInputWrapper>
                     <StyledMotionCommunicationInputInner
                         ref={innerWrapperRef}
+                        $borderRadius={borderRadius}
                         $direction={direction}
                         $isFocused={isFocused}
                         animate={animate}
@@ -166,7 +183,14 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                                         )
                                     }
                                     chipsElement={
-                                        <Chips chips={chips} size={size} height={innerHeight} />
+                                        <Chips
+                                            chips={chips}
+                                            size={size}
+                                            height={innerHeight}
+                                            shouldEnableKeyboardHighlighting={
+                                                shouldEnableKeyboardHighlighting
+                                            }
+                                        />
                                     }
                                 >
                                     <StyledMotionCommunicationInputEmojiInputWrapper
@@ -181,6 +205,10 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                                             onBlur={onBlur}
                                             onFocus={onFocus}
                                             ref={emojiInputRef}
+                                            shouldEnableKeyboardHighlighting={
+                                                shouldEnableKeyboardHighlighting
+                                            }
+                                            shouldDisableEditorKeyboardHighlighting
                                         />
                                     </StyledMotionCommunicationInputEmojiInputWrapper>
                                 </DynamicLayout>

@@ -164,6 +164,11 @@ export type EmojiInputProps = {
      */
     shouldEnableKeyboardHighlighting?: boolean;
     /**
+     * Disables keyboard-only focus highlighting for the editor while preserving it for child controls.
+     * @optional
+     */
+    shouldDisableEditorKeyboardHighlighting?: boolean;
+    /**
      * The plain text value of the input field. Instead of HTML elements BB codes must be used at
      * this point. These are then converted by the input field into corresponding HTML elements.
      */
@@ -202,6 +207,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             rightElement,
             shouldHidePlaceholderOnFocus = false,
             shouldEnableKeyboardHighlighting,
+            shouldDisableEditorKeyboardHighlighting,
             shouldRevertAsciiSmileyConversionOnBackspace = false,
             shouldPreventEmojiPicker,
             value,
@@ -939,7 +945,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         }, [isDisabled]);
 
         const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
-            shouldEnableKeyboardHighlighting,
+            shouldDisableEditorKeyboardHighlighting ? false : shouldEnableKeyboardHighlighting,
         );
         useFocusRingPortal(editorRef, {
             isEnabled: shouldShowKeyboardHighlighting,

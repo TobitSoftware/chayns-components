@@ -8,11 +8,12 @@ interface ChipsProps {
     chips: CommunicationInputProps['chips'];
     size: CommunicationInputSize;
     height: number;
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 const SCROLL_OFFSET = 120;
 
-const Chips: FC<ChipsProps> = ({ chips, size, height }) => {
+const Chips: FC<ChipsProps> = ({ chips, size, height, shouldEnableKeyboardHighlighting }) => {
     const scrollRef = useRef<HTMLDivElement | null>(null);
 
     const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -73,9 +74,10 @@ const Chips: FC<ChipsProps> = ({ chips, size, height }) => {
                     onRemove={onRemove}
                     icons={icons}
                     key={label}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />
             )),
-        [chips, size],
+        [chips, shouldEnableKeyboardHighlighting, size],
     );
 
     if (!chips) {
