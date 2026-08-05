@@ -107,6 +107,10 @@ export interface CommunicationHeaderProps {
      * @default false
      */
     isLoading?: boolean;
+    /**
+     * Enables keyboard-only focus highlighting for header controls.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 export interface Action {

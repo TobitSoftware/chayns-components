@@ -5,12 +5,15 @@ type StyledHeaderActionProps = WithTheme<{
     $shouldForceHover: boolean;
 }>;
 
-export const StyledHeaderAction = styled.div<StyledHeaderActionProps>`
+export const StyledHeaderAction = styled.button<StyledHeaderActionProps>`
+    background: none;
+    border: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
     cursor: pointer;
+    outline: none;
 
     position: relative;
 

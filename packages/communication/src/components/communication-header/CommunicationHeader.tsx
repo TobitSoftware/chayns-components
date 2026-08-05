@@ -21,6 +21,7 @@ const CommunicationHeader: FC<CommunicationHeaderProps> = ({
     maxActionCount,
     rightActions,
     isLoading,
+    shouldEnableKeyboardHighlighting,
 }) => (
     <TextStringProviderSSR libraries="chayns-components-v5-communication" id="communication-header">
         <StyledCommunicationHeader>
@@ -29,8 +30,16 @@ const CommunicationHeader: FC<CommunicationHeaderProps> = ({
                 title={title}
                 isFullScreen={isFullScreen}
                 onFullScreenToggle={onFullScreenToggle}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             />
-            <HeaderMembers from={from} to={to} date={date} cc={cc} isLoading={isLoading} />
+            <HeaderMembers
+                from={from}
+                to={to}
+                date={date}
+                cc={cc}
+                isLoading={isLoading}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+            />
             <HeaderActions
                 isLoading={isLoading}
                 rightActions={rightActions}
@@ -39,6 +48,7 @@ const CommunicationHeader: FC<CommunicationHeaderProps> = ({
                 onReadToggle={onReadToggle}
                 isTeamTalkActive={isTeamTalkActive}
                 onTeamTalkToggle={onTeamTalkToggle}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             />
         </StyledCommunicationHeader>
     </TextStringProviderSSR>

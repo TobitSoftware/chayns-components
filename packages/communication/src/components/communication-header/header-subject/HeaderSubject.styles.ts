@@ -25,7 +25,12 @@ export const StyledHeaderSubjectTitle = styled.h2<WithTheme<unknown>>`
     white-space: nowrap;
 `;
 
-export const StyledHeaderSubjectFullScreenWrapper = styled.div<WithTheme<unknown>>`
+export const StyledHeaderSubjectFullScreenWrapper = styled.button<WithTheme<unknown>>`
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;

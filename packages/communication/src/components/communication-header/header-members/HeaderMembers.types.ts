@@ -31,4 +31,11 @@ export interface HeaderMembersProps {
      * Use this while sender and recipient data is still loading.
      */
     isLoading: CommunicationHeaderProps['isLoading'];
+    /**
+     * Enables keyboard-only focus highlighting for member actions.
+     * @description
+     * Displays focus rings when member actions receive focus through keyboard navigation.
+     * @optional
+     */
+    shouldEnableKeyboardHighlighting: CommunicationHeaderProps['shouldEnableKeyboardHighlighting'];
 }
