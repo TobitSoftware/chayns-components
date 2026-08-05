@@ -1,5 +1,11 @@
-import React from 'react';
-import { SmallWaitCursor, SmallWaitCursorSize, Icon } from '@chayns-components/core';
+import React, { useRef } from 'react';
+import {
+    SmallWaitCursor,
+    SmallWaitCursorSize,
+    Icon,
+    useFocusRingPortal,
+    useKeyboardFocusHighlighting,
+} from '@chayns-components/core';
 import {
     CommunicationFile,
     CommunicationImage,
@@ -20,11 +26,27 @@ interface Props {
     file: CommunicationFile | CommunicationImage | CommunicationVideo;
     onRemove?: (fileId: string) => void;
     size: CommunicationInputSize;
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
-const CommunicationFileItem = ({ file, onRemove, size }: Props) => {
+const CommunicationFileItem = ({
+    file,
+    onRemove,
+    size,
+    shouldEnableKeyboardHighlighting,
+}: Props) => {
     const isUploading = file.loadingState === CommunicationLoadingState.UPLOADING;
     const isError = file.loadingState === CommunicationLoadingState.ERROR;
+    const removeButtonRef = useRef<HTMLButtonElement>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        onRemove ? shouldEnableKeyboardHighlighting : false,
+    );
+
+    useFocusRingPortal(removeButtonRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        shape: 'circle',
+        padding: 3,
+    });
 
     return (
         <StyledCommunicationFileItemContainer $size={size}>
@@ -49,7 +71,12 @@ const CommunicationFileItem = ({ file, onRemove, size }: Props) => {
             )}
 
             {onRemove && (
-                <StyledCommunicationFileItemRemoveButton onClick={() => onRemove(file.id)}>
+                <StyledCommunicationFileItemRemoveButton
+                    aria-label="Datei entfernen"
+                    onClick={() => onRemove(file.id)}
+                    ref={removeButtonRef}
+                    type="button"
+                >
                     <Icon icons={['fa fa-times']} size={12} />
                 </StyledCommunicationFileItemRemoveButton>
             )}

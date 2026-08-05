@@ -9,6 +9,7 @@ const CommunicationFileList: FC<CommunicationFileListProps> = ({
     files,
     onRemove,
     size = CommunicationInputSize.MEDIUM,
+    shouldEnableKeyboardHighlighting,
 }) => (
     <StyledCommunicationFileList>
         <Masonry gap={4} columnWidth={64} rowHeight={64}>
@@ -17,7 +18,12 @@ const CommunicationFileList: FC<CommunicationFileListProps> = ({
 
                 return (
                     <Masonry.Item key={file.id} columns={columns}>
-                        <CommunicationFileItem file={file} onRemove={onRemove} size={size} />
+                        <CommunicationFileItem
+                            file={file}
+                            onRemove={onRemove}
+                            shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                            size={size}
+                        />
                     </Masonry.Item>
                 );
             })}

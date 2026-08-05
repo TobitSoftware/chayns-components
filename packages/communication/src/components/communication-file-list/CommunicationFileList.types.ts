@@ -4,6 +4,10 @@ export interface CommunicationFileListProps {
     files: (CommunicationFile | CommunicationVideo | CommunicationImage)[];
     onRemove?: (fileId: string) => void;
     size?: CommunicationInputSize;
+    /**
+     * Enables keyboard-only focus highlighting for file actions.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 export enum CommunicationLoadingState {
