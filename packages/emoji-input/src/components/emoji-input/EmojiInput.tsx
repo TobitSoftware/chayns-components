@@ -989,7 +989,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     <StyledMotionEmojiInputEditor
                         className="chayns-scrollbar"
                         animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
-                        contentEditable
+                        contentEditable={!isDisabled}
+                        aria-disabled={isDisabled}
                         role="textbox"
                         aria-multiline="true"
                         inputMode="text"
@@ -1005,6 +1006,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         onPaste={handlePaste}
                         onDrop={handleDrop}
                         ref={editorRef}
+                        tabIndex={isDisabled ? -1 : undefined}
                         $shouldShowContent={isPrefixAnimationFinished}
                         transition={{ type: 'tween', duration: 0.2 }}
                     />
@@ -1021,6 +1023,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         <EmojiPickerPopup
                             accessToken={accessToken}
                             container={container}
+                            isDisabled={isDisabled}
                             onSelect={handlePopupSelect}
                             onSelectWithKeyboard={handlePopupKeyboardSelect}
                             onPopupVisibilityChange={handlePopupVisibility}

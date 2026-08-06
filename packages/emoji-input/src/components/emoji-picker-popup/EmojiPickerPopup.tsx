@@ -21,6 +21,10 @@ export type EmojiPickerPopupProps = {
      */
     container?: Element;
     /**
+     * Whether the picker trigger is disabled.
+     */
+    isDisabled?: boolean;
+    /**
      * Function that is executed when the visibility of the popup changes.
      * @param {boolean} isVisible - Whether the popup is visible or not
      */
@@ -47,6 +51,7 @@ export type EmojiPickerPopupProps = {
 const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
     accessToken,
     container,
+    isDisabled,
     onPopupVisibilityChange,
     onSelect,
     onSelectWithKeyboard,
@@ -56,7 +61,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
     const popupRef = useRef<PopupRef>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
-        shouldEnableKeyboardHighlighting,
+        isDisabled ? false : shouldEnableKeyboardHighlighting,
     );
 
     useFocusRingPortal(triggerRef, {
@@ -71,12 +76,19 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
         }
     }, []);
 
-    const handleTriggerKeyDown = useCallback<KeyboardEventHandler<HTMLButtonElement>>((event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            popupRef.current?.show();
-        }
-    }, []);
+    const handleTriggerKeyDown = useCallback<KeyboardEventHandler<HTMLButtonElement>>(
+        (event) => {
+            if (isDisabled) {
+                return;
+            }
+
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                popupRef.current?.show();
+            }
+        },
+        [isDisabled],
+    );
 
     const handleSelect = useCallback(
         (emoji: string, shouldRestoreInputFocus?: boolean) => {
@@ -98,7 +110,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
     }, [handleKeyPress]);
 
     return (
-        <StyledEmojiPickerPopup>
+        <StyledEmojiPickerPopup aria-hidden={isDisabled}>
             <Popup
                 container={container}
                 ref={popupRef}
@@ -125,6 +137,12 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
                 <button
                     aria-label="Open emoji picker"
                     className="prevent-lose-focus"
+                    disabled={isDisabled}
+                    onClick={(event) => {
+                        if (isDisabled) {
+                            event.stopPropagation();
+                        }
+                    }}
                     onKeyDown={handleTriggerKeyDown}
                     ref={triggerRef}
                     type="button"

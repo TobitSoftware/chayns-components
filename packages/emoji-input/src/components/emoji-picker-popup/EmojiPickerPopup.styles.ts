@@ -13,5 +13,10 @@ export const StyledEmojiPickerPopup = styled.div`
         cursor: pointer;
         font: inherit;
         padding: 0;
+
+        &:disabled {
+            cursor: default;
+            opacity: 0.5;
+        }
     }
 `;

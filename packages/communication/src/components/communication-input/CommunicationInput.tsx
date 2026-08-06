@@ -144,7 +144,13 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                     </ContextMenu>
                 </StyledCommunicationInputSideElement>
             );
-        }, [contextMenuItems, fontSize, innerHeight, isContextMenuOpen]);
+        }, [
+            contextMenuItems,
+            fontSize,
+            innerHeight,
+            isContextMenuOpen,
+            shouldEnableKeyboardHighlighting,
+        ]);
 
         return (
             <StyledCommunicationInput $height={outerHeight}>
