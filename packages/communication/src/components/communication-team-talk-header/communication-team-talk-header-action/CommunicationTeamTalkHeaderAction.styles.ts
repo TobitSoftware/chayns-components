@@ -3,7 +3,11 @@ import { WithTheme } from '@chayns-components/core';
 
 type StyledCommunicationTeamTalkHeaderActionProps = WithTheme<{ $isDisabled?: boolean }>;
 
-export const StyledCommunicationTeamTalkHeaderAction = styled.div<StyledCommunicationTeamTalkHeaderActionProps>`
+export const StyledCommunicationTeamTalkHeaderAction = styled.button<StyledCommunicationTeamTalkHeaderActionProps>`
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
     display: flex;
     align-items: center;
     justify-content: center;

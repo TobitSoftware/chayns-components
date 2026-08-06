@@ -1,4 +1,5 @@
 export interface CommunicationTeamTalkHeaderProps {
+    shouldEnableKeyboardHighlighting?: boolean;
     shouldShowInternalHint?: boolean;
     onAgree: VoidFunction;
     onAdd?: VoidFunction;
