@@ -125,6 +125,12 @@ export const StyledMotionIconWrapper = styled(motion.button)`
     color: inherit;
     cursor: pointer;
     padding: 0;
+
+    &:focus-visible {
+        border-radius: 50%;
+        outline: 2px solid color-mix(in srgb, white 70%, transparent);
+        outline-offset: 3px;
+    }
 `;
 
 export const StyledMotionCommunicationInputSpacer = styled(motion.div)`

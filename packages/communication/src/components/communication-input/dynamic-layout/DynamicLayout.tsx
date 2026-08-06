@@ -47,11 +47,11 @@ const DynamicLayout: FC<DynamicLayoutProps> = ({
                 />
             </StyledDynamicLayoutFullHeightToggle>
         )}
+        {leftElement && <StyledDynamicLayoutLeft>{leftElement}</StyledDynamicLayoutLeft>}
+
         <StyledDynamicLayoutInput key="input" layout>
             {children}
         </StyledDynamicLayoutInput>
-
-        {leftElement && <StyledDynamicLayoutLeft>{leftElement}</StyledDynamicLayoutLeft>}
 
         {chipsElement && <StyledDynamicLayoutChips>{chipsElement}</StyledDynamicLayoutChips>}
 

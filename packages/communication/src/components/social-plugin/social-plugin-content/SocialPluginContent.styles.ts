@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { WithTheme } from '@chayns-components/core';
 
 export const StyledSocialPluginContent = styled.div`
     width: 100%;
@@ -32,11 +33,16 @@ export const StyledSocialPluginContentTopContent = styled.div`
     padding: 8px;
 `;
 
-type StyledSocialPluginContentRightElementProps = {
+type StyledSocialPluginContentRightElementProps = WithTheme<{
     $isDisabled?: boolean;
-};
+}>;
 
-export const StyledSocialPluginContentRightElement = styled.div<StyledSocialPluginContentRightElementProps>`
+export const StyledSocialPluginContentRightElement = styled.button<StyledSocialPluginContentRightElementProps>`
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    padding: 0;
     cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
 
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.75 : 1)};
@@ -47,6 +53,12 @@ export const StyledSocialPluginContentRightElement = styled.div<StyledSocialPlug
     display: flex;
     align-items: center;
     justify-content: center;
+
+    &:focus-visible {
+        border-radius: 50%;
+        outline: 2px solid color-mix(in srgb, white 70%, transparent);
+        outline-offset: 3px;
+    }
 `;
 
 export const StyledSocialPluginImageWrapper = styled.div`
@@ -58,10 +70,21 @@ export const StyledSocialPluginImageWrapper = styled.div`
     border-radius: 3px;
 `;
 
-export const StyledSocialPluginImageXmark = styled.div`
+export const StyledSocialPluginImageXmark = styled.button`
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    padding: 0;
     position: absolute;
     top: 0;
     right: 0;
+    border-radius: 50%;
+
+    &:focus-visible {
+        outline: 2px solid color-mix(in srgb, white 70%, transparent);
+        outline-offset: 3px;
+    }
 
     cursor: pointer;
 `;

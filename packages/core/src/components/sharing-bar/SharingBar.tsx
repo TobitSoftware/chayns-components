@@ -72,6 +72,13 @@ const SharingBar: FC<SharingBarProps> = ({
                 return;
             }
 
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                event.stopPropagation();
+                contextMenuRef.current?.hide();
+                return;
+            }
+
             if (event.key !== 'Enter' && event.key !== ' ') {
                 return;
             }

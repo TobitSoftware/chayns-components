@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledSharingBar = styled.div`
+    border-radius: 4px;
     cursor: pointer;
     display: flex;
     align-items: center;

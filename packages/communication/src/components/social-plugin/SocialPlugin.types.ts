@@ -1,4 +1,5 @@
 export interface SocialPluginProps {
+    shouldEnableKeyboardHighlighting?: boolean;
     link: string;
     commentType: number;
     postingId: string;

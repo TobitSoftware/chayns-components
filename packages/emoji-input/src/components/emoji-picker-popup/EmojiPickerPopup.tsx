@@ -145,6 +145,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
                     }}
                     onKeyDown={handleTriggerKeyDown}
                     ref={triggerRef}
+                    tabIndex={isDisabled ? -1 : 0}
                     type="button"
                 >
                     <Icon icons={['far fa-smile']} size={18} />
