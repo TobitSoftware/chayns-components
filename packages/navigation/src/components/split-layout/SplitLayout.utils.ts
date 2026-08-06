@@ -8,6 +8,10 @@ interface GetVisibleViewIdsOptions {
 export const getVisibleViewIds = ({ views, containerSize }: GetVisibleViewIdsOptions): string[] =>
     Object.entries(views)
         .filter(([, view]) => {
+            if (view.isHidden) {
+                return false;
+            }
+
             if (typeof view.collapseBreakpoint !== 'number') {
                 return true;
             }
@@ -15,6 +19,82 @@ export const getVisibleViewIds = ({ views, containerSize }: GetVisibleViewIdsOpt
             return containerSize >= view.collapseBreakpoint;
         })
         .map(([id]) => id);
+
+export const clampViewSize = (view: SplitLayoutView | undefined, size: number): number => {
+    const minSize = view?.minSize ?? 0;
+    const maxSize = view?.maxSize ?? Number.MAX_SAFE_INTEGER;
+
+    return Math.min(Math.max(size, minSize), maxSize);
+};
+
+interface DistributeSizesOptions {
+    views: Record<string, SplitLayoutView>;
+    viewIds: string[];
+    containerSize: number;
+    handleSize: number;
+    previousSizes?: Record<string, number>;
+}
+
+/**
+ * Distributes the available container size across all visible views so that the
+ * views always fill the container exactly. Existing sizes are kept as close as
+ * possible while respecting min/max constraints.
+ */
+export const distributeSizes = ({
+    views,
+    viewIds,
+    containerSize,
+    handleSize,
+    previousSizes = {},
+}: DistributeSizesOptions): Record<string, number> => {
+    if (viewIds.length === 0 || containerSize <= 0) {
+        return {};
+    }
+
+    const availableSize = containerSize - handleSize * Math.max(viewIds.length - 1, 0);
+
+    if (availableSize <= 0) {
+        return {};
+    }
+
+    const sizes: Record<string, number> = {};
+
+    viewIds.forEach((id) => {
+        const baseSize =
+            previousSizes[id] ?? views[id]?.defaultSize ?? availableSize / viewIds.length;
+
+        sizes[id] = clampViewSize(views[id], baseSize);
+    });
+
+    let diff = availableSize - viewIds.reduce((sum, id) => sum + (sizes[id] ?? 0), 0);
+
+    // Distribute the remaining difference over all views that can still grow or
+    // shrink. Multiple passes are needed because views may hit their min/max.
+    for (let pass = 0; pass < viewIds.length && Math.abs(diff) > 0.5; pass++) {
+        const adjustableIds = viewIds.filter((id) => {
+            const size = sizes[id] ?? 0;
+
+            return diff > 0
+                ? size < (views[id]?.maxSize ?? Number.MAX_SAFE_INTEGER)
+                : size > (views[id]?.minSize ?? 0);
+        });
+
+        if (adjustableIds.length === 0) {
+            break;
+        }
+
+        const share = diff / adjustableIds.length;
+
+        adjustableIds.forEach((id) => {
+            const nextSize = clampViewSize(views[id], (sizes[id] ?? 0) + share);
+
+            diff -= nextSize - (sizes[id] ?? 0);
+            sizes[id] = nextSize;
+        });
+    }
+
+    return sizes;
+};
 
 export const getContainerSizeByDirection = (
     element: HTMLDivElement | null,
