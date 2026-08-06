@@ -14,6 +14,7 @@ export interface SplitLayoutView {
     maxSize?: number;
     collapseBreakpoint?: number;
     defaultSize?: number;
+    isHidden?: boolean;
 }
 
 export enum SplitLayoutDirection {

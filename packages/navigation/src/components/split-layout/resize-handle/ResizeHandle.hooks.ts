@@ -53,11 +53,11 @@ export const useDragHandle = ({
                 moveEvent.preventDefault();
 
                 const currentPosition = getPointerPosition(moveEvent, direction);
-                const delta = currentPosition - startPositionRef.current;
 
-                startPositionRef.current = currentPosition;
-
-                onDrag(delta);
+                // Pass the total delta since drag start instead of incremental
+                // deltas. This way clamped movement cannot cause an offset
+                // between pointer position and pane size.
+                onDrag(currentPosition - startPositionRef.current);
             };
 
             const cleanup = () => {
