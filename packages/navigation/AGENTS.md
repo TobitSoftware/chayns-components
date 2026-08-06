@@ -31,8 +31,7 @@ import { DynamicToolbar } from '@chayns-components/navigation';
 
 ## DynamicToolbar
 
-Die DynamicToolbar blendet Aktionen je nach Breite automatisch aus, gruppiert sie im Overflow-Menü
-und lässt sich zwischen Floating- und Area-Layout umschalten.
+Die DynamicToolbar blendet Aktionen je nach Breite automatisch aus, gruppiert sie im Overflow-Menü und lässt sich zwischen Floating- und Area-Layout umschalten.
 
 ### Import
 
@@ -126,31 +125,43 @@ import { DynamicToolbar } from '@chayns-components/navigation';
 
 ### Props
 
-| name           | type                                                | required | description               |
-| -------------- | --------------------------------------------------- | -------- | ------------------------- |
-| `activeItemId` | `string \| null \| undefined`                       | no       | No description available. |
-| `className`    | `string \| undefined`                               | no       | No description available. |
-| `items`        | `DynamicToolbarItem[]`                              | yes      | No description available. |
-| `layout`       | `DynamicToolbarLayout \| undefined`                 | no       | No description available. |
-| `onItemSelect` | `((item: DynamicToolbarItem) => void) \| undefined` | no       | No description available. |
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `activeItemId` | `string \| null \| undefined` | no | No description available. |
+| `className` | `string \| undefined` | no | No description available. |
+| `items` | `DynamicToolbarItem[]` | yes | No description available. |
+| `layout` | `DynamicToolbarLayout \| undefined` | no | No description available. |
+| `onItemSelect` | `((item: DynamicToolbarItem) => void) \| undefined` | no | No description available. |
 
 ### Types
 
-- `DynamicToolbarItem` ->
-  `type DynamicToolbarItem = {     // Optional badge count that highlights pending conversations.     badgeCount?: number;     // Icon names that are forwarded to the shared Icon component.     icons: IconProps['icons'];     // Unique identifier that drives selection state and callbacks.     id: string;     // Marks the action as temporarily unavailable.     isDisabled?: boolean;     // Human-readable label for accessibility announcements.     label: string;     // Optional visual separator to highlight contextual groups.     hasRightSeparator?: boolean; };`
-- `DynamicToolbarLayout` ->
-  `enum DynamicToolbarLayout {     Area = 'area',     Hidden = 'hidden',     Floating = 'floating', }`
+- `DynamicToolbarItem` -> `type DynamicToolbarItem = {
+    // Optional badge count that highlights pending conversations.
+    badgeCount?: number;
+    // Icon names that are forwarded to the shared Icon component.
+    icons: IconProps['icons'];
+    // Unique identifier that drives selection state and callbacks.
+    id: string;
+    // Marks the action as temporarily unavailable.
+    isDisabled?: boolean;
+    // Human-readable label for accessibility announcements.
+    label: string;
+    // Optional visual separator to highlight contextual groups.
+    hasRightSeparator?: boolean;
+};`
+- `DynamicToolbarLayout` -> `enum DynamicToolbarLayout {
+    Area = 'area',
+    Hidden = 'hidden',
+    Floating = 'floating',
+}`
 
 ### Usage Notes
 
-- Import `DynamicToolbar` directly from `@chayns-components/navigation` instead of internal source
-  paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `DynamicToolbar` directly from `@chayns-components/navigation` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 - Pay special attention to required props: `items`.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/navigation/src/...`; always use the
-  public package export.
+- Avoid imports from internal paths such as `@chayns-components/navigation/src/...`; always use the public package export.
 - Avoid incomplete prop objects; follow the documented prop types and required fields.

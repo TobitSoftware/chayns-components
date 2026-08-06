@@ -16,16 +16,15 @@ import { Textstring } from '@chayns-components/textstring';
 <Textstring
     childrenTagName={'h1'}
     textstring={{
-        fallback: 'Das ist ein Textstring! Pizza ist lecker.',
-        name: 'txt_chayns_chaynsComponents_textString_example',
-    }}
+            fallback: 'Das ist ein Textstring! Pizza ist lecker.',
+            name: 'txt_chayns_chaynsComponents_textString_example',
+        }}
 />
 ```
 
 ## Textstring
 
-`Textstring` is exported by `@chayns-components/textstring` and should be imported from the public
-package entry point.
+`Textstring` is exported by `@chayns-components/textstring` and should be imported from the public package entry point.
 
 ### Import
 
@@ -41,9 +40,9 @@ import { Textstring } from '@chayns-components/textstring';
 <Textstring
     childrenTagName={'h1'}
     textstring={{
-        fallback: 'Das ist ein Textstring! Pizza ist lecker.',
-        name: 'txt_chayns_chaynsComponents_textString_example',
-    }}
+            fallback: 'Das ist ein Textstring! Pizza ist lecker.',
+            name: 'txt_chayns_chaynsComponents_textString_example',
+        }}
 />
 ```
 
@@ -52,9 +51,9 @@ import { Textstring } from '@chayns-components/textstring';
 ```tsx
 <Textstring
     textstring={{
-        fallback: '<button>Drücke mich!</button>',
-        name: 'txt_chayns_chaynsComponents_textString_example_with_html',
-    }}
+            fallback: '<button>Drücke mich!</button>',
+            name: 'txt_chayns_chaynsComponents_textString_example_with_html',
+        }}
     isTextstringHTML
 />
 ```
@@ -72,39 +71,41 @@ import { Textstring } from '@chayns-components/textstring';
     childrenTagName={'h1'}
     childrenStyles={{ color: 'rebeccapurple' }}
     textstring={{
-        fallback: 'Das ist ein Textstring! Pizza ist lecker.',
-        name: 'txt_chayns_chaynsComponents_textString_example',
-    }}
+            fallback: 'Das ist ein Textstring! Pizza ist lecker.',
+            name: 'txt_chayns_chaynsComponents_textString_example',
+        }}
 />
 ```
 
 ### Props
 
-| name                | type                                                                   | required | description                                                                                                  |
-| ------------------- | ---------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------ |
-| `children`          | `ReactElement<any, string \| JSXElementConstructor<any>> \| undefined` | no       | The element that the text should be displayed in.                                                            |
-| `childrenClassName` | `string \| undefined`                                                  | no       | The class name of the HTML element that the text should be displayed in. Only used if `children` is not set. |
-| `childrenStyles`    | `CSSProperties \| undefined`                                           | no       | The styles of the HTML element that the text should be displayed in. Only used if `children` is not set.     |
-| `childrenTagName`   | `keyof IntrinsicElements \| undefined`                                 | no       | The tag of the HTML element that the text should be displayed in. Only used if `children` is not set.        |
-| `isTextstringHTML`  | `boolean \| undefined`                                                 | no       | Whether the textstring contains HTML elements and should be displayed as HTML.                               |
-| `replacements`      | `TextstringReplacement \| undefined`                                   | no       | Replacement values for the textstring.                                                                       |
-| `textstring`        | `ITextstring`                                                          | yes      | The text that should be displayed.                                                                           |
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `children` | `ReactElement<any, string \| JSXElementConstructor<any>> \| undefined` | no | The element that the text should be displayed in. |
+| `childrenClassName` | `string \| undefined` | no | The class name of the HTML element that the text should be displayed in. Only used if `children` is not set. |
+| `childrenStyles` | `CSSProperties \| undefined` | no | The styles of the HTML element that the text should be displayed in. Only used if `children` is not set. |
+| `childrenTagName` | `keyof IntrinsicElements \| undefined` | no | The tag of the HTML element that the text should be displayed in. Only used if `children` is not set. |
+| `isTextstringHTML` | `boolean \| undefined` | no | Whether the textstring contains HTML elements and should be displayed as HTML. |
+| `replacements` | `TextstringReplacement \| undefined` | no | Replacement values for the textstring. |
+| `textstring` | `ITextstring` | yes | The text that should be displayed. |
 
 ### Types
 
-- `ITextstring` -> `interface ITextstring {     fallback: string;     name: string; }`
-- `TextstringReplacement` -> `interface TextstringReplacement {     [key: string]: string; }`
+- `ITextstring` -> `interface ITextstring {
+    fallback: string;
+    name: string;
+}`
+- `TextstringReplacement` -> `interface TextstringReplacement {
+    [key: string]: string;
+}`
 
 ### Usage Notes
 
-- Import `Textstring` directly from `@chayns-components/textstring` instead of internal source
-  paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `Textstring` directly from `@chayns-components/textstring` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 - Pay special attention to required props: `textstring`.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/textstring/src/...`; always use the
-  public package export.
+- Avoid imports from internal paths such as `@chayns-components/textstring/src/...`; always use the public package export.
 - Avoid incomplete prop objects; follow the documented prop types and required fields.

@@ -42,8 +42,7 @@ import { CodeHighlighter } from '@chayns-components/code-highlighter';
 
 ## CodeHighlighter
 
-`CodeHighlighter` is exported by `@chayns-components/code-highlighter` and should be imported from
-the public package entry point.
+`CodeHighlighter` is exported by `@chayns-components/code-highlighter` and should be imported from the public package entry point.
 
 ### Import
 
@@ -91,10 +90,10 @@ import { CodeHighlighter } from '@chayns-components/code-highlighter';
     shouldShowLineNumbers
     language={'tsx'}
     highlightedLines={{
-        added: [15, 16, 17, 18, 19],
-        removed: [14],
-        marked: [5],
-    }}
+            added: [15, 16, 17, 18, 19],
+            removed: [14],
+            marked: [5],
+        }}
     code={`import React from 'react';
     import { ColorSchemeProvider } from '@chayns-components/core';
     import { ChaynsProvider, getSite } from 'chayns-api';
@@ -247,9 +246,7 @@ import { CodeHighlighter } from '@chayns-components/code-highlighter';
     copyButtonText={'Code kopieren'}
     shouldShowLineNumbers
     language={''}
-    code={
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed rhoncus nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Donec semper ante quis molestie vulputate. Praesent facilisis auctor turpis. Duis sodales dictum sem, id aliquet nisi faucibus egestas. Morbi volutpat dapibus feugiat.'
-    }
+    code={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed rhoncus nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Donec semper ante quis molestie vulputate. Praesent facilisis auctor turpis. Duis sodales dictum sem, id aliquet nisi faucibus egestas. Morbi volutpat dapibus feugiat.'}
     shouldWrapLines
 />
 ```
@@ -262,8 +259,8 @@ import { CodeHighlighter } from '@chayns-components/code-highlighter';
     shouldShowLineNumbers
     language={'typescript'}
     code={Array.from({ length: 100 }, (_, index) => `console.log('Zeile ${index + 1}');`).join(
-        '\n',
-    )}
+            '\n',
+        )}
 />
 ```
 
@@ -278,8 +275,8 @@ import { CodeHighlighter } from '@chayns-components/code-highlighter';
     
     console.log(greeting);`}
     onInsertCode={(code) => {
-        console.log('Insert code', code);
-    }}
+            console.log('Insert code', code);
+        }}
 />
 ```
 
@@ -315,51 +312,337 @@ import { CodeHighlighter } from '@chayns-components/code-highlighter';
     shouldShowLineNumbers
     language={'typescript'}
     code={Array.from(
-        { length: 80 },
-        (_, index) => `const update${index + 1} = createUpdate(${index + 1});`,
-    ).join('\n')}
+            { length: 80 },
+            (_, index) => `const update${index + 1} = createUpdate(${index + 1});`,
+        ).join('\n')}
 />
 ```
 
 #### Virtualized Chat Message
 
 ```tsx
-<CodeHighlighter copyButtonText={'Code kopieren'} shouldShowLineNumbers language={'tsx'} />
+<CodeHighlighter
+    copyButtonText={'Code kopieren'}
+    shouldShowLineNumbers
+    language={'tsx'}
+/>
 ```
 
 ### Props
 
-| name                    | type                                      | required | description                                                                                                            |
-| ----------------------- | ----------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `code`                  | `string`                                  | yes      | The code that should be displayed.                                                                                     |
-| `copyButtonText`        | `string \| undefined`                     | no       | The text that should be displayed after the copy button.<br />If not set, just the button is displayed without text.   |
-| `highlightedLines`      | `HighlightedLines \| undefined`           | no       | The lines of code that should be highlighted.<br />Following lines can be highlighted: added, removed and just marked. |
-| `language`              | `CodeHighlighterLanguage`                 | yes      | The language of the displayed code.                                                                                    |
-| `onFormatError`         | `((error: unknown) => void) \| undefined` | no       | Function to be executed when the formatting of the code fails.                                                         |
-| `onInsertCode`          | `((code: string) => void) \| undefined`   | no       | Function to be executed when the code should be inserted into another target.                                          |
-| `shouldFormatCode`      | `boolean \| undefined`                    | no       | Whether the code should be formatted with prettier.                                                                    |
-| `shouldShowLineNumbers` | `boolean \| undefined`                    | no       | Whether the line numbers should be displayed.                                                                          |
-| `shouldWrapLines`       | `boolean \| undefined`                    | no       | Whether long lines should be wrapped.                                                                                  |
-| `theme`                 | `CodeHighlighterTheme \| undefined`       | no       | The theme of the code block. Decide between dark and light.                                                            |
+| name | type | required | description |
+| --- | --- | --- | --- |
+| `code` | `string` | yes | The code that should be displayed. |
+| `copyButtonText` | `string \| undefined` | no | The text that should be displayed after the copy button.<br />If not set, just the button is displayed without text. |
+| `highlightedLines` | `HighlightedLines \| undefined` | no | The lines of code that should be highlighted.<br />Following lines can be highlighted: added, removed and just marked. |
+| `language` | `CodeHighlighterLanguage` | yes | The language of the displayed code. |
+| `onFormatError` | `((error: unknown) => void) \| undefined` | no | Function to be executed when the formatting of the code fails. |
+| `onInsertCode` | `((code: string) => void) \| undefined` | no | Function to be executed when the code should be inserted into another target. |
+| `shouldFormatCode` | `boolean \| undefined` | no | Whether the code should be formatted with prettier. |
+| `shouldShowLineNumbers` | `boolean \| undefined` | no | Whether the line numbers should be displayed. |
+| `shouldWrapLines` | `boolean \| undefined` | no | Whether long lines should be wrapped. |
+| `theme` | `CodeHighlighterTheme \| undefined` | no | The theme of the code block. Decide between dark and light. |
 
 ### Types
 
-- `CodeHighlighterLanguage` ->
-  `type CodeHighlighterLanguage =   | 'abap'   | 'abnf'   | 'actionscript'   | 'ada'   | 'agda'   | 'al'   | 'antlr4'   | 'apacheconf'   | 'apex'   | 'apl'   | 'applescript'   | 'aql'   | 'arduino'   | 'arff'   | 'asciidoc'   | 'asm6502'   | 'asmatmel'   | 'aspnet'   | 'autohotkey'   | 'autoit'   | 'avisynth'   | 'avroIdl'   | 'bash'   | 'basic'   | 'batch'   | 'bbcode'   | 'bicep'   | 'birb'   | 'bison'   | 'bnf'   | 'brainfuck'   | 'brightscript'   | 'bro'   | 'bsl'   | 'c'   | 'cfscript'   | 'chaiscript'   | 'cil'   | 'clike'   | 'clojure'   | 'cmake'   | 'cobol'   | 'coffeescript'   | 'concurnas'   | 'coq'   | 'cpp'   | 'crystal'   | 'csharp'   | 'cshtml'   | 'csp'   | 'cssExtras'   | 'css'   | 'csv'   | 'cypher'   | 'd'   | 'dart'   | 'dataweave'   | 'dax'   | 'dhall'   | 'diff'   | 'django'   | 'dnsZoneFile'   | 'docker'   | 'dot'   | 'ebnf'   | 'editorconfig'   | 'eiffel'   | 'ejs'   | 'elixir'   | 'elm'   | 'erb'   | 'erlang'   | 'etlua'   | 'excelFormula'   | 'factor'   | 'falselang'   | 'firestoreSecurityRules'   | 'flow'   | 'fortran'   | 'fsharp'   | 'ftl'   | 'gap'   | 'gcode'   | 'gdscript'   | 'gedcom'   | 'gherkin'   | 'git'   | 'glsl'   | 'gml'   | 'gn'   | 'goModule'   | 'go'   | 'graphql'   | 'groovy'   | 'haml'   | 'handlebars'   | 'haskell'   | 'haxe'   | 'hcl'   | 'hlsl'   | 'hoon'   | 'hpkp'   | 'hsts'   | 'html'   | 'http'   | 'ichigojam'   | 'icon'   | 'icuMessageFormat'   | 'idris'   | 'iecst'   | 'ignore'   | 'inform7'   | 'ini'   | 'io'   | 'j'   | 'java'   | 'javadoc'   | 'javadoclike'   | 'javascript'   | 'javastacktrace'   | 'jexl'   | 'jolie'   | 'jq'   | 'jsExtras'   | 'jsTemplates'   | 'jsdoc'   | 'json'   | 'json5'   | 'jsonp'   | 'jsstacktrace'   | 'jsx'   | 'julia'   | 'keepalived'   | 'keyman'   | 'kotlin'   | 'kumir'   | 'kusto'   | 'latex'   | 'latte'   | 'less'   | 'lilypond'   | 'liquid'   | 'lisp'   | 'livescript'   | 'llvm'   | 'log'   | 'lolcode'   | 'lua'   | 'magma'   | 'makefile'   | 'markdown'   | 'markupTemplating'   | 'markup'   | 'matlab'   | 'maxscript'   | 'mel'   | 'mermaid'   | 'mizar'   | 'mongodb'   | 'monkey'   | 'moonscript'   | 'n1ql'   | 'n4js'   | 'nand2tetrisHdl'   | 'naniscript'   | 'nasm'   | 'neon'   | 'nevod'   | 'nginx'   | 'nim'   | 'nix'   | 'nsis'   | 'objectivec'   | 'ocaml'   | 'opencl'   | 'openqasm'   | 'oz'   | 'parigp'   | 'parser'   | 'pascal'   | 'pascaligo'   | 'pcaxis'   | 'peoplecode'   | 'perl'   | 'phpExtras'   | 'php'   | 'phpdoc'   | 'plsql'   | 'powerquery'   | 'powershell'   | 'processing'   | 'prolog'   | 'promql'   | 'properties'   | 'protobuf'   | 'psl'   | 'pug'   | 'puppet'   | 'pure'   | 'purebasic'   | 'purescript'   | 'python'   | 'q'   | 'qml'   | 'qore'   | 'qsharp'   | 'r'   | 'racket'   | 'reason'   | 'regex'   | 'rego'   | 'renpy'   | 'rest'   | 'rip'   | 'roboconf'   | 'robotframework'   | 'ruby'   | 'rust'   | 'sas'   | 'sass'   | 'scala'   | 'scheme'   | 'scss'   | 'shellSession'   | 'smali'   | 'smalltalk'   | 'smarty'   | 'sml'   | 'solidity'   | 'solutionFile'   | 'soy'   | 'sparql'   | 'splunkSpl'   | 'sqf'   | 'sql'   | 'squirrel'   | 'stan'   | 'stylus'   | 'swift'   | 'systemd'   | 't4Cs'   | 't4Templating'   | 't4Vb'   | 'tap'   | 'tcl'   | 'textile'   | 'toml'   | 'tremor'   | 'tsx'   | 'tt2'   | 'turtle'   | 'twig'   | 'typescript'   | 'typoscript'   | 'unrealscript'   | 'uorazor'   | 'uri'   | 'v'   | 'vala'   | 'vbnet'   | 'velocity'   | 'verilog'   | 'vhdl'   | 'vim'   | 'visualBasic'   | 'warpscript'   | 'wasm'   | 'webIdl'   | 'wiki'   | 'wolfram'   | 'wren'   | 'xeora'   | 'xmlDoc'   | 'xojo'   | 'xquery'   | 'yaml'   | 'yang'   | 'zig'   | ''   | undefined;`
-- `CodeHighlighterTheme` -> `enum CodeHighlighterTheme {     Light = 'light',     Dark = 'dark', }`
-- `HighlightedLines` ->
-  `interface HighlightedLines {     added?: number[];     removed?: number[];     marked?: number[]; }`
+- `CodeHighlighterLanguage` -> `type CodeHighlighterLanguage =
+    | 'abap'
+    | 'abnf'
+    | 'actionscript'
+    | 'ada'
+    | 'agda'
+    | 'al'
+    | 'antlr4'
+    | 'apacheconf'
+    | 'apex'
+    | 'apl'
+    | 'applescript'
+    | 'aql'
+    | 'arduino'
+    | 'arff'
+    | 'asciidoc'
+    | 'asm6502'
+    | 'asmatmel'
+    | 'aspnet'
+    | 'autohotkey'
+    | 'autoit'
+    | 'avisynth'
+    | 'avroIdl'
+    | 'bash'
+    | 'basic'
+    | 'batch'
+    | 'bbcode'
+    | 'bicep'
+    | 'birb'
+    | 'bison'
+    | 'bnf'
+    | 'brainfuck'
+    | 'brightscript'
+    | 'bro'
+    | 'bsl'
+    | 'c'
+    | 'cfscript'
+    | 'chaiscript'
+    | 'cil'
+    | 'clike'
+    | 'clojure'
+    | 'cmake'
+    | 'cobol'
+    | 'coffeescript'
+    | 'concurnas'
+    | 'coq'
+    | 'cpp'
+    | 'crystal'
+    | 'csharp'
+    | 'cshtml'
+    | 'csp'
+    | 'cssExtras'
+    | 'css'
+    | 'csv'
+    | 'cypher'
+    | 'd'
+    | 'dart'
+    | 'dataweave'
+    | 'dax'
+    | 'dhall'
+    | 'diff'
+    | 'django'
+    | 'dnsZoneFile'
+    | 'docker'
+    | 'dot'
+    | 'ebnf'
+    | 'editorconfig'
+    | 'eiffel'
+    | 'ejs'
+    | 'elixir'
+    | 'elm'
+    | 'erb'
+    | 'erlang'
+    | 'etlua'
+    | 'excelFormula'
+    | 'factor'
+    | 'falselang'
+    | 'firestoreSecurityRules'
+    | 'flow'
+    | 'fortran'
+    | 'fsharp'
+    | 'ftl'
+    | 'gap'
+    | 'gcode'
+    | 'gdscript'
+    | 'gedcom'
+    | 'gherkin'
+    | 'git'
+    | 'glsl'
+    | 'gml'
+    | 'gn'
+    | 'goModule'
+    | 'go'
+    | 'graphql'
+    | 'groovy'
+    | 'haml'
+    | 'handlebars'
+    | 'haskell'
+    | 'haxe'
+    | 'hcl'
+    | 'hlsl'
+    | 'hoon'
+    | 'hpkp'
+    | 'hsts'
+    | 'html'
+    | 'http'
+    | 'ichigojam'
+    | 'icon'
+    | 'icuMessageFormat'
+    | 'idris'
+    | 'iecst'
+    | 'ignore'
+    | 'inform7'
+    | 'ini'
+    | 'io'
+    | 'j'
+    | 'java'
+    | 'javadoc'
+    | 'javadoclike'
+    | 'javascript'
+    | 'javastacktrace'
+    | 'jexl'
+    | 'jolie'
+    | 'jq'
+    | 'jsExtras'
+    | 'jsTemplates'
+    | 'jsdoc'
+    | 'json'
+    | 'json5'
+    | 'jsonp'
+    | 'jsstacktrace'
+    | 'jsx'
+    | 'julia'
+    | 'keepalived'
+    | 'keyman'
+    | 'kotlin'
+    | 'kumir'
+    | 'kusto'
+    | 'latex'
+    | 'latte'
+    | 'less'
+    | 'lilypond'
+    | 'liquid'
+    | 'lisp'
+    | 'livescript'
+    | 'llvm'
+    | 'log'
+    | 'lolcode'
+    | 'lua'
+    | 'magma'
+    | 'makefile'
+    | 'markdown'
+    | 'markupTemplating'
+    | 'markup'
+    | 'matlab'
+    | 'maxscript'
+    | 'mel'
+    | 'mermaid'
+    | 'mizar'
+    | 'mongodb'
+    | 'monkey'
+    | 'moonscript'
+    | 'n1ql'
+    | 'n4js'
+    | 'nand2tetrisHdl'
+    | 'naniscript'
+    | 'nasm'
+    | 'neon'
+    | 'nevod'
+    | 'nginx'
+    | 'nim'
+    | 'nix'
+    | 'nsis'
+    | 'objectivec'
+    | 'ocaml'
+    | 'opencl'
+    | 'openqasm'
+    | 'oz'
+    | 'parigp'
+    | 'parser'
+    | 'pascal'
+    | 'pascaligo'
+    | 'pcaxis'
+    | 'peoplecode'
+    | 'perl'
+    | 'phpExtras'
+    | 'php'
+    | 'phpdoc'
+    | 'plsql'
+    | 'powerquery'
+    | 'powershell'
+    | 'processing'
+    | 'prolog'
+    | 'promql'
+    | 'properties'
+    | 'protobuf'
+    | 'psl'
+    | 'pug'
+    | 'puppet'
+    | 'pure'
+    | 'purebasic'
+    | 'purescript'
+    | 'python'
+    | 'q'
+    | 'qml'
+    | 'qore'
+    | 'qsharp'
+    | 'r'
+    | 'racket'
+    | 'reason'
+    | 'regex'
+    | 'rego'
+    | 'renpy'
+    | 'rest'
+    | 'rip'
+    | 'roboconf'
+    | 'robotframework'
+    | 'ruby'
+    | 'rust'
+    | 'sas'
+    | 'sass'
+    | 'scala'
+    | 'scheme'
+    | 'scss'
+    | 'shellSession'
+    | 'smali'
+    | 'smalltalk'
+    | 'smarty'
+    | 'sml'
+    | 'solidity'
+    | 'solutionFile'
+    | 'soy'
+    | 'sparql'
+    | 'splunkSpl'
+    | 'sqf'
+    | 'sql'
+    | 'squirrel'
+    | 'stan'
+    | 'stylus'
+    | 'swift'
+    | 'systemd'
+    | 't4Cs'
+    | 't4Templating'
+    | 't4Vb'
+    | 'tap'
+    | 'tcl'
+    | 'textile'
+    | 'toml'
+    | 'tremor'
+    | 'tsx'
+    | 'tt2'
+    | 'turtle'
+    | 'twig'
+    | 'typescript'
+    | 'typoscript'
+    | 'unrealscript'
+    | 'uorazor'
+    | 'uri'
+    | 'v'
+    | 'vala'
+    | 'vbnet'
+    | 'velocity'
+    | 'verilog'
+    | 'vhdl'
+    | 'vim'
+    | 'visualBasic'
+    | 'warpscript'
+    | 'wasm'
+    | 'webIdl'
+    | 'wiki'
+    | 'wolfram'
+    | 'wren'
+    | 'xeora'
+    | 'xmlDoc'
+    | 'xojo'
+    | 'xquery'
+    | 'yaml'
+    | 'yang'
+    | 'zig'
+    | ''
+    | undefined;`
+- `CodeHighlighterTheme` -> `enum CodeHighlighterTheme {
+    Light = 'light',
+    Dark = 'dark',
+}`
+- `HighlightedLines` -> `interface HighlightedLines {
+    added?: number[];
+    removed?: number[];
+    marked?: number[];
+}`
 
 ### Usage Notes
 
-- Import `CodeHighlighter` directly from `@chayns-components/code-highlighter` instead of internal
-  source paths.
-- Start with one of the documented Storybook examples and adapt the props incrementally for your use
-  case.
+- Import `CodeHighlighter` directly from `@chayns-components/code-highlighter` instead of internal source paths.
+- Start with one of the documented Storybook examples and adapt the props incrementally for your use case.
 - Pay special attention to required props: `code`, `language`.
 
 ### Anti Patterns
 
-- Avoid imports from internal paths such as `@chayns-components/code-highlighter/src/...`; always
-  use the public package export.
+- Avoid imports from internal paths such as `@chayns-components/code-highlighter/src/...`; always use the public package export.
 - Avoid incomplete prop objects; follow the documented prop types and required fields.
