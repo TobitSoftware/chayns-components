@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/navigation",
-    "version": "5.5.30",
+    "version": "5.5.31",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
