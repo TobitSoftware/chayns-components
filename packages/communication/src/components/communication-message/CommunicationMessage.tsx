@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useRef } from 'react';
+import React, { FC, useMemo, useRef, useState } from 'react';
 import {
     CommunicationMessageAlignment,
     CommunicationMessageProps,
@@ -32,8 +32,10 @@ const CommunicationMessage: FC<CommunicationMessageProps> = ({
     shouldShowStatus = true,
     timestampFormatter,
     alignment,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const contextMenuRef = useRef<ContextMenuRef>(null);
+    const [isOptionsFocused, setIsOptionsFocused] = useState(false);
 
     const { isTouch } = useDevice();
     const { t, language } = useTranslation();
@@ -102,6 +104,27 @@ const CommunicationMessage: FC<CommunicationMessageProps> = ({
         };
     }, [alignment, isTouch]);
 
+    const animationValue = useMemo(() => {
+        if (isOptionsFocused) return { opacity: 1, right: optionsAnimation.animate.right };
+        if (shouldShowContextMenu) {
+            return optionsAnimation.animate;
+        }
+        return { opacity: 0, right: optionsAnimation.initial.right };
+    }, [
+        isOptionsFocused,
+        optionsAnimation.animate,
+        optionsAnimation.initial.right,
+        shouldShowContextMenu,
+    ]);
+
+    const initialValue = useMemo(
+        () =>
+            shouldShowContextMenu || isOptionsFocused
+                ? optionsAnimation.initial
+                : { opacity: 0, right: optionsAnimation.initial.right },
+        [isOptionsFocused, optionsAnimation.initial, shouldShowContextMenu],
+    );
+
     return (
         <StyledCommunicationMessage
             $alignment={alignment}
@@ -113,13 +136,23 @@ const CommunicationMessage: FC<CommunicationMessageProps> = ({
             onTouchStart={onTouchStart}
         >
             <AnimatePresence>
-                {shouldShowContextMenu && (
+                {Array.isArray(options) && options.length > 0 && (
                     <StyledMotionCommunicationMessageContextMenu
-                        initial={optionsAnimation.initial}
+                        onBlurCapture={(event) => {
+                            if (!event.currentTarget.contains(event.relatedTarget)) {
+                                setIsOptionsFocused(false);
+                            }
+                        }}
+                        onFocusCapture={() => setIsOptionsFocused(true)}
+                        initial={initialValue}
                         exit={optionsAnimation.exit}
-                        animate={optionsAnimation.animate}
+                        animate={animationValue}
                     >
-                        <ContextMenu items={options ?? []} ref={contextMenuRef} />
+                        <ContextMenu
+                            items={options}
+                            ref={contextMenuRef}
+                            shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                        />
                     </StyledMotionCommunicationMessageContextMenu>
                 )}
             </AnimatePresence>
