@@ -7,6 +7,8 @@ import { useAudioInput } from './AudioInput.hooks';
 import WaveForm from './wave-form/WaveForm';
 import { AUDIO_INPUT_ANIMATION } from './AudioInput.constants';
 import { CommunicationInputSize } from '../communication-input/CommunicationInput.types';
+import { useTranslation } from '@chayns/textstrings';
+import textStrings from '../../constants/textStrings';
 
 const AudioInput = forwardRef<AudioInputRef, AudioInputProps>(
     (
@@ -23,6 +25,7 @@ const AudioInput = forwardRef<AudioInputRef, AudioInputProps>(
         },
         ref,
     ) => {
+        const { t } = useTranslation();
         const { backgroundColor = 'var(--chayns-color--primary)', color = 'white' } =
             styleConfig ?? {};
 
@@ -93,7 +96,11 @@ const AudioInput = forwardRef<AudioInputRef, AudioInputProps>(
                 transition={{ duration: 0.25, ease: [0.2, 0.8, 0.2, 1], type: 'tween' }}
             >
                 <StyledMotionAudioInputIconWrapper
-                    aria-label={isActive ? 'Mikrofon stummschalten' : 'Aufnahme starten'}
+                    aria-label={
+                        isActive
+                            ? t(textStrings.audioInput.accessibility.mute)
+                            : t(textStrings.audioInput.accessibility.start)
+                    }
                     onClick={handleMainButtonClick}
                     ref={mainButtonRef}
                     tabIndex={isActive && !canMute ? -1 : undefined}
@@ -111,7 +118,7 @@ const AudioInput = forwardRef<AudioInputRef, AudioInputProps>(
 
                     {isExpanded && (
                         <StyledMotionAudioInputIconWrapper
-                            aria-label="Aufnahme stoppen"
+                            aria-label={t(textStrings.audioInput.accessibility.stop)}
                             key="stop"
                             onClick={stop}
                             ref={stopButtonRef}

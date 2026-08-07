@@ -97,7 +97,7 @@ const PreviewMessage: FC<PreviewMessageProps> = ({
                     )}
                     {typeof onRemove === 'function' && (
                         <StyledPreviewMessageRemoveIcon
-                            aria-label="Remove message preview"
+                            aria-label={t(textStrings.previewMessage.accessibility.remove)}
                             onClick={onRemove}
                             ref={removeRef}
                             type="button"

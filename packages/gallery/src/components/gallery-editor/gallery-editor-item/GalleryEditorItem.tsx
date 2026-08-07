@@ -11,6 +11,8 @@ import {
     GALLERY_EDITOR_DELETE_BUTTON_Z_INDEX,
     GALLERY_EDITOR_ITEM_FADE_DURATION_S,
 } from '../GalleryEditor.constants';
+import { useTranslation } from '@chayns/textstrings';
+import textStrings from '../../../constants/textStrings';
 
 const GalleryEditorItem: FC<GalleryEditorItemProps> = ({
     fileItem,
@@ -20,6 +22,7 @@ const GalleryEditorItem: FC<GalleryEditorItemProps> = ({
     ratio = 1,
     onClick,
 }) => {
+    const { t } = useTranslation();
     const deleteButtonRef = useRef<HTMLButtonElement>(null);
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlighting,
@@ -64,7 +67,7 @@ const GalleryEditorItem: FC<GalleryEditorItemProps> = ({
                     handleDeleteFile(fileItem.id);
                 }}
                 $zIndex={GALLERY_EDITOR_DELETE_BUTTON_Z_INDEX}
-                aria-label="Bild entfernen"
+                aria-label={t(textStrings.galleryEditor.accessibility.removeImage)}
             >
                 <Icon size={20} icons={['ts-wrong']} />
             </StyledGalleryEditorItemDeleteButton>

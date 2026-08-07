@@ -21,6 +21,8 @@ import {
     StyledCommunicationFileItemRemoveButton,
 } from './CommunicationFileItem.styles';
 import { CommunicationInputSize } from '../../communication-input/CommunicationInput.types';
+import { useTranslation } from '@chayns/textstrings';
+import textStrings from '../../../constants/textStrings';
 
 interface Props {
     file: CommunicationFile | CommunicationImage | CommunicationVideo;
@@ -35,6 +37,7 @@ const CommunicationFileItem = ({
     size,
     shouldEnableKeyboardHighlighting,
 }: Props) => {
+    const { t } = useTranslation();
     const isUploading = file.loadingState === CommunicationLoadingState.UPLOADING;
     const isError = file.loadingState === CommunicationLoadingState.ERROR;
     const removeButtonRef = useRef<HTMLButtonElement>(null);
@@ -72,7 +75,7 @@ const CommunicationFileItem = ({
 
             {onRemove && (
                 <StyledCommunicationFileItemRemoveButton
-                    aria-label="Datei entfernen"
+                    aria-label={t(textStrings.communicationFileItem.accessibility.remove)}
                     onClick={() => onRemove(file.id)}
                     ref={removeButtonRef}
                     type="button"

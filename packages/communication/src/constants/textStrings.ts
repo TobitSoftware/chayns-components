@@ -1,5 +1,52 @@
 export default {
+    audioInput: {
+        accessibility: {
+            mute: {
+                stringName: 'txt_chayns_components_v5_communication_audioInput_accessibility_mute',
+                fallback: 'Mikrofon stummschalten',
+            },
+            start: {
+                stringName: 'txt_chayns_components_v5_communication_audioInput_accessibility_start',
+                fallback: 'Aufnahme starten',
+            },
+            stop: {
+                stringName: 'txt_chayns_components_v5_communication_audioInput_accessibility_stop',
+                fallback: 'Aufnahme stoppen',
+            },
+        },
+    },
+    communicationFileItem: {
+        accessibility: {
+            remove: {
+                stringName:
+                    'txt_chayns_components_v5_communication_communicationFileItem_accessibility_remove',
+                fallback: 'Datei entfernen',
+            },
+        },
+    },
     communicationHeader: {
+        accessibility: {
+            enterFullscreen: {
+                stringName:
+                    'txt_chayns_components_v5_communication_communicationHeader_accessibility_enterFullscreen',
+                fallback: 'Vollbild aktivieren',
+            },
+            exitFullscreen: {
+                stringName:
+                    'txt_chayns_components_v5_communication_communicationHeader_accessibility_exitFullscreen',
+                fallback: 'Vollbild beenden',
+            },
+            hideRecipients: {
+                stringName:
+                    'txt_chayns_components_v5_communication_communicationHeader_accessibility_hideRecipients',
+                fallback: 'Empfänger ausblenden',
+            },
+            showRecipients: {
+                stringName:
+                    'txt_chayns_components_v5_communication_communicationHeader_accessibility_showRecipients',
+                fallback: 'Empfänger anzeigen',
+            },
+        },
         headerActions: {
             more: {
                 stringName:
@@ -107,6 +154,13 @@ export default {
         },
     },
     previewMessage: {
+        accessibility: {
+            remove: {
+                stringName:
+                    'txt_chayns_components_v5_communication_previewMessage_accessibility_remove',
+                fallback: 'Nachrichtenvorschau entfernen',
+            },
+        },
         file: {
             stringName: 'txt_chayns_components_v5_communication_previewMessage_file',
             fallback: 'Datei',
@@ -185,6 +239,18 @@ export default {
                 },
             },
             input: {
+                accessibility: {
+                    openContextMenu: {
+                        stringName:
+                            'txt_chayns_components_v5_communication_socialPlugin_content_input_accessibility_openContextMenu',
+                        fallback: 'Menü öffnen',
+                    },
+                    removeImage: {
+                        stringName:
+                            'txt_chayns_components_v5_communication_socialPlugin_content_input_accessibility_removeImage',
+                        fallback: 'Bild entfernen',
+                    },
+                },
                 options: {
                     image: {
                         stringName:

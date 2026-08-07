@@ -40,6 +40,8 @@ import {
 import Chips from './chips/Chips';
 import AudioInput from '../audio-input/AudioInput';
 import { AnimatePresence } from 'motion/react';
+import { useTranslation } from '@chayns/textstrings';
+import textStrings from '../../constants/textStrings';
 
 const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputProps>(
     (
@@ -61,6 +63,7 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
         },
         ref,
     ) => {
+        const { t } = useTranslation();
         const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
 
         const contextMenuRef = useRef<ContextMenuRef>(null);
@@ -135,7 +138,10 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
                     >
                         <StyledMotionIconWrapper
                             animate={{ rotate: isContextMenuOpen ? 45 : 0 }}
-                            aria-label="Open context menu"
+                            aria-label={t(
+                                textStrings.socialPlugin.content.input.accessibility
+                                    .openContextMenu,
+                            )}
                             ref={contextMenuTriggerRef}
                             type="button"
                         >

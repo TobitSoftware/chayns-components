@@ -11,6 +11,8 @@ import {
     useFocusRingPortal,
     useKeyboardFocusHighlighting,
 } from '@chayns-components/core';
+import { useTranslation } from '@chayns/textstrings';
+import textStrings from '../../../constants/textStrings';
 
 const HeaderSubject: FC<HeaderSubjectProps> = ({
     title,
@@ -19,6 +21,7 @@ const HeaderSubject: FC<HeaderSubjectProps> = ({
     isLoading,
     shouldEnableKeyboardHighlighting,
 }) => {
+    const { t } = useTranslation();
     const fullScreenRef = useRef<HTMLButtonElement>(null);
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlighting,
@@ -35,7 +38,11 @@ const HeaderSubject: FC<HeaderSubjectProps> = ({
             )}
             {typeof onFullScreenToggle === 'function' && !isLoading && (
                 <StyledHeaderSubjectFullScreenWrapper
-                    aria-label={isFullScreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+                    aria-label={
+                        isFullScreen
+                            ? t(textStrings.communicationHeader.accessibility.exitFullscreen)
+                            : t(textStrings.communicationHeader.accessibility.enterFullscreen)
+                    }
                     onClick={() => onFullScreenToggle(!isFullScreen)}
                     ref={fullScreenRef}
                     type="button"

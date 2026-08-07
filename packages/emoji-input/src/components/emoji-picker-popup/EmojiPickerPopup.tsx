@@ -10,6 +10,8 @@ import {
 import React, { FC, KeyboardEventHandler, useCallback, useEffect, useRef } from 'react';
 import EmojiPicker from '../emoji-picker/EmojiPicker';
 import { StyledEmojiPickerPopup } from './EmojiPickerPopup.styles';
+import { useTranslation } from '@chayns/textstrings';
+import textStrings from '../../constants/textStrings';
 
 export type EmojiPickerPopupProps = {
     /**
@@ -58,6 +60,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
     personId,
     shouldEnableKeyboardHighlighting,
 }) => {
+    const { t } = useTranslation();
     const popupRef = useRef<PopupRef>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
@@ -135,7 +138,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
                 }
             >
                 <button
-                    aria-label="Open emoji picker"
+                    aria-label={t(textStrings.emojiPickerPopup.accessibility.open)}
                     className="prevent-lose-focus"
                     disabled={isDisabled}
                     onClick={(event) => {

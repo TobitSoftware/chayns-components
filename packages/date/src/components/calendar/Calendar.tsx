@@ -1,5 +1,6 @@
 import { ComboBox, Icon, useColorScheme, useFocusRingPortal } from '@chayns-components/core';
 import { Language } from 'chayns-api';
+import { useTranslation, TextStringProvider } from '@chayns/textstrings';
 import React, {
     CSSProperties,
     FC,
@@ -36,6 +37,7 @@ import {
 } from './Calendar.styles';
 import MonthWrapper from './month-wrapper/MonthWrapper';
 import { useKeyboardFocusHighlighting } from '@chayns-components/core';
+import textStrings from '../../constants/textStrings';
 
 interface BaseProps {
     /**
@@ -163,6 +165,7 @@ const Calendar: FC<CalendarProps> = ({
     currentDateBackgroundColor,
     shouldEnableKeyboardHighlighting: shouldEnableKeyboardHighlightingProp,
 }) => {
+    const { t } = useTranslation();
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
     const [internalSelectedDate, setInternalSelectedDate] = useState<
@@ -633,83 +636,85 @@ const Calendar: FC<CalendarProps> = ({
     }, [currentDate, maxDate]);
 
     return (
-        <StyledCalendar ref={calendarRef} $isDisabled={isDisabled} onKeyDown={handleKeyDown}>
-            {ShouldShowLeftArrow ? (
-                <StyledCalendarIconWrapper
-                    ref={leftNavigationIconRef}
-                    aria-label="Previous month"
-                    role="button"
-                    tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
-                    onClick={handleLeftArrowClick}
-                    onKeyDown={(event) =>
-                        handleNavigationIconKeyDown(event, handleLeftArrowClick, 'left')
-                    }
-                >
-                    <StyledCalendarIconWrapperContent ref={leftNavigationIconContentRef}>
-                        {showMonthYearPickers && (
-                            <StyledPseudoMonthYearPicker>
-                                <ComboBox lists={[{ list: [] }]} placeholder="" />
-                            </StyledPseudoMonthYearPicker>
-                        )}
-                        <Icon icons={['fa fa-angle-left']} />
-                    </StyledCalendarIconWrapperContent>
-                </StyledCalendarIconWrapper>
-            ) : (
-                <StyledCalendarIconWrapperPseudo />
-            )}
-            {currentDate && (
-                <MonthWrapper
-                    shouldRenderTwo={shouldRenderTwoMonths}
-                    currentDate={currentDate}
-                    width={width}
-                    locale={locale}
-                    direction={direction}
-                    customThumbColors={customThumbColors}
-                    onSelect={handleSelect}
-                    selectedDate={internalSelectedDate}
-                    highlightedDates={highlightedDates}
-                    categories={categories}
-                    onAnimationFinished={handleAnimationFinished}
-                    minDate={minDate}
-                    maxDate={maxDate}
-                    type={type}
-                    disabledDates={disabledDates}
-                    setCurrentDate={setCurrentDate}
-                    shouldShowHighlightsInMonthOverlay={shouldShowHighlightsInMonthOverlay}
-                    showMonthYearPickers={showMonthYearPickers}
-                    handleLeftArrowClick={handleLeftArrowClick}
-                    handleRightArrowClick={handleRightArrowClick}
-                    currentDateBackgroundColor={currentDateBackgroundColor}
-                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
-                    shouldShowKeyboardHighlighting={
-                        shouldShowKeyboardFocusHighlighting && type !== CalendarType.Single
-                    }
-                />
-            )}
-            {ShouldShowRightArrow ? (
-                <StyledCalendarIconWrapper
-                    ref={rightNavigationIconRef}
-                    aria-label="Next month"
-                    role="button"
-                    tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
-                    onClick={handleRightArrowClick}
-                    onKeyDown={(event) =>
-                        handleNavigationIconKeyDown(event, handleRightArrowClick, 'right')
-                    }
-                >
-                    <StyledCalendarIconWrapperContent ref={rightNavigationIconContentRef}>
-                        {showMonthYearPickers && (
-                            <StyledPseudoMonthYearPicker>
-                                <ComboBox lists={[{ list: [] }]} placeholder="" />
-                            </StyledPseudoMonthYearPicker>
-                        )}
-                        <Icon icons={['fa fa-angle-right']} />
-                    </StyledCalendarIconWrapperContent>
-                </StyledCalendarIconWrapper>
-            ) : (
-                <StyledCalendarIconWrapperPseudo />
-            )}
-        </StyledCalendar>
+        <TextStringProvider libraries="@chayns-components-date">
+            <StyledCalendar ref={calendarRef} $isDisabled={isDisabled} onKeyDown={handleKeyDown}>
+                {ShouldShowLeftArrow ? (
+                    <StyledCalendarIconWrapper
+                        ref={leftNavigationIconRef}
+                        aria-label={t(textStrings.calendar.accessibility.previousMonth)}
+                        role="button"
+                        tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
+                        onClick={handleLeftArrowClick}
+                        onKeyDown={(event) =>
+                            handleNavigationIconKeyDown(event, handleLeftArrowClick, 'left')
+                        }
+                    >
+                        <StyledCalendarIconWrapperContent ref={leftNavigationIconContentRef}>
+                            {showMonthYearPickers && (
+                                <StyledPseudoMonthYearPicker>
+                                    <ComboBox lists={[{ list: [] }]} placeholder="" />
+                                </StyledPseudoMonthYearPicker>
+                            )}
+                            <Icon icons={['fa fa-angle-left']} />
+                        </StyledCalendarIconWrapperContent>
+                    </StyledCalendarIconWrapper>
+                ) : (
+                    <StyledCalendarIconWrapperPseudo />
+                )}
+                {currentDate && (
+                    <MonthWrapper
+                        shouldRenderTwo={shouldRenderTwoMonths}
+                        currentDate={currentDate}
+                        width={width}
+                        locale={locale}
+                        direction={direction}
+                        customThumbColors={customThumbColors}
+                        onSelect={handleSelect}
+                        selectedDate={internalSelectedDate}
+                        highlightedDates={highlightedDates}
+                        categories={categories}
+                        onAnimationFinished={handleAnimationFinished}
+                        minDate={minDate}
+                        maxDate={maxDate}
+                        type={type}
+                        disabledDates={disabledDates}
+                        setCurrentDate={setCurrentDate}
+                        shouldShowHighlightsInMonthOverlay={shouldShowHighlightsInMonthOverlay}
+                        showMonthYearPickers={showMonthYearPickers}
+                        handleLeftArrowClick={handleLeftArrowClick}
+                        handleRightArrowClick={handleRightArrowClick}
+                        currentDateBackgroundColor={currentDateBackgroundColor}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                        shouldShowKeyboardHighlighting={
+                            shouldShowKeyboardFocusHighlighting && type !== CalendarType.Single
+                        }
+                    />
+                )}
+                {ShouldShowRightArrow ? (
+                    <StyledCalendarIconWrapper
+                        ref={rightNavigationIconRef}
+                        aria-label={t(textStrings.calendar.accessibility.nextMonth)}
+                        role="button"
+                        tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
+                        onClick={handleRightArrowClick}
+                        onKeyDown={(event) =>
+                            handleNavigationIconKeyDown(event, handleRightArrowClick, 'right')
+                        }
+                    >
+                        <StyledCalendarIconWrapperContent ref={rightNavigationIconContentRef}>
+                            {showMonthYearPickers && (
+                                <StyledPseudoMonthYearPicker>
+                                    <ComboBox lists={[{ list: [] }]} placeholder="" />
+                                </StyledPseudoMonthYearPicker>
+                            )}
+                            <Icon icons={['fa fa-angle-right']} />
+                        </StyledCalendarIconWrapperContent>
+                    </StyledCalendarIconWrapper>
+                ) : (
+                    <StyledCalendarIconWrapperPseudo />
+                )}
+            </StyledCalendar>
+        </TextStringProvider>
     );
 };
 

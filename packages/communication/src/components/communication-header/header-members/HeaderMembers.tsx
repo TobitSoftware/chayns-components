@@ -17,7 +17,7 @@ import {
     useFocusRingPortal,
     useKeyboardFocusHighlighting,
 } from '@chayns-components/core';
-import { Translation } from '@chayns/textstrings';
+import { Translation, useTranslation } from '@chayns/textstrings';
 import textStrings from '../../../constants/textStrings';
 
 interface Row {
@@ -33,6 +33,7 @@ const HeaderMembers: FC<HeaderMembersProps> = ({
     isLoading,
     shouldEnableKeyboardHighlighting,
 }) => {
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const toggleRef = useRef<HTMLButtonElement>(null);
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
@@ -114,7 +115,11 @@ const HeaderMembers: FC<HeaderMembersProps> = ({
                 <StyledHeaderMembersDate>{formattedDate}</StyledHeaderMembersDate>
                 <StyledHeaderMembersIconWrapper
                     aria-expanded={isOpen}
-                    aria-label={isOpen ? 'Hide recipients' : 'Show recipients'}
+                    aria-label={
+                        isOpen
+                            ? t(textStrings.communicationHeader.accessibility.hideRecipients)
+                            : t(textStrings.communicationHeader.accessibility.showRecipients)
+                    }
                     onClick={() => setIsOpen((prev) => !prev)}
                     ref={toggleRef}
                     type="button"

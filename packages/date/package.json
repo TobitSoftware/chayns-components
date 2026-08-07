@@ -69,6 +69,7 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
+        "@chayns/textstrings": "^1.0.1",
         "@chayns-components/core": "^5.5.31-alpha.0",
         "react-compiler-runtime": "^1.0.0",
         "uuid": "^10.0.0"

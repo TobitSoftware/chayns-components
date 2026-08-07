@@ -218,7 +218,9 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({
                 {image && (
                     <StyledSocialPluginImageWrapper>
                         <StyledSocialPluginImageXmark
-                            aria-label="Remove image"
+                            aria-label={t(
+                                textStrings.socialPlugin.content.input.accessibility.removeImage,
+                            )}
                             onClick={() => setImage(undefined)}
                             ref={imageRemoveRef}
                             type="button"

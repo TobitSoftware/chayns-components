@@ -6,6 +6,7 @@ import type { GalleryEditorProps, GalleryEditorRef } from './GalleryEditor.types
 import GalleryEditorItem from './gallery-editor-item/GalleryEditorItem';
 import { GALLERY_EDITOR_GRID_GAP_PX } from './GalleryEditor.constants';
 import useGalleryEditorState from './useGalleryEditorState';
+import { TextStringProvider } from '@chayns/textstrings';
 
 const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
     (
@@ -52,35 +53,39 @@ const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
         const shouldShowAddFileTile = !maxFiles || maxFiles > fileItems.length;
 
         return (
-            <StyledGalleryEditor>
-                <StyledGalleryEditorGrid
-                    $fileMinWidth={fileMinWidth}
-                    $gap={GALLERY_EDITOR_GRID_GAP_PX}
-                    onDragOver={(event) => event.preventDefault()}
-                    onDrop={(event) => void handleDrop(event)}
-                >
-                    <AnimatePresence initial={false}>
-                        {fileItems.map((file) => (
-                            <GalleryEditorItem
-                                key={file.id}
-                                fileItem={file}
-                                handleDeleteFile={handleDeleteFile}
-                                onClick={handleOpenFiles}
-                                shouldLoadImages={shouldLoadImages}
+            <TextStringProvider libraries="@chayns-components-gallery">
+                <StyledGalleryEditor>
+                    <StyledGalleryEditorGrid
+                        $fileMinWidth={fileMinWidth}
+                        $gap={GALLERY_EDITOR_GRID_GAP_PX}
+                        onDragOver={(event) => event.preventDefault()}
+                        onDrop={(event) => void handleDrop(event)}
+                    >
+                        <AnimatePresence initial={false}>
+                            {fileItems.map((file) => (
+                                <GalleryEditorItem
+                                    key={file.id}
+                                    fileItem={file}
+                                    handleDeleteFile={handleDeleteFile}
+                                    onClick={handleOpenFiles}
+                                    shouldLoadImages={shouldLoadImages}
+                                    shouldEnableKeyboardHighlighting={
+                                        shouldEnableKeyboardHighlighting
+                                    }
+                                />
+                            ))}
+                        </AnimatePresence>
+
+                        {shouldShowAddFileTile && (
+                            <AddFile
+                                addFileIcon={addFileIcon}
+                                onAdd={handleAddFiles}
                                 shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                             />
-                        ))}
-                    </AnimatePresence>
-
-                    {shouldShowAddFileTile && (
-                        <AddFile
-                            addFileIcon={addFileIcon}
-                            onAdd={handleAddFiles}
-                            shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
-                        />
-                    )}
-                </StyledGalleryEditorGrid>
-            </StyledGalleryEditor>
+                        )}
+                    </StyledGalleryEditorGrid>
+                </StyledGalleryEditor>
+            </TextStringProvider>
         );
     },
 );
