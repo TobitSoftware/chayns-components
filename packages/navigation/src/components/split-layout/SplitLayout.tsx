@@ -9,6 +9,28 @@ import {
     getVisibleViewIds,
 } from './SplitLayout.utils';
 
+type ActivityComponent = (props: {
+    mode: 'visible' | 'hidden';
+    children: React.ReactNode;
+}) => React.ReactElement | null;
+
+const isReactVersionAtLeast = (version: string, major: number, minor: number): boolean => {
+    const match = /^(\d+)\.(\d+)/.exec(version);
+
+    if (!match) {
+        return false;
+    }
+
+    const actualMajor = Number(match[1]);
+    const actualMinor = Number(match[2]);
+
+    return actualMajor > major || (actualMajor === major && actualMinor >= minor);
+};
+
+const Activity = isReactVersionAtLeast(React.version, 19, 2)
+    ? (React as unknown as { Activity?: ActivityComponent }).Activity
+    : undefined;
+
 export const SplitLayout: FC<SplitLayoutProps> = ({
     direction = SplitLayoutDirection.HORIZONTAL,
     handleSize = 2,
@@ -133,23 +155,39 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
             return views[fullScreenViewId].component;
         }
 
-        return viewIdsToDisplay.map((key, index) => {
-            const view = views[key];
+        const visibleViewIds = new Set(viewIdsToDisplay);
+        let visibleIndex = 0;
 
-            if (!view) {
+        return Object.entries(views).map(([key, view]) => {
+            const isVisible = visibleViewIds.has(key);
+            const index = visibleIndex;
+
+            if (isVisible) {
+                visibleIndex += 1;
+            }
+
+            if (!isVisible && !Activity) {
                 return null;
             }
 
+            const pane = (
+                <StyledSplitLayoutPane
+                    $direction={direction}
+                    $size={sizes[key] ?? view.defaultSize ?? view.minSize ?? view.maxSize}
+                >
+                    {view.component}
+                </StyledSplitLayoutPane>
+            );
+
             return (
                 <React.Fragment key={key}>
-                    <StyledSplitLayoutPane
-                        $direction={direction}
-                        $size={sizes[key] ?? view.defaultSize ?? view.minSize ?? view.maxSize}
-                    >
-                        {view.component}
-                    </StyledSplitLayoutPane>
+                    {Activity ? (
+                        <Activity mode={isVisible ? 'visible' : 'hidden'}>{pane}</Activity>
+                    ) : (
+                        pane
+                    )}
 
-                    {index < viewIdsToDisplay.length - 1 && (
+                    {isVisible && index < viewIdsToDisplay.length - 1 && (
                         <ResizeHandle
                             size={handleSize}
                             direction={direction}
