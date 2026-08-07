@@ -145,6 +145,8 @@ export type CalendarProps = BaseProps &
 const DEFAULT_MAX_DATE = addYears(new Date(), 1);
 const DEFAULT_MIN_DATE = subYears(new Date(), 1);
 
+const EMPTY_DISABLED_DATES: Date[] = []; // stable empty const to prevent infinite loop caused by new empty arrays
+
 const Calendar: FC<CalendarProps> = ({
     locale = Language.German,
     maxDate = DEFAULT_MAX_DATE,
@@ -159,7 +161,7 @@ const Calendar: FC<CalendarProps> = ({
     isDisabled,
     type = CalendarType.Single,
     shouldShowHighlightsInMonthOverlay = true,
-    disabledDates = [],
+    disabledDates = EMPTY_DISABLED_DATES,
     showMonthYearPickers: showMonthYearPickersProp,
     onShownDatesChange = () => {},
     currentDateBackgroundColor,
@@ -636,8 +638,8 @@ const Calendar: FC<CalendarProps> = ({
     }, [currentDate, maxDate]);
 
     return (
-        <TextStringProvider libraries="@chayns-components-date">
-            <StyledCalendar ref={calendarRef} $isDisabled={isDisabled} onKeyDown={handleKeyDown}>
+        <StyledCalendar ref={calendarRef} $isDisabled={isDisabled} onKeyDown={handleKeyDown}>
+            <TextStringProvider libraries="@chayns-components-date">
                 {ShouldShowLeftArrow ? (
                     <StyledCalendarIconWrapper
                         ref={leftNavigationIconRef}
@@ -713,8 +715,8 @@ const Calendar: FC<CalendarProps> = ({
                 ) : (
                     <StyledCalendarIconWrapperPseudo />
                 )}
-            </StyledCalendar>
-        </TextStringProvider>
+            </TextStringProvider>
+        </StyledCalendar>
     );
 };
 
