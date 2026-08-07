@@ -29,21 +29,26 @@ type StyledSplitLayoutPaneProps = WithTheme<{
     $size?: number;
 }>;
 
-export const StyledSplitLayoutPane = styled.div<StyledSplitLayoutPaneProps>`
+export const StyledSplitLayoutPane = styled.div.attrs<StyledSplitLayoutPaneProps>(
+    ({ $direction, $size }) => ({
+        style:
+            $direction === SplitLayoutDirection.HORIZONTAL
+                ? { width: $size ? `${$size}px` : '100%' }
+                : { height: $size ? `${$size}px` : '100%' },
+    }),
+)<StyledSplitLayoutPaneProps>`
     position: relative;
     flex: 0 0 auto;
     overflow: hidden;
 
-    ${({ $direction, $size }) =>
+    ${({ $direction }) =>
         $direction === SplitLayoutDirection.HORIZONTAL
             ? css`
                   min-width: 0;
                   height: 100%;
-                  width: ${$size ? `${$size}px` : '100%'};
               `
             : css`
                   min-height: 0;
                   width: 100%;
-                  height: ${$size ? `${$size}px` : '100%'};
               `}
 `;
