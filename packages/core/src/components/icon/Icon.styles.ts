@@ -61,13 +61,6 @@ export const StyledIcon = styled.i<StyledIconProps>`
     color: ${({ $color, theme }: StyledIconProps) => $color || theme.iconColor || theme.text};
     display: ${({ $isStacked }) => ($isStacked ? undefined : 'inline-flex')};
     font-size: ${({ $fontSize }) => `${$fontSize}px`};
-
-    ${({ $fontSize, $size }) =>
-        $fontSize !== $size &&
-        css`
-            top: 50%;
-            transform: translateY(-50%);
-        `}
 `;
 
 type StyledUnicodeIconProps = WithTheme<{ $icon: string }>;
