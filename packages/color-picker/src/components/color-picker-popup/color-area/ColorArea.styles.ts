@@ -15,6 +15,7 @@ export const StyledColorAreaCanvas = styled.canvas`
 `;
 
 export const StyledColorAreaPseudo = styled.div`
+    outline: none;
     position: absolute;
     top: -10px;
     left: -10px;

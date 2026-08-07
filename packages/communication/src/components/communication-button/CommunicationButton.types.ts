@@ -64,4 +64,8 @@ export interface CommunicationButtonProps {
      * @default CommunicationInputSize.MEDIUM
      */
     size?: CommunicationInputSize;
+    /**
+     * Enables keyboard-only focus highlighting for the button.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 }

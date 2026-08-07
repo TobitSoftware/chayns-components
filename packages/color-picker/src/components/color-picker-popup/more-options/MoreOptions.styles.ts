@@ -23,4 +23,5 @@ export const StyledMoreOptionsInput = styled.input<StyledMoreOptionsInputProps>`
         $isInvalid ? theme.wrong : theme.text};
     padding: 8px 10px;
     font-size: 11px;
+    outline: none;
 `;

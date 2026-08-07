@@ -35,6 +35,8 @@ export type MonthWrapperProps = {
     handleLeftArrowClick: () => void;
     handleRightArrowClick: () => void;
     currentDateBackgroundColor?: CSSProperties['backgroundColor'];
+    shouldEnableKeyboardHighlighting: boolean;
+    shouldShowKeyboardHighlighting: boolean;
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
@@ -60,6 +62,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     handleLeftArrowClick,
     handleRightArrowClick,
     currentDateBackgroundColor,
+    shouldEnableKeyboardHighlighting,
+    shouldShowKeyboardHighlighting,
 }) => {
     const [content, setContent] = useState<ReactElement[]>();
 
@@ -102,6 +106,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                         handleLeftArrowClick={handleLeftArrowClick}
                         handleRightArrowClick={handleRightArrowClick}
                         currentDateBackgroundColor={currentDateBackgroundColor}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                        shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                     />,
                 );
             }
@@ -121,30 +127,28 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
 
                 const { month, year } = getMonthAndYear(date);
 
-                return {
-                    ...element,
-                    props: {
-                        ...element.props,
-                        categories,
-                        disabledDates,
-                        displayIndex: index - 1,
-                        highlightedDates,
-                        hoveringDay,
-                        locale,
-                        onSelect,
-                        shouldShowHighlightsInMonthOverlay,
-                        maxDate,
-                        minDate,
-                        month,
-                        customThumbColors,
-                        selectedDate,
-                        setCurrentDate,
-                        setHoveringDay,
-                        showMonthYearPickers,
-                        type,
-                        year,
-                    } as ReactElement,
-                };
+                return React.cloneElement(element, {
+                    categories,
+                    disabledDates,
+                    displayIndex: index - 1,
+                    highlightedDates,
+                    hoveringDay,
+                    locale,
+                    onSelect,
+                    shouldShowHighlightsInMonthOverlay,
+                    maxDate,
+                    minDate,
+                    month,
+                    customThumbColors,
+                    selectedDate,
+                    setCurrentDate,
+                    setHoveringDay,
+                    showMonthYearPickers,
+                    shouldShowKeyboardHighlighting,
+                    shouldEnableKeyboardHighlighting,
+                    type,
+                    year,
+                });
             }),
         );
     }, [
@@ -166,6 +170,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
         showMonthYearPickers,
         type,
         shouldShowHighlightsInMonthOverlay,
+        shouldShowKeyboardHighlighting,
+        shouldEnableKeyboardHighlighting,
     ]);
 
     const animate: MotionProps['animate'] = useMemo(() => {

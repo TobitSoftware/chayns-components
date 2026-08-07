@@ -19,6 +19,7 @@ const HeaderActions: FC<HeaderActionsProps> = ({
     onTeamTalkToggle,
     isTeamTalkActive,
     isLoading,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const rightSideRef = useRef<HTMLDivElement | null>(null);
     const rightSideWidth = useElementWidth(rightSideRef);
@@ -37,6 +38,7 @@ const HeaderActions: FC<HeaderActionsProps> = ({
                 icons={isRead ? ['fa fa-check', 'fa fa-slash'] : ['fa fa-check']}
                 onClick={() => onReadToggle(!isRead)}
                 shouldShowLabel
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             />,
         ];
 
@@ -49,6 +51,7 @@ const HeaderActions: FC<HeaderActionsProps> = ({
                     onClick={() => onTeamTalkToggle(!isTeamTalkActive)}
                     shouldShowLabel
                     shouldForceHover={isTeamTalkActive}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />,
             );
         }
@@ -95,6 +98,7 @@ const HeaderActions: FC<HeaderActionsProps> = ({
                     onClick={onClick}
                     contextMenuItems={contextMenuItems}
                     isDisabled={isDisabled}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />
             ),
         );
@@ -115,6 +119,7 @@ const HeaderActions: FC<HeaderActionsProps> = ({
                             isDisabled,
                         }),
                     )}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />,
             );
         }

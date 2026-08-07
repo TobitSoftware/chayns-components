@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
 import type { CSSProperties } from 'react';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 import type { CheckboxProps } from './Checkbox';
 
 export const StyledCheckbox = styled.div`
@@ -12,11 +11,7 @@ export const StyledCheckbox = styled.div`
     min-height: 20px;
 `;
 
-type StyledCheckboxInputProps = {
-    $shouldShowKeyboardHighlighting?: boolean;
-};
-
-export const StyledCheckboxInput = styled.input<StyledCheckboxInputProps>`
+export const StyledCheckboxInput = styled.input`
     border: 0;
     clip: rect(0 0 0 0);
     clip-path: inset(50%);
@@ -30,15 +25,6 @@ export const StyledCheckboxInput = styled.input<StyledCheckboxInputProps>`
     top: 0;
     white-space: nowrap;
     width: 1px;
-
-    ${({ $shouldShowKeyboardHighlighting }) =>
-        $shouldShowKeyboardHighlighting &&
-        css`
-            &:focus-visible + div > label {
-                transition: none;
-                ${keyboardFocusHighlightingRingCss}
-            }
-        `}
 `;
 
 type StyledCheckboxBoxWrapperProps = WithTheme<{

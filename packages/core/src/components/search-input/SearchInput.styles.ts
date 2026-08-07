@@ -2,7 +2,6 @@ import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { InputSize } from '../input/Input';
-import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledSearchInputProps = WithTheme<{
     $size: InputSize;
@@ -45,7 +44,6 @@ export const StyledSearchInputPseudoElement = styled.div`
 
 type StyledMotionSearchInputContentWrapperProps = {
     $shouldUseAbsolutePositioning: boolean;
-    $shouldShowKeyboardHighlighting: boolean;
 };
 
 export const StyledMotionSearchInputContentWrapper = styled(
@@ -59,26 +57,15 @@ export const StyledMotionSearchInputContentWrapper = styled(
             right: 0;
         `}
 
-    overflow: ${({ $shouldShowKeyboardHighlighting }) =>
-        $shouldShowKeyboardHighlighting ? 'visible' : 'hidden'};
+    overflow: hidden;
 `;
 
-type StyledMotionSearchInputIconWrapperContentProps = {
-    $shouldShowKeyboardHighlighting: boolean;
-};
-
-export const StyledMotionSearchInputIconWrapperContent = styled(
-    motion.div,
-)<StyledMotionSearchInputIconWrapperContentProps>`
+export const StyledMotionSearchInputIconWrapperContent = styled(motion.div)`
     display: flex;
     cursor: pointer;
 `;
 
-type StyledSearchInputIconTriggerProps = {
-    $shouldShowKeyboardHighlighting: boolean;
-};
-
-export const StyledSearchInputIconTrigger = styled.div<StyledSearchInputIconTriggerProps>`
+export const StyledSearchInputIconTrigger = styled.div`
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -87,17 +74,10 @@ export const StyledSearchInputIconTrigger = styled.div<StyledSearchInputIconTrig
     border-radius: 6px;
     cursor: pointer;
 
-    ${({ $shouldShowKeyboardHighlighting }) =>
-        $shouldShowKeyboardHighlighting &&
-        css`
-            &:focus-visible {
-                transition: none;
-                ${keyboardFocusHighlightingRingCss}
-                border-radius: 50%;
-                box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.35);
-                outline-offset: 2px;
-            }
-        `}
+    &:focus-visible {
+        outline: none;
+        box-shadow: none;
+    }
 `;
 
 export const StyledMotionSearchInputIconWrapper = styled.div`

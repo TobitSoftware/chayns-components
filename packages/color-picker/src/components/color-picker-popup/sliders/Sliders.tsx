@@ -8,9 +8,13 @@ import { StyledSliders, StyledSlidersWrapper } from './Sliders.styles';
 
 interface SlidersProps {
     shouldShowTransparencySlider: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
-const Sliders = ({ shouldShowTransparencySlider }: SlidersProps) => {
+const Sliders = ({
+    shouldShowTransparencySlider,
+    shouldEnableKeyboardHighlighting,
+}: SlidersProps) => {
     const {
         selectedColor,
         updateSelectedColor,
@@ -30,6 +34,10 @@ const Sliders = ({ shouldShowTransparencySlider }: SlidersProps) => {
     const handleHueColorChange = (color: CSSProperties['color']) => {
         if (typeof updateHueColor === 'function' && color) {
             updateHueColor(color);
+        }
+
+        if (typeof updateSelectedColor === 'function' && color) {
+            updateSelectedColor(color);
         }
     };
 
@@ -72,6 +80,7 @@ const Sliders = ({ shouldShowTransparencySlider }: SlidersProps) => {
                     onEnd={handleEnd}
                     onStart={handleHueStart}
                     onChange={handleHueColorChange}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />
                 {shouldShowTransparencySlider && (
                     <TransparencySlider
@@ -79,6 +88,7 @@ const Sliders = ({ shouldShowTransparencySlider }: SlidersProps) => {
                         onEnd={handleEnd}
                         onStart={handleStart}
                         onChange={handleColorChange}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                     />
                 )}
             </StyledSlidersWrapper>

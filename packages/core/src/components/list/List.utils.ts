@@ -212,12 +212,6 @@ export const handleHorizontalArrowNavigation = ({
             focusableLeftElements[focusableLeftElements.length - 1]?.focus();
             return true;
         }
-
-        if (event.key === 'ArrowRight' && focusableRightElements.length > 0) {
-            event.preventDefault();
-            focusableRightElements[0]?.focus();
-            return true;
-        }
     }
 
     return false;
@@ -313,9 +307,9 @@ export const handleVerticalListGroupNavigation = ({
         return true;
     }
 
-    const isBackward = event.key === 'ArrowUp';
-
     event.preventDefault();
+
+    const isBackward = event.key === 'ArrowUp';
 
     const nextIndex = isBackward
         ? (currentIndex - 1 + listItemUuids.length) % listItemUuids.length

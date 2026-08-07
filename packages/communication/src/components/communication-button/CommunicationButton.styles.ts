@@ -9,7 +9,8 @@ type StyledCommunicationButtonProps = WithTheme<{
     $size: CommunicationInputSize;
 }>;
 
-export const StyledCommunicationButton = styled.div<StyledCommunicationButtonProps>`
+export const StyledCommunicationButton = styled.button<StyledCommunicationButtonProps>`
+    border: 0;
     height: ${({ $size }) => ($size === CommunicationInputSize.MEDIUM ? 44 : 34)}px;
     width: ${({ $size }) => ($size === CommunicationInputSize.MEDIUM ? 44 : 34)}px;
 
@@ -24,6 +25,8 @@ export const StyledCommunicationButton = styled.div<StyledCommunicationButtonPro
     position: relative;
 
     overflow: hidden;
+    outline: none;
+    padding: 0;
 
     ${({ $isDisabled }) =>
         $isDisabled &&

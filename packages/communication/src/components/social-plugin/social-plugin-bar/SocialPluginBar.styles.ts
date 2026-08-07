@@ -31,12 +31,23 @@ export const StyledSocialPluginBarItemsSide = styled.div`
     gap: 16px;
 `;
 
-export const StyledSocialPluginBarItem = styled.div`
+export const StyledSocialPluginBarItem = styled.button`
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    padding: 0;
     display: flex;
     align-items: center;
     gap: 8px;
 
     cursor: pointer;
+
+    &:focus-visible {
+        border-radius: 4px;
+        outline: 2px solid color-mix(in srgb, white 70%, transparent);
+        outline-offset: 3px;
+    }
 `;
 
 type StyledSocialPluginBarItemTextProps = {

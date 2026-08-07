@@ -1,4 +1,5 @@
 import { hslToRgb255 } from '@chayns/colors';
+import { useFocusRingPortal, useKeyboardFocusHighlighting } from '@chayns-components/core';
 import { setRefreshScrollEnabled } from 'chayns-api';
 import React, {
     ChangeEvent,
@@ -34,6 +35,10 @@ export type HueSliderProps = {
      * The opacity of the Color. Is used if the color has no opacity value.
      */
     opacity?: number;
+    /**
+     * Enables keyboard-only focus highlighting for the slider.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const HueSlider: FC<HueSliderProps> = ({
@@ -42,6 +47,7 @@ const HueSlider: FC<HueSliderProps> = ({
     onEnd,
     opacity,
     color = 'rgba(255, 0, 0, 1)',
+    shouldEnableKeyboardHighlighting,
 }) => {
     const [editedValue, setEditedValue] = useState(0);
     const [hslColor, setHslColor] = useState<CSSProperties['color']>('hsl(0, 0, 100)');
@@ -49,6 +55,16 @@ const HueSlider: FC<HueSliderProps> = ({
 
     const sliderThumbRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLInputElement>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
+    useFocusRingPortal(sliderRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        overlayRef: sliderThumbRef,
+        shape: 'circle',
+        padding: 3,
+    });
 
     useEffect(() => {
         if (color) {

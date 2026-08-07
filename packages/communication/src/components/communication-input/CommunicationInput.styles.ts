@@ -21,6 +21,7 @@ export const StyledCommunicationInputWrapper = styled.div`
 `;
 
 type StyledMotionCommunicationInputInnerProps = WithTheme<{
+    $borderRadius: number;
     $isFocused: boolean;
     $direction: CommunicationInputDirection;
 }>;
@@ -45,6 +46,7 @@ export const StyledMotionCommunicationInputInner = styled(
               `}
 
     border: 2px solid hsla(0, 0%, 45%, 0.4);
+    border-radius: ${({ $borderRadius }) => $borderRadius}px;
     background-color: ${({ theme }) => theme['000']};
 
     ${({ $isFocused, theme }) =>
@@ -117,7 +119,19 @@ export const StyledMotionCommunicationInputEmojiInputWrapper = styled(
     }
 `;
 
-export const StyledMotionIconWrapper = styled(motion.div)``;
+export const StyledMotionIconWrapper = styled(motion.button)`
+    background: none;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+
+    &:focus-visible {
+        border-radius: 50%;
+        outline: 2px solid color-mix(in srgb, white 70%, transparent);
+        outline-offset: 3px;
+    }
+`;
 
 export const StyledMotionCommunicationInputSpacer = styled(motion.div)`
     height: 100%;

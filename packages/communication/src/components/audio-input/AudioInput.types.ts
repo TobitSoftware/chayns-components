@@ -71,6 +71,12 @@ export interface AudioInputProps {
      * @default CommunicationInputSize.MEDIUM
      */
     size?: CommunicationInputSize;
+    /**
+     * Enables keyboard-only focus highlighting for audio controls.
+     * @optional
+     * @default false
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 export interface AudioInputRef {

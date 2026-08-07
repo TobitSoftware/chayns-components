@@ -1,5 +1,5 @@
-import { Icon, NumberInput } from '@chayns-components/core';
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import { Icon, NumberInput, useFocusRingPortal } from '@chayns-components/core';
+import React, { FC, KeyboardEventHandler, useCallback, useMemo, useRef, useState } from 'react';
 import { OpeningTimesButtonType, type Time } from '../../../../types/openingTimes';
 import {
     StyledOpeningInput,
@@ -19,6 +19,7 @@ export type OpeningInputProps = {
     onAdd: () => void;
     onRemove: () => void;
     onChange: (time: Time) => void;
+    shouldEnableKeyboardHighlighting: boolean;
 };
 
 const OpeningInput: FC<OpeningInputProps> = ({
@@ -31,28 +32,65 @@ const OpeningInput: FC<OpeningInputProps> = ({
     onAdd,
     onChange,
     id,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const [startTime, setStartTime] = useState(start);
     const [endTime, setEndTime] = useState(end);
+    const buttonRef = useRef<HTMLDivElement>(null);
+
+    useFocusRingPortal(buttonRef, {
+        isEnabled: buttonType !== OpeningTimesButtonType.NONE,
+        borderRadius: 3,
+        padding: 2,
+    });
+
+    const handleButtonKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (event.key !== 'Enter' && event.key !== ' ') {
+                return;
+            }
+
+            event.preventDefault();
+
+            if (buttonType === OpeningTimesButtonType.ADD) {
+                onAdd();
+            } else if (buttonType === OpeningTimesButtonType.REMOVE) {
+                onRemove();
+            }
+        },
+        [buttonType, onAdd, onRemove],
+    );
 
     const button = useMemo(() => {
         switch (buttonType) {
             case OpeningTimesButtonType.ADD:
                 return (
-                    <StyledOpeningInputButtonWrapper onClick={onAdd}>
+                    <StyledOpeningInputButtonWrapper
+                        ref={buttonRef}
+                        role="button"
+                        tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
+                        onClick={onAdd}
+                        onKeyDown={handleButtonKeyDown}
+                    >
                         <Icon icons={['ts-plus']} size={15} />
                     </StyledOpeningInputButtonWrapper>
                 );
             case OpeningTimesButtonType.REMOVE:
                 return (
-                    <StyledOpeningInputButtonWrapper onClick={onRemove}>
+                    <StyledOpeningInputButtonWrapper
+                        ref={buttonRef}
+                        role="button"
+                        tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
+                        onClick={onRemove}
+                        onKeyDown={handleButtonKeyDown}
+                    >
                         <Icon icons={['ts-wrong']} size={15} />
                     </StyledOpeningInputButtonWrapper>
                 );
             default:
                 return <StyledOpeningInputPseudoButton />;
         }
-    }, [buttonType, onAdd, onRemove]);
+    }, [buttonType, handleButtonKeyDown, onAdd, onRemove, shouldEnableKeyboardHighlighting]);
 
     const handleStartTimeBlur = useCallback(
         (value: string | number | null, isTimeInvalid: boolean) => {
@@ -97,6 +135,7 @@ const OpeningInput: FC<OpeningInputProps> = ({
                         value={startTime}
                         onBlur={handleStartTimeBlur}
                         isDisabled={isDisabled}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                     />
                 </StyledOpeningInputWrapper>
                 <StyledOpeningInputText $isDisabled={isDisabled}>-</StyledOpeningInputText>
@@ -108,6 +147,7 @@ const OpeningInput: FC<OpeningInputProps> = ({
                         value={endTime}
                         onBlur={handleEndTimeBlur}
                         isDisabled={isDisabled}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                     />
                 </StyledOpeningInputWrapper>
                 {button}

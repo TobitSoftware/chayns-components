@@ -37,6 +37,10 @@ export interface MediaContentProps {
      */
     shouldLoadImages?: boolean;
     /**
+     * Enables keyboard-only focus highlighting for the media tile.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * Is called when the media tile is selected.
      * @description
      * Use this callback to react to clicks on the rendered image or video tile.

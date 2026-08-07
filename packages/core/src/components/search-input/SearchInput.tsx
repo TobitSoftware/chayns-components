@@ -23,6 +23,7 @@ import {
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import { useElementSize } from '../../hooks/element';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 export type SearchInputProps = {
@@ -104,6 +105,10 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
         const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
             shouldEnableKeyboardHighlighting,
         );
+        useFocusRingPortal(iconTriggerRef, {
+            isEnabled: shouldShowKeyboardHighlighting,
+            shape: 'circle',
+        });
 
         const handleBackIconClick = useCallback(() => setIsSearchInputActive(false), []);
 
@@ -187,7 +192,6 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                             {isSearchInputActive && (
                                 <StyledMotionSearchInputContentWrapper
                                     $shouldUseAbsolutePositioning={shouldUseAbsolutePositioning}
-                                    $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                                     animate={{ opacity: 1, width }}
                                     exit={{ opacity: 0, width: 0 }}
                                     initial={{ opacity: 0, width: 0 }}
@@ -218,7 +222,6 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                                 tabIndex={0}
                                 onClick={handleIconTriggerClick}
                                 onKeyDown={handleIconTriggerKeyDown}
-                                $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                             >
                                 <StyledMotionSearchInputIconWrapperContent
                                     animate={{ opacity: 1 }}
@@ -226,7 +229,6 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                                     initial={{ opacity: 0 }}
                                     key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
                                     transition={{ duration: 0.3 }}
-                                    $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                                 >
                                     <Icon
                                         key="icon"
@@ -253,9 +255,6 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                                         tabIndex={0}
                                         onClick={handleIconTriggerClick}
                                         onKeyDown={handleIconTriggerKeyDown}
-                                        $shouldShowKeyboardHighlighting={
-                                            shouldShowKeyboardHighlighting
-                                        }
                                     >
                                         <StyledMotionSearchInputIconWrapperContent
                                             animate={{ opacity: 1 }}
@@ -263,9 +262,6 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                                             initial={{ opacity: 0 }}
                                             key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
                                             transition={{ duration: 0.3 }}
-                                            $shouldShowKeyboardHighlighting={
-                                                shouldShowKeyboardHighlighting
-                                            }
                                         >
                                             <Icon
                                                 key="icon"
@@ -285,9 +281,6 @@ const SearchInput = forwardRef<InputRef, SearchInputProps>(
                                 {isSearchInputActive && (
                                     <StyledMotionSearchInputContentWrapper
                                         $shouldUseAbsolutePositioning={shouldUseAbsolutePositioning}
-                                        $shouldShowKeyboardHighlighting={
-                                            shouldShowKeyboardHighlighting
-                                        }
                                         animate={{ opacity: 1, width: '100%' }}
                                         exit={{ opacity: 0, width: 0 }}
                                         initial={{ opacity: 0, width: 0 }}

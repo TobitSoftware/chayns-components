@@ -93,6 +93,7 @@ import { ColorPicker } from '@chayns-components/color-picker';
 | `onSelect` | `((color: string) => void) \| undefined` | no | Function to be executed when a color is selected. |
 | `presetColors` | `IPresetColor[] \| undefined` | no | Colors the user can select from. |
 | `selectedColor` | `string \| undefined` | no | The color that should be preselected. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for color picker controls. |
 | `shouldHideColorArea` | `boolean \| undefined` | no | Whether the color area should be displayed. |
 | `shouldHideDefaultPresetColors` | `boolean \| undefined` | no | Whether the default preset colors should be hidden. |
 | `shouldShowAsPopup` | `boolean \| undefined` | no | Whether the ColorPicker should be displayed inside a popup. |
@@ -140,7 +141,10 @@ import { ColorPickerPopup } from '@chayns-components/color-picker';
 | --- | --- | --- | --- |
 | `onPresetColorAdd` | `((presetColor: IPresetColor) => void) \| undefined` | no | No description available. |
 | `onPresetColorRemove` | `((presetColorId: string) => void) \| undefined` | no | No description available. |
+| `onSelect` | `((color: string) => void) \| undefined` | no | No description available. |
 | `presetColors` | `IPresetColor[] \| undefined` | no | No description available. |
+| `selectedColor` | `string \| undefined` | no | No description available. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | No description available. |
 | `shouldHideColorArea` | `boolean` | yes | No description available. |
 | `shouldHideDefaultPresetColors` | `boolean` | yes | No description available. |
 | `shouldShowMoreOptions` | `boolean` | yes | No description available. |
@@ -189,6 +193,7 @@ import { HueSlider } from '@chayns-components/color-picker';
 | `onEnd` | `((rgb: Color \| undefined, hsl: Color \| undefined) => void) \| undefined` | no | Function that will be executed when the color is ending to change. |
 | `onStart` | `((rgb: Color \| undefined, hsl: Color \| undefined) => void) \| undefined` | no | Function that will be executed when the color is starting to change. |
 | `opacity` | `number \| undefined` | no | The opacity of the Color. Is used if the color has no opacity value. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for the slider. |
 
 ### Types
 
@@ -231,6 +236,7 @@ import { TransparencySlider } from '@chayns-components/color-picker';
 | `onChange` | `((color: string) => void) \| undefined` | no | Function that will be executed when the opacity is changed. |
 | `onEnd` | `((color: string) => void) \| undefined` | no | Function that will be executed when the opacity is ending to change. |
 | `onStart` | `((color: string) => void) \| undefined` | no | Function that will be executed when the opacity is starting to change. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for the slider. |
 
 ### Types
 

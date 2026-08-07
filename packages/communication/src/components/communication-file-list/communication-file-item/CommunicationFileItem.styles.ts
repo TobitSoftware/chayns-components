@@ -56,4 +56,5 @@ export const StyledCommunicationFileItemRemoveButton = styled.button<StyledCommu
     width: 18px;
     z-index: 2;
     padding: 0;
+    outline: none;
 `;

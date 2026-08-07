@@ -26,6 +26,10 @@ export interface GalleryViewerProps {
      */
     shouldLoadImages?: boolean;
     /**
+     * Enables keyboard-only focus highlighting for media tiles.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * Defines how the media tiles are arranged in read-only mode.
      * @description
      * Use this prop to switch between the supported viewer layouts for known media.

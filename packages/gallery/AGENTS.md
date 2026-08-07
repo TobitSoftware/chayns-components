@@ -123,6 +123,7 @@ import { Gallery } from '@chayns-components/gallery';
 | `onAdd` | `((file: FileItem) => void) \| undefined` | no | Is called after a file has been uploaded successfully in edit mode. |
 | `onFileCountChange` | `((fileCount: number) => void) \| undefined` | no | Is called whenever the internal item count changes in edit mode. |
 | `onRemove` | `((file: FileItem) => void) \| undefined` | no | Is called after an uploaded file has been removed in edit mode. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for interactive gallery tiles. |
 | `shouldLoadImages` | `boolean \| undefined` | no | Controls when the gallery is allowed to load the final media assets. |
 | `viewMode` | `GalleryViewMode \| undefined` | no | Defines how known media items are arranged in read-only mode. |
 
@@ -258,6 +259,7 @@ import { GalleryEditor } from '@chayns-components/gallery';
 | `onAdd` | `((file: FileItem) => void) \| undefined` | no | Is called after a file has been uploaded successfully. |
 | `onFileCountChange` | `((fileCount: number) => void) \| undefined` | no | Is called whenever the internal item count changes, including local pending uploads. |
 | `onRemove` | `((file: FileItem) => void) \| undefined` | no | Is called after an uploaded file has been removed. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for interactive gallery tiles. |
 | `shouldLoadImages` | `boolean \| undefined` | no | Controls whether the editor may load the final media assets immediately. |
 
 ### Types

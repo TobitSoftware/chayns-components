@@ -66,6 +66,10 @@ export interface GalleryEditorProps {
      */
     shouldLoadImages?: boolean;
     /**
+     * Enables keyboard-only focus highlighting for interactive gallery tiles.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * Limits how many files can be managed by the editor.
      * @description
      * After the limit is reached, the add-tile is hidden and additional file selection is ignored.

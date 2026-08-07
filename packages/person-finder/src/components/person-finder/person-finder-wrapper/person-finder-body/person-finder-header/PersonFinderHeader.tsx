@@ -16,6 +16,7 @@ export type PersonFinderHeaderProps = {
     defaultGroupName?: string;
     shouldShowGroupNames: boolean;
     shouldShowShadow: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const PersonFinderHeader: FC<PersonFinderHeaderProps> = ({
@@ -24,6 +25,7 @@ const PersonFinderHeader: FC<PersonFinderHeaderProps> = ({
     defaultGroupName,
     shouldShowGroupNames,
     shouldShowShadow,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const { activeFilter, updateActiveFilter } = usePersonFinder();
 
@@ -62,6 +64,7 @@ const PersonFinderHeader: FC<PersonFinderHeaderProps> = ({
                     items={filter}
                     onSelect={handleFilterSelect}
                     selectedItemIds={activeFilter}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />
             </StyledPersonFinderHeaderFilter>
             {shouldShowGroupNames && (

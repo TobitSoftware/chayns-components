@@ -1,4 +1,10 @@
-import { Checkbox, Popup, useElementSize, type PopupRef } from '@chayns-components/core';
+import {
+    Checkbox,
+    Popup,
+    useColorScheme,
+    useElementSize,
+    type PopupRef,
+} from '@chayns-components/core';
 import React, {
     FC,
     useCallback,
@@ -64,6 +70,10 @@ export type OpeningTimesProps = {
      */
     openingTimes: OpeningTime[];
     /**
+     * Enables keyboard highlighting. Defaults to the surrounding ColorSchemeProvider setting.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * The weekdays that should be displayed.
      */
     weekdays: Weekday[];
@@ -80,6 +90,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     onChange,
     onTimeAdd,
     onTimeRemove,
+    shouldEnableKeyboardHighlighting: shouldEnableKeyboardHighlightingProp,
 }) => {
     const [newOpeningTimes, setNewOpeningTimes] = useState<OpeningTime[]>();
     const [invalidOpeningTimes, setInvalidOpeningTimes] = useState<
@@ -89,6 +100,11 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
 
     const ref = useRef<HTMLDivElement>(null);
     const popupRef = useRef<PopupRef>(null);
+    const colorScheme = useColorScheme();
+    const shouldEnableKeyboardHighlighting =
+        shouldEnableKeyboardHighlightingProp ??
+        colorScheme?.shouldEnableKeyboardHighlighting ??
+        false;
 
     useEffect(() => {
         setNewOpeningTimes(openingTimes);
@@ -274,6 +290,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                         onRemove={handleRemove}
                         onAdd={handleAdd}
                         editMode={editMode}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                     />
                 </StyledOpeningTimesWrapper>,
             );
@@ -290,6 +307,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
         handleRemove,
         handleUpdateInvalidIds,
         newOpeningTimes,
+        shouldEnableKeyboardHighlighting,
         weekdays,
     ]);
 
@@ -347,6 +365,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
                     id={id}
                     times={times}
                     editMode={editMode}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />
             </StyledOpeningTimesWrapper>
         );

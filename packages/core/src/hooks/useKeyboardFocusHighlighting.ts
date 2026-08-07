@@ -21,6 +21,11 @@ const KEYBOARD_NAVIGATION_KEYS = new Set([
     'PageDown',
 ]);
 
+let isKeyboardFocusHighlightingActive = false;
+
+export const getIsKeyboardFocusHighlightingActive = (): boolean =>
+    isKeyboardFocusHighlightingActive;
+
 /**
  * Tracks whether focus highlighting should be visible for keyboard navigation.
  * Keyboard mode is enabled via Tab and reset by mouse interaction.
@@ -36,6 +41,7 @@ export const useKeyboardFocusHighlighting = (isEnabledProp?: boolean): boolean =
         const canListen = isEnabled && typeof window !== 'undefined';
 
         const enableKeyboardNavigation = () => {
+            isKeyboardFocusHighlightingActive = true;
             setIsKeyboardNavigation(true);
         };
 
@@ -52,12 +58,14 @@ export const useKeyboardFocusHighlighting = (isEnabledProp?: boolean): boolean =
         };
 
         const disableKeyboardNavigation = () => {
+            isKeyboardFocusHighlightingActive = false;
             setIsKeyboardNavigation((current) => (current ? false : current));
         };
 
         if (canListen) {
             window.addEventListener('keydown', handleKeyDown);
-            window.addEventListener('mousedown', disableKeyboardNavigation);
+            // Reset synchronously before a click can move focus to a control.
+            document.addEventListener('pointerdown', disableKeyboardNavigation, true);
             window.addEventListener('mousemove', disableKeyboardNavigation);
         } else {
             setIsKeyboardNavigation(false);
@@ -66,7 +74,7 @@ export const useKeyboardFocusHighlighting = (isEnabledProp?: boolean): boolean =
         return () => {
             if (canListen) {
                 window.removeEventListener('keydown', handleKeyDown);
-                window.removeEventListener('mousedown', disableKeyboardNavigation);
+                document.removeEventListener('pointerdown', disableKeyboardNavigation, true);
                 window.removeEventListener('mousemove', disableKeyboardNavigation);
             }
         };

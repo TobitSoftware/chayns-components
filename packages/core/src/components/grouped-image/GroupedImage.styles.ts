@@ -1,11 +1,9 @@
 import styled, { css } from 'styled-components';
 import { CSSProperties } from 'react';
 import { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledGroupedImageProps = WithTheme<{
     $height: CSSProperties['height'];
-    $shouldShowKeyboardHighlighting?: boolean;
 }>;
 
 export const StyledGroupedImage = styled.div<StyledGroupedImageProps>`
@@ -14,13 +12,9 @@ export const StyledGroupedImage = styled.div<StyledGroupedImageProps>`
     position: relative;
     width: ${({ $height }) => $height}px;
 
-    ${({ $shouldShowKeyboardHighlighting }) =>
-        $shouldShowKeyboardHighlighting &&
-        css`
-            &:focus-visible {
-                ${keyboardFocusHighlightingRingCss}
-            }
-        `}
+    &:focus-visible {
+        outline: none;
+    }
 `;
 
 type StyledImageProps = WithTheme<{

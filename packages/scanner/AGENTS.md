@@ -64,6 +64,7 @@ import { CodeScanner } from '@chayns-components/scanner';
 | `onScan` | `CodeReaderOnScanCallback \| undefined` | no | Callback function triggered when a code is successfully scanned. |
 | `placeholder` | `string \| undefined` | no | A placeholder that should be displayed inside the preview. |
 | `scanInterval` | `number \| undefined` | no | The interval of the scans. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for scanner controls. |
 | `shouldShowIconOverlay` | `boolean \| undefined` | no | Whether a calling code icon should be displayed as an overlay. |
 | `shouldTriggerForSameCode` | `boolean \| undefined` | no | If true, allows scanning the same code multiple times in a row. |
 | `trackConstraints` | `MediaTrackConstraints \| undefined` | no | Custom media track constraints for controlling the video input. |

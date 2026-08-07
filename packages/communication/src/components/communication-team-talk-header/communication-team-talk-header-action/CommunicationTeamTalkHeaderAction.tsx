@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useRef } from 'react';
 import { CommunicationTeamTalkHeaderActionProps } from './CommunicationTeamTalkHeaderAction.types';
 import {
     StyledCommunicationTeamTalkHeaderAction,
     StyledCommunicationTeamTalkHeaderActionLabel,
 } from './CommunicationTeamTalkHeaderAction.styles';
-import { Icon } from '@chayns-components/core';
+import { Icon, useFocusRingPortal, useKeyboardFocusHighlighting } from '@chayns-components/core';
 
 const CommunicationTeamTalkHeaderAction: FC<CommunicationTeamTalkHeaderActionProps> = ({
     onClick,
@@ -12,20 +12,33 @@ const CommunicationTeamTalkHeaderAction: FC<CommunicationTeamTalkHeaderActionPro
     icons,
     shouldShowLabel,
     isDisabled,
-}) => (
-    <StyledCommunicationTeamTalkHeaderAction
-        onClick={isDisabled ? undefined : onClick}
-        title={label}
-        $isDisabled={isDisabled}
-    >
-        <Icon icons={icons} />
-        {shouldShowLabel && (
-            <StyledCommunicationTeamTalkHeaderActionLabel>
-                {label}
-            </StyledCommunicationTeamTalkHeaderActionLabel>
-        )}
-    </StyledCommunicationTeamTalkHeaderAction>
-);
+    shouldEnableKeyboardHighlighting,
+}) => {
+    const actionRef = useRef<HTMLButtonElement>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        isDisabled ? false : shouldEnableKeyboardHighlighting,
+    );
+
+    useFocusRingPortal(actionRef, { isEnabled: shouldShowKeyboardHighlighting });
+
+    return (
+        <StyledCommunicationTeamTalkHeaderAction
+            disabled={isDisabled}
+            onClick={isDisabled ? undefined : onClick}
+            title={label}
+            $isDisabled={isDisabled}
+            ref={actionRef}
+            type="button"
+        >
+            <Icon icons={icons} />
+            {shouldShowLabel && (
+                <StyledCommunicationTeamTalkHeaderActionLabel>
+                    {label}
+                </StyledCommunicationTeamTalkHeaderActionLabel>
+            )}
+        </StyledCommunicationTeamTalkHeaderAction>
+    );
+};
 
 CommunicationTeamTalkHeaderAction.displayName = 'CommunicationTeamTalkHeaderAction';
 

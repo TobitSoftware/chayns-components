@@ -5,4 +5,18 @@ export const StyledEmojiPickerPopup = styled.div`
     display: flex;
     height: ${() => getComputedStyle(document.body).getPropertyValue('line-height')};
     position: relative;
+
+    button {
+        background: none;
+        border: 0;
+        color: inherit;
+        cursor: pointer;
+        font: inherit;
+        padding: 0;
+
+        &:disabled {
+            cursor: default;
+            opacity: 0.5;
+        }
+    }
 `;

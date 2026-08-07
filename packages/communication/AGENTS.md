@@ -57,6 +57,7 @@ import { AudioInput } from '@chayns-components/communication';
 | `onStart` | `((stream: MediaStream) => void) \| undefined` | no | Called after recording starts successfully. |
 | `onStop` | `(() => void) \| undefined` | no | Called after the active recording has been stopped. |
 | `position` | `AudioInputPosition \| undefined` | no | Horizontal alignment of the expandable audio input. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for audio controls. |
 | `size` | `CommunicationInputSize \| undefined` | no | Size variant shared with the communication input. |
 | `styleConfig` | `AudioInputStyleConfig \| undefined` | no | Visual configuration of the audio input button. |
 
@@ -138,6 +139,7 @@ import { CommunicationButton } from '@chayns-components/communication';
 | `isDisabled` | `boolean \| undefined` | no | Disables the button and prevents clicks. |
 | `onClick` | `(() => void) \| undefined` | no | Called when the button is pressed. |
 | `personId` | `string \| undefined` | no | Optional person ID used to show a profile image inside the button. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for the button. |
 | `shouldFillBackground` | `boolean \| undefined` | no | Controls whether the button uses a filled background style. |
 | `size` | `CommunicationInputSize \| undefined` | no | Size variant shared with the communication input. |
 
@@ -244,6 +246,7 @@ import { CommunicationFileList } from '@chayns-components/communication';
 | --- | --- | --- | --- |
 | `files` | `(CommunicationFile \| CommunicationVideo \| CommunicationImage)[]` | yes | No description available. |
 | `onRemove` | `((fileId: string) => void) \| undefined` | no | No description available. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for file actions. |
 | `size` | `CommunicationInputSize \| undefined` | no | No description available. |
 
 ### Types
@@ -370,6 +373,7 @@ import { CommunicationHeader } from '@chayns-components/communication';
 | `onReadToggle` | `(isRead: boolean) => void` | yes | Called when the read state should change. |
 | `onTeamTalkToggle` | `((isTeamTalkActive: boolean) => void) \| undefined` | no | Called when the TeamTalk state should be toggled. |
 | `rightActions` | `Action[]` | yes | Actions rendered on the right side of the header. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for header controls. |
 | `title` | `string` | yes | Subject or title of the currently opened communication. |
 | `to` | `Member[]` | yes | Primary recipients of the communication. |
 
@@ -603,6 +607,7 @@ import { CommunicationInput, Icon } from '@chayns-components/communication';
 | `rightElement` | `ReactNode` | no | Element rendered on the right side of the input. |
 | `scrollContainerRef` | `RefObject<HTMLElement> \| undefined` | no | Reference to the scrollable container that this component should interact with. |
 | `shouldDisableFullHeight` | `boolean \| undefined` | no | Disables the full height toggle of the input. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for the complete input container. |
 | `shouldUseAudioInput` | `boolean \| undefined` | no | Enables the audio input button next to the editor. |
 | `shouldUseInitialAnimation` | `boolean \| undefined` | no | Enables the initial reveal animation of the input. |
 | `size` | `CommunicationInputSize \| undefined` | no | Size variant of the composed communication input. |
@@ -1131,6 +1136,7 @@ import { CommunicationTeamTalkHeader } from '@chayns-components/communication';
 | `onChange` | `(value: string) => void` | yes | No description available. |
 | `onLeave` | `VoidFunction \| undefined` | no | No description available. |
 | `onSend` | `VoidFunction` | yes | No description available. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | No description available. |
 | `shouldShowInternalHint` | `boolean \| undefined` | no | No description available. |
 | `value` | `string` | yes | No description available. |
 
@@ -1176,6 +1182,7 @@ import { SocialPlugin } from '@chayns-components/communication';
 | `commentType` | `number` | yes | No description available. |
 | `link` | `string` | yes | No description available. |
 | `postingId` | `string` | yes | No description available. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | No description available. |
 
 ### Types
 

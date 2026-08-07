@@ -70,6 +70,10 @@ interface ColorPickerProps {
      * The alignment of the popup
      */
     alignment?: PopupAlignment;
+    /**
+     * Enables keyboard-only focus highlighting for color picker controls.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 const ColorPicker = ({
@@ -89,6 +93,7 @@ const ColorPicker = ({
     shouldShowTransparencySlider = false,
     shouldUseSiteColors = false,
     alignment,
+    shouldEnableKeyboardHighlighting,
 }: ColorPickerProps) => (
     <ColorPickerProvider selectedColor={selectedColor} onSelect={onSelect}>
         <StyledColorPicker>
@@ -106,6 +111,7 @@ const ColorPicker = ({
                 shouldShowTransparencySlider={shouldShowTransparencySlider}
                 shouldUseSiteColors={shouldUseSiteColors}
                 shouldHideColorArea={shouldHideColorArea}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             >
                 {children}
             </ColorPickerWrapper>

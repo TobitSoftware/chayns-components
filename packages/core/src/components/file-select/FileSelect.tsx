@@ -1,8 +1,9 @@
 import { createDialog, DialogType } from 'chayns-api';
-import React, { DragEvent, FC, KeyboardEventHandler, useCallback, useMemo } from 'react';
+import React, { DragEvent, FC, KeyboardEventHandler, useCallback, useMemo, useRef } from 'react';
 import type { ImageDialogResult } from '../../types/fileInput';
 import { isValidFileType } from '../../utils/file';
 import { selectFiles } from '../../utils/fileDialog';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import Icon from '../icon/Icon';
 import {
@@ -88,9 +89,16 @@ const FileSelect: FC<FileSelectProps> = ({
     shouldPreventImageUpload = false,
     shouldEnableKeyboardHighlighting,
 }) => {
+    const fileSelectionRef = useRef<HTMLDivElement>(null);
+    const imageSelectionRef = useRef<HTMLDivElement>(null);
+
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlighting && !isDisabled,
     );
+    useFocusRingPortal(fileSelectionRef, { isEnabled: shouldShowKeyboardHighlighting });
+    useFocusRingPortal(imageSelectionRef, {
+        isEnabled: shouldShowKeyboardHighlighting && Boolean(imageSelectPlaceholder),
+    });
 
     const handleAddImages = useCallback(
         (images: UploadedFile[]) => {
@@ -235,7 +243,7 @@ const FileSelect: FC<FileSelectProps> = ({
             <StyledFileSelect>
                 <StyledFileSelectWrapper $isDisabled={isDisabled}>
                     <StyledFileSelectContainer
-                        $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                        ref={fileSelectionRef}
                         onClick={() => void handleFileSelectionClick()}
                         onKeyDown={handleFileSelectionKeyDown}
                         onDragOver={(e) => e.preventDefault()}
@@ -248,8 +256,8 @@ const FileSelect: FC<FileSelectProps> = ({
                     </StyledFileSelectContainer>
                     {imageSelectPlaceholder && (
                         <StyledFileSelectContainer
+                            ref={imageSelectionRef}
                             $isImageSelection
-                            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                             onClick={() => void handleImageSelectionClick()}
                             onKeyDown={handleImageSelectionKeyDown}
                             role="button"
@@ -268,7 +276,6 @@ const FileSelect: FC<FileSelectProps> = ({
             fileSelectionPlaceholder,
             imageSelectPlaceholder,
             imageSelectIcons,
-            shouldShowKeyboardHighlighting,
             handleFileSelectionClick,
             handleDrop,
             handleFileSelectionKeyDown,

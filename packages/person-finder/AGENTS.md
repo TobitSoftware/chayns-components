@@ -121,6 +121,7 @@ import { PersonFinder } from '@chayns-components/person-finder';
 | `relationMode` | `RelationMode \| undefined` | no | Determines whether persons are searched and sorted from the user's perspective or from a site's perspective. |
 | `shouldAllowMultiple` | `boolean \| undefined` | no | Whether multiple persons and sites should be selected. |
 | `shouldDisableRemove` | `boolean \| undefined` | no | Whether the remove action should be disabled. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for interactive controls. |
 | `shouldHideResultsOnAdd` | `boolean \| undefined` | no | Whether the dropdown should be hidden after adding an entry. By default, it is not hidden. |
 | `shouldRenderInline` | `boolean \| undefined` | no | Whether the `PersonFinder` should be rendered inline without a dropdown. |
 | `shouldShowOwnUser` | `boolean \| undefined` | no | Whether the own user should be shown in the results. By default, it is not shown. |

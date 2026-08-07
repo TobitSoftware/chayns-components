@@ -39,7 +39,12 @@ export const StyledHeaderMembersDate = styled.div`
     gap: 6px;
 `;
 
-export const StyledHeaderMembersIconWrapper = styled.div<WithTheme<unknown>>`
+export const StyledHeaderMembersIconWrapper = styled.button<WithTheme<unknown>>`
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -1,4 +1,4 @@
-import React, { FC, KeyboardEventHandler, useCallback, useMemo } from 'react';
+import React, { FC, KeyboardEventHandler, useCallback, useMemo, useRef } from 'react';
 import { getHumanSize, getIconByMimeType } from '../../../utils/file';
 import Icon from '../../icon/Icon';
 import ContextMenu from '../../context-menu/ContextMenu';
@@ -14,6 +14,7 @@ import {
 } from './FileItem.styles';
 import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
 import textStrings from '../../../constants/textStrings';
+import { useFocusRingPortal } from '../../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../../hooks/useKeyboardFocusHighlighting';
 
 export type FileItemProps = IFileItem & {
@@ -32,8 +33,13 @@ const FileItem: FC<FileItemProps> = ({
 }) => {
     const canDownload = shouldAllowDownload && !!source;
     const canRemove = typeof onRemove === 'function';
+    const actionIconRef = useRef<HTMLDivElement>(null);
 
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(canRemove || !!canDownload);
+    useFocusRingPortal(actionIconRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        shape: 'circle',
+    });
 
     const handleRemove = useCallback(() => {
         if (canRemove) {
@@ -160,6 +166,7 @@ const FileItem: FC<FileItemProps> = ({
 
         return (
             <StyledFileItemIcon
+                ref={actionIconRef}
                 onClick={handleClick}
                 onKeyDown={handleKeyDown}
                 role="button"

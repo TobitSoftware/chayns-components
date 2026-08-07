@@ -1,4 +1,5 @@
-import React, { FC, KeyboardEventHandler, useCallback } from 'react';
+import React, { FC, KeyboardEventHandler, useCallback, useRef } from 'react';
+import { useFocusRingPortal } from '../../../hooks/useFocusRingPortal';
 import {
     StyledHighlightSliderItem,
     StyledHighlightSliderItemBackground,
@@ -37,8 +38,10 @@ const HighlightSliderItem: FC<HighlightSliderItemProps> = ({
     shouldEnableKeyboardHighlighting,
     shouldShowKeyboardHighlighting = false,
 }) => {
+    const itemRef = useRef<HTMLDivElement>(null);
     const uuid = useUuid();
     const isKeyboardFocusable = isInteractive && shouldEnableKeyboardHighlighting;
+    useFocusRingPortal(itemRef, { isEnabled: shouldShowKeyboardHighlighting });
 
     const handleKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
         (event) => {
@@ -56,11 +59,11 @@ const HighlightSliderItem: FC<HighlightSliderItemProps> = ({
 
     return (
         <StyledHighlightSliderItem
+            ref={itemRef}
             onClick={isInteractive ? () => onClick(index) : undefined}
             onKeyDown={isKeyboardFocusable ? handleKeyDown : undefined}
             tabIndex={isKeyboardFocusable ? 0 : -1}
             role={isInteractive ? 'button' : undefined}
-            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
         >
             <StyledProgressBarProgressWrapper>
                 {isActive && (

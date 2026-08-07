@@ -31,6 +31,7 @@ import {
 import { AreaContext } from '../area-provider/AreaContextProvider';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import { useCursorRepaint } from '../../hooks/resize';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 export type TagInputProps = {
@@ -114,6 +115,7 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
         const areaProvider = useContext(AreaContext);
 
         const inputRef = useRef<HTMLInputElement | null>(null);
+        const tagInputRef = useRef<HTMLDivElement | null>(null);
 
         useCursorRepaint(inputRef);
 
@@ -131,9 +133,6 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
         const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
             shouldEnableKeyboardHighlighting,
         );
-
-        const shouldShowTagHighlighting =
-            shouldShowKeyboardHighlighting && typeof selectedId === 'string';
 
         useImperativeHandle(
             ref,
@@ -363,9 +362,18 @@ const TagInput = forwardRef<TagInputRef, TagInputProps>(
             [tags?.length, shouldAllowMultiple],
         );
 
+        useFocusRingPortal(inputRef, {
+            isEnabled: shouldShowKeyboardHighlighting && shouldShowInput,
+            overlayRef: tagInputRef,
+        });
+
+        const shouldShowTagHighlighting =
+            shouldShowKeyboardHighlighting && typeof selectedId === 'string';
+
         return useMemo(
             () => (
                 <StyledTagInput
+                    ref={tagInputRef}
                     $shouldChangeColor={shouldChangeColor}
                     $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                     $shouldShowTagHighlighting={shouldShowTagHighlighting}

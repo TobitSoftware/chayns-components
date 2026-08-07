@@ -43,4 +43,8 @@ export interface HeaderActionsProps {
      * Receives the next read state after the user triggers the corresponding action.
      */
     onReadToggle: CommunicationHeaderProps['onReadToggle'];
+    /**
+     * Enables keyboard-only focus highlighting for header actions.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 }

@@ -25,6 +25,7 @@ export type RankingEntryProps = {
     points: IRankingEntry['points'];
     name: IRankingEntry['name'];
     icons: IRankingEntry['icons'];
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
 const RankingEntry: FC<RankingEntryProps> = ({
@@ -37,6 +38,7 @@ const RankingEntry: FC<RankingEntryProps> = ({
     content,
     onFriendRemove,
     onFriendAdd,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const handleIconClick = useCallback(() => {
         if (isFriend && typeof onFriendRemove === 'function') {
@@ -65,12 +67,22 @@ const RankingEntry: FC<RankingEntryProps> = ({
                     icons={isFriend ? ['fas fa-star'] : ['far fa-star']}
                     size={15}
                     onClick={handleIconClick}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                    tabIndex={0}
                 />
             </StyledRankingEntryRightElement>
         );
 
         return { title: titleElement, rightElement: rightElements };
-    }, [handleIconClick, icons, isFriend, fullName, points, rank]);
+    }, [
+        handleIconClick,
+        icons,
+        isFriend,
+        fullName,
+        points,
+        rank,
+        shouldEnableKeyboardHighlighting,
+    ]);
 
     const entryContent = useMemo(() => {
         if (!content) return null;
@@ -103,7 +115,12 @@ const RankingEntry: FC<RankingEntryProps> = ({
         () => (
             <StyledRankingEntry $shouldShowLines={!entryContent}>
                 {entryContent ? (
-                    <Accordion title="" titleElement={title} rightElement={rightElement}>
+                    <Accordion
+                        title=""
+                        titleElement={title}
+                        rightElement={rightElement}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                    >
                         <AccordionContent>
                             <StyledRankingEntryContent>{entryContent}</StyledRankingEntryContent>
                         </AccordionContent>

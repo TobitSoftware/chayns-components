@@ -18,7 +18,10 @@ type ScannerToolbarButtonProps = {
     $isActive?: boolean;
 };
 
-export const StyledScannerToolbarButton = styled.div<ScannerToolbarButtonProps>`
+export const StyledScannerToolbarButton = styled.button<ScannerToolbarButtonProps>`
+    background: none;
+    border: 0;
+    color: inherit;
     display: flex;
     justify-content: center;
     align-items: center;

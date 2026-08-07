@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, useRef } from 'react';
 import {
     StyledPreviewMessage,
     StyledPreviewMessageAuthor,
@@ -11,7 +11,7 @@ import {
     StyledPreviewMessageRight,
 } from './PreviewMessage.styles';
 import { CombinedPreviewFile, MessageMetaData } from '../CommunicationMessage.types';
-import { Icon } from '@chayns-components/core';
+import { Icon, useFocusRingPortal, useKeyboardFocusHighlighting } from '@chayns-components/core';
 import { useTranslation } from '@chayns/textstrings';
 import textStrings from '../../../constants/textStrings';
 
@@ -19,9 +19,21 @@ interface PreviewMessageProps {
     metadata: MessageMetaData;
     onClick?: VoidFunction;
     onRemove?: VoidFunction;
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
-const PreviewMessage: FC<PreviewMessageProps> = ({ metadata, onRemove, onClick }) => {
+const PreviewMessage: FC<PreviewMessageProps> = ({
+    metadata,
+    onRemove,
+    onClick,
+    shouldEnableKeyboardHighlighting,
+}) => {
+    const removeRef = useRef<HTMLButtonElement>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
+    useFocusRingPortal(removeRef, { isEnabled: shouldShowKeyboardHighlighting, padding: 2 });
     const { t } = useTranslation();
 
     const firstFile = useMemo(
@@ -84,7 +96,12 @@ const PreviewMessage: FC<PreviewMessageProps> = ({ metadata, onRemove, onClick }
                         />
                     )}
                     {typeof onRemove === 'function' && (
-                        <StyledPreviewMessageRemoveIcon onClick={onRemove}>
+                        <StyledPreviewMessageRemoveIcon
+                            aria-label={t(textStrings.previewMessage.accessibility.remove)}
+                            onClick={onRemove}
+                            ref={removeRef}
+                            type="button"
+                        >
                             <Icon icons={['fa fa-xmark']} />
                         </StyledPreviewMessageRemoveIcon>
                     )}

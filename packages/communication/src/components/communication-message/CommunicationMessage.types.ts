@@ -22,6 +22,8 @@ export interface CommunicationMessageProps {
     content: ReactNode;
     alignment: CommunicationMessageAlignment;
 
+    shouldEnableKeyboardHighlighting?: boolean;
+
     options?: ContextMenuItem[];
 
     timestampFormatter?: (date: Date) => string;

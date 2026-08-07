@@ -2,7 +2,12 @@ import styled from 'styled-components';
 
 type StyledHeaderMemberProps = { $isContextMenu?: boolean };
 
-export const StyledHeaderMember = styled.div<StyledHeaderMemberProps>`
+export const StyledHeaderMember = styled.button<StyledHeaderMemberProps>`
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    padding: 0;
     cursor: pointer;
     width: fit-content;
 

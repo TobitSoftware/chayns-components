@@ -1,9 +1,30 @@
-import React, { FC } from 'react';
+import React, { FC, useRef } from 'react';
 import { Member } from '../../CommunicationHeader.types';
 import { StyledHeaderMember } from './HeaderMember.styles';
-import { ContextMenu } from '@chayns-components/core';
+import {
+    ContextMenu,
+    useFocusRingPortal,
+    useKeyboardFocusHighlighting,
+} from '@chayns-components/core';
 
-const HeaderMember: FC<Omit<Member, 'id'>> = ({ name, actions }) => {
+interface HeaderMemberProps extends Omit<Member, 'id'> {
+    isFocusable?: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
+}
+
+const HeaderMember: FC<HeaderMemberProps> = ({
+    name,
+    actions,
+    isFocusable = true,
+    shouldEnableKeyboardHighlighting,
+}) => {
+    const memberRef = useRef<HTMLButtonElement>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
+    useFocusRingPortal(memberRef, { isEnabled: isFocusable && shouldShowKeyboardHighlighting });
+
     const handleClick = () => {
         const firstAction = actions[0];
 
@@ -16,24 +37,36 @@ const HeaderMember: FC<Omit<Member, 'id'>> = ({ name, actions }) => {
 
     if (actions.length > 1) {
         return (
-            <StyledHeaderMember $isContextMenu>
-                <ContextMenu
-                    items={actions.map(({ onClick, label, icons }) => ({
-                        onClick,
-                        icons,
-                        key: label,
-                        text: label,
-                    }))}
+            <ContextMenu
+                items={actions.map(({ onClick, label, icons }) => ({
+                    onClick,
+                    icons,
+                    key: label,
+                    text: label,
+                }))}
+                shouldEnableKeyboardHighlighting={false}
+                shouldUseDefaultTriggerStyles={false}
+            >
+                <StyledHeaderMember
+                    $isContextMenu
+                    ref={memberRef}
+                    tabIndex={isFocusable ? undefined : -1}
+                    type="button"
                 >
                     {name}
-                </ContextMenu>
-            </StyledHeaderMember>
+                </StyledHeaderMember>
+            </ContextMenu>
         );
     }
 
     return (
-        <StyledHeaderMember onClick={handleClick}>
-            <span>{name}</span>
+        <StyledHeaderMember
+            onClick={handleClick}
+            ref={memberRef}
+            tabIndex={isFocusable ? undefined : -1}
+            type="button"
+        >
+            {name}
         </StyledHeaderMember>
     );
 };

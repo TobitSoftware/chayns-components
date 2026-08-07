@@ -20,4 +20,8 @@ export interface AddFileProps {
      * <AddFile onAdd={(files) => console.log(files)} />
      */
     onAdd: (files: File[]) => void;
+    /**
+     * Enables keyboard-only focus highlighting for the add-file button.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 }

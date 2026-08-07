@@ -83,6 +83,8 @@ import { EmojiInput } from '@chayns-components/emoji-input';
 | `popupAlignment` | `PopupAlignment \| undefined` | no | Sets the alignment of the popup to a fixed value. If this value is not set, the component<br />calculates the best position on its own. Use the imported 'PopupAlignment' enum to set this<br />value. |
 | `prefixElement` | `string \| undefined` | no | Element that is rendered before the input field but the placeholder is still visible. |
 | `rightElement` | `ReactNode` | no | Element that is rendered inside the EmojiInput on the right side. |
+| `shouldDisableEditorKeyboardHighlighting` | `boolean \| undefined` | no | Disables keyboard-only focus highlighting for the editor while preserving it for child controls. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
 | `shouldHidePlaceholderOnFocus` | `boolean \| undefined` | no | Whether the placeholder should be shown after the input has focus. |
 | `shouldPreventEmojiPicker` | `boolean \| undefined` | no | Prevents the EmojiPickerPopup icon from being displayed |
 | `shouldRevertAsciiSmileyConversionOnBackspace` | `boolean \| undefined` | no | Allows the most recently auto-converted ASCII smiley to be reverted with Backspace. |
@@ -130,7 +132,7 @@ import { EmojiPicker } from '@chayns-components/emoji-input';
 | name | type | required | description |
 | --- | --- | --- | --- |
 | `accessToken` | `string \| undefined` | no | Access token of the logged-in user. Is needed to load and save the history of the emojis. |
-| `onSelect` | `(emoji: string) => void` | yes | Function executed when an emoji is selected in the popup |
+| `onSelect` | `(emoji: string, shouldRestoreInputFocus?: boolean \| undefined) => void` | yes | Function executed when an emoji is selected in the popup |
 | `personId` | `string \| undefined` | no | Person id of the logged-in user. Is needed to load and save the history of the emojis. |
 
 ### Types
@@ -171,9 +173,12 @@ import { EmojiPickerPopup } from '@chayns-components/emoji-input';
 | --- | --- | --- | --- |
 | `accessToken` | `string \| undefined` | no | Access token of the logged-in user. Is needed to load and save the history of the emojis. |
 | `container` | `Element \| undefined` | no | The DOM element that should receive the popup portal. |
+| `isDisabled` | `boolean \| undefined` | no | Whether the picker trigger is disabled. |
 | `onPopupVisibilityChange` | `((isVisible: boolean) => void) \| undefined` | no | Function that is executed when the visibility of the popup changes. |
 | `onSelect` | `(emoji: string) => void` | yes | Function executed when an emoji is selected in the popup |
+| `onSelectWithKeyboard` | `((emoji: string) => void) \| undefined` | no | Receives focus after an emoji is selected with the keyboard. |
 | `personId` | `string \| undefined` | no | Person id of the logged-in user. Is needed to load and save the history of the emojis. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for the picker trigger. |
 
 ### Types
 

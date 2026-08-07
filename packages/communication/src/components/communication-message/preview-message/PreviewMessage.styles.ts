@@ -77,10 +77,19 @@ export const StyledPreviewMessageFile = styled.img`
     margin-right: -4px;
 `;
 
-export const StyledPreviewMessageRemoveIcon = styled.div`
-    height: 100%;
+export const StyledPreviewMessageRemoveIcon = styled.button`
+    background: none;
+    border: 0;
+    border-radius: 50%;
+    color: inherit;
+    padding: 0;
+    font: inherit;
+    width: 20px;
+    aspect-ratio: 1;
+    align-self: center;
     display: flex;
     align-items: center;
+    justify-content: center;
 
     cursor: pointer;
 `;

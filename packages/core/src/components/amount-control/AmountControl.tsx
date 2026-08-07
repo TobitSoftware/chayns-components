@@ -1,6 +1,7 @@
 import { AnimatePresence } from 'motion/react';
 import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { checkForValidAmount } from '../../utils/amountControl';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import Icon from '../icon/Icon';
 import {
@@ -104,6 +105,8 @@ const AmountControl: FC<AmountControlProps> = ({
     );
 
     const inputRef = useRef<HTMLInputElement>(null);
+    const leftButtonRef = useRef<HTMLButtonElement>(null);
+    const rightButtonRef = useRef<HTMLButtonElement>(null);
 
     /**
      * This function controls the displayState
@@ -266,13 +269,21 @@ const AmountControl: FC<AmountControlProps> = ({
             (shouldForceLabel && typeof label === 'string') ||
             inputLabel === label);
 
+    useFocusRingPortal(inputRef, {
+        isEnabled: shouldShowKeyboardHighlighting && !shouldShowPseudoInput,
+    });
+    useFocusRingPortal(leftButtonRef, {
+        isEnabled: shouldShowKeyboardHighlighting && displayState === 'normal',
+    });
+    useFocusRingPortal(rightButtonRef, { isEnabled: shouldShowKeyboardHighlighting });
+
     return useMemo(
         () => (
             <StyledAmountControl onClick={handleFirstAmount} $isDisabled={isDisabled}>
                 <AnimatePresence initial={false}>
                     {['normal'].includes(displayState) && (
                         <StyledMotionAmountControlButton
-                            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                            ref={leftButtonRef}
                             key="left_button"
                             initial={{ width: 0, opacity: 0, padding: 0 }}
                             animate={{
@@ -308,7 +319,6 @@ const AmountControl: FC<AmountControlProps> = ({
                             $shouldShowIcon={shouldShowIcon}
                             $shouldShowWideInput={shouldShowWideInput}
                             $hasFocus={hasFocus}
-                            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                             disabled={isDisabled}
                             onFocus={() => setIsEditing(true)}
                             onBlur={handleInputBlur}
@@ -319,7 +329,7 @@ const AmountControl: FC<AmountControlProps> = ({
                 </StyledInputWrapper>
                 <AnimatePresence initial={false}>
                     <StyledMotionAmountControlButton
-                        $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
+                        ref={rightButtonRef}
                         key="right_button"
                         initial={{ width: 0, opacity: 0, padding: 0 }}
                         animate={{

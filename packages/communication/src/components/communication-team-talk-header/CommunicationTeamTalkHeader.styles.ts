@@ -40,8 +40,11 @@ export const StyledCommunicationTeamTalkHeaderSendButton = styled.div<StyledComm
 
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.75 : 1)};
 
-    height: 100%;
-    width: 100%;
+    height: 24px;
+    width: 24px;
+    flex: 0 0 24px;
+    align-self: center;
+    border-radius: 50%;
 
     display: flex;
     align-items: center;

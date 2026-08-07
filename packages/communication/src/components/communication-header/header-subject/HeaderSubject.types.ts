@@ -27,4 +27,11 @@ export interface HeaderSubjectProps {
      * Use this while the title and actions are still loading.
      */
     isLoading: CommunicationHeaderProps['isLoading'];
+    /**
+     * Enables keyboard-only focus highlighting for the fullscreen toggle.
+     * @description
+     * Displays a focus ring when the fullscreen toggle receives focus through keyboard navigation.
+     * @optional
+     */
+    shouldEnableKeyboardHighlighting?: CommunicationHeaderProps['shouldEnableKeyboardHighlighting'];
 }

@@ -22,6 +22,7 @@ import {
     StyledRadioButtonWrapper,
 } from './RadioButton.styles';
 import { getHeightOfSingleTextLine } from '../../utils/calculate';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 export type RadioButtonProps = {
@@ -83,6 +84,7 @@ const RadioButton: FC<RadioButtonProps> = ({
     const [radioButtonTop, setRadioButtonTop] = useState<number | undefined>(undefined);
 
     const radioButtonBoxRef = useRef<HTMLDivElement>(null);
+    const radioButtonInputRef = useRef<HTMLInputElement>(null);
     const radioButtonRootRef = useRef<HTMLDivElement>(null);
 
     const isInGroup = typeof updateSelectedRadioButtonId === 'function';
@@ -97,6 +99,10 @@ const RadioButton: FC<RadioButtonProps> = ({
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         effectiveShouldEnableKeyboardHighlighting && !isDisabled,
     );
+    useFocusRingPortal(radioButtonInputRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        shape: 'circle',
+    });
 
     useEffect(() => {
         if (radioButtonRootRef.current && !shouldShowCentered) {
@@ -212,13 +218,13 @@ const RadioButton: FC<RadioButtonProps> = ({
                     $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                 >
                     <StyledRadioButtonCheckBox
+                        ref={radioButtonInputRef}
                         onClick={handleClick}
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
                         onKeyDown={handleKeyDown}
                         disabled={isDisabled}
                         $isDisabled={isDisabled}
-                        $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                         type="radio"
                         checked={isMarked}
                         onChange={() => {}}

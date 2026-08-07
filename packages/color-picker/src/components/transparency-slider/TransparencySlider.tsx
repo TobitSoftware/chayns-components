@@ -1,4 +1,5 @@
 import { setRefreshScrollEnabled } from 'chayns-api';
+import { useFocusRingPortal, useKeyboardFocusHighlighting } from '@chayns-components/core';
 import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { hexToRgb, isValidRGBA, splitRgb } from '../../utils/color';
 import {
@@ -27,6 +28,10 @@ interface TransparencySliderProps {
      * Function that will be executed when the opacity is starting to change.
      */
     onStart?: (color: string) => void;
+    /**
+     * Enables keyboard-only focus highlighting for the slider.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 const TransparencySlider = ({
@@ -34,6 +39,7 @@ const TransparencySlider = ({
     onStart,
     onEnd,
     color = 'rgba(255, 0, 0, 1)',
+    shouldEnableKeyboardHighlighting,
 }: TransparencySliderProps) => {
     const [editedValue, setEditedValue] = useState(0);
     const [pureColor, setPureColor] = useState<string>();
@@ -41,6 +47,16 @@ const TransparencySlider = ({
 
     const sliderThumbRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLInputElement>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
+    useFocusRingPortal(sliderRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        overlayRef: sliderThumbRef,
+        shape: 'circle',
+        padding: 3,
+    });
 
     useEffect(() => {
         if (color) {

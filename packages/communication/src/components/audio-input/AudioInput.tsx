@@ -1,5 +1,5 @@
-import React, { forwardRef, useCallback, useImperativeHandle, useMemo } from 'react';
-import { Icon } from '@chayns-components/core';
+import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from 'react';
+import { Icon, useFocusRingPortal, useKeyboardFocusHighlighting } from '@chayns-components/core';
 import { AnimatePresence } from 'motion/react';
 import { AudioInputPosition, AudioInputProps, AudioInputRef } from './AudioInput.types';
 import { StyledMotionAudioInput, StyledMotionAudioInputIconWrapper } from './AudioInput.styles';
@@ -7,6 +7,8 @@ import { useAudioInput } from './AudioInput.hooks';
 import WaveForm from './wave-form/WaveForm';
 import { AUDIO_INPUT_ANIMATION } from './AudioInput.constants';
 import { CommunicationInputSize } from '../communication-input/CommunicationInput.types';
+import { useTranslation } from '@chayns/textstrings';
+import textStrings from '../../constants/textStrings';
 
 const AudioInput = forwardRef<AudioInputRef, AudioInputProps>(
     (
@@ -19,9 +21,11 @@ const AudioInput = forwardRef<AudioInputRef, AudioInputProps>(
             styleConfig,
             position = AudioInputPosition.RIGHT,
             size = CommunicationInputSize.MEDIUM,
+            shouldEnableKeyboardHighlighting,
         },
         ref,
     ) => {
+        const { t } = useTranslation();
         const { backgroundColor = 'var(--chayns-color--primary)', color = 'white' } =
             styleConfig ?? {};
 
@@ -33,6 +37,23 @@ const AudioInput = forwardRef<AudioInputRef, AudioInputProps>(
         });
 
         const isExpanded = isActive;
+        const canMute = isActive && typeof onMuteChange === 'function';
+        const mainButtonRef = useRef<HTMLButtonElement>(null);
+        const stopButtonRef = useRef<HTMLButtonElement>(null);
+        const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+            shouldEnableKeyboardHighlighting,
+        );
+
+        useFocusRingPortal(mainButtonRef, {
+            isEnabled: shouldShowKeyboardHighlighting && (!isActive || canMute),
+            shape: 'circle',
+            padding: 4,
+        });
+        useFocusRingPortal(stopButtonRef, {
+            isEnabled: shouldShowKeyboardHighlighting && isExpanded,
+            shape: 'circle',
+            padding: 4,
+        });
 
         useImperativeHandle(
             ref,
@@ -74,7 +95,17 @@ const AudioInput = forwardRef<AudioInputRef, AudioInputProps>(
                 }}
                 transition={{ duration: 0.25, ease: [0.2, 0.8, 0.2, 1], type: 'tween' }}
             >
-                <StyledMotionAudioInputIconWrapper onClick={handleMainButtonClick}>
+                <StyledMotionAudioInputIconWrapper
+                    aria-label={
+                        isActive
+                            ? t(textStrings.audioInput.accessibility.mute)
+                            : t(textStrings.audioInput.accessibility.start)
+                    }
+                    onClick={handleMainButtonClick}
+                    ref={mainButtonRef}
+                    tabIndex={isActive && !canMute ? -1 : undefined}
+                    type="button"
+                >
                     <Icon
                         icons={isMuted ? ['fa fa-microphone', 'fa fa-slash'] : ['fa fa-microphone']}
                         size={sizes.iconSize}
@@ -87,12 +118,15 @@ const AudioInput = forwardRef<AudioInputRef, AudioInputProps>(
 
                     {isExpanded && (
                         <StyledMotionAudioInputIconWrapper
+                            aria-label={t(textStrings.audioInput.accessibility.stop)}
                             key="stop"
                             onClick={stop}
+                            ref={stopButtonRef}
                             initial={AUDIO_INPUT_ANIMATION.initial}
                             animate={AUDIO_INPUT_ANIMATION.animate}
                             exit={AUDIO_INPUT_ANIMATION.exit}
                             transition={AUDIO_INPUT_ANIMATION.transition}
+                            type="button"
                         >
                             <Icon icons={['fa fa-xmark']} size={sizes.iconSize} color={color} />
                         </StyledMotionAudioInputIconWrapper>

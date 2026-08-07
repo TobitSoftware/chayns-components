@@ -51,6 +51,10 @@ export type RankingProps = {
      */
     shouldShowOnlyFriends?: boolean;
     /**
+     * Enables keyboard-only focus highlighting for interactive controls.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * The title of the top Accordion.
      */
     title?: string;
@@ -68,6 +72,7 @@ const Ranking: FC<RankingProps> = ({
     searchValue,
     onLoadMore,
     onFriendVisibleChange,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const content = useMemo(
         () =>
@@ -83,6 +88,7 @@ const Ranking: FC<RankingProps> = ({
                     onFriendAdd={onFriendAdd}
                     onFriendRemove={onFriendRemove}
                     isFriend={friendPersonIds?.includes(personId)}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />
             )),
         [entries, friendPersonIds, onFriendAdd, onFriendRemove],
@@ -109,11 +115,14 @@ const Ranking: FC<RankingProps> = ({
                         }
                         onSearchChange={handleSearchChange}
                         searchValue={searchValue}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                         rightElement={
                             <Icon
                                 icons={shouldShowOnlyFriends ? ['fas fa-star'] : ['far fa-star']}
                                 size={15}
                                 onClick={onFriendVisibleChange}
+                                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                                tabIndex={0}
                             />
                         }
                     >
@@ -123,6 +132,9 @@ const Ranking: FC<RankingProps> = ({
                                 <StyledRankingLoadMoreButton>
                                     <Button
                                         onClick={onLoadMore}
+                                        shouldEnableKeyboardHighlighting={
+                                            shouldEnableKeyboardHighlighting
+                                        }
                                         shouldShowWaitCursor={isLoadingData}
                                     >
                                         <Textstring
@@ -144,6 +156,7 @@ const Ranking: FC<RankingProps> = ({
             onLoadMore,
             searchValue,
             shouldShowOnlyFriends,
+            shouldEnableKeyboardHighlighting,
             title,
         ],
     );

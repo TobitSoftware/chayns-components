@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 import type { Theme, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import { DropdownDirection } from '../../types/dropdown';
 import { ComboBoxProps, ComboBoxSize } from './ComboBox.types';
-import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledComboBoxProps = WithTheme<{
     $minWidth?: number;
@@ -47,7 +46,6 @@ type StyledComboBoxHeaderProps = WithTheme<{
     $shouldShowBigImage: ComboBoxProps['shouldShowBigImage'];
     $shouldShowTransparentBackground: boolean;
     $size: ComboBoxSize;
-    $shouldShowKeyboardHighlighting: boolean;
 }>;
 
 export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
@@ -133,15 +131,9 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
             }
         `}
 
-    ${({ $shouldShowKeyboardHighlighting }) =>
-        $shouldShowKeyboardHighlighting &&
-        css`
-            &:focus-visible,
-            &:focus-within {
-                transition: none;
-                ${keyboardFocusHighlightingRingCss}
-            }
-        `}
+    &:focus-visible {
+        outline: none;
+    }
 `;
 
 type StyledComboBoxPlaceholderProps = WithTheme<{ $shouldReduceOpacity: boolean }>;

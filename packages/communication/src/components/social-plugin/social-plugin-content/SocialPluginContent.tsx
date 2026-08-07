@@ -24,6 +24,8 @@ import {
     Icon,
     selectFiles,
     uploadFile,
+    useFocusRingPortal,
+    useKeyboardFocusHighlighting,
     type Image,
     type InternalFileItem,
 } from '@chayns-components/core';
@@ -48,20 +50,29 @@ import { replaceEmojis } from '../../../utils/emojione';
 
 interface SocialPluginContentProps {
     shouldShowComments: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
-const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments }) => {
+const SocialPluginContent: FC<SocialPluginContentProps> = ({
+    shouldShowComments,
+    shouldEnableKeyboardHighlighting,
+}) => {
     const [value, setValue] = useState('');
     const [isSending, setIsSending] = useState(false);
     const [image, setImage] = useState<InternalFileItem>();
 
     const listRef = useRef<HTMLDivElement>(null);
+    const sendButtonRef = useRef<HTMLButtonElement>(null);
+    const imageRemoveRef = useRef<HTMLButtonElement>(null);
     const pendingRequestRef = useRef(false);
     const previousScrollHeightRef = useRef(0);
     const previousScrollTopRef = useRef(0);
     const shouldRestoreScrollPositionRef = useRef(false);
 
     const { t } = useTranslation();
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
 
     const { comments, commentCount, addComment, replyMetadata, setReplyMetadata, loadComments } =
         useSocialPlugin();
@@ -95,6 +106,14 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
 
         return checkValue.length > 0 || (hasUploadedImage && !isImagePending);
     }, [image, value]);
+
+    useFocusRingPortal(sendButtonRef, {
+        isEnabled: canSend && !isSending && shouldShowKeyboardHighlighting,
+    });
+    useFocusRingPortal(imageRemoveRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        shape: 'circle',
+    });
 
     const handleSend = useCallback(() => {
         if (!canSend || isSending) {
@@ -193,11 +212,19 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
                     <PreviewMessage
                         metadata={replyMetadata}
                         onRemove={() => setReplyMetadata(undefined)}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                     />
                 )}
                 {image && (
                     <StyledSocialPluginImageWrapper>
-                        <StyledSocialPluginImageXmark onClick={() => setImage(undefined)}>
+                        <StyledSocialPluginImageXmark
+                            aria-label={t(
+                                textStrings.socialPlugin.content.input.accessibility.removeImage,
+                            )}
+                            onClick={() => setImage(undefined)}
+                            ref={imageRemoveRef}
+                            type="button"
+                        >
                             <Icon icons={['fa fa-xmark']} />
                         </StyledSocialPluginImageXmark>
                         <StyledSocialPluginImage
@@ -335,13 +362,17 @@ const SocialPluginContent: FC<SocialPluginContentProps> = ({ shouldShowComments 
                     topContent={topContent}
                     scrollContainerRef={listRef}
                     shouldDisableFullHeight
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                     contextMenuItems={contextMenuItems}
                     cornerType={CommunicationInputCornerType.ROUNDED}
                     size={CommunicationInputSize.SMALL}
                     rightElement={
                         <StyledSocialPluginContentRightElement
                             $isDisabled={!canSend || isSending}
-                            onClick={handleSend}
+                            disabled={!canSend || isSending}
+                            onClick={canSend && !isSending ? handleSend : undefined}
+                            ref={sendButtonRef}
+                            type="button"
                         >
                             <Icon icons={['fa fa-paper-plane']} />
                         </StyledSocialPluginContentRightElement>

@@ -183,6 +183,7 @@ import { Calendar } from '@chayns-components/date';
 | `selectedDate` | `Date \| undefined` | no | A date that should be preselected. |
 | `selectedDateInterval` | `DateInterval \| undefined` | no | No description available. |
 | `selectedDates` | `Date[] \| undefined` | no | No description available. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard focus highlighting and keyboard selection for selectable days. |
 | `shouldShowHighlightsInMonthOverlay` | `boolean \| undefined` | no | Whether the highlighted dates should be displayed for the greyed month overlay days. |
 | `showMonthYearPickers` | `boolean \| undefined` | no | Shows the month and year pickers, if there are multiple months/years to select from. |
 | `type` | `CalendarType \| undefined` | no | The type of the calendar selection. |
@@ -424,6 +425,7 @@ import { OpeningTimes } from '@chayns-components/date';
 | `onTimeAdd` | `(({ time, dayId, isValid }: OnTimeAdd) => void) \| undefined` | no | Function to be executed when a time is added. |
 | `onTimeRemove` | `((id: string) => void) \| undefined` | no | Function to be executed when a time is removed. |
 | `openingTimes` | `OpeningTime[]` | yes | The opening times corresponding to its weekday. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard highlighting. Defaults to the surrounding ColorSchemeProvider setting. |
 | `weekdays` | `Weekday[]` | yes | The weekdays that should be displayed. |
 
 ### Types

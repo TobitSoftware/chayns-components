@@ -4,4 +4,5 @@ export interface CommunicationTeamTalkHeaderActionProps {
     label?: string;
     shouldShowLabel?: boolean;
     isDisabled?: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
 }

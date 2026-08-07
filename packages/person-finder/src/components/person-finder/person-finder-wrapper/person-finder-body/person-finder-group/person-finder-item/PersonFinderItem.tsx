@@ -1,6 +1,12 @@
-import React, { FC, MouseEvent } from 'react';
+import {
+    Icon,
+    ListItem,
+    Theme,
+    useFocusRingPortal,
+    useKeyboardFocusHighlighting,
+} from '@chayns-components/core';
+import React, { FC, KeyboardEvent, MouseEvent, useRef } from 'react';
 import { StyledPersonFinderItem } from './PersonFinderItem.styles';
-import { Icon, ListItem, Theme } from '@chayns-components/core';
 import { PersonFinderEntry } from '../../../../../../types/personFinder';
 import { useFriends, usePersonFinderItem } from '../../../../../../hooks/personFinder';
 import { usePersonFinder } from '../../../../../PersonFinderProvider';
@@ -11,9 +17,15 @@ export type PersonFinderItemProps = {
     entry: PersonFinderEntry;
     onAdd: (id: string) => void;
     onRemove: (id: string) => void;
+    shouldEnableKeyboardHighlighting?: boolean;
 };
 
-const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd, onRemove }) => {
+const PersonFinderItem: FC<PersonFinderItemProps> = ({
+    entry,
+    onAdd,
+    onRemove,
+    shouldEnableKeyboardHighlighting,
+}) => {
     const { id: entryId } = entry;
 
     const id = typeof entryId === 'string' ? entryId : entryId.toString();
@@ -26,6 +38,11 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd, onRemove })
     const user = useUser();
 
     const isSelected = tags && tags.map((tag) => tag.id).includes(id);
+    const itemRef = useRef<HTMLDivElement>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+    useFocusRingPortal(itemRef, { isEnabled: shouldShowKeyboardHighlighting });
 
     const handleIconClick = (event: MouseEvent) => {
         event.preventDefault();
@@ -51,16 +68,37 @@ const PersonFinderItem: FC<PersonFinderItemProps> = ({ entry, onAdd, onRemove })
         }
     };
 
+    const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+        if ((event.target as HTMLElement).closest('.beta-chayns-icon')) {
+            return;
+        }
+
+        if (event.key === 'Enter' || event.key === ' ') {
+            handleClick(event as unknown as MouseEvent);
+        }
+    };
+
     const rightElements = (
         <Icon
             icons={[`${isFriend ? 'fas' : 'far'} fa-star`]}
             color={isFriend ? theme['yellow-3'] : undefined}
             onClick={handleIconClick}
+            shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+            shouldStopPropagation
+            tabIndex={0}
         />
     );
 
     return (
-        <StyledPersonFinderItem onClick={handleClick} $isSelected={isSelected}>
+        <StyledPersonFinderItem
+            data-person-finder-result
+            ref={itemRef}
+            onClick={handleClick}
+            onKeyDown={handleKeyDown}
+            $isSelected={isSelected}
+            role="button"
+            tabIndex={0}
+        >
             <ListItem
                 title={title}
                 subtitle={subtitle}

@@ -21,6 +21,10 @@ export interface GalleryViewerItemProps {
      */
     shouldLoadImages?: boolean;
     /**
+     * Enables keyboard-only focus highlighting for the media tile.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * Defines the aspect ratio that should be reserved for the tile.
      * @description
      * Use this prop to reserve a deterministic tile height for stable read-only rendering.

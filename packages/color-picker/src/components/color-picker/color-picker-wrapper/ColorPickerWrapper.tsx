@@ -1,7 +1,7 @@
 import { Popup, PopupAlignment } from '@chayns-components/core';
 import React, { ReactNode, useContext, useMemo } from 'react';
 import type { IPresetColor } from '../../../types/colorPicker';
-import ColorPickerPopup from '../../color-picker-popup/ColorPickerPopup';
+import { ColorPickerPopupContent } from '../../color-picker-popup/ColorPickerPopup';
 import { ColorPickerContext } from '../../ColorPickerProvider';
 import {
     StyledColorPickerWrapper,
@@ -26,6 +26,7 @@ interface ColorPickerWrapperProps {
     shouldHideColorArea: boolean;
     shouldHideDefaultPresetColors: boolean;
     alignment?: PopupAlignment;
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 const ColorPickerWrapper = ({
@@ -43,12 +44,13 @@ const ColorPickerWrapper = ({
     shouldShowTransparencySlider,
     shouldUseSiteColors,
     alignment,
+    shouldEnableKeyboardHighlighting,
 }: ColorPickerWrapperProps) => {
     const { selectedColor } = useContext(ColorPickerContext);
 
     const content = useMemo(
         () => (
-            <ColorPickerPopup
+            <ColorPickerPopupContent
                 shouldHideDefaultPresetColors={shouldHideDefaultPresetColors}
                 shouldHideColorArea={shouldHideColorArea}
                 shouldShowPresetColors={shouldShowPresetColors}
@@ -58,6 +60,7 @@ const ColorPickerWrapper = ({
                 shouldUseSiteColors={shouldUseSiteColors}
                 shouldShowMoreOptions={shouldShowMoreOptions}
                 shouldShowTransparencySlider={shouldShowTransparencySlider}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             />
         ),
         [
@@ -70,6 +73,7 @@ const ColorPickerWrapper = ({
             shouldShowPresetColors,
             shouldShowTransparencySlider,
             shouldUseSiteColors,
+            shouldEnableKeyboardHighlighting,
         ],
     );
 

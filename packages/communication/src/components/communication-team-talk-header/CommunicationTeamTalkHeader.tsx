@@ -1,6 +1,6 @@
-import React, { FC, useCallback, KeyboardEvent, useMemo } from 'react';
+import React, { FC, useCallback, KeyboardEvent, useMemo, useRef } from 'react';
 import textStrings from '../../constants/textStrings';
-import { Icon } from '@chayns-components/core';
+import { Icon, useFocusRingPortal, useKeyboardFocusHighlighting } from '@chayns-components/core';
 import {
     StyledCommunicationTeamTalkHeader,
     StyledCommunicationTeamTalkHeaderActions,
@@ -27,14 +27,24 @@ const CommunicationTeamTalkHeader: FC<CommunicationTeamTalkHeaderProps> = ({
     onAdd,
     isInputDisabled,
     isAgreeDisabled,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const { t } = useTranslation();
+    const sendButtonRef = useRef<HTMLDivElement>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
 
     const canSend = useMemo(() => {
         const checkValue = value.replaceAll('<br>', '').trim();
 
         return checkValue.length > 0;
     }, [value]);
+
+    useFocusRingPortal(sendButtonRef, {
+        isEnabled: canSend && shouldShowKeyboardHighlighting,
+        padding: 5,
+    });
 
     const handleInput = useCallback(
         (_: unknown, originalText: string) => {
@@ -73,6 +83,7 @@ const CommunicationTeamTalkHeader: FC<CommunicationTeamTalkHeaderProps> = ({
                     label={t(textStrings.CommunicationTeamTalkHeader.agree)}
                     shouldShowLabel
                     isDisabled={isAgreeDisabled}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />
                 <StyledCommunicationTeamTalkHeaderActionsSide>
                     {typeof onLeave === 'function' && (
@@ -80,6 +91,7 @@ const CommunicationTeamTalkHeader: FC<CommunicationTeamTalkHeaderProps> = ({
                             icons={['fa fa-user-minus']}
                             onClick={onLeave}
                             label={t(textStrings.CommunicationTeamTalkHeader.leave)}
+                            shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                         />
                     )}
                     {typeof onAdd === 'function' && (
@@ -87,6 +99,7 @@ const CommunicationTeamTalkHeader: FC<CommunicationTeamTalkHeaderProps> = ({
                             icons={['fa fa-user-plus']}
                             onClick={onAdd}
                             label={t(textStrings.CommunicationTeamTalkHeader.add)}
+                            shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                         />
                     )}
                 </StyledCommunicationTeamTalkHeaderActionsSide>
@@ -100,10 +113,20 @@ const CommunicationTeamTalkHeader: FC<CommunicationTeamTalkHeaderProps> = ({
                 }}
                 cornerType={CommunicationInputCornerType.ROUNDED}
                 direction={CommunicationInputDirection.BOTTOM}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 rightElement={
                     <StyledCommunicationTeamTalkHeaderSendButton
                         $isDisabled={!canSend}
-                        onClick={onSend}
+                        onClick={canSend ? onSend : undefined}
+                        onKeyDown={(event) => {
+                            if (canSend && (event.key === 'Enter' || event.key === ' ')) {
+                                event.preventDefault();
+                                onSend();
+                            }
+                        }}
+                        ref={sendButtonRef}
+                        role="button"
+                        tabIndex={canSend ? 0 : -1}
                     >
                         <Icon icons={['fa fa-paper-plane']} />
                     </StyledCommunicationTeamTalkHeaderSendButton>

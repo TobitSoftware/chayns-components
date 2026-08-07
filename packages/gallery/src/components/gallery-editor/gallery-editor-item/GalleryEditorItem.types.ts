@@ -21,6 +21,10 @@ export interface GalleryEditorItemProps {
      */
     shouldLoadImages?: boolean;
     /**
+     * Enables keyboard-only focus highlighting for the media tile and delete button.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * Is called when the delete button is clicked in edit mode.
      * @description
      * The callback receives the internal item identifier so the editor can remove the item from its local state.

@@ -11,6 +11,7 @@ import React, {
 } from 'react';
 import { useTheme } from 'styled-components';
 import { useElementSize } from '../../hooks/element';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import {
     calculateGradientOffset,
@@ -219,6 +220,16 @@ const Slider: FC<SliderProps> = ({
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlighting && !isDisabled,
     );
+    useFocusRingPortal(fromSliderRef, {
+        isEnabled: shouldShowKeyboardHighlighting && isFromThumbFocused,
+        overlayRef: fromSliderThumbRef,
+        shape: 'circle',
+    });
+    useFocusRingPortal(toSliderRef, {
+        isEnabled: shouldShowKeyboardHighlighting && isToThumbFocused,
+        overlayRef: toSliderThumbRef,
+        shape: 'circle',
+    });
 
     const updateFromValue = useCallback((nextValue: number) => {
         previousFromValueRef.current = nextValue;
@@ -618,7 +629,6 @@ const Slider: FC<SliderProps> = ({
                     onChange={handleInputChange}
                     onMouseUp={handleMouseUp}
                     $background={fromInputBackground}
-                    $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                     onFocus={() => {
                         setIsFromThumbFocused(true);
                         setIsToThumbFocused(false);
@@ -631,7 +641,6 @@ const Slider: FC<SliderProps> = ({
                     ref={fromSliderThumbRef}
                     $position={fromSliderThumbPosition}
                     $isBigSlider={isBigSlider}
-                    $shouldShowFocusRing={shouldShowKeyboardHighlighting && isFromThumbFocused}
                 >
                     {shouldShowThumbLabel && (
                         <StyledSliderThumbLabel
@@ -651,7 +660,6 @@ const Slider: FC<SliderProps> = ({
                         ref={toSliderThumbRef}
                         $position={toSliderThumbPosition}
                         $isBigSlider={isBigSlider}
-                        $shouldShowFocusRing={shouldShowKeyboardHighlighting && isToThumbFocused}
                     >
                         {shouldShowThumbLabel && (
                             <StyledSliderThumbLabel
@@ -684,7 +692,6 @@ const Slider: FC<SliderProps> = ({
                         onTouchEnd={handleTouchEnd}
                         onChange={handleControlToSlider}
                         onMouseUp={handleMouseUp}
-                        $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                         onFocus={() => {
                             setIsToThumbFocused(true);
                             setIsFromThumbFocused(false);

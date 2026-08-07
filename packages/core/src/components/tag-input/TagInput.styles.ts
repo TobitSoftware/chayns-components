@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 import type { InputSize } from '../input/Input';
 
 type StyledTagInputProps = WithTheme<{
@@ -32,7 +31,6 @@ export const StyledTagInput = styled.div<StyledTagInputProps>`
         css`
             &:focus-within {
                 transition: none;
-                ${keyboardFocusHighlightingRingCss}
             }
         `}
 `;
@@ -56,7 +54,7 @@ export const StyledTagInputTagFocusWrapper = styled.div<StyledTagInputTagFocusWr
         css`
             ${StyledTagInput}:focus-within & > .beta-chayns-badge {
                 transition: none;
-                ${keyboardFocusHighlightingRingCss}
+
                 border-radius: 999px;
                 outline-offset: 0;
             }

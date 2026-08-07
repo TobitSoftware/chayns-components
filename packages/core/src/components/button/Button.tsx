@@ -1,7 +1,8 @@
 import clsx from 'clsx';
 import { AnimatePresence } from 'motion/react';
-import React, { FC, MouseEventHandler, useMemo } from 'react';
+import React, { FC, MouseEventHandler, useMemo, useRef } from 'react';
 import { useTheme } from 'styled-components';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
@@ -29,6 +30,8 @@ const Button: FC<ButtonProps> = ({
     tapDuration = 0.5,
     shouldEnableKeyboardHighlighting,
 }) => {
+    const buttonRef = useRef<HTMLButtonElement>(null);
+
     const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
         if (shouldStopPropagation) {
             event.stopPropagation();
@@ -46,6 +49,7 @@ const Button: FC<ButtonProps> = ({
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlighting && !isDisabled,
     );
+    useFocusRingPortal(buttonRef, { isEnabled: shouldShowKeyboardHighlighting });
 
     const iconColor = useMemo(() => {
         if (isSecondary) {
@@ -102,10 +106,10 @@ const Button: FC<ButtonProps> = ({
 
     return (
         <StyledMotionButton
+            ref={buttonRef}
             $shouldShowTextAsRobotoMedium={shouldShowTextAsRobotoMedium}
             $shouldShowAsSelectButton={shouldShowAsSelectButton}
             $shouldShowWaitCursor={shouldShowWaitCursor}
-            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
             className={buttonClasses}
             disabled={isDisabled}
             $isDisabled={isDisabled}

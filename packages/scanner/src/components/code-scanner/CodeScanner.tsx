@@ -68,6 +68,10 @@ type CodeScannerProps = {
      */
     shouldShowIconOverlay?: boolean;
     /**
+     * Enables keyboard-only focus highlighting for scanner controls.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+    /**
      * If true, allows scanning the same code multiple times in a row.
      */
     shouldTriggerForSameCode?: boolean;
@@ -96,6 +100,7 @@ const CodeScanner: FC<CodeScannerProps> = ({
     scanInterval = 250,
     placeholder,
     errorMessages,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const [isPolyfillLoaded, setIsPolyfillLoaded] = useState(false);
     const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
@@ -379,6 +384,7 @@ const CodeScanner: FC<CodeScannerProps> = ({
                     isZoomDisabled={isZoomDisabled}
                     isTorchDisabled={isTorchDisabled}
                     isFileSelectDisabled={isFileSelectDisabled}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />
             )}
         </StyledCodeScanner>

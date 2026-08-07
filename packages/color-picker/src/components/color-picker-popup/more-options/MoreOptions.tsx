@@ -1,6 +1,20 @@
-import { Accordion, AccordionGroup, AreaContext } from '@chayns-components/core';
+import {
+    Accordion,
+    AccordionGroup,
+    AreaContext,
+    useFocusRingPortal,
+    useKeyboardFocusHighlighting,
+} from '@chayns-components/core';
 import { isHex } from '@chayns/colors';
-import React, { type ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+    type ChangeEvent,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 
 import { extractRgbValues, hexToRgb, isValidRGBA, rgbToHex } from '../../../utils/color';
 import { ColorPickerContext } from '../../ColorPickerProvider';
@@ -12,7 +26,11 @@ import {
 import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
 import textStrings from '../../../constants/textStrings';
 
-const MoreOptions = () => {
+type MoreOptionsProps = {
+    shouldEnableKeyboardHighlighting?: boolean;
+};
+
+const MoreOptions = ({ shouldEnableKeyboardHighlighting }: MoreOptionsProps) => {
     const { selectedColor, updateSelectedColor, updateShouldCallOnSelect } =
         useContext(ColorPickerContext);
     const areaProvider = useContext(AreaContext);
@@ -21,6 +39,37 @@ const MoreOptions = () => {
     const [tmpRgbValue, setTmpRgbValue] = useState('');
     const [isHexInvalid, setIsHexInvalid] = useState(false);
     const [isRgbInvalid, setIsRgbInvalid] = useState(false);
+    const [areInputsMounted, setAreInputsMounted] = useState(false);
+    const hexInputRef = useRef<HTMLInputElement | null>(null);
+    const rgbInputRef = useRef<HTMLInputElement | null>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
+    useFocusRingPortal(hexInputRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        updateKey: areInputsMounted,
+    });
+    useFocusRingPortal(rgbInputRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        updateKey: areInputsMounted,
+    });
+
+    const setHexInputRef = useCallback((element: HTMLInputElement | null) => {
+        hexInputRef.current = element;
+
+        if (element) {
+            setAreInputsMounted(true);
+        }
+    }, []);
+
+    const setRgbInputRef = useCallback((element: HTMLInputElement | null) => {
+        rgbInputRef.current = element;
+
+        if (element) {
+            setAreInputsMounted(true);
+        }
+    }, []);
 
     const shouldChangeColor = useMemo(
         () => areaProvider.shouldChangeColor ?? false,
@@ -87,12 +136,14 @@ const MoreOptions = () => {
                 <Accordion title={title}>
                     <StyledMoreOptionsInputWrapper>
                         <StyledMoreOptionsInput
+                            ref={setHexInputRef}
                             $shouldChangeColor={shouldChangeColor}
                             value={tmpHexValue}
                             onChange={handleHexChange}
                             $isInvalid={isHexInvalid}
                         />
                         <StyledMoreOptionsInput
+                            ref={setRgbInputRef}
                             $shouldChangeColor={shouldChangeColor}
                             value={tmpRgbValue}
                             onChange={handleRgbChange}

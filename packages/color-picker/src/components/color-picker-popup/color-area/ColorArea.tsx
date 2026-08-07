@@ -17,9 +17,18 @@ import {
     rgbToHsv,
 } from '../../../utils/color';
 import { ColorPickerContext } from '../../ColorPickerProvider';
-import { useIsMeasuredClone } from '@chayns-components/core';
+import {
+    useFocusRingPortal,
+    useIsMeasuredClone,
+    useKeyboardFocusHighlighting,
+} from '@chayns-components/core';
+import { useColorAreaKeyboardNavigation } from '../../../hooks/useColorAreaKeyboardNavigation';
 
-const ColorArea = () => {
+type ColorAreaProps = {
+    shouldEnableKeyboardHighlighting?: boolean;
+};
+
+const ColorArea = ({ shouldEnableKeyboardHighlighting }: ColorAreaProps) => {
     const {
         selectedColor,
         updateSelectedColor,
@@ -40,6 +49,7 @@ const ColorArea = () => {
     const canDrag = useRef(false);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const pseudoRef = useRef<HTMLDivElement>(null);
+    const pointerRef = useRef<HTMLDivElement>(null);
 
     const [shouldPreventListener, ref] = useIsMeasuredClone<HTMLDivElement>();
 
@@ -47,6 +57,16 @@ const ColorArea = () => {
 
     const x = useMotionValue(0);
     const y = useMotionValue(0);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
+    useFocusRingPortal(pseudoRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        overlayRef: pointerRef,
+        shape: 'circle',
+        padding: 3,
+    });
 
     useEffect(() => {
         isPresetColorRef.current = isPresetColor ?? false;
@@ -298,6 +318,14 @@ const ColorArea = () => {
         updateShouldGetCoordinates,
     ]);
 
+    const handleKeyDown = useColorAreaKeyboardNavigation({
+        move,
+        onChangeEnd: () => updateShouldCallOnSelect?.(true),
+        onChangeStart: () => updateShouldGetCoordinates?.(false),
+        x,
+        y,
+    });
+
     return useMemo(
         () => (
             <StyledColorArea ref={ref}>
@@ -306,8 +334,12 @@ const ColorArea = () => {
                     ref={pseudoRef}
                     onPointerDown={handleStartDrag}
                     onClick={handleClick}
+                    onKeyDown={handleKeyDown}
+                    role="slider"
+                    tabIndex={0}
                 >
                     <StyledMotionColorAreaPointer
+                        ref={pointerRef}
                         drag
                         dragConstraints={pseudoRef}
                         style={{ x, y }}

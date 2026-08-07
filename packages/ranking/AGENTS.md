@@ -229,6 +229,7 @@ import { Ranking } from '@chayns-components/ranking';
 | `onLoadMore` | `(() => void) \| undefined` | no | Callback function when the load more button is clicked. |
 | `onSearchChange` | `((value: string) => void) \| undefined` | no | Callback function triggered when the search input value changes. |
 | `searchValue` | `string \| undefined` | no | The current value of the search input field. |
+| `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting for interactive controls. |
 | `shouldShowOnlyFriends` | `boolean \| undefined` | no | Whether only the friends of the user should be displayed (filtering and fetching the correct data is done by you). |
 | `title` | `string \| undefined` | no | The title of the top Accordion. |
 

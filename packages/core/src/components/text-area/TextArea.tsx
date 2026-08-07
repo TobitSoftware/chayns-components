@@ -25,6 +25,7 @@ import {
     StyledTextAreaLabelWrapper,
 } from './TextArea.styles';
 import { useCursorRepaint } from '../../hooks/resize';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 type TextAreaColors = {
@@ -127,6 +128,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
             shouldEnableKeyboardHighlighting && !isDisabled,
         );
+        useFocusRingPortal(textareaRef, { isEnabled: shouldShowKeyboardHighlighting });
 
         const adjustTextareaHeight = useCallback(() => {
             if (textareaRef.current) {

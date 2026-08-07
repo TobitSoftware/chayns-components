@@ -24,6 +24,7 @@ export type {
     WithTheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
 export { useContainer, ContainerAnchor } from './hooks/container';
+export { useFocusRingPortal } from './hooks/useFocusRingPortal';
 export { DropdownDirection, type DropdownCoordinates } from './types/dropdown';
 export { useIsMeasuredClone } from './hooks/element';
 export { useCombinedRefs } from './hooks/ref';
@@ -174,3 +175,4 @@ export type {
 export { default as Skeleton } from './components/skeleton';
 export { SkeletonAnimationType } from './components/skeleton/types';
 export { default as Masonry } from './components/masonry/Masonry';
+export { useKeyboardFocusHighlighting } from './hooks/useKeyboardFocusHighlighting';

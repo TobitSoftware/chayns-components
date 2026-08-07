@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback, useMemo, useRef } from 'react';
 import {
     StyledSocialPluginBar,
     StyledSocialPluginBarCommentCount,
@@ -8,7 +8,13 @@ import {
     StyledSocialPluginBarItemsSide,
     StyledSocialPluginBarItemText,
 } from './SocialPluginBar.styles';
-import { ContextMenuAlignment, Icon, SharingBar } from '@chayns-components/core';
+import {
+    ContextMenuAlignment,
+    Icon,
+    SharingBar,
+    useFocusRingPortal,
+    useKeyboardFocusHighlighting,
+} from '@chayns-components/core';
 import { useTranslation } from '@chayns/textstrings';
 import textStrings from '../../../constants/textStrings';
 import { useSocialPlugin } from '../SocialPlugin.context';
@@ -16,10 +22,23 @@ import { useSocialPlugin } from '../SocialPlugin.context';
 interface SocialPluginBarProps {
     link: string;
     onCommentVisibilityChange: VoidFunction;
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
-const SocialPluginBar: FC<SocialPluginBarProps> = ({ link, onCommentVisibilityChange }) => {
+const SocialPluginBar: FC<SocialPluginBarProps> = ({
+    link,
+    onCommentVisibilityChange,
+    shouldEnableKeyboardHighlighting,
+}) => {
     const { t } = useTranslation();
+    const likeRef = useRef<HTMLButtonElement>(null);
+    const commentRef = useRef<HTMLButtonElement>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
+    useFocusRingPortal(likeRef, { isEnabled: shouldShowKeyboardHighlighting, padding: 4 });
+    useFocusRingPortal(commentRef, { isEnabled: shouldShowKeyboardHighlighting, padding: 4 });
 
     const { likeCount, hasLiked, commentCount, like, dislike } = useSocialPlugin();
 
@@ -73,7 +92,7 @@ const SocialPluginBar: FC<SocialPluginBarProps> = ({ link, onCommentVisibilityCh
             <StyledSocialPluginBarDivider />
             <StyledSocialPluginBarItems>
                 <StyledSocialPluginBarItemsSide>
-                    <StyledSocialPluginBarItem onClick={handleLike}>
+                    <StyledSocialPluginBarItem onClick={handleLike} ref={likeRef} type="button">
                         <Icon
                             icons={[`${hasLiked ? 'fas' : 'fa'} fa-thumbs-up`]}
                             color={hasLiked ? 'var(--chayns-color--primary)' : undefined}
@@ -82,7 +101,11 @@ const SocialPluginBar: FC<SocialPluginBarProps> = ({ link, onCommentVisibilityCh
                             {t(textStrings.socialPlugin.bar.like)}
                         </StyledSocialPluginBarItemText>
                     </StyledSocialPluginBarItem>
-                    <StyledSocialPluginBarItem onClick={onCommentVisibilityChange}>
+                    <StyledSocialPluginBarItem
+                        onClick={onCommentVisibilityChange}
+                        ref={commentRef}
+                        type="button"
+                    >
                         <Icon icons={['fa fa-comment']} />
                         <StyledSocialPluginBarItemText>
                             {t(textStrings.socialPlugin.bar.comment)}
@@ -94,6 +117,7 @@ const SocialPluginBar: FC<SocialPluginBarProps> = ({ link, onCommentVisibilityCh
                         label={t(textStrings.socialPlugin.bar.share)}
                         link={link}
                         popupAlignment={ContextMenuAlignment.TopLeft}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                     />
                 </StyledSocialPluginBarItemsSide>
             </StyledSocialPluginBarItems>

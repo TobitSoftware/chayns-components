@@ -1,7 +1,9 @@
 import { setRefreshScrollEnabled } from 'chayns-api';
 import { AnimatePresence, useAnimate } from 'motion/react';
+import type { RefObject } from 'react';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useElementSize } from '../../hooks/element';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 import { PopupRef } from '../../types/popup';
@@ -56,6 +58,10 @@ const SliderButton: FC<SliderButtonProps> = ({
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlightingEffective && !isDisabled,
     );
+    useFocusRingPortal(scope as RefObject<HTMLElement>, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        shape: isRounded ? 'circle' : 'rectangle',
+    });
 
     const initialItemWidth = useMemo(() => calculateBiggestWidth(items), [items]);
     const elementSize = useElementSize(sliderButtonRef);
@@ -508,7 +514,6 @@ const SliderButton: FC<SliderButtonProps> = ({
                             ? handleThumbKeyDown
                             : undefined
                     }
-                    $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
                 />
                 <StyledSliderButtonWrapper
                     $isRounded={isRounded}

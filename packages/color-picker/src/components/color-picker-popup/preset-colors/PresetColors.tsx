@@ -10,6 +10,7 @@ import { ColorPickerContext } from '../../ColorPickerProvider';
 import PresetButton from './preset-button/PresetButton';
 import PresetColor from './preset-color/PresetColor';
 import { StyledPresetColors } from './PresetColors.styles';
+import { usePresetColorKeyboardNavigation } from '../../../hooks/usePresetColorKeyboardNavigation';
 
 interface PresetColorsProps {
     presetColors?: IPresetColor[];
@@ -17,6 +18,7 @@ interface PresetColorsProps {
     onPresetColorRemove?: (presetColorId: IPresetColor['id']) => void;
     shouldUseSiteColors: boolean;
     shouldHideDefaultPresetColors: boolean;
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 const PresetColors = ({
@@ -25,10 +27,12 @@ const PresetColors = ({
     onPresetColorAdd,
     shouldUseSiteColors,
     shouldHideDefaultPresetColors,
+    shouldEnableKeyboardHighlighting,
 }: PresetColorsProps) => {
     const { selectedColor } = useContext(ColorPickerContext);
 
     const [siteColors, setSiteColors] = useState<IPresetColor[] | undefined>(undefined);
+    const [focusedPresetIndex, setFocusedPresetIndex] = useState(0);
 
     const loadSiteColors = async (presetColorId?: IPresetColor['id']) => {
         const colors = await getSiteColors();
@@ -107,12 +111,25 @@ const PresetColors = ({
     const content = useMemo(() => {
         const items: ReactElement[] = [];
 
-        combinedColors.forEach(({ color, id }) => {
-            items.push(<PresetColor key={`preset-color__${id}`} color={color} />);
+        combinedColors.forEach(({ color, id }, index) => {
+            items.push(
+                <PresetColor
+                    key={`preset-color__${id}`}
+                    color={color}
+                    isKeyboardFocusable={index === focusedPresetIndex}
+                    onFocus={() => setFocusedPresetIndex(index)}
+                    presetIndex={index}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                />,
+            );
         });
 
         return items;
-    }, [combinedColors]);
+    }, [combinedColors, focusedPresetIndex, shouldEnableKeyboardHighlighting]);
+
+    const handlePresetColorsKeyDown = usePresetColorKeyboardNavigation({
+        onFocusChange: setFocusedPresetIndex,
+    });
 
     const currentPresetColor = useMemo(
         () => combinedColors.find(({ color }) => color === selectedColor),
@@ -148,14 +165,18 @@ const PresetColors = ({
     };
 
     return (
-        <StyledPresetColors>
+        <StyledPresetColors onKeyDown={handlePresetColorsKeyDown}>
             {content}
             {!shouldHideDefaultPresetColors && (
                 <PresetButton
                     id={currentPresetColor?.id}
                     isCustom={currentPresetColor?.isCustom}
+                    isKeyboardFocusable={focusedPresetIndex === combinedColors.length}
                     onAdd={handleAddColor}
+                    onFocus={() => setFocusedPresetIndex(combinedColors.length)}
                     onRemove={handleRemoveColor}
+                    presetIndex={combinedColors.length}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />
             )}
         </StyledPresetColors>

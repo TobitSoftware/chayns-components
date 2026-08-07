@@ -15,10 +15,12 @@ import React, {
     KeyboardEvent,
     FocusEvent,
 } from 'react';
+import { useTheme } from 'styled-components';
 import { useUuid } from '../../hooks/uuid';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { AreaContext } from '../area-provider/AreaContextProvider';
-import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { type Theme, useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { InputProps } from '../input/Input';
 import AccordionBody from './accordion-body/AccordionBody';
 import { AccordionGroupContext } from './accordion-group/AccordionGroup';
@@ -209,6 +211,7 @@ const Accordion: FC<AccordionProps> = ({
     onBodyAnimationComplete,
     shouldEnableKeyboardHighlighting,
 }) => {
+    const theme = useTheme() as Theme;
     const {
         isWrapped: groupIsWrapped,
         openAccordionUuid,
@@ -238,6 +241,7 @@ const Accordion: FC<AccordionProps> = ({
     const uuid = useUuid();
 
     const isInitialRenderRef = useRef(true);
+    const accordionRef = useRef<HTMLDivElement>(null);
 
     const initialRenderSkipRef = useInitialRenderRef(true);
 
@@ -256,6 +260,11 @@ const Accordion: FC<AccordionProps> = ({
     );
     const isKeyboardFocusable =
         !isDisabled && (shouldIndex || shouldEnableKeyboardHighlightingEffective);
+
+    useFocusRingPortal(accordionRef, {
+        isEnabled: shouldShowKeyboardHighlighting && isKeyboardFocusable,
+        borderRadius: `${theme.cardBorderRadius}px`,
+    });
 
     const isInKeyboardNavigationGroup =
         isKeyboardFocusable &&
@@ -379,6 +388,7 @@ const Accordion: FC<AccordionProps> = ({
                 accordionUuids?.length &&
                 (e.key === 'ArrowDown' || e.key === 'ArrowUp')
             ) {
+                e.preventDefault();
                 const currentIndex = accordionUuids.indexOf(uuid);
 
                 if (currentIndex !== -1) {
@@ -518,6 +528,7 @@ const Accordion: FC<AccordionProps> = ({
 
     return (
         <StyledMotionAccordion
+            ref={accordionRef}
             animate={{ height: 'auto', opacity: 1 }}
             data-uuid={`${accordionGroupUuid ?? ''}---${uuid}`}
             className="beta-chayns-accordion"

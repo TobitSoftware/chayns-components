@@ -1,5 +1,6 @@
 import { AnimatePresence } from 'motion/react';
-import React, { FC, FocusEventHandler, MouseEvent } from 'react';
+import React, { FC, FocusEventHandler, MouseEvent, useRef } from 'react';
+import { useFocusRingPortal } from '../../../hooks/useFocusRingPortal';
 import Icon from '../../icon/Icon';
 import Tooltip from '../../tooltip/Tooltip';
 import {
@@ -60,6 +61,8 @@ const ActionButton: FC<ActionButtonProps> = ({
     height,
     shouldShowKeyboardHighlighting = false,
 }) => {
+    const actionButtonRef = useRef<HTMLButtonElement>(null);
+
     const isPrimary = actionType === 'primary';
     const isSecondary = actionType === 'secondary';
     const actionColor = action.color ?? '#FFFFFF';
@@ -67,6 +70,10 @@ const ActionButton: FC<ActionButtonProps> = ({
     const disabledReason = action.disabledReason?.trim();
     const shouldShowDisabledReason = Boolean(disabledReason) && isActionDisabled;
     const iconSize = height - 24;
+
+    useFocusRingPortal(actionButtonRef, {
+        isEnabled: shouldShowKeyboardHighlighting && !isActionDisabled,
+    });
 
     const actionContent = (
         <StyledActionContent>
@@ -97,6 +104,7 @@ const ActionButton: FC<ActionButtonProps> = ({
 
     return (
         <StyledActionButton
+            ref={actionButtonRef}
             aria-disabled={isActionDisabled}
             disabled={isActionDisabled && !shouldShowDisabledReason}
             $backgroundColor={backgroundColor}
@@ -112,7 +120,6 @@ const ActionButton: FC<ActionButtonProps> = ({
             $height={height}
             $statusType={action.status?.type}
             $shouldUseContentWidth={shouldUseContentWidth}
-            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
             onClick={onClick}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}

@@ -172,6 +172,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const handleTitleWidthChange = useCallback((width: number) => {
         setTitleMaxWidth(width);
     }, []);
+    const shouldShowHoverItemContent = !!(shouldForceHover || shouldShowHoverItem);
 
     const handleInputClick = useCallback<MouseEventHandler<HTMLDivElement>>((event) => {
         event.stopPropagation();
@@ -310,13 +311,13 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 </LayoutGroup>
             </StyledListItemHeadContent>
             <ListItemRightElement rightElements={rightElements} />
-            {hoverItem && (
+            {hoverItem && shouldShowHoverItemContent && (
                 <StyledMotionListItemHeadHoverItemWrapper
                     className="beta-chayns-list-item-hover-item"
                     animate={{
-                        marginLeft: shouldForceHover || shouldShowHoverItem ? 8 : 0,
-                        opacity: shouldForceHover || shouldShowHoverItem ? 1 : 0,
-                        width: shouldForceHover || shouldShowHoverItem ? 'auto' : 0,
+                        marginLeft: 8,
+                        opacity: 1,
+                        width: 'auto',
                     }}
                     initial={false}
                     transition={{ duration: 0.15, type: 'tween' }}

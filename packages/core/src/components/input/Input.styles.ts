@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { InputSize } from './Input';
 import { CSSProperties } from 'react';
-import { keyboardFocusHighlightingRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledInputProps = WithTheme<{ $isDisabled?: boolean }>;
 
@@ -105,7 +104,6 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
             /* Show highlighting when the input field is focused */
             &:has(input:focus-visible) {
                 transition: none;
-                ${keyboardFocusHighlightingRingCss}
             }
         `}
 `;
@@ -198,7 +196,6 @@ export const StyledMotionInputClearIcon = styled(motion.div)<StyledMotionInputCl
         css`
             &:focus-visible {
                 transition: none;
-                ${keyboardFocusHighlightingRingCss}
             }
         `}
 `;

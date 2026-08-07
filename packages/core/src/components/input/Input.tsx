@@ -35,6 +35,7 @@ import {
 import { ContentCardType } from '../../types/contentCard';
 import { useCursorRepaint } from '../../hooks/resize';
 import Tooltip from '../tooltip/Tooltip';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 
 export interface InputRef {
@@ -225,6 +226,8 @@ const Input = forwardRef<InputRef, InputProps>(
         const theme = useTheme() as Theme;
 
         const inputRef = useRef<HTMLInputElement>(null);
+        const inputContentWrapperRef = useRef<HTMLDivElement>(null);
+        const clearIconRef = useRef<HTMLDivElement>(null);
         const placeholderRef = useRef<HTMLLabelElement>(null);
 
         useCursorRepaint(inputRef);
@@ -309,6 +312,13 @@ const Input = forwardRef<InputRef, InputProps>(
         const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
             shouldEnableKeyboardHighlighting && !isDisabled,
         );
+        useFocusRingPortal(inputRef, {
+            isEnabled: shouldShowKeyboardHighlighting,
+            overlayRef: inputContentWrapperRef,
+        });
+        useFocusRingPortal(clearIconRef, {
+            isEnabled: shouldShowKeyboardHighlighting && hasValue && !isDisabled,
+        });
 
         const borderColor = color?.border;
         const placeholderColor = color?.placeholder;
@@ -333,6 +343,7 @@ const Input = forwardRef<InputRef, InputProps>(
             () => (
                 <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
                     <StyledInputContentWrapper
+                        ref={inputContentWrapperRef}
                         $shouldShowTransparentBackground={shouldShowTransparentBackground}
                         $backgroundColor={backgroundColor}
                         $isInvalid={isInvalid}
@@ -402,6 +413,7 @@ const Input = forwardRef<InputRef, InputProps>(
                         </StyledInputContent>
                         {shouldShowClearIcon && (
                             <StyledMotionInputClearIcon
+                                ref={clearIconRef}
                                 $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                                 $size={size}
                                 $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
@@ -409,12 +421,8 @@ const Input = forwardRef<InputRef, InputProps>(
                                 initial={false}
                                 onClick={handleClearIconClick}
                                 onKeyDown={handleClearIconKeyDown}
-                                tabIndex={
-                                    shouldShowKeyboardHighlighting && hasValue && !isDisabled
-                                        ? 0
-                                        : -1
-                                }
-                                role={shouldShowKeyboardHighlighting ? 'button' : undefined}
+                                tabIndex={hasValue && !isDisabled ? 0 : -1}
+                                role={hasValue ? 'button' : undefined}
                                 aria-hidden={!hasValue}
                                 transition={{ type: 'tween' }}
                             >

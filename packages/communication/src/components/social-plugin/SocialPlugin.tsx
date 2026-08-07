@@ -6,7 +6,12 @@ import SocialPluginBar from './social-plugin-bar/SocialPluginBar';
 import { TextStringProviderSSR } from '@chayns/textstrings';
 import SocialPluginContent from './social-plugin-content/SocialPluginContent';
 
-const SocialPlugin: FC<SocialPluginProps> = ({ link, postingId, commentType }) => {
+const SocialPlugin: FC<SocialPluginProps> = ({
+    link,
+    postingId,
+    commentType,
+    shouldEnableKeyboardHighlighting,
+}) => {
     const [shouldShowComments, setShouldSHowComments] = useState(false);
 
     return (
@@ -19,8 +24,12 @@ const SocialPlugin: FC<SocialPluginProps> = ({ link, postingId, commentType }) =
                     <SocialPluginBar
                         link={link}
                         onCommentVisibilityChange={() => setShouldSHowComments((prev) => !prev)}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                     />
-                    <SocialPluginContent shouldShowComments={shouldShowComments} />
+                    <SocialPluginContent
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                        shouldShowComments={shouldShowComments}
+                    />
                 </StyledSocialPlugin>
             </TextStringProviderSSR>
         </SocialPluginProvider>

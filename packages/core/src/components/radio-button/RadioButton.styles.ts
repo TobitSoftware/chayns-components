@@ -2,7 +2,6 @@ import { motion } from 'motion/react';
 import styled, { css } from 'styled-components';
 import { RadioButtonRightElementMargin } from '../../types/radioButton';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { keyboardFocusHighlightingCircleRingCss } from '../../utils/keyboardFocusHighlighting.styles';
 
 type StyledRadioButtonProps = WithTheme<{
     $isDisabled: boolean;
@@ -74,7 +73,6 @@ export const StyledRadioButtonPseudoCheckBox = styled.div<StyledRadioButtonPseud
 
 type StyledRadioButtonCheckBoxProps = WithTheme<{
     $isDisabled: boolean;
-    $shouldShowKeyboardHighlighting: boolean;
 }>;
 
 export const StyledRadioButtonCheckBox = styled.input<StyledRadioButtonCheckBoxProps>`
@@ -83,15 +81,6 @@ export const StyledRadioButtonCheckBox = styled.input<StyledRadioButtonCheckBoxP
     width: 15px;
     cursor: ${({ $isDisabled }: StyledRadioButtonCheckBoxProps) =>
         $isDisabled ? 'default !important' : 'pointer !important'};
-
-    ${({ $shouldShowKeyboardHighlighting }) =>
-        $shouldShowKeyboardHighlighting &&
-        css`
-            &:focus-visible + ${StyledRadioButtonPseudoCheckBox} {
-                transition: none;
-                ${keyboardFocusHighlightingCircleRingCss}
-            }
-        `}
 `;
 
 type StyledRadioButtonCheckBoxMarkProps = WithTheme<{

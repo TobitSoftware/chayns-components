@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import React, { FC, KeyboardEventHandler, MouseEventHandler } from 'react';
+import React, { FC, KeyboardEventHandler, MouseEventHandler, useRef } from 'react';
 import { getStackSizeFactor } from '../../utils/icon';
+import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import { useColorScheme } from '../color-scheme-provider/ColorSchemeProvider';
 import { StyledIcon as StyledIconElement, StyledIconWrapper } from './Icon.styles';
@@ -121,6 +122,7 @@ const Icon: FC<IconProps> = ({
     shouldStopPropagation,
     shouldEnableKeyboardHighlighting,
 }) => {
+    const iconWrapperRef = useRef<HTMLSpanElement>(null);
     const theme = useTheme() as Theme;
     const colorScheme = useColorScheme();
     const shouldEnableKeyboardHighlightingEffective =
@@ -130,6 +132,11 @@ const Icon: FC<IconProps> = ({
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
         shouldEnableKeyboardHighlightingEffective && isClickable,
     );
+    useFocusRingPortal(iconWrapperRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        shape: 'circle',
+        padding: 4,
+    });
 
     const handleClick: MouseEventHandler<HTMLSpanElement> = (event) => {
         if (shouldStopPropagation) {
@@ -182,6 +189,7 @@ const Icon: FC<IconProps> = ({
 
     return (
         <StyledIconWrapper
+            ref={iconWrapperRef}
             tabIndex={
                 shouldEnableKeyboardHighlightingEffective && isClickable
                     ? (tabIndex ?? 0)
@@ -196,7 +204,6 @@ const Icon: FC<IconProps> = ({
             }
             onMouseDown={typeof onMouseDown === 'function' && !isDisabled ? onMouseDown : undefined}
             onKeyDown={shouldEnableKeyboardHighlightingEffective ? handleKeyDown : undefined}
-            $shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
             $size={size}
             role={isClickable ? 'button' : undefined}
         >

@@ -1,5 +1,10 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import { Icon, selectFiles } from '@chayns-components/core';
+import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import {
+    Icon,
+    selectFiles,
+    useFocusRingPortal,
+    useKeyboardFocusHighlighting,
+} from '@chayns-components/core';
 import {
     StyledScannerToolbar,
     StyledScannerToolbarButton,
@@ -54,6 +59,50 @@ type ScannerToolbarProps = {
      * Defines constraints for the video element, e.g., resolution or facing mode.
      */
     videoConstraints: MediaTrackConstraints;
+    /**
+     * Enables keyboard-only focus highlighting for toolbar actions.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
+};
+
+type ScannerToolbarActionProps = {
+    children: ReactNode;
+    isActive?: boolean;
+    isAvailable: boolean;
+    onClick: VoidFunction;
+    shouldEnableKeyboardHighlighting?: boolean;
+};
+
+const ScannerToolbarAction: FC<ScannerToolbarActionProps> = ({
+    children,
+    isActive,
+    isAvailable,
+    onClick,
+    shouldEnableKeyboardHighlighting,
+}) => {
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        isAvailable ? shouldEnableKeyboardHighlighting : false,
+    );
+
+    useFocusRingPortal(buttonRef, {
+        isEnabled: shouldShowKeyboardHighlighting,
+        shape: 'circle',
+        padding: 4,
+    });
+
+    return (
+        <StyledScannerToolbarButton
+            $isActive={isActive}
+            $isAvailable={isAvailable}
+            disabled={!isAvailable}
+            onClick={onClick}
+            ref={buttonRef}
+            type="button"
+        >
+            {children}
+        </StyledScannerToolbarButton>
+    );
 };
 
 const ScannerToolbar: FC<ScannerToolbarProps> = ({
@@ -68,6 +117,7 @@ const ScannerToolbar: FC<ScannerToolbarProps> = ({
     placeholder,
     isTorchDisabled = false,
     isFileSelectDisabled = false,
+    shouldEnableKeyboardHighlighting,
 }) => {
     const [tracks, setTrack] = useState<MediaStreamTrack[]>();
     const [isZoomed, setIsZoomed] = useState<boolean>();
@@ -169,6 +219,23 @@ const ScannerToolbar: FC<ScannerToolbarProps> = ({
         }
     }, [isTorchActive, isTorchSupported, tracks]);
 
+    const handleFileSelect = useCallback(() => {
+        setIsImageSelectActive(true);
+        selectFiles({
+            multiple: false,
+            type: 'image/*',
+        })
+            .then((files) => {
+                if (files && files[0]) {
+                    onFileSelect(files[0]);
+                }
+            })
+            .catch(console.error)
+            .finally(() => {
+                setIsImageSelectActive(false);
+            });
+    }, [onFileSelect]);
+
     if (typeof placeholder === 'string' && placeholder.length > 0) {
         return (
             <StyledScannerToolbar>
@@ -179,46 +246,34 @@ const ScannerToolbar: FC<ScannerToolbarProps> = ({
 
     return (
         <StyledScannerToolbar>
-            <StyledScannerToolbarButton
-                $isAvailable={isTorchSupported}
-                $isActive={isTorchActive}
+            <ScannerToolbarAction
+                isActive={isTorchActive}
+                isAvailable={isTorchSupported}
                 onClick={() => {
                     setIsTorchActive((prev) => !prev);
                 }}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             >
                 <Icon icons={['far fa-lightbulb']} size={25} />
-            </StyledScannerToolbarButton>
-            <StyledScannerToolbarButton
-                $isAvailable={isZoomSupported}
-                $isActive={isZoomed}
+            </ScannerToolbarAction>
+            <ScannerToolbarAction
+                isActive={isZoomed}
+                isAvailable={isZoomSupported}
                 onClick={() => {
                     setIsZoomed((prev) => !prev);
                 }}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             >
                 <Icon icons={['far fa-search-plus']} size={25} />
-            </StyledScannerToolbarButton>
-            <StyledScannerToolbarButton
-                $isAvailable={!isFileSelectDisabled}
-                $isActive={isImageSelectActive || isScanningFile}
-                onClick={() => {
-                    setIsImageSelectActive(true);
-                    selectFiles({
-                        multiple: false,
-                        type: 'image/*',
-                    })
-                        .then((files) => {
-                            if (files && files[0]) {
-                                onFileSelect(files[0]);
-                            }
-                        })
-                        .catch(console.error)
-                        .finally(() => {
-                            setIsImageSelectActive(false);
-                        });
-                }}
+            </ScannerToolbarAction>
+            <ScannerToolbarAction
+                isActive={isImageSelectActive || isScanningFile}
+                isAvailable={!isFileSelectDisabled}
+                onClick={handleFileSelect}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
             >
                 <Icon icons={['far fa-folder-image']} size={25} />
-            </StyledScannerToolbarButton>
+            </ScannerToolbarAction>
         </StyledScannerToolbar>
     );
 };

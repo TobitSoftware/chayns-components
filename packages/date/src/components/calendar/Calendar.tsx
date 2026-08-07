@@ -1,6 +1,16 @@
-import { ComboBox, Icon } from '@chayns-components/core';
+import { ComboBox, Icon, useColorScheme, useFocusRingPortal } from '@chayns-components/core';
 import { Language } from 'chayns-api';
-import React, { CSSProperties, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation, TextStringProvider } from '@chayns/textstrings';
+import React, {
+    CSSProperties,
+    FC,
+    KeyboardEvent,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import {
     CalendarType,
     Categories,
@@ -10,6 +20,7 @@ import {
 } from '../../types/calendar';
 import { getNewDate, getYearsBetween, isDateInRange } from '../../utils/calendar';
 import {
+    addDays,
     addYears,
     differenceInCalendarMonths,
     isSameDay,
@@ -25,6 +36,8 @@ import {
     StyledPseudoMonthYearPicker,
 } from './Calendar.styles';
 import MonthWrapper from './month-wrapper/MonthWrapper';
+import { useKeyboardFocusHighlighting } from '@chayns-components/core';
+import textStrings from '../../constants/textStrings';
 
 interface BaseProps {
     /**
@@ -81,6 +94,10 @@ interface BaseProps {
         When set, the current date will be highlighted in the corresponding style.
     */
     currentDateBackgroundColor?: CSSProperties['backgroundColor'];
+    /**
+     * Enables keyboard focus highlighting and keyboard selection for selectable days.
+     */
+    shouldEnableKeyboardHighlighting?: boolean;
 }
 
 interface SingleSelectionProps {
@@ -128,6 +145,8 @@ export type CalendarProps = BaseProps &
 const DEFAULT_MAX_DATE = addYears(new Date(), 1);
 const DEFAULT_MIN_DATE = subYears(new Date(), 1);
 
+const EMPTY_DISABLED_DATES: Date[] = []; // stable empty const to prevent infinite loop caused by new empty arrays
+
 const Calendar: FC<CalendarProps> = ({
     locale = Language.German,
     maxDate = DEFAULT_MAX_DATE,
@@ -142,11 +161,13 @@ const Calendar: FC<CalendarProps> = ({
     isDisabled,
     type = CalendarType.Single,
     shouldShowHighlightsInMonthOverlay = true,
-    disabledDates = [],
+    disabledDates = EMPTY_DISABLED_DATES,
     showMonthYearPickers: showMonthYearPickersProp,
     onShownDatesChange = () => {},
     currentDateBackgroundColor,
+    shouldEnableKeyboardHighlighting: shouldEnableKeyboardHighlightingProp,
 }) => {
+    const { t } = useTranslation();
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
     const [internalSelectedDate, setInternalSelectedDate] = useState<
@@ -163,6 +184,79 @@ const Calendar: FC<CalendarProps> = ({
     }, [minDate, maxDate, showMonthYearPickersProp]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
+    const leftNavigationIconRef = useRef<HTMLDivElement>(null);
+    const leftNavigationIconContentRef = useRef<HTMLDivElement>(null);
+    const rightNavigationIconRef = useRef<HTMLDivElement>(null);
+    const rightNavigationIconContentRef = useRef<HTMLDivElement>(null);
+    const pendingFocusedDateRef = useRef<Date>();
+    const pendingNavigationFocusRef = useRef<'left' | 'right'>();
+    const colorScheme = useColorScheme();
+    const shouldEnableKeyboardHighlighting =
+        shouldEnableKeyboardHighlightingProp ??
+        colorScheme?.shouldEnableKeyboardHighlighting ??
+        false;
+    const shouldShowKeyboardFocusHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
+    useFocusRingPortal(leftNavigationIconRef, {
+        isEnabled: shouldShowKeyboardFocusHighlighting,
+        shape: 'circle',
+        padding: 4,
+        overlayRef: leftNavigationIconContentRef,
+        updateKey: currentDate,
+    } as Parameters<typeof useFocusRingPortal>[1] & { updateKey: Date | undefined });
+    useFocusRingPortal(rightNavigationIconRef, {
+        isEnabled: shouldShowKeyboardFocusHighlighting,
+        shape: 'circle',
+        padding: 4,
+        overlayRef: rightNavigationIconContentRef,
+        updateKey: currentDate,
+    } as Parameters<typeof useFocusRingPortal>[1] & { updateKey: Date | undefined });
+
+    useEffect(() => {
+        const pendingFocusedDate = pendingFocusedDateRef.current;
+
+        if (!pendingFocusedDate || !calendarRef.current || direction) {
+            return;
+        }
+
+        let animationFrameId: number;
+
+        const focusPendingDay = () => {
+            const nextDay = calendarRef.current?.querySelector<HTMLDivElement>(
+                `[data-calendar-month="${pendingFocusedDate.getFullYear()}-${pendingFocusedDate.getMonth()}"] [data-calendar-date="${pendingFocusedDate.getTime()}"]`,
+            );
+
+            if (nextDay) {
+                pendingFocusedDateRef.current = undefined;
+                nextDay.focus();
+                return;
+            }
+
+            animationFrameId = window.requestAnimationFrame(focusPendingDay);
+        };
+
+        animationFrameId = window.requestAnimationFrame(focusPendingDay);
+
+        return () => {
+            window.cancelAnimationFrame(animationFrameId);
+        };
+    }, [currentDate, direction, shouldRenderTwoMonths]);
+
+    useEffect(() => {
+        if (direction || !pendingNavigationFocusRef.current) {
+            return;
+        }
+
+        const navigationIconRef =
+            pendingNavigationFocusRef.current === 'left'
+                ? leftNavigationIconRef
+                : rightNavigationIconRef;
+
+        pendingNavigationFocusRef.current = undefined;
+        navigationIconRef.current?.focus();
+    }, [currentDate, direction]);
 
     useEffect(() => {
         if (currentDate) {
@@ -413,6 +507,120 @@ const Calendar: FC<CalendarProps> = ({
         setDirection(() => undefined);
     };
 
+    const handleNavigationIconKeyDown = useCallback(
+        (
+            event: KeyboardEvent<HTMLDivElement>,
+            onNavigate: VoidFunction,
+            navigationDirection: 'left' | 'right',
+        ) => {
+            if (!shouldEnableKeyboardHighlighting || (event.key !== 'Enter' && event.key !== ' ')) {
+                return;
+            }
+
+            event.preventDefault();
+            pendingNavigationFocusRef.current = navigationDirection;
+            onNavigate();
+        },
+        [shouldEnableKeyboardHighlighting],
+    );
+
+    const handleKeyDown = useCallback(
+        (event: KeyboardEvent<HTMLDivElement>) => {
+            if (!shouldEnableKeyboardHighlighting) {
+                return;
+            }
+
+            const dayElement = (event.target as HTMLElement).closest<HTMLDivElement>(
+                '[data-calendar-date]',
+            );
+
+            if (!dayElement || !event.currentTarget.contains(dayElement)) {
+                return;
+            }
+
+            const dayTimestamp = Number(dayElement.dataset.calendarDate);
+            const day = new Date(dayTimestamp);
+
+            if (!Number.isFinite(dayTimestamp)) {
+                return;
+            }
+
+            if (
+                type !== CalendarType.Single &&
+                (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar')
+            ) {
+                event.preventDefault();
+                handleSelect(day);
+                return;
+            }
+
+            const daysToMove =
+                event.key === 'ArrowLeft'
+                    ? -1
+                    : event.key === 'ArrowRight'
+                      ? 1
+                      : event.key === 'ArrowUp'
+                        ? -7
+                        : event.key === 'ArrowDown'
+                          ? 7
+                          : 0;
+
+            if (daysToMove === 0) {
+                return;
+            }
+
+            const direction = daysToMove > 0 ? 1 : -1;
+            let nextDate = addDays(day, daysToMove);
+
+            while (
+                isWithinInterval(nextDate, { start: minDate, end: maxDate }) &&
+                disabledDates.some((disabledDate) => isSameDay(disabledDate, nextDate))
+            ) {
+                nextDate = addDays(nextDate, direction);
+            }
+
+            if (!isWithinInterval(nextDate, { start: minDate, end: maxDate })) {
+                event.preventDefault();
+                return;
+            }
+
+            event.preventDefault();
+
+            const isNextDateVisible =
+                currentDate &&
+                (isSameMonth(nextDate, currentDate) ||
+                    (shouldRenderTwoMonths && isSameMonth(nextDate, getNewDate(1, currentDate))));
+
+            if (!isNextDateVisible) {
+                pendingFocusedDateRef.current = nextDate;
+                setDirection(daysToMove > 0 ? 'right' : 'left');
+                setCurrentDate((previousDate) =>
+                    previousDate ? getNewDate(daysToMove > 0 ? 1 : -1, previousDate) : previousDate,
+                );
+            } else {
+                event.currentTarget
+                    .querySelector<HTMLDivElement>(
+                        `[data-calendar-month="${nextDate.getFullYear()}-${nextDate.getMonth()}"] [data-calendar-date="${nextDate.getTime()}"]`,
+                    )
+                    ?.focus();
+            }
+
+            if (type === CalendarType.Single) {
+                handleSelect(nextDate);
+            }
+        },
+        [
+            currentDate,
+            disabledDates,
+            handleSelect,
+            maxDate,
+            minDate,
+            shouldEnableKeyboardHighlighting,
+            shouldRenderTwoMonths,
+            type,
+        ],
+    );
+
     const ShouldShowLeftArrow = useMemo(() => {
         if (!currentDate) {
             return false;
@@ -430,60 +638,84 @@ const Calendar: FC<CalendarProps> = ({
     }, [currentDate, maxDate]);
 
     return (
-        <StyledCalendar ref={calendarRef} $isDisabled={isDisabled}>
-            {ShouldShowLeftArrow ? (
-                <StyledCalendarIconWrapper onClick={handleLeftArrowClick}>
-                    <StyledCalendarIconWrapperContent>
-                        {showMonthYearPickers && (
-                            <StyledPseudoMonthYearPicker>
-                                <ComboBox lists={[{ list: [] }]} placeholder="" />
-                            </StyledPseudoMonthYearPicker>
-                        )}
-                        <Icon icons={['fa fa-angle-left']} />
-                    </StyledCalendarIconWrapperContent>
-                </StyledCalendarIconWrapper>
-            ) : (
-                <StyledCalendarIconWrapperPseudo />
-            )}
-            {currentDate && (
-                <MonthWrapper
-                    shouldRenderTwo={shouldRenderTwoMonths}
-                    currentDate={currentDate}
-                    width={width}
-                    locale={locale}
-                    direction={direction}
-                    customThumbColors={customThumbColors}
-                    onSelect={handleSelect}
-                    selectedDate={internalSelectedDate}
-                    highlightedDates={highlightedDates}
-                    categories={categories}
-                    onAnimationFinished={handleAnimationFinished}
-                    minDate={minDate}
-                    maxDate={maxDate}
-                    type={type}
-                    disabledDates={disabledDates}
-                    setCurrentDate={setCurrentDate}
-                    shouldShowHighlightsInMonthOverlay={shouldShowHighlightsInMonthOverlay}
-                    showMonthYearPickers={showMonthYearPickers}
-                    handleLeftArrowClick={handleLeftArrowClick}
-                    handleRightArrowClick={handleRightArrowClick}
-                    currentDateBackgroundColor={currentDateBackgroundColor}
-                />
-            )}
-            {ShouldShowRightArrow ? (
-                <StyledCalendarIconWrapper onClick={handleRightArrowClick}>
-                    <StyledCalendarIconWrapperContent>
-                        {showMonthYearPickers && (
-                            <StyledPseudoMonthYearPicker>
-                                <ComboBox lists={[{ list: [] }]} placeholder="" />
-                            </StyledPseudoMonthYearPicker>
-                        )}
-                        <Icon icons={['fa fa-angle-right']} />
-                    </StyledCalendarIconWrapperContent>
-                </StyledCalendarIconWrapper>
-            ) : (
-                <StyledCalendarIconWrapperPseudo />
-            )}
+        <StyledCalendar ref={calendarRef} $isDisabled={isDisabled} onKeyDown={handleKeyDown}>
+            <TextStringProvider libraries="@chayns-components-date">
+                {ShouldShowLeftArrow ? (
+                    <StyledCalendarIconWrapper
+                        ref={leftNavigationIconRef}
+                        aria-label={t(textStrings.calendar.accessibility.previousMonth)}
+                        role="button"
+                        tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
+                        onClick={handleLeftArrowClick}
+                        onKeyDown={(event) =>
+                            handleNavigationIconKeyDown(event, handleLeftArrowClick, 'left')
+                        }
+                    >
+                        <StyledCalendarIconWrapperContent ref={leftNavigationIconContentRef}>
+                            {showMonthYearPickers && (
+                                <StyledPseudoMonthYearPicker>
+                                    <ComboBox lists={[{ list: [] }]} placeholder="" />
+                                </StyledPseudoMonthYearPicker>
+                            )}
+                            <Icon icons={['fa fa-angle-left']} />
+                        </StyledCalendarIconWrapperContent>
+                    </StyledCalendarIconWrapper>
+                ) : (
+                    <StyledCalendarIconWrapperPseudo />
+                )}
+                {currentDate && (
+                    <MonthWrapper
+                        shouldRenderTwo={shouldRenderTwoMonths}
+                        currentDate={currentDate}
+                        width={width}
+                        locale={locale}
+                        direction={direction}
+                        customThumbColors={customThumbColors}
+                        onSelect={handleSelect}
+                        selectedDate={internalSelectedDate}
+                        highlightedDates={highlightedDates}
+                        categories={categories}
+                        onAnimationFinished={handleAnimationFinished}
+                        minDate={minDate}
+                        maxDate={maxDate}
+                        type={type}
+                        disabledDates={disabledDates}
+                        setCurrentDate={setCurrentDate}
+                        shouldShowHighlightsInMonthOverlay={shouldShowHighlightsInMonthOverlay}
+                        showMonthYearPickers={showMonthYearPickers}
+                        handleLeftArrowClick={handleLeftArrowClick}
+                        handleRightArrowClick={handleRightArrowClick}
+                        currentDateBackgroundColor={currentDateBackgroundColor}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                        shouldShowKeyboardHighlighting={
+                            shouldShowKeyboardFocusHighlighting && type !== CalendarType.Single
+                        }
+                    />
+                )}
+                {ShouldShowRightArrow ? (
+                    <StyledCalendarIconWrapper
+                        ref={rightNavigationIconRef}
+                        aria-label={t(textStrings.calendar.accessibility.nextMonth)}
+                        role="button"
+                        tabIndex={shouldEnableKeyboardHighlighting ? 0 : -1}
+                        onClick={handleRightArrowClick}
+                        onKeyDown={(event) =>
+                            handleNavigationIconKeyDown(event, handleRightArrowClick, 'right')
+                        }
+                    >
+                        <StyledCalendarIconWrapperContent ref={rightNavigationIconContentRef}>
+                            {showMonthYearPickers && (
+                                <StyledPseudoMonthYearPicker>
+                                    <ComboBox lists={[{ list: [] }]} placeholder="" />
+                                </StyledPseudoMonthYearPicker>
+                            )}
+                            <Icon icons={['fa fa-angle-right']} />
+                        </StyledCalendarIconWrapperContent>
+                    </StyledCalendarIconWrapper>
+                ) : (
+                    <StyledCalendarIconWrapperPseudo />
+                )}
+            </TextStringProvider>
         </StyledCalendar>
     );
 };

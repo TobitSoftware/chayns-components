@@ -36,6 +36,8 @@ export type MonthProps = {
     handleLeftArrowClick: () => void;
     handleRightArrowClick: () => void;
     currentDateBackgroundColor?: CSSProperties['backgroundColor'];
+    shouldEnableKeyboardHighlighting: boolean;
+    shouldShowKeyboardHighlighting: boolean;
 };
 
 const minSwipeDistance = 50;
@@ -63,6 +65,8 @@ const Month: FC<MonthProps> = ({
     handleLeftArrowClick,
     handleRightArrowClick,
     currentDateBackgroundColor,
+    shouldEnableKeyboardHighlighting,
+    shouldShowKeyboardHighlighting,
 }) => {
     const [touchStart, setTouchStart] = useState<undefined | number>();
     const [touchEnd, setTouchEnd] = useState<undefined | number>();
@@ -90,6 +94,7 @@ const Month: FC<MonthProps> = ({
     return (
         <StyledMonth
             $height={height}
+            data-calendar-month={`${year}-${month - 1}`}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
@@ -124,6 +129,8 @@ const Month: FC<MonthProps> = ({
                 setHoveringDay={setHoveringDay}
                 disabledDates={disabledDates}
                 currentDateBackgroundColor={currentDateBackgroundColor}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                shouldShowKeyboardHighlighting={shouldShowKeyboardHighlighting}
             />
         </StyledMonth>
     );

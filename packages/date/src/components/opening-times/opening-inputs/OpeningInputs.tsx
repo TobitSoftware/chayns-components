@@ -46,6 +46,10 @@ export type OpeningInputsProps = {
      * The text to show when the inputs are disabled
      */
     closedText?: string;
+    /**
+     * Enables keyboard-only focus highlighting for the time inputs and controls.
+     */
+    shouldEnableKeyboardHighlighting: boolean;
 };
 
 const OpeningInputs: FC<OpeningInputsProps> = ({
@@ -59,6 +63,7 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
     currentDayId,
     editMode = false,
     closedText = '',
+    shouldEnableKeyboardHighlighting,
 }) => {
     const [newTimes, setNewTimes] = useState<Time[]>();
     const [invalidTimes, setInvalidTimes] = useState<string[]>([]);
@@ -186,6 +191,7 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
                     onAdd={handleAdd}
                     onChange={(time) => handleChange(time)}
                     onRemove={() => handleRemove(timeId)}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 />,
             );
         });
@@ -203,6 +209,7 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
         isDisabled,
         newTimes,
         times.length,
+        shouldEnableKeyboardHighlighting,
     ]);
 
     const gap = useMemo(() => {

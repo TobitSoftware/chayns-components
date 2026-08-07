@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useMemo, useState } from 'react';
+import React, { FC, ReactNode, useMemo, useRef, useState } from 'react';
 import { HeaderMembersProps } from './HeaderMembers.types';
 import {
     StyledHeaderMembers,
@@ -10,8 +10,14 @@ import {
 } from './HeaderMembers.styles';
 import { useCommunicationHeaderDate } from './HeaderMembers.hooks';
 import HeaderMember from './header-member/HeaderMember';
-import { ExpandableContent, Icon, Skeleton } from '@chayns-components/core';
-import { Translation } from '@chayns/textstrings';
+import {
+    ExpandableContent,
+    Icon,
+    Skeleton,
+    useFocusRingPortal,
+    useKeyboardFocusHighlighting,
+} from '@chayns-components/core';
+import { Translation, useTranslation } from '@chayns/textstrings';
 import textStrings from '../../../constants/textStrings';
 
 interface Row {
@@ -19,8 +25,22 @@ interface Row {
     content: ReactNode;
 }
 
-const HeaderMembers: FC<HeaderMembersProps> = ({ from, to, date, cc, isLoading }) => {
+const HeaderMembers: FC<HeaderMembersProps> = ({
+    from,
+    to,
+    date,
+    cc,
+    isLoading,
+    shouldEnableKeyboardHighlighting,
+}) => {
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
+    const toggleRef = useRef<HTMLButtonElement>(null);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        shouldEnableKeyboardHighlighting,
+    );
+
+    useFocusRingPortal(toggleRef, { isEnabled: shouldShowKeyboardHighlighting });
 
     const formattedDate = useCommunicationHeaderDate(date);
 
@@ -37,7 +57,14 @@ const HeaderMembers: FC<HeaderMembersProps> = ({ from, to, date, cc, isLoading }
                     ) : (
                         <div />
                     ),
-                content: <HeaderMember actions={member.actions} name={member.name} />,
+                content: (
+                    <HeaderMember
+                        actions={member.actions}
+                        name={member.name}
+                        isFocusable={isOpen}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                    />
+                ),
             });
         });
 
@@ -51,12 +78,19 @@ const HeaderMembers: FC<HeaderMembersProps> = ({ from, to, date, cc, isLoading }
                     ) : (
                         <div />
                     ),
-                content: <HeaderMember actions={member.actions} name={member.name} />,
+                content: (
+                    <HeaderMember
+                        actions={member.actions}
+                        name={member.name}
+                        isFocusable={isOpen}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                    />
+                ),
             });
         });
 
         return items;
-    }, [cc, to]);
+    }, [cc, isOpen, shouldEnableKeyboardHighlighting, to]);
 
     if (isLoading) {
         return (
@@ -73,9 +107,23 @@ const HeaderMembers: FC<HeaderMembersProps> = ({ from, to, date, cc, isLoading }
     return (
         <StyledHeaderMembers>
             <StyledHeaderMembersFirstMember>
-                <HeaderMember actions={from.actions} name={from.name} />
+                <HeaderMember
+                    actions={from.actions}
+                    name={from.name}
+                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                />
                 <StyledHeaderMembersDate>{formattedDate}</StyledHeaderMembersDate>
-                <StyledHeaderMembersIconWrapper onClick={() => setIsOpen((prev) => !prev)}>
+                <StyledHeaderMembersIconWrapper
+                    aria-expanded={isOpen}
+                    aria-label={
+                        isOpen
+                            ? t(textStrings.communicationHeader.accessibility.hideRecipients)
+                            : t(textStrings.communicationHeader.accessibility.showRecipients)
+                    }
+                    onClick={() => setIsOpen((prev) => !prev)}
+                    ref={toggleRef}
+                    type="button"
+                >
                     <StyledMotionIcon
                         animate={{ rotate: isOpen ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
@@ -86,13 +134,14 @@ const HeaderMembers: FC<HeaderMembersProps> = ({ from, to, date, cc, isLoading }
             </StyledHeaderMembersFirstMember>
             <ExpandableContent isOpen={isOpen}>
                 <StyledHeaderMembersContent className="chayns-scrollbar">
-                    {rows.map((row, i) => (
-                        <React.Fragment key={i}>
-                            {row.prefix}
+                    {isOpen &&
+                        rows.map((row, i) => (
+                            <React.Fragment key={i}>
+                                {row.prefix}
 
-                            {row.content}
-                        </React.Fragment>
-                    ))}
+                                {row.content}
+                            </React.Fragment>
+                        ))}
                 </StyledHeaderMembersContent>
             </ExpandableContent>
         </StyledHeaderMembers>
