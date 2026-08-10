@@ -72,7 +72,8 @@
         "@chayns-components/core": "^5.5.34",
         "@chayns-components/textstring": "^5.5.34",
         "@chayns/colors": "^2.0.2",
-        "react-compiler-runtime": "^1.0.0"
+        "react-compiler-runtime": "^1.0.0",
+        "uuid": "^10.0.0"
     },
     "peerDependencies": {
         "chayns-api": ">=2.2.0",
