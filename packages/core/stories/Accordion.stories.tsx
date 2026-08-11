@@ -116,6 +116,50 @@ const ControlledAccordionTemplate: StoryFn<typeof Accordion> = ({ children, ...a
     );
 };
 
+const ControlledAccordionGroupTemplate: StoryFn<typeof Accordion> = () => {
+    const [openAccordionId, setOpenAccordionId] = useState<string | undefined>('first');
+
+    const accordions = [
+        { id: 'first', title: 'First accordion' },
+        { id: 'second', title: 'Second accordion' },
+        { id: 'third', title: 'Third accordion' },
+    ];
+
+    return (
+        <>
+            <div style={{ marginBottom: 12 }}>
+                Controlled open accordion: {openAccordionId ?? 'none'}
+            </div>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+                {accordions.map(({ id, title }) => (
+                    <Button key={id} onClick={() => setOpenAccordionId(id)}>
+                        Open {title}
+                    </Button>
+                ))}
+                <Button onClick={() => setOpenAccordionId(undefined)}>Close all</Button>
+            </div>
+            <AccordionGroup shouldDisableInternalHandling>
+                {accordions.map(({ id, title }) => (
+                    <Accordion
+                        key={id}
+                        title={title}
+                        isOpened={openAccordionId === id}
+                        onOpen={() => setOpenAccordionId(id)}
+                        onClose={() => {
+                            if (openAccordionId === id) setOpenAccordionId(undefined);
+                        }}
+                    >
+                        <AccordionContent>
+                            Content for {title}. Open another accordion to debug the controlled
+                            group behavior.
+                        </AccordionContent>
+                    </Accordion>
+                ))}
+            </AccordionGroup>
+        </>
+    );
+};
+
 const HiddenBottomLinesTemplate: StoryFn<typeof Accordion> = ({ children, ...args }) => {
     return (
         <>
@@ -188,6 +232,8 @@ export const DynamicLoadingTemplate: StoryFn<typeof Accordion> = () => {
 export const General = Template.bind({});
 
 export const ControlledAccordion = ControlledAccordionTemplate.bind({});
+
+export const ControlledAccordionGroup = ControlledAccordionGroupTemplate.bind({});
 
 export const MultipleAccordions = MultipleAccordionsTemplate.bind({});
 

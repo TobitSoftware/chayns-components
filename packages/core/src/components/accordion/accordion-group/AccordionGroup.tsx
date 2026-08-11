@@ -59,6 +59,11 @@ type AccordionGroupProps = {
      */
     isWrapped?: boolean;
     /**
+     * Disables the group's internal open-state handling while keeping the group context available
+     * for styling and keyboard navigation.
+     */
+    shouldDisableInternalHandling?: boolean;
+    /**
      * Function that is executed when all accordions in group are closed.
      */
     onClose?: VoidFunction;
@@ -68,7 +73,13 @@ type AccordionGroupProps = {
     onOpen?: VoidFunction;
 };
 
-const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose, onOpen }) => {
+const AccordionGroup: FC<AccordionGroupProps> = ({
+    children,
+    isWrapped,
+    onClose,
+    onOpen,
+    shouldDisableInternalHandling = false,
+}) => {
     const [openAccordionUuid, setOpenAccordionUuid] =
         useState<IAccordionGroupContext['openAccordionUuid']>(undefined);
     const [accordionUuids, setAccordionUuids] = useState<string[]>();
@@ -164,7 +175,9 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
             isWrapped: shouldWrap,
             openAccordionUuid,
             setOpenAccordionUuid,
-            updateOpenAccordionUuid,
+            updateOpenAccordionUuid: shouldDisableInternalHandling
+                ? undefined
+                : updateOpenAccordionUuid,
             accordionUuids,
             registerAccordionUuid,
             unregisterAccordionUuid,
@@ -182,6 +195,7 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, isWrapped, onClose,
             updateOpenAccordionUuid,
             activeAccordionUuid,
             updateActiveAccordionUuid,
+            shouldDisableInternalHandling,
         ],
     );
 
