@@ -124,6 +124,12 @@ import { Accordion } from '@chayns-components/core';
 </Accordion>
 ```
 
+#### Controlled Accordion Group
+
+```tsx
+<Accordion />
+```
+
 #### Multiple Accordions
 
 ```tsx
