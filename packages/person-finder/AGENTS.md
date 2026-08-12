@@ -106,7 +106,7 @@ import { PersonFinder } from '@chayns-components/person-finder';
 | --- | --- | --- | --- |
 | `container` | `Element \| undefined` | no | The element where the content of the `PersonFinder` should be rendered via React Portal. |
 | `defaultEntries` | `DefaultEntry[] \| undefined` | no | Sites and persons that are selected by default. |
-| `dropdownDirection` | `any` | no | The direction in which the dropdown should be displayed. By default, it is displayed below the input. |
+| `dropdownDirection` | `DropdownDirection \| undefined` | no | The direction in which the dropdown should be displayed. By default, it is displayed below the input. |
 | `entries` | `PersonEntry[] \| undefined` | no | A list of entries that should be searched. |
 | `excludedEntryIds` | `(string \| number)[] \| undefined` | no | Entry ids to exclude from the results |
 | `filterTypes` | `PersonFinderFilterTypes[] \| undefined` | no | The filter options of the component. |
