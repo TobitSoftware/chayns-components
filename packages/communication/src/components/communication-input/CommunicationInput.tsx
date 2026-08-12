@@ -159,13 +159,14 @@ const CommunicationInputContent = forwardRef<CommunicationInputRef, Communicatio
         ]);
 
         return (
-            <StyledCommunicationInput $height={outerHeight}>
+            <StyledCommunicationInput $height={outerHeight} $hasTopContent={!!topContent}>
                 <StyledCommunicationInputWrapper>
                     <StyledMotionCommunicationInputInner
                         ref={innerWrapperRef}
                         $borderRadius={borderRadius}
                         $direction={direction}
                         $isFocused={isFocused}
+                        $hasTopContent={!!topContent}
                         animate={animate}
                         initial={initial}
                         transition={transition}
