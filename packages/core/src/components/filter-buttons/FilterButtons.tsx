@@ -158,7 +158,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
         }
 
         const array: ReactElement[] = [
-            <TextstringProvider libraryName="@chayns-components-core">
+            <TextstringProvider key="all" libraryName="@chayns-components-core">
                 <AllButton
                     count={allButtonCount}
                     isSelected={
