@@ -86,7 +86,7 @@ import { ColorPicker } from '@chayns-components/color-picker';
 
 | name | type | required | description |
 | --- | --- | --- | --- |
-| `alignment` | `PopupAlignment \| undefined` | no | The alignment of the popup |
+| `alignment` | `any` | no | The alignment of the popup |
 | `children` | `ReactNode` | no | The element that should be rendered to trigger the ColorPicker popup on click. |
 | `onPresetColorAdd` | `((presetColor: IPresetColor) => void) \| undefined` | no | Function to be executed when a preset color is added. |
 | `onPresetColorRemove` | `((presetColorId: string) => void) \| undefined` | no | Function to be executed when a preset color is removed. |
