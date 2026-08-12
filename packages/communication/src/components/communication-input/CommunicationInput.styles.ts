@@ -5,12 +5,20 @@ import { CommunicationInputSize, CommunicationInputDirection } from './Communica
 
 type StyledCommunicationInputProps = {
     $height: number;
+    $hasTopContent?: boolean;
 };
 
 export const StyledCommunicationInput = styled.div<StyledCommunicationInputProps>`
     position: relative;
     width: 100%;
-    height: ${({ $height }) => $height}px;
+    ${({ $height, $hasTopContent }) =>
+        $hasTopContent
+            ? css`
+                  min-height: ${$height}px;
+              `
+            : css`
+                  height: ${$height}px;
+              `}
 
     display: flex;
 `;
@@ -24,26 +32,28 @@ type StyledMotionCommunicationInputInnerProps = WithTheme<{
     $borderRadius: number;
     $isFocused: boolean;
     $direction: CommunicationInputDirection;
+    $hasTopContent?: boolean;
 }>;
 
 export const StyledMotionCommunicationInputInner = styled(
     motion.div,
 )<StyledMotionCommunicationInputInnerProps>`
-    position: absolute;
+    ${({ $hasTopContent }) => ($hasTopContent ? 'position: relative;' : 'position: absolute;')}
     width: 100%;
 
     overflow: hidden;
 
     left: 0;
 
-    ${({ $direction }) =>
-        $direction === CommunicationInputDirection.TOP
+    ${({ $direction, $hasTopContent }) =>
+        !$hasTopContent &&
+        ($direction === CommunicationInputDirection.TOP
             ? css`
                   bottom: 0;
               `
             : css`
                   top: 0;
-              `}
+              `)}
 
     border: 2px solid hsla(0, 0%, 45%, 0.4);
     border-radius: ${({ $borderRadius }) => $borderRadius}px;
