@@ -3,7 +3,7 @@ import { StyledRanking, StyledRankingLoadMoreButton } from './Ranking.styles';
 import { IRankingEntry } from '../../types/ranking';
 import { Accordion, AccordionContent, AccordionGroup, Button, Icon } from '@chayns-components/core';
 import RankingEntry from './ranking-entry/RankingEntry';
-import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
+import { TextStringProvider, Translation } from '@chayns/textstrings';
 import textStrings from '../../constants/textStrings';
 
 export type RankingProps = {
@@ -107,12 +107,10 @@ const Ranking: FC<RankingProps> = ({
 
     return useMemo(
         () => (
-            <TextstringProvider libraryName="@chayns-components-ranking">
+            <TextStringProvider libraries="@chayns-components-ranking">
                 <StyledRanking>
                     <Accordion
-                        titleElement={
-                            title ?? <Textstring textstring={ttsToITextString(ts.title)} />
-                        }
+                        titleElement={title ?? <Translation textString={ts.title} />}
                         onSearchChange={handleSearchChange}
                         searchValue={searchValue}
                         shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
@@ -137,16 +135,14 @@ const Ranking: FC<RankingProps> = ({
                                         }
                                         shouldShowWaitCursor={isLoadingData}
                                     >
-                                        <Textstring
-                                            textstring={ttsToITextString(ts.button.loadMore)}
-                                        />
+                                        <Translation textString={ts.button.loadMore} />
                                     </Button>
                                 </StyledRankingLoadMoreButton>
                             </AccordionContent>
                         )}
                     </Accordion>
                 </StyledRanking>
-            </TextstringProvider>
+            </TextStringProvider>
         ),
         [
             content,

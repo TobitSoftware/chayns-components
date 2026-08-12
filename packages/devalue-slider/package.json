@@ -53,7 +53,7 @@
     },
     "dependencies": {
         "@chayns-components/core": "^5.5.36",
-        "@chayns-components/textstring": "^5.5.34",
+        "@chayns/textstrings": "^1.0.1",
         "@react-hook/size": "^2.1.2",
         "react-compiler-runtime": "^1.0.0"
     },

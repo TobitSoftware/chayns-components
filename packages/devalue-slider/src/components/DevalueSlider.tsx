@@ -1,7 +1,7 @@
 import React, { type CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
 import Slider, { type SliderRef } from './slider/Slider';
 import Timer from './timer/Timer';
-import { TextstringProvider } from '@chayns-components/textstring';
+import { TextStringProvider } from '@chayns/textstrings';
 
 export type DevalueSliderOnDevalueHandlerResult = { success: boolean };
 export type DevalueSliderOnDevalueHandler = () => Promise<DevalueSliderOnDevalueHandlerResult>;
@@ -87,14 +87,14 @@ const DevalueSlider: React.FC<DevalueSliderProps> = ({
 
     if (timerDevalueTime) {
         return (
-            <TextstringProvider libraryName="@chayns-component-devalue-slider">
+            <TextStringProvider libraries="@chayns-component-devalue-slider">
                 <Timer color={devalueBackgroundColor} devalueTime={timerDevalueTime} />
-            </TextstringProvider>
+            </TextStringProvider>
         );
     }
 
     return (
-        <TextstringProvider libraryName="@chayns-component-devalue-slider">
+        <TextStringProvider libraries="@chayns-component-devalue-slider">
             <Slider
                 ref={sliderRef}
                 onDevalue={onDevalue}
@@ -104,7 +104,7 @@ const DevalueSlider: React.FC<DevalueSliderProps> = ({
                 onChange={onChange}
                 trackText={label}
             />
-        </TextstringProvider>
+        </TextStringProvider>
     );
 };
 

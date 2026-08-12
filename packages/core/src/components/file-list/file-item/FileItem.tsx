@@ -12,7 +12,7 @@ import {
     StyledFileItemRemoveButton,
     StyledFileItemIcon,
 } from './FileItem.styles';
-import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
+import { useTranslation } from '@chayns/textstrings';
 import textStrings from '../../../constants/textStrings';
 import { useFocusRingPortal } from '../../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../../hooks/useKeyboardFocusHighlighting';
@@ -122,12 +122,9 @@ const FileItem: FC<FileItemProps> = ({
         }
     }, [name, source]);
 
-    const downloadText = useTextstringValue({
-        textstring: ttsToITextString(textStrings.components.fileItem.download),
-    });
-    const removeText = useTextstringValue({
-        textstring: ttsToITextString(textStrings.components.fileItem.remove),
-    });
+    const { t } = useTranslation();
+    const downloadText = t(textStrings.components.fileItem.download);
+    const removeText = t(textStrings.components.fileItem.remove);
 
     const rightElement = useMemo(() => {
         if (!canDownload && !canRemove) return undefined;

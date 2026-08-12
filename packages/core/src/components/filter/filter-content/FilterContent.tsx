@@ -11,7 +11,7 @@ import Icon from '../../icon/Icon';
 import FilterButtons from '../../filter-buttons/FilterButtons';
 import ComboBox from '../../combobox/ComboBox';
 import Checkbox from '../../checkbox/Checkbox';
-import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
+import { TextStringProvider, Translation } from '@chayns/textstrings';
 import textStrings from '../../../constants/textStrings';
 import type { IComboBoxItem } from '../../combobox/ComboBox.types';
 import type { FilterContentProps } from './FilterContent.types';
@@ -53,15 +53,13 @@ const FilterContent: FC<FilterContentProps> = ({
 
     return useMemo(
         () => (
-            <TextstringProvider libraryName="@chayns-components-core">
+            <TextStringProvider libraries="@chayns-components-core">
                 <StyledFilterContent>
                     {searchConfig && (
                         <Input
                             ref={searchRef}
                             onChange={(ev) => searchConfig.onSearchChange(ev.target.value)}
-                            placeholder={
-                                <Textstring textstring={ttsToITextString(ts.input.placeholder)} />
-                            }
+                            placeholder={<Translation textString={ts.input.placeholder} />}
                             value={searchConfig.searchValue}
                             shouldShowClearIcon={searchConfig.searchValue.length > 0}
                             leftElement={<Icon icons={['fa fa-search']} />}
@@ -80,7 +78,7 @@ const FilterContent: FC<FilterContentProps> = ({
                     {sortConfig && (
                         <StyledFilterContentLabeledRow>
                             <StyledFilterContentLabel>
-                                <Textstring textstring={ttsToITextString(ts.sort)} />
+                                <Translation textString={ts.sort} />
                             </StyledFilterContentLabel>
                             <StyledFilterContentControlWrapper>
                                 <ComboBox
@@ -126,7 +124,7 @@ const FilterContent: FC<FilterContentProps> = ({
                         />
                     )}
                 </StyledFilterContent>
-            </TextstringProvider>
+            </TextStringProvider>
         ),
         [
             checkboxConfig,

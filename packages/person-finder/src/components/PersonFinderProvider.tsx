@@ -32,7 +32,7 @@ import { deleteFriends } from '../api/friends/delete';
 import { filterDataByKeys, loadData } from '../utils/personFinder';
 import { Tag } from '@chayns-components/core/lib/types/types/tagInput';
 import { getUACGroups, getUsersByGroups } from '../utils/uac';
-import { TextstringProvider } from '@chayns-components/textstring';
+import { TextStringProvider } from '@chayns/textstrings';
 import { PERSON_FINDER_TEXTSTRING_LIBRARY_NAME } from '../constants/textStrings';
 
 const THROTTLE_INTERVAL = 500;
@@ -639,9 +639,9 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
     return (
         <PersonFinderContext.Provider value={providerValue}>
-            <TextstringProvider libraryName={PERSON_FINDER_TEXTSTRING_LIBRARY_NAME}>
+            <TextStringProvider libraries={PERSON_FINDER_TEXTSTRING_LIBRARY_NAME}>
                 {children}
-            </TextstringProvider>
+            </TextStringProvider>
         </PersonFinderContext.Provider>
     );
 };

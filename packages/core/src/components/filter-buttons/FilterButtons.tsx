@@ -7,7 +7,7 @@ import {
 import FilterButton from './filter-button/FilterButton';
 import { StyledFilterButton } from './FilterButtons.styles';
 import { AllButton } from './all-button/AllButton';
-import { TextstringProvider } from '@chayns-components/textstring';
+import { TextStringProvider } from '@chayns/textstrings';
 
 export type FilterButtonsProps = {
     /**
@@ -158,7 +158,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
         }
 
         const array: ReactElement[] = [
-            <TextstringProvider key="all" libraryName="@chayns-components-core">
+            <TextStringProvider key="all" libraries="@chayns-components-core">
                 <AllButton
                     count={allButtonCount}
                     isSelected={
@@ -175,7 +175,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
                         buttonRefs.current.all = element;
                     }}
                 />
-            </TextstringProvider>,
+            </TextStringProvider>,
         ];
 
         items.forEach(({ icons, text, color, count, id, isDisabled }) => {

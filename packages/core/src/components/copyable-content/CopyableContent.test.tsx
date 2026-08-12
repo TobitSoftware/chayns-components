@@ -4,12 +4,11 @@ import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import CopyableContent from './CopyableContent';
 
-vi.mock('@chayns-components/textstring', () => ({
-    Textstring: ({ textstring }: { textstring: { fallback: string } }) => textstring.fallback,
-    TextstringProvider: ({ children }: { children: React.ReactNode }) => children,
-    ttsToITextString: (textstring: { fallback: string }) => textstring,
-    useTextstringValue: ({ textstring }: { textstring: { fallback: string } }) =>
-        textstring.fallback,
+vi.mock('@chayns/textstrings', () => ({
+    useTranslation: () => ({
+        t: (textString: { fallback?: string } | string) =>
+            typeof textString === 'string' ? textString : textString.fallback,
+    }),
 }));
 
 type ResizeObserverCallback = (entries: ResizeObserverEntry[]) => void;

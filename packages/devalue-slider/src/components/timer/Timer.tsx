@@ -10,7 +10,7 @@ import {
     intervalToDuration,
 } from '../../utils/date';
 import textStrings from '../../constants/textStrings';
-import { Textstring, ttsToITextString } from '@chayns-components/textstring';
+import { Translation } from '@chayns/textstrings';
 
 export type TimerProps = {
     color: string;
@@ -80,8 +80,8 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
         });
 
         return (
-            <Textstring
-                textstring={ttsToITextString(text)}
+            <Translation
+                textString={text}
                 replacements={{
                     '##MINUTES##': minutesShowValue,
                     '##SECONDS##': secondsShowValue,

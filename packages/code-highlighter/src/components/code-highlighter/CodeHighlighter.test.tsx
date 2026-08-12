@@ -26,10 +26,11 @@ vi.mock('@chayns-components/core', () => ({
     useColorScheme: () => undefined,
 }));
 
-vi.mock('@chayns-components/textstring', () => ({
-    ttsToITextString: (value: unknown) => value,
-    useTextstringValue: ({ textstring }: { textstring: { fallback: string } }) =>
-        textstring.fallback,
+vi.mock('@chayns/textstrings', () => ({
+    useTranslation: () => ({
+        t: (textString: { fallback?: string } | string) =>
+            typeof textString === 'string' ? textString : textString.fallback,
+    }),
 }));
 
 vi.mock('chayns-api', () => ({

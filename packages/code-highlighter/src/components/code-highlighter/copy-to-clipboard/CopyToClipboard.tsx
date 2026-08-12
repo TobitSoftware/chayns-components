@@ -1,5 +1,5 @@
 import { Icon, SharingContextMenu } from '@chayns-components/core';
-import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
+import { useTranslation } from '@chayns/textstrings';
 import { createDialog, DialogType, ToastType } from 'chayns-api';
 import React, { FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { CodeHighlighterTheme } from '../../../types/codeHighlighter';
@@ -33,22 +33,11 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({
     const isActionGroupSticky = useStickyActionState(rootRef, actionGroupRef);
     const [hasCopied, setHasCopied] = useState(false);
 
-    const defaultCopyText = useTextstringValue({
-        textstring: ttsToITextString(textStrings.components.codeHighlighter.copyToClipboard.copy),
-    });
-    const copyFailedText = useTextstringValue({
-        textstring: ttsToITextString(
-            textStrings.components.codeHighlighter.copyToClipboard.copyFailed,
-        ),
-    });
-    const shareText = useTextstringValue({
-        textstring: ttsToITextString(textStrings.components.codeHighlighter.copyToClipboard.share),
-    });
-    const insertCodeText = useTextstringValue({
-        textstring: ttsToITextString(
-            textStrings.components.codeHighlighter.copyToClipboard.insertCode,
-        ),
-    });
+    const { t } = useTranslation();
+    const defaultCopyText = t(textStrings.components.codeHighlighter.copyToClipboard.copy);
+    const copyFailedText = t(textStrings.components.codeHighlighter.copyToClipboard.copyFailed);
+    const shareText = t(textStrings.components.codeHighlighter.copyToClipboard.share);
+    const insertCodeText = t(textStrings.components.codeHighlighter.copyToClipboard.insertCode);
 
     const copyText = copyButtonText ?? defaultCopyText;
     const iconColor = theme === CodeHighlighterTheme.Dark ? '#f4f6f8' : '#5f6368';

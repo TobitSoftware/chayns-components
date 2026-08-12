@@ -23,7 +23,7 @@ import {
     StyledMoreOptionsInput,
     StyledMoreOptionsInputWrapper,
 } from './MoreOptions.styles';
-import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
+import { useTranslation } from '@chayns/textstrings';
 import textStrings from '../../../constants/textStrings';
 
 type MoreOptionsProps = {
@@ -124,11 +124,8 @@ const MoreOptions = ({ shouldEnableKeyboardHighlighting }: MoreOptionsProps) => 
         }
     }, [selectedColor]);
 
-    const title = useTextstringValue({
-        textstring: ttsToITextString(
-            textStrings.components.colorPickerPopup.moreOptions.accordionTitle,
-        ),
-    });
+    const { t } = useTranslation();
+    const title = t(textStrings.components.colorPickerPopup.moreOptions.accordionTitle);
 
     return (
         <StyledMoreOptions>

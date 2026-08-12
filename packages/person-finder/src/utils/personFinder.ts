@@ -7,7 +7,7 @@ import {
     RelationMode,
     SiteEntry,
 } from '../types/personFinder';
-import { getTextstringValue, ttsToITextString } from '@chayns-components/textstring';
+import { getFixedT } from '@chayns/textstrings';
 import { getPersons } from '../api/person/get';
 import { getSites } from '../api/site/get';
 import { convertPersonEntry, convertSiteEntry } from './convert';
@@ -40,11 +40,13 @@ export const getPersonFinderTextstringValue = ({
     textstring,
     replacements,
 }: GetPersonFinderTextstringValueOptions) =>
-    getTextstringValue({
-        libraryName: PERSON_FINDER_TEXTSTRING_LIBRARY_NAME,
-        textstring: ttsToITextString(textstring),
-        replacements: normalizeTextstringReplacements(replacements),
-    });
+    getFixedT(
+        {
+            stringName: textstring.stringName,
+            fallback: textstring.fallback,
+        },
+        normalizeTextstringReplacements(replacements),
+    );
 
 export const getGroupName = (key: string) => {
     const groupNames: Partial<

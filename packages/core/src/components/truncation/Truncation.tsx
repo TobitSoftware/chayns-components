@@ -1,4 +1,4 @@
-import { Textstring, TextstringProvider, ttsToITextString } from '@chayns-components/textstring';
+import { TextStringProvider, Translation } from '@chayns/textstrings';
 import React, {
     FC,
     KeyboardEventHandler,
@@ -165,10 +165,10 @@ const Truncation: FC<TruncationProps> = ({
     }, []);
 
     const internalMoreLabel = moreLabel ?? (
-        <Textstring textstring={ttsToITextString(textStrings.components.truncation.more)} />
+        <Translation textString={textStrings.components.truncation.more} />
     );
     const internalLessLabel = lessLabel ?? (
-        <Textstring textstring={ttsToITextString(textStrings.components.truncation.less)} />
+        <Translation textString={textStrings.components.truncation.less} />
     );
     const collapsedContentHeight = Math.min(contentHeight || collapsedHeight, collapsedHeight);
     const targetHeight = internalIsOpen ? contentHeight || collapsedHeight : collapsedContentHeight;
@@ -184,7 +184,7 @@ const Truncation: FC<TruncationProps> = ({
             </StyledMotionTruncationContent>
             {hasOverflow && (
                 <StyledTruncationClampWrapper $position={clampPosition}>
-                    <TextstringProvider libraryName="@chayns-components-core">
+                    <TextStringProvider libraries="@chayns-components-core">
                         <StyledTruncationClampFocusWrapper>
                             <StyledTruncationClamp
                                 ref={clampRef}
@@ -196,7 +196,7 @@ const Truncation: FC<TruncationProps> = ({
                                 {internalIsOpen ? internalLessLabel : internalMoreLabel}
                             </StyledTruncationClamp>
                         </StyledTruncationClampFocusWrapper>
-                    </TextstringProvider>
+                    </TextStringProvider>
                 </StyledTruncationClampWrapper>
             )}
         </StyledTruncation>

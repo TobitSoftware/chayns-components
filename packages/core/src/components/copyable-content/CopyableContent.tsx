@@ -1,5 +1,5 @@
 import { formatStringToHtml } from '@chayns-components/format';
-import { ttsToITextString, useTextstringValue } from '@chayns-components/textstring';
+import { useTranslation } from '@chayns/textstrings';
 import { createDialog, DialogType, ToastType } from 'chayns-api';
 import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import textStrings from '../../constants/textStrings';
@@ -74,15 +74,10 @@ const CopyableContent: FC<CopyableContentProps> = ({
             ? CopyableContentColorMode.Dark
             : CopyableContentColorMode.Light;
 
-    const defaultCopyButtonText = useTextstringValue({
-        textstring: ttsToITextString(textStrings.components.copyableContent.copy),
-    });
-    const defaultCopyFailedMessage = useTextstringValue({
-        textstring: ttsToITextString(textStrings.components.copyableContent.copyFailed),
-    });
-    const shareText = useTextstringValue({
-        textstring: ttsToITextString(textStrings.components.copyableContent.share),
-    });
+    const { t } = useTranslation();
+    const defaultCopyButtonText = t(textStrings.components.copyableContent.copy);
+    const defaultCopyFailedMessage = t(textStrings.components.copyableContent.copyFailed);
+    const shareText = t(textStrings.components.copyableContent.share);
 
     const html = useMemo(() => formatStringToHtml(content).html, [content]);
 
