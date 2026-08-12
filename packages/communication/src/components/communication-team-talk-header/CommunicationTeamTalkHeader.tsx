@@ -15,9 +15,9 @@ import {
     CommunicationInputDirection,
 } from '../communication-input/CommunicationInput.types';
 import CommunicationTeamTalkHeaderAction from './communication-team-talk-header-action/CommunicationTeamTalkHeaderAction';
-import { Translation, useTranslation } from '@chayns/textstrings';
+import { TextStringProviderSSR, Translation, useTranslation } from '@chayns/textstrings';
 
-const CommunicationTeamTalkHeader: FC<CommunicationTeamTalkHeaderProps> = ({
+const CommunicationTeamTalkHeaderContent: FC<CommunicationTeamTalkHeaderProps> = ({
     onAgree,
     value,
     onLeave,
@@ -135,6 +135,15 @@ const CommunicationTeamTalkHeader: FC<CommunicationTeamTalkHeaderProps> = ({
         </StyledCommunicationTeamTalkHeader>
     );
 };
+
+const CommunicationTeamTalkHeader: FC<CommunicationTeamTalkHeaderProps> = (props) => (
+    <TextStringProviderSSR
+        libraries="chayns-components-v5-communication"
+        id="communication-team-talk-header"
+    >
+        <CommunicationTeamTalkHeaderContent {...props} />
+    </TextStringProviderSSR>
+);
 
 CommunicationTeamTalkHeader.displayName = 'CommunicationTeamTalkHeader';
 

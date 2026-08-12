@@ -74,7 +74,7 @@ export const ColorPickerPopupContent = ({
             )}
             {shouldShowMoreOptions && (
                 <TextStringProviderSSR
-                    libraries="@chayns-components-color-picker"
+                    libraries="chayns-components-v5-color-picker"
                     id="color-picker-popup"
                 >
                     <MoreOptions

@@ -12,7 +12,7 @@ import { getPersons } from '../api/person/get';
 import { getSites } from '../api/site/get';
 import { convertPersonEntry, convertSiteEntry } from './convert';
 import { getUser } from 'chayns-api';
-import textStrings, { PERSON_FINDER_TEXTSTRING_LIBRARY_NAME } from '../constants/textStrings';
+import textStrings from '../constants/textStrings';
 
 interface GetPersonFinderTextstringValueOptions {
     textstring: {

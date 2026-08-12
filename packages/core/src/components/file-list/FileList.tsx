@@ -47,7 +47,7 @@ const FileList: FC<FileListProps> = ({ files, onRemove, shouldAllowDownload }) =
 
     return useMemo(
         () => (
-            <TextStringProviderSSR libraries="@chayns-components-core" id="file-list">
+            <TextStringProviderSSR libraries="chayns-components-v5-core" id="file-list">
                 <StyledFileList>
                     <List>{content}</List>
                 </StyledFileList>

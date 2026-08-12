@@ -53,7 +53,7 @@ const FilterContent: FC<FilterContentProps> = ({
 
     return useMemo(
         () => (
-            <TextStringProviderSSR libraries="@chayns-components-core" id="filter-content">
+            <TextStringProviderSSR libraries="chayns-components-v5-core" id="filter-content">
                 <StyledFilterContent>
                     {searchConfig && (
                         <Input

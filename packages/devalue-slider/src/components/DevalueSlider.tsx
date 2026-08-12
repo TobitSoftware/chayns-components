@@ -88,7 +88,7 @@ const DevalueSlider: React.FC<DevalueSliderProps> = ({
     if (timerDevalueTime) {
         return (
             <TextStringProviderSSR
-                libraries="@chayns-component-devalue-slider"
+                libraries="chayns-components-v5-devalue-slider"
                 id="devalue-slider-timer"
             >
                 <Timer color={devalueBackgroundColor} devalueTime={timerDevalueTime} />
@@ -97,7 +97,7 @@ const DevalueSlider: React.FC<DevalueSliderProps> = ({
     }
 
     return (
-        <TextStringProviderSSR libraries="@chayns-component-devalue-slider" id="devalue-slider">
+        <TextStringProviderSSR libraries="chayns-components-v5-devalue-slider" id="devalue-slider">
             <Slider
                 ref={sliderRef}
                 onDevalue={onDevalue}

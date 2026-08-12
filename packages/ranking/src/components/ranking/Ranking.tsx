@@ -107,7 +107,7 @@ const Ranking: FC<RankingProps> = ({
 
     return useMemo(
         () => (
-            <TextStringProviderSSR libraries="@chayns-components-ranking" id="ranking">
+            <TextStringProviderSSR libraries="chayns-components-v5-ranking" id="ranking">
                 <StyledRanking>
                     <Accordion
                         titleElement={title ?? <Translation textString={ts.title} />}

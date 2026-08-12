@@ -40,10 +40,10 @@ import {
 import Chips from './chips/Chips';
 import AudioInput from '../audio-input/AudioInput';
 import { AnimatePresence } from 'motion/react';
-import { useTranslation } from '@chayns/textstrings';
+import { TextStringProviderSSR, useTranslation } from '@chayns/textstrings';
 import textStrings from '../../constants/textStrings';
 
-const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputProps>(
+const CommunicationInputContent = forwardRef<CommunicationInputRef, CommunicationInputProps>(
     (
         {
             size = CommunicationInputSize.MEDIUM,
@@ -251,6 +251,17 @@ const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputP
             </StyledCommunicationInput>
         );
     },
+);
+
+const CommunicationInput = forwardRef<CommunicationInputRef, CommunicationInputProps>(
+    (props, ref) => (
+        <TextStringProviderSSR
+            libraries="chayns-components-v5-communication"
+            id="communication-input"
+        >
+            <CommunicationInputContent {...props} ref={ref} />
+        </TextStringProviderSSR>
+    ),
 );
 
 CommunicationInput.displayName = 'CommunicationInput';

@@ -160,7 +160,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
         const array: ReactElement[] = [
             <TextStringProviderSSR
                 key="all"
-                libraries="@chayns-components-core"
+                libraries="chayns-components-v5-core"
                 id="filter-buttons-all"
             >
                 <AllButton

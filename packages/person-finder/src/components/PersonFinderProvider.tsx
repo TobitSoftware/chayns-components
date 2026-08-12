@@ -33,7 +33,6 @@ import { filterDataByKeys, loadData } from '../utils/personFinder';
 import { Tag } from '@chayns-components/core/lib/types/types/tagInput';
 import { getUACGroups, getUsersByGroups } from '../utils/uac';
 import { TextStringProviderSSR } from '@chayns/textstrings';
-import { PERSON_FINDER_TEXTSTRING_LIBRARY_NAME } from '../constants/textStrings';
 
 const THROTTLE_INTERVAL = 500;
 const PAGE_SIZE = 20;
@@ -640,7 +639,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     return (
         <PersonFinderContext.Provider value={providerValue}>
             <TextStringProviderSSR
-                libraries={PERSON_FINDER_TEXTSTRING_LIBRARY_NAME}
+                libraries="chayns-components-v5-person-finder"
                 id="person-finder"
             >
                 {children}

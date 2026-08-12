@@ -10,7 +10,7 @@ import {
 import React, { FC, KeyboardEventHandler, useCallback, useEffect, useRef } from 'react';
 import EmojiPicker from '../emoji-picker/EmojiPicker';
 import { StyledEmojiPickerPopup } from './EmojiPickerPopup.styles';
-import { useTranslation } from '@chayns/textstrings';
+import { TextStringProviderSSR, useTranslation } from '@chayns/textstrings';
 import textStrings from '../../constants/textStrings';
 
 export type EmojiPickerPopupProps = {
@@ -50,7 +50,7 @@ export type EmojiPickerPopupProps = {
     onSelectWithKeyboard?: (emoji: string) => void;
 };
 
-const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
+const EmojiPickerPopupContent: FC<EmojiPickerPopupProps> = ({
     accessToken,
     container,
     isDisabled,
@@ -157,6 +157,12 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
         </StyledEmojiPickerPopup>
     );
 };
+
+const EmojiPickerPopup: FC<EmojiPickerPopupProps> = (props) => (
+    <TextStringProviderSSR libraries="@chayns-component-emoji-input" id="emoji-picker-popup">
+        <EmojiPickerPopupContent {...props} />
+    </TextStringProviderSSR>
+);
 
 EmojiPickerPopup.displayName = 'EmojiPickerPopup';
 

@@ -147,7 +147,7 @@ const DEFAULT_MIN_DATE = subYears(new Date(), 1);
 
 const EMPTY_DISABLED_DATES: Date[] = []; // stable empty const to prevent infinite loop caused by new empty arrays
 
-const Calendar: FC<CalendarProps> = ({
+const CalendarContent: FC<CalendarProps> = ({
     locale = Language.German,
     maxDate = DEFAULT_MAX_DATE,
     minDate = DEFAULT_MIN_DATE,
@@ -639,7 +639,7 @@ const Calendar: FC<CalendarProps> = ({
 
     return (
         <StyledCalendar ref={calendarRef} $isDisabled={isDisabled} onKeyDown={handleKeyDown}>
-            <TextStringProviderSSR libraries="@chayns-components-date" id="calendar">
+            <>
                 {ShouldShowLeftArrow ? (
                     <StyledCalendarIconWrapper
                         ref={leftNavigationIconRef}
@@ -715,10 +715,16 @@ const Calendar: FC<CalendarProps> = ({
                 ) : (
                     <StyledCalendarIconWrapperPseudo />
                 )}
-            </TextStringProviderSSR>
+            </>
         </StyledCalendar>
     );
 };
+
+const Calendar: FC<CalendarProps> = (props) => (
+    <TextStringProviderSSR libraries="@chayns-components-date" id="calendar">
+        <CalendarContent {...props} />
+    </TextStringProviderSSR>
+);
 
 Calendar.displayName = 'Calendar';
 

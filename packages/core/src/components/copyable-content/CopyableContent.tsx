@@ -1,5 +1,5 @@
 import { formatStringToHtml } from '@chayns-components/format';
-import { useTranslation } from '@chayns/textstrings';
+import { TextStringProviderSSR, useTranslation } from '@chayns/textstrings';
 import { createDialog, DialogType, ToastType } from 'chayns-api';
 import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import textStrings from '../../constants/textStrings';
@@ -53,7 +53,7 @@ export type CopyableContentProps = {
     transformClipboardHtml?: (html: string) => string;
 };
 
-const CopyableContent: FC<CopyableContentProps> = ({
+const CopyableContentContent: FC<CopyableContentProps> = ({
     appearance = CopyableContentAppearance.Default,
     content,
     children,
@@ -181,6 +181,12 @@ const CopyableContent: FC<CopyableContentProps> = ({
         </StyledCopyableContent>
     );
 };
+
+const CopyableContent: FC<CopyableContentProps> = (props) => (
+    <TextStringProviderSSR libraries="chayns-components-v5-core" id="copyable-content">
+        <CopyableContentContent {...props} />
+    </TextStringProviderSSR>
+);
 
 CopyableContent.displayName = 'CopyableContent';
 

@@ -20,9 +20,9 @@ import { ContextMenu, ContextMenuRef, Icon } from '@chayns-components/core';
 import { AnimatePresence } from 'motion/react';
 import { useDevice } from 'chayns-api';
 import textStrings from '../../constants/textStrings';
-import { useTranslation } from '@chayns/textstrings';
+import { TextStringProviderSSR, useTranslation } from '@chayns/textstrings';
 
-const CommunicationMessage: FC<CommunicationMessageProps> = ({
+const CommunicationMessageContent: FC<CommunicationMessageProps> = ({
     metadata,
     content,
     options,
@@ -195,6 +195,15 @@ const CommunicationMessage: FC<CommunicationMessageProps> = ({
         </StyledCommunicationMessage>
     );
 };
+
+const CommunicationMessage: FC<CommunicationMessageProps> = (props) => (
+    <TextStringProviderSSR
+        libraries="chayns-components-v5-communication"
+        id="communication-message"
+    >
+        <CommunicationMessageContent {...props} />
+    </TextStringProviderSSR>
+);
 
 CommunicationMessage.displayName = 'CommunicationMessage';
 

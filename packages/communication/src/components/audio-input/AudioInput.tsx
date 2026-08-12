@@ -7,10 +7,10 @@ import { useAudioInput } from './AudioInput.hooks';
 import WaveForm from './wave-form/WaveForm';
 import { AUDIO_INPUT_ANIMATION } from './AudioInput.constants';
 import { CommunicationInputSize } from '../communication-input/CommunicationInput.types';
-import { useTranslation } from '@chayns/textstrings';
+import { TextStringProviderSSR, useTranslation } from '@chayns/textstrings';
 import textStrings from '../../constants/textStrings';
 
-const AudioInput = forwardRef<AudioInputRef, AudioInputProps>(
+const AudioInputContent = forwardRef<AudioInputRef, AudioInputProps>(
     (
         {
             onError,
@@ -136,6 +136,12 @@ const AudioInput = forwardRef<AudioInputRef, AudioInputProps>(
         );
     },
 );
+
+const AudioInput = forwardRef<AudioInputRef, AudioInputProps>((props, ref) => (
+    <TextStringProviderSSR libraries="chayns-components-v5-communication" id="audio-input">
+        <AudioInputContent {...props} ref={ref} />
+    </TextStringProviderSSR>
+));
 
 AudioInput.displayName = 'AudioInput';
 

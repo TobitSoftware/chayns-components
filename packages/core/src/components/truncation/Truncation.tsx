@@ -184,7 +184,7 @@ const Truncation: FC<TruncationProps> = ({
             </StyledMotionTruncationContent>
             {hasOverflow && (
                 <StyledTruncationClampWrapper $position={clampPosition}>
-                    <TextStringProviderSSR libraries="@chayns-components-core" id="truncation">
+                    <TextStringProviderSSR libraries="chayns-components-v5-core" id="truncation">
                         <StyledTruncationClampFocusWrapper>
                             <StyledTruncationClamp
                                 ref={clampRef}
