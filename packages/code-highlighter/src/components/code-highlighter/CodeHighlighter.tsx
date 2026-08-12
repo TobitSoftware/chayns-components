@@ -8,6 +8,7 @@ import {
     CodeHighlighterTheme,
     HighlightedLines,
 } from '../../types/codeHighlighter';
+import { TextStringProviderSSR } from '@chayns/textstrings';
 import { formatLanguage, getParserForLanguage } from '../../utils/codeHighlighter';
 import {
     StyledCodeHighlighter,
@@ -210,38 +211,43 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
     return useMemo(
         () => (
-            <StyledCodeHighlighter
-                $shouldWrapLines={shouldWrapLines}
-                $codeTheme={resolvedTheme}
-                ref={ref}
+            <TextStringProviderSSR
+                libraries="chayns-components-v5-code-highlighter"
+                id="code-highlighter"
             >
-                <StyledCodeHighlighterHeader $codeTheme={resolvedTheme}>
-                    <StyledCodeHighlighterFileName $codeTheme={resolvedTheme}>
-                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                        {/* @ts-ignore */}
-                        <tw-ignore>{formatLanguage(language)}</tw-ignore>
-                    </StyledCodeHighlighterFileName>
-                </StyledCodeHighlighterHeader>
-                <CopyToClipboard
-                    text={code}
-                    theme={resolvedTheme}
-                    copyButtonText={copyButtonText}
-                    onInsertCode={onInsertCode}
-                    rootRef={ref}
-                />
-                <SyntaxHighlighter
-                    customStyle={syntaxHighlighterStyle}
-                    language={language ?? ''}
-                    lineNumberStyle={lineNumberStyle}
-                    showLineNumbers={shouldShowLineNumbers}
-                    style={resolvedTheme === CodeHighlighterTheme.Dark ? oneDark : oneLight}
-                    wrapLines
-                    wrapLongLines={shouldWrapLines}
-                    lineProps={lineWrapper}
+                <StyledCodeHighlighter
+                    $shouldWrapLines={shouldWrapLines}
+                    $codeTheme={resolvedTheme}
+                    ref={ref}
                 >
-                    {formattedCode}
-                </SyntaxHighlighter>
-            </StyledCodeHighlighter>
+                    <StyledCodeHighlighterHeader $codeTheme={resolvedTheme}>
+                        <StyledCodeHighlighterFileName $codeTheme={resolvedTheme}>
+                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                            {/* @ts-ignore */}
+                            <tw-ignore>{formatLanguage(language)}</tw-ignore>
+                        </StyledCodeHighlighterFileName>
+                    </StyledCodeHighlighterHeader>
+                    <CopyToClipboard
+                        text={code}
+                        theme={resolvedTheme}
+                        copyButtonText={copyButtonText}
+                        onInsertCode={onInsertCode}
+                        rootRef={ref}
+                    />
+                    <SyntaxHighlighter
+                        customStyle={syntaxHighlighterStyle}
+                        language={language ?? ''}
+                        lineNumberStyle={lineNumberStyle}
+                        showLineNumbers={shouldShowLineNumbers}
+                        style={resolvedTheme === CodeHighlighterTheme.Dark ? oneDark : oneLight}
+                        wrapLines
+                        wrapLongLines={shouldWrapLines}
+                        lineProps={lineWrapper}
+                    >
+                        {formattedCode}
+                    </SyntaxHighlighter>
+                </StyledCodeHighlighter>
+            </TextStringProviderSSR>
         ),
         [
             shouldWrapLines,

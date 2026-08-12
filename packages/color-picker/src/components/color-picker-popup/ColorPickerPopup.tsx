@@ -6,7 +6,7 @@ import { StyledColorPickerPopup } from './ColorPickerPopup.styles';
 import MoreOptions from './more-options/MoreOptions';
 import PresetColors from './preset-colors/PresetColors';
 import Sliders from './sliders/Sliders';
-import { TextStringProvider } from '@chayns/textstrings';
+import { TextStringProviderSSR } from '@chayns/textstrings';
 
 export interface ColorPickerPopupProps {
     presetColors?: IPresetColor[];
@@ -73,11 +73,14 @@ export const ColorPickerPopupContent = ({
                 />
             )}
             {shouldShowMoreOptions && (
-                <TextStringProvider libraries="@chayns-components-color-picker">
+                <TextStringProviderSSR
+                    libraries="@chayns-components-color-picker"
+                    id="color-picker-popup"
+                >
                     <MoreOptions
                         shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                     />
-                </TextStringProvider>
+                </TextStringProviderSSR>
             )}
         </StyledColorPickerPopup>
     );

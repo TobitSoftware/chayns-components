@@ -3,7 +3,7 @@ import { StyledRanking, StyledRankingLoadMoreButton } from './Ranking.styles';
 import { IRankingEntry } from '../../types/ranking';
 import { Accordion, AccordionContent, AccordionGroup, Button, Icon } from '@chayns-components/core';
 import RankingEntry from './ranking-entry/RankingEntry';
-import { TextStringProvider, Translation } from '@chayns/textstrings';
+import { TextStringProviderSSR, Translation } from '@chayns/textstrings';
 import textStrings from '../../constants/textStrings';
 
 export type RankingProps = {
@@ -107,7 +107,7 @@ const Ranking: FC<RankingProps> = ({
 
     return useMemo(
         () => (
-            <TextStringProvider libraries="@chayns-components-ranking">
+            <TextStringProviderSSR libraries="@chayns-components-ranking" id="ranking">
                 <StyledRanking>
                     <Accordion
                         titleElement={title ?? <Translation textString={ts.title} />}
@@ -142,7 +142,7 @@ const Ranking: FC<RankingProps> = ({
                         )}
                     </Accordion>
                 </StyledRanking>
-            </TextStringProvider>
+            </TextStringProviderSSR>
         ),
         [
             content,

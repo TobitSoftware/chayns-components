@@ -1,4 +1,4 @@
-import { TextStringProvider, Translation } from '@chayns/textstrings';
+import { TextStringProviderSSR, Translation } from '@chayns/textstrings';
 import React, {
     FC,
     KeyboardEventHandler,
@@ -184,7 +184,7 @@ const Truncation: FC<TruncationProps> = ({
             </StyledMotionTruncationContent>
             {hasOverflow && (
                 <StyledTruncationClampWrapper $position={clampPosition}>
-                    <TextStringProvider libraries="@chayns-components-core">
+                    <TextStringProviderSSR libraries="@chayns-components-core" id="truncation">
                         <StyledTruncationClampFocusWrapper>
                             <StyledTruncationClamp
                                 ref={clampRef}
@@ -196,7 +196,7 @@ const Truncation: FC<TruncationProps> = ({
                                 {internalIsOpen ? internalLessLabel : internalMoreLabel}
                             </StyledTruncationClamp>
                         </StyledTruncationClampFocusWrapper>
-                    </TextStringProvider>
+                    </TextStringProviderSSR>
                 </StyledTruncationClampWrapper>
             )}
         </StyledTruncation>

@@ -6,7 +6,7 @@ import type { GalleryEditorProps, GalleryEditorRef } from './GalleryEditor.types
 import GalleryEditorItem from './gallery-editor-item/GalleryEditorItem';
 import { GALLERY_EDITOR_GRID_GAP_PX } from './GalleryEditor.constants';
 import useGalleryEditorState from './useGalleryEditorState';
-import { TextStringProvider } from '@chayns/textstrings';
+import { TextStringProviderSSR } from '@chayns/textstrings';
 
 const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
     (
@@ -53,7 +53,7 @@ const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
         const shouldShowAddFileTile = !maxFiles || maxFiles > fileItems.length;
 
         return (
-            <TextStringProvider libraries="@chayns-components-gallery">
+            <TextStringProviderSSR libraries="@chayns-components-gallery" id="gallery-editor">
                 <StyledGalleryEditor>
                     <StyledGalleryEditorGrid
                         $fileMinWidth={fileMinWidth}
@@ -85,7 +85,7 @@ const GalleryEditor = forwardRef<GalleryEditorRef, GalleryEditorProps>(
                         )}
                     </StyledGalleryEditorGrid>
                 </StyledGalleryEditor>
-            </TextStringProvider>
+            </TextStringProviderSSR>
         );
     },
 );

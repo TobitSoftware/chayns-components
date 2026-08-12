@@ -1,6 +1,6 @@
 import { ComboBox, Icon, useColorScheme, useFocusRingPortal } from '@chayns-components/core';
 import { Language } from 'chayns-api';
-import { useTranslation, TextStringProvider } from '@chayns/textstrings';
+import { useTranslation, TextStringProviderSSR } from '@chayns/textstrings';
 import React, {
     CSSProperties,
     FC,
@@ -639,7 +639,7 @@ const Calendar: FC<CalendarProps> = ({
 
     return (
         <StyledCalendar ref={calendarRef} $isDisabled={isDisabled} onKeyDown={handleKeyDown}>
-            <TextStringProvider libraries="@chayns-components-date">
+            <TextStringProviderSSR libraries="@chayns-components-date" id="calendar">
                 {ShouldShowLeftArrow ? (
                     <StyledCalendarIconWrapper
                         ref={leftNavigationIconRef}
@@ -715,7 +715,7 @@ const Calendar: FC<CalendarProps> = ({
                 ) : (
                     <StyledCalendarIconWrapperPseudo />
                 )}
-            </TextStringProvider>
+            </TextStringProviderSSR>
         </StyledCalendar>
     );
 };

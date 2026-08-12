@@ -5,7 +5,7 @@ import EmojiPickerCategories from './emoji-picker-categories/EmojiPickerCategori
 import EmojiPickerEmojis from './emoji-picker-emojis/EmojiPickerEmojis';
 import { StyledEmojiPicker } from './EmojiPicker.styles';
 import textStrings from '../../constants/textStrings';
-import { Translation, TextStringProvider } from '@chayns/textstrings';
+import { Translation, TextStringProviderSSR } from '@chayns/textstrings';
 
 export type EmojiPickerProps = {
     /**
@@ -40,7 +40,7 @@ const EmojiPicker: FC<EmojiPickerProps> = ({ accessToken, onSelect, personId }) 
 
     return (
         <StyledEmojiPicker>
-            <TextStringProvider libraries="@chayns-component-emoji-input">
+            <TextStringProviderSSR libraries="@chayns-component-emoji-input" id="emoji-picker">
                 <Input
                     onChange={handleSearchChange}
                     placeholder={
@@ -50,7 +50,7 @@ const EmojiPicker: FC<EmojiPickerProps> = ({ accessToken, onSelect, personId }) 
                     }
                     value={searchString}
                 />
-            </TextStringProvider>
+            </TextStringProviderSSR>
             <EmojiPickerEmojis
                 accessToken={accessToken}
                 onSelect={onSelect}

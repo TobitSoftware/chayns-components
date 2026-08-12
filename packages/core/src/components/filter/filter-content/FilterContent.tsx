@@ -11,7 +11,7 @@ import Icon from '../../icon/Icon';
 import FilterButtons from '../../filter-buttons/FilterButtons';
 import ComboBox from '../../combobox/ComboBox';
 import Checkbox from '../../checkbox/Checkbox';
-import { TextStringProvider, Translation } from '@chayns/textstrings';
+import { TextStringProviderSSR, Translation } from '@chayns/textstrings';
 import textStrings from '../../../constants/textStrings';
 import type { IComboBoxItem } from '../../combobox/ComboBox.types';
 import type { FilterContentProps } from './FilterContent.types';
@@ -53,7 +53,7 @@ const FilterContent: FC<FilterContentProps> = ({
 
     return useMemo(
         () => (
-            <TextStringProvider libraries="@chayns-components-core">
+            <TextStringProviderSSR libraries="@chayns-components-core" id="filter-content">
                 <StyledFilterContent>
                     {searchConfig && (
                         <Input
@@ -124,7 +124,7 @@ const FilterContent: FC<FilterContentProps> = ({
                         />
                     )}
                 </StyledFilterContent>
-            </TextStringProvider>
+            </TextStringProviderSSR>
         ),
         [
             checkboxConfig,
