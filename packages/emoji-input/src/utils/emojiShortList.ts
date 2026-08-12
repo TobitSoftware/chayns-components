@@ -3679,6 +3679,6 @@ Object.keys(shortNameList).forEach((shortname, index) => {
 });
 
 export const regShortnames = new RegExp(
-    `<object[^>]*>.*?</object>|<span[^>]*>.*?</span>|<(?:object|embed|svg|img|div|span|p|a)[^>]*>|(${shortnameRegexp})`,
-    'gi',
+    `<object[^>]*>.*?</object>|<span[^>]*>.*?</span>|<(?:object|embed|svg|img|div|span|p|a)[^>]*>|(?<![\\p{L}\\p{N}])(${shortnameRegexp})(?![\\p{L}\\p{N}])`,
+    'giu',
 );
