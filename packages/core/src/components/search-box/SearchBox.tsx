@@ -19,7 +19,7 @@ import { useTheme } from 'styled-components';
 import type { IFilterButtonItem } from '../../types/filterButtons';
 import type { ISearchBoxItem, ISearchBoxItems } from '../../types/searchBox';
 import { calculateContentHeight } from '../../utils/calculate';
-import { searchList, sortSearchBoxItems } from '../../utils/searchBox';
+import { searchList, sortSearchBoxItems, type SearchBoxSortFunction } from '../../utils/searchBox';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import Input, { type InputProps } from '../input/Input';
@@ -52,26 +52,28 @@ export interface TagInputSettings {
 
 const filterSearchBoxItems = ({
     customFilter,
+    customSortFunction,
     items,
     searchString,
     shouldUseCustomFilterOnly,
 }: {
     customFilter?: (item: ISearchBoxItem) => boolean;
+    customSortFunction?: SearchBoxSortFunction;
     items: ISearchBoxItem[];
     searchString: string;
     shouldUseCustomFilterOnly?: boolean;
 }) => {
     if (typeof customFilter !== 'function') {
-        return searchList({ items, searchString });
+        return searchList({ customSortFunction, items, searchString });
     }
 
     if (shouldUseCustomFilterOnly) {
         const filteredItems = items.filter(customFilter);
 
-        return sortSearchBoxItems({ items: filteredItems, searchString });
+        return sortSearchBoxItems({ customSortFunction, items: filteredItems, searchString });
     }
 
-    return searchList({ items, searchString }).filter(customFilter);
+    return searchList({ customSortFunction, items, searchString }).filter(customFilter);
 };
 
 const getDropdownSearchString = ({
@@ -93,6 +95,10 @@ export type SearchBoxProps = {
      * An optional callback function to filter the elements to be displayed
      */
     customFilter?: (item: ISearchBoxItem) => boolean;
+    /**
+     * An optional callback function to sort the filtered elements to be displayed
+     */
+    customSortFunction?: SearchBoxSortFunction;
     /**
      * If true, the custom filter replaces the built-in text search instead of narrowing its results.
      */
@@ -196,6 +202,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         {
             container,
             customFilter,
+            customSortFunction,
             dropdownDirection,
             inputProps,
             isInvalid = false,
@@ -315,6 +322,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             newLists.forEach(({ list, groupName }) => {
                 const newList = filterSearchBoxItems({
                     customFilter,
+                    customSortFunction,
                     items: list,
                     searchString: dropdownSearchString,
                     shouldUseCustomFilterOnly,
@@ -353,6 +361,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             groups,
             lists,
             customFilter,
+            customSortFunction,
             dropdownSearchString,
             shouldAddInputToList,
             shouldUseCustomFilterOnly,
@@ -453,6 +462,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                     activeList.forEach(({ list, groupName }) => {
                         const newList = filterSearchBoxItems({
                             customFilter,
+                            customSortFunction,
                             items: list,
                             searchString: dropdownSearchString,
                             shouldUseCustomFilterOnly,
@@ -506,6 +516,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 hintText,
                 dropdownSearchString,
                 customFilter,
+                customSortFunction,
                 shouldUseCustomFilterOnly,
                 handleOpen,
                 inputProps,
@@ -535,6 +546,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             activeList.forEach(({ list, groupName }) => {
                 const newList = filterSearchBoxItems({
                     customFilter,
+                    customSortFunction,
                     items: list,
                     searchString: dropdownSearchString,
                     shouldUseCustomFilterOnly,
@@ -571,6 +583,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             shouldShowContentOnEmptyInput,
             dropdownSearchString,
             customFilter,
+            customSortFunction,
             shouldUseCustomFilterOnly,
         ]);
 
@@ -616,6 +629,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                 activeList.forEach(({ list, groupName }) => {
                     const newList = filterSearchBoxItems({
                         customFilter,
+                        customSortFunction,
                         items: list,
                         searchString: event.target.value,
                         shouldUseCustomFilterOnly,
@@ -662,6 +676,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             [
                 activeList,
                 customFilter,
+                customSortFunction,
                 handleOpen,
                 inputProps,
                 onChange,

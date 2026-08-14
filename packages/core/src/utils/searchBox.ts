@@ -41,12 +41,23 @@ export const getCurrentGroupName = (element: HTMLElement) => {
     return currentGroupName;
 };
 
+export type SearchBoxSortFunction = (a: ISearchBoxItem, b: ISearchBoxItem) => number;
+
 interface SearchListOptions {
+    customSortFunction?: SearchBoxSortFunction;
     items: ISearchBoxItem[];
     searchString: string;
 }
 
-export const sortSearchBoxItems = ({ searchString, items }: SearchListOptions) => {
+export const sortSearchBoxItems = ({
+    customSortFunction,
+    searchString,
+    items,
+}: SearchListOptions) => {
+    if (customSortFunction) {
+        return [...items].sort(customSortFunction);
+    }
+
     const lowercaseSearchString = searchString.toLowerCase();
 
     return [...items].sort((a, b) => {
@@ -63,7 +74,7 @@ export const sortSearchBoxItems = ({ searchString, items }: SearchListOptions) =
     });
 };
 
-export const searchList = ({ searchString, items }: SearchListOptions) => {
+export const searchList = ({ customSortFunction, searchString, items }: SearchListOptions) => {
     const matchingItems: ISearchBoxItem[] = [];
 
     const lowercaseSearchString = searchString.toLowerCase();
@@ -86,5 +97,5 @@ export const searchList = ({ searchString, items }: SearchListOptions) => {
         }
     });
 
-    return sortSearchBoxItems({ items: matchingItems, searchString });
+    return sortSearchBoxItems({ customSortFunction, items: matchingItems, searchString });
 };

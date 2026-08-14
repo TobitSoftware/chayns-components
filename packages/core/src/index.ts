@@ -147,6 +147,7 @@ export type {
     ISearchBoxItem as SearchBoxItem,
     ISearchBoxItems as SearchBoxItems,
 } from './types/searchBox';
+export type { SearchBoxSortFunction } from './utils/searchBox';
 export type { SelectButtonItem } from './types/selectButton';
 export type { SliderButtonItem } from './types/slider-button';
 export {
