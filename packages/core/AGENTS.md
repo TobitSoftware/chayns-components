@@ -4736,7 +4736,7 @@ import { SearchBox } from '@chayns-components/core';
 | name | type | required | description |
 | --- | --- | --- | --- |
 | `container` | `Element \| undefined` | no | The element where the content of the `ComboBox` should be rendered via React Portal. |
-| `customFilter` | `((item: ISearchBoxItem) => boolean) \| undefined` | no | An optional callback function to filter the elements to be displayed |
+| `customFilter` | `((item: ISearchBoxItem, value: string) => boolean) \| undefined` | no | An optional callback function to filter the elements to be displayed |
 | `customSortFunction` | `SearchBoxSortFunction \| undefined` | no | An optional callback function to sort the filtered elements to be displayed |
 | `dropdownDirection` | `DropdownDirection \| undefined` | no | The direction in which the dropdown should be displayed. By default, it is displayed below the input. |
 | `hintText` | `string \| undefined` | no | A text that should be displayed if no results are found. |
