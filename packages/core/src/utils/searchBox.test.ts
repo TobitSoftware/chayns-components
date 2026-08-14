@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ISearchBoxItem } from '../types/searchBox';
+import { filterSearchBoxItems } from '../components/search-box/SearchBox';
 import { searchList } from './searchBox';
 
 const items: ISearchBoxItem[] = [
@@ -26,5 +27,22 @@ describe('searchList', () => {
         });
 
         expect(result.map(({ id }) => id)).toEqual(['1', '2']);
+    });
+
+    it('uses only the custom filter when shouldUseCustomFilterOnly is enabled', () => {
+        const values: string[] = [];
+        const result = filterSearchBoxItems({
+            customFilter: ({ id }, value) => {
+                values.push(value);
+                return id === '2';
+            },
+            customSortFunction: (a, b) => a.id.localeCompare(b.id),
+            items,
+            searchString: 'does-not-match',
+            shouldUseCustomFilterOnly: true,
+        });
+
+        expect(result.map(({ id }) => id)).toEqual(['2']);
+        expect(values).toEqual(['does-not-match', 'does-not-match']);
     });
 });

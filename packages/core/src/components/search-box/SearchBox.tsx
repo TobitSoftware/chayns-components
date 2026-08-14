@@ -50,30 +50,35 @@ export interface TagInputSettings {
     tags?: TagInputProps['tags'];
 }
 
-const filterSearchBoxItems = ({
+export const filterSearchBoxItems = ({
     customFilter,
     customSortFunction,
     items,
     searchString,
     shouldUseCustomFilterOnly,
 }: {
-    customFilter?: (item: ISearchBoxItem) => boolean;
+    customFilter?: (item: ISearchBoxItem, value: string) => boolean;
     customSortFunction?: SearchBoxSortFunction;
     items: ISearchBoxItem[];
     searchString: string;
     shouldUseCustomFilterOnly?: boolean;
 }) => {
-    if (typeof customFilter !== 'function') {
-        return searchList({ customSortFunction, items, searchString });
-    }
-
     if (shouldUseCustomFilterOnly) {
-        const filteredItems = items.filter(customFilter);
+        const filteredItems =
+            typeof customFilter === 'function'
+                ? items.filter((item) => customFilter(item, searchString))
+                : items;
 
         return sortSearchBoxItems({ customSortFunction, items: filteredItems, searchString });
     }
 
-    return searchList({ customSortFunction, items, searchString }).filter(customFilter);
+    if (typeof customFilter !== 'function') {
+        return searchList({ customSortFunction, items, searchString });
+    }
+
+    return searchList({ customSortFunction, items, searchString }).filter((item) =>
+        customFilter(item, searchString),
+    );
 };
 
 const getDropdownSearchString = ({
@@ -93,8 +98,10 @@ export type SearchBoxProps = {
     container?: Element;
     /**
      * An optional callback function to filter the elements to be displayed
+     * @param item The item to filter.
+     * @param value The current input value.
      */
-    customFilter?: (item: ISearchBoxItem) => boolean;
+    customFilter?: (item: ISearchBoxItem, value: string) => boolean;
     /**
      * An optional callback function to sort the filtered elements to be displayed
      */
