@@ -150,6 +150,9 @@ const EmojiPickerPopupContent: FC<EmojiPickerPopupProps> = ({
                     ref={triggerRef}
                     tabIndex={isDisabled ? -1 : 0}
                     type="button"
+                    style={{
+                        display: 'flex',
+                    }}
                 >
                     <Icon icons={['far fa-smile']} size={18} />
                 </button>
