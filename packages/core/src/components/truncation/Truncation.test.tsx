@@ -6,6 +6,7 @@ import Truncation from './Truncation';
 vi.mock('@chayns/textstrings', () => ({
     Translation: () => 'Mehr anzeigen',
     TextStringProvider: ({ children }: { children: React.ReactNode }) => children,
+    TextStringProviderSSR: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 type ResizeObserverCallback = (entries: ResizeObserverEntry[]) => void;

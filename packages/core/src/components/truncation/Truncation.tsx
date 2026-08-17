@@ -61,6 +61,27 @@ export type TruncationProps = {
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
+const getHeightAtLineBoundary = (element: HTMLElement, height: number, contentHeight: number) => {
+    const elementTop = element.getBoundingClientRect().top;
+    const targetBottom = elementTop + height;
+    const range = element.ownerDocument.createRange();
+
+    range.selectNodeContents(element);
+
+    const lineRects =
+        typeof range.getClientRects === 'function' ? Array.from(range.getClientRects()) : [];
+    const lineBottom = lineRects
+        .map((rect) => rect.bottom)
+        .filter((bottom) => bottom >= targetBottom)
+        .sort((first, second) => first - second)[0];
+
+    range.detach();
+
+    return lineBottom === undefined
+        ? Math.min(contentHeight, height)
+        : Math.min(contentHeight, lineBottom - elementTop);
+};
+
 const Truncation: FC<TruncationProps> = ({
     collapsedHeight = 150,
     clampPosition = ClampPosition.Right,
@@ -79,6 +100,7 @@ const Truncation: FC<TruncationProps> = ({
     const pendingObservedHeight = useRef(0);
     const [internalIsOpen, setInternalIsOpen] = useState(Boolean(isOpen));
     const [contentHeight, setContentHeight] = useState(0);
+    const [collapsedContentHeight, setCollapsedContentHeight] = useState(collapsedHeight);
 
     useEffect(() => {
         if (typeof isOpen === 'boolean') {
@@ -115,11 +137,18 @@ const Truncation: FC<TruncationProps> = ({
                     return;
                 }
 
-                setContentHeight(
-                    Math.max(
-                        pendingObservedHeight.current,
-                        contentRef.current.scrollHeight,
-                        contentRef.current.getBoundingClientRect().height,
+                const measuredContentHeight = Math.max(
+                    pendingObservedHeight.current,
+                    contentRef.current.scrollHeight,
+                    contentRef.current.getBoundingClientRect().height,
+                );
+
+                setContentHeight(measuredContentHeight);
+                setCollapsedContentHeight(
+                    getHeightAtLineBoundary(
+                        contentRef.current,
+                        collapsedHeight,
+                        measuredContentHeight,
                     ),
                 );
                 pendingObservedHeight.current = 0;
@@ -145,7 +174,7 @@ const Truncation: FC<TruncationProps> = ({
                 window.cancelAnimationFrame(frame);
             }
         };
-    }, [children]);
+    }, [children, collapsedHeight]);
 
     const handleClampClick = useCallback<MouseEventHandler<HTMLAnchorElement>>(
         (event) => {
@@ -170,8 +199,9 @@ const Truncation: FC<TruncationProps> = ({
     const internalLessLabel = lessLabel ?? (
         <Translation textString={textStrings.components.truncation.less} />
     );
-    const collapsedContentHeight = Math.min(contentHeight || collapsedHeight, collapsedHeight);
-    const targetHeight = internalIsOpen ? contentHeight || collapsedHeight : collapsedContentHeight;
+    const targetHeight = internalIsOpen
+        ? contentHeight || collapsedHeight
+        : Math.min(contentHeight || collapsedHeight, collapsedContentHeight);
 
     return (
         <StyledTruncation className="beta-chayns-truncation">

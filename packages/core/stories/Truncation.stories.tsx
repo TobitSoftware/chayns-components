@@ -32,7 +32,7 @@ export default {
     title: 'Core/Truncation',
     component: Truncation,
     args: {
-        collapsedHeight: 100,
+        collapsedHeight: 125,
         children: BASE_HTML_TEXT,
     },
 } as Meta<typeof Truncation>;
