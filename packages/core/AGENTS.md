@@ -5854,7 +5854,7 @@ import { Button, Truncation } from '@chayns-components/core';
 
 ```tsx
 <Truncation
-    collapsedHeight={100}
+    collapsedHeight={125}
 >
     {
         <div>
@@ -5879,7 +5879,7 @@ import { Button, Truncation } from '@chayns-components/core';
 
 ```tsx
 <Truncation
-    collapsedHeight={100}
+    collapsedHeight={125}
 >
     {
         <>
@@ -5912,7 +5912,7 @@ import { Button, Truncation } from '@chayns-components/core';
 
 ```tsx
 <Truncation
-    collapsedHeight={100}
+    collapsedHeight={125}
 >
     {
         <div>
@@ -5937,7 +5937,7 @@ import { Button, Truncation } from '@chayns-components/core';
 
 ```tsx
 <Truncation
-    collapsedHeight={100}
+    collapsedHeight={125}
 >
     {<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>}
 </Truncation>
@@ -5947,7 +5947,7 @@ import { Button, Truncation } from '@chayns-components/core';
 
 ```tsx
 <Truncation
-    collapsedHeight={100}
+    collapsedHeight={125}
 >
     {
         <p>
