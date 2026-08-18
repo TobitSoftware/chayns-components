@@ -272,8 +272,13 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         });
     }, []);
 
+    const shouldLoadFriends = useMemo(
+        () => filterTypes.includes(PersonFinderFilterTypes.PERSON),
+        [filterTypes],
+    );
+
     useEffect(() => {
-        if (!filterTypes.includes(PersonFinderFilterTypes.PERSON)) {
+        if (!shouldLoadFriends) {
             return;
         }
 
@@ -291,7 +296,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
                 );
             }
         });
-    }, [filterTypes]);
+    }, [shouldLoadFriends]);
 
     const latestArgsRef = useRef<{ search: string; filter: PersonFinderFilterTypes[] } | null>(
         null,
