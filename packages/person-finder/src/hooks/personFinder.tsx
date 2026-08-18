@@ -155,6 +155,19 @@ export const useErrorMessage = ({
         filterKey === PersonFinderFilterTypes.PERSON &&
         entries.length > 0;
 
+    if (
+        search.length > 0 &&
+        search.length <= 2 &&
+        filterKey === PersonFinderFilterTypes.PERSON &&
+        entries.length > 0
+    ) {
+        return (
+            <StyledPersonFinderGroupErrorMessage>
+                {getPersonFinderTextstringValue({ textstring: ts.moreResultsMinSearchLength })}
+            </StyledPersonFinderGroupErrorMessage>
+        );
+    }
+
     if (search.length <= 2 && !areOnlyFriendsGiven && !shouldHideMinSearchLengthMessage) {
         return (
             <StyledPersonFinderGroupErrorMessage>

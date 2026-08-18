@@ -70,6 +70,11 @@ export default {
                                     'txt_chayns_components_v5_person_finder_components_personFinder_wrapper_body_group_errorMessage_minSearchLength',
                                 fallback: 'Gib einen Suchbegriff mit mindestens drei Zeichen ein.',
                             },
+                            moreResultsMinSearchLength: {
+                                stringName:
+                                    'txt_chayns_components_v5_person_finder_components_personFinder_wrapper_body_group_errorMessage_moreResultsMinSearchLength',
+                                fallback: 'Weitere Ergebnisse gibt es ab drei Zeichen.',
+                            },
                             noResults: {
                                 stringName:
                                     'txt_chayns_components_v5_person_finder_components_personFinder_wrapper_body_group_errorMessage_noResults',

@@ -412,15 +412,11 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
     );
 
     const searchLocal = useCallback(() => {
-        if (search.length < 3) {
-            return;
-        }
-
         updateLoadingState(PersonFinderFilterTypes.PERSON, LoadingState.Pending);
 
         const searchedUsers: PersonEntry[] = [];
 
-        const entriesToSearch = entries ?? uacUsers;
+        const entriesToSearch = entries ?? uacUsers ?? friends;
 
         entriesToSearch?.forEach((entry) => {
             if (
@@ -449,7 +445,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
             PersonFinderFilterTypes.PERSON,
             searchedUsers.length === 0 ? LoadingState.Error : LoadingState.Success,
         );
-    }, [entries, search, uacUsers, updateData, updateLoadingState]);
+    }, [entries, friends, search, uacUsers, updateData, updateLoadingState]);
 
     useEffect(() => {
         dataRef.current = data;
@@ -471,6 +467,14 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
         if (uacFilter || entries) {
             searchLocalRef.current();
+        } else if (
+            friendsPriority === Priority.HIGH &&
+            friends &&
+            active.includes(PersonFinderFilterTypes.PERSON) &&
+            search.length < 3
+        ) {
+            throttledRequest.current.cancel();
+            searchLocalRef.current();
         } else if (active?.includes(PersonFinderFilterTypes.UAC)) {
             searchDataRef.current({ filter: [PersonFinderFilterTypes.UAC] });
         } else {
@@ -487,7 +491,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
             throttledRequest.current();
         }
-    }, [search, uacFilter, entries]);
+    }, [entries, filterTypes, friends, friendsPriority, search, uacFilter]);
 
     // Handle filter changes - load missing data for newly selected filters
     useEffect(() => {
@@ -495,6 +499,15 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
 
         const active = activeFilter && activeFilter.length > 0 ? activeFilter : filterTypes;
         const currentData = dataRef.current;
+
+        if (
+            friendsPriority === Priority.HIGH &&
+            friends &&
+            active.includes(PersonFinderFilterTypes.PERSON) &&
+            search.length < 3
+        ) {
+            return;
+        }
 
         // Check which filters need to be loaded (don't have data for current search)
         const missingFilters = active.filter((filter) => {
@@ -510,7 +523,7 @@ const PersonFinderProvider: FC<PersonFinderProviderProps> = ({
         // Load only the missing filters
         latestArgsRef.current = { search, filter: missingFilters };
         throttledRequest.current();
-    }, [activeFilter, search, uacFilter, entries, filterTypes]);
+    }, [activeFilter, entries, filterTypes, friends, friendsPriority, search, uacFilter]);
 
     useEffect(
         () => () => {
