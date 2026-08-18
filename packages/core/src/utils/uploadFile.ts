@@ -13,7 +13,7 @@ export const uploadFile = async ({
     callback,
     shouldUploadImageToSite,
 }: UploadFilesOptions): Promise<void> => {
-    if (!fileToUpload || fileToUpload.state !== 'none') {
+    if (!fileToUpload || (fileToUpload.state !== undefined && fileToUpload.state !== 'none')) {
         return;
     }
 
