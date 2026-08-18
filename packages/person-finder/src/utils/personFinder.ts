@@ -7,7 +7,7 @@ import {
     RelationMode,
     SiteEntry,
 } from '../types/personFinder';
-import { getFixedT } from '@chayns/textstrings';
+import { getFixedT, Replacements } from '@chayns/textstrings';
 import { getPersons } from '../api/person/get';
 import { getSites } from '../api/site/get';
 import { convertPersonEntry, convertSiteEntry } from './convert';
@@ -31,7 +31,7 @@ export const getPersonFinderTextstringValue = ({
             stringName: textstring.stringName,
             fallback: textstring.fallback,
         },
-        replacements,
+        replacements as Replacements,
     );
 
 export const getGroupName = (key: string) => {
