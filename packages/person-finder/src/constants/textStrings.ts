@@ -73,7 +73,7 @@ export default {
                             moreResultsMinSearchLength: {
                                 stringName:
                                     'txt_chayns_components_v5_person_finder_components_personFinder_wrapper_body_group_errorMessage_moreResultsMinSearchLength',
-                                fallback: 'Weitere Ergebnisse gibt es ab drei Zeichen.',
+                                fallback: 'Gib für weitere Ergebnisse mindestens drei Zeichen ein.',
                             },
                             noResults: {
                                 stringName:
