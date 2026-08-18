@@ -6,6 +6,9 @@ import { getGroupName } from '../../../../utils/personFinder';
 import { useClosestElementAbove } from '../../../../hooks/personFinder';
 import PersonFinderGroup from './person-finder-group/PersonFinderGroup';
 import PersonFinderHeader from './person-finder-header/PersonFinderHeader';
+import { StyledPersonFinderGroupErrorMessage } from './person-finder-group/PersonFinderGroup.styles';
+import { getPersonFinderTextstringValue } from '../../../../utils/personFinder';
+import textStrings from '../../../../constants/textStrings';
 
 export type PersonFinderBodyProps = {
     onAdd: (id: string) => void;
@@ -20,7 +23,7 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
         { onAdd, filterTypes, onRemove, shouldRenderInline, shouldEnableKeyboardHighlighting },
         ref,
     ) => {
-        const { activeFilter, data } = usePersonFinder();
+        const { activeFilter, data, search } = usePersonFinder();
 
         const [isScrollTop, setIsScrollTop] = useState(true);
 
@@ -31,6 +34,12 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
         const shouldShowGroupNames = (activeFilter?.length ?? 0) !== 1;
 
         const defaultGroupName = getGroupName(Object.keys(data ?? {})[0] ?? '');
+        const activeFilters = activeFilter?.length ? activeFilter : (filterTypes ?? []);
+        const shouldShowSingleMinSearchLengthMessage =
+            search !== undefined &&
+            search.length <= 2 &&
+            activeFilters.length > 1 &&
+            activeFilters.every((filter) => !data?.[filter]?.entries.length);
 
         const handleContentScroll = (event: UIEvent<HTMLDivElement>) => {
             setIsScrollTop((event.target as HTMLElement).scrollTop === 0);
@@ -57,22 +66,36 @@ const PersonFinderBody = forwardRef<HTMLDivElement, PersonFinderBodyProps>(
             [data, onAdd, onRemove, shouldShowGroupNames],
         );
 
+        const contentToRender = shouldShowSingleMinSearchLengthMessage ? (
+            <StyledPersonFinderGroupErrorMessage>
+                {getPersonFinderTextstringValue({
+                    textstring:
+                        textStrings.components.personFinder.wrapper.body.group.errorMessage
+                            .minSearchLength,
+                })}
+            </StyledPersonFinderGroupErrorMessage>
+        ) : (
+            content
+        );
+
         return (
             <StyledPersonFinderBody ref={ref} $shouldRenderInline={shouldRenderInline}>
-                <PersonFinderHeader
-                    currentGroupName={currentGroupName}
-                    defaultGroupName={defaultGroupName}
-                    filterTypes={filterTypes}
-                    shouldShowGroupNames={shouldShowGroupNames}
-                    shouldShowShadow={!isScrollTop && !shouldRenderInline}
-                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
-                />
+                {!shouldShowSingleMinSearchLengthMessage && (
+                    <PersonFinderHeader
+                        currentGroupName={currentGroupName}
+                        defaultGroupName={defaultGroupName}
+                        filterTypes={filterTypes}
+                        shouldShowGroupNames={shouldShowGroupNames}
+                        shouldShowShadow={!isScrollTop && !shouldRenderInline}
+                        shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+                    />
+                )}
                 <StyledPersonFinderBodyContent
                     ref={contentRef}
                     className="chayns-scrollbar"
                     onScroll={handleContentScroll}
                 >
-                    {content}
+                    {contentToRender}
                 </StyledPersonFinderBodyContent>
             </StyledPersonFinderBody>
         );
