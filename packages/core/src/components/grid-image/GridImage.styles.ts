@@ -25,6 +25,41 @@ export const StyledGridImage = styled.div<StyledGridImageProps>`
     }
 `;
 
+type StyledGridSingleImageProps = {
+    $isHidden: boolean;
+};
+
+export const StyledGridSingleImage = styled.img<StyledGridSingleImageProps>`
+    height: 100%;
+    left: 0;
+    object-fit: cover;
+    opacity: ${({ $isHidden }) => ($isHidden ? 0 : 1)};
+    position: absolute;
+    top: 0;
+    transition: opacity 0.4s ease;
+    width: 100%;
+`;
+
+type StyledGridTwoImageProps = {
+    $isHidden: boolean;
+    $isLeft: boolean;
+    $size: number;
+};
+
+export const StyledGridTwoImage = styled.img<StyledGridTwoImageProps>`
+    border-right: ${({ $isLeft, $size }) => ($isLeft ? `${$size / 40}px solid white` : undefined)};
+    box-sizing: border-box;
+    height: 100%;
+    left: ${({ $isLeft }) => ($isLeft ? 0 : undefined)};
+    object-fit: cover;
+    opacity: ${({ $isHidden }) => ($isHidden ? 0 : 1)};
+    position: absolute;
+    right: ${({ $isLeft }) => ($isLeft ? undefined : 0)};
+    top: 0;
+    transition: opacity 0.4s ease;
+    width: 50%;
+`;
+
 type StyledGridLeftImageProps = {
     $isHidden: boolean;
     $size: number;

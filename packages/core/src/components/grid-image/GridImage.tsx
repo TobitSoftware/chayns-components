@@ -15,7 +15,9 @@ import {
     StyledGridBottomRightImage,
     StyledGridImage,
     StyledGridLeftImage,
+    StyledGridSingleImage,
     StyledGridTopRightImage,
+    StyledGridTwoImage,
 } from './GridImage.styles';
 
 type GridImageProps = {
@@ -91,7 +93,9 @@ const GridImage: FC<GridImageProps> = ({
     const handleBottomRightImageLoaded = useCallback(() => setHasLoadedBottomRightImage(true), []);
 
     const isGridImageHidden =
-        !hasLoadedLeftImage || !hasLoadedTopRightImage || !hasLoadedBottomRightImage;
+        !hasLoadedLeftImage ||
+        (images.length > 1 && !hasLoadedTopRightImage) ||
+        (images.length > 2 && !hasLoadedBottomRightImage);
 
     return (
         <StyledGridImage
@@ -104,23 +108,52 @@ const GridImage: FC<GridImageProps> = ({
             tabIndex={isKeyboardFocusable ? 0 : -1}
             role={isClickable ? 'button' : undefined}
         >
-            <StyledGridLeftImage
-                $isHidden={isGridImageHidden}
-                onLoad={handleLeftImageLoaded}
-                $size={size}
-                src={images[0]}
-            />
-            <StyledGridTopRightImage
-                $isHidden={isGridImageHidden}
-                onLoad={handleTopRightImageLoaded}
-                $size={size}
-                src={images[1]}
-            />
-            <StyledGridBottomRightImage
-                $isHidden={isGridImageHidden}
-                onLoad={handleBottomRightImageLoaded}
-                src={images[2]}
-            />
+            {images.length === 1 && (
+                <StyledGridSingleImage
+                    $isHidden={isGridImageHidden}
+                    onLoad={handleLeftImageLoaded}
+                    src={images[0]}
+                />
+            )}
+            {images.length === 2 && (
+                <>
+                    <StyledGridTwoImage
+                        $isHidden={isGridImageHidden}
+                        $isLeft
+                        $size={size}
+                        onLoad={handleLeftImageLoaded}
+                        src={images[0]}
+                    />
+                    <StyledGridTwoImage
+                        $isHidden={isGridImageHidden}
+                        $isLeft={false}
+                        $size={size}
+                        onLoad={handleTopRightImageLoaded}
+                        src={images[1]}
+                    />
+                </>
+            )}
+            {images.length > 2 && (
+                <>
+                    <StyledGridLeftImage
+                        $isHidden={isGridImageHidden}
+                        onLoad={handleLeftImageLoaded}
+                        $size={size}
+                        src={images[0]}
+                    />
+                    <StyledGridTopRightImage
+                        $isHidden={isGridImageHidden}
+                        onLoad={handleTopRightImageLoaded}
+                        $size={size}
+                        src={images[1]}
+                    />
+                    <StyledGridBottomRightImage
+                        $isHidden={isGridImageHidden}
+                        onLoad={handleBottomRightImageLoaded}
+                        src={images[2]}
+                    />
+                </>
+            )}
         </StyledGridImage>
     );
 };

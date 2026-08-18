@@ -19,3 +19,16 @@ export default {
 const Template: StoryFn<typeof GridImage> = (args) => <GridImage {...args} />;
 
 export const General = Template.bind({});
+
+export const OneImage = Template.bind({});
+OneImage.args = {
+    images: ['https://tsimg.cloud/77896-21884/8aee1a304297729a4542b97325940a656a3da8f2.png'],
+};
+
+export const TwoImages = Template.bind({});
+TwoImages.args = {
+    images: [
+        'https://tsimg.cloud/77896-21884/8aee1a304297729a4542b97325940a656a3da8f2.png',
+        'https://tsimg.cloud/77896-21884/54a117f35e5fb57520e64471461af5491c0eff06.png',
+    ],
+};
