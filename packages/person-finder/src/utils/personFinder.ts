@@ -22,20 +22,6 @@ interface GetPersonFinderTextstringValueOptions {
     replacements?: Record<string, number | string | undefined>;
 }
 
-const normalizeTextstringReplacements = (
-    replacements?: GetPersonFinderTextstringValueOptions['replacements'],
-) => {
-    if (!replacements) {
-        return undefined;
-    }
-
-    return Object.entries(replacements).reduce<Record<string, string>>((acc, [key, value]) => {
-        acc[`##${key}##`] = value?.toString() ?? '';
-
-        return acc;
-    }, {});
-};
-
 export const getPersonFinderTextstringValue = ({
     textstring,
     replacements,
@@ -45,7 +31,7 @@ export const getPersonFinderTextstringValue = ({
             stringName: textstring.stringName,
             fallback: textstring.fallback,
         },
-        normalizeTextstringReplacements(replacements),
+        replacements,
     );
 
 export const getGroupName = (key: string) => {
