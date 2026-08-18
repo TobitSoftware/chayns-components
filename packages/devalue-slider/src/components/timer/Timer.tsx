@@ -83,10 +83,10 @@ const Timer: FunctionComponent<TimerProps> = ({ devalueTime, color, textColor = 
             <Translation
                 textString={text}
                 replacements={{
-                    '##MINUTES##': minutesShowValue,
-                    '##SECONDS##': secondsShowValue,
-                    '##TIME##': formatTime(devalueTime, 'HH:mm'),
-                    '##DISTANCE##': distanceLabel,
+                    MINUTES: minutesShowValue,
+                    SECONDS: secondsShowValue,
+                    TIME: formatTime(devalueTime, 'HH:mm'),
+                    DISTANCE: distanceLabel,
                 }}
             />
         );
