@@ -42,6 +42,8 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
     const [sizes, setSizes] = useState<Record<string, number>>({});
     const [containerSize, setContainerSize] = useState(0);
     const dragStartSizesRef = useRef<Record<string, number>>({});
+    const sizeHistoryRef = useRef<Record<string, number>>({});
+    const visibleViewIdsRef = useRef<string[]>([]);
 
     useEffect(() => {
         if (!ref.current) {
@@ -83,15 +85,27 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
             return;
         }
 
-        setSizes((prev) =>
-            distributeSizes({
+        setSizes((prev) => {
+            const previousSizes = { ...sizeHistoryRef.current, ...prev };
+            const reappearedViewIds = viewIdsToDisplay.filter(
+                (id) =>
+                    !visibleViewIdsRef.current.includes(id) &&
+                    typeof previousSizes[id] === 'number',
+            );
+            const nextSizes = distributeSizes({
                 views,
                 viewIds: viewIdsToDisplay,
                 containerSize,
                 handleSize,
-                previousSizes: prev,
-            }),
-        );
+                previousSizes,
+                preserveViewIds: reappearedViewIds,
+            });
+
+            sizeHistoryRef.current = { ...sizeHistoryRef.current, ...nextSizes };
+            visibleViewIdsRef.current = viewIdsToDisplay;
+
+            return nextSizes;
+        });
     }, [containerSize, handleSize, viewIdsToDisplay, views]);
 
     const handleDragStart = useCallback(() => {

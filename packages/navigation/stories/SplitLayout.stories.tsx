@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
-import React from 'react';
+import React, { useState } from 'react';
+import Button from '../../core/src/components/button/Button';
 import SplitLayout from '../src/components/split-layout/SplitLayout';
 import { SplitLayoutDirection } from '../src';
 
@@ -61,6 +62,38 @@ const VerticalTemplate: StoryFn<typeof SplitLayout> = () => {
     );
 };
 
+const HiddenViewTemplate: StoryFn<typeof SplitLayout> = () => {
+    const [isHidden, setIsHidden] = useState(false);
+    const [lastSize, setLastSize] = useState(220);
+
+    return (
+        <>
+            <Button onClick={() => setIsHidden((prevState) => !prevState)}>
+                {isHidden ? 'View einblenden' : 'View ausblenden'}
+            </Button>
+            <div style={{ width: '100%', height: '400px' }}>
+                <SplitLayout
+                    onChange={(id, size) => {
+                        if (id === '2') {
+                            setLastSize(size);
+                        }
+                    }}
+                    views={{
+                        '1': { component: renderTestContent('1'), defaultSize: 180 },
+                        '2': {
+                            component: renderTestContent('2'),
+                            defaultSize: lastSize,
+                            isHidden,
+                        },
+                    }}
+                />
+            </div>
+        </>
+    );
+};
+
 export const General = Template.bind({});
 
 export const Vertical = VerticalTemplate.bind({});
+
+export const HiddenView = HiddenViewTemplate.bind({});

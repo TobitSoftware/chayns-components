@@ -33,6 +33,7 @@ interface DistributeSizesOptions {
     containerSize: number;
     handleSize: number;
     previousSizes?: Record<string, number>;
+    preserveViewIds?: string[];
 }
 
 /**
@@ -46,6 +47,7 @@ export const distributeSizes = ({
     containerSize,
     handleSize,
     previousSizes = {},
+    preserveViewIds = [],
 }: DistributeSizesOptions): Record<string, number> => {
     if (viewIds.length === 0 || containerSize <= 0) {
         return {};
@@ -73,6 +75,10 @@ export const distributeSizes = ({
     for (let pass = 0; pass < viewIds.length && Math.abs(diff) > 0.5; pass++) {
         const adjustableIds = viewIds.filter((id) => {
             const size = sizes[id] ?? 0;
+
+            if (preserveViewIds.includes(id)) {
+                return false;
+            }
 
             return diff > 0
                 ? size < (views[id]?.maxSize ?? Number.MAX_SAFE_INTEGER)
