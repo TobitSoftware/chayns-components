@@ -7,6 +7,7 @@ import {
     distributeSizes,
     getContainerSizeByDirection,
     getVisibleViewIds,
+    resizeViewSizes,
 } from './SplitLayout.utils';
 
 type ActivityComponent = (props: {
@@ -119,46 +120,31 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
     const handleResize = useCallback(
         (key: string, delta: number) => {
             setSizes((prev) => {
-                const index = viewIdsToDisplay.indexOf(key);
-                const nextKey = viewIdsToDisplay[index + 1];
-
-                if (index < 0 || !nextKey) {
-                    return prev;
-                }
-
-                // The delta is the total pointer movement since drag start, so
-                // the calculation is based on the sizes captured at drag start.
-                // This prevents an offset when the pointer moves beyond min/max
-                // limits and then back again.
                 const startSizes = dragStartSizesRef.current;
+                const nextSizes = resizeViewSizes({
+                    views,
+                    viewIds: viewIdsToDisplay,
+                    key,
+                    delta,
+                    startSizes,
+                });
+                const changedIds = Object.keys(nextSizes);
 
-                const currentSize = startSizes[key] ?? prev[key] ?? 0;
-                const nextSize = startSizes[nextKey] ?? prev[nextKey] ?? 0;
-
-                // The pane can only grow as much as its neighbor can shrink and
-                // vice versa, so the total size never exceeds the container.
-                const clampedCurrent = clampViewSize(views[key], currentSize + delta);
-                let appliedDelta = clampedCurrent - currentSize;
-
-                const clampedNext = clampViewSize(views[nextKey], nextSize - appliedDelta);
-                appliedDelta = nextSize - clampedNext;
-
-                const newCurrentSize = clampViewSize(views[key], currentSize + appliedDelta);
-
-                if (prev[key] === newCurrentSize && prev[nextKey] === clampedNext) {
+                if (changedIds.every((id) => prev[id] === nextSizes[id])) {
                     return prev;
                 }
 
                 if (typeof onChange === 'function') {
-                    onChange(key, newCurrentSize);
-                    onChange(nextKey, clampedNext);
+                    changedIds.forEach((id) => {
+                        const size = nextSizes[id];
+
+                        if (typeof size === 'number') {
+                            onChange(id, size);
+                        }
+                    });
                 }
 
-                return {
-                    ...prev,
-                    [key]: newCurrentSize,
-                    [nextKey]: clampedNext,
-                };
+                return { ...prev, ...nextSizes };
             });
         },
         [onChange, viewIdsToDisplay, views],

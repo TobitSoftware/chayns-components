@@ -102,6 +102,62 @@ export const distributeSizes = ({
     return sizes;
 };
 
+interface ResizeViewSizesOptions {
+    views: Record<string, SplitLayoutView>;
+    viewIds: string[];
+    key: string;
+    delta: number;
+    startSizes: Record<string, number>;
+}
+
+export const resizeViewSizes = ({
+    views,
+    viewIds,
+    key,
+    delta,
+    startSizes,
+}: ResizeViewSizesOptions): Record<string, number> => {
+    const index = viewIds.indexOf(key);
+    const nextIds = index < 0 ? [] : viewIds.slice(index + 1);
+    const startSize = startSizes[key] ?? 0;
+    const requestedSize = clampViewSize(views[key], startSize + delta);
+    const requestedDelta = requestedSize - startSize;
+
+    if (requestedDelta === 0 || nextIds.length === 0) {
+        return { [key]: startSize };
+    }
+
+    const capacity = nextIds.reduce((sum, id) => {
+        const size = startSizes[id] ?? 0;
+        const limit =
+            requestedDelta > 0
+                ? (views[id]?.minSize ?? 0)
+                : (views[id]?.maxSize ?? Number.MAX_SAFE_INTEGER);
+
+        return sum + Math.max(requestedDelta > 0 ? size - limit : limit - size, 0);
+    }, 0);
+    const appliedDelta = Math.sign(requestedDelta) * Math.min(Math.abs(requestedDelta), capacity);
+    const sizes: Record<string, number> = { [key]: startSize + appliedDelta };
+    let remaining = Math.abs(appliedDelta);
+
+    nextIds.forEach((id) => {
+        const size = startSizes[id] ?? 0;
+        const limit =
+            requestedDelta > 0
+                ? (views[id]?.minSize ?? 0)
+                : (views[id]?.maxSize ?? Number.MAX_SAFE_INTEGER);
+        const adjustment = Math.min(
+            remaining,
+            Math.max(requestedDelta > 0 ? size - limit : limit - size, 0),
+        );
+
+        sizes[id] = size - Math.sign(requestedDelta) * adjustment;
+        remaining -= adjustment;
+    });
+
+    return sizes;
+};
+
 export const getContainerSizeByDirection = (
     element: HTMLDivElement | null,
     direction: SplitLayoutDirection,
