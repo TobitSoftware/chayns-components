@@ -73,30 +73,30 @@ export const distributeSizes = ({
     // Distribute the remaining difference over all views that can still grow or
     // shrink. Multiple passes are needed because views may hit their min/max.
     for (let pass = 0; pass < viewIds.length && Math.abs(diff) > 0.5; pass++) {
-        const adjustableIds = viewIds.filter((id) => {
-            const size = sizes[id] ?? 0;
-
-            if (preserveViewIds.includes(id)) {
-                return false;
-            }
-
-            return diff > 0
-                ? size < (views[id]?.maxSize ?? Number.MAX_SAFE_INTEGER)
-                : size > (views[id]?.minSize ?? 0);
-        });
+        const currentDiff = diff;
+        const adjustableIds = viewIds.filter(
+            (id) =>
+                !preserveViewIds.includes(id) &&
+                (currentDiff > 0
+                    ? (sizes[id] ?? 0) < (views[id]?.maxSize ?? Number.MAX_SAFE_INTEGER)
+                    : (sizes[id] ?? 0) > (views[id]?.minSize ?? 0)),
+        );
 
         if (adjustableIds.length === 0) {
             break;
         }
 
         const share = diff / adjustableIds.length;
+        const sizesBeforePass = { ...sizes };
 
         adjustableIds.forEach((id) => {
-            const nextSize = clampViewSize(views[id], (sizes[id] ?? 0) + share);
-
-            diff -= nextSize - (sizes[id] ?? 0);
-            sizes[id] = nextSize;
+            sizes[id] = clampViewSize(views[id], (sizesBeforePass[id] ?? 0) + share);
         });
+
+        diff -= adjustableIds.reduce(
+            (sum, id) => sum + (sizes[id] ?? 0) - (sizesBeforePass[id] ?? 0),
+            0,
+        );
     }
 
     return sizes;
@@ -108,6 +108,7 @@ interface ResizeViewSizesOptions {
     key: string;
     delta: number;
     startSizes: Record<string, number>;
+    mainViewId?: string;
 }
 
 export const resizeViewSizes = ({
@@ -116,9 +117,16 @@ export const resizeViewSizes = ({
     key,
     delta,
     startSizes,
+    mainViewId,
 }: ResizeViewSizesOptions): Record<string, number> => {
     const index = viewIds.indexOf(key);
-    const nextIds = index < 0 ? [] : viewIds.slice(index + 1);
+    let nextIds: string[] = [];
+
+    if (index >= 0) {
+        const hasMainView =
+            typeof mainViewId === 'string' && viewIds.includes(mainViewId) && key !== mainViewId;
+        nextIds = hasMainView ? [mainViewId] : viewIds.slice(index + 1);
+    }
     const startSize = startSizes[key] ?? 0;
     const requestedSize = clampViewSize(views[key], startSize + delta);
     const requestedDelta = requestedSize - startSize;

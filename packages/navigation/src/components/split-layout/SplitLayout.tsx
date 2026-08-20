@@ -3,7 +3,6 @@ import ResizeHandle from './resize-handle/ResizeHandle';
 import { StyledSplitLayout, StyledSplitLayoutPane } from './SplitLayout.styles';
 import { SplitLayoutDirection, type SplitLayoutProps } from './SplitLayout.types';
 import {
-    clampViewSize,
     distributeSizes,
     getContainerSizeByDirection,
     getVisibleViewIds,
@@ -38,6 +37,7 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
     views,
     onChange,
     fullScreenViewId,
+    mainView,
 }) => {
     const ref = useRef<HTMLDivElement | null>(null);
     const [sizes, setSizes] = useState<Record<string, number>>({});
@@ -127,6 +127,7 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
                     key,
                     delta,
                     startSizes,
+                    mainViewId: mainView,
                 });
                 const changedIds = Object.keys(nextSizes);
 
@@ -147,7 +148,7 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
                 return { ...prev, ...nextSizes };
             });
         },
-        [onChange, viewIdsToDisplay, views],
+        [mainView, onChange, viewIdsToDisplay, views],
     );
 
     const content = useMemo(() => {

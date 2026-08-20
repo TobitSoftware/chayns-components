@@ -5,6 +5,7 @@ export interface SplitLayoutProps {
     direction?: SplitLayoutDirection;
     handleSize?: number;
     fullScreenViewId?: string;
+    mainView?: string;
     onChange?: (id: string, size: number) => void;
 }
 
