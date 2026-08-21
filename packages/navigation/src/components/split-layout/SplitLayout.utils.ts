@@ -123,9 +123,12 @@ export const resizeViewSizes = ({
     let nextIds: string[] = [];
 
     if (index >= 0) {
-        const hasMainView =
-            typeof mainViewId === 'string' && viewIds.includes(mainViewId) && key !== mainViewId;
-        nextIds = hasMainView ? [mainViewId] : viewIds.slice(index + 1);
+        const mainViewIndex = typeof mainViewId === 'string' ? viewIds.indexOf(mainViewId) : -1;
+        if (mainViewIndex > index && typeof mainViewId === 'string') {
+            nextIds = [mainViewId];
+        } else {
+            nextIds = viewIds.slice(index + 1);
+        }
     }
     const startSize = startSizes[key] ?? 0;
     const requestedSize = clampViewSize(views[key], startSize + delta);

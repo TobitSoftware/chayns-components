@@ -42,7 +42,11 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
     const ref = useRef<HTMLDivElement | null>(null);
     const [sizes, setSizes] = useState<Record<string, number>>({});
     const [containerSize, setContainerSize] = useState(0);
+    const sizesRef = useRef<Record<string, number>>({});
+    const viewsRef = useRef(views);
+    viewsRef.current = views;
     const dragStartSizesRef = useRef<Record<string, number>>({});
+    const isDraggingRef = useRef(false);
     const sizeHistoryRef = useRef<Record<string, number>>({});
     const visibleViewIdsRef = useRef<string[]>([]);
 
@@ -70,31 +74,42 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
         };
     }, [direction]);
 
-    const viewIdsToDisplay = useMemo(
-        () =>
-            getVisibleViewIds({
-                views,
-                containerSize,
-            }),
-        [views, containerSize],
-    );
+    const visibleViewConfigKey = Object.entries(views)
+        .map(([id, view]) => [id, view.isHidden, view.collapseBreakpoint].join(':'))
+        .join('|');
+    const viewIdsToDisplay = useMemo(() => {
+        void visibleViewConfigKey;
+
+        return getVisibleViewIds({
+            views: viewsRef.current,
+            containerSize,
+        });
+    }, [containerSize, visibleViewConfigKey]);
+    const viewLayoutKey = viewIdsToDisplay
+        .map((id) => {
+            const view = views[id];
+
+            return [id, view?.minSize, view?.maxSize].join(':');
+        })
+        .join('|');
+    const visibleViewIdsKey = viewIdsToDisplay.join('|');
 
     // Keep the panes filling the container exactly - both initially and
     // whenever the container size or the visible views change.
     useEffect(() => {
-        if (containerSize <= 0 || viewIdsToDisplay.length === 0) {
+        if (isDraggingRef.current || containerSize <= 0 || viewIdsToDisplay.length === 0) {
             return;
         }
 
         setSizes((prev) => {
-            const previousSizes = { ...sizeHistoryRef.current, ...prev };
+            const previousSizes = { ...sizeHistoryRef.current, ...sizesRef.current, ...prev };
             const reappearedViewIds = viewIdsToDisplay.filter(
                 (id) =>
                     !visibleViewIdsRef.current.includes(id) &&
                     typeof previousSizes[id] === 'number',
             );
             const nextSizes = distributeSizes({
-                views,
+                views: viewsRef.current,
                 viewIds: viewIdsToDisplay,
                 containerSize,
                 handleSize,
@@ -105,24 +120,37 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
             sizeHistoryRef.current = { ...sizeHistoryRef.current, ...nextSizes };
             visibleViewIdsRef.current = viewIdsToDisplay;
 
-            return nextSizes;
+            const hasChanged = viewIdsToDisplay.some(
+                (id) => Math.abs((prev[id] ?? 0) - (nextSizes[id] ?? 0)) > 0.01,
+            );
+
+            if (hasChanged) {
+                sizesRef.current = nextSizes;
+            }
+
+            return hasChanged ? nextSizes : prev;
         });
-    }, [containerSize, handleSize, viewIdsToDisplay, views]);
+    }, [containerSize, handleSize, viewIdsToDisplay, viewLayoutKey, visibleViewIdsKey]);
 
     const handleDragStart = useCallback(() => {
-        setSizes((prev) => {
-            dragStartSizesRef.current = prev;
+        isDraggingRef.current = true;
+        dragStartSizesRef.current = { ...sizesRef.current };
+    }, []);
 
-            return prev;
-        });
+    const handleDragEnd = useCallback(() => {
+        isDraggingRef.current = false;
     }, []);
 
     const handleResize = useCallback(
         (key: string, delta: number) => {
             setSizes((prev) => {
+                if (!isDraggingRef.current) {
+                    return prev;
+                }
+
                 const startSizes = dragStartSizesRef.current;
                 const nextSizes = resizeViewSizes({
-                    views,
+                    views: viewsRef.current,
                     viewIds: viewIdsToDisplay,
                     key,
                     delta,
@@ -145,10 +173,13 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
                     });
                 }
 
-                return { ...prev, ...nextSizes };
+                const updatedSizes = { ...dragStartSizesRef.current, ...nextSizes };
+                sizesRef.current = updatedSizes;
+
+                return updatedSizes;
             });
         },
-        [mainView, onChange, viewIdsToDisplay, views],
+        [mainView, onChange, viewIdsToDisplay],
     );
 
     const content = useMemo(() => {
@@ -193,6 +224,7 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
                             size={handleSize}
                             direction={direction}
                             onDragStart={handleDragStart}
+                            onDragEnd={handleDragEnd}
                             onDrag={(delta) => handleResize(key, delta)}
                         />
                     )}
@@ -202,6 +234,7 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
     }, [
         direction,
         fullScreenViewId,
+        handleDragEnd,
         handleDragStart,
         handleResize,
         handleSize,
