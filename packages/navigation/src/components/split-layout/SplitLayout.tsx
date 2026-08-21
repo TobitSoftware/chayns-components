@@ -175,6 +175,7 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
 
                 const updatedSizes = { ...dragStartSizesRef.current, ...nextSizes };
                 sizesRef.current = updatedSizes;
+                sizeHistoryRef.current = { ...sizeHistoryRef.current, ...updatedSizes };
 
                 return updatedSizes;
             });
