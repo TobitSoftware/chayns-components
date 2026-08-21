@@ -81,19 +81,23 @@ export const distributeSizes = ({
                     ? (sizes[id] ?? 0) < (views[id]?.maxSize ?? Number.MAX_SAFE_INTEGER)
                     : (sizes[id] ?? 0) > (views[id]?.minSize ?? 0)),
         );
+        const fallbackIds =
+            adjustableIds.length === 0 && currentDiff < 0
+                ? viewIds.filter((id) => (sizes[id] ?? 0) > (views[id]?.minSize ?? 0))
+                : adjustableIds;
 
-        if (adjustableIds.length === 0) {
+        if (fallbackIds.length === 0) {
             break;
         }
 
-        const share = diff / adjustableIds.length;
+        const share = diff / fallbackIds.length;
         const sizesBeforePass = { ...sizes };
 
-        adjustableIds.forEach((id) => {
+        fallbackIds.forEach((id) => {
             sizes[id] = clampViewSize(views[id], (sizesBeforePass[id] ?? 0) + share);
         });
 
-        diff -= adjustableIds.reduce(
+        diff -= fallbackIds.reduce(
             (sum, id) => sum + (sizes[id] ?? 0) - (sizesBeforePass[id] ?? 0),
             0,
         );

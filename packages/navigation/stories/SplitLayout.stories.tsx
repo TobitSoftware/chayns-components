@@ -81,18 +81,26 @@ const MainViewTemplate: StoryFn<typeof SplitLayout> = () => {
 
 const HiddenViewTemplate: StoryFn<typeof SplitLayout> = () => {
     const [isHidden, setIsHidden] = useState(false);
+    const [isHidden2, setIsHidden2] = useState(false);
     const [lastSize, setLastSize] = useState(220);
+    const [lastSize2, setLastSize2] = useState(220);
 
     return (
         <>
             <Button onClick={() => setIsHidden((prevState) => !prevState)}>
                 {isHidden ? 'View einblenden' : 'View ausblenden'}
             </Button>
+            <Button onClick={() => setIsHidden2((prevState) => !prevState)}>
+                {isHidden2 ? 'View einblenden' : 'View ausblenden'}
+            </Button>
             <div style={{ width: '100%', height: '400px' }}>
                 <SplitLayout
                     onChange={(id, size) => {
                         if (id === '2') {
                             setLastSize(size);
+                        }
+                        if (id === '3') {
+                            setLastSize2(size);
                         }
                     }}
                     views={{
@@ -101,6 +109,11 @@ const HiddenViewTemplate: StoryFn<typeof SplitLayout> = () => {
                             component: renderTestContent('2'),
                             defaultSize: lastSize,
                             isHidden,
+                        },
+                        '3': {
+                            component: renderTestContent('3'),
+                            defaultSize: lastSize2,
+                            isHidden: isHidden2,
                         },
                     }}
                 />

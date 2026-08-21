@@ -103,18 +103,21 @@ export const SplitLayout: FC<SplitLayoutProps> = ({
 
         setSizes((prev) => {
             const previousSizes = { ...sizeHistoryRef.current, ...sizesRef.current, ...prev };
-            const reappearedViewIds = viewIdsToDisplay.filter(
-                (id) =>
-                    !visibleViewIdsRef.current.includes(id) &&
-                    typeof previousSizes[id] === 'number',
+            const existingViewIds = viewIdsToDisplay.filter((id) =>
+                visibleViewIdsRef.current.includes(id),
             );
+            const flexibleViewId = existingViewIds[0];
+            const preserveViewIds =
+                visibleViewIdsRef.current.length === 0
+                    ? []
+                    : viewIdsToDisplay.filter((id) => id !== flexibleViewId);
             const nextSizes = distributeSizes({
                 views: viewsRef.current,
                 viewIds: viewIdsToDisplay,
                 containerSize,
                 handleSize,
                 previousSizes,
-                preserveViewIds: reappearedViewIds,
+                preserveViewIds,
             });
 
             sizeHistoryRef.current = { ...sizeHistoryRef.current, ...nextSizes };
