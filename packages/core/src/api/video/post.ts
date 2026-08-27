@@ -1,4 +1,5 @@
 import { getAccessToken } from 'chayns-api';
+import { VIDEO_SERVICE_URL } from '../../constants/uploadUrls';
 
 export interface PostVideoResult {
     id: string;
@@ -28,16 +29,13 @@ export const postVideo = async ({
 
     formData.append('files', file);
 
-    const response = await fetch(
-        'https://streamingservice.chayns.space/video?disableIntercom=true',
-        {
-            body: formData,
-            headers: {
-                Authorization: `bearer ${accessToken}`,
-            },
-            method: 'POST',
+    const response = await fetch(`${VIDEO_SERVICE_URL}?disableIntercom=true`, {
+        body: formData,
+        headers: {
+            Authorization: `bearer ${accessToken}`,
         },
-    );
+        method: 'POST',
+    });
 
     if (response.ok) {
         const data = (await response.json()) as PostVideoResult[];

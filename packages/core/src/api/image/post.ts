@@ -1,4 +1,5 @@
 import { getAccessToken, getSite, getUser } from 'chayns-api';
+import { IMAGE_RESIZER_API_URL, IMAGE_SERVICE_API_V3_URL } from '../../constants/uploadUrls';
 import type { Meta } from '../../types/file';
 
 export interface PostImageResult {
@@ -36,9 +37,6 @@ interface PostImageOptions {
     file: File;
     shouldUploadImageToSite?: boolean;
 }
-
-const IMAGE_SERVICE_API_V3_URL = 'https://cube.tobit.cloud/image-service/v3/Images';
-const IMAGE_RESIZER_API_URL = 'https://cube.tobit.cloud/image-resizer-backend/api/v1.0/image';
 
 /**
  * Uploads an image to the tsimg cloud service
