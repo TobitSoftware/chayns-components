@@ -65,6 +65,7 @@ type ListItemHeadProps = {
     shouldForceHover?: boolean;
     setShouldEnableTooltip: (value: boolean) => void;
     shouldDisableAnimation?: boolean;
+    shouldAnimateLayout?: boolean;
     cornerElement?: ReactNode;
     onTitleWidthChange: (titleWidth: number, titleMaxWidth: number) => void;
     onImageError?: (event: SyntheticEvent<HTMLImageElement, Event>, index: number) => void;
@@ -97,6 +98,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     titleElement,
     setShouldEnableTooltip,
     shouldDisableAnimation = false,
+    shouldAnimateLayout = false,
     cornerElement,
     onTitleWidthChange,
     onImageError,
@@ -271,7 +273,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 <LayoutGroup>
                     <StyledListItemHeadTitle
                         as={shouldDisableAnimation ? undefined : motion.div}
-                        layout="position"
+                        layout={shouldAnimateLayout ? 'position' : undefined}
                     >
                         {hasTitleInput ? (
                             // eslint-disable-next-line react/jsx-no-constructed-context-values

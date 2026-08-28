@@ -160,9 +160,26 @@ export type ListItemProps = {
      */
     shouldOpenImageOnClick?: boolean;
     /**
+     * Whether the framer-motion layout projection (`layout="position"`) should be
+     * enabled. This animates the `ListItem` smoothly into its new position when
+     * sibling items are reordered, expanded or resized.
+     *
+     * This is opt-in and disabled by default, because framer-motions layout
+     * projection is viewport-global: every layout change anywhere in the document
+     * (window resize, height animation, ...) forces a re-measurement of **all**
+     * layout-projection nodes via `getBoundingClientRect`. In lists with many
+     * `ListItem`s this scales linearly and causes noticeable layout thrash. The
+     * enter/exit height/opacity animation is unaffected and stays enabled.
+     */
+    shouldAnimateLayout?: boolean;
+    /**
      * Whether the layout animation should be prevented. This is useful when the
      * `ListItem` is used in a list with a lot of items and the layout animation
      * is not desired.
+     *
+     * @deprecated The layout projection is now disabled by default. Use
+     * `shouldAnimateLayout` to opt into it instead. When set to `true`, this
+     * prop keeps forcing the layout projection off.
      */
     shouldPreventLayoutAnimation?: boolean;
     /**
@@ -254,6 +271,7 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
             shouldOpenImageOnClick = false,
             shouldHideImageOrIconBackground,
             shouldHideIndicator = false,
+            shouldAnimateLayout = false,
             shouldPreventLayoutAnimation = false,
             shouldRenderClosed = false,
             shouldShowRoundImageOrIcon,
@@ -512,7 +530,9 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
                 ref={listItemRef}
                 data-uuid={`${listGroupUuid ?? ''}---${uuid}`}
                 layout={
-                    shouldPreventLayoutAnimation || shouldDisableAnimation ? undefined : 'position'
+                    shouldAnimateLayout && !shouldPreventLayoutAnimation && !shouldDisableAnimation
+                        ? 'position'
+                        : undefined
                 }
                 $backgroundColor={backgroundColor}
                 $isClickable={isClickable}
@@ -579,6 +599,11 @@ const ListItem = forwardRef<ListItemRef, ListItemProps>(
                         titleElement={titleElement}
                         setShouldEnableTooltip={setShouldEnableTooltip}
                         shouldDisableAnimation={shouldDisableAnimation}
+                        shouldAnimateLayout={
+                            shouldAnimateLayout &&
+                            !shouldPreventLayoutAnimation &&
+                            !shouldDisableAnimation
+                        }
                         onImageError={onImageError}
                     />
                 </Tooltip>
