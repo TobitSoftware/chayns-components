@@ -27,7 +27,7 @@ const readEnv = (key: string): string | undefined => {
  * to the default chayns image service when the variable is not defined.
  */
 export const IMAGE_SERVICE_API_V3_URL =
-    readEnv('CHAYNS_IMAGE_SERVICE_URL') ?? 'https://cube.tobit.cloud/image-service/v3/Images';
+    process.env.CHAYNS_IMAGE_SERVICE_URL ?? 'https://cube.tobit.cloud/image-service/v3/Images';
 
 /**
  * URL of the image resizer service used to upload images larger than 10 MB.
@@ -37,7 +37,7 @@ export const IMAGE_SERVICE_API_V3_URL =
  * to the default chayns image resizer when the variable is not defined.
  */
 export const IMAGE_RESIZER_API_URL =
-    readEnv('CHAYNS_IMAGE_RESIZER_URL') ??
+    process.env.CHAYNS_IMAGE_RESIZER_URL ??
     'https://cube.tobit.cloud/image-resizer-backend/api/v1.0/image';
 
 /**
@@ -48,4 +48,4 @@ export const IMAGE_RESIZER_API_URL =
  * to the default chayns streaming service when the variable is not defined.
  */
 export const VIDEO_SERVICE_URL =
-    readEnv('CHAYNS_VIDEO_SERVICE_URL') ?? 'https://streamingservice.chayns.space/video';
+    process.env.CHAYNS_VIDEO_SERVICE_URL ?? 'https://streamingservice.chayns.space/video';
