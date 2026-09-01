@@ -72,7 +72,7 @@ Each package includes:
 Clone the repository:
 
 ```bash
-git clone https://github.com/chayns-components/chayns-components.git
+git clone https://github.com/TobitSoftware/chayns-components.git
 cd chayns-components
 ```
 
