@@ -422,7 +422,7 @@ const Filter = forwardRef<FilterRef, FilterProps>(
                     {[FilterType.MULTIPLE, FilterType.ONLY_FILTER].includes(type) && (
                         <StyledFilterContentWrapper
                             ref={contentRef}
-                            inert={!isOpen ? 'true' : undefined}
+                            inert={!isOpen || undefined}
                             aria-hidden={!isOpen}
                         >
                             <ExpandableContent isOpen={isOpen}>
