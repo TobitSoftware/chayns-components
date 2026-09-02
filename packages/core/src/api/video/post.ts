@@ -1,5 +1,5 @@
 import { getAccessToken } from 'chayns-api';
-import { VIDEO_SERVICE_URL } from '../../constants/uploadUrls';
+import { VIDEO_SERVICE_URL } from '../../constants/serverUrls';
 
 export interface PostVideoResult {
     id: string;

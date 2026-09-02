@@ -67,6 +67,7 @@
         "@storybook/addon-mdx-gfm": "^7.6.24",
         "@storybook/react": "^7.6.24",
         "@storybook/react-webpack5": "^7.6.24",
+        "@types/node": "^26.4.1",
         "@types/uuid": "^10.0.0",
         "babel-loader": "^9.2.1",
         "babel-plugin-react-compiler": "^1.0.0",

@@ -1,5 +1,5 @@
 import { getAccessToken, getSite, getUser } from 'chayns-api';
-import { IMAGE_RESIZER_API_URL, IMAGE_SERVICE_API_V3_URL } from '../../constants/uploadUrls';
+import { IMAGE_RESIZER_URL, IMAGE_SERVICE_URL } from '../../constants/serverUrls';
 import type { Meta } from '../../types/file';
 
 export interface PostImageResult {
@@ -61,8 +61,8 @@ export const postImage = async ({
 
     const url =
         file.size > 10 * 1024 * 1024
-            ? `${IMAGE_RESIZER_API_URL}/${shouldUploadImageToSite ? site.id : user.personId}`
-            : `${IMAGE_SERVICE_API_V3_URL}/${shouldUploadImageToSite ? site.id : user.personId}`;
+            ? `${IMAGE_RESIZER_URL}/${shouldUploadImageToSite ? site.id : user.personId}`
+            : `${IMAGE_SERVICE_URL}/${shouldUploadImageToSite ? site.id : user.personId}`;
 
     const response = await fetch(url, {
         body,
