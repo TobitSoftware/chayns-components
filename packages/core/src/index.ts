@@ -165,6 +165,13 @@ export { filterFilesByMimeType, getFileAsArrayBuffer, selectFiles } from './util
 export { isTobitEmployee } from './utils/isTobitEmployee';
 export { getUsableHeight } from './utils/pageProvider';
 export { uploadFile } from './utils/uploadFile';
+export {
+    DEFAULT_UPLOAD_URLS,
+    getUploadUrls,
+    resetUploadUrls,
+    setUploadUrls,
+    type UploadUrls,
+} from './config/uploadUrls';
 export type { Theme } from './components/color-scheme-provider/ColorSchemeProvider';
 export { ComboBoxSize } from './components/combobox/ComboBox.types';
 export type {

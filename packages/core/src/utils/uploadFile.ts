@@ -1,24 +1,30 @@
 import { postImage } from '../api/image/post';
 import { postVideo } from '../api/video/post';
+import type { UploadUrls } from '../config/uploadUrls';
 import type { Image, InternalFileItem, Video } from '../types/file';
 
 interface UploadFilesOptions {
     fileToUpload: InternalFileItem;
     callback: (UploadedFile: Video | Image) => void;
     shouldUploadImageToSite?: boolean;
+    /**
+     * Overrides the globally configured upload service URLs for this upload.
+     */
+    uploadUrls?: Partial<UploadUrls>;
 }
 
 export const uploadFile = async ({
     fileToUpload,
     callback,
     shouldUploadImageToSite,
+    uploadUrls,
 }: UploadFilesOptions): Promise<void> => {
     if (!fileToUpload || (fileToUpload.state !== undefined && fileToUpload.state !== 'none')) {
         return;
     }
 
     if (fileToUpload.file?.type.includes('video/')) {
-        const uploadedVideo = await postVideo({ file: fileToUpload.file });
+        const uploadedVideo = await postVideo({ file: fileToUpload.file, uploadUrls });
 
         if (uploadedVideo) {
             callback({
@@ -29,7 +35,11 @@ export const uploadFile = async ({
     }
 
     if (fileToUpload.file?.type.includes('image/')) {
-        const uploadedImage = await postImage({ file: fileToUpload.file, shouldUploadImageToSite });
+        const uploadedImage = await postImage({
+            file: fileToUpload.file,
+            shouldUploadImageToSite,
+            uploadUrls,
+        });
 
         if (uploadedImage) {
             callback({

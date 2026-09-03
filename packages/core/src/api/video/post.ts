@@ -1,5 +1,5 @@
 import { getAccessToken } from 'chayns-api';
-import { VIDEO_SERVICE_URL } from '../../constants/serverUrls';
+import { getUploadUrls, type UploadUrls } from '../../config/uploadUrls';
 
 export interface PostVideoResult {
     id: string;
@@ -11,6 +11,10 @@ export interface PostVideoResult {
 
 interface PostVideoOptions {
     file: File | Blob;
+    /**
+     * Overrides the globally configured upload service URLs for this upload.
+     */
+    uploadUrls?: Partial<UploadUrls>;
 }
 
 /**
@@ -18,6 +22,7 @@ interface PostVideoOptions {
  */
 export const postVideo = async ({
     file,
+    uploadUrls,
 }: PostVideoOptions): Promise<PostVideoResult | undefined> => {
     const { accessToken } = await getAccessToken();
 
@@ -29,7 +34,9 @@ export const postVideo = async ({
 
     formData.append('files', file);
 
-    const response = await fetch(`${VIDEO_SERVICE_URL}?disableIntercom=true`, {
+    const { videoServiceUrl } = getUploadUrls(uploadUrls);
+
+    const response = await fetch(`${videoServiceUrl}?disableIntercom=true`, {
         body: formData,
         headers: {
             Authorization: `bearer ${accessToken}`,

@@ -1,5 +1,5 @@
 import { getAccessToken, getSite, getUser } from 'chayns-api';
-import { IMAGE_RESIZER_URL, IMAGE_SERVICE_URL } from '../../constants/serverUrls';
+import { getUploadUrls, type UploadUrls } from '../../config/uploadUrls';
 import type { Meta } from '../../types/file';
 
 export interface PostImageResult {
@@ -36,6 +36,10 @@ export interface Signature {
 interface PostImageOptions {
     file: File;
     shouldUploadImageToSite?: boolean;
+    /**
+     * Overrides the globally configured upload service URLs for this upload.
+     */
+    uploadUrls?: Partial<UploadUrls>;
 }
 
 /**
@@ -44,6 +48,7 @@ interface PostImageOptions {
 export const postImage = async ({
     file,
     shouldUploadImageToSite,
+    uploadUrls,
 }: PostImageOptions): Promise<PostImageResult | undefined> => {
     const { accessToken } = await getAccessToken();
     const user = getUser();
@@ -59,10 +64,12 @@ export const postImage = async ({
 
     body.append('File', file);
 
+    const { imageServiceUrl, imageResizerUrl } = getUploadUrls(uploadUrls);
+
     const url =
         file.size > 10 * 1024 * 1024
-            ? `${IMAGE_RESIZER_URL}/${shouldUploadImageToSite ? site.id : user.personId}`
-            : `${IMAGE_SERVICE_URL}/${shouldUploadImageToSite ? site.id : user.personId}`;
+            ? `${imageResizerUrl}/${shouldUploadImageToSite ? site.id : user.personId}`
+            : `${imageServiceUrl}/${shouldUploadImageToSite ? site.id : user.personId}`;
 
     const response = await fetch(url, {
         body,
