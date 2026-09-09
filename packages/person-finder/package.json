@@ -79,7 +79,7 @@
     },
     "peerDependencies": {
         "chayns-api": ">=2.2.0",
-        "motion": ">=12.4.1",
+        "motion": "^12.4.1 || ^13.0.0",
         "react": ">=18.0.0",
         "react-dom": ">=18.0.0",
         "styled-components": ">=5.3.11"

@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { animate, useMotionValue } from 'motion/react';
-import { Easing, MotionValue, ObjectTarget } from 'motion';
+import { Easing } from 'motion';
 
 type Ease = [number, number, number, number] | ((t: number) => number) | string;
 
@@ -75,7 +75,7 @@ export const AnimatedNumber: FC<AnimatedNumberProps> = ({
     useEffect(() => {
         motionValue.set(startFrom);
 
-        const controls = animate(motionValue, value as ObjectTarget<MotionValue<number>>, {
+        const controls = animate(motionValue, value, {
             duration,
             delay,
             ease: ease as Easing,
