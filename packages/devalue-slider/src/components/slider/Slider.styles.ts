@@ -201,8 +201,8 @@ export const ThumbIconContainer = styled.div`
     align-items: center;
 `;
 
-export const ThumbIcon = styled(motion.i).attrs<{ icon: string }>(({ icon }) => ({
-    className: `react-chayns-icon ${icon}`,
+export const ThumbIcon = styled(motion.i).attrs<{ $icon: string }>(({ $icon }) => ({
+    className: `react-chayns-icon ${$icon}`,
 }))`
     font-size: 22px;
     z-index: 1;

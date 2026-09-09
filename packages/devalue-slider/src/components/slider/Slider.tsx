@@ -258,7 +258,7 @@ const Slider = forwardRef<SliderRef, SliderProps>(
                             {!showWaitCursor && (
                                 <ThumbIcon
                                     key="thumb-icon"
-                                    icon={icon}
+                                    $icon={icon}
                                     variants={THUMB_ICON_VARIANTS}
                                     style={iconStyles}
                                 />
