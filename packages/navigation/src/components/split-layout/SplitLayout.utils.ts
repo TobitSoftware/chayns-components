@@ -82,8 +82,12 @@ export const distributeSizes = ({
                     : (sizes[id] ?? 0) > (views[id]?.minSize ?? 0)),
         );
         const fallbackIds =
-            adjustableIds.length === 0 && currentDiff < 0
-                ? viewIds.filter((id) => (sizes[id] ?? 0) > (views[id]?.minSize ?? 0))
+            adjustableIds.length === 0
+                ? viewIds.filter((id) =>
+                      currentDiff > 0
+                          ? (sizes[id] ?? 0) < (views[id]?.maxSize ?? Number.MAX_SAFE_INTEGER)
+                          : (sizes[id] ?? 0) > (views[id]?.minSize ?? 0),
+                  )
                 : adjustableIds;
 
         if (fallbackIds.length === 0) {
