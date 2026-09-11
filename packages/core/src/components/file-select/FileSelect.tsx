@@ -2,7 +2,7 @@ import { createDialog, DialogType } from 'chayns-api';
 import React, { DragEvent, FC, KeyboardEventHandler, useCallback, useMemo, useRef } from 'react';
 import type { ImageDialogResult } from '../../types/fileInput';
 import { isValidFileType } from '../../utils/file';
-import { selectFiles } from '../../utils/fileDialog';
+import { filterFilesBySize, selectFiles } from '../../utils/fileDialog';
 import { useFocusRingPortal } from '../../hooks/useFocusRingPortal';
 import { useKeyboardFocusHighlighting } from '../../hooks/useKeyboardFocusHighlighting';
 import Icon from '../icon/Icon';
@@ -194,13 +194,13 @@ const FileSelect: FC<FileSelectProps> = ({
         (e: DragEvent<HTMLDivElement>) => {
             e.preventDefault();
 
-            const draggedFiles = Array.from(e.dataTransfer.files).filter((file) => {
-                if (fileTypes && !isValidFileType({ file, types: fileTypes })) {
-                    return false;
-                }
+            const eventFiles = Array.from(e.dataTransfer.files);
 
-                return !(maxFileSizeInMB && file.size > maxFileSizeInMB * 1024 * 1024);
-            });
+            let draggedFiles = filterFilesBySize(eventFiles, maxFileSizeInMB);
+
+            draggedFiles = draggedFiles.filter(
+                (file) => !(fileTypes && !isValidFileType({ file, types: fileTypes })),
+            );
 
             if (
                 draggedFiles.length === 1 &&

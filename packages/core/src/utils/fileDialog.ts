@@ -58,26 +58,7 @@ export const selectFiles = ({
                 return file;
             });
 
-            let filteredFileArray = fileArray.filter((file) => {
-                const sizeInMB = file.size / 1024 / 1024;
-
-                if (maxFileSizeInMB && maxFileSizeInMB < sizeInMB) {
-                    return false;
-                }
-
-                if (file.type.includes('video/') && sizeInMB > 500) {
-                    return false;
-                }
-
-                return !(file.type.includes('image/') && sizeInMB > 64);
-            });
-
-            if (fileArray.length !== filteredFileArray.length) {
-                void createDialog({
-                    type: DialogType.ALERT,
-                    text: 'Einige Deiner ausgewählten Dateien sind zu groß.',
-                }).open();
-            }
+            let filteredFileArray = filterFilesBySize(fileArray, maxFileSizeInMB);
 
             if (typeof type === 'string') {
                 filteredFileArray = filterFilesByMimeType(filteredFileArray, type) as File[];
@@ -97,6 +78,31 @@ export const selectFiles = ({
 
         input.click();
     });
+
+export const filterFilesBySize = (files: File[], maxFileSizeInMB?: number) => {
+    const filteredFiles = files.filter((file) => {
+        const sizeInMB = file.size / 1024 / 1024;
+
+        if (maxFileSizeInMB && maxFileSizeInMB < sizeInMB) {
+            return false;
+        }
+
+        if (file.type.includes('video/') && sizeInMB > 500) {
+            return false;
+        }
+
+        return !(file.type.includes('image/') && sizeInMB > 64);
+    });
+
+    if (files.length !== filteredFiles.length) {
+        void createDialog({
+            type: DialogType.ALERT,
+            text: 'Einige Deiner ausgewählten Dateien sind zu groß.',
+        }).open();
+    }
+
+    return filteredFiles;
+};
 
 export const filterFilesByMimeType = (
     files: FileList | File[],
