@@ -8,6 +8,11 @@ interface UploadFilesOptions {
     callback: (UploadedFile: Video | Image) => void;
     shouldUploadImageToSite?: boolean;
     /**
+     * Relative target path appended to the image service URL. When set, it
+     * takes precedence over the default user or site ID path.
+     */
+    uploadPath?: string;
+    /**
      * Overrides the globally configured upload service URLs for this upload.
      */
     uploadUrls?: Partial<UploadUrls>;
@@ -17,6 +22,7 @@ export const uploadFile = async ({
     fileToUpload,
     callback,
     shouldUploadImageToSite,
+    uploadPath,
     uploadUrls,
 }: UploadFilesOptions): Promise<void> => {
     if (!fileToUpload || (fileToUpload.state !== undefined && fileToUpload.state !== 'none')) {
@@ -38,6 +44,7 @@ export const uploadFile = async ({
         const uploadedImage = await postImage({
             file: fileToUpload.file,
             shouldUploadImageToSite,
+            uploadPath,
             uploadUrls,
         });
 

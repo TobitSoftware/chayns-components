@@ -37,6 +37,11 @@ interface PostImageOptions {
     file: File;
     shouldUploadImageToSite?: boolean;
     /**
+     * Relative target path appended to the image service URL. When set, it
+     * takes precedence over the default user or site ID path.
+     */
+    uploadPath?: string;
+    /**
      * Overrides the globally configured upload service URLs for this upload.
      */
     uploadUrls?: Partial<UploadUrls>;
@@ -48,6 +53,7 @@ interface PostImageOptions {
 export const postImage = async ({
     file,
     shouldUploadImageToSite,
+    uploadPath,
     uploadUrls,
 }: PostImageOptions): Promise<PostImageResult | undefined> => {
     const { accessToken } = await getAccessToken();
@@ -65,11 +71,12 @@ export const postImage = async ({
     body.append('File', file);
 
     const { imageServiceUrl, imageResizerUrl } = getUploadUrls(uploadUrls);
+    const targetPath = uploadPath ?? (shouldUploadImageToSite ? site.id : user.personId);
 
     const url =
         file.size > 10 * 1024 * 1024
-            ? `${imageResizerUrl}/${shouldUploadImageToSite ? site.id : user.personId}`
-            : `${imageServiceUrl}/${shouldUploadImageToSite ? site.id : user.personId}`;
+            ? `${imageResizerUrl}/${targetPath}`
+            : `${imageServiceUrl}/${targetPath}`;
 
     const response = await fetch(url, {
         body,
