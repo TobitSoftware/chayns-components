@@ -550,14 +550,15 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                             !isDisabled && typeof inputValue !== 'string' ? isAnimating : undefined
                         }
                     >
-                        <StyledComboBoxPrefixAndPlaceholderWrapper>
+                        <StyledComboBoxPrefixAndPlaceholderWrapper $size={size}>
                             {prefix && (
-                                <StyledComboBoxPrefix $prefixMinWidth={prefixMinWidth}>
+                                <StyledComboBoxPrefix $prefixMinWidth={prefixMinWidth} $size={size}>
                                     {prefix}
                                 </StyledComboBoxPrefix>
                             )}
                             <StyledComboBoxPlaceholder
                                 $shouldReduceOpacity={!selectedItem && !internalSelectedItem}
+                                $size={size}
                             >
                                 {placeholderImageUrl && (
                                     <StyledComboBoxPlaceholderImage
@@ -590,9 +591,13 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                         {shouldShowClearIcon && internalSelectedItem && (
                             <StyledComboBoxClearIconWrapper
                                 $isDisabled={isDisabled}
+                                $size={size}
                                 onClick={handleClear}
                             >
-                                <Icon icons={['fa fa-times']} />
+                                <Icon
+                                    icons={['fa fa-times']}
+                                    size={size === ComboBoxSize.MINI ? 13 : 15}
+                                />
                             </StyledComboBoxClearIconWrapper>
                         )}
                         {!shouldDisableActions && (
@@ -604,7 +609,11 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                                     internalSelectedItem !== undefined
                                 }
                             >
-                                <Icon icons={['fa fa-chevron-down']} isDisabled={isDisabled} />
+                                <Icon
+                                    icons={['fa fa-chevron-down']}
+                                    isDisabled={isDisabled}
+                                    size={size === ComboBoxSize.MINI ? 13 : 15}
+                                />
                             </StyledComboBoxIconWrapper>
                         )}
                     </StyledComboBoxHeader>

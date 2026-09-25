@@ -110,6 +110,10 @@ export enum ComboBoxSize {
      * Compact height and spacing.
      */
     SMALL = 'small',
+    /**
+     * Minimal height and spacing.
+     */
+    MINI = 'mini',
 }
 
 /**

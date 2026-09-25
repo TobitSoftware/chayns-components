@@ -4,7 +4,7 @@ import { DropdownDirection } from '../src/types/dropdown';
 import ComboBox from '../src/components/combobox/ComboBox';
 import Icon from '../src/components/icon/Icon';
 import { Badge } from '@chayns-components/core';
-import { IComboBoxItem } from '../src/components/combobox/ComboBox.types';
+import { ComboBoxSize, IComboBoxItem } from '../src/components/combobox/ComboBox.types';
 
 export default {
     title: 'Core/ComboBox',
@@ -114,7 +114,13 @@ const WithInputTemplate: StoryFn<typeof ComboBox> = (args) => {
 
 export const General = Template.bind({});
 
+export const Mini = Template.bind({});
+
 export const Custom = CustomTemplate.bind({});
+
+Mini.args = {
+    size: ComboBoxSize.MINI,
+};
 
 export const OwnWidth = Template.bind({});
 

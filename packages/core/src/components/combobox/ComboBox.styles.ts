@@ -59,6 +59,11 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
 
     ${({ $size }) => {
         switch ($size) {
+            case ComboBoxSize.MINI:
+                return css`
+                    box-sizing: border-box;
+                    height: 28px;
+                `;
             case ComboBoxSize.SMALL:
                 return css`
                     height: 34px;
@@ -75,22 +80,22 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
         if ($shouldShowTransparentBackground) {
             if (theme.colorMode === 'dark') {
                 return css`
-                    border-color: rgba(255, 255, 255, 0.5);
+                    border-color: rgba(255, 255, 255, 0.3);
                     background-color: transparent;
                 `;
             }
 
             return css`
-                border-color: rgba(0, 0, 0, 0.5);
+                border-color: rgba(0, 0, 0, 0.3);
                 background-color: transparent;
             `;
         }
 
         return css`
             border-color: rgba(160, 160, 160, 0.3);
-            background-color: ${theme.colorMode === 'classic' || $shouldChangeColor
-                ? theme['000']
-                : theme['100']};
+            background-color: ${
+                theme.colorMode === 'classic' || $shouldChangeColor ? theme['000'] : theme['100']
+            };
         `;
     }}
 
@@ -136,7 +141,10 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     }
 `;
 
-type StyledComboBoxPlaceholderProps = WithTheme<{ $shouldReduceOpacity: boolean }>;
+type StyledComboBoxPlaceholderProps = WithTheme<{
+    $shouldReduceOpacity: boolean;
+    $size: ComboBoxSize;
+}>;
 
 export const StyledComboBoxPlaceholder = styled.div<StyledComboBoxPlaceholderProps>`
     align-items: center;
@@ -146,6 +154,12 @@ export const StyledComboBoxPlaceholder = styled.div<StyledComboBoxPlaceholderPro
     gap: 10px;
     min-width: 0;
     opacity: ${({ $shouldReduceOpacity }) => ($shouldReduceOpacity ? 0.5 : 1)};
+
+    ${({ $size }) =>
+        $size === ComboBoxSize.MINI &&
+        css`
+            font-size: 13px;
+        `}
 `;
 
 export const StyledComboBoxPlaceholderText = styled.div`
@@ -154,28 +168,47 @@ export const StyledComboBoxPlaceholderText = styled.div`
     white-space: nowrap;
 `;
 
-export const StyledComboBoxPrefixAndPlaceholderWrapper = styled.div`
+type StyledComboBoxPrefixAndPlaceholderWrapperProps = {
+    $size: ComboBoxSize;
+};
+
+export const StyledComboBoxPrefixAndPlaceholderWrapper = styled.div<StyledComboBoxPrefixAndPlaceholderWrapperProps>`
     align-items: center;
     display: flex;
     flex: 1 1 auto;
     min-width: 0;
     padding: 4px 10px;
+
+    ${({ $size }) =>
+        $size === ComboBoxSize.MINI &&
+        css`
+            padding: 2px 8px;
+        `}
 `;
 
 type StyledComboBoxPrefixProps = {
     $prefixMinWidth?: number;
+    $size: ComboBoxSize;
 };
 
 export const StyledComboBoxPrefix = styled.div<StyledComboBoxPrefixProps>`
     flex: 0 0 auto;
     min-width: ${({ $prefixMinWidth }) => $prefixMinWidth ?? 0}px;
     padding-right: 5px;
+
+    ${({ $size }) =>
+        $size === ComboBoxSize.MINI &&
+        css`
+            font-size: 13px;
+            padding-right: 4px;
+        `}
 `;
 
 export const StyledComboBoxInput = styled.input`
     color: ${({ theme }: { theme: Theme }) => theme.text};
     border: none;
     background-color: transparent;
+    font: inherit;
     width: 100%;
     min-width: 0;
 `;
@@ -198,7 +231,10 @@ export const StyledComboBoxPlaceholderImage = styled.img<StyledComboBoxPlacehold
         `}
 `;
 
-type StyledComboBoxClearIconWrapperProps = { $isDisabled: boolean };
+type StyledComboBoxClearIconWrapperProps = {
+    $isDisabled: boolean;
+    $size: ComboBoxSize;
+};
 
 export const StyledComboBoxClearIconWrapper = styled.div<StyledComboBoxClearIconWrapperProps>`
     align-items: center;
@@ -208,6 +244,13 @@ export const StyledComboBoxClearIconWrapper = styled.div<StyledComboBoxClearIcon
     height: 40px;
     justify-content: center;
     width: 40px;
+
+    ${({ $size }) =>
+        $size === ComboBoxSize.MINI &&
+        css`
+            height: 26px;
+            width: 28px;
+        `}
 `;
 
 type StyledComboBoxIconWrapperProps = {
@@ -228,6 +271,11 @@ export const StyledComboBoxIconWrapper = styled.div<StyledComboBoxIconWrapperPro
 
     ${({ $size }) => {
         switch ($size) {
+            case ComboBoxSize.MINI:
+                return css`
+                    height: 26px;
+                    width: 28px;
+                `;
             case ComboBoxSize.SMALL:
                 return css`
                     height: 30px;
