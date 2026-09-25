@@ -897,6 +897,25 @@ import { ComboBox } from '@chayns-components/core';
 />
 ```
 
+#### Mini
+
+```tsx
+<ComboBox
+    lists={[
+                {
+                    list: [
+                        {
+                            text: 'Margherita',
+                            value: 1,
+                        },
+                    ],
+                },
+            ]}
+    placeholder={'Select Pizza'}
+    size={ComboBoxSize.MINI}
+/>
+```
+
 #### Custom
 
 ```tsx
@@ -1437,6 +1456,10 @@ import { ComboBox } from '@chayns-components/core';
      * Compact height and spacing.
      */
     SMALL = 'small',
+    /**
+     * Minimal height and spacing.
+     */
+    MINI = 'mini',
 }`
 - `DropdownDirection` -> `enum DropdownDirection {
     BOTTOM,
