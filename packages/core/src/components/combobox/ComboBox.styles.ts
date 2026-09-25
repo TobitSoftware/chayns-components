@@ -182,7 +182,7 @@ export const StyledComboBoxPrefixAndPlaceholderWrapper = styled.div<StyledComboB
     ${({ $size }) =>
         $size === ComboBoxSize.MINI &&
         css`
-            padding: 2px 8px;
+            padding: 2px;
         `}
 `;
 
