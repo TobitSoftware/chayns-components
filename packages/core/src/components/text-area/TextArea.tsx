@@ -13,7 +13,9 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { useTheme } from 'styled-components';
 import { AreaContext } from '../area-provider/AreaContextProvider';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import { StyledInputRightElement } from '../input/Input.styles';
 import {
     StyledRightElementWrapper,
@@ -112,6 +114,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         const [isOverflowing, setIsOverflowing] = useState(false);
 
         const areaProvider = useContext(AreaContext);
+        const theme = useTheme() as Theme;
 
         const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -196,7 +199,9 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                                 rows={1}
                             />
                             <StyledTextAreaLabelWrapper
-                                animate={{ fontSize: hasValue ? '9px' : undefined }}
+                                animate={{
+                                    fontSize: hasValue ? '9px' : `${Number(theme.fontSize)}px`,
+                                }}
                                 initial={false}
                                 style={labelPosition}
                                 transition={{ type: 'tween', duration: 0.1 }}
@@ -237,6 +242,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 minHeight,
                 isOverflowing,
                 hasValue,
+                theme.fontSize,
                 labelPosition,
                 placeholder,
                 rightElement,
