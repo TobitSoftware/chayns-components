@@ -1,4 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import React, { useState } from 'react';
 import FileList from '../src/components/file-list/FileList';
 
@@ -22,7 +23,28 @@ const Template: StoryFn<typeof FileList> = ({ ...args }) => {
         setInternalFiles((prevState) => (prevState ?? []).filter((file) => id !== file.id));
     };
 
-    return <FileList files={internalFiles} onRemove={handleRemove} />;
+    return <FileList {...args} files={internalFiles} onRemove={handleRemove} />;
 };
 
 export const General = Template.bind({});
+
+export const CustomContextMenuItems = Template.bind({});
+CustomContextMenuItems.args = {
+    shouldAllowDownload: false,
+    files: [
+        {
+            id: '1',
+            name: 'Document.txt',
+            size: 1024,
+            mimeType: 'text/plain',
+            contextMenuItems: [
+                {
+                    key: 'custom-download',
+                    text: 'Download via project',
+                    icons: ['fa fa-download'],
+                    onClick: () => action('custom-download')('1'),
+                },
+            ],
+        },
+    ],
+};
