@@ -2037,6 +2037,30 @@ import { FileList } from '@chayns-components/core';
 />
 ```
 
+#### Custom Context Menu Items
+
+```tsx
+<FileList
+    files={[
+            {
+                id: '1',
+                name: 'Document.txt',
+                size: 1024,
+                mimeType: 'text/plain',
+                contextMenuItems: [
+                    {
+                        key: 'custom-download',
+                        text: 'Download via project',
+                        icons: ['fa fa-download'],
+                        onClick: () => action('custom-download')('1'),
+                    },
+                ],
+            },
+        ]}
+    shouldAllowDownload={false}
+/>
+```
+
 ### Props
 
 | name | type | required | description |
