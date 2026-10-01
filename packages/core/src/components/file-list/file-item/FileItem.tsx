@@ -7,9 +7,7 @@ import ListItem from '../../list/list-item/ListItem';
 import type { IFileItem } from '../FileList';
 import {
     StyledFileItem,
-    StyledFileItemActions,
     StyledFileItemKeyboardWrapper,
-    StyledFileItemRemoveButton,
     StyledFileItemIcon,
 } from './FileItem.styles';
 import { useTranslation } from '@chayns/textstrings';
@@ -30,12 +28,16 @@ const FileItem: FC<FileItemProps> = ({
     id,
     source,
     shouldAllowDownload,
+    contextMenuItems,
 }) => {
     const canDownload = shouldAllowDownload && !!source;
     const canRemove = typeof onRemove === 'function';
+    const hasCustomActions = !!contextMenuItems?.length;
     const actionIconRef = useRef<HTMLDivElement>(null);
 
-    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(canRemove || !!canDownload);
+    const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
+        canRemove || !!canDownload || hasCustomActions,
+    );
     useFocusRingPortal(actionIconRef, {
         isEnabled: shouldShowKeyboardHighlighting,
         shape: 'circle',
@@ -45,7 +47,7 @@ const FileItem: FC<FileItemProps> = ({
         if (canRemove) {
             onRemove(id);
         }
-    }, [id, onRemove]);
+    }, [canRemove, id, onRemove]);
 
     const handleItemKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
         (event) => {
@@ -65,7 +67,7 @@ const FileItem: FC<FileItemProps> = ({
                 handleRemove();
             }
         },
-        [handleRemove],
+        [canRemove, handleRemove],
     );
 
     const humanFileSize = useMemo(() => {
@@ -127,23 +129,30 @@ const FileItem: FC<FileItemProps> = ({
     const removeText = t(textStrings.components.fileItem.remove);
 
     const rightElement = useMemo(() => {
-        if (!canDownload && !canRemove) return undefined;
-        // Both actions available → show as ContextMenu
-        if (canDownload && canRemove) {
-            const items: ContextMenuItem[] = [
-                {
+        if (!canDownload && !canRemove && !hasCustomActions) return undefined;
+
+        if (hasCustomActions || (canDownload && canRemove)) {
+            const items: ContextMenuItem[] = [];
+
+            if (canDownload) {
+                items.push({
                     icons: ['fa fa-download'],
                     key: 'download',
                     onClick: handleDownload,
                     text: downloadText,
-                },
-                {
+                });
+            }
+
+            if (canRemove) {
+                items.push({
                     icons: ['fa fa-trash'],
                     key: 'remove',
-                    onClick: () => onRemove(id),
+                    onClick: handleRemove,
                     text: removeText,
-                },
-            ];
+                });
+            }
+
+            items.push(...(contextMenuItems ?? []));
 
             return <ContextMenu items={items} />;
         }
@@ -175,9 +184,12 @@ const FileItem: FC<FileItemProps> = ({
     }, [
         canDownload,
         canRemove,
+        contextMenuItems,
         downloadText,
         handleDownload,
+        handleRemove,
         handleRemoveKeyDown,
+        hasCustomActions,
         id,
         onRemove,
         removeText,

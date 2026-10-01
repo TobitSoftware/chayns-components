@@ -3,6 +3,7 @@ import { TextStringProviderSSR } from '@chayns/textstrings';
 import List from '../list/List';
 import { StyledFileList } from './FileList.styles';
 import FileItem from './file-item/FileItem';
+import type { ContextMenuItem } from '../context-menu/ContextMenu.types';
 
 export interface IFileItem {
     id: string;
@@ -10,6 +11,11 @@ export interface IFileItem {
     size?: number;
     mimeType: string;
     source?: string | File;
+    /**
+     * Additional context menu actions, appended after the built-in download and remove actions.
+     * Use keys other than `download` and `remove` when those built-in actions are enabled.
+     */
+    contextMenuItems?: ContextMenuItem[];
 }
 
 export type FileListProps = {
@@ -30,7 +36,7 @@ export type FileListProps = {
 const FileList: FC<FileListProps> = ({ files, onRemove, shouldAllowDownload }) => {
     const content = useMemo(
         () =>
-            files?.map(({ mimeType, size, name, id, source }) => (
+            files?.map(({ mimeType, size, name, id, source, contextMenuItems }) => (
                 <FileItem
                     key={id}
                     id={id}
@@ -38,6 +44,7 @@ const FileList: FC<FileListProps> = ({ files, onRemove, shouldAllowDownload }) =
                     size={size}
                     mimeType={mimeType}
                     source={source}
+                    contextMenuItems={contextMenuItems}
                     onRemove={onRemove}
                     shouldAllowDownload={shouldAllowDownload}
                 />
