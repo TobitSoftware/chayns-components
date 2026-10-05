@@ -1,9 +1,9 @@
 import { useFunctions, useValues } from 'chayns-api';
 import React, {
     FocusEventHandler,
-    KeyboardEventHandler,
     forwardRef,
     Fragment,
+    KeyboardEventHandler,
     useCallback,
     useContext,
     useEffect,
@@ -507,7 +507,7 @@ const ComboBox = forwardRef<ComboBoxRef, ComboBoxProps>(
                         )}
                         {list.list.map((item) => (
                             <ComboBoxItem
-                                key={`item-${item.text}`}
+                                key={`item-${item.value}-${item.text}`}
                                 item={item}
                                 isSelected={
                                     selectedItem ? item.value === selectedItem.value : false
