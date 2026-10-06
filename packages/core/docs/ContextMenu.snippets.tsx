@@ -14,6 +14,8 @@
             key: 'delete',
             onClick: () => {},
             text: 'Delete',
+            isDisabled: true,
+            disabledReason: 'You do not have permission to delete this entry.',
         },
     ]}
 />

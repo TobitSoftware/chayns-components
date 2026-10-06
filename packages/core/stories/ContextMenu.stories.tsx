@@ -109,3 +109,24 @@ WithYOffset.args = {
     ...General.args,
     yOffset: 12,
 };
+
+export const WithDisabledItems = Template.bind({});
+
+WithDisabledItems.args = {
+    items: [
+        {
+            icons: ['fa fa-pencil'],
+            key: 'rename',
+            text: 'Umbenennen',
+            onClick: () => alert('Option "Umbenennen" wurde geklickt...'),
+        },
+        {
+            icons: ['fa fa-trash'],
+            key: 'delete',
+            text: 'Löschen',
+            isDisabled: true,
+            disabledReason: 'Dir fehlt die Berechtigung, diesen Eintrag zu löschen.',
+            onClick: () => alert('Option "Löschen" wurde geklickt...'),
+        },
+    ],
+};

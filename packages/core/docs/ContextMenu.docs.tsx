@@ -20,6 +20,8 @@ const ITEMS: ContextMenuItem[] = [
         key: 'delete',
         onClick: () => alert('Option "Löschen" wurde geklickt...'),
         text: 'Löschen',
+        isDisabled: true,
+        disabledReason: 'Dir fehlt die Berechtigung, diesen Eintrag zu löschen.',
     },
 ];
 
