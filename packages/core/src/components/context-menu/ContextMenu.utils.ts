@@ -1,7 +1,7 @@
 import type { ContextMenuItem } from './ContextMenu.types';
 
 export const getDefaultFocusedIndex = (items: ContextMenuItem[]): number =>
-    items.findIndex((item) => item.isSelected);
+    items.findIndex((item) => item.isSelected && !item.isDisabled);
 
 export const getActiveItemIndex = ({
     contextMenuContentElement,
@@ -33,6 +33,10 @@ export const selectItem = ({
 
     if (!item) {
         return false;
+    }
+
+    if (item.isDisabled) {
+        return true;
     }
 
     void item.onClick();

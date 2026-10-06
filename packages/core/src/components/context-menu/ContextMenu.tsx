@@ -148,18 +148,26 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     type: DialogType.SELECT,
                     text: dialogText,
                     buttons: [],
-                    list: items.map(({ icons, text, isSelected }, index) => ({
-                        name: text,
-                        id: index,
-                        isSelected,
-                        icon: isValidElement(icons)
-                            ? undefined
-                            : (icons as string[] | undefined)?.[0],
-                    })),
+                    list: items.map(
+                        ({ icons, text, isSelected, isDisabled, disabledReason }, index) => ({
+                            name: text,
+                            id: index,
+                            isSelected,
+                            disabled: isDisabled,
+                            subtitle: isDisabled ? disabledReason : undefined,
+                            icon: isValidElement(icons)
+                                ? undefined
+                                : (icons as string[] | undefined)?.[0],
+                        }),
+                    ),
                 }).open()) as SelectDialogResult;
 
                 if (result && typeof result[0] === 'number') {
-                    void items[result[0]]?.onClick();
+                    const item = items[result[0]];
+
+                    if (item && !item.isDisabled) {
+                        void item.onClick();
+                    }
                 }
             } else if (contextMenuRef.current) {
                 if (!newContainer) {
@@ -294,7 +302,6 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                 isHovered,
                 isContentShown,
                 items,
-                items.length,
                 shouldCloseOnPopupClick,
                 shouldDisableClick,
                 shouldUseFocusableWrapper,
@@ -387,9 +394,12 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
         useEffect(() => {
             const handleDocumentClick = (event: PointerEvent) => {
+                const target = event.target as Element;
+                const isInsideMenu = contextMenuContentRef.current?.contains(target);
+
                 if (
-                    !shouldCloseOnPopupClick &&
-                    contextMenuContentRef.current?.contains(event.target as Node)
+                    isInsideMenu &&
+                    (!shouldCloseOnPopupClick || target.closest('[aria-disabled="true"]'))
                 ) {
                     return;
                 }

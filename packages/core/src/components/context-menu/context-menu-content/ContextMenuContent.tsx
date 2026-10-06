@@ -1,12 +1,7 @@
-import React, { isValidElement, useMemo } from 'react';
-import Icon from '../../icon/Icon';
+import React, { useMemo } from 'react';
+import ContextMenuContentItem from './context-menu-content-item/ContextMenuContentItem';
 import {
     StyledContextMenuContentHeadline,
-    StyledContextMenuContentItem,
-    StyledContextMenuContentItemIconWrapper,
-    StyledContextMenuContentItemSpacer,
-    StyledContextMenuContentItemText,
-    StyledContextMenuContentItemWrapper,
     StyledMotionContextMenuContent,
 } from './ContextMenuContent.styles';
 import {
@@ -94,52 +89,23 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
 
         const content = useMemo(
             () =>
-                items.map(({ onClick, key, text, icons, shouldShowSpacer }, index) => {
-                    const isFocused = index === focusedIndex;
-
-                    let iconElement = null;
-
-                    if (isValidElement(icons)) {
-                        iconElement = icons;
-                    } else if (Array.isArray(icons) && icons.length > 0) {
-                        iconElement = (
-                            <StyledContextMenuContentItemIconWrapper>
-                                <Icon icons={icons} />
-                            </StyledContextMenuContentItemIconWrapper>
-                        );
-                    }
-
-                    return (
-                        <StyledContextMenuContentItem
-                            key={`context-menu-item-${key}`}
-                            data-index={index}
-                        >
-                            <StyledContextMenuContentItemWrapper
-                                key={key}
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    event.stopPropagation();
-                                    void onClick(event);
-                                }}
-                                tabIndex={0}
-                                $shouldHidePopupArrow={shouldHidePopupArrow}
-                                $isFocused={isFocused}
-                                onFocus={() => onItemFocus(index)}
-                            >
-                                {iconElement}
-                                <StyledContextMenuContentItemText>
-                                    {text}
-                                </StyledContextMenuContentItemText>
-                            </StyledContextMenuContentItemWrapper>
-                            {shouldShowSpacer && <StyledContextMenuContentItemSpacer />}
-                        </StyledContextMenuContentItem>
-                    );
-                }),
+                items.map((item, index) => (
+                    <ContextMenuContentItem
+                        key={item.key}
+                        item={item}
+                        index={index}
+                        isFocused={index === focusedIndex}
+                        shouldHidePopupArrow={shouldHidePopupArrow}
+                        onItemFocus={onItemFocus}
+                    />
+                )),
             [items, focusedIndex, shouldHidePopupArrow, onItemFocus],
         );
 
         return (
             <StyledMotionContextMenuContent
+                role="menu"
+                aria-label={headline}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: exitAndInitialY }}
                 initial={{ opacity: 0, y: exitAndInitialY }}

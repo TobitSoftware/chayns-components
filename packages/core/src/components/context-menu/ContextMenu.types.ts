@@ -28,6 +28,15 @@ export type ContextMenuCoordinates = {
 export type ContextMenuItem = {
     /** Optional icons for the item. Can be strings or React nodes. */
     icons?: string[] | ReactNode;
+    /**
+     * Whether the item is disabled. Disabled items cannot be activated.
+     */
+    isDisabled?: boolean;
+    /**
+     * Reason why the item is disabled. Only shown for disabled items.
+     * Displayed as a tooltip on desktop and a subtitle in the native select dialog on touch devices.
+     */
+    disabledReason?: string;
     /** Whether the item is selected. */
     isSelected?: boolean;
     /** Unique key for the item. */

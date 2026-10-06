@@ -97,7 +97,9 @@ export const StyledMotionContextMenuContent = styled(
     }
 `;
 
-export const StyledContextMenuContentItem = styled.div``;
+export const StyledContextMenuContentItem = styled.div`
+    position: relative;
+`;
 
 type StyledContextMenuContentItemSpacerProps = WithTheme<unknown>;
 
@@ -110,12 +112,14 @@ export const StyledContextMenuContentItemSpacer = styled.div<StyledContextMenuCo
 type StyledContextMenuContentItemWrapperProps = WithTheme<{
     $shouldHidePopupArrow: boolean;
     $isFocused: boolean;
+    $isDisabled: boolean;
 }>;
 
 export const StyledContextMenuContentItemWrapper = styled.div<StyledContextMenuContentItemWrapperProps>`
     align-items: center;
     border-radius: ${({ $shouldHidePopupArrow }) => ($shouldHidePopupArrow ? '3px' : 0)};
-    cursor: pointer;
+    cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     display: flex;
     gap: 6px;
     margin: ${({ $shouldHidePopupArrow }) => ($shouldHidePopupArrow ? '3px' : 0)};
@@ -130,8 +134,8 @@ export const StyledContextMenuContentItemWrapper = styled.div<StyledContextMenuC
         `}
 
     &:hover {
-        background-color: ${({ theme }: StyledContextMenuContentItemWrapperProps) =>
-            theme['secondary-103']};
+        background-color: ${({ $isDisabled, theme }) =>
+            $isDisabled ? 'transparent' : theme['secondary-103']};
     }
 `;
 
