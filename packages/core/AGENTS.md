@@ -1650,6 +1650,29 @@ import { ContextMenu } from '@chayns-components/core';
 />
 ```
 
+#### With Disabled Items
+
+```tsx
+<ContextMenu
+    items={[
+            {
+                icons: ['fa fa-pencil'],
+                key: 'rename',
+                text: 'Umbenennen',
+                onClick: () => alert('Option "Umbenennen" wurde geklickt...'),
+            },
+            {
+                icons: ['fa fa-trash'],
+                key: 'delete',
+                text: 'Löschen',
+                isDisabled: true,
+                disabledReason: 'Dir fehlt die Berechtigung, diesen Eintrag zu löschen.',
+                onClick: () => alert('Option "Löschen" wurde geklickt...'),
+            },
+        ]}
+/>
+```
+
 ### Props
 
 | name | type | required | description |
@@ -1693,6 +1716,15 @@ import { ContextMenu } from '@chayns-components/core';
 - `ContextMenuItem` -> `type ContextMenuItem = {
     /** Optional icons for the item. Can be strings or React nodes. */
     icons?: string[] | ReactNode;
+    /**
+     * Whether the item is disabled. Disabled items cannot be activated.
+     */
+    isDisabled?: boolean;
+    /**
+     * Reason why the item is disabled. Only shown for disabled items.
+     * Displayed as a tooltip on desktop and a subtitle in the native select dialog on touch devices.
+     */
+    disabledReason?: string;
     /** Whether the item is selected. */
     isSelected?: boolean;
     /** Unique key for the item. */
