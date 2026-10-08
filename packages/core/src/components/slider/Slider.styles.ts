@@ -20,14 +20,14 @@ export const StyledSlider = styled.div<StyledSliderProps>`
 type StyledSliderInputProps = WithTheme<{
     $background?: string;
     $isInterval: boolean;
-    $thumbWidth: number;
+    $trackInset: number;
 }>;
 
 export const StyledSliderInput = styled(motion.input).attrs<StyledSliderInputProps>(
-    ({ $background, $isInterval, $thumbWidth }) => ({
+    ({ $background, $isInterval, $trackInset }) => ({
         style: {
             pointerEvents: $isInterval ? 'none' : 'all',
-            width: `calc(100% - ${$thumbWidth}px)`,
+            width: `calc(100% - ${$trackInset}px)`,
             background: $background,
         },
     }),

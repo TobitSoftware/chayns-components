@@ -2,6 +2,7 @@ import { setRefreshScrollEnabled } from 'chayns-api';
 import React, {
     ChangeEvent,
     FC,
+    PointerEvent as ReactPointerEvent,
     ReactNode,
     useCallback,
     useEffect,
@@ -27,6 +28,8 @@ import {
     StyledSliderThumb,
     StyledSliderThumbLabel,
 } from './Slider.styles';
+
+const SLIDER_TRACK_INSET = 40;
 
 export interface SliderInterval {
     maxValue: number;
@@ -213,8 +216,10 @@ const Slider: FC<SliderProps> = ({
     const fromSliderThumbContentRef = useRef<HTMLDivElement>(null);
     const toSliderThumbContentRef = useRef<HTMLDivElement>(null);
     const sliderWrapperRef = useRef<HTMLDivElement>(null);
+    const activePointerIdRef = useRef<number | null>(null);
 
     const sliderWrapperSize = useElementSize(sliderWrapperRef);
+    const sliderTrackWidth = Math.max((sliderWrapperSize?.width ?? 0) - SLIDER_TRACK_INSET, 0);
 
     const theme = useTheme() as Theme;
     const shouldShowKeyboardHighlighting = useKeyboardFocusHighlighting(
@@ -388,6 +393,33 @@ const Slider: FC<SliderProps> = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [theme]);
 
+    const normalizeSingleValue = useCallback(
+        (rawValue: number) => {
+            const effectiveMin =
+                typeof minEnabledValue === 'number'
+                    ? Math.max(minValue, minEnabledValue)
+                    : minValue;
+
+            const effectiveMax =
+                typeof maxEnabledValue === 'number'
+                    ? Math.min(maxValue, maxEnabledValue)
+                    : maxValue;
+
+            let newValue = rawValue;
+
+            if (Number.isNaN(newValue)) {
+                newValue = effectiveMin;
+            }
+
+            if (newValue < effectiveMin) newValue = effectiveMin;
+            else if (newValue > effectiveMax - (effectiveMax % step)) newValue = effectiveMax;
+            else newValue = Math.round(newValue / step) * step;
+
+            return newValue;
+        },
+        [maxEnabledValue, maxValue, minEnabledValue, minValue, step],
+    );
+
     /**
      * This function updates the value
      */
@@ -404,27 +436,7 @@ const Slider: FC<SliderProps> = ({
                 return;
             }
 
-            // Respect optionally enabled bounds in addition to absolute min/max
-            const effectiveMin =
-                typeof minEnabledValue === 'number'
-                    ? Math.max(minValue, minEnabledValue)
-                    : minValue;
-
-            const effectiveMax =
-                typeof maxEnabledValue === 'number'
-                    ? Math.min(maxValue, maxEnabledValue)
-                    : maxValue;
-
-            let newValue = Number(event.target.value);
-
-            // Clamp to effective range first
-            if (Number.isNaN(newValue)) {
-                newValue = effectiveMin;
-            }
-
-            if (newValue < effectiveMin) newValue = effectiveMin;
-            else if (newValue > effectiveMax - (effectiveMax % step)) newValue = effectiveMax;
-            else newValue = Math.round(newValue / step) * step;
+            const newValue = normalizeSingleValue(Number(event.target.value));
 
             if (typeof onChange === 'function' && newValue !== previousFromValueRef.current) {
                 onChange(newValue);
@@ -437,24 +449,82 @@ const Slider: FC<SliderProps> = ({
             interval,
             isDisabled,
             maxEnabledValue,
-            maxValue,
-            minEnabledValue,
-            minValue,
+            normalizeSingleValue,
             onChange,
-            step,
             updateFromValue,
         ],
     );
 
+    const updateValueFromPointer = useCallback(
+        (event: ReactPointerEvent<HTMLDivElement>) => {
+            const bounds = event.currentTarget.getBoundingClientRect();
+            const relativePosition =
+                (event.clientX - bounds.left - SLIDER_TRACK_INSET / 2) / sliderTrackWidth;
+            const rawValue =
+                minValue + Math.min(Math.max(relativePosition, 0), 1) * (maxValue - minValue);
+            const newValue = normalizeSingleValue(rawValue);
+
+            if (typeof onChange === 'function' && newValue !== previousFromValueRef.current) {
+                onChange(newValue);
+            }
+
+            updateFromValue(newValue);
+
+            return newValue;
+        },
+        [maxValue, minValue, normalizeSingleValue, onChange, sliderTrackWidth, updateFromValue],
+    );
+
+    const handlePointerDown = useCallback(
+        (event: ReactPointerEvent<HTMLDivElement>) => {
+            if (isDisabled || interval || event.button !== 0) {
+                return;
+            }
+
+            event.preventDefault();
+            activePointerIdRef.current = event.pointerId;
+            event.currentTarget.setPointerCapture(event.pointerId);
+            fromSliderRef.current?.focus();
+            updateValueFromPointer(event);
+        },
+        [interval, isDisabled, updateValueFromPointer],
+    );
+
+    const handlePointerMove = useCallback(
+        (event: ReactPointerEvent<HTMLDivElement>) => {
+            if (activePointerIdRef.current !== event.pointerId) {
+                return;
+            }
+
+            event.preventDefault();
+            updateValueFromPointer(event);
+        },
+        [updateValueFromPointer],
+    );
+
+    const handlePointerUp = useCallback(
+        (event: ReactPointerEvent<HTMLDivElement>) => {
+            if (activePointerIdRef.current !== event.pointerId) {
+                return;
+            }
+
+            event.preventDefault();
+            activePointerIdRef.current = null;
+            event.currentTarget.releasePointerCapture(event.pointerId);
+
+            if (typeof onSelect === 'function') {
+                onSelect(updateValueFromPointer(event));
+            }
+        },
+        [onSelect, updateValueFromPointer],
+    );
+
     const fromSliderThumbPosition = useMemo(() => {
-        if (
-            typeof fromSliderRef.current?.offsetWidth === 'number' &&
-            typeof sliderWrapperSize?.width === 'number'
-        ) {
+        if (typeof sliderWrapperSize?.width === 'number') {
             return calculateGradientOffset({
                 maxValue,
                 minValue,
-                sliderWidth: fromSliderRef.current.offsetWidth,
+                sliderWidth: sliderTrackWidth,
                 thumbWidth: 20,
                 value: fromValue,
                 wrapperWidth: sliderWrapperSize.width,
@@ -462,17 +532,14 @@ const Slider: FC<SliderProps> = ({
         }
 
         return 0;
-    }, [fromValue, maxValue, minValue, sliderWrapperSize?.width]);
+    }, [fromValue, maxValue, minValue, sliderTrackWidth, sliderWrapperSize?.width]);
 
     const toSliderThumbPosition = useMemo(() => {
-        if (
-            typeof toSliderRef.current?.offsetWidth === 'number' &&
-            typeof sliderWrapperSize?.width === 'number'
-        ) {
+        if (typeof sliderWrapperSize?.width === 'number') {
             return calculateGradientOffset({
                 maxValue,
                 minValue,
-                sliderWidth: toSliderRef.current.offsetWidth,
+                sliderWidth: sliderTrackWidth,
                 thumbWidth: 20,
                 value: toValue,
                 wrapperWidth: sliderWrapperSize.width,
@@ -480,7 +547,7 @@ const Slider: FC<SliderProps> = ({
         }
 
         return 0;
-    }, [maxValue, minValue, sliderWrapperSize?.width, toValue]);
+    }, [maxValue, minValue, sliderTrackWidth, sliderWrapperSize?.width, toValue]);
 
     const toSliderThumbContentPosition = useMemo(
         () =>
@@ -526,11 +593,8 @@ const Slider: FC<SliderProps> = ({
         const from = Number(fromSliderRef.current?.value);
         const to = Number(toSliderRef.current?.value);
 
-        if (typeof onSelect === 'function') {
-            onSelect(
-                interval ? undefined : from,
-                interval ? { maxValue: to, minValue: from } : undefined,
-            );
+        if (interval && typeof onSelect === 'function') {
+            onSelect(undefined, { maxValue: to, minValue: from });
         }
 
         if (shouldShowThumbLabel) {
@@ -539,10 +603,9 @@ const Slider: FC<SliderProps> = ({
     }, [interval, isDisabled, onSelect, shouldShowThumbLabel]);
 
     const highlightedStepElements = useMemo(() => {
-        const sliderWidth = fromSliderRef.current?.offsetWidth ?? 0;
         const wrapperWidth = sliderWrapperSize?.width ?? 0;
 
-        if (!shouldHighlightSteps || interval || sliderWidth === 0 || wrapperWidth === 0) {
+        if (!shouldHighlightSteps || interval || sliderTrackWidth === 0 || wrapperWidth === 0) {
             return null;
         }
 
@@ -553,15 +616,16 @@ const Slider: FC<SliderProps> = ({
                 (typeof minEnabledValue === 'number' && i < minEnabledValue) ||
                 (typeof maxEnabledValue === 'number' && i > maxEnabledValue);
 
-            const offset = (wrapperWidth - sliderWidth) / 2;
-            const stepWidth = (sliderWidth / (maxValue - minValue)) * step;
+            const offset = (wrapperWidth - sliderTrackWidth) / 2;
 
             elements.push(
                 <StyledHighlightedStep
                     key={`step--${i}`}
                     $isDisabled={isStepDisabled}
                     $isFilled={i < fromValue}
-                    $leftPosition={offset + stepWidth * i}
+                    $leftPosition={
+                        offset + ((i - minValue) / (maxValue - minValue)) * sliderTrackWidth
+                    }
                 />,
             );
         }
@@ -575,6 +639,7 @@ const Slider: FC<SliderProps> = ({
         minEnabledValue,
         minValue,
         shouldHighlightSteps,
+        sliderTrackWidth,
         sliderWrapperSize?.width,
         step,
     ]);
@@ -610,13 +675,19 @@ const Slider: FC<SliderProps> = ({
 
     return useMemo(
         () => (
-            <StyledSlider ref={sliderWrapperRef} $isDisabled={isDisabled}>
+            <StyledSlider
+                ref={sliderWrapperRef}
+                $isDisabled={isDisabled}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+            >
                 {highlightedStepElements}
                 <StyledSliderInput
                     animate={{ height: isBigSlider ? 30 : 10 }}
                     initial={{ height: 10 }}
                     exit={{ height: 10 }}
-                    $thumbWidth={40}
+                    $trackInset={SLIDER_TRACK_INSET}
                     ref={fromSliderRef}
                     $isInterval={!!interval}
                     type="range"
@@ -627,7 +698,7 @@ const Slider: FC<SliderProps> = ({
                     onTouchStart={handleTouchStart}
                     onTouchEnd={handleTouchEnd}
                     onChange={handleInputChange}
-                    onMouseUp={handleMouseUp}
+                    onMouseUp={interval ? handleMouseUp : undefined}
                     $background={fromInputBackground}
                     onFocus={() => {
                         setIsFromThumbFocused(true);
@@ -680,7 +751,7 @@ const Slider: FC<SliderProps> = ({
                         animate={{ height: isBigSlider ? 30 : 10 }}
                         initial={{ height: 10 }}
                         exit={{ height: 10 }}
-                        $thumbWidth={40}
+                        $trackInset={SLIDER_TRACK_INSET}
                         ref={toSliderRef}
                         $isInterval={!!interval}
                         type="range"
@@ -711,6 +782,9 @@ const Slider: FC<SliderProps> = ({
             handleControlToSlider,
             handleInputChange,
             handleMouseUp,
+            handlePointerDown,
+            handlePointerMove,
+            handlePointerUp,
             handleTouchEnd,
             handleTouchStart,
             highlightedStepElements,
