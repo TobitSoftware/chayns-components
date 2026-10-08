@@ -22,6 +22,7 @@ describe('serializeHTMLToText', () => {
     });
 
     it('preserves line breaks, nesting, and block structure inside spans', () => {
+        expect(serializeHTML('<br>')).toBe('');
         expect(serializeHTML('<span><br></span>')).toBe('<br>');
         expect(serializeHTML('<span>before<span>nested</span>after</span>')).toBe(
             'beforenestedafter',

@@ -57,6 +57,10 @@ const serializeSpanElementToText = (element: HTMLElement) => {
         return BLOCK_SEPARATOR;
     }
 
+    if (childNodes.length === 1 && isBreakElement(childNodes[0]!)) {
+        return BLOCK_SEPARATOR;
+    }
+
     return serializeHTMLToText(childNodes);
 };
 
@@ -88,6 +92,10 @@ const serializeHTMLNodeToText = (node: ChildNode): string => {
 
 export const serializeHTMLToText = (nodes: NodeListOf<ChildNode> | ChildNode[]) => {
     const serializedNodes = Array.from(nodes);
+
+    if (serializedNodes.length === 1 && isBreakElement(serializedNodes[0]!)) {
+        return '';
+    }
 
     let result = '';
     let didSerializeBlockElement = false;
