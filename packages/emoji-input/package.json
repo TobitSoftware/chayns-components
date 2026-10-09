@@ -70,13 +70,13 @@
         "jsdom": "^26.1.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "styled-components": "^6.4.4",
+        "styled-components": "^6.5.3",
         "typescript": "^5.9.3",
         "vitest": "^1.6.1"
     },
     "dependencies": {
         "@chayns-components/core": "^5.5.67",
-        "@chayns/textstrings": "^1.0.1",
+        "@chayns/textstrings": "^1.0.2",
         "emojilib": "^3.0.12",
         "react-compiler-runtime": "^1.0.0",
         "unicode-emoji-json": "^0.9.0"

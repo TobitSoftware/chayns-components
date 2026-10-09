@@ -65,13 +65,13 @@
         "cross-env": "^7.0.3",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "styled-components": "^6.4.4",
+        "styled-components": "^6.5.3",
         "typescript": "^5.9.3"
     },
     "dependencies": {
         "@chayns-components/core": "^5.5.67",
         "@chayns/colors": "^2.0.2",
-        "@chayns/textstrings": "^1.0.1",
+        "@chayns/textstrings": "^1.0.2",
         "react-compiler-runtime": "^1.0.0",
         "uuid": "^10.0.0"
     },
