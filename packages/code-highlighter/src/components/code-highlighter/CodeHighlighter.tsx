@@ -92,7 +92,11 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     const colorScheme = useColorScheme();
 
     const [width, setWidth] = useState(0);
-    const [formattedCode, setFormattedCode] = useState(code);
+    const [formattedResult, setFormattedResult] = useState({ code, language, value: code });
+    const formattedCode =
+        shouldFormatCode && formattedResult.code === code && formattedResult.language === language
+            ? formattedResult.value
+            : code;
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -170,26 +174,30 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     useEffect(() => {
         let isCurrent = true;
 
-        if (!shouldFormatCode) {
-            setFormattedCode(code);
+        if (!shouldFormatCode) return;
 
-            return () => {
-                isCurrent = false;
-            };
-        }
+        void getParserForLanguage(language)
+            .then((config) => {
+                if (!config || !isCurrent) {
+                    return;
+                }
 
-        void getParserForLanguage(language).then((config) => {
-            if (!config || !isCurrent) {
-                return;
-            }
-
-            try {
-                setFormattedCode(format(code, config) as unknown as string);
-            } catch (error) {
+                try {
+                    setFormattedResult({
+                        code,
+                        language,
+                        value: format(code, config) as unknown as string,
+                    });
+                } catch (error) {
+                    onFormatError?.(error);
+                    setFormattedResult({ code, language, value: code });
+                }
+            })
+            .catch((error: unknown) => {
+                if (!isCurrent) return;
                 onFormatError?.(error);
-                setFormattedCode(code);
-            }
-        });
+                setFormattedResult({ code, language, value: code });
+            });
 
         return () => {
             isCurrent = false;

@@ -64,6 +64,14 @@ describe('CodeHighlighter', () => {
         expect(other.container.querySelector('.linenumber tw-ignore')).toBeInTheDocument();
     });
 
+    it('updates unsupported formatting languages without showing previous code', () => {
+        const { container, rerender } = render(
+            <CodeHighlighter code="print(1)" language="python" shouldFormatCode />,
+        );
+        rerender(<CodeHighlighter code="print(2)" language="python" shouldFormatCode />);
+        expect(container.querySelector('pre')).toHaveTextContent('print(2)');
+    });
+
     it('keeps the copy operation and renders sticky actions', async () => {
         const writeText = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
         const { container } = render(
