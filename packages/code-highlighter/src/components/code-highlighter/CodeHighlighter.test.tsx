@@ -64,6 +64,24 @@ describe('CodeHighlighter', () => {
         expect(other.container.querySelector('.linenumber tw-ignore')).toBeInTheDocument();
     });
 
+    it('renders large blocks as plain code while preserving copy and insert', () => {
+        const code = Array.from({ length: 600 }, () => '// fixture').join('\n');
+        const onInsertCode = vi.fn();
+        const { container } = render(
+            <CodeHighlighter
+                code={code}
+                language="javascript"
+                shouldFormatCode
+                shouldShowLineNumbers
+                onInsertCode={onInsertCode}
+            />,
+        );
+        expect(container.querySelector('pre')?.textContent).toBe(code);
+        expect(container.querySelector('.token')).toBeNull();
+        fireEvent.click(screen.getByRole('button', { name: 'Code einfügen' }));
+        expect(onInsertCode).toHaveBeenCalledWith(code);
+    });
+
     it('updates unsupported formatting languages without showing previous code', () => {
         const { container, rerender } = render(
             <CodeHighlighter code="print(1)" language="python" shouldFormatCode />,

@@ -16,7 +16,7 @@ import {
     StyledCodeHighlighterHeader,
 } from './CodeHighlighter.styles';
 import CopyToClipboard from './copy-to-clipboard/CopyToClipboard';
-import { wrapLineNumbers } from '../../utils/codeHighlighterPerformance';
+import { shouldHighlightCode, wrapLineNumbers } from '../../utils/codeHighlighterPerformance';
 
 type AddScrollbarClassOptions = {
     root: HTMLDivElement | null;
@@ -93,6 +93,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
     const [width, setWidth] = useState(0);
     const [formattedResult, setFormattedResult] = useState({ code, language, value: code });
+    const canHighlightCode = shouldHighlightCode(code);
     const formattedCode =
         shouldFormatCode && formattedResult.code === code && formattedResult.language === language
             ? formattedResult.value
@@ -174,7 +175,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     useEffect(() => {
         let isCurrent = true;
 
-        if (!shouldFormatCode) return;
+        if (!shouldFormatCode || !canHighlightCode) return;
 
         void getParserForLanguage(language)
             .then((config) => {
@@ -202,7 +203,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
         return () => {
             isCurrent = false;
         };
-    }, [code, language, onFormatError, shouldFormatCode]);
+    }, [code, language, onFormatError, shouldFormatCode, canHighlightCode]);
 
     useEffect(() => {
         wrapLineNumbers(ref.current);
@@ -233,18 +234,24 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                         onInsertCode={onInsertCode}
                         rootRef={ref}
                     />
-                    <SyntaxHighlighter
-                        customStyle={syntaxHighlighterStyle}
-                        language={language ?? ''}
-                        lineNumberStyle={lineNumberStyle}
-                        showLineNumbers={shouldShowLineNumbers}
-                        style={resolvedTheme === CodeHighlighterTheme.Dark ? oneDark : oneLight}
-                        wrapLines
-                        wrapLongLines={shouldWrapLines}
-                        lineProps={lineWrapper}
-                    >
-                        {formattedCode}
-                    </SyntaxHighlighter>
+                    {canHighlightCode ? (
+                        <SyntaxHighlighter
+                            customStyle={syntaxHighlighterStyle}
+                            language={language ?? ''}
+                            lineNumberStyle={lineNumberStyle}
+                            showLineNumbers={shouldShowLineNumbers}
+                            style={resolvedTheme === CodeHighlighterTheme.Dark ? oneDark : oneLight}
+                            wrapLines
+                            wrapLongLines={shouldWrapLines}
+                            lineProps={lineWrapper}
+                        >
+                            {formattedCode}
+                        </SyntaxHighlighter>
+                    ) : (
+                        <pre className="chayns-scrollbar" style={syntaxHighlighterStyle}>
+                            <code>{code}</code>
+                        </pre>
+                    )}
                 </StyledCodeHighlighter>
             </TextStringProviderSSR>
         ),
@@ -260,6 +267,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
             shouldShowLineNumbers,
             lineWrapper,
             formattedCode,
+            canHighlightCode,
         ],
     );
 };
