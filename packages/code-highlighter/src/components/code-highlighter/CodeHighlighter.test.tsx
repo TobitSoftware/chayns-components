@@ -27,6 +27,7 @@ vi.mock('@chayns-components/core', () => ({
 }));
 
 vi.mock('@chayns/textstrings', () => ({
+    TextStringProviderSSR: ({ children }: { children: React.ReactNode }) => <>{children}</>,
     useTranslation: () => ({
         t: (textString: { fallback?: string } | string) =>
             typeof textString === 'string' ? textString : textString.fallback,
@@ -40,6 +41,29 @@ vi.mock('chayns-api', () => ({
 }));
 
 describe('CodeHighlighter', () => {
+    it('keeps translation wrappers scoped and idempotent across mounts', () => {
+        const { container } = render(
+            <React.StrictMode>
+                <CodeHighlighter
+                    code="const first = 1;"
+                    language="javascript"
+                    shouldShowLineNumbers
+                />
+            </React.StrictMode>,
+        );
+        const initialLine = container.querySelector('.linenumber');
+        expect(initialLine?.querySelectorAll('tw-ignore')).toHaveLength(1);
+        const other = render(
+            <CodeHighlighter
+                code="const second = 2;"
+                language="javascript"
+                shouldShowLineNumbers
+            />,
+        );
+        expect(initialLine?.querySelectorAll('tw-ignore')).toHaveLength(1);
+        expect(other.container.querySelector('.linenumber tw-ignore')).toBeInTheDocument();
+    });
+
     it('keeps the copy operation and renders sticky actions', async () => {
         const writeText = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
         const { container } = render(

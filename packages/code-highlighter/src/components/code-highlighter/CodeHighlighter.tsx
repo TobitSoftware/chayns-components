@@ -16,6 +16,7 @@ import {
     StyledCodeHighlighterHeader,
 } from './CodeHighlighter.styles';
 import CopyToClipboard from './copy-to-clipboard/CopyToClipboard';
+import { wrapLineNumbers } from '../../utils/codeHighlighterPerformance';
 
 type AddScrollbarClassOptions = {
     root: HTMLDivElement | null;
@@ -196,18 +197,8 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     }, [code, language, onFormatError, shouldFormatCode]);
 
     useEffect(() => {
-        const elements = document.getElementsByClassName('linenumber');
-
-        Array.from(elements).forEach((element) => {
-            const wrapper = document.createElement('tw-ignore');
-
-            while (element.firstChild) {
-                wrapper.appendChild(element.firstChild);
-            }
-
-            element.appendChild(wrapper);
-        });
-    }, []);
+        wrapLineNumbers(ref.current);
+    }, [formattedCode, shouldShowLineNumbers]);
 
     return useMemo(
         () => (
