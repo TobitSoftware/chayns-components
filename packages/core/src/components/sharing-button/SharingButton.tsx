@@ -21,18 +21,11 @@ const SharingButton: FunctionComponent<SharingButtonProps> = ({
     shouldEnableKeyboardHighlighting,
 }) => {
     const contextMenuRef = React.useRef<ContextMenuRef>(null);
-    const [isButtonDisabled, setIsButtonDisabled] = React.useState(false);
 
-    const handleButtonClick = () => {
+    const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
         contextMenuRef.current?.show();
-    };
-
-    const handleOnShow = () => {
-        setIsButtonDisabled(true);
-    };
-
-    const handleOnHide = () => {
-        setIsButtonDisabled(false);
     };
 
     return (
@@ -43,12 +36,10 @@ const SharingButton: FunctionComponent<SharingButtonProps> = ({
                 container={container}
                 ref={contextMenuRef}
                 shouldDisableClick
-                onShow={handleOnShow}
-                onHide={handleOnHide}
             >
                 <Button
                     onClick={handleButtonClick}
-                    isDisabled={isButtonDisabled || isDisabled}
+                    isDisabled={isDisabled}
                     shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
                 >
                     {children}
