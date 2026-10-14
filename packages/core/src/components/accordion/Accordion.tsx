@@ -235,8 +235,8 @@ const Accordion: FC<AccordionProps> = ({
         [contextIsWrapped, groupIsWrapped],
     );
 
-    const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(isDefaultOpen ?? isOpened);
-    const [isGroupFocusWithin, setIsGroupFocusWithin] = useState(false);
+    const isControlled = typeof isOpened === 'boolean';
+    const [internalOpen, setInternalOpen] = useState<boolean>(isDefaultOpen ?? false);
 
     const uuid = useUuid();
 
@@ -250,7 +250,11 @@ const Accordion: FC<AccordionProps> = ({
 
     const isInGroup = shouldSkipAnimation ? false : typeof updateOpenAccordionUuid === 'function';
 
-    const isOpen = isInGroup ? openAccordionUuid === uuid : isAccordionOpen;
+    const isOpen = (() => {
+        if (isInGroup) return openAccordionUuid === uuid;
+        if (isControlled) return isOpened;
+        return internalOpen;
+    })();
 
     const isOpenRef = useRef(isOpen);
     const onCloseRef = useRef(onClose);
@@ -263,7 +267,7 @@ const Accordion: FC<AccordionProps> = ({
 
     useFocusRingPortal(accordionRef, {
         isEnabled: shouldShowKeyboardHighlighting && isKeyboardFocusable,
-        borderRadius: `${theme.cardBorderRadius}px`,
+        borderRadius: `${theme.cardBorderRadius ?? 0}px`,
     });
 
     const isInKeyboardNavigationGroup =
@@ -309,20 +313,39 @@ const Accordion: FC<AccordionProps> = ({
 
         if (typeof updateOpenAccordionUuid === 'function') {
             updateOpenAccordionUuid(uuid);
+        } else if (!isControlled) {
+            setInternalOpen((prev: boolean) => !prev);
         }
 
-        setIsAccordionOpen((currentIsAccordionOpen) => !currentIsAccordionOpen);
-    }, [isDisabled, isKeyboardFocusable, updateActiveAccordionUuid, updateOpenAccordionUuid, uuid]);
+        if (isOpen) {
+            onClose?.();
+        } else {
+            onOpen?.();
+        }
+    }, [
+        isDisabled,
+        isKeyboardFocusable,
+        updateActiveAccordionUuid,
+        updateOpenAccordionUuid,
+        uuid,
+        isOpen,
+        onClose,
+        onOpen,
+        isControlled,
+    ]);
 
     useEffect(() => {
         if (isDisabled && isOpen) {
             if (typeof updateOpenAccordionUuid === 'function') {
                 updateOpenAccordionUuid(uuid);
+            } else if (typeof onClose === 'function') {
+                onClose();
+            } else {
+                // Uncontrolled mode: use the internal state
+                setInternalOpen(false);
             }
-
-            setIsAccordionOpen((currentIsAccordionOpen) => !currentIsAccordionOpen);
         }
-    }, [isDisabled, isOpen, updateOpenAccordionUuid, uuid]);
+    }, [isDisabled, isOpen, updateOpenAccordionUuid, uuid, onClose]);
 
     useEffect(() => {
         if (isInitialRenderRef.current) {
@@ -337,24 +360,16 @@ const Accordion: FC<AccordionProps> = ({
     }, [isOpen]);
 
     useEffect(() => {
-        if (isDefaultOpen) {
+        if (!isControlled && isDefaultOpen) {
             if (typeof updateOpenAccordionUuid === 'function') {
                 updateOpenAccordionUuid(uuid, { shouldOnlyOpen: true });
+            } else if (typeof onOpen === 'function') {
+                onOpen();
             } else {
-                setIsAccordionOpen(true);
+                setInternalOpen(true);
             }
         }
-    }, [isDefaultOpen, updateOpenAccordionUuid, uuid]);
-
-    useEffect(() => {
-        if (typeof isOpened === 'boolean') {
-            if (typeof updateOpenAccordionUuid === 'function' && isOpened !== isOpenRef.current) {
-                updateOpenAccordionUuid(uuid);
-            } else {
-                setIsAccordionOpen(isOpened);
-            }
-        }
-    }, [isOpened, updateOpenAccordionUuid, uuid]);
+    }, [isDefaultOpen, updateOpenAccordionUuid, uuid, onOpen, isControlled]);
 
     const accordionContextProviderValue = useMemo(
         () => ({ isWrapped: isWrapped === true }),
@@ -482,7 +497,6 @@ const Accordion: FC<AccordionProps> = ({
                 isInKeyboardNavigationGroup &&
                 typeof updateActiveAccordionUuid === 'function'
             ) {
-                setIsGroupFocusWithin(true);
                 updateActiveAccordionUuid(uuid);
             }
         },
@@ -500,7 +514,6 @@ const Accordion: FC<AccordionProps> = ({
                 const currentGroupElement = e.currentTarget as HTMLElement;
 
                 if (!nextFocusedElement || !currentGroupElement.contains(nextFocusedElement)) {
-                    setIsGroupFocusWithin(false);
                     updateActiveAccordionUuid(undefined);
                 }
             }
@@ -509,9 +522,7 @@ const Accordion: FC<AccordionProps> = ({
     );
 
     useEffect(() => {
-        if (!isInKeyboardNavigationGroup) {
-            setIsGroupFocusWithin(false);
-        } else if (
+        if (
             activeAccordionUuid == null &&
             typeof updateActiveAccordionUuid === 'function' &&
             accordionUuids?.[0] === uuid
