@@ -229,6 +229,73 @@ export const DynamicLoadingTemplate: StoryFn<typeof Accordion> = () => {
     );
 };
 
+const ControlledOpenFromOutsideTemplate: StoryFn<typeof Accordion> = () => {
+    const [openAgentGroupAccordion, setOpenAgentGroupAccordion] = useState<string | null>(null);
+
+    const handleOpenAgentGroup = (key: string) => {
+        setOpenAgentGroupAccordion(key);
+    };
+
+    const handleCloseAgentGroup = (key: string) => {
+        setOpenAgentGroupAccordion((currentKey) => (currentKey === key ? null : currentKey));
+    };
+
+    const key1 = 'First';
+    const key2 = 'Second';
+
+    return (
+        <>
+            <Accordion
+                key={key1}
+                title="First Accordion"
+                isOpened={openAgentGroupAccordion === key1}
+                onOpen={() => handleOpenAgentGroup(key1)}
+                onClose={() => handleCloseAgentGroup(key1)}
+            >
+                <List>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            width: '100%',
+                            marginBottom: '1.2rem',
+                        }}
+                    >
+                        <Button onClick={() => handleOpenAgentGroup(key2)}>
+                            {' '}
+                            Open Second Accordion{' '}
+                        </Button>
+                    </div>
+                </List>
+            </Accordion>
+
+            <Accordion
+                key={key2}
+                title="Second Accordion"
+                isOpened={openAgentGroupAccordion === key2}
+                onOpen={() => handleOpenAgentGroup(key2)}
+                onClose={() => handleCloseAgentGroup(key2)}
+            >
+                <List>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            width: '100%',
+                            marginBottom: '1.2rem',
+                        }}
+                    >
+                        <Button onClick={() => handleOpenAgentGroup(key1)}>
+                            {' '}
+                            Open First Accordion{' '}
+                        </Button>
+                    </div>
+                </List>
+            </Accordion>
+        </>
+    );
+};
+
 export const General = Template.bind({});
 
 export const ControlledAccordion = ControlledAccordionTemplate.bind({});
@@ -260,6 +327,8 @@ export const InputAsTitle = InputAsTitleTemplate.bind({});
 export const WrappedAccordionWithListItems = Template.bind({});
 
 export const HiddenBottomLines = HiddenBottomLinesTemplate.bind({});
+
+export const ControlledOpenFromOutside = ControlledOpenFromOutsideTemplate.bind({});
 
 General.args = {
     children: (
