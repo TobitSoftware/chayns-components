@@ -1,6 +1,7 @@
-import { getSite } from 'chayns-api';
+import { getSite, invokeCall, isApp } from 'chayns-api';
 import React, { forwardRef, useCallback } from 'react';
 import { SHAREPROVIDER } from '../../constants/sharingBar';
+import type { SharingBarProvider } from '../../types/sharingBar';
 import { useIsTouch } from '../../utils/environment';
 import { copyToClipboard, shareWithApp, shareWithUrl } from '../../utils/sharingBar';
 import ContextMenu from '../context-menu/ContextMenu';
@@ -44,6 +45,26 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
     ) => {
         const isTouch = useIsTouch();
 
+        const shareInApp = useCallback(
+            (provider: SharingBarProvider | undefined, shareText: string) => {
+                if (!provider) {
+                    throw new Error('The requested sharing provider is not configured.');
+                }
+
+                void invokeCall({
+                    action: 80,
+                    value: {
+                        text: shareText,
+                        sharingApp: provider.providerId,
+                        ...(provider.androidIdentifier
+                            ? { sharingAndroidApp: provider.androidIdentifier }
+                            : {}),
+                    },
+                });
+            },
+            [],
+        );
+
         const handleImageDownload = useCallback(() => {
             shareWithUrl(
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -58,17 +79,26 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
         const handleShare = useCallback(
             (key: string) => {
                 switch (key) {
-                    case 'whatsapp':
+                    case 'whatsapp': {
+                        const shareText = text ? `${text}\n\n${link}` : `${link}`.trim();
+                        if (isApp()) {
+                            shareInApp(SHAREPROVIDER[0], shareText);
+                            break;
+                        }
+
                         shareWithUrl(
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
-                            SHAREPROVIDER[0].url.replace(
-                                '{url}',
-                                encodeURIComponent(text ? `${text}\n\n${link}` : `${link}`.trim()),
-                            ),
+                            SHAREPROVIDER[0].url.replace('{url}', encodeURIComponent(shareText)),
                         );
                         break;
+                    }
                     case 'facebook':
+                        if (isApp()) {
+                            shareInApp(SHAREPROVIDER[3], `${link}`.trim());
+                            break;
+                        }
+
                         shareWithUrl(
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
@@ -76,6 +106,14 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
                         );
                         break;
                     case 'twitter':
+                        if (isApp()) {
+                            shareInApp(
+                                SHAREPROVIDER[4],
+                                text ? `${text}\n\n${link}` : `${link}`.trim(),
+                            );
+                            break;
+                        }
+
                         shareWithUrl(
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
@@ -85,7 +123,12 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
                         );
                         break;
                     case 'mail':
-                        if (isTouch) {
+                        if (isApp()) {
+                            shareInApp(
+                                SHAREPROVIDER[2],
+                                text ? `${text}\n\n${link}` : `${link}`.trim(),
+                            );
+                        } else if (isTouch) {
                             shareWithApp(text ? `${text}\n\n${link}` : `${link}`.trim());
                         } else {
                             shareWithUrl(
@@ -107,7 +150,7 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
                         break;
                 }
             },
-            [link, text, isTouch],
+            [link, text, isTouch, shareInApp],
         );
 
         const contextMenuItems = [

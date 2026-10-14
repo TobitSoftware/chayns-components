@@ -1,15 +1,19 @@
 import { fireEvent, render } from '@testing-library/react';
 import React, { ReactNode } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import SharingContextMenu from './SharingContextMenu';
 
-const { shareWithApp, shareWithUrl } = vi.hoisted(() => ({
+const { invokeCall, isApp, shareWithApp, shareWithUrl } = vi.hoisted(() => ({
+    invokeCall: vi.fn(),
+    isApp: vi.fn(() => false),
     shareWithApp: vi.fn(),
     shareWithUrl: vi.fn(),
 }));
 
 vi.mock('chayns-api', () => ({
     getSite: () => ({ color: '#000000' }),
+    invokeCall,
+    isApp,
 }));
 
 vi.mock('../../utils/sharingBar', () => ({
@@ -42,6 +46,59 @@ vi.mock('../context-menu/ContextMenu', () => ({
 }));
 
 describe('SharingContextMenu', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        isApp.mockReturnValue(false);
+    });
+
+    it('uses the native share call in the app', () => {
+        isApp.mockReturnValue(true);
+
+        const { getByRole } = render(
+            <SharingContextMenu link="https://example.com" text="Check this out">
+                <button type="button">Share</button>
+            </SharingContextMenu>,
+        );
+
+        fireEvent.click(getByRole('button', { name: 'whatsapp' }));
+        fireEvent.click(getByRole('button', { name: 'facebook' }));
+        fireEvent.click(getByRole('button', { name: 'twitter' }));
+        fireEvent.click(getByRole('button', { name: 'mail' }));
+
+        expect(invokeCall).toHaveBeenNthCalledWith(1, {
+            action: 80,
+            value: {
+                text: 'Check this out\n\nhttps://example.com',
+                sharingApp: 1,
+                sharingAndroidApp: 'com.whatsapp',
+            },
+        });
+        expect(invokeCall).toHaveBeenNthCalledWith(2, {
+            action: 80,
+            value: {
+                text: 'https://example.com',
+                sharingApp: 2,
+                sharingAndroidApp: 'com.facebook.katana',
+            },
+        });
+        expect(invokeCall).toHaveBeenNthCalledWith(3, {
+            action: 80,
+            value: {
+                text: 'Check this out\n\nhttps://example.com',
+                sharingApp: 5,
+            },
+        });
+        expect(invokeCall).toHaveBeenNthCalledWith(4, {
+            action: 80,
+            value: {
+                text: 'Check this out\n\nhttps://example.com',
+                sharingApp: 0,
+            },
+        });
+        expect(shareWithApp).not.toHaveBeenCalled();
+        expect(shareWithUrl).not.toHaveBeenCalled();
+    });
+
     it('shares the optional text via WhatsApp, mail, and X only', () => {
         const { getByRole } = render(
             <SharingContextMenu link="https://example.com" text="Check this out">
