@@ -12,6 +12,10 @@ export type SharingContextMenuProps = {
      */
     link: string;
     /**
+     * Optional text that is shared together with the link via WhatsApp, mail, and X.
+     */
+    text?: string;
+    /**
      * Shows the action that copies the shared link to the clipboard.
      */
     shouldShowCopyAction?: boolean;
@@ -29,6 +33,7 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
     (
         {
             link,
+            text,
             children,
             shouldEnableKeyboardHighlighting,
             shouldShowCallingCodeAction = true,
@@ -59,7 +64,7 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
                             // @ts-ignore
                             SHAREPROVIDER[0].url.replace(
                                 '{url}',
-                                encodeURIComponent(`${link}`.trim()),
+                                encodeURIComponent(text ? `${text}\n\n${link}` : `${link}`.trim()),
                             ),
                         );
                         break;
@@ -76,19 +81,21 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
                             // @ts-ignore
                             SHAREPROVIDER[4].url
                                 .replace('{url}', encodeURIComponent(link))
-                                .replace('{linkText}', ''),
+                                .replace('{linkText}', encodeURIComponent(text ?? '')),
                         );
                         break;
                     case 'mail':
                         if (isTouch) {
-                            shareWithApp(`${link}`.trim());
+                            shareWithApp(text ? `${text}\n\n${link}` : `${link}`.trim());
                         } else {
                             shareWithUrl(
                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                 // @ts-ignore
                                 SHAREPROVIDER[2].url.replace(
                                     '{url}',
-                                    encodeURIComponent(`${link}`.trim()),
+                                    encodeURIComponent(
+                                        text ? `${text}\n\n${link}` : `${link}`.trim(),
+                                    ),
                                 ),
                             );
                         }
@@ -100,7 +107,7 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
                         break;
                 }
             },
-            [link, isTouch],
+            [link, text, isTouch],
         );
 
         const contextMenuItems = [

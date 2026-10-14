@@ -25,6 +25,10 @@ export type SharingBarProps = {
      */
     link: string;
     /**
+     * Optional text that is shared together with the link via WhatsApp, mail, and X.
+     */
+    text?: string;
+    /**
      * The alignment of the sharing options.
      */
     popupAlignment: ContextMenuAlignment;
@@ -37,6 +41,7 @@ export type SharingBarProps = {
 const SharingBar: FC<SharingBarProps> = ({
     label,
     link,
+    text,
     popupAlignment,
     container,
     shouldEnableKeyboardHighlighting,
@@ -106,6 +111,7 @@ const SharingBar: FC<SharingBarProps> = ({
             </StyledSharingBarIconWrapper>
             <SharingContextMenu
                 link={link}
+                text={text}
                 ref={contextMenuRef}
                 alignment={popupAlignment}
                 container={container}

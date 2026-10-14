@@ -8,12 +8,13 @@ import Button from '../button/Button';
 import { ButtonProps } from '../button/Button.types';
 
 export type SharingButtonProps = PropsWithChildren<
-    Pick<SharingContextMenuProps, 'link' | 'alignment' | 'container'> &
+    Pick<SharingContextMenuProps, 'link' | 'text' | 'alignment' | 'container'> &
         Pick<ButtonProps, 'isDisabled' | 'shouldEnableKeyboardHighlighting'>
 >;
 
 const SharingButton: FunctionComponent<SharingButtonProps> = ({
     link,
+    text,
     alignment,
     container,
     children,
@@ -32,6 +33,7 @@ const SharingButton: FunctionComponent<SharingButtonProps> = ({
         <StyledSharingButtonContainer>
             <SharingContextMenu
                 link={link}
+                text={text}
                 alignment={alignment}
                 container={container}
                 ref={contextMenuRef}
