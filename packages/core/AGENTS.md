@@ -5144,6 +5144,7 @@ import { SharingBar } from '@chayns-components/core';
 | `link` | `string` | yes | The link that should be shared. |
 | `popupAlignment` | `ContextMenuAlignment` | yes | The alignment of the sharing options. |
 | `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting and keyboard interaction. |
+| `text` | `string \| undefined` | no | Optional text that is shared together with the link via WhatsApp, mail, and X. |
 
 ### Types
 
@@ -5244,6 +5245,7 @@ import { SharingButton } from '@chayns-components/core';
 | `isDisabled` | `boolean \| undefined` | no | Whether the button is disabled and cannot be clicked anymore. |
 | `link` | `string` | yes | The link that should be shared. |
 | `shouldEnableKeyboardHighlighting` | `boolean \| undefined` | no | Enables keyboard-only focus highlighting. |
+| `text` | `string \| undefined` | no | Optional text that is shared together with the link via WhatsApp, mail, and X. |
 
 ### Types
 
