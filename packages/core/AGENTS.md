@@ -482,6 +482,12 @@ import { Accordion } from '@chayns-components/core';
 <Accordion />
 ```
 
+#### Controlled Open From Outside
+
+```tsx
+<Accordion />
+```
+
 ### Props
 
 | name | type | required | description |
