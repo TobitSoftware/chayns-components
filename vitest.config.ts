@@ -6,6 +6,7 @@ export default defineConfig({
         exclude: ['**/lib/**', '**/node_modules/**'],
         include: [
             'packages/core/src/**/*.test.{ts,tsx}',
+            'packages/emoji-input/src/**/*.test.{ts,tsx}',
             'packages/code-highlighter/src/**/*.test.{ts,tsx}',
             'packages/format/src/**/*.test.{ts,tsx}',
         ],

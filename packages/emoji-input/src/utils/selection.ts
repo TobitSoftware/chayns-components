@@ -191,53 +191,96 @@ export const restoreSelection = (element: HTMLDivElement) => {
     range.collapse(true);
 };
 
-export const insertInvisibleCursorMarker = (): void => {
-    const selection = window.getSelection();
+const CURSOR_MARKER_DELAY_MS = 10;
+const pendingCursorMarkers = new WeakMap<Document, VoidFunction>();
 
-    if (!selection || selection.rangeCount === 0) {
-        return;
+export const insertInvisibleCursorMarker = (
+    editorElement: HTMLDivElement,
+): VoidFunction | undefined => {
+    const ownerDocument = editorElement.ownerDocument;
+    pendingCursorMarkers.get(ownerDocument)?.();
+
+    const selection = ownerDocument.getSelection();
+
+    if (!selection || selection.rangeCount === 0 || !editorElement.isConnected) {
+        return undefined;
     }
 
-    const range = selection.getRangeAt(0);
-    const textNode = range.startContainer;
-    const offset = range.startOffset;
+    if (!editorElement.contains(selection.getRangeAt(0).startContainer)) {
+        return undefined;
+    }
 
     // noinspection JSDeprecatedSymbols
-    document.execCommand('delete', false);
+    ownerDocument.execCommand('delete', false);
 
-    const span = document.createElement('span');
+    if (selection.rangeCount === 0) {
+        return undefined;
+    }
+
+    const { startContainer: textNode, startOffset: offset } = selection.getRangeAt(0);
+    const parent = textNode.parentNode;
+
+    if (!parent || !editorElement.contains(textNode) || textNode.nodeType !== Node.TEXT_NODE) {
+        return undefined;
+    }
+
+    const span = ownerDocument.createElement('span');
     span.style.display = 'inline-block';
     span.style.width = '0';
     span.style.height = '0';
     span.className = 'invisible-cursor-marker';
 
-    const parent = textNode.parentNode;
+    const textContent = textNode.textContent || '';
+    textNode.textContent = textContent.slice(0, offset);
+    parent.insertBefore(span, textNode.nextSibling);
+    parent.insertBefore(ownerDocument.createTextNode(textContent.slice(offset)), span.nextSibling);
 
-    if (parent) {
-        if (textNode.nodeType === Node.TEXT_NODE) {
-            const textContent = textNode.textContent || '';
-            const beforeText = textContent.slice(0, offset);
-            const afterText = textContent.slice(offset);
+    // Capture the selection after synchronous editing and marker insertion have settled.
+    const expectedRange = selection.getRangeAt(0);
+    const { anchorNode, anchorOffset, focusNode, focusOffset } = selection;
+    const activeElement = ownerDocument.activeElement;
 
-            textNode.textContent = beforeText;
+    const cleanup = () => {
+        clearTimeout(timer);
+        editorElement.removeEventListener('blur', cleanup, true);
+        span.remove();
 
-            parent.insertBefore(span, textNode.nextSibling);
-            const afterTextNode = document.createTextNode(afterText);
-            parent.insertBefore(afterTextNode, span.nextSibling);
-
-            setTimeout(() => {
-                // Set cursor to cursor element
-                const newRange = document.createRange();
-                newRange.setStartAfter(span);
-                newRange.setEndAfter(span);
-                selection.removeAllRanges();
-                selection.addRange(newRange);
-
-                // Remove cursor element
-                span.remove();
-            }, 10);
+        if (pendingCursorMarkers.get(ownerDocument) === cleanup) {
+            pendingCursorMarkers.delete(ownerDocument);
         }
-    }
+    };
+
+    const timer = setTimeout(() => {
+        const isCurrentSelection =
+            selection.rangeCount > 0 &&
+            selection.getRangeAt(0) === expectedRange &&
+            selection.anchorNode === anchorNode &&
+            selection.anchorOffset === anchorOffset &&
+            selection.focusNode === focusNode &&
+            selection.focusOffset === focusOffset &&
+            ownerDocument.activeElement === activeElement;
+
+        if (
+            span.isConnected &&
+            span.parentNode === parent &&
+            editorElement.isConnected &&
+            editorElement.contains(span) &&
+            isCurrentSelection
+        ) {
+            const newRange = ownerDocument.createRange();
+            newRange.setStartAfter(span);
+            newRange.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(newRange);
+        }
+
+        cleanup();
+    }, CURSOR_MARKER_DELAY_MS);
+
+    editorElement.addEventListener('blur', cleanup, true);
+    pendingCursorMarkers.set(ownerDocument, cleanup);
+
+    return cleanup;
 };
 
 export const insertPseudoMarker = () => {
@@ -509,6 +552,8 @@ export const setCursorPositionByAbsIndex = ({
     editorElement,
     position,
 }: SetCursorPositionByAbsIndexOptions): void => {
+    pendingCursorMarkers.get(editorElement.ownerDocument)?.();
+
     const selection = window.getSelection?.();
 
     if (!selection) {

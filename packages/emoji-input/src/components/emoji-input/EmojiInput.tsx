@@ -233,6 +233,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const prefixElementRef = useRef<HTMLDivElement>(null);
         const hasPrefixRendered = useRef(false);
         const hasPrefixChanged = useRef(false);
+        const cancelCursorMarkerRef = useRef<VoidFunction>();
         const shouldDeleteOneMoreBackwards = useRef(false);
         const shouldDeleteOneMoreForwards = useRef(false);
 
@@ -266,6 +267,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             () => areaProvider.shouldChangeColor ?? false,
             [areaProvider.shouldChangeColor],
         );
+
+        useIsomorphicLayoutEffect(() => () => cancelCursorMarkerRef.current?.(), []);
 
         useEffect(() => {
             void loadEmojiShortList().then(({ shortNameList, regShortnames }) => {
@@ -394,7 +397,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     event.stopPropagation();
 
                     // Remove content and set cursor to the right position
-                    insertInvisibleCursorMarker();
+                    cancelCursorMarkerRef.current = insertInvisibleCursorMarker(editorRef.current);
 
                     return;
                 }
@@ -434,6 +437,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
         const handleKeyDown = useCallback(
             (event: TmpKeyboardEvent<HTMLDivElement>) => {
+                cancelCursorMarkerRef.current?.();
+
                 if (isDisabled) {
                     event.preventDefault();
                     event.stopPropagation();
