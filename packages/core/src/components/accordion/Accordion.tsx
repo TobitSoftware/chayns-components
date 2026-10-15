@@ -218,6 +218,7 @@ const Accordion: FC<AccordionProps> = ({
         accordionGroupUuid,
         accordionUuids,
         updateOpenAccordionUuid,
+        setOpenAccordionUuid,
         activeAccordionUuid,
         updateActiveAccordionUuid,
         registerAccordionUuid,
@@ -248,7 +249,7 @@ const Accordion: FC<AccordionProps> = ({
     const shouldSkipAnimation =
         shouldSkipAnimationProp ?? (initialRenderSkipRef.current && isDefaultOpen);
 
-    const isInGroup = shouldSkipAnimation ? false : typeof updateOpenAccordionUuid === 'function';
+    const isInGroup = typeof updateOpenAccordionUuid === 'function';
 
     const isOpen = (() => {
         if (isInGroup) return openAccordionUuid === uuid;
@@ -370,6 +371,22 @@ const Accordion: FC<AccordionProps> = ({
             }
         }
     }, [isDefaultOpen, updateOpenAccordionUuid, uuid, onOpen, isControlled]);
+
+    useEffect(() => {
+        if (!isInGroup || !isControlled) {
+            return;
+        }
+
+        if (isOpened) {
+            updateOpenAccordionUuid?.(uuid, { shouldOnlyOpen: true });
+        } else {
+            setOpenAccordionUuid?.((currentUuid) =>
+                currentUuid === uuid ? undefined : currentUuid,
+            );
+        }
+        // Only prop changes should request a group transition. Reasserting an unchanged true
+        // value after a sibling opens would make the accordions compete for the group state.
+    }, [isControlled, isInGroup, isOpened, setOpenAccordionUuid, updateOpenAccordionUuid, uuid]);
 
     const accordionContextProviderValue = useMemo(
         () => ({ isWrapped: isWrapped === true }),
