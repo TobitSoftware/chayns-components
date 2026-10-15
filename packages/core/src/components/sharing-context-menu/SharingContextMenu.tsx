@@ -51,7 +51,7 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
                 app &&
                 app.name === AppName.CityApp &&
                 ((os === 'iOS' && app.appVersion >= 3313) ||
-                    (os === 'Android OS' && app.appVersion >= 3313)),
+                    (os === 'Android OS' && app.appVersion >= 7472)),
             [app, os],
         );
 
