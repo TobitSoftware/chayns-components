@@ -50,7 +50,7 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
             () =>
                 app &&
                 app.name === AppName.CityApp &&
-                ((os === 'iOS' && app.appVersion >= 3313) ||
+                ((os === 'iOS' && app.appVersion >= 7313) ||
                     (os === 'Android OS' && app.appVersion >= 7472)),
             [app, os],
         );
@@ -65,6 +65,12 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
                     throw new Error('The requested sharing provider is not configured.');
                 }
 
+                window.sharingCallback = (retVal: { status: 0 | -1 | -2 }) => {
+                    if (retVal.status !== 0) {
+                        callback();
+                    }
+                };
+
                 void invokeCall({
                     action: 80,
                     value: {
@@ -73,11 +79,7 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
                         ...(provider.androidIdentifier
                             ? { sharingAndroidApp: provider.androidIdentifier }
                             : {}),
-                        callback: (retVal: { status: 0 | -1 | -2 }) => {
-                            if (retVal.status !== 0) {
-                                callback();
-                            }
-                        },
+                        callback: 'window.sharingCallback',
                     },
                 });
             },
