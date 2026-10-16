@@ -65,22 +65,16 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
                     throw new Error('The requested sharing provider is not configured.');
                 }
 
-                window.sharingCallback = (retVal: { status: 0 | -1 | -2 }) => {
-                    if (retVal.status !== 0) {
-                        callback();
-                    }
-                };
-
                 void invokeCall({
                     action: 80,
                     value: {
                         text: shareText,
                         sharingApp: provider.providerId,
-                        ...(provider.androidIdentifier
-                            ? { sharingAndroidApp: provider.androidIdentifier }
-                            : {}),
-                        callback: 'window.sharingCallback',
                     },
+                }).then((retVal: { status: 0 | -1 | -2 }) => {
+                    if (retVal.status !== 0) {
+                        callback();
+                    }
                 });
             },
             [],
