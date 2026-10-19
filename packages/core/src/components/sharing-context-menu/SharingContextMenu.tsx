@@ -49,7 +49,7 @@ const SharingContextMenu = forwardRef<ContextMenuRef, SharingContextMenuProps>(
         const shouldUseAppCall = useMemo(
             () =>
                 app &&
-                app.name === AppName.CityApp &&
+                [AppName.Chayns, AppName.CityApp].includes(app.name) &&
                 ((os === 'iOS' && app.appVersion >= 7313) ||
                     (os === 'Android OS' && app.appVersion >= 7472)),
             [app, os],
