@@ -23,6 +23,19 @@ export type PopupProps = {
      */
     children?: ReactNode;
     /**
+     * Additional horizontal insets inside the positioning container, in CSS pixels.
+     * @description
+     * Reserve space for safe areas or host controls without moving the trigger. Each side defaults
+     * to zero and is added to the standard popup edge spacing. Insets use the positioning container's
+     * unscaled coordinate space; fixed popups use the document body. Updating the values repositions
+     * an open popup. Oversized content is constrained to the remaining width and allowed to wrap.
+     * @default { left: 0, right: 0 }
+     * @example
+     * <Popup boundaryInsets={{ left: 17, right: 43 }} content="Details">Open</Popup>
+     * @optional
+     */
+    boundaryInsets?: { left?: number; right?: number };
+    /**
      * The DOM element that should receive the popup portal.
      * @description
      * By default, the popup resolves a suitable container automatically. Use this prop when the popup should be rendered

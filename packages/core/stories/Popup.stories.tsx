@@ -74,3 +74,23 @@ LongContent.args = {
         </div>
     ),
 };
+
+export const SafeAreaInsets: StoryFn<typeof Popup> = ({ boundaryInsets, alignment }) => (
+    <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '24px 90px 240px' }}>
+        <Popup
+            alignment={alignment}
+            boundaryInsets={boundaryInsets}
+            content={
+                <div style={{ width: 350, padding: 8 }}>
+                    This popup reserves horizontal space for safe areas. Change the boundary insets
+                    while it is open to check positioning, text wrapping and arrow alignment.
+                </div>
+            }
+            isOpen
+        >
+            <Button onClick={() => {}}>Popup</Button>
+        </Popup>
+    </div>
+);
+
+SafeAreaInsets.args = { boundaryInsets: { left: 17, right: 59 } };
