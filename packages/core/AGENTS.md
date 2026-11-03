@@ -4449,11 +4449,24 @@ import { Popup } from '@chayns-components/core';
 />
 ```
 
+#### Safe Area Insets
+
+```tsx
+<Popup
+    content={<span style={{ display: 'block' }}>
+                    <h1 style={{ margin: 0 }}>Popup</h1>
+                    <p>Das ist ein Popup!</p>
+                </span>}
+    boundaryInsets={{ left: 17, right: 59 }}
+/>
+```
+
 ### Props
 
 | name | type | required | description |
 | --- | --- | --- | --- |
 | `alignment` | `PopupAlignment \| undefined` | no | The preferred alignment of the popup relative to its trigger element. |
+| `boundaryInsets` | `{ left?: number \| undefined; right?: number \| undefined; } \| undefined` | no | Additional horizontal insets inside the positioning container, in CSS pixels. |
 | `children` | `ReactNode` | no | The trigger element that the popup is attached to. |
 | `container` | `Element \| undefined` | no | The DOM element that should receive the popup portal. |
 | `content` | `ReactNode` | yes | The content rendered inside the popup. |
