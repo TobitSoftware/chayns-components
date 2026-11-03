@@ -5,6 +5,7 @@ import React, {
     useCallback,
     useEffect,
     useImperativeHandle,
+    useMemo,
     useRef,
     useState,
 } from 'react';
@@ -13,7 +14,8 @@ import { useUuid } from '../../hooks/uuid';
 import { PopupAlignment, PopupCoordinates, PopupRef } from '../../types/popup';
 import AreaContextProvider from '../area-provider/AreaContextProvider';
 import PopupContentWrapper from './popup-content-wrapper/PopupContentWrapper';
-import { StyledPopup } from './Popup.styles';
+import { StyledPopup, StyledPopupInsetContent } from './Popup.styles';
+import { getPopupInsetPosition, POPUP_HORIZONTAL_PADDING } from './popupPosition';
 import { useMeasuredClone } from '../../hooks/element';
 import type { PopupProps } from './Popup.types';
 
@@ -23,6 +25,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
     (
         {
             alignment,
+            boundaryInsets,
             content,
             onShow,
             container,
@@ -52,6 +55,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const [portal, setPortal] = useState<ReactPortal>();
         const [pseudoSize, setPseudoSize] = useState<{ height: number; width: number }>();
         const [newContainer, setNewContainer] = useState<Element | null>(container ?? null);
+        const [contentMaxWidth, setContentMaxWidth] = useState<number | undefined>();
         const [contentMaxHeight, setContentMaxHeight] = useState<number | undefined>(undefined);
 
         const timeout = useRef<number>();
@@ -61,9 +65,31 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const isControlled = typeof isOpen === 'boolean';
         const isPopupOpen = isControlled ? isOpen : isInternallyOpen;
 
+        const leftInset = Number.isFinite(boundaryInsets?.left)
+            ? Math.max(0, boundaryInsets?.left ?? 0)
+            : 0;
+        const rightInset = Number.isFinite(boundaryInsets?.right)
+            ? Math.max(0, boundaryInsets?.right ?? 0)
+            : 0;
+        const hasBoundaryInsets = leftInset > 0 || rightInset > 0;
+        const shouldWrapContent = boundaryInsets !== undefined;
+        const popupContent = useMemo(
+            () =>
+                shouldWrapContent ? (
+                    <StyledPopupInsetContent
+                        style={{ maxWidth: hasBoundaryInsets ? contentMaxWidth : undefined }}
+                    >
+                        {content}
+                    </StyledPopupInsetContent>
+                ) : (
+                    content
+                ),
+            [content, contentMaxWidth, hasBoundaryInsets, shouldWrapContent],
+        );
+
         const { height, width, measuredElement } = useMeasuredClone({
-            content,
-            shouldPreventTextWrapping: !shouldUseChildrenWidth,
+            content: popupContent,
+            shouldPreventTextWrapping: !shouldUseChildrenWidth && !hasBoundaryInsets,
         });
 
         const popupContentRef = useRef<HTMLDivElement>(null);
@@ -95,7 +121,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     return;
                 }
 
-                const HORIZONTAL_PADDING = 23;
+                const HORIZONTAL_PADDING = POPUP_HORIZONTAL_PADDING;
 
                 const { height: pseudoHeight, width: pseudoWidth } = pseudoSize;
 
@@ -124,8 +150,13 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     (childrenTop + childrenHeight / 2 - top) / zoomY + element.scrollTop - yOffset;
 
                 // Use one coordinate space for all horizontal bounds checks.
-                const boundaryLeft = element.scrollLeft;
-                const boundaryWidth = containerWidth / zoomX;
+                const boundaryLeft = element.scrollLeft + leftInset;
+                const boundaryWidth = Math.max(0, containerWidth / zoomX - leftInset - rightInset);
+                setContentMaxWidth(
+                    hasBoundaryInsets
+                        ? Math.max(0, boundaryWidth - 2 * HORIZONTAL_PADDING)
+                        : undefined,
+                );
                 const relativeX = x - boundaryLeft;
 
                 const shouldShowBottom =
@@ -146,56 +177,60 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     pseudoWidth / 2 <= relativeX - HORIZONTAL_PADDING &&
                     pseudoWidth / 2 <= boundaryWidth - relativeX - HORIZONTAL_PADDING;
 
+                let nextAlignment: PopupAlignment;
+                let nextOffset = 0;
+
                 if (shouldUseCenterAlignment && hasEnoughSpaceForCenter) {
-                    setInternalAlignment(
-                        shouldShowBottom ? PopupAlignment.BottomCenter : PopupAlignment.TopCenter,
-                    );
-                    setOffset(0);
-                    setCoordinates({
-                        x,
-                        y,
-                    });
+                    nextAlignment = shouldShowBottom
+                        ? PopupAlignment.BottomCenter
+                        : PopupAlignment.TopCenter;
                 } else {
-                    let isRight = false;
-
-                    if (pseudoWidth > relativeX - HORIZONTAL_PADDING || shouldForceRight) {
-                        setInternalAlignment(
-                            shouldShowBottom ? PopupAlignment.BottomRight : PopupAlignment.TopRight,
-                        );
-                        isRight = true;
-                    } else {
-                        setInternalAlignment(
-                            shouldShowBottom ? PopupAlignment.BottomLeft : PopupAlignment.TopLeft,
-                        );
-                    }
-
-                    let newOffset;
-
+                    const isRight =
+                        pseudoWidth > relativeX - HORIZONTAL_PADDING || shouldForceRight;
                     if (isRight) {
-                        newOffset =
+                        nextAlignment = shouldShowBottom
+                            ? PopupAlignment.BottomRight
+                            : PopupAlignment.TopRight;
+                        nextOffset =
                             relativeX + pseudoWidth >= boundaryWidth - HORIZONTAL_PADDING
                                 ? relativeX + pseudoWidth - (boundaryWidth - HORIZONTAL_PADDING)
                                 : 0;
                     } else {
+                        nextAlignment = shouldShowBottom
+                            ? PopupAlignment.BottomLeft
+                            : PopupAlignment.TopLeft;
                         const right = boundaryWidth - relativeX;
-
-                        newOffset =
+                        nextOffset =
                             right + pseudoWidth >= boundaryWidth + HORIZONTAL_PADDING
                                 ? right + pseudoWidth - (boundaryWidth + HORIZONTAL_PADDING)
                                 : 0;
                     }
-
-                    setOffset(newOffset);
-
-                    const newX = x - newOffset;
-
-                    setCoordinates({
-                        x: newX,
-                        y,
-                    });
                 }
+
+                const position = hasBoundaryInsets
+                    ? getPopupInsetPosition({
+                          alignment: nextAlignment,
+                          anchorX: x,
+                          boundaryLeft,
+                          boundaryWidth,
+                          width: pseudoWidth,
+                      })
+                    : { x: x - nextOffset, offset: nextOffset };
+
+                setInternalAlignment(nextAlignment);
+                setOffset(position.offset);
+                setCoordinates({ x: position.x, y });
             }
-        }, [alignment, newContainer, pseudoSize, shouldScrollWithContent, yOffset]);
+        }, [
+            alignment,
+            hasBoundaryInsets,
+            leftInset,
+            newContainer,
+            pseudoSize,
+            rightInset,
+            shouldScrollWithContent,
+            yOffset,
+        ]);
 
         const handleShow = useCallback(() => {
             updatePopupPosition();
@@ -208,18 +243,16 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         }, [isControlled, updatePopupPosition]);
 
         useEffect(() => {
-            if (isControlled) {
-                if (isOpen) {
-                    updatePopupPosition();
-                }
-
-                return;
-            }
-
-            if (shouldBeOpen) {
+            if (!isControlled && shouldBeOpen) {
                 handleShow();
             }
-        }, [handleShow, isControlled, isOpen, shouldBeOpen, updatePopupPosition]);
+        }, [handleShow, isControlled, shouldBeOpen]);
+
+        useEffect(() => {
+            if (isPopupOpen) {
+                updatePopupPosition();
+            }
+        }, [isPopupOpen, updatePopupPosition]);
 
         const handleReposition = useCallback(() => {
             if (isPopupOpen) {
@@ -398,7 +431,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                                 onMouseEnter={handleMouseEnter}
                             >
                                 <AreaContextProvider shouldChangeColor>
-                                    {content}
+                                    {popupContent}
                                 </AreaContextProvider>
                             </PopupContentWrapper>
                         )}
@@ -410,7 +443,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             contentMaxHeight,
             internalAlignment,
             newContainer,
-            content,
+            popupContent,
             coordinates,
             handleMouseEnter,
             handleMouseLeave,

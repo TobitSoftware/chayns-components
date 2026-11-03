@@ -35,3 +35,13 @@ export const StyledPopupPseudo = styled.div<{
     opacity: 0;
     position: absolute;
 `;
+
+// Apply the same wrapping constraint to the measured clone and the visible content.
+export const StyledPopupInsetContent = styled.div`
+    overflow-wrap: anywhere;
+
+    > * {
+        box-sizing: border-box;
+        max-width: 100%;
+    }
+`;
