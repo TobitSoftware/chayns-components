@@ -173,18 +173,16 @@ const PresetColors = ({
     return (
         <StyledPresetColors onKeyDown={handlePresetColorsKeyDown}>
             {content}
-            {!shouldHideDefaultPresetColors && (
-                <PresetButton
-                    id={currentPresetColor?.id}
-                    isCustom={currentPresetColor?.isCustom}
-                    isKeyboardFocusable={focusedPresetIndex === combinedColors.length}
-                    onAdd={handleAddColor}
-                    onFocus={() => setFocusedPresetIndex(combinedColors.length)}
-                    onRemove={handleRemoveColor}
-                    presetIndex={combinedColors.length}
-                    shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
-                />
-            )}
+            <PresetButton
+                id={currentPresetColor?.id}
+                isCustom={currentPresetColor?.isCustom}
+                isKeyboardFocusable={focusedPresetIndex === combinedColors.length}
+                onAdd={handleAddColor}
+                onFocus={() => setFocusedPresetIndex(combinedColors.length)}
+                onRemove={handleRemoveColor}
+                presetIndex={combinedColors.length}
+                shouldEnableKeyboardHighlighting={shouldEnableKeyboardHighlighting}
+            />
         </StyledPresetColors>
     );
 };
