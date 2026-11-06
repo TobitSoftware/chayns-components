@@ -1,8 +1,8 @@
 import { isHex } from '@chayns/colors';
 import React, { useContext, useEffect, useMemo, useState, type ReactElement } from 'react';
 
-import { putSiteColors } from '../../../api/color/get';
-import { getSiteColors } from '../../../api/color/put';
+import { putSiteColors } from '../../../api/color/put';
+import { getSiteColors } from '../../../api/color/get';
 import { PRESETCOLORS } from '../../../constants/color';
 import type { IPresetColor } from '../../../types/colorPicker';
 import { extractRgbValues, hexToRgb, rgbToHex } from '../../../utils/color';
