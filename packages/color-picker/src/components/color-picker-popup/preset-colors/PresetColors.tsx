@@ -141,6 +141,10 @@ const PresetColors = ({
             onPresetColorAdd(presetColor);
         }
 
+        if (!shouldUseSiteColors) {
+            return;
+        }
+
         setSiteColors((prevColors) => {
             const colors = [...(prevColors ?? []), presetColor];
 
@@ -157,7 +161,9 @@ const PresetColors = ({
     };
 
     const handleRemoveColor = (presetColorId: IPresetColor['id']) => {
-        void loadSiteColors(presetColorId);
+        if (shouldUseSiteColors) {
+            void loadSiteColors(presetColorId);
+        }
 
         if (typeof onPresetColorRemove === 'function') {
             onPresetColorRemove(presetColorId);
