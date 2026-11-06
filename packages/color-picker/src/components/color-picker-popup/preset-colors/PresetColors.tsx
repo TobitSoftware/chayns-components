@@ -5,7 +5,7 @@ import { putSiteColors } from '../../../api/color/put';
 import { getSiteColors } from '../../../api/color/get';
 import { PRESETCOLORS } from '../../../constants/color';
 import type { IPresetColor } from '../../../types/colorPicker';
-import { extractRgbValues, hexToRgb, rgbToHex } from '../../../utils/color';
+import { extractRgbValues, hexToRgb, isValidRGBA, rgbToHex } from '../../../utils/color';
 import { ColorPickerContext } from '../../ColorPickerProvider';
 import PresetButton from './preset-button/PresetButton';
 import PresetColor from './preset-color/PresetColor';
@@ -20,6 +20,38 @@ interface PresetColorsProps {
     shouldHideDefaultPresetColors: boolean;
     shouldEnableKeyboardHighlighting?: boolean;
 }
+
+const getColorIdentifier = (color: string) => {
+    if (isHex(color)) {
+        const { r, g, b, a } = hexToRgb(color);
+
+        return `rgba(${r},${g},${b},${a})`;
+    }
+
+    if (isValidRGBA(color)) {
+        const { r, g, b, a } = extractRgbValues(color);
+
+        return `rgba(${r},${g},${b},${a})`;
+    }
+
+    return color.trim().toLowerCase();
+};
+
+const removeDuplicateColors = (colors: IPresetColor[]) => {
+    const colorIdentifiers = new Set<string>();
+
+    return colors.filter(({ color }) => {
+        const colorIdentifier = getColorIdentifier(color);
+
+        if (colorIdentifiers.has(colorIdentifier)) {
+            return false;
+        }
+
+        colorIdentifiers.add(colorIdentifier);
+
+        return true;
+    });
+};
 
 const PresetColors = ({
     presetColors,
@@ -38,17 +70,19 @@ const PresetColors = ({
         const colors = await getSiteColors();
 
         setSiteColors((prevColors) => {
-            const newColors = colors.value.map((color) => {
-                const { r, g, b, a } = hexToRgb(color);
+            const newColors = removeDuplicateColors(
+                colors.value.map((color) => {
+                    const { r, g, b, a } = hexToRgb(color);
 
-                const newColor = `rgba(${r},${g},${b},${a})`;
+                    const newColor = `rgba(${r},${g},${b},${a})`;
 
-                return {
-                    color: newColor,
-                    id: Math.random().toString(),
-                    isCustom: true,
-                };
-            });
+                    return {
+                        color: newColor,
+                        id: Math.random().toString(),
+                        isCustom: true,
+                    };
+                }),
+            );
 
             if (!presetColorId) {
                 return newColors;
@@ -101,11 +135,11 @@ const PresetColors = ({
             };
         });
 
-        if (shouldHideDefaultPresetColors) {
-            return tmp;
-        }
+        const colors = shouldHideDefaultPresetColors
+            ? tmp
+            : [...PRESETCOLORS, ...(siteColors ?? []), ...tmp];
 
-        return [...PRESETCOLORS, ...(siteColors ?? []), ...tmp];
+        return removeDuplicateColors(colors);
     }, [presetColors, shouldHideDefaultPresetColors, siteColors]);
 
     const content = useMemo(() => {
@@ -137,6 +171,14 @@ const PresetColors = ({
     );
 
     const handleAddColor = (presetColor: IPresetColor) => {
+        if (
+            combinedColors.some(
+                ({ color }) => getColorIdentifier(color) === getColorIdentifier(presetColor.color),
+            )
+        ) {
+            return;
+        }
+
         if (typeof onPresetColorAdd === 'function') {
             onPresetColorAdd(presetColor);
         }
