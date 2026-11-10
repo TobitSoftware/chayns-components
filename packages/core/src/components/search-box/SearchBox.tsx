@@ -19,7 +19,12 @@ import { useTheme } from 'styled-components';
 import type { IFilterButtonItem } from '../../types/filterButtons';
 import type { ISearchBoxItem, ISearchBoxItems } from '../../types/searchBox';
 import { calculateContentHeight } from '../../utils/calculate';
-import { searchList, sortSearchBoxItems, type SearchBoxSortFunction } from '../../utils/searchBox';
+import {
+    getSearchBoxItemId,
+    searchList,
+    sortSearchBoxItems,
+    type SearchBoxSortFunction,
+} from '../../utils/searchBox';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import Input, { type InputProps } from '../input/Input';
@@ -899,7 +904,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             return;
                         }
 
-                        const { id, textContent } = element;
+                        const { textContent } = element;
 
                         let imageUrl: string | undefined;
 
@@ -913,7 +918,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
                             imageUrl = element.children[0]?.attributes.src.nodeValue as string;
                         }
 
-                        const newId = id.replace('search-box-item__', '');
+                        const newId = getSearchBoxItemId(element);
 
                         handleSelect({
                             id: newId === 'input-value' ? textContent : newId,

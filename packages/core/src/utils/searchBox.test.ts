@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { ISearchBoxItem } from '../types/searchBox';
 import { filterSearchBoxItems } from '../components/search-box/SearchBox';
-import { searchList } from './searchBox';
+import { getSearchBoxItemId, searchList } from './searchBox';
 
 const items: ISearchBoxItem[] = [
     { id: '2', text: 'Zweite' },
@@ -44,5 +44,22 @@ describe('searchList', () => {
 
         expect(result.map(({ id }) => id)).toEqual(['2']);
         expect(values).toEqual(['does-not-match', 'does-not-match']);
+    });
+});
+
+describe('getSearchBoxItemId', () => {
+    it('uses the item ID instead of the group-specific DOM ID', () => {
+        const element = document.createElement('div');
+        element.id = '_Food';
+        element.dataset.searchBoxItemId = 'pizza';
+
+        expect(getSearchBoxItemId(element)).toBe('pizza');
+    });
+
+    it('uses the legacy DOM ID when no item ID is available', () => {
+        const element = document.createElement('div');
+        element.id = 'search-box-item__pizza';
+
+        expect(getSearchBoxItemId(element)).toBe('pizza');
     });
 });

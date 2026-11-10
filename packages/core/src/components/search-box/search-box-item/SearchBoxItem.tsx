@@ -45,7 +45,12 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
 
     return useMemo(
         () => (
-            <StyledSearchBoxItem id={idString} onClick={handleClick} tabIndex={tabIndex}>
+            <StyledSearchBoxItem
+                data-search-box-item-id={id}
+                id={idString}
+                onClick={handleClick}
+                tabIndex={tabIndex}
+            >
                 {imageUrl && (
                     <StyledSearchBoxItemImage
                         src={imageUrl}
@@ -60,6 +65,7 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
         ),
         [
             handleClick,
+            id,
             idString,
             imageUrl,
             shouldShowRoundImage,

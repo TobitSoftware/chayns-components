@@ -41,6 +41,10 @@ export const getCurrentGroupName = (element: HTMLElement) => {
     return currentGroupName;
 };
 
+export const getSearchBoxItemId = (element: Element) =>
+    (element as HTMLElement).dataset.searchBoxItemId ??
+    element.id.replace('search-box-item__', '');
+
 export type SearchBoxSortFunction = (a: ISearchBoxItem, b: ISearchBoxItem) => number;
 
 interface SearchListOptions {
