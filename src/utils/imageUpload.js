@@ -32,8 +32,10 @@ export default async function imageUpload(file, options, _personId, _siteId) {
     let personId;
     let siteId;
     let accessToken;
+    let imageOptions;
+    let customUrl;
     if (options && typeof options === 'object') {
-        ({ personId, siteId, accessToken } = options);
+        ({ personId, siteId, accessToken, customUrl, imageOptions } = options);
     } else {
         personId = _personId;
         siteId = _siteId;
@@ -62,8 +64,13 @@ export default async function imageUpload(file, options, _personId, _siteId) {
     } else {
         body.append('File', file);
     }
+    if (imageOptions && typeof imageOptions === 'object') {
+        Object.entries(imageOptions).forEach(([key, value]) => {
+            body.append(key, value);
+        });
+    }
 
-    let url = `${IMAGE_SERVICE_API_V3_URL}/${owner}`;
+    let url = customUrl || `${IMAGE_SERVICE_API_V3_URL}/${owner}`;
 
     if (typeof file !== 'string') {
         const objectURL = URL.createObjectURL(file);
