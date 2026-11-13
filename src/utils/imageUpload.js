@@ -72,7 +72,7 @@ export default async function imageUpload(file, options, _personId, _siteId) {
 
     let url = customUrl || `${IMAGE_SERVICE_API_V3_URL}/${owner}`;
 
-    if (typeof file !== 'string') {
+    if (typeof file !== 'string' && !customUrl) {
         const objectURL = URL.createObjectURL(file);
         const img = new Image();
         await new Promise((resolve) => {
