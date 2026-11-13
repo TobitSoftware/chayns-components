@@ -106,7 +106,7 @@ const ListItemHeader = ({
                     })}
                     style={{
                         boxShadow: `0 0 0 1px ${imageBorderColor} inset`,
-                        backgroundImage: `url(${image})`,
+                        backgroundImage: `url('${image}')`,
                     }}
                     onClick={(event) => {
                         if (openImageOnClick) {
@@ -138,7 +138,7 @@ const ListItemHeader = ({
                                 key={img}
                                 className="list-item__image"
                                 style={{
-                                    backgroundImage: `url(${img})`,
+                                    backgroundImage: `url('${img}')`,
                                 }}
                             />
                         );
